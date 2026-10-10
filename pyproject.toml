@@ -1,0 +1,44 @@
+[project]
+name = "f1ar"
+version = "0.0.1"
+description = "F1 Alternate Reality — living championship simulator (pausable, persistent, forkable race worlds with profile-conditioned AI strategists)."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "mypy>=2.4.0",
+    "pytest>=9.1.1",
+    "ruff>=0.17.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["backend/src/f1ar"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+    "network: test needs internet access (opt-in, not run by default in CI)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["backend/src", "tests", "scripts"]
+# Pseudocode blocks in the master plan are illustrative; don't reformat the source document.
+extend-exclude = ["F1_ALTERNATE_REALITY_MASTER_PLAN.md"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+mypy_path = "backend/src"
+packages = ["f1ar"]

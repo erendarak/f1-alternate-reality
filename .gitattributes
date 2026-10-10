@@ -1,0 +1,5 @@
+# Normalize line endings so tracked fixtures/manifests hash identically on Windows and CI.
+* text=auto eol=lf
+*.parquet binary
+*.png binary
+*.sqlite binary

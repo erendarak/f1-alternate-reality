@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.hypothesis/
+.ipynb_checkpoints/
+
+# Node / frontend
+node_modules/
+frontend/dist/
+
+# Data and caches (not redistributable / large) — see docs/LEGAL_AND_LICENSES.md
+.cache/
+data/raw/
+data/processed/
+# data/manifests/ and data/sample_synthetic/ ARE tracked
+
+# User worlds and local databases
+saves/
+*.sqlite
+*.sqlite3
+*.db
+*.db-wal
+*.db-shm
+
+# Model artifacts (manifests are tracked separately)
+artifacts/models/
+
+# Secrets / local config
+.env
+.claude/settings.local.json
+
+# IDE / OS
+.idea/
+.vscode/
+*.code-workspace
+Thumbs.db
+.DS_Store
