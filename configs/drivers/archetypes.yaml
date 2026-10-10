@@ -1,0 +1,58 @@
+# Generic persona templates (plan §3.3). All values are EDITORIAL ASSUMPTIONS:
+# illustrative simulation priors in [0, 1], not measurements of any real person.
+# A driver profile = template + explicit per-driver overrides (see seed_*.yaml).
+schema_version: 1
+templates:
+  generic_balanced:
+    description: "Mid-field all-rounder; no strong style bias."
+    archetype:
+      race_pace_skill: 0.85
+      consistency: 0.85
+      risk_appetite: 0.60
+      tire_management: 0.82
+      wet_skill: 0.80
+      adaptability: 0.82
+      qualifying_skill: 0.84
+      overtake_skill: 0.80
+      defense_skill: 0.80
+      team_orientation: 0.70
+      composure: 0.80
+      ambition: 0.75
+      sociability: 0.60
+      negotiation_skill: 0.55
+
+  generic_veteran:
+    description: "Experienced driver: steadier, better tyre and race-craft, slightly less risk."
+    archetype:
+      race_pace_skill: 0.86
+      consistency: 0.89
+      risk_appetite: 0.55
+      tire_management: 0.87
+      wet_skill: 0.84
+      adaptability: 0.86
+      qualifying_skill: 0.83
+      overtake_skill: 0.82
+      defense_skill: 0.85
+      team_orientation: 0.72
+      composure: 0.87
+      ambition: 0.70
+      sociability: 0.60
+      negotiation_skill: 0.65
+
+  generic_rookie:
+    description: "New driver: raw speed, higher variance and risk, still learning tyre management."
+    archetype:
+      race_pace_skill: 0.82
+      consistency: 0.78
+      risk_appetite: 0.68
+      tire_management: 0.76
+      wet_skill: 0.74
+      adaptability: 0.80
+      qualifying_skill: 0.82
+      overtake_skill: 0.76
+      defense_skill: 0.74
+      team_orientation: 0.75
+      composure: 0.72
+      ambition: 0.85
+      sociability: 0.60
+      negotiation_skill: 0.45

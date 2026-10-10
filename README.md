@@ -38,13 +38,17 @@ This creates `.venv/` with Python 3.12, the `f1ar` package (editable) and the de
 | Lint | `uv run ruff check .` |
 | Format | `uv run ruff format .` |
 | Type-check | `uv run mypy` |
+| Show Monza 2024 grid + driver personas | `uv run python scripts/show_profiles.py` |
+| Re-fetch a race roster (Jolpica) | `uv run python scripts/build_roster.py --season 2024 --round 16 --event-id 2024_italian_gp` |
 
 ## Repository layout
 
 ```text
-backend/src/f1ar/   Python package (simulation, persistence, data, policy, api)
-tests/              pytest suites (unit, replay, property, integration, ml)
-docs/               decisions, progress, limitations, experiments
+backend/src/f1ar/   Python package (domain, data, persistence; simulation/policy/api to come)
+configs/            race rosters (verified facts) and driver persona seeds (editorial assumptions)
+scripts/            CLI entry points
+tests/              pytest suites
+docs/               decisions, progress, assumptions, licenses, limitations, experiments
 ```
 
 Folders are created when a milestone needs them, not ahead of time.
@@ -52,4 +56,4 @@ Folders are created when a milestone needs them, not ahead of time.
 ## Data and licenses
 
 Historical data comes from FastF1 / OpenF1 / Jolpica and is cached locally. It is **not** committed.
-This is a non-commercial research and learning project. See `docs/LEGAL_AND_LICENSES.md` (added in M0).
+This is a non-commercial research and learning project. See [docs/LEGAL_AND_LICENSES.md](docs/LEGAL_AND_LICENSES.md).
