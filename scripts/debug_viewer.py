@@ -5,6 +5,7 @@ Usage:
     uv run python scripts/debug_viewer.py            # then open http://127.0.0.1:8765
     uv run python scripts/debug_viewer.py --drivers VER HAM LEC NOR --speed 5
     uv run python scripts/debug_viewer.py --all --seed 7
+    uv run python scripts/debug_viewer.py --replay      # the REAL 2024 race, recorded history
 
 The page is a read-only view of backend state; every button sends a command to the runner.
 """
@@ -19,8 +20,11 @@ import pandas as pd
 import uvicorn
 
 from f1ar.api.debug_app import create_app
+from f1ar.api.replay_app import create_replay_app
 from f1ar.domain.identities import RaceRoster
 from f1ar.domain.race_state import WorldState
+from f1ar.history.reference import HistoricalRace
+from f1ar.history.replay import REPLAY_SPEEDS, ReplayClock
 from f1ar.persistence.sqlite_store import SnapshotStore
 from f1ar.presentation.track_geometry import TrackGeometry
 from f1ar.presentation.view_model import track_view
@@ -82,22 +86,39 @@ def main() -> None:
     parser.add_argument("--drivers", nargs="+", default=["VER", "HAM", "LEC", "NOR", "PIA", "SAI"])
     parser.add_argument("--all", action="store_true", help="full 20-car grid")
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--speed", type=int, default=5, choices=ALLOWED_SPEEDS)
+    parser.add_argument(
+        "--speed", type=int, default=5, choices=sorted({*ALLOWED_SPEEDS, *REPLAY_SPEEDS})
+    )
+    parser.add_argument("--replay", action="store_true", help="replay the real recorded race")
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--db", type=Path, default=ROOT / "saves" / "viewer.sqlite")
     args = parser.parse_args()
 
     roster, profiles = load_event(ROOT / "configs")
     geometry, payload, colors = load_assets(roster)
+    sprite = CAR_SPRITE if CAR_SPRITE.exists() else None
+    if sprite is None:
+        print(f"note: {CAR_SPRITE.relative_to(ROOT)} not found, drawing dots instead of cars")
+
+    if args.replay:
+        race = HistoricalRace.from_processed_dir(MONZA_2024, DATA)
+        clock = ReplayClock(
+            race.duration_s, speed=args.speed if args.speed in REPLAY_SPEEDS else 10
+        )
+        replay = create_replay_app(
+            race, clock, geometry=geometry, track_payload=payload, car_sprite=sprite
+        )
+        print(f"F1AR REAL-RACE REPLAY -> http://127.0.0.1:{args.port}  (Ctrl+C to stop)")
+        uvicorn.run(replay, host="127.0.0.1", port=args.port, log_level="warning")
+        return
+    if args.speed not in ALLOWED_SPEEDS:
+        parser.error(f"simulation speed must be one of {ALLOWED_SPEEDS}")
     setup = setup_from_codes(roster, profiles, None if args.all else args.drivers)
     store = SnapshotStore(args.db)
 
     def new_world(seed: int, world_id: str) -> WorldState:
         return engine.create_world(setup, seed=seed, world_id=world_id)
 
-    sprite = CAR_SPRITE if CAR_SPRITE.exists() else None
-    if sprite is None:
-        print(f"note: {CAR_SPRITE.relative_to(ROOT)} not found, drawing dots instead of cars")
     app = create_app(
         new_world,
         seed=args.seed,

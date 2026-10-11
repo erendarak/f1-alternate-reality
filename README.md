@@ -49,7 +49,9 @@ This creates `.venv/` with Python 3.12, the `f1ar` package (editable) and the de
 | Verify local data files against the manifest | `uv run python scripts/fetch_monza_2024.py --verify` |
 | Run the opt-in network tests | `uv run pytest -m network` |
 | Replay the REAL 2024 race lap by lap (history, not simulation) | `uv run python scripts/replay_monza_2024.py` |
-| **Watch the race on the real Monza map** (debug viewer) | `uv run python scripts/debug_viewer.py` then open http://127.0.0.1:8765 (Space = play/pause, → = step) |
+| **Watch the race on the real Monza map** (debug viewer) | `uv run python scripts/debug_viewer.py` then open http://127.0.0.1:8765 |
+| **Watch the REAL 2024 race replayed on the map** | `uv run python scripts/debug_viewer.py --replay` |
+| Viewer controls | Space play/pause · → step · mouse wheel zoom · drag pan · click car = select · **F** follow · **B** or double-click = battle cam · Esc fit |
 | Re-fetch a race roster (Jolpica) | `uv run python scripts/build_roster.py --season 2024 --round 16 --event-id 2024_italian_gp` |
 
 ## Repository layout

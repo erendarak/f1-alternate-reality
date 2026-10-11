@@ -253,3 +253,23 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   official 2.664 s). Pinned by a `network` test.
 - **Next (M1/M2):** draw the replay on the debug viewer; later, `HISTORICAL_ALTERNATE` = real history
   up to lap N, then the engine takes over (needs pit stops and real start compounds in the engine, M2).
+
+## D-019 — Viewer camera (zoom / follow / battle cam) and the real-race replay viewer (2026-10-12)
+
+- **Camera** (page-side, display only): the view looks at a point in the rotated track frame with a
+  zoom on top of the fit-the-track scale. Mouse wheel zooms around the cursor (x1–x80), drag pans,
+  `Fit`/Esc resets. **Follow** (F) keeps the selected car centred at the current zoom. **Battle
+  cam** (B, or double-click a car) = follow + zoom to 7 px/m (~200 m of track on screen). Easing is
+  time-based (`1 − e^(−dt/τ)`) so it also converges when the browser throttles frames. A
+  `ResizeObserver` recomputes the base scale when the canvas changes size, including panes that open
+  hidden (zero-size canvases are ignored).
+- **Zoomed rendering:** track width ≥ 14 m to scale, cars 5.6 m to scale (clamped 22–90 px), labels
+  `P# CODE`. Cars within ~9 m of each other get a **display-only** sideways offset (±27 % of track
+  width) so a battle isn't one blob (plan §7.4: never affects results).
+- **Replay viewer** (`scripts/debug_viewer.py --replay`, `f1ar/api/replay_app.py`): same page and
+  endpoint paths, driven by `history/replay.py::ReplayClock` (play/pause/speed up to x50/step/seek,
+  wall time only selects the position in the recording) and `view_model.replay_view` (same JSON
+  shape; `mode = HISTORICAL_REPLAY`; lap type IN/OUT LAP in place of pace mode; real compounds,
+  tyre life and lap times; gaps from progress × leader lap time; laps-down from progress, not from
+  completed-lap counts). The page hides simulation-only controls and labels the view "recorded
+  history". There are no save/fork/pace commands (rejected with 422).

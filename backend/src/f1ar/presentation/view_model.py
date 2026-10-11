@@ -4,9 +4,11 @@ This is a spectator ("god") view, not a policy observation: it may show things a
 can't know. Gaps are approximate display values derived from track position.
 """
 
+import math
 from typing import Any
 
 from f1ar.domain.race_state import CarStatus, RaceEvent, WorldState
+from f1ar.history.reference import HistoricalRace
 from f1ar.presentation.track_geometry import TrackGeometry
 from f1ar.simulation.lightweight_engine import standings
 
@@ -85,6 +87,7 @@ def state_view(
             }
         )
     return {
+        "mode": state.mode,
         "world_id": state.world_id,
         "timeline_id": state.timeline_id,
         "seed": state.rng.seed,
@@ -97,4 +100,133 @@ def state_view(
         "engine_version": state.engine_version,
         "cars": cars,
         "events": [e.model_dump(mode="json") for e in recent_events],
+    }
+
+
+# --- recorded race (HISTORICAL_REPLAY) ------------------------------------------------------
+
+_REPLAY_STATUS = {
+    "READY": "CREATED",
+    "PLAYING": "RUNNING",
+    "PAUSED": "PAUSED",
+    "FINISHED": "COMPLETED",
+}
+
+
+def _laps_down(
+    state: str, lead: tuple[int, float, str], lead_laps: int, laps_done: int, frac: float
+) -> int | None:
+    """Whole laps behind the leader by track progress (not by completed-lap count).
+
+    Right after the leader crosses the line everyone else has one lap fewer *completed* but
+    is not a lap *down*; only a full lap of progress counts.
+    """
+    if state == "RETIRED":
+        return None
+    if state == "FINISHED":
+        return lead_laps - laps_done
+    return math.floor((lead[0] + lead[1]) - (laps_done + frac))
+
+
+def replay_view(
+    race: HistoricalRace,
+    geometry: TrackGeometry,
+    *,
+    replay_s: float,
+    status: str,
+    speed: int,
+    recent: int = 12,
+) -> dict[str, Any]:
+    """Same JSON shape as ``state_view`` so one page can show both modes.
+
+    ``pace_mode`` carries the lap type instead (``IN LAP`` / ``OUT LAP`` / blank), since the
+    recording has no pace intent. Gaps are approximate: progress difference times the leader's
+    current lap time.
+    """
+    progress = race.progress_at(replay_s)
+    t_abs = race.race_start_s + replay_s
+
+    def sort_key(code: str) -> tuple[int, float, int]:
+        laps, frac, state = progress[code]
+        car = race.car(code)
+        if state == "FINISHED":
+            return (0, car.laps[-1].end_s - car.laps_completed * 1e6, car.grid_position)
+        if state == "RETIRED":
+            return (2, -(laps + frac), car.grid_position)
+        return (1, -(laps + frac), car.grid_position)  # ties (e.g. the start): grid order
+
+    order = sorted(progress, key=sort_key)
+    lead = progress[order[0]]
+    lead_car = race.car(order[0])
+    lead_lap = lead_car.laps[min(lead[0], lead_car.laps_completed - 1)]
+    lead_lap_time = lead_lap.end_s - lead_lap.start_s
+    cars = []
+    for pos, code in enumerate(order, start=1):
+        laps_done, frac, state = progress[code]
+        car = race.car(code)
+        current = car.laps[laps_done] if laps_done < car.laps_completed else car.laps[-1]
+        last = car.laps[laps_done - 1] if laps_done >= 1 else None
+        x, y = geometry.point_at(frac)
+        lap_kind = (
+            "IN LAP" if current.pit_in else "OUT LAP" if current.pit_out and current.lap > 1 else ""
+        )
+        if state == "FINISHED":
+            lead_finish = lead_car.laps[-1].end_s
+            gap: float | None = (
+                car.laps[-1].end_s - lead_finish
+                if car.laps_completed == lead_car.laps_completed
+                else None
+            )
+        elif state == "RETIRED":
+            gap = None
+        else:
+            gap = ((lead[0] + lead[1]) - (laps_done + frac)) * lead_lap_time
+        cars.append(
+            {
+                "position": pos,
+                "driver_id": code,
+                "code": code,
+                "team_color": car.team_color or DEFAULT_COLOR,
+                "x": round(x, 1),
+                "y": round(y, 1),
+                "heading_deg": round(geometry.heading_at(frac), 1),
+                "lap": min(laps_done + 1, race.total_laps),
+                "laps_completed": laps_done,
+                "status": state,
+                "compound": current.compound or "UNKNOWN",
+                "tyre_age_laps": current.tyre_life_laps
+                if current.tyre_life_laps is not None
+                else 0,
+                "pace_mode": lap_kind,
+                "lap_pace_mode": lap_kind,
+                "last_lap_time_s": last.lap_time_s if last else None,
+                "gap_to_leader_s": None if gap is None else round(gap, 3),
+                "laps_down": _laps_down(state, lead, lead_car.laps_completed, laps_done, frac),
+            }
+        )
+    events = [e for e in race.events() if e.session_time_s <= t_abs][-recent:]
+    return {
+        "mode": race.mode,
+        "world_id": race.event_id,
+        "timeline_id": "recorded",
+        "seed": None,
+        "status": _REPLAY_STATUS[status],
+        "tick": None,
+        "sim_clock_s": replay_s,
+        "duration_s": race.duration_s,
+        "speed": speed,
+        "leader_lap": min(lead[0] + 1, race.total_laps),
+        "total_laps": race.total_laps,
+        "engine_version": None,
+        "cars": cars,
+        "events": [
+            {
+                "seq": i,
+                "tick": None,
+                "type": e.type,
+                "driver_id": e.code,
+                "payload": {"lap": e.lap, "detail": e.detail},
+            }
+            for i, e in enumerate(events)
+        ],
     }

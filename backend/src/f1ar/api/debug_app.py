@@ -39,6 +39,37 @@ WorldFactory = Callable[[int, str], WorldState]
 """``(seed, world_id) -> new CREATED world``."""
 
 
+def sprite_payload(car_sprite: Path | None) -> dict[str, Any] | None:
+    """How the page recolours the base sprite (exact-match pixel replacement), or None."""
+    if car_sprite is None:
+        return None
+    return {
+        "url": "/assets/car.png",
+        "paint_rgb": SPRITE_PAINT_RGB,
+        "background_rgb": SPRITE_BACKGROUND_RGB,
+        "credit": SPRITE_CREDIT,
+    }
+
+
+def add_shared_routes(app: FastAPI, track_payload: dict[str, Any], car_sprite: Path | None) -> None:
+    """Page, car sprite and track: identical for the simulation and the replay viewer."""
+    payload = {**track_payload, "car_sprite": sprite_payload(car_sprite)}
+
+    @app.get("/", include_in_schema=False)
+    def index() -> FileResponse:
+        return FileResponse(STATIC / "debug_viewer.html")
+
+    @app.get("/assets/car.png", include_in_schema=False)
+    def sprite() -> FileResponse:
+        if car_sprite is None or not car_sprite.exists():
+            raise HTTPException(status_code=404, detail="no car sprite configured")
+        return FileResponse(car_sprite, media_type="image/png")
+
+    @app.get("/api/debug/track")
+    def track() -> dict[str, Any]:
+        return payload
+
+
 class CommandRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -117,32 +148,7 @@ def create_app(
                 session.runner.stop_background()
 
     app = FastAPI(title="F1AR debug viewer", lifespan=lifespan)
-    payload = {
-        **track_payload,
-        # How the page recolours the base sprite: exact-match pixel replacement.
-        "car_sprite": {
-            "url": "/assets/car.png",
-            "paint_rgb": SPRITE_PAINT_RGB,
-            "background_rgb": SPRITE_BACKGROUND_RGB,
-            "credit": SPRITE_CREDIT,
-        }
-        if car_sprite is not None
-        else None,
-    }
-
-    @app.get("/", include_in_schema=False)
-    def index() -> FileResponse:
-        return FileResponse(STATIC / "debug_viewer.html")
-
-    @app.get("/assets/car.png", include_in_schema=False)
-    def sprite() -> FileResponse:
-        if car_sprite is None or not car_sprite.exists():
-            raise HTTPException(status_code=404, detail="no car sprite configured")
-        return FileResponse(car_sprite, media_type="image/png")
-
-    @app.get("/api/debug/track")
-    def track() -> dict[str, Any]:
-        return payload
+    add_shared_routes(app, track_payload, car_sprite)
 
     @app.get("/api/debug/state")
     def state() -> dict[str, Any]:

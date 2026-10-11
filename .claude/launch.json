@@ -4,8 +4,29 @@
     {
       "name": "debug-viewer",
       "runtimeExecutable": "uv",
-      "runtimeArgs": ["run", "python", "scripts/debug_viewer.py", "--speed", "10"],
+      "runtimeArgs": [
+        "run",
+        "python",
+        "scripts/debug_viewer.py",
+        "--speed",
+        "10"
+      ],
       "port": 8765
+    },
+    {
+      "name": "replay-viewer",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": [
+        "run",
+        "python",
+        "scripts/debug_viewer.py",
+        "--replay",
+        "--speed",
+        "10",
+        "--port",
+        "8766"
+      ],
+      "port": 8766
     }
   ]
 }

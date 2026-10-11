@@ -9,7 +9,7 @@ M0 and M0.5 are complete (gate 5/5; see below). M1 tasks, adapted to what step 7
 - [x] Track geometry (FastF1 outline + corners instead of the TUM centreline, D-016/D-017).
 - [x] Offline synthetic fixtures for all data code (step 7, M1).
 - [x] **Historical reference race + reference event list; `HISTORICAL_REPLAY` separated in code (D-018).**
-- [ ] Real race replay on the debug viewer map (play/pause/speed/seek; no fork, no actions).
+- [x] Real race replay on the debug viewer map (play/pause/speed/seek; no fork, no actions) + camera.
 - [ ] More events through the same pipeline (generalise `fetch_monza_2024.py` to any season/round).
 - [ ] Engine inputs from data: real start compounds, per-driver/team pace baselines from
       representative laps (feeds M2/M4 calibration).
@@ -228,3 +228,21 @@ Plan §22 checklist (adapted per D-002):
   LEC–PIA–NOR, gap 2.7 s; TSU the only retirement.
 - Tests: 161 offline passing (+6 history tests) + 2 opt-in network tests.
 - Next: replay the real race on the debug viewer map.
+
+### 2026-10-12 — M1 slice 2: real-race replay on the map + camera system
+
+- `history/replay.py` (ReplayClock), `presentation/view_model.replay_view`, `api/replay_app.py`, a shared
+  route helper in `debug_app.py`, `debug_viewer.py --replay`, launch config `replay-viewer`.
+- Page rewrite with a camera: wheel zoom at cursor, drag pan, Fit, **Follow**, **Battle cam**
+  (follow + zoom), double-click a car = battle cam, display-only side-by-side spreading,
+  to-scale track/cars when zoomed (D-019).
+- Verified in the browser: battle cam on VER in the simulation; replay seek to lap 15 shows the real
+  in-laps (NOR, MAG on lap 14; LEC, HAM on lap 15) and NOR's out-lap on 1-lap-old hards; battle cam
+  on LEC's in-lap behind SAI.
+- Bugs found and fixed while verifying: (1) per-frame camera easing stalled when the browser throttled
+  frames → time-based easing; (2) base scale computed while the pane was hidden (height 0 → negative
+  scale) → ResizeObserver + size guard; (3) replay tower showed "+1 lap" for everyone just after the
+  leader crossed the line → laps-down from track progress (regression test).
+- Tests: 170 offline passing (+10 replay clock/view/API) + 2 network.
+- Next M1 items: generalise fetching to any event; engine inputs from data (real start compounds,
+  pace baselines).
