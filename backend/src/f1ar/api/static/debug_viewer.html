@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>F1AR Debug Viewer</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #171a21; --line: #2a2f3a; --text: #e6e8eb; --muted: #8b93a1;
+    --track: #3a404c; --track-edge: #5a6272; --accent: #e10600; --ok: #3ccf91; --warn: #f5b041;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 13px/1.4 system-ui, Segoe UI, sans-serif; }
+  .app { display: grid; grid-template-columns: 1fr 380px; height: 100vh; }
+  .stage { position: relative; min-width: 0; }
+  canvas { width: 100%; height: 100%; display: block; }
+  .badge { position: absolute; left: 12px; top: 10px; color: var(--muted); font-size: 12px; }
+  .badge b { color: var(--warn); font-weight: 600; letter-spacing: .04em; }
+  aside { background: var(--panel); border-left: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; }
+  header { padding: 12px 14px; border-bottom: 1px solid var(--line); }
+  header h1 { font-size: 14px; margin: 0 0 6px; letter-spacing: .05em; }
+  .status { display: flex; gap: 10px; flex-wrap: wrap; color: var(--muted); }
+  .status span b { color: var(--text); font-variant-numeric: tabular-nums; }
+  .pill { padding: 1px 7px; border-radius: 9px; font-weight: 600; font-size: 11px; }
+  .pill.RUNNING { background: #123d2c; color: var(--ok); }
+  .pill.PAUSED { background: #3d2f12; color: var(--warn); }
+  .pill.CREATED, .pill.COMPLETED { background: #2a2f3a; color: var(--text); }
+  .controls { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  button { background: #222733; color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px; font: inherit; cursor: pointer; }
+  button:hover { border-color: #49505e; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+  button.on { outline: 2px solid #c9ced6; }
+  .tower { overflow: auto; flex: 1; min-height: 0; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th { position: sticky; top: 0; background: var(--panel); color: var(--muted); font-weight: 500; text-align: left; padding: 6px 6px; border-bottom: 1px solid var(--line); }
+  td { padding: 4px 6px; border-bottom: 1px solid #1f232c; white-space: nowrap; }
+  tr { cursor: pointer; }
+  tr.sel td { background: #232836; }
+  .chip { display: inline-block; width: 4px; height: 14px; border-radius: 2px; vertical-align: -2px; margin-right: 6px; }
+  .tyre { display: inline-block; width: 18px; height: 18px; line-height: 16px; text-align: center; border-radius: 50%; border: 2px solid; font-weight: 700; font-size: 10px; }
+  .tyre.SOFT { border-color: #e8002d; } .tyre.MEDIUM { border-color: #ffd12e; } .tyre.HARD { border-color: #f0f0f0; }
+  .mode { font-size: 11px; color: var(--muted); }
+  .mode.PUSH { color: #ff6b6b; } .mode.CONSERVE { color: #6bc2ff; }
+  .driverbox { padding: 10px 14px; border-top: 1px solid var(--line); }
+  .driverbox .row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .log { max-height: 130px; overflow: auto; padding: 8px 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+  .msg { color: var(--warn); min-height: 18px; padding: 0 14px 8px; font-size: 12px; }
+  footer { padding: 8px 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+  @media (max-width: 900px) { .app { grid-template-columns: 1fr; grid-template-rows: 55vh 1fr; } aside { border-left: 0; border-top: 1px solid var(--line); } }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="stage">
+    <canvas id="map"></canvas>
+    <div class="badge"><b>DEBUG VIEWER</b> · read-only view of backend state · positions interpolated on the FastF1 outline</div>
+  </div>
+  <aside>
+    <header>
+      <h1>MONZA 2024 · ALTERNATE SIMULATION</h1>
+      <div class="status">
+        <span id="pill" class="pill CREATED">CREATED</span>
+        <span>Lap <b id="lap">–</b></span>
+        <span>Sim <b id="clock">0:00.0</b></span>
+        <span>Tick <b id="tick">0</b></span>
+        <span>x<b id="speed">1</b></span>
+      </div>
+    </header>
+    <div class="controls">
+      <button id="play" class="primary">Start</button>
+      <button data-step="1" title="Right arrow">Step tick</button>
+      <button data-step="168" title="Shift + Right arrow">Step ~lap</button>
+      <span style="flex-basis:100%;height:0"></span>
+      <button data-speed="1">x1</button><button data-speed="2">x2</button><button data-speed="5">x5</button>
+      <button data-speed="10">x10</button><button data-speed="25">x25</button>
+      <button id="save">Save</button>
+    </div>
+    <div class="msg" id="msg"></div>
+    <div class="tower">
+      <table>
+        <thead><tr><th>P</th><th>Driver</th><th>Gap</th><th>Lap</th><th>Tyre</th><th>Mode</th><th>Last lap</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div class="driverbox">
+      <div class="row"><span id="selname" style="min-width:90px;color:var(--muted)">Select a driver</span>
+        <button data-mode="CONSERVE">Conserve</button><button data-mode="BALANCED">Balanced</button><button data-mode="PUSH">Push</button>
+      </div>
+    </div>
+    <div class="log" id="log"></div>
+    <footer>Synthetic, uncalibrated lap model · no pit stops/traffic yet · Space = play/pause · → step</footer>
+  </aside>
+</div>
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const canvas = $("map"), ctx = canvas.getContext("2d");
+let track = null, view = null, selected = null;
+let prev = new Map(), curr = new Map(), lastPoll = performance.now();
+const POLL_MS = 100;
+
+async function api(path, body) {
+  const res = await fetch(path, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {});
+  if (!res.ok) throw new Error(`${res.status} ${await res.text()}`);
+  return res.json();
+}
+
+async function command(body) {
+  try {
+    const ack = await api("/api/debug/command", { idempotency_key: crypto.randomUUID(), ...body });
+    $("msg").textContent = ack.accepted
+      ? `${ack.type} applied at tick ${ack.applied_tick}${ack.snapshot_id ? " · saved " + ack.snapshot_id : ""}`
+      : `${ack.type} rejected: ${ack.reason}`;
+  } catch (e) { $("msg").textContent = String(e); }
+}
+
+// --- geometry: rotate world (metres) into screen space -------------------------------------
+let tf = null;
+function rotate([x, y], deg) {
+  const a = (deg * Math.PI) / 180, c = Math.cos(a), s = Math.sin(a);
+  return [x * c - y * s, x * s + y * c];
+}
+function fit() {
+  const dpr = window.devicePixelRatio || 1, w = canvas.clientWidth, h = canvas.clientHeight;
+  canvas.width = w * dpr; canvas.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  if (!track) return;
+  const pts = track.outline.map((p) => rotate(p, track.rotation_deg));
+  const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+  const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+  const pad = 60, scale = Math.min((w - 2 * pad) / (maxX - minX), (h - 2 * pad) / (maxY - minY));
+  const ox = (w - scale * (maxX - minX)) / 2, oy = (h - scale * (maxY - minY)) / 2;
+  tf = (p) => { const [x, y] = rotate(p, track.rotation_deg); return [ox + (x - minX) * scale, h - (oy + (y - minY) * scale)]; };
+}
+
+function drawTrack() {
+  const path = new Path2D();
+  track.outline.forEach((p, i) => { const [x, y] = tf(p); i ? path.lineTo(x, y) : path.moveTo(x, y); });
+  path.closePath();
+  ctx.lineJoin = "round"; ctx.lineCap = "round";
+  ctx.strokeStyle = getCss("--track-edge"); ctx.lineWidth = 16; ctx.stroke(path);
+  ctx.strokeStyle = getCss("--track"); ctx.lineWidth = 12; ctx.stroke(path);
+  // start/finish line
+  const [sx, sy] = tf(track.outline[0]), [nx, ny] = tf(track.outline[1]);
+  const ang = Math.atan2(ny - sy, nx - sx) + Math.PI / 2;
+  ctx.strokeStyle = "#fff"; ctx.lineWidth = 3; ctx.beginPath();
+  ctx.moveTo(sx - 10 * Math.cos(ang), sy - 10 * Math.sin(ang)); ctx.lineTo(sx + 10 * Math.cos(ang), sy + 10 * Math.sin(ang)); ctx.stroke();
+  // corner numbers (offset away from the track along the corner angle, like FastF1's examples)
+  ctx.font = "11px system-ui"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  for (const c of track.corners) {
+    const off = rotate([60, 0], c.angle_deg);
+    const [x, y] = tf([c.x_m + off[0], c.y_m + off[1]]);
+    ctx.fillStyle = "#2a2f3a"; ctx.beginPath(); ctx.arc(x, y, 9, 0, 2 * Math.PI); ctx.fill();
+    ctx.fillStyle = "#c9ced6"; ctx.fillText(String(c.number) + (c.letter || ""), x, y);
+  }
+}
+
+function drawCars(alpha) {
+  if (!view) return;
+  ctx.font = "bold 10px system-ui"; ctx.textAlign = "left"; ctx.textBaseline = "middle";
+  // draw back-markers first so the leader is on top
+  for (const car of [...view.cars].reverse()) {
+    const a = prev.get(car.driver_id), b = curr.get(car.driver_id);
+    if (!b) continue;
+    const jump = a ? Math.hypot(b[0] - a[0], b[1] - a[1]) : 0;
+    const p = !a || jump > 400 || view.status !== "RUNNING" ? b : [a[0] + (b[0] - a[0]) * alpha, a[1] + (b[1] - a[1]) * alpha];
+    const [x, y] = tf(p);
+    ctx.fillStyle = "#" + car.team_color; ctx.strokeStyle = car.driver_id === selected ? "#fff" : "#0f1115";
+    ctx.lineWidth = car.driver_id === selected ? 3 : 2;
+    ctx.beginPath(); ctx.arc(x, y, 7, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = "#e6e8eb"; ctx.fillText(car.code, x + 10, y);
+  }
+}
+
+function frame() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (track && tf) {
+    drawTrack();
+    drawCars(Math.min(1, (performance.now() - lastPoll) / POLL_MS));
+  }
+  requestAnimationFrame(frame);
+}
+
+// --- polling + panel -------------------------------------------------------------------------
+const fmtClock = (s) => `${Math.floor(s / 60)}:${(s % 60).toFixed(1).padStart(4, "0")}`;
+const fmtLap = (s) => (s == null ? "–" : `${Math.floor(s / 60)}:${(s % 60).toFixed(3).padStart(6, "0")}`);
+
+function render() {
+  $("pill").textContent = view.status; $("pill").className = "pill " + view.status;
+  $("lap").textContent = `${view.leader_lap}/${view.total_laps}`;
+  $("clock").textContent = fmtClock(view.sim_clock_s); $("tick").textContent = view.tick; $("speed").textContent = view.speed;
+  $("play").textContent = view.status === "CREATED" ? "Start" : view.status === "RUNNING" ? "Pause" : view.status === "PAUSED" ? "Resume" : "Finished";
+  document.querySelectorAll("[data-speed]").forEach((b) => b.classList.toggle("on", Number(b.dataset.speed) === view.speed));
+  $("rows").innerHTML = view.cars.map((c) => `
+    <tr data-id="${c.driver_id}" class="${c.driver_id === selected ? "sel" : ""}">
+      <td>${c.position}</td>
+      <td><span class="chip" style="background:#${c.team_color}"></span>${c.code}</td>
+      <td>${c.position === 1 ? "Leader" : "+" + c.gap_to_leader_s.toFixed(1)}</td>
+      <td>${c.status === "FINISHED" ? "🏁" : c.lap}</td>
+      <td><span class="tyre ${c.compound}" title="${c.compound}, ${c.tyre_age_laps} laps">${c.compound[0]}</span> ${c.tyre_age_laps}</td>
+      <td class="mode ${c.pace_mode}">${c.pace_mode === c.lap_pace_mode ? c.pace_mode : c.lap_pace_mode + "→" + c.pace_mode}</td>
+      <td>${fmtLap(c.last_lap_time_s)}</td>
+    </tr>`).join("");
+  const sel = view.cars.find((c) => c.driver_id === selected);
+  $("selname").textContent = sel ? `${sel.code} pace:` : "Select a driver";
+  $("log").innerHTML = [...view.events].reverse().map((e) => {
+    const who = view.cars.find((c) => c.driver_id === e.driver_id)?.code || "";
+    const p = e.payload, txt = e.type === "LAP_COMPLETED" ? `lap ${p.lap} ${fmtLap(p.lap_time_s)}` : e.type === "PACE_MODE_CHANGED" ? `${p.from}→${p.to} from lap ${p.effective_from_lap}` : JSON.stringify(p);
+    return `<div>t${e.tick} · ${who} ${e.type} ${txt}</div>`;
+  }).join("");
+}
+
+async function poll() {
+  try {
+    const next = await api("/api/debug/state");
+    prev = curr; curr = new Map(next.cars.map((c) => [c.driver_id, [c.x, c.y]]));
+    view = next; lastPoll = performance.now(); render();
+  } catch (e) { $("msg").textContent = "backend unreachable: " + e; }
+  setTimeout(poll, POLL_MS);
+}
+
+// --- wiring ------------------------------------------------------------------------------------
+function togglePlay() {
+  if (!view) return;
+  const t = { CREATED: "START", RUNNING: "PAUSE", PAUSED: "RESUME" }[view.status];
+  if (t) command({ type: t });
+}
+$("play").onclick = togglePlay;
+$("save").onclick = () => command({ type: "SAVE" });
+document.querySelectorAll("[data-speed]").forEach((b) => (b.onclick = () => command({ type: "SET_SPEED", speed: Number(b.dataset.speed) })));
+document.querySelectorAll("[data-step]").forEach((b) => (b.onclick = () => command({ type: "STEP", ticks: Number(b.dataset.step) })));
+document.querySelectorAll("[data-mode]").forEach((b) => (b.onclick = () => selected && command({ type: "SET_PACE_MODE", driver_id: selected, pace_mode: b.dataset.mode })));
+$("rows").onclick = (e) => { const tr = e.target.closest("tr"); if (tr) { selected = tr.dataset.id; render(); } };
+canvas.onclick = (e) => {
+  if (!view || !tf) return;
+  const r = canvas.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+  let best = null, bestD = 14;
+  for (const c of view.cars) { const [x, y] = tf([c.x, c.y]); const d = Math.hypot(x - mx, y - my); if (d < bestD) { best = c; bestD = d; } }
+  if (best) { selected = best.driver_id; render(); }
+};
+window.addEventListener("keydown", (e) => {
+  if (e.target.tagName === "INPUT") return;
+  if (e.code === "Space") { e.preventDefault(); togglePlay(); }
+  if (e.code === "ArrowRight") command({ type: "STEP", ticks: e.shiftKey ? 168 : 1 });
+});
+function getCss(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+window.addEventListener("resize", fit);
+
+(async () => {
+  track = await api("/api/debug/track");
+  fit(); requestAnimationFrame(frame); poll();
+})();
+</script>
+</body>
+</html>

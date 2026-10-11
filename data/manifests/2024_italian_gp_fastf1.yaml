@@ -2,7 +2,7 @@ dataset_id: 2024_italian_gp_fastf1_v1
 event: 2024_italian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-11T20:23:24Z'
+retrieved_utc: '2026-10-11T20:47:17Z'
 session_key: 2024/round 16/R
 license_review_status: research_only
 files:
@@ -35,7 +35,7 @@ files:
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2024_italian_gp/results.parquet
-  sha256: sha256:f1401c35971eddb1c770c2bbac15c39f409e24166c03c7b43acc744f41c3e0e2
+  sha256: sha256:38f3f3c55cc30dbcd8f0b6fba3bc045ce7048fd13304ac6c9375e2c0fe9915d5
   rows: 20
   columns:
   - driver_number
@@ -48,6 +48,7 @@ files:
   - status
   - laps
   - points
+  - team_color
   source_type: historical_verified
   description: official classification incl. grid, status, laps
 - relative_path: data/processed/2024_italian_gp/weather.parquet
@@ -86,6 +87,18 @@ files:
   - message
   source_type: historical_verified
   description: race control messages
+- relative_path: data/processed/2024_italian_gp/corners.parquet
+  sha256: sha256:6f4b1cb56bf6318970705cb14caac8e20e08357f0467ebc70ee300f76aa1b4df
+  rows: 11
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
 - relative_path: data/processed/2024_italian_gp/positions.parquet
   sha256: sha256:b384ba0954a774538fe54d9ad9f1203cfff2e4b2d8fd791a0288315025f6d7bc
   rows: 612740

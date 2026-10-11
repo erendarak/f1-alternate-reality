@@ -17,6 +17,17 @@ before heavier or different use.
 
 Attribution: data from Jolpica-F1 (CC BY-NC-SA 4.0) and from F1 live timing via the FastF1 library.
 
+The debug viewer's track outline, corner markers, display rotation and team colours are all derived
+from that FastF1/F1-timing data and follow the same rules (generated locally, not committed).
+
+## Visual assets
+
+| Asset | Status | Terms |
+|---|---|---|
+| Track drawing | Generated from data (above) | n/a |
+| Cars in the debug viewer | Coloured dots + 3-letter codes; no logos/liveries | n/a |
+| [palm-tree, "Formula 1 inspired 2D pixel art car pack"](https://palm-tree.itch.io/formula-1-inspired-2d-pixel-art-car-pack) | **Proposed for M3, not in the repo yet** (the user downloads it) | Read 2026-10-12. No formal licence on the page. The author's replies: commercial use *"Yes, you absolutely can"*; *"feel free to use it however you want. there's no charge."* Pay-what-you-want; the author asks for a link to games using it. 4 cars "inspired by" 2021 Red Bull/Mercedes/McLaren/Ferrari. **Plan:** keep the original files under `assets/third_party/palm-tree-f1-pack/` with a note of these terms, credit "palm-tree" in the UI, and use one neutral sprite recoloured with team colours rather than the real-livery-like designs. |
+
 ## Planned (not used yet)
 
 | Source | Notes |

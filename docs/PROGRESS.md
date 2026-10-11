@@ -13,7 +13,7 @@ Plan §22 checklist (adapted per D-002):
 - [ ] **6b.** Terminal timing tower in `demo_headless.py` (D-002).
 - [x] **7.** FastF1 Monza 2024 fetch/cache + data quality report.
 - [x] **8.** TUM race-simulation feasibility memo → go/no-go (fallback C pre-approved, D-003).
-- [ ] **M0.5** Debug viewer: Monza outline + car dots from backend state (D-002).
+- [x] **M0.5** Debug viewer: Monza outline + car dots from backend state (D-002).
 
 ## Session log
 
@@ -182,3 +182,22 @@ Plan §22 checklist (adapted per D-002):
 **M0 acceptance gate: 5/5.** Remaining from the adapted plan: M0.5 debug viewer (D-002); step 6b
 (terminal tower) is effectively covered by `live_race.py`.
 - Next: M0.5, debug viewer (Monza outline from FastF1 + car dots from backend state).
+
+### 2026-10-12 — M0.5: debug viewer (first visual)
+
+- Data pipeline extended: `results.team_color` (official timing colours) and `corners.parquet`
+  (11 corners + 95° display rotation from FastF1 `get_circuit_info()`).
+- `f1ar.presentation.track_geometry` (arc-length placement), `f1ar.presentation.view_model`
+  (pure state → JSON), `f1ar.api.debug_app` (FastAPI over one live `WorldRunner`), page
+  `f1ar/api/static/debug_viewer.html`, launcher `scripts/debug_viewer.py`, `.claude/launch.json`.
+- Verified in the browser: real Monza outline with corner numbers and start/finish line; cars in team
+  colours move continuously. Start, pause (applied at tick 763, lap 5), select driver, PUSH
+  (`PACE_MODE_CHANGED … from lap 6` in the event log), resume (no catch-up). Timing tower shows
+  ~1:24.2 laps.
+- Assets: track from data, cars as team-colour dots (D-017). The user proposed the palm-tree pixel car
+  pack; its terms are recorded and it's planned for M3 (one sprite recoloured per team).
+- Dev deps: `httpx` → `httpx2` (Starlette 1.7 test client).
+- Tests: 147 passing (+9 viewer tests: placement by lap fraction, view model purity, colour fallback,
+  page/track served, commands relayed incl. step/pace/save/rejections, idempotency, 422 on bad input).
+- **M0 + M0.5 complete.** Next: M1, the historical data layer (plan §16): repeatable fetch for more
+  races, real start compounds/strategies as a historical-replay reference, and engine inputs from data.

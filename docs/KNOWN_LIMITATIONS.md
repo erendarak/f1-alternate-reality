@@ -2,7 +2,14 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
-## Current (M0 complete)
+## Current (M0 + M0.5 complete)
+
+- **Debug viewer:** it polls at 10 Hz with linear interpolation; at x25, dots move in visible steps.
+  There's no pit lane, no zoom/follow camera and no sprites (M3). Gaps are display estimates from
+  track position at a nominal pace. It needs `scripts/fetch_monza_2024.py` to have run (outline,
+  corners, colours are local data).
+- Cars drive the sampled racing path at constant speed per lap (no corner slow-down), so dots move
+  uniformly. The race result is unaffected.
 
 - **Engine throughput** is about 0.5 s per 20-car race at 0.5 s ticks (~2 races/s). That's fine for live
   play and Monte Carlo of tens of races, but possibly slow for large RL training. Plan: a lap-level

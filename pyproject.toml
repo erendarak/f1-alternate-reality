@@ -5,14 +5,17 @@ description = "F1 Alternate Reality — living championship simulator (pausable,
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "fastapi>=0.143.0",
     "fastf1>=3.8.3",
     "pyarrow>=26.0.0",
     "pydantic>=2.14.0",
     "pyyaml>=6.0.3",
+    "uvicorn>=0.54.0",
 ]
 
 [dependency-groups]
 dev = [
+    "httpx2>=2.13.1",
     "mypy>=2.4.0",
     "pandas-stubs>=3.0.5.260914",
     "pytest>=9.1.1",

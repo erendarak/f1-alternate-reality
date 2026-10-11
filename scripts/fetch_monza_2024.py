@@ -100,6 +100,13 @@ def main() -> None:
             source_type=hist,
             description="race control messages",
         ),
+        write_table(
+            tables.corners,
+            OUT / "corners.parquet",
+            root=ROOT,
+            source_type=hist,
+            description="corner numbers/positions (metres) + suggested display rotation",
+        ),
     ]
     if not tables.positions.empty:
         winner = int(tables.results.iloc[0]["driver_number"])

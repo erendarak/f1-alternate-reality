@@ -4,8 +4,8 @@ A persistent, forkable F1 world. It starts from real historical races (first tar
 From there, profile-conditioned AI strategists decide what happens next. You can pause, save, reload and
 branch the timeline at any moment.
 
-> **Status:** M0. A headless, deterministic race engine runs (placeholder lap model, no UI yet);
-> see [docs/PROGRESS.md](docs/PROGRESS.md).
+> **Status:** M0 + M0.5 done. A deterministic race engine with pause/save/load/fork, real Monza 2024 data,
+> and a browser debug viewer (placeholder lap model). See [docs/PROGRESS.md](docs/PROGRESS.md).
 > The full product and technical plan is [F1_ALTERNATE_REALITY_MASTER_PLAN.md](F1_ALTERNATE_REALITY_MASTER_PLAN.md).
 
 Alternate outcomes are **simulation estimates** built on modelling assumptions. They are not historical facts.
@@ -48,6 +48,7 @@ This creates `.venv/` with Python 3.12, the `f1ar` package (editable) and the de
 | Fetch + validate real Monza 2024 data (FastF1) | `uv run python scripts/fetch_monza_2024.py` (report: `docs/data/2024_italian_gp_quality.md`) |
 | Verify local data files against the manifest | `uv run python scripts/fetch_monza_2024.py --verify` |
 | Run the opt-in network tests | `uv run pytest -m network` |
+| **Watch the race on the real Monza map** (debug viewer) | `uv run python scripts/debug_viewer.py` then open http://127.0.0.1:8765 (Space = play/pause, → = step) |
 | Re-fetch a race roster (Jolpica) | `uv run python scripts/build_roster.py --season 2024 --round 16 --event-id 2024_italian_gp` |
 
 ## Repository layout

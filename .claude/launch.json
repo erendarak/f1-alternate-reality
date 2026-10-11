@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "debug-viewer",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "python", "scripts/debug_viewer.py", "--speed", "10"],
+      "port": 8765
+    }
+  ]
+}

@@ -13,7 +13,7 @@ as processed by FastF1 (which partly repairs/derives data; see its ``FastF1Gener
 ``IsAccurate`` flags, kept as columns). ``track_outline`` is ``derived``.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -42,6 +42,7 @@ class RaceTables:
     track_status: pd.DataFrame
     race_control: pd.DataFrame
     positions: pd.DataFrame
+    corners: pd.DataFrame = field(default_factory=lambda: _empty_corners())
 
 
 class DataSourceError(RuntimeError):
@@ -96,6 +97,7 @@ def tables_from_session(session: Any) -> RaceTables:
         track_status=normalize_track_status(session.track_status),
         race_control=normalize_race_control(session.race_control_messages),
         positions=positions,
+        corners=normalize_corners(session.get_circuit_info()),
     )
 
 
@@ -158,6 +160,10 @@ def normalize_results(results: pd.DataFrame) -> pd.DataFrame:
             "status": _str(results["Status"]),
             "laps": _int(results["Laps"]),
             "points": pd.to_numeric(results["Points"], errors="coerce").astype("Float64"),
+            # Official timing colour (hex, no '#'). A colour is data; no logos or liveries are used.
+            "team_color": _str(results["TeamColor"])
+            if "TeamColor" in results
+            else pd.Series(pd.NA, index=results.index, dtype="string"),
         }
     )
     return df.sort_values("position", kind="stable", na_position="last").reset_index(drop=True)
@@ -200,6 +206,42 @@ def normalize_race_control(messages: pd.DataFrame) -> pd.DataFrame:
             "scope": _str(messages["Scope"]),
             "lap": _int(lap),
             "message": _str(messages["Message"]),
+        }
+    )
+
+
+def _empty_corners() -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "number": pd.Series(dtype="Int64"),
+            "letter": pd.Series(dtype="string"),
+            "x_m": pd.Series(dtype="Float64"),
+            "y_m": pd.Series(dtype="Float64"),
+            "angle_deg": pd.Series(dtype="Float64"),
+            "display_rotation_deg": pd.Series(dtype="Float64"),
+        }
+    )
+
+
+def normalize_corners(circuit_info: Any) -> pd.DataFrame:
+    """Corner markers from ``Session.get_circuit_info()`` (same 1/10 m frame as positions).
+
+    ``display_rotation_deg`` is FastF1's suggested rotation so the map looks like the usual
+    broadcast orientation; it is repeated on every row to keep this a single table.
+    """
+    if circuit_info is None:
+        return _empty_corners()
+    c = circuit_info.corners
+    return pd.DataFrame(
+        {
+            "number": _int(c["Number"]),
+            "letter": _str(c["Letter"]),
+            "x_m": (pd.to_numeric(c["X"]) / 10.0).astype("Float64"),
+            "y_m": (pd.to_numeric(c["Y"]) / 10.0).astype("Float64"),
+            "angle_deg": pd.to_numeric(c["Angle"]).astype("Float64"),
+            "display_rotation_deg": pd.Series(
+                float(circuit_info.rotation), index=c.index, dtype="Float64"
+            ),
         }
     )
 

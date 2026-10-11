@@ -208,3 +208,26 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
 - **Kept from TUM as ideas only** (re-implemented, credited): per-driver accident probability,
   start performance, pit standstill distribution, overtaking time loss, FCY handling,
   degradation curve shapes.
+
+## D-017 — M0.5 debug viewer and the visual-asset policy (2026-10-12)
+
+- **Viewer:** `scripts/debug_viewer.py` serves one build-free page
+  (`f1ar/api/static/debug_viewer.html`) from a small FastAPI app (`f1ar/api/debug_app.py`) that
+  wraps one live `WorldRunner`. The page polls `/api/debug/state` (~10 Hz) and posts commands to
+  `/api/debug/command`. All commands go through the runner queue and are applied at tick
+  boundaries, with idempotency keys from the browser. The page never simulates. It linearly
+  interpolates dot positions between polls while RUNNING and snaps to the canonical state when
+  paused. This is a debug tool; the real API + React UI replace it in M3.
+- **Placement:** `presentation/track_geometry.py` maps `distance_m / engine_length` onto the outline
+  by arc length (fraction of a lap). The outline is 5,760 m vs the official 5,793 m, so using
+  fractions means the mismatch can't push cars off the drawing. `presentation/view_model.py` is a
+  pure state → JSON function (a spectator view, not a policy observation).
+- **Track assets come from data, not artwork:** the outline is the winner's lap-30 path; the 11 corner
+  markers and the 95° display rotation come from FastF1 `Session.get_circuit_info()`. All are derived
+  from F1 timing and stay local (gitignored) like the other data.
+- **Car assets:** no F1/team logos, liveries or models. Cars are dots in the **team colour from the
+  official timing feed** (FastF1 `TeamColor`; a colour is data, not a mark), labelled with the 3-letter
+  code. Tyres use letters plus colours (S/M/H). For M3 we can use third-party sprites only with
+  recorded terms. The user-proposed **palm-tree "Formula 1 inspired 2D pixel art car pack"** (terms
+  in `LEGAL_AND_LICENSES.md`) would be used with one neutral base sprite **recoloured per team
+  colour at runtime**, rather than its 2021-livery-like cars, and the author is credited.
