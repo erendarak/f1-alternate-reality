@@ -228,6 +228,14 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
 - **Car assets:** no F1/team logos, liveries or models. Cars are dots in the **team colour from the
   official timing feed** (FastF1 `TeamColor`; a colour is data, not a mark), labelled with the 3-letter
   code. Tyres use letters plus colours (S/M/H). For M3 we can use third-party sprites only with
-  recorded terms. The user-proposed **palm-tree "Formula 1 inspired 2D pixel art car pack"** (terms
-  in `LEGAL_AND_LICENSES.md`) would be used with one neutral base sprite **recoloured per team
-  colour at runtime**, rather than its 2021-livery-like cars, and the author is credited.
+  recorded terms. **Update (same day):** the user added the palm-tree "Formula 1 inspired 2D pixel art
+  car pack" (`assets/third_party/palm-tree-f1-pack/`, terms in `SOURCE.md`). The viewer now draws
+  every car from its 16×16 Ferrari sprite, **recoloured in the browser by exact pixel replacement**:
+  white background → transparent, bodywork `#D30400` → team timing colour (verified: 140 transparent,
+  50 recoloured, 0 original red left). Cars are rotated to the track heading
+  (`TrackGeometry.heading_at`) and drawn at 24 px (oversized for legibility). Without the file the
+  viewer falls back to dots.
+- **Restart:** `POST /api/debug/restart` never rewinds a world. It stops the runner and builds a new
+  world (`viewer_<n>`) from a factory: `{}` = same seed (the identical race again, tested position by
+  position), `{"seed": N}` or `{"new_seed": true}` = a different race. Saves of earlier worlds stay
+  in `saves/viewer.sqlite`.

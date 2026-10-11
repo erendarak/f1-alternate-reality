@@ -3,3 +3,5 @@
 *.parquet binary
 *.png binary
 *.sqlite binary
+*.PNG binary
+*.xcf binary

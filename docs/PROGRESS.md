@@ -199,5 +199,8 @@ Plan §22 checklist (adapted per D-002):
 - Dev deps: `httpx` → `httpx2` (Starlette 1.7 test client).
 - Tests: 147 passing (+9 viewer tests: placement by lap fraction, view model purity, colour fallback,
   page/track served, commands relayed incl. step/pace/save/rejections, idempotency, 422 on bad input).
+- Follow-up (same day): cars drawn with the user-supplied palm-tree sprite, recoloured per team and
+  rotated along the track; Restart (same seed) / New race buttons + `POST /api/debug/restart`; seed
+  shown in header. Tests: 155 passing.
 - **M0 + M0.5 complete.** Next: M1, the historical data layer (plan §16): repeatable fetch for more
   races, real start compounds/strategies as a historical-replay reference, and engine inputs from data.

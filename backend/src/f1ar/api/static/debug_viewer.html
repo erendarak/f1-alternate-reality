@@ -64,6 +64,7 @@
         <span>Sim <b id="clock">0:00.0</b></span>
         <span>Tick <b id="tick">0</b></span>
         <span>x<b id="speed">1</b></span>
+        <span>Seed <b id="seed">–</b></span>
       </div>
     </header>
     <div class="controls">
@@ -74,6 +75,9 @@
       <button data-speed="1">x1</button><button data-speed="2">x2</button><button data-speed="5">x5</button>
       <button data-speed="10">x10</button><button data-speed="25">x25</button>
       <button id="save">Save</button>
+      <span style="flex-basis:100%;height:0"></span>
+      <button id="restart" title="Same seed: the identical race again">Restart (same seed)</button>
+      <button id="newrace" title="Fresh random seed: a different race">New race</button>
     </div>
     <div class="msg" id="msg"></div>
     <div class="tower">
@@ -88,7 +92,7 @@
       </div>
     </div>
     <div class="log" id="log"></div>
-    <footer>Synthetic, uncalibrated lap model · no pit stops/traffic yet · Space = play/pause · → step</footer>
+    <footer>Synthetic, uncalibrated lap model · no pit stops/traffic yet · Space = play/pause · → step<span id="credit"></span></footer>
   </aside>
 </div>
 <script>
@@ -96,7 +100,9 @@
 const $ = (id) => document.getElementById(id);
 const canvas = $("map"), ctx = canvas.getContext("2d");
 let track = null, view = null, selected = null;
-let prev = new Map(), curr = new Map(), lastPoll = performance.now();
+let prev = new Map(), curr = new Map(), heading = new Map(), lastPoll = performance.now();
+let spriteSrc = null; const spriteCache = new Map();
+const CAR_PX = 24; // on-screen sprite size: far larger than a real car at this zoom, for legibility
 const POLL_MS = 100;
 
 async function api(path, body) {
@@ -154,6 +160,24 @@ function drawTrack() {
   }
 }
 
+// Recolour the base sprite: background -> transparent, bodywork -> team colour (exact match).
+function teamSprite(hex) {
+  if (!spriteSrc) return null;
+  if (spriteCache.has(hex)) return spriteCache.get(hex);
+  const { img, paint, bg } = spriteSrc;
+  const c = document.createElement("canvas"); c.width = img.width; c.height = img.height;
+  const g = c.getContext("2d"); g.drawImage(img, 0, 0);
+  const data = g.getImageData(0, 0, c.width, c.height), px = data.data;
+  const team = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  for (let i = 0; i < px.length; i += 4) {
+    if (px[i] === bg[0] && px[i + 1] === bg[1] && px[i + 2] === bg[2]) px[i + 3] = 0;
+    else if (px[i] === paint[0] && px[i + 1] === paint[1] && px[i + 2] === paint[2]) [px[i], px[i + 1], px[i + 2]] = team;
+  }
+  g.putImageData(data, 0, 0);
+  spriteCache.set(hex, c);
+  return c;
+}
+
 function drawCars(alpha) {
   if (!view) return;
   ctx.font = "bold 10px system-ui"; ctx.textAlign = "left"; ctx.textBaseline = "middle";
@@ -164,10 +188,19 @@ function drawCars(alpha) {
     const jump = a ? Math.hypot(b[0] - a[0], b[1] - a[1]) : 0;
     const p = !a || jump > 400 || view.status !== "RUNNING" ? b : [a[0] + (b[0] - a[0]) * alpha, a[1] + (b[1] - a[1]) * alpha];
     const [x, y] = tf(p);
-    ctx.fillStyle = "#" + car.team_color; ctx.strokeStyle = car.driver_id === selected ? "#fff" : "#0f1115";
-    ctx.lineWidth = car.driver_id === selected ? 3 : 2;
-    ctx.beginPath(); ctx.arc(x, y, 7, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = "#e6e8eb"; ctx.fillText(car.code, x + 10, y);
+    const sprite = teamSprite(car.team_color);
+    if (sprite) {
+      // world heading (deg, CCW from +x) -> screen: add map rotation, flip y; sprite nose points up
+      const ang = -((heading.get(car.driver_id) || 0) + track.rotation_deg) * Math.PI / 180 + Math.PI / 2;
+      if (car.driver_id === selected) { ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(x, y, CAR_PX * 0.62, 0, 2 * Math.PI); ctx.stroke(); }
+      ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(sprite, -CAR_PX / 2, -CAR_PX / 2, CAR_PX, CAR_PX); ctx.restore();
+    } else {
+      ctx.fillStyle = "#" + car.team_color; ctx.strokeStyle = car.driver_id === selected ? "#fff" : "#0f1115";
+      ctx.lineWidth = car.driver_id === selected ? 3 : 2;
+      ctx.beginPath(); ctx.arc(x, y, 7, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+    }
+    ctx.fillStyle = "#e6e8eb"; ctx.fillText(car.code, x + CAR_PX * 0.6, y);
   }
 }
 
@@ -187,6 +220,7 @@ const fmtLap = (s) => (s == null ? "–" : `${Math.floor(s / 60)}:${(s % 60).toF
 function render() {
   $("pill").textContent = view.status; $("pill").className = "pill " + view.status;
   $("lap").textContent = `${view.leader_lap}/${view.total_laps}`;
+  $("seed").textContent = view.seed;
   $("clock").textContent = fmtClock(view.sim_clock_s); $("tick").textContent = view.tick; $("speed").textContent = view.speed;
   $("play").textContent = view.status === "CREATED" ? "Start" : view.status === "RUNNING" ? "Pause" : view.status === "PAUSED" ? "Resume" : "Finished";
   document.querySelectorAll("[data-speed]").forEach((b) => b.classList.toggle("on", Number(b.dataset.speed) === view.speed));
@@ -213,6 +247,7 @@ async function poll() {
   try {
     const next = await api("/api/debug/state");
     prev = curr; curr = new Map(next.cars.map((c) => [c.driver_id, [c.x, c.y]]));
+    heading = new Map(next.cars.map((c) => [c.driver_id, c.heading_deg]));
     view = next; lastPoll = performance.now(); render();
   } catch (e) { $("msg").textContent = "backend unreachable: " + e; }
   setTimeout(poll, POLL_MS);
@@ -226,6 +261,16 @@ function togglePlay() {
 }
 $("play").onclick = togglePlay;
 $("save").onclick = () => command({ type: "SAVE" });
+async function restart(body, label) {
+  if (!confirm(`${label}? The current race keeps running only in its saves.`)) return;
+  try {
+    const r = await api("/api/debug/restart", body);
+    prev = new Map(); curr = new Map();
+    $("msg").textContent = `${label}: ${r.world_id}, seed ${r.seed}. Press Start.`;
+  } catch (e) { $("msg").textContent = String(e); }
+}
+$("restart").onclick = () => restart({}, "Restart with the same seed");
+$("newrace").onclick = () => restart({ new_seed: true }, "New race with a new seed");
 document.querySelectorAll("[data-speed]").forEach((b) => (b.onclick = () => command({ type: "SET_SPEED", speed: Number(b.dataset.speed) })));
 document.querySelectorAll("[data-step]").forEach((b) => (b.onclick = () => command({ type: "STEP", ticks: Number(b.dataset.step) })));
 document.querySelectorAll("[data-mode]").forEach((b) => (b.onclick = () => selected && command({ type: "SET_PACE_MODE", driver_id: selected, pace_mode: b.dataset.mode })));
@@ -247,6 +292,12 @@ window.addEventListener("resize", fit);
 
 (async () => {
   track = await api("/api/debug/track");
+  if (track.car_sprite) {
+    const img = new Image();
+    img.onload = () => { spriteSrc = { img, paint: track.car_sprite.paint_rgb, bg: track.car_sprite.background_rgb }; spriteCache.clear(); };
+    img.src = track.car_sprite.url;
+    $("credit").textContent = " · " + track.car_sprite.credit;
+  }
   fit(); requestAnimationFrame(frame); poll();
 })();
 </script>

@@ -5,7 +5,8 @@ Honest list of what does **not** work or is only approximate. Update whenever on
 ## Current (M0 + M0.5 complete)
 
 - **Debug viewer:** it polls at 10 Hz with linear interpolation; at x25, dots move in visible steps.
-  There's no pit lane, no zoom/follow camera and no sprites (M3). Gaps are display estimates from
+  There's no pit lane and no zoom/follow camera (M3); car sprites are oversized (24 px) and overlap
+  when close. Gaps are display estimates from
   track position at a nominal pace. It needs `scripts/fetch_monza_2024.py` to have run (outline,
   corners, colours are local data).
 - Cars drive the sampled racing path at constant speed per lap (no corner slow-down), so dots move

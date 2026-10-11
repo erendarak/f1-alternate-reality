@@ -47,11 +47,20 @@ class TrackGeometry:
     def length_m(self) -> float:
         return self.cumulative_m[-1]
 
-    def point_at(self, fraction: float) -> tuple[float, float]:
-        """X/Y at ``fraction`` of a lap; wraps around, so 1.0 == 0.0 == the line."""
+    def _segment(self, fraction: float) -> tuple[int, float]:
         target = (fraction % 1.0) * self.length_m
         i = bisect.bisect_right(self.cumulative_m, target)
-        i = min(max(i, 1), len(self.cumulative_m) - 1)
+        return min(max(i, 1), len(self.cumulative_m) - 1), target
+
+    def heading_at(self, fraction: float) -> float:
+        """Direction of travel at ``fraction`` in degrees, counter-clockwise from +X."""
+        i, _ = self._segment(fraction)
+        dx, dy = self.xs[i] - self.xs[i - 1], self.ys[i] - self.ys[i - 1]
+        return math.degrees(math.atan2(dy, dx))
+
+    def point_at(self, fraction: float) -> tuple[float, float]:
+        """X/Y at ``fraction`` of a lap; wraps around, so 1.0 == 0.0 == the line."""
+        i, target = self._segment(fraction)
         seg_start, seg_end = self.cumulative_m[i - 1], self.cumulative_m[i]
         t = 0.0 if seg_end == seg_start else (target - seg_start) / (seg_end - seg_start)
         x = self.xs[i - 1] + t * (self.xs[i] - self.xs[i - 1])

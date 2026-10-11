@@ -20,15 +20,17 @@ import uvicorn
 
 from f1ar.api.debug_app import create_app
 from f1ar.domain.identities import RaceRoster
+from f1ar.domain.race_state import WorldState
 from f1ar.persistence.sqlite_store import SnapshotStore
 from f1ar.presentation.track_geometry import TrackGeometry
 from f1ar.presentation.view_model import track_view
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.scenarios import MONZA_2024, load_event, setup_from_codes
-from f1ar.simulation.world_runner import ALLOWED_SPEEDS, WorldRunner
+from f1ar.simulation.world_runner import ALLOWED_SPEEDS
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "processed" / MONZA_2024
+CAR_SPRITE = ROOT / "assets" / "third_party" / "palm-tree-f1-pack" / "Ferrari" / "Ferrari.png"
 
 
 def load_assets(roster: RaceRoster) -> tuple[TrackGeometry, dict[str, Any], dict[str, str]]:
@@ -88,10 +90,24 @@ def main() -> None:
     roster, profiles = load_event(ROOT / "configs")
     geometry, payload, colors = load_assets(roster)
     setup = setup_from_codes(roster, profiles, None if args.all else args.drivers)
-    world = engine.create_world(setup, seed=args.seed, world_id="viewer")
     store = SnapshotStore(args.db)
-    runner = WorldRunner(world, speed=args.speed, store=store)
-    app = create_app(runner, geometry=geometry, track_payload=payload, team_colors=colors)
+
+    def new_world(seed: int, world_id: str) -> WorldState:
+        return engine.create_world(setup, seed=seed, world_id=world_id)
+
+    sprite = CAR_SPRITE if CAR_SPRITE.exists() else None
+    if sprite is None:
+        print(f"note: {CAR_SPRITE.relative_to(ROOT)} not found, drawing dots instead of cars")
+    app = create_app(
+        new_world,
+        seed=args.seed,
+        speed=args.speed,
+        geometry=geometry,
+        track_payload=payload,
+        team_colors=colors,
+        store=store,
+        car_sprite=sprite,
+    )
 
     print(f"F1AR debug viewer -> http://127.0.0.1:{args.port}  (Ctrl+C to stop)")
     try:

@@ -48,3 +48,11 @@ def test_degenerate_outlines_are_rejected() -> None:
 
 def test_bounds() -> None:
     assert TrackGeometry.from_points(RECT).bounds() == (0.0, 0.0, 100.0, 50.0)
+
+
+@pytest.mark.parametrize(
+    ("fraction", "heading"),
+    [(0.1, 0.0), (125 / 300, 90.0), (200 / 300, 180.0), (275 / 300, -90.0)],
+)
+def test_heading_follows_direction_of_travel(fraction: float, heading: float) -> None:
+    assert TrackGeometry.from_points(RECT).heading_at(fraction) == pytest.approx(heading)

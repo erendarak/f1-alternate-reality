@@ -58,7 +58,8 @@ def state_view(
     for pos, driver_id in enumerate(order, start=1):
         car = state.car(driver_id)
         entry = state.setup.driver(driver_id)
-        x, y = geometry.point_at(car.distance_m / track.length_m)
+        fraction = car.distance_m / track.length_m
+        x, y = geometry.point_at(fraction)
         if car.status is CarStatus.FINISHED and leader_car.finish_time_s is not None:
             gap = (car.finish_time_s or 0.0) - leader_car.finish_time_s
         else:
@@ -71,6 +72,7 @@ def state_view(
                 "team_color": team_colors.get(driver_id, DEFAULT_COLOR),
                 "x": round(x, 1),
                 "y": round(y, 1),
+                "heading_deg": round(geometry.heading_at(fraction), 1),
                 "lap": min(car.laps_completed + 1, track.total_laps),
                 "laps_completed": car.laps_completed,
                 "status": car.status.value,
@@ -85,6 +87,7 @@ def state_view(
     return {
         "world_id": state.world_id,
         "timeline_id": state.timeline_id,
+        "seed": state.rng.seed,
         "status": state.world_status.value,
         "tick": state.sim_tick,
         "sim_clock_s": state.sim_clock_s,

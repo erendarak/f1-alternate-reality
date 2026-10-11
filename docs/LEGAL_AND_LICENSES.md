@@ -25,8 +25,8 @@ from that FastF1/F1-timing data and follow the same rules (generated locally, no
 | Asset | Status | Terms |
 |---|---|---|
 | Track drawing | Generated from data (above) | n/a |
-| Cars in the debug viewer | Coloured dots + 3-letter codes; no logos/liveries | n/a |
-| [palm-tree, "Formula 1 inspired 2D pixel art car pack"](https://palm-tree.itch.io/formula-1-inspired-2d-pixel-art-car-pack) | **Proposed for M3, not in the repo yet** (the user downloads it) | Read 2026-10-12. No formal licence on the page. The author's replies: commercial use *"Yes, you absolutely can"*; *"feel free to use it however you want. there's no charge."* Pay-what-you-want; the author asks for a link to games using it. 4 cars "inspired by" 2021 Red Bull/Mercedes/McLaren/Ferrari. **Plan:** keep the original files under `assets/third_party/palm-tree-f1-pack/` with a note of these terms, credit "palm-tree" in the UI, and use one neutral sprite recoloured with team colours rather than the real-livery-like designs. |
+| Cars in the debug viewer | One pixel sprite (below) recoloured per team + 3-letter codes; dots if the sprite is missing; no logos | n/a |
+| [palm-tree, "Formula 1 inspired 2D pixel art car pack"](https://palm-tree.itch.io/formula-1-inspired-2d-pixel-art-car-pack) | **In use** (debug viewer): files in `assets/third_party/palm-tree-f1-pack/` (see its `SOURCE.md`) | Read 2026-10-12. No formal licence on the page. The author's replies: commercial use *"Yes, you absolutely can"*; *"feel free to use it however you want. there's no charge."* Pay-what-you-want; the author asks for a link to games using it. 4 cars "inspired by" 2021 Red Bull/Mercedes/McLaren/Ferrari. Only `Ferrari/Ferrari.png` is used, as a neutral base recoloured per team in the browser (white → transparent, `#D30400` → team colour). Credit "palm-tree" is shown in the viewer footer. |
 
 ## Planned (not used yet)
 
