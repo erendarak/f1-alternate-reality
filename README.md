@@ -4,7 +4,8 @@ A persistent, forkable F1 world. It starts from real historical races (first tar
 From there, profile-conditioned AI strategists decide what happens next. You can pause, save, reload and
 branch the timeline at any moment.
 
-> **Status:** M0 — bootstrap. There is nothing to play yet; see [docs/PROGRESS.md](docs/PROGRESS.md).
+> **Status:** M0. A headless, deterministic race engine runs (placeholder lap model, no UI yet);
+> see [docs/PROGRESS.md](docs/PROGRESS.md).
 > The full product and technical plan is [F1_ALTERNATE_REALITY_MASTER_PLAN.md](F1_ALTERNATE_REALITY_MASTER_PLAN.md).
 
 Alternate outcomes are **simulation estimates** built on modelling assumptions. They are not historical facts.
@@ -39,6 +40,7 @@ This creates `.venv/` with Python 3.12, the `f1ar` package (editable) and the de
 | Format | `uv run ruff format .` |
 | Type-check | `uv run mypy` |
 | Show Monza 2024 grid + driver personas | `uv run python scripts/show_profiles.py` |
+| Run a headless race (timing sheet) | `uv run python scripts/demo_headless.py --drivers VER HAM LEC` (or `--all`) |
 | Re-fetch a race roster (Jolpica) | `uv run python scripts/build_roster.py --season 2024 --round 16 --event-id 2024_italian_gp` |
 
 ## Repository layout

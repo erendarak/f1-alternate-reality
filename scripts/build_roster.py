@@ -32,6 +32,7 @@ def main() -> None:
     out.write_text(
         json.dumps(roster.model_dump(mode="json"), indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
+        newline="\n",  # LF on every OS, matching .gitattributes
     )
     print(f"wrote {out} ({len(roster.entries)} entries, source {url})")
     for e in roster.entries:

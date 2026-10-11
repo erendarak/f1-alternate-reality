@@ -66,3 +66,34 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   will pin (`profile_manifest_hash`, plan §4.4). `profile_revision` is the human label.
 - **Policy input:** `DriverProfile.features()` returns the 14-value vector under the stable names
   `PROFILE_FEATURE_NAMES` (`profile.<field>`). The observation schema in step 3 embeds this block.
+
+## D-008 — Immutable world state, pure bounded step (2026-10-11)
+
+- **Decision:** `WorldState` is a frozen Pydantic model holding *everything* that affects the future:
+  the race setup (track, lap-model coefficients, embedded resolved driver profiles), car states, the
+  tick, and the RNG spec. `lightweight_engine.step(state) -> StepResult(state, events)` is pure and
+  advances exactly one tick (default 0.5 sim-seconds). `sim_clock_s` is derived as
+  `tick * tick_seconds`, never accumulated.
+- **Why:** Fork = keep the old object; save = serialize one object; replay = re-run pure steps. A
+  bounded tick gives the ≤1-tick pause guarantee of plan §4.2.
+- **Cost:** Copying a Pydantic object per tick costs about 9 µs per tick for 2 cars (a full 53-lap race
+  takes about 0.08 s). If RL training later needs more throughput, add a fast internal representation
+  behind the same API.
+
+## D-009 — Keyed random numbers instead of a stateful RNG (2026-10-11)
+
+- **Decision:** Every random draw is `f(seed, key...)`, e.g. `normal(seed, "lap_noise", driver_id,
+  lap)`, built on SHA-256 (`f1ar/simulation/rng_streams.py`, scheme `sha256-keyed-v1`). The world saves
+  only `{scheme, seed}`.
+- **Why:** There's no generator state to serialize, so save/load can't drift. It also gives plan
+  §4.5's common random numbers for free: forks and added cars don't shift anyone else's draws (tested).
+- **Limit:** Normals use `math.log/cos`. Bitwise equality is guaranteed on one machine/libm (plan's
+  "deterministic CPU mode"), not across platforms.
+
+## D-010 — Minimal lap model is a placeholder (2026-10-11)
+
+- **Decision:** `lap = base + skill_gap·(1−pace) + compound + degradation(age, compound,
+  tire_management, pace_mode) + fuel·laps_remaining + pace_mode + N(0, sd(consistency))`. The
+  coefficients are synthetic (`editorial_assumption`) and chosen only to look plausible for Monza
+  (~84 s laps, ~74 min race). `risk_appetite` deliberately does **not** enter the transition model; it is a
+  strategy preference. The model is replaced or calibrated from FastF1 in M1/M4.

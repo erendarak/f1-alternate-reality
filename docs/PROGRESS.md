@@ -6,7 +6,7 @@ Plan §22 checklist (adapted per D-002):
 
 - [x] **1.** Repository/bootstrap: uv + Python 3.12, pyproject, ruff/mypy/pytest; first real tests pass.
 - [x] **2.** `DriverProfile` schema + source-tagged seed for the full Monza 2024 grid.
-- [ ] **3.** Headless deterministic two-car world, 1 tick.
+- [x] **3.** Headless deterministic two-car world, 1 tick (and full races, up to 20 cars).
 - [ ] **4.** Pause/resume with freeze test.
 - [ ] **5.** Snapshot save → fresh-process load → equality test.
 - [ ] **6.** Timeline fork with isolation test.
@@ -41,3 +41,22 @@ Plan §22 checklist (adapted per D-002):
 - Not done yet: profiles aren't wired into an observation or the simulation. That happens in step 3,
   where the M0 gate "profile fields included in observation schema" gets its test.
 - Next: step 3, headless deterministic two-car world, 1 tick.
+
+### 2026-10-11 — Step 3: headless deterministic world
+
+- `f1ar.domain.race_state`: frozen `WorldState`, `RaceSetup` (track, lap model, embedded profiles),
+  `CarState`, `RaceEvent`, status enums (D-008).
+- `f1ar.simulation.rng_streams`: keyed SHA-256 random draws, `RngSpec` (D-009).
+- `f1ar.simulation.lap_model`: profile-conditioned lap-time model (D-010).
+- `f1ar.simulation.lightweight_engine`: `create_world`, `start`, pure `step`, `standings`. Line
+  crossings are interpolated inside the tick; events LAP_COMPLETED / CAR_FINISHED / RACE_COMPLETED.
+- `f1ar.simulation.scenarios`: Monza 2024 track spec, default lap model, `build_setup`.
+- `f1ar.policy.observation`: observation = state features + 14-value profile block; hidden
+  `lap_target_s` excluded. **The M0 gate "profile fields in observation schema" now has a test.**
+- `scripts/demo_headless.py`: lap-by-lap timing sheet, 2 to 20 cars (early visibility, D-002).
+- Tests: 57 passing (~2 s). New ones cover keyed RNG, lap-model direction tests (pace, tyre mgmt, push
+  vs conserve, fuel, consistency → spread, risk doesn't affect dynamics), engine single tick, events,
+  full-race invariants every tick, JSON round-trip, same-seed hash, fresh-process hash, common random
+  numbers, profile change affects only that driver, observation contents and no-leak.
+- Fixed: `build_roster.py` now writes LF line endings.
+- Next: step 4, pause/resume with a freeze test (world runner + command queue).
