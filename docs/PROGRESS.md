@@ -12,7 +12,7 @@ Plan §22 checklist (adapted per D-002):
 - [x] **6.** Timeline fork with isolation test.
 - [ ] **6b.** Terminal timing tower in `demo_headless.py` (D-002).
 - [x] **7.** FastF1 Monza 2024 fetch/cache + data quality report.
-- [ ] **8.** TUM race-simulation feasibility memo → go/no-go (fallback C pre-approved, D-003).
+- [x] **8.** TUM race-simulation feasibility memo → go/no-go (fallback C pre-approved, D-003).
 - [ ] **M0.5** Debug viewer: Monza outline + car dots from backend state (D-002).
 
 ## Session log
@@ -152,3 +152,33 @@ Plan §22 checklist (adapted per D-002):
   `-W error`); now detected and reported clearly.
 - Tests: 128 offline passing (~9.5 s) + 1 opt-in network test passing against the real data.
 - Next: step 8, TUM race-simulation feasibility memo (go/no-go; fallback C pre-approved).
+
+### 2026-10-12 — Step 8: simulator decision
+
+- TUM race-simulation was run in an isolated sandbox (own venv, outside the repo), probed with
+  `scripts/research/tum_feasibility_probe.py`. The time-discrete simulator was assessed from its
+  repository.
+- **Decision: our engine (option C); both TUM simulators no-go** (`docs/SIMULATOR_DECISION.md`,
+  D-016). Key evidence: two global RNGs (no common random numbers across forks; NumPy-only pit draws
+  break `random.seed` repeatability), pickle-only persistence of private state, future events
+  pre-drawn into state, the shipped Monza 2019 file fails to construct (VSCs 1.46 laps apart) and
+  runs out of fuel without them, unmaintained deps (TF/cvxpy hard imports). It's fast (54–116 ms per
+  race), and in-memory deepcopy forks are exact when both RNG states are captured. Both are recorded
+  in fairness.
+- Modelling ideas kept for M2 (re-implemented, credited): accident probability, start performance,
+  pit standstill distribution, overtaking loss, FCY handling, degradation shapes.
+
+#### M0 acceptance gate status
+
+```text
+[PASS] python -m pytest tests/unit tests/replay
+[PASS] python scripts/demo_headless.py --seed 42 --pause --save --reload --resume   -> MATCH
+[PASS] A repeat run produces identical canonical state hash in deterministic mode
+[PASS] DriverProfile fields validate and are included in observation schema
+[PASS] Simulator decision, license notes, and data limitations documented
+       (SIMULATOR_DECISION.md, LEGAL_AND_LICENSES.md, KNOWN_LIMITATIONS.md, data quality report)
+```
+
+**M0 acceptance gate: 5/5.** Remaining from the adapted plan: M0.5 debug viewer (D-002); step 6b
+(terminal tower) is effectively covered by `live_race.py`.
+- Next: M0.5, debug viewer (Monza outline from FastF1 + car dots from backend state).

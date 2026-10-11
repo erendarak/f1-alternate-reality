@@ -192,3 +192,19 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   return no laps. The lockfile pins working versions; upgrades must re-run `pytest -m network`.
 - **Tests:** offline tests use synthetic FastF1-shaped frames. The real fetch is an opt-in
   `network` test (`uv run pytest -m network`), excluded by default.
+
+## D-016 — Simulator: our engine (option C); TUM simulators no-go (2026-10-12)
+
+- **Decision:** Keep and grow `lightweight_engine`. Don't wrap or vendor TUM race-simulation or the
+  TUM time-discrete simulator. Full evidence: `docs/SIMULATOR_DECISION.md`; reproducible probe:
+  `scripts/research/tum_feasibility_probe.py` (runs only in an external sandbox).
+- **Why (top reasons):** TUM's randomness lives in two interpreter-global RNGs, so forks can't share
+  luck and a single extra draw shifts all later outcomes. Persistence is pickle-only over ~100
+  private fields per car. Future events are pre-drawn into the state. Its shipped Monza 2019
+  parameters fail to construct (two real VSCs 1.46 laps apart vs. a 1.5-lap minimum) and are
+  fuel-calibrated to that race's events. It's unmaintained (Py3.8-era deps; TF/cvxpy hard imports).
+  The time-discrete simulator is a self-declared proof of concept in Rust with one incomplete
+  parameter file.
+- **Kept from TUM as ideas only** (re-implemented, credited): per-driver accident probability,
+  start performance, pit standstill distribution, overtaking time loss, FCY handling,
+  degradation curve shapes.

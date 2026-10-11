@@ -2,7 +2,15 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
-## Current (M0, step 7)
+## Current (M0 complete)
+
+- **Engine throughput** is about 0.5 s per 20-car race at 0.5 s ticks (~2 races/s). That's fine for live
+  play and Monte Carlo of tens of races, but possibly slow for large RL training. Plan: a lap-level
+  fast path sharing the same lap model (SIMULATOR_DECISION.md follow-up 3).
+- The engine has no safety car, VSC, failures, accidents or retirements yet (M2). TUM-derived modelling
+  ideas are noted but not implemented.
+
+## M0, step 7
 
 - Real Monza 2024 data is fetched and validated but **not yet used by the engine**. The race still
   runs on the placeholder lap model, with every car on MEDIUM, no pit stops, no lapping and no DNFs,

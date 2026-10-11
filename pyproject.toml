@@ -56,5 +56,5 @@ files = ["backend/src/f1ar", "scripts", "tests"]
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
-module = ["fastf1", "fastf1.*"]
-ignore_missing_imports = true  # FastF1 ships no type information
+module = ["fastf1", "fastf1.*", "racesim", "racesim.*"]
+ignore_missing_imports = true  # untyped third-party (racesim: external research probe only)

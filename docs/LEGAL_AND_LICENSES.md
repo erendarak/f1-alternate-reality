@@ -22,7 +22,9 @@ Attribution: data from Jolpica-F1 (CC BY-NC-SA 4.0) and from F1 live timing via 
 | Source | Notes |
 |---|---|
 | OpenF1 (`openf1.org`) | FAQ: "intended for educational purposes, personal learning projects, research, and non-commercial fan engagement"; site CC BY-NC-SA 4.0. Free plan: historical data from 2023, all endpoints, no auth, **3 req/s and 30 req/min**. Credit appreciated, not required. |
-| TUM race-simulation / racetrack-database | LGPL-3.0 code. Keep any use isolated and attributed (step 8 decides). |
+| TUM race-simulation | **Not used** (D-016). LGPL-3.0. It was run only in an external sandbox for the feasibility probe; no TUM code is in this repo. Modelling ideas may be re-implemented with credit (ideas aren't covered by copyright; copying code would bring LGPL obligations). |
+| TUM time-discrete race simulator | Not used (D-016). Apache-2.0/MIT. |
+| TUM racetrack-database | Not used yet. LGPL-3.0 data; FastF1-derived outline is used instead. |
 | TUM f1-timing-database | CC BY-NC-SA 3.0, non-commercial. |
 
 ## Names, marks, persona content
