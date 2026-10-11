@@ -42,6 +42,8 @@ This creates `.venv/` with Python 3.12, the `f1ar` package (editable) and the de
 | Show Monza 2024 grid + driver personas | `uv run python scripts/show_profiles.py` |
 | Run a headless race (timing sheet) | `uv run python scripts/demo_headless.py --drivers VER HAM LEC` (or `--all`) |
 | Watch a live race, pause/resume with Enter | `uv run python scripts/live_race.py --speed 25` |
+| Pause at lap 18 → save → reload in a new process → finish → verify | `uv run python scripts/demo_headless.py --seed 42 --pause --save --reload --resume` |
+| List/verify saved snapshots | `uv run python scripts/inspect_save.py` |
 | Re-fetch a race roster (Jolpica) | `uv run python scripts/build_roster.py --season 2024 --round 16 --event-id 2024_italian_gp` |
 
 ## Repository layout

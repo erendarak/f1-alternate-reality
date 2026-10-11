@@ -8,7 +8,7 @@ Plan §22 checklist (adapted per D-002):
 - [x] **2.** `DriverProfile` schema + source-tagged seed for the full Monza 2024 grid.
 - [x] **3.** Headless deterministic two-car world, 1 tick (and full races, up to 20 cars).
 - [x] **4.** Pause/resume with freeze test.
-- [ ] **5.** Snapshot save → fresh-process load → equality test.
+- [x] **5.** Snapshot save → fresh-process load → equality test.
 - [ ] **6.** Timeline fork with isolation test.
 - [ ] **6b.** Terminal timing tower in `demo_headless.py` (D-002).
 - [ ] **7.** FastF1 Monza 2024 fetch/cache + data quality report.
@@ -77,3 +77,31 @@ Plan §22 checklist (adapted per D-002):
   real-thread test checks pause ack < 250 ms, freeze over 1 s of real time, and no catch-up after
   resume (5/5 stable runs).
 - Next: step 5, snapshot save → load in a fresh process → equality test (SQLite + checksum).
+
+### 2026-10-11 — Step 5: save / load
+
+- `f1ar.persistence.sqlite_store.SnapshotStore`: atomic snapshot save, verified load, list,
+  `latest_valid` recovery, store schema guard (D-012).
+- `WorldRunner`: `SAVE` command, acked only after commit; failures reported, never faked.
+- `scripts/demo_headless.py`: `--pause [--pause-at-lap N] --save --reload --resume`, where reload runs
+  in a fresh child process and the result is compared with an uninterrupted run. Also `--resume-from`.
+- `scripts/inspect_save.py`: lists snapshots in a save DB and verifies each.
+- Bug found by the tests: SQL-level corruption can turn the BLOB into TEXT, which crashed `load` with a
+  TypeError. It is now a clean `SnapshotIntegrityError`.
+- Tests: 90 passing (~7 s). Plan §4.7 test 1 (save → fresh process → equal), test 2 (1000 ticks ==
+  400 + save + fresh-process load + 600), test 7 (corrupt checksum rejected, last good suggested), plus
+  resume to the flag from lap 18 in another process, engine/schema version refusal, immutability,
+  runner SAVE while running/paused, and a failed save never reported as success. The M0 gate command
+  itself is an integration test.
+
+#### M0 acceptance gate status
+
+```text
+[PASS] python -m pytest tests/unit tests/replay
+[PASS] python scripts/demo_headless.py --seed 42 --pause --save --reload --resume   -> MATCH
+[PASS] A repeat run produces identical canonical state hash in deterministic mode
+[PASS] DriverProfile fields validate and are included in observation schema
+[TODO] Simulator decision, license notes, and data limitations documented  (steps 7-8)
+```
+
+- Next: step 6, timeline fork (branch with a different decision; original untouched).

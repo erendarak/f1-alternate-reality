@@ -115,3 +115,22 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   `start_background()` runs it on one thread with `time.monotonic`. States are immutable, so readers
   get a consistent snapshot without copying. Measured pause ack in tests: well under the 250 ms
   target (plan §4.2).
+
+## D-012 — SQLite snapshot store: full state blob + checksum, one transaction (2026-10-11)
+
+- **Decision:** `f1ar/persistence/sqlite_store.py`. One SQLite file (WAL, `foreign_keys=ON`,
+  `synchronous=FULL`) with `worlds`, `timelines`, `snapshots` and `store_meta(schema_version)`. A
+  snapshot row stores the **canonical JSON of the whole `WorldState`** plus its SHA-256, inserted in a
+  single `BEGIN IMMEDIATE … COMMIT`. This is plan §4.6's "state blob + manifest in one transaction"
+  option, chosen over temp-file + rename because it is atomic by construction on Windows too.
+- **Load verifies everything** before returning a state: schema, codec and engine version must match
+  the running build exactly (no silent migration or engine swap), the stored type must be a BLOB, the
+  checksum must match, and the decoded state must re-encode to the same hash. `latest_valid(world)`
+  finds the newest snapshot that passes, for recovery (plan §4.7 test 7).
+- **Snapshots are immutable** (insert-only). The store opens from any thread behind one lock, because
+  the runner thread saves while others read.
+- **Runner:** `CommandType.SAVE` saves at a tick boundary. The ack carries `snapshot_id` and is sent
+  only after commit. Any store error turns into `accepted=False, reason="save failed: …"`, and the
+  world keeps running (plan US-09).
+- **Not yet:** event log and command log tables, autosave, timeline/fork records beyond the main
+  timeline (step 6 / M2).

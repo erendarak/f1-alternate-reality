@@ -18,6 +18,7 @@ tests. ``start_background()`` runs it in a thread against ``time.monotonic``.
 
 import math
 import queue
+import sqlite3
 import threading
 import time
 from collections.abc import Callable
@@ -27,6 +28,7 @@ from enum import StrEnum
 from pydantic import BaseModel, ConfigDict, Field
 
 from f1ar.domain.race_state import RaceEvent, WorldState, WorldStatus
+from f1ar.persistence.sqlite_store import SnapshotError, SnapshotStore
 from f1ar.simulation import lightweight_engine as engine
 
 ALLOWED_SPEEDS: tuple[int, ...] = (1, 2, 5, 10, 25)
@@ -40,6 +42,8 @@ class CommandType(StrEnum):
     SET_SPEED = "SET_SPEED"
     STEP = "STEP"
     """Advance N ticks manually; only while PAUSED."""
+    SAVE = "SAVE"
+    """Snapshot the world at the current tick boundary; acked only after the DB commit."""
 
 
 class Command(BaseModel):
@@ -50,6 +54,7 @@ class Command(BaseModel):
     type: CommandType
     actor_id: str = "USER"
     speed: int | None = None
+    label: str | None = None
     ticks: int = Field(default=1, ge=1, le=MAX_STEP_TICKS)
 
 
@@ -65,6 +70,7 @@ class CommandAck(BaseModel):
     world_status: WorldStatus
     speed: int
     duplicate: bool = False
+    snapshot_id: str | None = None
 
 
 class AppliedCommand(BaseModel):
@@ -91,6 +97,7 @@ class WorldRunner:
         speed: int = 1,
         clock: Callable[[], float] = time.monotonic,
         max_catchup_ticks: int = 1_000,
+        store: SnapshotStore | None = None,
     ) -> None:
         if speed not in ALLOWED_SPEEDS:
             raise ValueError(f"speed must be one of {ALLOWED_SPEEDS}")
@@ -98,6 +105,7 @@ class WorldRunner:
         self._speed = speed
         self._clock = clock
         self._max_catchup = max_catchup_ticks
+        self._store = store
 
         self._lock = threading.RLock()
         self._queue: queue.SimpleQueue[tuple[Command, Future[CommandAck]]] = queue.SimpleQueue()
@@ -207,11 +215,15 @@ class WorldRunner:
         if previous is not None:
             return previous.model_copy(update={"duplicate": True})
 
+        snapshot_id = None
         try:
-            self._execute(command, now)
+            snapshot_id = self._execute(command, now)
             accepted, reason = True, None
         except (_Rejected, engine.EngineStateError) as exc:
             accepted, reason = False, str(exc)
+        except (SnapshotError, sqlite3.Error, OSError) as exc:
+            # A failed save must never look like a success (plan US-09); the world is untouched.
+            accepted, reason = False, f"save failed: {exc}"
 
         ack = CommandAck(
             idempotency_key=command.idempotency_key,
@@ -221,12 +233,14 @@ class WorldRunner:
             applied_tick=self._state.sim_tick,
             world_status=self._state.world_status,
             speed=self._speed,
+            snapshot_id=snapshot_id,
         )
         self._acks[command.idempotency_key] = ack
         self._log.append(AppliedCommand(command=command, ack=ack))
         return ack
 
-    def _execute(self, command: Command, now: float) -> None:
+    def _execute(self, command: Command, now: float) -> str | None:
+        """Apply one command; returns a snapshot id for SAVE."""
         match command.type:
             case CommandType.START:
                 self._state = engine.start(self._state)
@@ -248,6 +262,12 @@ class WorldRunner:
                     if self._state.world_status is not WorldStatus.PAUSED:
                         break  # race completed during stepping
                     self._advance(allow_paused=True)
+            case CommandType.SAVE:
+                if self._store is None:
+                    raise _Rejected("this runner has no snapshot store")
+                label = command.label or f"tick {self._state.sim_tick}"
+                return self._store.save(self._state, label=label).snapshot_id
+        return None
 
     # --- background thread --------------------------------------------------------------------
 

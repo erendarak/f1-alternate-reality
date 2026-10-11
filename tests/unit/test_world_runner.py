@@ -1,10 +1,12 @@
 """WorldRunner with a fake clock: exact, instant tests of pause/resume semantics (plan §4.7)."""
 
+from pathlib import Path
 from typing import Any
 
 import pytest
 
 from f1ar.domain.race_state import RaceEvent, RaceSetup, WorldState, WorldStatus
+from f1ar.persistence.sqlite_store import SnapshotStore
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.world_runner import Command, CommandAck, CommandType, WorldRunner
 from tests.conftest import run_to_end
@@ -187,6 +189,50 @@ def test_duplicate_command_is_applied_once(runner: WorldRunner) -> None:
     assert second.duplicate and not first.duplicate
     assert second.applied_tick == first.applied_tick
     assert len(runner.command_log) == 3  # START, PAUSE, STEP: the duplicate isn't logged again
+
+
+# --- saving ------------------------------------------------------------------------------------
+
+
+def test_save_while_paused_and_running(
+    two_car_setup: RaceSetup, clock: FakeClock, tmp_path: Path
+) -> None:
+    with SnapshotStore(tmp_path / "w.sqlite") as store:
+        world = engine.create_world(two_car_setup, seed=42, world_id="w")
+        runner = started(WorldRunner(world, clock=clock, store=store))
+        runner.pump(30.0)
+
+        running_ack = send(runner, cmd(CommandType.SAVE, label="while running"), 30.0)
+        assert running_ack.accepted and running_ack.snapshot_id is not None
+        saved = store.load(running_ack.snapshot_id)
+        assert saved.sim_tick == running_ack.applied_tick == 60
+        assert saved.world_status is WorldStatus.RUNNING
+
+        send(runner, cmd(CommandType.PAUSE), 30.0)
+        paused_ack = send(runner, cmd(CommandType.SAVE), 30.0)
+        assert paused_ack.snapshot_id is not None
+        assert store.load(paused_ack.snapshot_id) == runner.state
+        assert store.get_meta(paused_ack.snapshot_id).label == "tick 60"
+
+
+def test_save_without_store_is_rejected(runner: WorldRunner) -> None:
+    ack = send(runner, cmd(CommandType.SAVE), 0.0)
+    assert not ack.accepted and ack.snapshot_id is None
+
+
+def test_failed_save_never_reports_success(
+    two_car_setup: RaceSetup, clock: FakeClock, tmp_path: Path
+) -> None:
+    """Plan US-09: a failing save is reported as failed and the world keeps going."""
+    store = SnapshotStore(tmp_path / "w.sqlite")
+    world = engine.create_world(two_car_setup, seed=42, world_id="w")
+    runner = started(WorldRunner(world, clock=clock, store=store))
+    store.close()  # simulate the database becoming unavailable
+    ack = send(runner, cmd(CommandType.SAVE), 1.0)
+    assert not ack.accepted and ack.snapshot_id is None
+    assert "save failed" in (ack.reason or "")
+    runner.pump(2.0)
+    assert runner.state.sim_tick == 4
 
 
 # --- determinism is independent of pacing ----------------------------------------------------
