@@ -1,9 +1,10 @@
 """Scenario builders: turn roster + profiles into a ``RaceSetup``."""
 
 from collections.abc import Sequence
+from pathlib import Path
 
-from f1ar.domain.driver_profiles import ProfileSet
-from f1ar.domain.identities import RaceRoster
+from f1ar.domain.driver_profiles import ProfileSet, load_profiles
+from f1ar.domain.identities import RaceRoster, load_roster
 from f1ar.domain.provenance import SourceType
 from f1ar.domain.race_state import (
     Compound,
@@ -17,6 +18,31 @@ from f1ar.domain.race_state import (
 )
 
 DEFAULT_TICK_SECONDS = 0.5
+MONZA_2024 = "2024_italian_gp"
+_SEED_FILES = {MONZA_2024: "seed_2024_monza_drivers.yaml"}
+
+
+def load_event(configs_dir: Path, event_id: str = MONZA_2024) -> tuple[RaceRoster, ProfileSet]:
+    """Load the verified roster and the persona profiles of one event from ``configs/``."""
+    roster = load_roster(configs_dir / "rosters" / f"{event_id}.json", expected_event_id=event_id)
+    profiles = load_profiles(
+        configs_dir / "drivers" / _SEED_FILES[event_id],
+        configs_dir / "drivers" / "archetypes.yaml",
+        roster,
+    )
+    return roster, profiles
+
+
+def setup_from_codes(
+    roster: RaceRoster, profiles: ProfileSet, codes: Sequence[str] | None
+) -> RaceSetup:
+    """Setup from 3-letter driver codes (e.g. ``["VER", "HAM"]``); ``None`` = full grid."""
+    by_code = {e.code: e.driver_id for e in roster.entries}
+    wanted = [e.code for e in roster.entries] if codes is None else [c.upper() for c in codes]
+    unknown = [c for c in wanted if c not in by_code]
+    if unknown:
+        raise ValueError(f"unknown driver code(s) {unknown}; choose from {sorted(by_code)}")
+    return build_setup(roster, profiles, [by_code[c] for c in wanted])
 
 
 def monza_2024_track() -> TrackSpec:

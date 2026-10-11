@@ -119,9 +119,27 @@ def start(state: WorldState) -> WorldState:
     return state.model_copy(update={"world_status": WorldStatus.RUNNING})
 
 
-def step(state: WorldState) -> StepResult:
-    """Advance the world by exactly one tick. Pure: ``state`` is not modified."""
+def pause(state: WorldState) -> WorldState:
+    """RUNNING -> PAUSED. Only the status changes; tick, clocks, cars and events are frozen."""
     if state.world_status is not WorldStatus.RUNNING:
+        raise EngineStateError(f"cannot pause a world in status {state.world_status}")
+    return state.model_copy(update={"world_status": WorldStatus.PAUSED})
+
+
+def resume(state: WorldState) -> WorldState:
+    if state.world_status is not WorldStatus.PAUSED:
+        raise EngineStateError(f"cannot resume a world in status {state.world_status}")
+    return state.model_copy(update={"world_status": WorldStatus.RUNNING})
+
+
+def step(state: WorldState, *, allow_paused: bool = False) -> StepResult:
+    """Advance the world by exactly one tick. Pure: ``state`` is not modified.
+
+    ``allow_paused`` supports manual single-stepping of a paused world ("Step Tick"); the
+    world stays PAUSED afterwards (or becomes COMPLETED if that tick ends the race).
+    """
+    allowed = {WorldStatus.RUNNING, WorldStatus.PAUSED} if allow_paused else {WorldStatus.RUNNING}
+    if state.world_status not in allowed:
         raise EngineStateError(f"cannot step a world in status {state.world_status}")
 
     setup = state.setup

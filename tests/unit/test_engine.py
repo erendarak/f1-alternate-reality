@@ -22,6 +22,30 @@ def test_cannot_step_before_start_or_start_twice(two_car_setup: RaceSetup) -> No
         engine.start(engine.start(world))
 
 
+def test_pause_and_resume_transitions(two_car_world: WorldState) -> None:
+    paused = engine.pause(run_ticks(two_car_world, 10))
+    assert paused.world_status is WorldStatus.PAUSED
+    with pytest.raises(engine.EngineStateError):
+        engine.step(paused)
+    with pytest.raises(engine.EngineStateError):
+        engine.pause(paused)
+    stepped = engine.step(paused, allow_paused=True).state
+    assert stepped.sim_tick == 11 and stepped.world_status is WorldStatus.PAUSED
+    resumed = engine.resume(stepped)
+    assert resumed.world_status is WorldStatus.RUNNING
+    with pytest.raises(engine.EngineStateError):
+        engine.resume(resumed)
+
+
+def test_manual_steps_equal_running_steps(two_car_world: WorldState) -> None:
+    """Stepping while paused computes exactly the same ticks as running."""
+    running = run_ticks(two_car_world, 30)
+    paused = engine.pause(two_car_world)
+    for _ in range(30):
+        paused = engine.step(paused, allow_paused=True).state
+    assert engine.resume(paused) == running
+
+
 def test_one_tick_advances_time_and_cars(two_car_world: WorldState) -> None:
     result = engine.step(two_car_world)
     s = result.state

@@ -97,3 +97,21 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   coefficients are synthetic (`editorial_assumption`) and chosen only to look plausible for Monza
   (~84 s laps, ~74 min race). `risk_appetite` deliberately does **not** enter the transition model; it is a
   strategy preference. The model is replaced or calibrated from FastF1 in M1/M4.
+
+## D-011 — WorldRunner: commands at tick boundaries, pacing kept separate (2026-10-11)
+
+- **Decision:** `f1ar/simulation/world_runner.py` owns one live world. Commands (`START`, `PAUSE`,
+  `RESUME`, `SET_SPEED` ∈ {1,2,5,10,25}, `STEP` N ticks while paused) are queued and applied **only
+  between ticks**. Each returns a `CommandAck` with the exact `applied_tick`. Invalid commands are
+  rejected with a reason, never raised, and every command is recorded in a command log.
+- **Pacing:** Real time only determines *how many* ticks are due:
+  `due = anchor_tick + floor((now − anchor_wall)·speed / tick_seconds)`. Start, resume and speed
+  changes re-anchor, so paused time is never caught up. Catch-up per pump is capped; if the runner
+  can't keep up, the sim slows down rather than jumping ahead. Tested: an arbitrary mix of
+  pauses and speeds ends in the same canonical state as plain stepping.
+- **Idempotency:** A repeated `idempotency_key` returns the original ack (`duplicate=True`) and is not
+  re-applied (plan §4.7 test 9).
+- **Threading:** `pump(now)` is the deterministic core, testable with a fake clock.
+  `start_background()` runs it on one thread with `time.monotonic`. States are immutable, so readers
+  get a consistent snapshot without copying. Measured pause ack in tests: well under the 250 ms
+  target (plan §4.2).

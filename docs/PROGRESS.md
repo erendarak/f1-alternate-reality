@@ -7,7 +7,7 @@ Plan §22 checklist (adapted per D-002):
 - [x] **1.** Repository/bootstrap: uv + Python 3.12, pyproject, ruff/mypy/pytest; first real tests pass.
 - [x] **2.** `DriverProfile` schema + source-tagged seed for the full Monza 2024 grid.
 - [x] **3.** Headless deterministic two-car world, 1 tick (and full races, up to 20 cars).
-- [ ] **4.** Pause/resume with freeze test.
+- [x] **4.** Pause/resume with freeze test.
 - [ ] **5.** Snapshot save → fresh-process load → equality test.
 - [ ] **6.** Timeline fork with isolation test.
 - [ ] **6b.** Terminal timing tower in `demo_headless.py` (D-002).
@@ -60,3 +60,20 @@ Plan §22 checklist (adapted per D-002):
   numbers, profile change affects only that driver, observation contents and no-leak.
 - Fixed: `build_roster.py` now writes LF line endings.
 - Next: step 4, pause/resume with a freeze test (world runner + command queue).
+
+### 2026-10-11 — Step 4: pause / resume
+
+- Engine: `pause`, `resume`, and `step(allow_paused=True)` for manual stepping.
+- `f1ar.simulation.world_runner`: `WorldRunner`, `Command`, `CommandAck`, command log, idempotency,
+  real-time pacing with speed multipliers, background thread (D-011).
+- `f1ar.simulation.timing.LapTimingSheet`: shared timing-sheet formatter. `scenarios.load_event` and
+  `setup_from_codes` are shared loading helpers.
+- `scripts/live_race.py`: real-time race in the terminal. Enter = pause/resume, `s N` = step,
+  `1/2/5/10/25` = speed (early visibility, D-002).
+- Tests: 73 passing (~4 s). Plan §4.7 tests 3 (pause freezes everything), 4 (paused wall time not
+  caught up), 9 (idempotent duplicate), 10 (pause exactly on a lap event) are covered with a fake
+  clock. Also: pause mid-burst lands on the next tick boundary, catch-up cap, invalid commands
+  rejected and logged, stepping while paused, and pacing/pauses never change the race outcome. A
+  real-thread test checks pause ack < 250 ms, freeze over 1 s of real time, and no catch-up after
+  resume (5/5 stable runs).
+- Next: step 5, snapshot save → load in a fresh process → equality test (SQLite + checksum).

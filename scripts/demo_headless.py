@@ -9,17 +9,14 @@ The race model is a synthetic placeholder (no pit stops, no traffic, uncalibrate
 """
 
 import argparse
-from collections import defaultdict
 from pathlib import Path
 
-from f1ar.domain.driver_profiles import load_profiles
-from f1ar.domain.identities import load_roster
 from f1ar.domain.race_state import WorldStatus
 from f1ar.simulation import lightweight_engine as engine
-from f1ar.simulation.scenarios import build_setup
+from f1ar.simulation.scenarios import MONZA_2024, load_event, setup_from_codes
+from f1ar.simulation.timing import LapTimingSheet
 
 CONFIGS = Path(__file__).resolve().parents[1] / "configs"
-EVENT_ID = "2024_italian_gp"
 
 
 def main() -> None:
@@ -30,45 +27,25 @@ def main() -> None:
     parser.add_argument("--every", type=int, default=1, help="print every Nth lap")
     args = parser.parse_args()
 
-    roster = load_roster(CONFIGS / "rosters" / f"{EVENT_ID}.json", expected_event_id=EVENT_ID)
-    profiles = load_profiles(
-        CONFIGS / "drivers" / "seed_2024_monza_drivers.yaml",
-        CONFIGS / "drivers" / "archetypes.yaml",
-        roster,
-    )
-    by_code = {e.code: e.driver_id for e in roster.entries}
-    codes = [e.code for e in roster.entries] if args.all else [c.upper() for c in args.drivers]
-    unknown = [c for c in codes if c not in by_code]
-    if unknown:
-        parser.error(f"unknown driver code(s) {unknown}; choose from {sorted(by_code)}")
-
-    setup = build_setup(roster, profiles, [by_code[c] for c in codes])
+    roster, profiles = load_event(CONFIGS)
+    try:
+        setup = setup_from_codes(roster, profiles, None if args.all else args.drivers)
+    except ValueError as exc:
+        parser.error(str(exc))
     state = engine.start(engine.create_world(setup, seed=args.seed, world_id="demo"))
     code_of = {d.driver_id: d.code for d in setup.drivers}
     total = setup.track.total_laps
-    n_cars = len(setup.drivers)
 
-    print(f"{EVENT_ID} | {n_cars} cars | {total} laps | seed {args.seed} | {engine.ENGINE_VERSION}")
+    print(f"{MONZA_2024} | {len(setup.drivers)} cars | {total} laps | seed {args.seed}")
     print("grid: " + "  ".join(f"P{d.grid_position} {d.code}" for d in setup.drivers))
-    print("synthetic lap model: no pit stops, no traffic, uncalibrated\n")
+    print(f"{engine.ENGINE_VERSION}: synthetic lap model, no pit stops, no traffic\n")
 
-    crossings: dict[int, list[tuple[float, str, float]]] = defaultdict(list)
+    sheet = LapTimingSheet(code_of, total, every=args.every)
     while state.world_status is WorldStatus.RUNNING:
         result = engine.step(state)
         state = result.state
-        for e in result.events:
-            if e.type != "LAP_COMPLETED" or e.driver_id is None:
-                continue
-            lap = int(e.payload["lap"])
-            crossings[lap].append(
-                (float(e.payload["crossing_time_s"]), e.driver_id, float(e.payload["lap_time_s"]))
-            )
-            if len(crossings[lap]) == n_cars and (lap % args.every == 0 or lap == total):
-                order = sorted(crossings[lap])
-                leader_t = order[0][0]
-                cells = [f"{code_of[order[0][1]]} {order[0][2]:6.2f}"]
-                cells += [f"{code_of[d]} +{t - leader_t:.3f}" for t, d, _ in order[1:]]
-                print(f"Lap {lap:>2}/{total}  " + "  ".join(cells))
+        for row in sheet.feed(result.events):
+            print(row)
 
     print("\nFinal classification")
     winner_t = state.car(engine.standings(state)[0]).finish_time_s or 0.0
