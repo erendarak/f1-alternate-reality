@@ -2,7 +2,11 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
-## Current (M1 in progress)
+## Current (M1 complete)
+
+- **Car pace offsets are in-sample, one-race estimates** (Monza 2024 only, mixing fuel/tyre/traffic
+  effects). The real winner won on strategy, which the engine can't do yet (no pit stops), see EXP-001.
+- **No lapping**: slow cars finish all laps ~2+ minutes behind instead of a lap down.
 
 - **Replay positions are interpolated linearly in time within each lap** (the timing feed gives lap
   start/end, not continuous speed). Cars move at constant speed through each lap, including in/out
@@ -55,8 +59,8 @@ Honest list of what does **not** work or is only approximate. Update whenever on
 - Runner listeners run on the runner thread and must be quick; a slow listener slows the sim.
 - **The race model is a synthetic placeholder.** Its coefficients are uncalibrated, and there are
   no pit stops, strategy decisions, weather, safety cars or DNFs.
-- **No car performance yet:** pace comes only from driver personas, so team strength is ignored. In
-  a 20-car run, a Sauber can finish 10th from P19.
+- Car performance now comes from data (D-021) when the race is fetched; with `--synthetic` or
+  without data, cars are equal again.
 - **No traffic or overtaking model:** cars pass through each other with no time cost, so grid
   position barely matters.
 - Every car finishes all 53 laps; nobody is lapped or flagged at the leader's finish.

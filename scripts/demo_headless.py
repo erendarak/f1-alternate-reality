@@ -23,7 +23,7 @@ from pathlib import Path
 from f1ar.domain.race_state import WorldState, WorldStatus
 from f1ar.persistence.sqlite_store import SnapshotStore
 from f1ar.simulation import lightweight_engine as engine
-from f1ar.simulation.scenarios import MONZA_2024, load_event, setup_from_codes
+from f1ar.simulation.scenarios import MONZA_2024, event_data_dir, load_event, setup_from_codes
 from f1ar.simulation.timing import LapTimingSheet
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -97,6 +97,9 @@ def main() -> None:
     parser.add_argument("--reload", action="store_true", help="reload the save in a new process")
     parser.add_argument("--resume", action="store_true", help="resume to the flag after pausing")
     parser.add_argument("--db", type=Path, default=DEFAULT_DB)
+    parser.add_argument(
+        "--synthetic", action="store_true", help="ignore fetched data: equal cars, all on MEDIUM"
+    )
     parser.add_argument("--resume-from", metavar="SNAPSHOT_ID", help="load a snapshot and finish")
     args = parser.parse_args()
 
@@ -112,7 +115,12 @@ def main() -> None:
 
     roster, profiles = load_event(CONFIGS)
     try:
-        setup = setup_from_codes(roster, profiles, None if args.all else args.drivers)
+        setup = setup_from_codes(
+            roster,
+            profiles,
+            None if args.all else args.drivers,
+            data_dir=None if args.synthetic else event_data_dir(ROOT),
+        )
     except ValueError as exc:
         parser.error(str(exc))
     world = engine.start(engine.create_world(setup, seed=args.seed, world_id="demo"))
@@ -122,7 +130,9 @@ def main() -> None:
         f" | seed {args.seed}"
     )
     print("grid: " + "  ".join(f"P{d.grid_position} {d.code}" for d in setup.drivers))
-    print(f"{engine.ENGINE_VERSION}: synthetic lap model, no pit stops, no traffic\n")
+    data_note = ", ".join(setup.inputs) if setup.inputs else "synthetic defaults (no data)"
+    print(f"inputs: {data_note}")
+    print(f"{engine.ENGINE_VERSION}: placeholder lap model, no pit stops, no traffic\n")
 
     sheet = _sheet(world, args.every)
     state = _run(world, sheet, stop_after_lap=pause_lap)

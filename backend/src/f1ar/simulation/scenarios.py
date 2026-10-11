@@ -1,7 +1,9 @@
 """Scenario builders: turn roster + profiles into a ``RaceSetup``."""
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from pathlib import Path
+
+import pandas as pd
 
 from f1ar.domain.driver_profiles import ProfileSet, load_profiles
 from f1ar.domain.identities import RaceRoster, load_roster
@@ -34,15 +36,49 @@ def load_event(configs_dir: Path, event_id: str = MONZA_2024) -> tuple[RaceRoste
 
 
 def setup_from_codes(
-    roster: RaceRoster, profiles: ProfileSet, codes: Sequence[str] | None
+    roster: RaceRoster,
+    profiles: ProfileSet,
+    codes: Sequence[str] | None,
+    *,
+    data_dir: Path | None = None,
 ) -> RaceSetup:
-    """Setup from 3-letter driver codes (e.g. ``["VER", "HAM"]``); ``None`` = full grid."""
+    """Setup from 3-letter driver codes (e.g. ``["VER", "HAM"]``); ``None`` = full grid.
+
+    With ``data_dir`` (a fetched ``data/processed/<event>/``) the setup uses the real start tyres
+    and the data-estimated car pace offsets; without it, synthetic defaults.
+    """
     by_code = {e.code: e.driver_id for e in roster.entries}
     wanted = [e.code for e in roster.entries] if codes is None else [c.upper() for c in codes]
     unknown = [c for c in wanted if c not in by_code]
     if unknown:
         raise ValueError(f"unknown driver code(s) {unknown}; choose from {sorted(by_code)}")
-    return build_setup(roster, profiles, [by_code[c] for c in wanted])
+    driver_ids = [by_code[c] for c in wanted]
+    if data_dir is None:
+        return build_setup(roster, profiles, driver_ids)
+
+    from f1ar.calibration.race_inputs import estimate_car_offsets, start_compounds
+
+    laps = pd.read_parquet(data_dir / "laps.parquet")
+    lap_model = default_lap_model()
+    estimate = estimate_car_offsets(laps, roster, profiles, lap_model)
+    return build_setup(
+        roster,
+        profiles,
+        driver_ids,
+        lap_model=lap_model,
+        start_compounds=start_compounds(laps, roster),
+        car_offsets_s=estimate.offsets_s,
+        inputs={
+            "start_compounds": f"historical_verified: lap-1 compound, {data_dir.name}/laps.parquet",
+            "car_pace_offsets": estimate.note,
+        },
+    )
+
+
+def event_data_dir(root: Path, event_id: str = MONZA_2024) -> Path | None:
+    """``data/processed/<event>`` if it has been fetched, else None (synthetic defaults)."""
+    path = root / "data" / "processed" / event_id
+    return path if (path / "laps.parquet").exists() else None
 
 
 def monza_2024_track() -> TrackSpec:
@@ -92,8 +128,15 @@ def build_setup(
     lap_model: LapModelParams | None = None,
     tick_seconds: float = DEFAULT_TICK_SECONDS,
     start_compound: Compound = Compound.MEDIUM,
+    start_compounds: Mapping[str, Compound] | None = None,
+    car_offsets_s: Mapping[str, float] | None = None,
+    inputs: Mapping[str, str] | None = None,
 ) -> RaceSetup:
-    """Race setup for a subset of the roster, ordered by grid position."""
+    """Race setup for a subset of the roster, ordered by grid position.
+
+    ``start_compounds`` (per driver) and ``car_offsets_s`` (per team) override the synthetic
+    defaults (``start_compound`` for everyone, equal cars); ``inputs`` records where they came from.
+    """
     if roster.event_id != profiles.event_id:
         raise ValueError("roster and profiles belong to different events")
     entries = sorted((roster.entry(d) for d in driver_ids), key=lambda e: e.grid_position)
@@ -109,9 +152,11 @@ def build_setup(
                 code=e.code,
                 team_id=e.team_id,
                 grid_position=e.grid_position,
-                start_compound=start_compound,
+                start_compound=(start_compounds or {}).get(e.driver_id, start_compound),
+                car_pace_offset_s=(car_offsets_s or {}).get(e.team_id, 0.0),
                 profile=profiles.get(e.driver_id),
             )
             for e in entries
         ),
+        inputs=dict(inputs or {}),
     )

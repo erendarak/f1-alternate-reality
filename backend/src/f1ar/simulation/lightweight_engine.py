@@ -27,8 +27,9 @@ from f1ar.domain.race_state import (
 from f1ar.simulation.lap_model import sample_lap_time_s, wear_per_lap_s
 from f1ar.simulation.rng_streams import RngSpec
 
-ENGINE_VERSION = "lightweight_engine_v0.2.0"
-"""v0.2.0: tyre wear is accumulated per lap at the mode driven (v0.1.0 scaled it retroactively)."""
+ENGINE_VERSION = "lightweight_engine_v0.3.0"
+"""v0.3.0: per-car performance offset (``DriverEntry.car_pace_offset_s``).
+v0.2.0: tyre wear accumulated per lap at the mode driven (v0.1.0 scaled it retroactively)."""
 
 
 class EngineStateError(RuntimeError):
@@ -54,9 +55,10 @@ def _sample_next_lap(
     laps_completed: int,
     tyre_wear_s: float,
 ) -> float:
+    entry = setup.driver(driver_id)
     return sample_lap_time_s(
         setup.lap_model,
-        setup.driver(driver_id).profile.archetype,
+        entry.profile.archetype,
         seed=seed,
         driver_id=driver_id,
         lap_number=laps_completed + 1,
@@ -64,6 +66,7 @@ def _sample_next_lap(
         tyre_wear_s=tyre_wear_s,
         pace_mode=pace_mode,
         laps_remaining=setup.track.total_laps - laps_completed,
+        car_offset_s=entry.car_pace_offset_s,
     )
 
 

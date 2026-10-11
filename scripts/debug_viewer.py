@@ -29,7 +29,7 @@ from f1ar.persistence.sqlite_store import SnapshotStore
 from f1ar.presentation.track_geometry import TrackGeometry
 from f1ar.presentation.view_model import track_view
 from f1ar.simulation import lightweight_engine as engine
-from f1ar.simulation.scenarios import MONZA_2024, load_event, setup_from_codes
+from f1ar.simulation.scenarios import MONZA_2024, event_data_dir, load_event, setup_from_codes
 from f1ar.simulation.world_runner import ALLOWED_SPEEDS
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -93,6 +93,9 @@ def main() -> None:
     )
     parser.add_argument("--replay", action="store_true", help="replay the real recorded race")
     parser.add_argument(
+        "--synthetic", action="store_true", help="ignore fetched data: equal cars, all on MEDIUM"
+    )
+    parser.add_argument(
         "--event", default=MONZA_2024, help="event id for --replay, e.g. 2024_belgian_gp"
     )
     parser.add_argument("--port", type=int, default=8765)
@@ -124,7 +127,14 @@ def main() -> None:
     _, profiles = load_event(ROOT / "configs")
     if args.speed not in ALLOWED_SPEEDS:
         parser.error(f"simulation speed must be one of {ALLOWED_SPEEDS}")
-    setup = setup_from_codes(roster, profiles, None if args.all else args.drivers)
+    setup = setup_from_codes(
+        roster,
+        profiles,
+        None if args.all else args.drivers,
+        data_dir=None if args.synthetic else event_data_dir(ROOT),
+    )
+    data_note = ", ".join(setup.inputs) if setup.inputs else "synthetic defaults (no data)"
+    print(f"inputs: {data_note}")
     store = SnapshotStore(args.db)
 
     def new_world(seed: int, world_id: str) -> WorldState:

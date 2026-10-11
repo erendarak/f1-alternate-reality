@@ -291,3 +291,21 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   road, not the official status. A disqualified finisher is FINISHED with a `DISQUALIFIED` event and a
   `DSQ` badge in the tower (Spa 2024: RUS P1 on the road by 0.526 s, then DSQ). The official order
   stays available in `results` / `classified_position`.
+
+## D-021 — Real start tyres and team car-pace offsets as engine inputs; engine v0.3.0 (2026-10-12)
+
+- **Engine:** `DriverEntry.car_pace_offset_s` (seconds per lap vs the fastest car) enters the lap
+  model as its own term, separate from the driver's skill term (plan §5.2). `RaceSetup.inputs`
+  records the provenance of every data-derived input. `ENGINE_VERSION = lightweight_engine_v0.3.0`,
+  `WORLD_SCHEMA_VERSION = 3`; older saves are refused, as before (D-014).
+- **Estimation** (`f1ar/calibration/race_inputs.py`): start compound = real lap-1 compound
+  (`historical_verified`, dry compounds only). Car offset per team = mean over its drivers of
+  (median representative lap − the persona skill term), relative to the fastest team
+  (`estimated_from_data`; drivers with <10 representative laps excluded; teams without data get
+  the median offset). Monza 2024: McLaren 0.00, Ferrari 0.29, Mercedes 0.34, Red Bull 0.56,
+  midfield 1.30–1.37, Alpine 1.92, Sauber 2.45 s/lap.
+- **Default on:** `setup_from_codes(..., data_dir=...)`; every simulation script uses
+  `data/processed/<event>` when fetched and prints which inputs are active. `--synthetic` restores
+  the old defaults, and a missing data dir falls back automatically (tests/CI unchanged).
+- **Evidence:** EXP-001. Rank correlation with the real result 0.743 → 0.879 (30/30 paired seeds
+  better), but the strategy-won real race can't be reproduced without pit stops.

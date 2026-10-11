@@ -16,7 +16,7 @@ from f1ar.domain.provenance import SourceType
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 2
+WORLD_SCHEMA_VERSION = 3
 
 
 class _Frozen(BaseModel):
@@ -103,6 +103,9 @@ class DriverEntry(_Frozen):
     team_id: str
     grid_position: int = Field(ge=0)
     start_compound: Compound
+    car_pace_offset_s: float = Field(default=0.0, ge=0.0, le=10.0)
+    """Car performance: lap time lost vs. the fastest car in the field (0 = fastest car).
+    Separate from driver skill (plan §5.2); see ``RaceSetup.inputs`` for its provenance."""
     profile: DriverProfile
 
 
@@ -114,6 +117,9 @@ class RaceSetup(_Frozen):
     profile_set_manifest_hash: str
     """Hash of the full ProfileSet the embedded profiles were taken from."""
     drivers: tuple[DriverEntry, ...]
+    inputs: dict[str, str] = Field(default_factory=dict)
+    """Provenance of data-derived inputs, e.g. ``{"start_compounds": "historical_verified: ..."}``.
+    Empty = synthetic defaults (all MEDIUM, equal cars)."""
 
     @model_validator(mode="after")
     def _unique(self) -> Self:
@@ -183,7 +189,7 @@ DriverAction = SetPaceMode
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[2]
+    schema_version: Literal[3]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None

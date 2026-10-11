@@ -20,7 +20,7 @@ from pathlib import Path
 
 from f1ar.domain.race_state import PaceMode, RaceEvent, WorldState, WorldStatus
 from f1ar.simulation import lightweight_engine as engine
-from f1ar.simulation.scenarios import load_event, setup_from_codes
+from f1ar.simulation.scenarios import event_data_dir, load_event, setup_from_codes
 from f1ar.simulation.timing import LapTimingSheet
 from f1ar.simulation.world_runner import (
     ALLOWED_SPEEDS,
@@ -30,7 +30,8 @@ from f1ar.simulation.world_runner import (
     WorldRunner,
 )
 
-CONFIGS = Path(__file__).resolve().parents[1] / "configs"
+ROOT = Path(__file__).resolve().parents[1]
+CONFIGS = ROOT / "configs"
 _keys = itertools.count(1)
 
 
@@ -54,10 +55,20 @@ def main() -> None:
     parser.add_argument("--drivers", nargs="+", default=["VER", "HAM", "LEC", "NOR"])
     parser.add_argument("--all", action="store_true")
     parser.add_argument("--speed", type=int, default=25, choices=ALLOWED_SPEEDS)
+    parser.add_argument(
+        "--synthetic", action="store_true", help="ignore fetched data: equal cars, all on MEDIUM"
+    )
     args = parser.parse_args()
 
     roster, profiles = load_event(CONFIGS)
-    setup = setup_from_codes(roster, profiles, None if args.all else args.drivers)
+    setup = setup_from_codes(
+        roster,
+        profiles,
+        None if args.all else args.drivers,
+        data_dir=None if args.synthetic else event_data_dir(ROOT),
+    )
+    data_note = ", ".join(setup.inputs) if setup.inputs else "synthetic defaults (no data)"
+    print(f"inputs: {data_note}")
     runner = WorldRunner(
         engine.create_world(setup, seed=args.seed, world_id="live"), speed=args.speed
     )

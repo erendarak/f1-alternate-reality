@@ -19,7 +19,7 @@ from pathlib import Path
 from f1ar.domain.race_state import PaceMode, SetPaceMode, WorldState, WorldStatus
 from f1ar.persistence.sqlite_store import SnapshotStore
 from f1ar.simulation import lightweight_engine as engine
-from f1ar.simulation.scenarios import load_event, setup_from_codes
+from f1ar.simulation.scenarios import event_data_dir, load_event, setup_from_codes
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIGS = ROOT / "configs"
@@ -39,10 +39,17 @@ def main() -> None:
     parser.add_argument("--driver", default="HAM", help="driver whose decision changes")
     parser.add_argument("--at-lap", type=int, default=18, help="branch after the leader's lap N")
     parser.add_argument("--db", type=Path, default=DEFAULT_DB)
+    parser.add_argument(
+        "--synthetic", action="store_true", help="ignore fetched data: equal cars, all on MEDIUM"
+    )
     args = parser.parse_args()
 
     roster, profiles = load_event(CONFIGS)
-    setup = setup_from_codes(roster, profiles, args.drivers)
+    setup = setup_from_codes(
+        roster, profiles, args.drivers, data_dir=None if args.synthetic else event_data_dir(ROOT)
+    )
+    data_note = ", ".join(setup.inputs) if setup.inputs else "synthetic defaults (no data)"
+    print(f"inputs: {data_note}")
     code_of = {d.driver_id: d.code for d in setup.drivers}
     by_code = {c: d for d, c in code_of.items()}
     if args.driver.upper() not in by_code:

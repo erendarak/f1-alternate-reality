@@ -1,6 +1,6 @@
 # Progress
 
-## Current milestone: M1 — Historical data layer (plan §16)
+## Current milestone: M1 — Historical data layer (plan §16) — COMPLETE
 
 M0 and M0.5 are complete (gate 5/5; see below). M1 tasks, adapted to what step 7 already delivered:
 
@@ -11,8 +11,12 @@ M0 and M0.5 are complete (gate 5/5; see below). M1 tasks, adapted to what step 7
 - [x] **Historical reference race + reference event list; `HISTORICAL_REPLAY` separated in code (D-018).**
 - [x] Real race replay on the debug viewer map (play/pause/speed/seek; no fork, no actions) + camera.
 - [x] More events through the same pipeline: `fetch_event.py --season --round` (D-020); 2024 Belgian GP added.
-- [ ] Engine inputs from data: real start compounds, per-driver/team pace baselines from
-      representative laps (feeds M2/M4 calibration).
+- [x] Engine inputs from data: real start compounds + team car-pace offsets (D-021, EXP-001).
+
+**M1 DoD (plan §16) met:** one CLI fetches and validates the real race; the next run loads from
+cache; 20 cars / 53 laps checked (lapping and retirement handled); gaps reported; historical replay
+and simulation are separate modes. Next milestone: **M2: canonical race engine + persistent world**
+(pit stops, tyre choice, lapping, traffic, SC/VSC, DNF/mistake model, event/command persistence).
 
 ## Previous milestone: M0 — Feasibility & Bootstrap
 
@@ -262,3 +266,14 @@ Plan §22 checklist (adapted per D-002):
   RUS P1 DSQ, HAM +0.526, PIA +1.173 at the flag.
 - Tests: 177 offline passing (+6 pipeline, +1 DSQ) + 2 network.
 - Next M1 item: engine inputs from data (real start compounds, team car-pace offsets).
+
+### 2026-10-12 — M1 slice 4: data into the engine (M1 complete)
+
+- `f1ar.calibration.race_inputs` (start compounds, car-pace offsets); `DriverEntry.car_pace_offset_s`,
+  `RaceSetup.inputs`; lap-model car term; engine v0.3.0, world schema v3 (D-021).
+- `setup_from_codes(data_dir=...)` + `event_data_dir`; demo_headless / live_race / fork_demo /
+  debug_viewer use real inputs by default (`--synthetic` to opt out) and print them.
+- **EXP-001** (`scripts/experiments/exp001_data_inputs.py`, `docs/EXPERIMENTS.md`): Spearman vs the
+  real order 0.743 → 0.879, position error 3.27 → 1.99, better in 30/30 paired seeds. But LEC's
+  strategy win can't happen without pit stops (McLaren wins every seed).
+- Tests: 183 offline passing (+6 inputs/engine/scenario) + 2 network.

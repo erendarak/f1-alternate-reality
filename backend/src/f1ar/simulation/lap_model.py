@@ -2,6 +2,7 @@
 
     lap_time = base_lap
              + skill_gap        * (1 - race_pace_skill)       # driver speed
+             + car_offset                                     # car speed (separate from driver)
              + compound offset                                # tyre choice
              + accumulated tyre wear                          # path-dependent, see below
              + fuel effect      * laps_remaining               # car gets lighter
@@ -64,10 +65,12 @@ def expected_lap_time_s(
     tyre_wear_s: float,
     pace_mode: PaceMode,
     laps_remaining: int,
+    car_offset_s: float = 0.0,
 ) -> float:
     return (
         params.base_lap_s
         + params.skill_gap_s * (1.0 - driver.race_pace_skill)
+        + car_offset_s
         + params.compounds[compound].offset_s
         + tyre_wear_s
         + params.fuel_s_per_lap_remaining * laps_remaining
@@ -90,6 +93,7 @@ def sample_lap_time_s(
     tyre_wear_s: float,
     pace_mode: PaceMode,
     laps_remaining: int,
+    car_offset_s: float = 0.0,
 ) -> float:
     """Lap time for ``lap_number``. The noise is keyed by (driver, lap): common across forks."""
     mean = expected_lap_time_s(
@@ -99,6 +103,7 @@ def sample_lap_time_s(
         tyre_wear_s=tyre_wear_s,
         pace_mode=pace_mode,
         laps_remaining=laps_remaining,
+        car_offset_s=car_offset_s,
     )
     z = normal(seed, "lap_noise", driver_id, lap_number)
     return max(mean + noise_sd_s(params, driver) * z, params.min_lap_fraction * params.base_lap_s)
