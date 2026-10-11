@@ -60,3 +60,12 @@ def test_observation_tracks_race_progress(two_car_world: WorldState) -> None:
     assert later["car.tyre_age_laps"] == 1.0
     assert later["car.has_last_lap"] == 1.0 and later["car.last_lap_time_s"] > 0
     assert later["car.position"] == engine.standings(state).index(VER) + 1
+
+
+def test_observation_hides_true_tyre_wear(two_car_world: WorldState) -> None:
+    """Partial observability: wear is inferred from lap times, not read off the car."""
+    state = run_ticks(two_car_world, 400)
+    tampered = state.model_copy(
+        update={"cars": tuple(c.model_copy(update={"tyre_wear_s": 9.9}) for c in state.cars)}
+    )
+    assert build_observation(tampered, VER) == build_observation(state, VER)

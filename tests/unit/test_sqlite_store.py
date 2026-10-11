@@ -5,7 +5,9 @@ from pathlib import Path
 import pytest
 
 from f1ar.domain.race_state import WorldState
+from f1ar.persistence.snapshot_codec import canonical_json
 from f1ar.persistence.sqlite_store import (
+    STORE_SCHEMA_VERSION,
     SnapshotIntegrityError,
     SnapshotNotFoundError,
     SnapshotStore,
@@ -146,3 +148,66 @@ def test_store_from_a_newer_schema_is_refused(tmp_path: Path) -> None:
     _raw(path, "UPDATE store_meta SET value = '99' WHERE key = 'schema_version'")
     with pytest.raises(UnsupportedSnapshotError, match="migration"):
         SnapshotStore(path)
+
+
+_V1_DDL = """
+CREATE TABLE store_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+CREATE TABLE worlds (id TEXT PRIMARY KEY, event_id TEXT NOT NULL, created_utc TEXT NOT NULL);
+CREATE TABLE timelines (
+    id TEXT PRIMARY KEY, world_id TEXT NOT NULL REFERENCES worlds(id),
+    parent_timeline_id TEXT REFERENCES timelines(id), created_utc TEXT NOT NULL);
+CREATE TABLE snapshots (
+    id TEXT PRIMARY KEY, world_id TEXT NOT NULL REFERENCES worlds(id),
+    timeline_id TEXT NOT NULL REFERENCES timelines(id), tick INTEGER NOT NULL,
+    sim_clock_s REAL NOT NULL, world_status TEXT NOT NULL, label TEXT NOT NULL,
+    kind TEXT NOT NULL, schema_version INTEGER NOT NULL, codec_version INTEGER NOT NULL,
+    engine_version TEXT NOT NULL, profile_set_hash TEXT NOT NULL, payload_sha256 TEXT NOT NULL,
+    payload BLOB NOT NULL, created_utc TEXT NOT NULL, seq INTEGER NOT NULL UNIQUE);
+INSERT INTO store_meta VALUES ('schema_version', '1');
+"""
+
+
+def test_v1_store_is_migrated_in_place(tmp_path: Path, two_car_world: WorldState) -> None:
+    """A save file from step 5 (store schema v1) still opens, loads and can be forked."""
+    path = tmp_path / "v1.sqlite"
+    state = run_ticks(two_car_world, 50)
+    payload = canonical_json(state.model_dump(mode="json"))
+    db = sqlite3.connect(path)
+    db.executescript(_V1_DDL)
+    with db:
+        db.execute("INSERT INTO worlds VALUES (?, ?, 't')", (state.world_id, state.setup.event_id))
+        db.execute(
+            "INSERT INTO timelines VALUES (?, ?, NULL, 't')", (state.timeline_id, state.world_id)
+        )
+        db.execute(
+            "INSERT INTO snapshots VALUES ('snap_v1', ?, ?, 50, 25.0, 'RUNNING', 'old', 'MANUAL',"
+            " ?, 1, ?, ?, ?, ?, 't', 1)",
+            (
+                state.world_id,
+                state.timeline_id,
+                state.schema_version,
+                state.engine_version,
+                state.setup.profile_set_manifest_hash,
+                state.canonical_hash(),
+                payload,
+            ),
+        )
+    db.close()
+
+    with SnapshotStore(path) as store:
+        assert store.schema_version == STORE_SCHEMA_VERSION == 2
+        assert store.load("snap_v1") == state
+        branch, _ = store.fork("snap_v1", label="after migration")
+        assert {t.timeline_id for t in store.list_timelines(state.world_id)} == {
+            state.timeline_id,
+            branch.timeline_id,
+        }
+
+
+def test_delete_snapshot(store: SnapshotStore, two_car_world: WorldState) -> None:
+    meta = store.save(two_car_world, label="x")
+    store.delete_snapshot(meta.snapshot_id)
+    with pytest.raises(SnapshotNotFoundError):
+        store.load(meta.snapshot_id)
+    with pytest.raises(SnapshotNotFoundError):
+        store.delete_snapshot(meta.snapshot_id)

@@ -134,3 +134,38 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   world keeps running (plan US-09).
 - **Not yet:** event log and command log tables, autosave, timeline/fork records beyond the main
   timeline (step 6 / M2).
+
+## D-013 — Forks, timelines and the first driver action (2026-10-12)
+
+- **Fork = copy under a new timeline id** (`f1ar/simulation/timeline.py::fork_world`). It keeps the
+  `world_id`, sets `parent_timeline_id`, and a RUNNING source forks as PAUSED. Because `WorldState` is
+  immutable and complete, the source can't be affected (tested via snapshot hash and by replaying the
+  source to the flag).
+- **Seed modes** (plan §4.5, §13.3): `COMMON_EXOGENOUS_RANDOMNESS` (default) keeps the parent seed, so
+  the branch sees identical (driver, lap) noise and differences come from the decision.
+  `INDEPENDENT` derives a new seed from (parent seed, timeline id), so it is reproducible.
+- **Store** (`SnapshotStore.fork`, `list_timelines`, `delete_snapshot`): a branch's first snapshot is
+  a full copy, and `timelines.fork_snapshot_id` records provenance as plain text (not a foreign key),
+  so deleting the source snapshot breaks neither the branch nor its recorded history (plan §4.7
+  test 6). A branch whose parent was only in memory still records the parent, labelled `(unsaved)`.
+- **Store schema v2** adds `timelines.label` and `fork_snapshot_id`. `STORE_MIGRATIONS` upgrades v1
+  files in place, one transaction per version (the first real migration).
+- **First driver action: `SetPaceMode`** (`engine.apply_action`, runner `SET_PACE_MODE`). It's pure,
+  emits `PACE_MODE_CHANGED`, and takes effect from the driver's next lap (the lap in progress was
+  sampled at its start). Re-requesting the same mode is an accepted no-op. Pit stops come in M2, so
+  for now pace mode is the decision forks can differ by.
+
+## D-014 — Tyre wear is path-dependent state; engine v0.2.0, world schema v2 (2026-10-12)
+
+- **Bug found by the fork demo:** engine v0.1.0 computed degradation as `tyre_age × rate ×
+  pace_mode_multiplier`, so changing mode retroactively rescaled the whole stint's wear. Pushing on
+  43-lap-old tyres instantly added about 0.7 s/lap and made a late push *slower*; conserving "healed"
+  tyres.
+- **Fix:** `CarState.tyre_wear_s` accumulates `compound_deg × wear_factor(tire_management) ×
+  mode_multiplier` per completed lap, at the mode that lap was driven in (`CarState.lap_pace_mode`,
+  locked at lap start; `pace_mode` is the intent for the next lap). Supersedes the degradation term
+  of D-010. `tyre_wear_s` is hidden from observations (inferred, not measured).
+- **Versioning:** `ENGINE_VERSION = lightweight_engine_v0.2.0`, `WORLD_SCHEMA_VERSION = 2`. Saves from
+  v0.1.0 are refused with `UnsupportedSnapshotError` (shown as INVALID by `inspect_save.py`) instead
+  of being silently re-simulated under different physics. The gate demo's reference hash changed
+  from `071ad86…` to `8ec919a…`.

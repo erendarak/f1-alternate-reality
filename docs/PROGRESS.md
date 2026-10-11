@@ -9,7 +9,7 @@ Plan §22 checklist (adapted per D-002):
 - [x] **3.** Headless deterministic two-car world, 1 tick (and full races, up to 20 cars).
 - [x] **4.** Pause/resume with freeze test.
 - [x] **5.** Snapshot save → fresh-process load → equality test.
-- [ ] **6.** Timeline fork with isolation test.
+- [x] **6.** Timeline fork with isolation test.
 - [ ] **6b.** Terminal timing tower in `demo_headless.py` (D-002).
 - [ ] **7.** FastF1 Monza 2024 fetch/cache + data quality report.
 - [ ] **8.** TUM race-simulation feasibility memo → go/no-go (fallback C pre-approved, D-003).
@@ -105,3 +105,26 @@ Plan §22 checklist (adapted per D-002):
 ```
 
 - Next: step 6, timeline fork (branch with a different decision; original untouched).
+
+### 2026-10-12 — Step 6: timeline forks
+
+- `f1ar.simulation.timeline`: `fork_world`, `SeedMode` (common / independent randomness),
+  `new_timeline_id` (D-013).
+- First driver action, `SetPaceMode`: `engine.apply_action` and runner `SET_PACE_MODE`, effective from
+  the next lap.
+- `SnapshotStore`: `fork`, `list_timelines`, `delete_snapshot`; store schema v2 with an in-place v1→v2
+  migration.
+- **Bug found and fixed:** tyre wear was retroactively rescaled by the current pace mode. It is now
+  path-dependent state (`tyre_wear_s`, `lap_pace_mode`). Engine v0.2.0, world schema v2; old saves are
+  refused clearly (D-014).
+- `scripts/fork_demo.py`: save at lap N, fork into main / push / conserve with the same luck, run all
+  to the flag, compare, print the timeline tree, verify the source snapshot is unchanged.
+- `scripts/live_race.py`: `p HAM push` changes a driver's pace mode mid-race.
+- Tests: 115 passing (~7.5 s). Plan §4.7 test 5 (fork with a different decision: A unchanged, B
+  differs, VER identical thanks to common random numbers) and test 6 (deleting the source snapshot
+  doesn't break the branch). Also: reproducible counterfactuals, independent-seed branches, timeline
+  tree, in-memory fork lineage, v1 store migration, actions (event, next-lap effect, no-op, rejection,
+  observable mode), runner SET_PACE_MODE, the late-push regression, hidden tyre wear.
+- M0 steps 1–6 are done. Remaining: 6b terminal tower (largely covered by `live_race.py`), 7 FastF1
+  data, 8 TUM feasibility memo, M0.5 debug viewer.
+- Next: step 7, FastF1 Monza 2024 fetch/cache + data quality report.

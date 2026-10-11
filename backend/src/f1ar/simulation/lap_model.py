@@ -3,10 +3,18 @@
     lap_time = base_lap
              + skill_gap        * (1 - race_pace_skill)       # driver speed
              + compound offset                                # tyre choice
-             + tyre degradation (age, compound, tire_management, pace_mode)
+             + accumulated tyre wear                          # path-dependent, see below
              + fuel effect      * laps_remaining               # car gets lighter
              + pace_mode offset                               # conserve / balanced / push
              + noise ~ N(0, sd(consistency))                   # lap-to-lap variance
+
+Tyre wear is STATE, not a formula of tyre age: each completed lap adds
+
+    wear_per_lap = compound_deg * wear_factor(tire_management) * pace_mode_wear_multiplier
+
+for the pace mode actually driven on that lap. Changing pace mode therefore changes how
+fast the tyres wear from now on. It never rewrites the wear already accumulated (engine
+v0.1.0 got this wrong: it scaled the whole stint's wear by the current mode).
 
 Each profile field gets its own causal channel: ``risk_appetite`` is a *preference* and
 does not enter the transition model here. It will shape strategy choices instead.
@@ -25,6 +33,17 @@ def tyre_wear_factor(params: LapModelParams, driver: DriverArchetype) -> float:
     return params.tyre_mgmt_wear_max + span * driver.tire_management
 
 
+def wear_per_lap_s(
+    params: LapModelParams, driver: DriverArchetype, *, compound: Compound, pace_mode: PaceMode
+) -> float:
+    """Lap time added to every later lap of this tyre set by one lap driven in ``pace_mode``."""
+    return (
+        params.compounds[compound].deg_s_per_lap
+        * tyre_wear_factor(params, driver)
+        * params.pace_modes[pace_mode].wear_multiplier
+    )
+
+
 def degradation_s(
     params: LapModelParams,
     driver: DriverArchetype,
@@ -33,12 +52,8 @@ def degradation_s(
     tyre_age_laps: int,
     pace_mode: PaceMode,
 ) -> float:
-    return (
-        tyre_age_laps
-        * params.compounds[compound].deg_s_per_lap
-        * tyre_wear_factor(params, driver)
-        * params.pace_modes[pace_mode].wear_multiplier
-    )
+    """Accumulated wear after ``tyre_age_laps`` laps all driven in the same mode (helper)."""
+    return tyre_age_laps * wear_per_lap_s(params, driver, compound=compound, pace_mode=pace_mode)
 
 
 def expected_lap_time_s(
@@ -46,7 +61,7 @@ def expected_lap_time_s(
     driver: DriverArchetype,
     *,
     compound: Compound,
-    tyre_age_laps: int,
+    tyre_wear_s: float,
     pace_mode: PaceMode,
     laps_remaining: int,
 ) -> float:
@@ -54,9 +69,7 @@ def expected_lap_time_s(
         params.base_lap_s
         + params.skill_gap_s * (1.0 - driver.race_pace_skill)
         + params.compounds[compound].offset_s
-        + degradation_s(
-            params, driver, compound=compound, tyre_age_laps=tyre_age_laps, pace_mode=pace_mode
-        )
+        + tyre_wear_s
         + params.fuel_s_per_lap_remaining * laps_remaining
         + params.pace_modes[pace_mode].offset_s
     )
@@ -74,7 +87,7 @@ def sample_lap_time_s(
     driver_id: str,
     lap_number: int,
     compound: Compound,
-    tyre_age_laps: int,
+    tyre_wear_s: float,
     pace_mode: PaceMode,
     laps_remaining: int,
 ) -> float:
@@ -83,7 +96,7 @@ def sample_lap_time_s(
         params,
         driver,
         compound=compound,
-        tyre_age_laps=tyre_age_laps,
+        tyre_wear_s=tyre_wear_s,
         pace_mode=pace_mode,
         laps_remaining=laps_remaining,
     )

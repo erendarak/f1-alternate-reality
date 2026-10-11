@@ -9,6 +9,7 @@ from f1ar.simulation.lap_model import (
     expected_lap_time_s,
     noise_sd_s,
     sample_lap_time_s,
+    wear_per_lap_s,
 )
 from f1ar.simulation.scenarios import default_lap_model
 
@@ -23,7 +24,7 @@ def _with(**changes: float) -> DriverArchetype:
 def _expected(driver: DriverArchetype, **kw: object) -> float:
     args: dict[str, object] = {
         "compound": Compound.MEDIUM,
-        "tyre_age_laps": 10,
+        "tyre_wear_s": 0.5,
         "pace_mode": PaceMode.BALANCED,
         "laps_remaining": 30,
     } | kw
@@ -41,16 +42,29 @@ def test_better_tyre_management_degrades_less() -> None:
     assert 0 < careful < rough
 
 
-def test_push_is_faster_on_fresh_tyres_but_wears_more() -> None:
+def test_push_is_faster_now_but_wears_faster() -> None:
     d = NEUTRAL
-    assert _expected(d, tyre_age_laps=0, pace_mode=PaceMode.PUSH) < _expected(d, tyre_age_laps=0)
-    push_deg = degradation_s(
-        PARAMS, d, compound=Compound.MEDIUM, tyre_age_laps=20, pace_mode=PaceMode.PUSH
+    assert _expected(d, pace_mode=PaceMode.PUSH) < _expected(d, pace_mode=PaceMode.BALANCED)
+    push = wear_per_lap_s(PARAMS, d, compound=Compound.MEDIUM, pace_mode=PaceMode.PUSH)
+    conserve = wear_per_lap_s(PARAMS, d, compound=Compound.MEDIUM, pace_mode=PaceMode.CONSERVE)
+    assert push > conserve > 0
+
+
+def test_switching_mode_never_rewrites_past_wear() -> None:
+    """Regression for engine v0.1.0: the mode only changes the lap-time offset and FUTURE wear.
+
+    On 40-lap-old tyres, switching to PUSH must make the very next lap faster, because the
+    40 laps of wear already accumulated are the same whatever mode comes next.
+    """
+    worn = degradation_s(
+        PARAMS, NEUTRAL, compound=Compound.MEDIUM, tyre_age_laps=40, pace_mode=PaceMode.BALANCED
     )
-    cons_deg = degradation_s(
-        PARAMS, d, compound=Compound.MEDIUM, tyre_age_laps=20, pace_mode=PaceMode.CONSERVE
+    assert _expected(NEUTRAL, tyre_wear_s=worn, pace_mode=PaceMode.PUSH) < _expected(
+        NEUTRAL, tyre_wear_s=worn, pace_mode=PaceMode.BALANCED
     )
-    assert push_deg > cons_deg
+    assert _expected(NEUTRAL, tyre_wear_s=worn, pace_mode=PaceMode.CONSERVE) > _expected(
+        NEUTRAL, tyre_wear_s=worn, pace_mode=PaceMode.BALANCED
+    )
 
 
 def test_fuel_burn_makes_later_laps_faster_all_else_equal() -> None:
@@ -60,6 +74,11 @@ def test_fuel_burn_makes_later_laps_faster_all_else_equal() -> None:
 def test_risk_appetite_does_not_change_lap_dynamics() -> None:
     """risk_appetite is a preference for the strategist, not a transition-model skill."""
     assert _expected(_with(risk_appetite=0.95)) == _expected(_with(risk_appetite=0.05))
+    assert wear_per_lap_s(
+        PARAMS, _with(risk_appetite=0.95), compound=Compound.SOFT, pace_mode=PaceMode.PUSH
+    ) == wear_per_lap_s(
+        PARAMS, _with(risk_appetite=0.05), compound=Compound.SOFT, pace_mode=PaceMode.PUSH
+    )
 
 
 def test_consistency_controls_lap_time_spread() -> None:
@@ -73,7 +92,7 @@ def test_consistency_controls_lap_time_spread() -> None:
                 driver_id="x",
                 lap_number=n,
                 compound=Compound.MEDIUM,
-                tyre_age_laps=0,
+                tyre_wear_s=0.0,
                 pace_mode=PaceMode.BALANCED,
                 laps_remaining=30,
             )

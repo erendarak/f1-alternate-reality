@@ -5,7 +5,7 @@ from typing import Any
 
 import pytest
 
-from f1ar.domain.race_state import RaceEvent, RaceSetup, WorldState, WorldStatus
+from f1ar.domain.race_state import PaceMode, RaceEvent, RaceSetup, WorldState, WorldStatus
 from f1ar.persistence.sqlite_store import SnapshotStore
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.world_runner import Command, CommandAck, CommandType, WorldRunner
@@ -261,3 +261,30 @@ def test_pacing_and_pauses_never_change_the_race(
         runner.pump(t)
 
     assert runner.state.canonical_hash() == reference.canonical_hash()
+
+
+# --- driver actions ------------------------------------------------------------------------------
+
+
+def test_set_pace_mode_command(runner: WorldRunner) -> None:
+    started(runner)
+    runner.pump(3.0)
+    ack = send(
+        runner,
+        cmd(CommandType.SET_PACE_MODE, driver_id="lewis_hamilton_2024", pace_mode=PaceMode.PUSH),
+        3.0,
+    )
+    assert ack.accepted and ack.applied_tick == 6
+    assert runner.state.car("lewis_hamilton_2024").pace_mode is PaceMode.PUSH
+    assert runner.events[-1].type == "PACE_MODE_CHANGED"
+    assert runner.state.event_seq == len(runner.events)
+
+
+def test_bad_pace_mode_commands_are_rejected(runner: WorldRunner) -> None:
+    started(runner)
+    missing = send(runner, cmd(CommandType.SET_PACE_MODE, driver_id="lewis_hamilton_2024"), 0.0)
+    unknown = send(
+        runner, cmd(CommandType.SET_PACE_MODE, driver_id="nobody", pace_mode=PaceMode.PUSH), 0.0
+    )
+    assert not missing.accepted and "needs" in (missing.reason or "")
+    assert not unknown.accepted and "unknown driver" in (unknown.reason or "")

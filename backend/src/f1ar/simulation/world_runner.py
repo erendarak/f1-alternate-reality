@@ -27,7 +27,7 @@ from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from f1ar.domain.race_state import RaceEvent, WorldState, WorldStatus
+from f1ar.domain.race_state import PaceMode, RaceEvent, SetPaceMode, WorldState, WorldStatus
 from f1ar.persistence.sqlite_store import SnapshotError, SnapshotStore
 from f1ar.simulation import lightweight_engine as engine
 
@@ -44,6 +44,8 @@ class CommandType(StrEnum):
     """Advance N ticks manually; only while PAUSED."""
     SAVE = "SAVE"
     """Snapshot the world at the current tick boundary; acked only after the DB commit."""
+    SET_PACE_MODE = "SET_PACE_MODE"
+    """Driver action: change a driver's pace mode from their next lap."""
 
 
 class Command(BaseModel):
@@ -56,6 +58,8 @@ class Command(BaseModel):
     speed: int | None = None
     label: str | None = None
     ticks: int = Field(default=1, ge=1, le=MAX_STEP_TICKS)
+    driver_id: str | None = None
+    pace_mode: PaceMode | None = None
 
 
 class CommandAck(BaseModel):
@@ -196,7 +200,9 @@ class WorldRunner:
         self._anchor_tick = self._state.sim_tick
 
     def _advance(self, *, allow_paused: bool) -> None:
-        result = engine.step(self._state, allow_paused=allow_paused)
+        self._commit(engine.step(self._state, allow_paused=allow_paused))
+
+    def _commit(self, result: engine.StepResult) -> None:
         self._state = result.state
         self._events.extend(result.events)
         for listener in self._listeners:
@@ -267,6 +273,15 @@ class WorldRunner:
                     raise _Rejected("this runner has no snapshot store")
                 label = command.label or f"tick {self._state.sim_tick}"
                 return self._store.save(self._state, label=label).snapshot_id
+            case CommandType.SET_PACE_MODE:
+                if command.driver_id is None or command.pace_mode is None:
+                    raise _Rejected("SET_PACE_MODE needs driver_id and pace_mode")
+                action = SetPaceMode(
+                    driver_id=command.driver_id,
+                    pace_mode=command.pace_mode,
+                    actor_id=command.actor_id,
+                )
+                self._commit(engine.apply_action(self._state, action))
         return None
 
     # --- background thread --------------------------------------------------------------------

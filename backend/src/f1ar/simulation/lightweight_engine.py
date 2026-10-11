@@ -17,16 +17,18 @@ from f1ar.domain.race_state import (
     CarState,
     CarStatus,
     Compound,
+    DriverAction,
     PaceMode,
     RaceEvent,
     RaceSetup,
     WorldState,
     WorldStatus,
 )
-from f1ar.simulation.lap_model import sample_lap_time_s
+from f1ar.simulation.lap_model import sample_lap_time_s, wear_per_lap_s
 from f1ar.simulation.rng_streams import RngSpec
 
-ENGINE_VERSION = "lightweight_engine_v0.1.0"
+ENGINE_VERSION = "lightweight_engine_v0.2.0"
+"""v0.2.0: tyre wear is accumulated per lap at the mode driven (v0.1.0 scaled it retroactively)."""
 
 
 class EngineStateError(RuntimeError):
@@ -50,7 +52,7 @@ def _sample_next_lap(
     compound: Compound,
     pace_mode: PaceMode,
     laps_completed: int,
-    tyre_age_laps: int,
+    tyre_wear_s: float,
 ) -> float:
     return sample_lap_time_s(
         setup.lap_model,
@@ -59,7 +61,7 @@ def _sample_next_lap(
         driver_id=driver_id,
         lap_number=laps_completed + 1,
         compound=compound,
-        tyre_age_laps=tyre_age_laps,
+        tyre_wear_s=tyre_wear_s,
         pace_mode=pace_mode,
         laps_remaining=setup.track.total_laps - laps_completed,
     )
@@ -79,7 +81,7 @@ def create_world(
             compound=entry.start_compound,
             pace_mode=pace_mode,
             laps_completed=0,
-            tyre_age_laps=0,
+            tyre_wear_s=0.0,
         )
         cars.append(
             CarState(
@@ -91,7 +93,9 @@ def create_world(
                 lap_target_s=target,
                 compound=entry.start_compound,
                 tyre_age_laps=0,
+                tyre_wear_s=0.0,
                 pace_mode=pace_mode,
+                lap_pace_mode=pace_mode,
                 last_lap_time_s=None,
                 finish_time_s=None,
             )
@@ -130,6 +134,46 @@ def resume(state: WorldState) -> WorldState:
     if state.world_status is not WorldStatus.PAUSED:
         raise EngineStateError(f"cannot resume a world in status {state.world_status}")
     return state.model_copy(update={"world_status": WorldStatus.RUNNING})
+
+
+class ActionRejectedError(EngineStateError):
+    """An action is illegal in the current state (unknown driver, finished car, ...)."""
+
+
+def apply_action(state: WorldState, action: DriverAction) -> StepResult:
+    """Apply a driver action between ticks. Pure; returns the new state and its events.
+
+    Re-requesting the mode a car already uses is an accepted no-op (no event).
+    """
+    if state.world_status is WorldStatus.COMPLETED:
+        raise ActionRejectedError("the race is over")
+    if action.driver_id not in {c.driver_id for c in state.cars}:
+        raise ActionRejectedError(f"unknown driver {action.driver_id!r}")
+    car = state.car(action.driver_id)
+    if car.status is not CarStatus.RUNNING:
+        raise ActionRejectedError(f"{action.driver_id} is {car.status}, not RUNNING")
+    if car.pace_mode is action.pace_mode:
+        return StepResult(state, ())
+
+    event = RaceEvent(
+        seq=state.event_seq,
+        tick=state.sim_tick,
+        type="PACE_MODE_CHANGED",
+        driver_id=car.driver_id,
+        payload={
+            "from": car.pace_mode.value,
+            "to": action.pace_mode.value,
+            "effective_from_lap": car.laps_completed + 2,
+            "actor_id": action.actor_id,
+        },
+    )
+    cars = tuple(
+        c.model_copy(update={"pace_mode": action.pace_mode}) if c.driver_id == car.driver_id else c
+        for c in state.cars
+    )
+    return StepResult(
+        state.model_copy(update={"cars": cars, "event_seq": state.event_seq + 1}), (event,)
+    )
 
 
 def step(state: WorldState, *, allow_paused: bool = False) -> StepResult:
@@ -193,8 +237,11 @@ def _advance_car(state: WorldState, car: CarState, emit: _Emit) -> CarState:
     target = car.lap_target_s
     laps = car.laps_completed
     tyre_age = car.tyre_age_laps
+    wear = car.tyre_wear_s
+    lap_mode = car.lap_pace_mode
     last_lap = car.last_lap_time_s
     remaining = dt
+    driver = setup.driver(car.driver_id).profile.archetype
 
     while remaining > 0.0:
         speed = length / target
@@ -210,6 +257,8 @@ def _advance_car(state: WorldState, car: CarState, emit: _Emit) -> CarState:
         last_lap = elapsed + time_to_line
         laps += 1
         tyre_age += 1
+        # The lap just driven wears the tyres at the rate of the mode it was driven in.
+        wear += wear_per_lap_s(setup.lap_model, driver, compound=car.compound, pace_mode=lap_mode)
         emit(
             "LAP_COMPLETED",
             car.driver_id,
@@ -224,20 +273,22 @@ def _advance_car(state: WorldState, car: CarState, emit: _Emit) -> CarState:
                     "distance_m": 0.0,
                     "lap_elapsed_s": 0.0,
                     "tyre_age_laps": tyre_age,
+                    "tyre_wear_s": wear,
                     "last_lap_time_s": last_lap,
                     "finish_time_s": crossing_time,
                 }
             )
         distance = 0.0
         elapsed = 0.0
+        lap_mode = car.pace_mode  # the driver's current intent is locked in for the new lap
         target = _sample_next_lap(
             setup,
             state.rng.seed,
             car.driver_id,
             compound=car.compound,
-            pace_mode=car.pace_mode,
+            pace_mode=lap_mode,
             laps_completed=laps,
-            tyre_age_laps=tyre_age,
+            tyre_wear_s=wear,
         )
 
     return car.model_copy(
@@ -247,6 +298,8 @@ def _advance_car(state: WorldState, car: CarState, emit: _Emit) -> CarState:
             "lap_elapsed_s": elapsed,
             "lap_target_s": target,
             "tyre_age_laps": tyre_age,
+            "tyre_wear_s": wear,
+            "lap_pace_mode": lap_mode,
             "last_lap_time_s": last_lap,
         }
     )

@@ -16,7 +16,7 @@ from f1ar.domain.provenance import SourceType
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 1
+WORLD_SCHEMA_VERSION = 2
 
 
 class _Frozen(BaseModel):
@@ -143,7 +143,13 @@ class CarState(_Frozen):
     """Pre-sampled duration of the current lap. HIDDEN: never part of an observation."""
     compound: Compound
     tyre_age_laps: int = Field(ge=0)
+    tyre_wear_s: float = Field(ge=0)
+    """Accumulated degradation of the current tyre set, as lap time added. HIDDEN: a real
+    team only infers this from lap times, so it is not part of an observation."""
     pace_mode: PaceMode
+    """Driver's intended mode; applies from the next lap start."""
+    lap_pace_mode: PaceMode
+    """Mode the lap in progress is being driven in (locked when the lap started)."""
     last_lap_time_s: float | None
     finish_time_s: float | None
 
@@ -151,13 +157,33 @@ class CarState(_Frozen):
 class RaceEvent(_Frozen):
     seq: int = Field(ge=0)
     tick: int = Field(ge=0)
-    type: Literal["LAP_COMPLETED", "CAR_FINISHED", "RACE_COMPLETED"]
+    type: Literal["LAP_COMPLETED", "CAR_FINISHED", "RACE_COMPLETED", "PACE_MODE_CHANGED"]
     driver_id: str | None
     payload: dict[str, float | int | str]
 
 
+# --- actions: decisions that change the future ----------------------------------------------
+
+
+class SetPaceMode(_Frozen):
+    """Driver pace intent (plan §3.6, §9.3). Takes effect from the driver's NEXT lap.
+
+    The duration of the lap in progress was sampled when it started, so a mid-lap change
+    can't retroactively change it. This also keeps decisions lap-granular like the engine.
+    """
+
+    type: Literal["SET_PACE_MODE"] = "SET_PACE_MODE"
+    driver_id: str
+    pace_mode: PaceMode
+    actor_id: str = "USER"
+
+
+DriverAction = SetPaceMode
+"""Union of all driver/team actions; pit requests join in M2."""
+
+
 class WorldState(_Frozen):
-    schema_version: Literal[1]
+    schema_version: Literal[2]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None

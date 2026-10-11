@@ -44,6 +44,7 @@ This creates `.venv/` with Python 3.12, the `f1ar` package (editable) and the de
 | Watch a live race, pause/resume with Enter | `uv run python scripts/live_race.py --speed 25` |
 | Pause at lap 18 → save → reload in a new process → finish → verify | `uv run python scripts/demo_headless.py --seed 42 --pause --save --reload --resume` |
 | List/verify saved snapshots | `uv run python scripts/inspect_save.py` |
+| Fork a saved race into alternate timelines and compare | `uv run python scripts/fork_demo.py --driver HAM --at-lap 18` |
 | Re-fetch a race roster (Jolpica) | `uv run python scripts/build_roster.py --season 2024 --round 16 --event-id 2024_italian_gp` |
 
 ## Repository layout

@@ -5,7 +5,12 @@ written together with its metadata in ONE transaction. A crash can't leave a hal
 snapshot that looks valid. Every load re-verifies the checksum, the schema version and the
 engine version; nothing is silently migrated or loaded with a different engine.
 
-Snapshots are immutable: they are only ever inserted, never updated.
+Snapshots are immutable: they are only ever inserted, never updated. Timelines record
+their lineage (parent timeline + the snapshot they were forked from), so the history of
+alternate realities can be shown even after a source snapshot is deleted.
+
+Store schema history (``STORE_MIGRATIONS``): v1 = worlds/timelines/snapshots;
+v2 = timelines gain ``label`` and ``fork_snapshot_id``.
 """
 
 import hashlib
@@ -22,8 +27,17 @@ from pydantic import BaseModel, ConfigDict, ValidationError
 from f1ar.domain.race_state import WORLD_SCHEMA_VERSION, WorldState, WorldStatus
 from f1ar.persistence.snapshot_codec import CODEC_VERSION, HASH_PREFIX, canonical_json
 from f1ar.simulation.lightweight_engine import ENGINE_VERSION
+from f1ar.simulation.timeline import SeedMode, fork_world, new_timeline_id
 
-STORE_SCHEMA_VERSION = 1
+STORE_SCHEMA_VERSION = 2
+
+STORE_MIGRATIONS: dict[int, tuple[str, ...]] = {
+    # from version N to N+1
+    1: (
+        "ALTER TABLE timelines ADD COLUMN label TEXT NOT NULL DEFAULT ''",
+        "ALTER TABLE timelines ADD COLUMN fork_snapshot_id TEXT",
+    ),
+}
 
 SnapshotKind = Literal["MANUAL", "AUTOSAVE"]
 
@@ -41,7 +55,9 @@ CREATE TABLE IF NOT EXISTS timelines (
     id                 TEXT PRIMARY KEY,
     world_id           TEXT NOT NULL REFERENCES worlds(id),
     parent_timeline_id TEXT REFERENCES timelines(id),
-    created_utc        TEXT NOT NULL
+    created_utc        TEXT NOT NULL,
+    label              TEXT NOT NULL DEFAULT '',
+    fork_snapshot_id   TEXT  -- provenance only, deliberately not a foreign key
 );
 CREATE TABLE IF NOT EXISTS snapshots (
     id                TEXT PRIMARY KEY,
@@ -101,6 +117,18 @@ class SnapshotMeta(BaseModel):
     created_utc: str
 
 
+class TimelineMeta(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    timeline_id: str
+    world_id: str
+    parent_timeline_id: str | None
+    label: str
+    fork_snapshot_id: str | None
+    created_utc: str
+    snapshot_count: int
+
+
 _META_COLUMNS = (
     "id, world_id, timeline_id, tick, sim_clock_s, world_status, label, kind, schema_version, "
     "codec_version, engine_version, profile_set_hash, payload_sha256, length(payload), created_utc"
@@ -137,12 +165,38 @@ class SnapshotStore:
                     "INSERT INTO store_meta(key, value) VALUES ('schema_version', ?)",
                     (str(STORE_SCHEMA_VERSION),),
                 )
-            elif int(row[0]) != STORE_SCHEMA_VERSION:
+            elif int(row[0]) > STORE_SCHEMA_VERSION:
                 self._db.close()
                 raise UnsupportedSnapshotError(
                     f"{path.name} uses store schema {row[0]}, this build supports "
                     f"{STORE_SCHEMA_VERSION}; refusing to open without a migration"
                 )
+            else:
+                self._migrate(int(row[0]))
+
+    def _migrate(self, version: int) -> None:
+        """Upgrade an older store in place, one version per transaction."""
+        while version < STORE_SCHEMA_VERSION:
+            self._db.execute("BEGIN IMMEDIATE")
+            try:
+                for sql in STORE_MIGRATIONS[version]:
+                    self._db.execute(sql)
+                version += 1
+                self._db.execute(
+                    "UPDATE store_meta SET value = ? WHERE key = 'schema_version'", (str(version),)
+                )
+                self._db.execute("COMMIT")
+            except BaseException:
+                self._db.execute("ROLLBACK")
+                raise
+
+    @property
+    def schema_version(self) -> int:
+        with self._lock:
+            row = self._db.execute(
+                "SELECT value FROM store_meta WHERE key='schema_version'"
+            ).fetchone()
+        return int(row[0])
 
     # --- lifecycle --------------------------------------------------------------------------
 
@@ -165,6 +219,42 @@ class SnapshotStore:
 
     def save(self, state: WorldState, *, label: str, kind: SnapshotKind = "MANUAL") -> SnapshotMeta:
         """Persist ``state`` atomically. Returns only after the transaction has committed."""
+        return self._save(state, label=label, kind=kind, timeline_label="", fork_snapshot_id=None)
+
+    def fork(
+        self,
+        snapshot_id: str,
+        *,
+        label: str,
+        seed_mode: SeedMode = SeedMode.COMMON_EXOGENOUS_RANDOMNESS,
+        timeline_id: str | None = None,
+    ) -> tuple[WorldState, SnapshotMeta]:
+        """Branch a saved snapshot into a new timeline and save the branch point.
+
+        The source snapshot is only read (and verified), never modified.
+        """
+        source = self.load(snapshot_id)
+        branch = fork_world(
+            source, new_timeline_id=timeline_id or new_timeline_id(), seed_mode=seed_mode
+        )
+        meta = self._save(
+            branch,
+            label=f"branch point: {label}",
+            kind="MANUAL",
+            timeline_label=label,
+            fork_snapshot_id=snapshot_id,
+        )
+        return branch, meta
+
+    def _save(
+        self,
+        state: WorldState,
+        *,
+        label: str,
+        kind: SnapshotKind,
+        timeline_label: str,
+        fork_snapshot_id: str | None,
+    ) -> SnapshotMeta:
         payload = canonical_json(state.model_dump(mode="json"))
         meta = SnapshotMeta(
             snapshot_id=f"snap_{uuid.uuid4().hex}",
@@ -190,10 +280,24 @@ class SnapshotStore:
                     "INSERT OR IGNORE INTO worlds(id, event_id, created_utc) VALUES (?, ?, ?)",
                     (state.world_id, state.setup.event_id, meta.created_utc),
                 )
+                if state.parent_timeline_id is not None:
+                    # Parent forked in memory but never saved: keep the lineage anyway.
+                    self._db.execute(
+                        "INSERT OR IGNORE INTO timelines(id, world_id, parent_timeline_id, label,"
+                        " fork_snapshot_id, created_utc) VALUES (?, ?, NULL, '(unsaved)', NULL, ?)",
+                        (state.parent_timeline_id, state.world_id, meta.created_utc),
+                    )
                 self._db.execute(
-                    "INSERT OR IGNORE INTO timelines(id, world_id, parent_timeline_id, created_utc)"
-                    " VALUES (?, ?, ?, ?)",
-                    (state.timeline_id, state.world_id, state.parent_timeline_id, meta.created_utc),
+                    "INSERT OR IGNORE INTO timelines(id, world_id, parent_timeline_id, label,"
+                    " fork_snapshot_id, created_utc) VALUES (?, ?, ?, ?, ?, ?)",
+                    (
+                        state.timeline_id,
+                        state.world_id,
+                        state.parent_timeline_id,
+                        timeline_label or ("main" if state.parent_timeline_id is None else ""),
+                        fork_snapshot_id,
+                        meta.created_utc,
+                    ),
                 )
                 next_seq = self._db.execute(
                     "SELECT COALESCE(MAX(seq), 0) + 1 FROM snapshots"
@@ -297,6 +401,25 @@ class SnapshotStore:
                 continue
             return meta
         return None
+
+    def list_timelines(self, world_id: str) -> list[TimelineMeta]:
+        """All timelines of a world, oldest first, with lineage and snapshot counts."""
+        with self._lock:
+            rows = self._db.execute(
+                "SELECT t.id, t.world_id, t.parent_timeline_id, t.label, t.fork_snapshot_id, "
+                "t.created_utc, (SELECT COUNT(*) FROM snapshots s WHERE s.timeline_id = t.id) "
+                "FROM timelines t WHERE t.world_id = ? ORDER BY t.created_utc, t.rowid",
+                (world_id,),
+            ).fetchall()
+        keys = TimelineMeta.model_fields
+        return [TimelineMeta.model_validate(dict(zip(keys, r, strict=True))) for r in rows]
+
+    def delete_snapshot(self, snapshot_id: str) -> None:
+        """Delete one snapshot. Branches forked from it keep working: they hold full copies."""
+        with self._lock:
+            cursor = self._db.execute("DELETE FROM snapshots WHERE id = ?", (snapshot_id,))
+        if cursor.rowcount == 0:
+            raise SnapshotNotFoundError(snapshot_id)
 
     @staticmethod
     def _meta(row: tuple[object, ...]) -> SnapshotMeta:
