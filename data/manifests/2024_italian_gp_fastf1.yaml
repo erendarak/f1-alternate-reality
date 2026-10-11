@@ -1,0 +1,119 @@
+dataset_id: 2024_italian_gp_fastf1_v1
+event: 2024_italian_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-11T20:23:24Z'
+session_key: 2024/round 16/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2024_italian_gp/laps.parquet
+  sha256: sha256:975113c251b94e54f8f22ef5e9f906b4e338af42f62f12da753700a106d606af
+  rows: 1008
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2024_italian_gp/results.parquet
+  sha256: sha256:f1401c35971eddb1c770c2bbac15c39f409e24166c03c7b43acc744f41c3e0e2
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps
+- relative_path: data/processed/2024_italian_gp/weather.parquet
+  sha256: sha256:44f34da5842762bc537112090183c321b4a4d01f24215d94eee370387b81f504
+  rows: 133
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2024_italian_gp/track_status.parquet
+  sha256: sha256:da4d1b6bdb84d2fd1f9f9b1350ad7a5aca97965474c2f4140c7bc3e82fd09c09
+  rows: 1
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2024_italian_gp/race_control.parquet
+  sha256: sha256:85aad0986af594b9528434e6a52563a82042256d9688a73d13bc3ddbfa85668c
+  rows: 59
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2024_italian_gp/positions.parquet
+  sha256: sha256:b384ba0954a774538fe54d9ad9f1203cfff2e4b2d8fd791a0288315025f6d7bc
+  rows: 612740
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2024_italian_gp/track_outline.parquet
+  sha256: sha256:5317f03be244a0ce790416f0dd0c2593faa49ebd799d1014bfc126a93d862767
+  rows: 317
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 16 lap 30 path as track outline'
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `sector1_s` missing in 20 rows
+- lap table `pit_in_time_s` missing in 977 rows
+- lap table `pit_out_time_s` missing in 978 rows

@@ -33,6 +33,21 @@ def slug(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", ascii_text.lower()).strip("_")
 
 
+def result_records(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    """Finishing data per car (reference for cross-checks; not part of any roster)."""
+    (race,) = payload["MRData"]["RaceTable"]["Races"]
+    return [
+        {
+            "number": int(r["number"]),
+            "position": int(r["position"]),
+            "laps": int(r["laps"]),
+            "status": r["status"],
+            "grid": int(r["grid"]),
+        }
+        for r in race["Results"]
+    ]
+
+
 def roster_from_results(
     payload: dict[str, Any], *, event_id: str, source_url: str, retrieved_utc: str
 ) -> RaceRoster:

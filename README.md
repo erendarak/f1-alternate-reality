@@ -45,6 +45,9 @@ This creates `.venv/` with Python 3.12, the `f1ar` package (editable) and the de
 | Pause at lap 18 → save → reload in a new process → finish → verify | `uv run python scripts/demo_headless.py --seed 42 --pause --save --reload --resume` |
 | List/verify saved snapshots | `uv run python scripts/inspect_save.py` |
 | Fork a saved race into alternate timelines and compare | `uv run python scripts/fork_demo.py --driver HAM --at-lap 18` |
+| Fetch + validate real Monza 2024 data (FastF1) | `uv run python scripts/fetch_monza_2024.py` (report: `docs/data/2024_italian_gp_quality.md`) |
+| Verify local data files against the manifest | `uv run python scripts/fetch_monza_2024.py --verify` |
+| Run the opt-in network tests | `uv run pytest -m network` |
 | Re-fetch a race roster (Jolpica) | `uv run python scripts/build_roster.py --season 2024 --round 16 --event-id 2024_italian_gp` |
 
 ## Repository layout

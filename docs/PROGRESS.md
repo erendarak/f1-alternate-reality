@@ -11,7 +11,7 @@ Plan §22 checklist (adapted per D-002):
 - [x] **5.** Snapshot save → fresh-process load → equality test.
 - [x] **6.** Timeline fork with isolation test.
 - [ ] **6b.** Terminal timing tower in `demo_headless.py` (D-002).
-- [ ] **7.** FastF1 Monza 2024 fetch/cache + data quality report.
+- [x] **7.** FastF1 Monza 2024 fetch/cache + data quality report.
 - [ ] **8.** TUM race-simulation feasibility memo → go/no-go (fallback C pre-approved, D-003).
 - [ ] **M0.5** Debug viewer: Monza outline + car dots from backend state (D-002).
 
@@ -128,3 +128,27 @@ Plan §22 checklist (adapted per D-002):
 - M0 steps 1–6 are done. Remaining: 6b terminal tower (largely covered by `live_race.py`), 7 FastF1
   data, 8 TUM feasibility memo, M0.5 debug viewer.
 - Next: step 7, FastF1 Monza 2024 fetch/cache + data quality report.
+
+### 2026-10-12 — Step 7: real Monza 2024 data
+
+- FastF1 3.8.3 (+ pyarrow, pandas-stubs). API checked in the installed source (`Session.load`
+  signature, track status codes, position units).
+- `f1ar.data.fastf1_adapter`: `load_race_session` (verified load, `DataSourceError`), pure
+  normalisers, `track_outline`. `f1ar.data.quality`: typed checks + Markdown report.
+  `f1ar.data.manifests`: manifest model, write/verify. `jolpica_adapter.result_records`.
+- `scripts/fetch_monza_2024.py`: 7 Parquet tables (1008 laps, 20 results, 133 weather samples, 59
+  race-control messages, 612,740 position samples, 317-point track outline), manifest
+  `data/manifests/2024_italian_gp_fastf1.yaml`, report `docs/data/2024_italian_gp_quality.md`.
+- **Quality: 15 PASS, 2 WARN, 0 FAIL.** FastF1 and Jolpica agree on every number, code, grid slot,
+  team pairing, finishing position and lap count. WARN: 6 lapped cars + Tsunoda retired on lap 7;
+  13 deleted laps, 81 inaccurate laps (excluded from pace stats).
+- What the real race tells the simulator (inputs to M1/M2/M4): fully green and dry (32–34 °C air,
+  44–55 °C track); 14 cars started on MEDIUM and 6 on HARD; Leclerc won on a one-stop (M→H lap 15),
+  most front-runners two-stopped; green-flag median lap 84.8 s (our placeholder model is in the right
+  range); a pre-race "RISK OF RAIN 40 %" message exists for future weather-aware strategy.
+- Terms verified from the sources' own pages (see `LEGAL_AND_LICENSES.md`): Jolpica CC BY-NC-SA 4.0,
+  4 req/s / 500 req/h, custom UA required (we send one); OpenF1 non-commercial, 3 req/s / 30 req/min.
+- Robustness fix: FastF1 silently returned no laps under a NumPy deprecation (found with
+  `-W error`); now detected and reported clearly.
+- Tests: 128 offline passing (~9.5 s) + 1 opt-in network test passing against the real data.
+- Next: step 8, TUM race-simulation feasibility memo (go/no-go; fallback C pre-approved).

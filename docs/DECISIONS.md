@@ -169,3 +169,26 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   v0.1.0 are refused with `UnsupportedSnapshotError` (shown as INVALID by `inspect_save.py`) instead
   of being silently re-simulated under different physics. The gate demo's reference hash changed
   from `071ad86…` to `8ec919a…`.
+
+## D-015 — FastF1 data pipeline: normalised Parquet + manifest + generated quality report (2026-10-12)
+
+- **Pipeline** (`scripts/fetch_monza_2024.py`, plan §6.4): FastF1 `load(laps, telemetry, weather,
+  messages)` with its on-disk cache → pure normalisers (`f1ar/data/fastf1_adapter.py`) → Parquet in
+  `data/processed/<event>/` → manifest `data/manifests/<event>_fastf1.yaml` (SHA-256, rows, columns,
+  `source_type` per file, units, missingness) → report `docs/data/<event>_quality.md`.
+  `--verify` re-hashes files against the manifest.
+- **Conventions:** snake_case, unit suffixes (`_s`, `_m`, `_c`, `_kph`), session-time seconds as
+  float, positions converted from FastF1's 1/10 m to metres, nullable `Int64`/`boolean`/`string`
+  dtypes so missing stays missing. The track outline (one green lap of the winner) is labelled
+  `estimated_from_data`; everything else `historical_verified`.
+- **Quality checks** are typed PASS/WARN/FAIL. FAIL = the data contradicts itself or our roster.
+  WARN = a real race feature the simulator must handle (lapped cars, DNF, deleted laps), or a gap.
+  The script exits non-zero on FAIL.
+- **Independent cross-check:** FastF1 vs Jolpica on numbers, codes, grid, team pairing, finishing
+  position and laps. All agree for 2024 Monza.
+- **FastF1 swallows load failures** (logs "Failed to load ...", returns a partial session).
+  `load_race_session` verifies laps and results exist and raises `DataSourceError` otherwise.
+  Found by running with `-W error`: a NumPy 2.5 deprecation inside FastF1/pandas made it silently
+  return no laps. The lockfile pins working versions; upgrades must re-run `pytest -m network`.
+- **Tests:** offline tests use synthetic FastF1-shaped frames. The real fetch is an opt-in
+  `network` test (`uv run pytest -m network`), excluded by default.

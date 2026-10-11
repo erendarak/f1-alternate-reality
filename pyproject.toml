@@ -5,6 +5,8 @@ description = "F1 Alternate Reality — living championship simulator (pausable,
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "fastf1>=3.8.3",
+    "pyarrow>=26.0.0",
     "pydantic>=2.14.0",
     "pyyaml>=6.0.3",
 ]
@@ -12,6 +14,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "mypy>=2.4.0",
+    "pandas-stubs>=3.0.5.260914",
     "pytest>=9.1.1",
     "ruff>=0.17.0",
     "types-pyyaml>=6.0.12.20260906",
@@ -27,7 +30,7 @@ packages = ["backend/src/f1ar"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
-addopts = "-ra --strict-markers"
+addopts = "-ra --strict-markers -m \"not network\""
 markers = [
     "network: test needs internet access (opt-in, not run by default in CI)",
 ]
@@ -51,3 +54,7 @@ strict = true
 mypy_path = "backend/src"
 files = ["backend/src/f1ar", "scripts", "tests"]
 plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["fastf1", "fastf1.*"]
+ignore_missing_imports = true  # FastF1 ships no type information

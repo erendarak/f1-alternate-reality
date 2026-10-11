@@ -2,7 +2,17 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
-## Current (M0, step 6)
+## Current (M0, step 7)
+
+- Real Monza 2024 data is fetched and validated but **not yet used by the engine**. The race still
+  runs on the placeholder lap model, with every car on MEDIUM, no pit stops, no lapping and no DNFs,
+  whereas the real race had 6 HARD starters, 31 pit stops, 6 lapped cars and a lap-7 retirement.
+  Wiring the data in is M1/M2.
+- The track outline is one car's ~4 Hz path over one lap: good enough for a 2D view, not a precise
+  geometry (no width, no pit lane).
+- FastF1 under NumPy ≥ 2.5 prints deprecation warnings. With warnings as errors it fails to load.
+  The lockfile pins working versions; re-run `uv run pytest -m network` after dependency upgrades.
+- Only one event (2024 Italian GP) has been fetched. Generalising beyond it needs more races (M1/M4).
 
 - The only decision a fork can differ by is **pace mode**. Pit stops and tyre choice come in M2.
 - Without pit stops, pushing usually pays off, because tyres can't "fall off a cliff" and must last
