@@ -21,7 +21,7 @@ import uvicorn
 
 from f1ar.api.debug_app import create_app
 from f1ar.api.replay_app import create_replay_app
-from f1ar.domain.identities import RaceRoster
+from f1ar.domain.identities import RaceRoster, load_roster
 from f1ar.domain.race_state import WorldState
 from f1ar.history.reference import HistoricalRace
 from f1ar.history.replay import REPLAY_SPEEDS, ReplayClock
@@ -33,17 +33,19 @@ from f1ar.simulation.scenarios import MONZA_2024, load_event, setup_from_codes
 from f1ar.simulation.world_runner import ALLOWED_SPEEDS
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "data" / "processed" / MONZA_2024
+PROCESSED = ROOT / "data" / "processed"
 CAR_SPRITE = ROOT / "assets" / "third_party" / "palm-tree-f1-pack" / "Ferrari" / "Ferrari.png"
 
 
-def load_assets(roster: RaceRoster) -> tuple[TrackGeometry, dict[str, Any], dict[str, str]]:
-    needed = [DATA / f for f in ("track_outline.parquet", "corners.parquet", "results.parquet")]
+def load_assets(
+    roster: RaceRoster, data: Path
+) -> tuple[TrackGeometry, dict[str, Any], dict[str, str]]:
+    needed = [data / f for f in ("track_outline.parquet", "corners.parquet", "results.parquet")]
     missing = [p.name for p in needed if not p.exists()]
     if missing:
         sys.exit(
-            f"missing {missing} in {DATA}. Run first:\n"
-            "    uv run python scripts/fetch_monza_2024.py"
+            f"missing {missing} in {data}. Run first:\n"
+            "    uv run python scripts/fetch_event.py --season <year> --round <n>"
         )
     outline = pd.read_parquet(needed[0])
     corners = pd.read_parquet(needed[1])
@@ -69,7 +71,7 @@ def load_assets(roster: RaceRoster) -> tuple[TrackGeometry, dict[str, Any], dict
         engine_length_m=5793.0,
         corners=corner_rows,
         rotation_deg=rotation,
-        source="FastF1 2024 Italian GP: winner's lap-30 path (derived); corners from circuit info",
+        source=f"FastF1 {roster.event_id}: winner's typical-lap path (derived); circuit corners",
     )
     by_number = {e.car_number: e.driver_id for e in roster.entries}
     result_records: list[dict[Hashable, Any]] = results.to_dict("records")
@@ -90,18 +92,26 @@ def main() -> None:
         "--speed", type=int, default=5, choices=sorted({*ALLOWED_SPEEDS, *REPLAY_SPEEDS})
     )
     parser.add_argument("--replay", action="store_true", help="replay the real recorded race")
+    parser.add_argument(
+        "--event", default=MONZA_2024, help="event id for --replay, e.g. 2024_belgian_gp"
+    )
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--db", type=Path, default=ROOT / "saves" / "viewer.sqlite")
     args = parser.parse_args()
 
-    roster, profiles = load_event(ROOT / "configs")
-    geometry, payload, colors = load_assets(roster)
+    if not args.replay and args.event != MONZA_2024:
+        parser.error("the simulation has driver personas only for 2024_italian_gp; use --replay")
+    roster_path = ROOT / "configs" / "rosters" / f"{args.event}.json"
+    if not roster_path.exists():
+        parser.error(f"unknown event {args.event!r}: fetch it first with scripts/fetch_event.py")
+    roster = load_roster(roster_path, expected_event_id=args.event)
+    geometry, payload, colors = load_assets(roster, PROCESSED / args.event)
     sprite = CAR_SPRITE if CAR_SPRITE.exists() else None
     if sprite is None:
         print(f"note: {CAR_SPRITE.relative_to(ROOT)} not found, drawing dots instead of cars")
 
     if args.replay:
-        race = HistoricalRace.from_processed_dir(MONZA_2024, DATA)
+        race = HistoricalRace.from_processed_dir(args.event, PROCESSED / args.event)
         clock = ReplayClock(
             race.duration_s, speed=args.speed if args.speed in REPLAY_SPEEDS else 10
         )
@@ -111,6 +121,7 @@ def main() -> None:
         print(f"F1AR REAL-RACE REPLAY -> http://127.0.0.1:{args.port}  (Ctrl+C to stop)")
         uvicorn.run(replay, host="127.0.0.1", port=args.port, log_level="warning")
         return
+    _, profiles = load_event(ROOT / "configs")
     if args.speed not in ALLOWED_SPEEDS:
         parser.error(f"simulation speed must be one of {ALLOWED_SPEEDS}")
     setup = setup_from_codes(roster, profiles, None if args.all else args.drivers)

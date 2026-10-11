@@ -45,12 +45,13 @@ This creates `.venv/` with Python 3.12, the `f1ar` package (editable) and the de
 | Pause at lap 18 → save → reload in a new process → finish → verify | `uv run python scripts/demo_headless.py --seed 42 --pause --save --reload --resume` |
 | List/verify saved snapshots | `uv run python scripts/inspect_save.py` |
 | Fork a saved race into alternate timelines and compare | `uv run python scripts/fork_demo.py --driver HAM --at-lap 18` |
+| Fetch + validate ANY race (roster, data, manifest, report) | `uv run python scripts/fetch_event.py --season 2024 --round 14` |
 | Fetch + validate real Monza 2024 data (FastF1) | `uv run python scripts/fetch_monza_2024.py` (report: `docs/data/2024_italian_gp_quality.md`) |
 | Verify local data files against the manifest | `uv run python scripts/fetch_monza_2024.py --verify` |
 | Run the opt-in network tests | `uv run pytest -m network` |
 | Replay the REAL 2024 race lap by lap (history, not simulation) | `uv run python scripts/replay_monza_2024.py` |
 | **Watch the race on the real Monza map** (debug viewer) | `uv run python scripts/debug_viewer.py` then open http://127.0.0.1:8765 |
-| **Watch the REAL 2024 race replayed on the map** | `uv run python scripts/debug_viewer.py --replay` |
+| **Watch the REAL 2024 race replayed on the map** | `uv run python scripts/debug_viewer.py --replay` (add `--event 2024_belgian_gp` for Spa) |
 | Viewer controls | Space play/pause · → step · mouse wheel zoom · drag pan · click car = select · **F** follow · **B** or double-click = battle cam · Esc fit |
 | Re-fetch a race roster (Jolpica) | `uv run python scripts/build_roster.py --season 2024 --round 16 --event-id 2024_italian_gp` |
 

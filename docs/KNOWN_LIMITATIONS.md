@@ -8,7 +8,8 @@ Honest list of what does **not** work or is only approximate. Update whenever on
   start/end, not continuous speed). Cars move at constant speed through each lap, including in/out
   laps: the **pit lane isn't drawn**, so pitting cars drive the racing line, just slower.
 - The side-by-side spreading in the viewer is cosmetic and can't tell who is really on which side.
-- The replay currently covers only the 2024 Italian GP.
+- Fetched so far: 2024 Italian GP and 2024 Belgian GP (any race can be fetched). Driver personas, and so
+  the *simulation*, exist only for Monza 2024; other events are replay-only.
 
 - **Debug viewer:** it polls at 10 Hz with linear interpolation; at x25, dots move in visible steps.
   There's no pit lane and no zoom/follow camera (M3); car sprites are oversized (24 px) and overlap

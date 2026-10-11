@@ -1,0 +1,134 @@
+dataset_id: 2024_belgian_gp_fastf1_v1
+event: 2024_belgian_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-11T21:33:52Z'
+session_key: 2024/round 14/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2024_belgian_gp/laps.parquet
+  sha256: sha256:d8bb6a25d8f83bbf930714e22c73cc7a28e7cf1d36a42bc6781264a1e3dc2676
+  rows: 841
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2024_belgian_gp/results.parquet
+  sha256: sha256:c55b774dcc203ceaf4d53c693ebc3b59e3e42f35d67713e5431d11e2f54754fc
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2024_belgian_gp/weather.parquet
+  sha256: sha256:325f8d37dbb34a369b8426abfd6b2e731fbe66d5e0ee412febbc763c0b5603db
+  rows: 137
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2024_belgian_gp/track_status.parquet
+  sha256: sha256:e0f24338db8f00b337622dc158fdbd0f2edc8729dd7a075983deb4ddd12e34ed
+  rows: 4
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2024_belgian_gp/race_control.parquet
+  sha256: sha256:1d4ce38bc8ecaa06364163be3affe7258f2c9d6137c0adf63ac1cb50fdd1103c
+  rows: 21
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2024_belgian_gp/corners.parquet
+  sha256: sha256:74effe1c46c56f5de1ea76feebc0b06a31064ea5504ca9218bc11e1733c84ef7
+  rows: 19
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2024_belgian_gp/positions.parquet
+  sha256: sha256:59503a3b17cffb005732fe4af2fa0b40010714a908626b0f3122c68604a75611
+  rows: 625020
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2024_belgian_gp/track_outline.parquet
+  sha256: sha256:e3109230ee08dd2844d0699cbe16f04d0dbe45b172b0268b623cac022aa5442c
+  rows: 407
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 18 path as outline'
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 1 rows
+- lap table `sector1_s` missing in 20 rows
+- lap table `sector2_s` missing in 1 rows
+- lap table `pit_in_time_s` missing in 806 rows
+- lap table `pit_out_time_s` missing in 807 rows

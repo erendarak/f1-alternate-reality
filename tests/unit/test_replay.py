@@ -79,7 +79,7 @@ def test_clock_rejects_bad_commands(bad: object) -> None:
 def test_replay_view_matches_the_recording(race: HistoricalRace) -> None:
     mid = replay_view(race, SQUARE, replay_s=45.0, status="PLAYING", speed=10)
     assert mid["mode"] == "HISTORICAL_REPLAY" and mid["status"] == "RUNNING"
-    assert [c["code"] for c in mid["cars"]] == ["AAA", "BBB", "CCC"]
+    assert [c["code"] for c in mid["cars"]] == ["AAA", "CCC", "BBB"]  # BBB laps 130 s
     aaa = mid["cars"][0]
     assert (aaa["x"], aaa["y"]) == pytest.approx(SQUARE.point_at(0.5), abs=0.06)
 

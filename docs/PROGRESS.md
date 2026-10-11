@@ -10,7 +10,7 @@ M0 and M0.5 are complete (gate 5/5; see below). M1 tasks, adapted to what step 7
 - [x] Offline synthetic fixtures for all data code (step 7, M1).
 - [x] **Historical reference race + reference event list; `HISTORICAL_REPLAY` separated in code (D-018).**
 - [x] Real race replay on the debug viewer map (play/pause/speed/seek; no fork, no actions) + camera.
-- [ ] More events through the same pipeline (generalise `fetch_monza_2024.py` to any season/round).
+- [x] More events through the same pipeline: `fetch_event.py --season --round` (D-020); 2024 Belgian GP added.
 - [ ] Engine inputs from data: real start compounds, per-driver/team pace baselines from
       representative laps (feeds M2/M4 calibration).
 
@@ -246,3 +246,19 @@ Plan §22 checklist (adapted per D-002):
 - Tests: 170 offline passing (+10 replay clock/view/API) + 2 network.
 - Next M1 items: generalise fetching to any event; engine inputs from data (real start compounds,
   pace baselines).
+
+### 2026-10-12 — M1 slice 3: any race + on-track vs official results
+
+- `f1ar.data.pipeline` (fetch_event, verify_event, typical_lap, event ids), `scripts/fetch_event.py`;
+  `fetch_monza_2024.py` is now a shortcut onto the same pipeline (Monza re-fetched: identical data;
+  outline now from LEC's typical lap 39).
+- 2024 Belgian GP fetched: 15 PASS / 4 WARN / 0 FAIL (ZHO retired lap 5, RUS disqualified after 44
+  laps, one lap without a time, deleted/inaccurate laps). 0 replay mismatches vs the feed.
+- **Bug found by the second race:** the history layer treated any non-Finished/Lapped status as a
+  retirement, so Spa's winner on the road "retired" at the flag. Fixed with `took_flag` (D-020),
+  plus a `DISQUALIFIED` event and a DSQ badge in the viewer. The synthetic fixture was also corrected
+  (its "lapped" car stopped before the flag, which real lapped cars don't).
+- Viewer: `--replay --event 2024_belgian_gp`; the title shows the event. Verified in the browser:
+  RUS P1 DSQ, HAM +0.526, PIA +1.173 at the flag.
+- Tests: 177 offline passing (+6 pipeline, +1 DSQ) + 2 network.
+- Next M1 item: engine inputs from data (real start compounds, team car-pace offsets).

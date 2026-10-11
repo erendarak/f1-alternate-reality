@@ -202,6 +202,10 @@ def replay_view(
                 "last_lap_time_s": last.lap_time_s if last else None,
                 "gap_to_leader_s": None if gap is None else round(gap, 3),
                 "laps_down": _laps_down(state, lead, lead_car.laps_completed, laps_done, frac),
+                # official classification can differ from the road (e.g. post-race DSQ)
+                "result_note": "DSQ"
+                if car.status == "Disqualified" and state == "FINISHED"
+                else None,
             }
         )
     events = [e for e in race.events() if e.session_time_s <= t_abs][-recent:]

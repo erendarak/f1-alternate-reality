@@ -58,7 +58,7 @@ class CarHistory:
 class HistoricalEvent:
     lap: int
     session_time_s: float
-    type: Literal["PIT_STOP", "RETIREMENT", "FINISHED", "LAPPED_FINISH"]
+    type: Literal["PIT_STOP", "RETIREMENT", "FINISHED", "LAPPED_FINISH", "DISQUALIFIED"]
     code: str
     detail: str
 
@@ -193,13 +193,23 @@ class HistoricalRace:
             if not c.laps:
                 continue
             last = c.laps[-1]
-            if c.status == "Finished":
+            if c.status == "Disqualified" and self.took_flag(c.code):
+                events.append(
+                    HistoricalEvent(
+                        last.lap,
+                        last.end_s,
+                        "DISQUALIFIED",
+                        c.code,
+                        f"took the flag after {c.laps_completed} laps; disqualified afterwards",
+                    )
+                )
+            elif self.took_flag(c.code) and c.laps_completed == self.total_laps:
                 events.append(
                     HistoricalEvent(
                         last.lap, last.end_s, "FINISHED", c.code, f"P{c.classified_position}"
                     )
                 )
-            elif c.status == "Lapped":
+            elif self.took_flag(c.code):
                 events.append(
                     HistoricalEvent(
                         last.lap,
@@ -221,6 +231,22 @@ class HistoricalRace:
                 )
         return sorted(events, key=lambda e: (e.session_time_s, e.code))
 
+    # --- on-track result vs. official classification -------------------------------------------
+
+    @property
+    def flag_s(self) -> float:
+        """Session time the chequered flag fell: the first car to complete the full distance."""
+        return min(c.laps[-1].end_s for c in self.cars if c.laps_completed == self.total_laps)
+
+    def took_flag(self, code: str) -> bool:
+        """Crossed the line after the flag, i.e. finished *on track* (lapped or not).
+
+        This is about what happened on the road. The official status may still differ, e.g. a
+        post-race disqualification (2024 Belgian GP: RUS won on the road, then was DSQ'd).
+        """
+        car = self.car(code)
+        return bool(car.laps) and car.laps[-1].end_s >= self.flag_s
+
     # --- replay ------------------------------------------------------------------------------
 
     def progress_at(self, replay_s: float) -> dict[str, tuple[int, float, str]]:
@@ -238,7 +264,7 @@ class HistoricalRace:
             ends = [lap.end_s for lap in c.laps]
             done = bisect_right(ends, t)
             if done >= c.laps_completed:
-                state = "RETIRED" if c.status not in ("Finished", "Lapped") else "FINISHED"
+                state = "FINISHED" if self.took_flag(c.code) else "RETIRED"
                 out[c.code] = (c.laps_completed, 0.0, state)
                 continue
             lap = c.laps[done]

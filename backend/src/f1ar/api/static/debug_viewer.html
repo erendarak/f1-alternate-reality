@@ -48,6 +48,7 @@
   .tyre { display: inline-block; width: 18px; height: 18px; line-height: 14px; text-align: center; border-radius: 50%; border: 2px solid #888; font-weight: 700; font-size: 10px; }
   .tyre.SOFT { border-color: #e8002d; } .tyre.MEDIUM { border-color: #ffd12e; } .tyre.HARD { border-color: #f0f0f0; }
   .tyre.INTERMEDIATE { border-color: #43b047; } .tyre.WET { border-color: #0067ad; }
+  .note { font-size: 10px; font-weight: 700; color: #fff; background: var(--accent); border-radius: 4px; padding: 0 4px; }
   .mode { font-size: 11px; color: var(--muted); }
   .mode.PUSH { color: #ff6b6b; } .mode.CONSERVE { color: #6bc2ff; } .mode.pit { color: var(--warn); font-weight: 600; }
   .driverbox { padding: 10px 14px; border-top: 1px solid var(--line); }
@@ -315,13 +316,14 @@ function setMode(m) {
   mode = m; const replay = m === "HISTORICAL_REPLAY";
   document.querySelectorAll(".sim-only").forEach((el) => (el.hidden = replay));
   document.querySelectorAll(".replay-only").forEach((el) => (el.hidden = !replay));
-  $("title").textContent = replay ? "MONZA 2024 · REAL RACE REPLAY" : "MONZA 2024 · ALTERNATE SIMULATION";
+  const ev = (replay && view && view.world_id ? view.world_id : "2024_italian_gp").replace(/_/g, " ").toUpperCase();
+  $("title").textContent = replay ? `${ev} · REAL RACE REPLAY` : "MONZA 2024 · ALTERNATE SIMULATION";
   $("badge").innerHTML = replay
     ? '<b class="hist">RECORDED HISTORY</b> · real 2024 lap times from the timing feed · positions interpolated within each lap'
     : "<b>DEBUG VIEWER</b> · read-only view of backend state · positions interpolated on the FastF1 outline";
   $("clockLabel").firstChild.textContent = replay ? "Race " : "Sim ";
   $("modeHead").textContent = replay ? "Lap type" : "Mode";
-  $("footer").textContent = (replay ? "Recorded 2024 Italian GP (FastF1/F1 timing) · no simulation"
+  $("footer").textContent = (replay ? "Recorded race (FastF1/F1 timing) · no simulation"
     : "Synthetic, uncalibrated lap model · no pit stops/traffic yet") + " · Space play/pause · → step · wheel zoom · drag pan · F follow · B battle cam · Esc fit"
     + (track && track.car_sprite ? " · " + track.car_sprite.credit : "");
   $("speeds").innerHTML = (replay ? REPLAY_SPEEDS : SIM_SPEEDS).map((s) => `<button data-speed="${s}">x${s}</button>`).join(" ");
@@ -342,7 +344,7 @@ function render() {
     const modeTxt = mode === "HISTORICAL_REPLAY" ? (c.status === "FINISHED" ? "🏁" : c.pace_mode) : (c.pace_mode === c.lap_pace_mode ? c.pace_mode : c.lap_pace_mode + "→" + c.pace_mode);
     return `<tr data-id="${c.driver_id}" class="${c.driver_id === selected ? "sel" : ""} ${c.status === "RETIRED" ? "out" : ""}">
       <td>${c.position}</td>
-      <td><span class="chip" style="background:#${c.team_color}"></span>${c.code}</td>
+      <td><span class="chip" style="background:#${c.team_color}"></span>${c.code}${c.result_note ? ` <span class="note" title="Official classification differs from the road result">${c.result_note}</span>` : ""}</td>
       <td>${gapText(c)}</td>
       <td>${c.status === "FINISHED" ? "🏁" : c.status === "RETIRED" ? "DNF" : c.lap}</td>
       <td><span class="tyre ${c.compound}" title="${c.compound}, ${c.tyre_age_laps} laps">${(c.compound || "?")[0]}</span> ${c.tyre_age_laps}</td>

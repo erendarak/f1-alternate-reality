@@ -273,3 +273,21 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   tyre life and lap times; gaps from progress × leader lap time; laps-down from progress, not from
   completed-lap counts). The page hides simulation-only controls and labels the view "recorded
   history". There are no save/fork/pace commands (rejected with 422).
+
+## D-020 — Generic event pipeline; on-track result vs official classification (2026-10-12)
+
+- **Pipeline:** `f1ar/data/pipeline.py::fetch_event(season, round)` generalises step 7. It makes one
+  Jolpica request (event identity, race-specific roster written once to `configs/rosters/`, and the
+  cross-check reference), loads FastF1 by round number, writes the normalised tables, manifest and
+  quality report, and picks the track outline from the winner's **typical** clean lap (the
+  representative lap closest to their median; ties → earliest). Event ids:
+  `<season>_<slug(race name)>` with "grand prix" → "gp" (e.g. `2024_belgian_gp`). CLIs:
+  `scripts/fetch_event.py` (any race), `scripts/fetch_monza_2024.py` (shortcut).
+- **Proven on a second race:** 2024 Belgian GP (round 14): 44 laps, 19 corners, yellow flags, a lap
+  without a time, a lap-5 retirement and a **post-race disqualification**. All cross-checks pass and
+  the replay is 0 mismatches vs the feed.
+- **On the road vs. on paper:** `HistoricalRace.took_flag` = crossed the line after the chequered
+  flag (`flag_s` = first car to complete the distance). Replay state FINISHED/RETIRED now follows the
+  road, not the official status. A disqualified finisher is FINISHED with a `DISQUALIFIED` event and a
+  `DSQ` badge in the tower (Spa 2024: RUS P1 on the road by 0.526 s, then DSQ). The official order
+  stays available in `results` / `classified_position`.
