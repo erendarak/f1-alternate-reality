@@ -239,3 +239,17 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   world (`viewer_<n>`) from a factory: `{}` = same seed (the identical race again, tested position by
   position), `{"seed": N}` or `{"new_seed": true}` = a different race. Saves of earlier worlds stay
   in `saves/viewer.sqlite`.
+
+## D-018 — Historical reference race is its own mode (2026-10-12)
+
+- **Decision:** `f1ar/history/reference.py::HistoricalRace` (mode `HISTORICAL_REPLAY`, plan §5) holds
+  the real race as recorded: per-car lap records in session time, classification after any lap
+  (ordered by line-crossing time, gaps = time behind the leader at the line), a reference event list
+  (pit stops with compound change, retirements, lapped finishers), and car progress at any replay
+  time (linear within a lap). It is **not** a `WorldState`. It can't be stepped, forked or fed to the
+  engine, so recorded history and simulated alternatives can't mix.
+- **Validation:** our end-time ordering equals the timing feed's own per-lap `Position` for all 53 laps
+  × all cars (0 mismatches), and the final gaps match the official result (LEC beats PIA by 2.7 s vs
+  official 2.664 s). Pinned by a `network` test.
+- **Next (M1/M2):** draw the replay on the debug viewer; later, `HISTORICAL_ALTERNATE` = real history
+  up to lap N, then the engine takes over (needs pit stops and real start compounds in the engine, M2).

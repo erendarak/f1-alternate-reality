@@ -1,6 +1,20 @@
 # Progress
 
-## Current milestone: M0 — Feasibility & Bootstrap
+## Current milestone: M1 — Historical data layer (plan §16)
+
+M0 and M0.5 are complete (gate 5/5; see below). M1 tasks, adapted to what step 7 already delivered:
+
+- [x] Repeatable fetch with cache, typed schema, units, validation, manifest SHA-256 (step 7).
+- [x] Grid, results, pit/stint data verified, with an independent Jolpica cross-check (step 7).
+- [x] Track geometry (FastF1 outline + corners instead of the TUM centreline, D-016/D-017).
+- [x] Offline synthetic fixtures for all data code (step 7, M1).
+- [x] **Historical reference race + reference event list; `HISTORICAL_REPLAY` separated in code (D-018).**
+- [ ] Real race replay on the debug viewer map (play/pause/speed/seek; no fork, no actions).
+- [ ] More events through the same pipeline (generalise `fetch_monza_2024.py` to any season/round).
+- [ ] Engine inputs from data: real start compounds, per-driver/team pace baselines from
+      representative laps (feeds M2/M4 calibration).
+
+## Previous milestone: M0 — Feasibility & Bootstrap
 
 Plan §22 checklist (adapted per D-002):
 
@@ -204,3 +218,13 @@ Plan §22 checklist (adapted per D-002):
   shown in header. Tests: 155 passing.
 - **M0 + M0.5 complete.** Next: M1, the historical data layer (plan §16): repeatable fetch for more
   races, real start compounds/strategies as a historical-replay reference, and engine inputs from data.
+
+### 2026-10-12 — M1 slice 1: historical reference race
+
+- `f1ar.history.reference.HistoricalRace`: lap records, classification after any lap, events,
+  replay progress (D-018). `scripts/replay_monza_2024.py` prints the real race lap by lap with pit
+  stops and the retirement, then the official classification.
+- Real-data checks (network test): 0 position mismatches vs the timing feed over the whole race;
+  LEC–PIA–NOR, gap 2.7 s; TSU the only retirement.
+- Tests: 161 offline passing (+6 history tests) + 2 opt-in network tests.
+- Next: replay the real race on the debug viewer map.
