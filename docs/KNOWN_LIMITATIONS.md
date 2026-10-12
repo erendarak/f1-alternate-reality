@@ -2,6 +2,15 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## M3 slice 4 (E2E)
+
+- The E2E test **needs the fetched Monza data** and a local `.venv`; without the data it skips. It
+  isn't in CI (there is no CI yet).
+- Verified on Windows only (Chromium); macOS/Linux should work (the helper picks `.venv/bin/python`)
+  but haven't been run.
+- One flow, one browser; no visual regression checks, no mobile viewport run.
+- The Vite proxy prints `ws proxy error` lines when the test kills the backend; that is expected.
+
 ## M3 slice 3 (library, save/load/fork UI)
 
 - **No rename or delete** of worlds, timelines or saves in the UI (nor in the API).

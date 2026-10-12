@@ -1,6 +1,6 @@
 # Progress
 
-## Current milestone: M3 — First playable 2D race (plan §16)
+## Current milestone: M3 — First playable 2D race (plan §16) — COMPLETE (replay in the new UI -> M6)
 
 M3 plan (agreed 2026-10-12, one slice per commit):
 
@@ -10,8 +10,8 @@ M3 plan (agreed 2026-10-12, one slice per commit):
   indicator, event log + lap strip, minimal start screen (D-028).
 - [x] **Slice 3: World Library, save / load / fork dialogs, timelines, driver panel with source
   tags, race director, keyboard shortcuts** (D-029, store schema v4).
-- [ ] Slice 4: Playwright E2E (play -> pause -> save -> restart backend + reload -> load ->
-  resume -> fork), M3 DoD check.
+- [x] **Slice 4: Playwright E2E** (play -> pause -> save -> kill backend + reload -> continue ->
+  resume -> fork -> back to main), **M3 DoD check** (D-030).
 
 Weather (open M2 item): **moved to M4** (owner's decision, 2026-10-12), designed together with the
 tyre recalibration and estimated from a wet 2024 race. It must be in before M5 (observation and
@@ -671,3 +671,54 @@ or move it to M4.
 - Not in this slice: historical replay inside the new UI (still the debug viewer); proposal: with
   M6's real-vs-simulated comparison.
 - Next: slice 4, Playwright E2E + M3 DoD check.
+
+### 2026-10-12 — M3 slice 4: end-to-end test and the M3 done-check
+
+- **Playwright E2E** (`frontend/e2e/m3_flow.spec.ts`, `npm --prefix frontend run e2e`; D-030):
+  real backend (`scripts/serve.py`, own save file, port 8001), its own Vite server (5174),
+  Chromium, real Monza 2024 data (skips with a message if not fetched). One flow in 8 steps:
+  create (seed 7) -> Start (clock moves) -> Pause (clock frozen for 1.5 s) -> +2 min -> Save as
+  "e2e checkpoint" (dialog focus checked) -> **backend killed abruptly** and restarted -> page
+  reloaded -> library lists the world -> Continue: same race time, same 20-car order, PAUSED,
+  main timeline -> Play / Pause -> select HAM (driver panel with an editorial tag) -> Fork with
+  "box for hards": Branch badge, HAM BOX, "original timeline is unchanged" -> Timelines: two,
+  main has the checkpoint -> Load main's newest save: no branch, HAM not boxing.
+- **Is it a real test?** A mutation run (last assertion inverted) failed exactly there, with HAM
+  on main at P6 on mediums; 3 consecutive clean runs passed (~9 s each). A separate check showed
+  that killing the backend process really frees the port, so the "restart" can't be the old
+  server answering.
+- Found while building it: Windows keeps a killed process's SQLite files locked for a moment, so
+  the test's save file lives in Playwright's output folder (wiped at the next run) instead of
+  being deleted at the end. The `[WebServer] ws proxy error: ECONNRESET/ECONNREFUSED` lines in
+  the output are the Vite proxy seeing the deliberate backend kill.
+- `README.md` was still at M0.5: now has the status, a "Play" section and the frontend/E2E
+  commands.
+- Tests: 295 backend offline + 2 network; frontend 17 unit + 1 E2E; `tsc` clean.
+
+#### M3 definition of done (plan §16) — check
+
+| M3 task | Status | Evidence |
+|---|---|---|
+| FastAPI GET/POST endpoints, data contracts, WebSocket state stream | done | D-027, `docs/API_CONTRACTS.md`, `test_api.py` (19 tests) |
+| React/Vite app, TrackCanvas / TimingTower / RaceControls | done | D-028, `frontend/src/components/` |
+| Monza centerline + 20 cars, race progress, UI event markers | done, with notes | FastF1 racing-line outline (not a surveyed centreline); 20 coloured markers with codes, not sprites (plan §14.4 "simple markers first"); lap strip + event log |
+| Real backend connection for pause / save / load / fork | done | slices 1-3, E2E |
+| Select a car/driver, see tyre and profile | done | driver panel (slice 3) |
+| Profiles' `editorial_assumption` labels shown | done | source tags on every value, engine-used traits marked (D-029) |
+| Race mode indicator: historical replay / alternate simulation | **partial** | badge shows "Alternate simulation"; replay mode stays in the debug viewer (proposed for M6) |
+| x1, x5, x10 (+x25); save success only on backend ack | done | RaceControls, `useCommand`, E2E checks the ack notice |
+| E2E: play -> pause -> save -> reload browser/backend -> resume -> fork | done | `e2e/m3_flow.spec.ts`, 3/3 runs, mutation-checked |
+
+| DoD criterion | Status |
+|---|---|
+| The 2D demo really works with user input | yes: create, play/pause, step, save, fork with a decision, driver decisions, race director (by hand and E2E) |
+| The full app can be reopened and continue where it left off | yes: backend killed abruptly + browser reloaded -> Continue restores the same race time, order and timeline (E2E; store v4 makes this follow the timeline the user was on) |
+| Optional GIF/video for a portfolio | not made (optional; can be recorded from the E2E trace or by hand) |
+
+Plan §13.2 endpoints not built in M3: `GET /api/races/{id}/reference` (historical reference
+data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per world instead,
+`/api/worlds/{id}/drivers/{driver_id}`, so a save shows the profile it was created with), and
+`GET /api/models` (no learned models before M5).
+
+**M3 is complete except the historical-replay mode inside the new UI.** Next milestone: M4
+(models and calibration: tyres + weather first, per EXP-002 and the weather decision).

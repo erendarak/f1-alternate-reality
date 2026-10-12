@@ -15,5 +15,5 @@ export default defineConfig({
       "/ws": { target: BACKEND.replace(/^http/, "ws"), ws: true },
     },
   },
-  test: { environment: "node" },
+  test: { environment: "node", include: ["src/**/*.test.ts"] }, // e2e/ is Playwright
 });

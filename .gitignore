@@ -45,3 +45,7 @@ Thumbs.db
 
 # Local assistant notes: never committed
 CLAUDE.md
+
+# Playwright output
+frontend/test-results/
+frontend/playwright-report/

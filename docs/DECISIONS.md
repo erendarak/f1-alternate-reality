@@ -546,3 +546,20 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
 - **Keyboard shortcuts** (plan §14.5): Space, S, →, Shift+→; never while typing or with a
   dialog open; no ← (there is no rewind: earlier states are loaded, never stepped back to).
 
+## D-030 — End-to-end test: Playwright with a test-owned backend (2026-10-12)
+
+- **Playwright + Chromium** (`frontend/e2e/`, `npm run e2e`), one serial worker. Playwright starts
+  a Vite server on 5174 pointed at port 8001; the **test owns the backend** process
+  (`e2e/backend.ts`) so it can kill it abruptly mid-test and start a new one on the same save
+  file, which is the M3 DoD ("reopen the full app and continue").
+- The kill is deliberately abrupt (no pause/autosave/flush) to exercise the crash path, which is
+  the harder case; a clean shutdown is covered by the backend tests.
+- **Real data, not fixtures:** the E2E uses the fetched Monza 2024 data and skips with a message
+  when it isn't there (fetched data is gitignored). The backend tests stay offline and
+  data-independent.
+- **Determinism in the E2E:** race progress comes from the step buttons where values are compared
+  (clock, order); wall-clock waits are only used to show that time moves or stays frozen.
+- Selectors use roles and visible text where possible (what a user sees), CSS classes for the
+  tower and header values.
+- Not in CI yet (the repo has no CI; it would need the data fetch or a recorded fixture).
+

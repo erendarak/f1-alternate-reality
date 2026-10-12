@@ -4,8 +4,9 @@ A persistent, forkable F1 world. It starts from real historical races (first tar
 From there, profile-conditioned AI strategists decide what happens next. You can pause, save, reload and
 branch the timeline at any moment.
 
-> **Status:** M0 + M0.5 done. A deterministic race engine with pause/save/load/fork, real Monza 2024 data,
-> and a browser debug viewer (placeholder lap model). See [docs/PROGRESS.md](docs/PROGRESS.md).
+> **Status:** M0–M3 done: a deterministic race engine (pit stops, traffic, incidents, safety car)
+> on real 2024 Monza/Spa grids, persistent worlds with save/load/fork, and a 2D browser app.
+> Coefficients are not calibrated yet (M4). See [docs/PROGRESS.md](docs/PROGRESS.md).
 > The full product and technical plan is [F1_ALTERNATE_REALITY_MASTER_PLAN.md](F1_ALTERNATE_REALITY_MASTER_PLAN.md).
 
 Alternate outcomes are **simulation estimates** built on modelling assumptions. They are not historical facts.
@@ -15,7 +16,7 @@ Driver persona values are **editorial assumptions**, not real psychometrics.
 
 - Windows, macOS or Linux
 - [uv](https://docs.astral.sh/uv/) (installs and manages Python 3.12 for you)
-- Node.js 20+ (needed only from the frontend milestone onward)
+- Node.js 20+ (for the browser app)
 
 Install uv on Windows (PowerShell):
 
@@ -31,11 +32,32 @@ uv sync
 
 This creates `.venv/` with Python 3.12, the `f1ar` package (editable) and the dev tools.
 
+```powershell
+uv run python scripts/fetch_event.py --season 2024 --round 16   # Monza 2024 data (once; cached)
+npm --prefix frontend install
+```
+
+## Play (M3 app)
+
+Two terminals:
+
+```powershell
+uv run python scripts/serve.py          # backend API on http://127.0.0.1:8000 (save file: saves/worlds.sqlite)
+npm --prefix frontend run dev           # app on http://localhost:5173
+```
+
+World Library → create a race or continue one. In the race: Space play/pause, S save, → step (paused),
+click a car for its driver panel (tyres, decisions, data sources), **Fork…** to branch the race with
+another decision, **Timelines** to load any save or go back to the main story. API reference:
+[docs/API_CONTRACTS.md](docs/API_CONTRACTS.md).
+
 ## Everyday commands
 
 | Task | Command |
 |---|---|
 | Run tests | `uv run pytest` |
+| Frontend unit tests / type-check / build | `npm --prefix frontend test` · `npm --prefix frontend run typecheck` · `npm --prefix frontend run build` |
+| End-to-end test (real backend, browser, backend restart) | `npm --prefix frontend run e2e` (once: `npx --prefix frontend playwright install chromium`) |
 | Lint | `uv run ruff check .` |
 | Format | `uv run ruff format .` |
 | Type-check | `uv run mypy` |
@@ -59,7 +81,9 @@ This creates `.venv/` with Python 3.12, the `f1ar` package (editable) and the de
 ## Repository layout
 
 ```text
-backend/src/f1ar/   Python package (domain, data, persistence; simulation/policy/api to come)
+backend/src/f1ar/   Python package: domain, data, calibration, history, simulation, policy,
+                    persistence, presentation, api (FastAPI + WebSocket)
+frontend/           React + TypeScript app (Vite); e2e/ = Playwright end-to-end test
 configs/            race rosters (verified facts) and driver persona seeds (editorial assumptions)
 scripts/            CLI entry points
 tests/              pytest suites
