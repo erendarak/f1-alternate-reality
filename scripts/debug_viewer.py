@@ -12,22 +12,18 @@ The page is a read-only view of backend state; every button sends a command to t
 
 import argparse
 import sys
-from collections.abc import Hashable
 from pathlib import Path
-from typing import Any
 
-import pandas as pd
 import uvicorn
 
 from f1ar.api.debug_app import create_app
 from f1ar.api.replay_app import create_replay_app
-from f1ar.domain.identities import RaceRoster, load_roster
+from f1ar.domain.identities import load_roster
 from f1ar.domain.race_state import WorldState
 from f1ar.history.reference import HistoricalRace
 from f1ar.history.replay import REPLAY_SPEEDS, ReplayClock
 from f1ar.persistence.sqlite_store import SnapshotStore
-from f1ar.presentation.track_geometry import TrackGeometry
-from f1ar.presentation.view_model import track_view
+from f1ar.presentation.event_assets import MissingEventAssetsError, load_event_assets
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.scenarios import (
     MONZA_2024,
@@ -35,58 +31,13 @@ from f1ar.simulation.scenarios import (
     event_data_dir,
     load_event,
     setup_from_codes,
+    track_for,
 )
 from f1ar.simulation.world_runner import ALLOWED_SPEEDS
 
 ROOT = Path(__file__).resolve().parents[1]
 PROCESSED = ROOT / "data" / "processed"
 CAR_SPRITE = ROOT / "assets" / "third_party" / "palm-tree-f1-pack" / "Ferrari" / "Ferrari.png"
-
-
-def load_assets(
-    roster: RaceRoster, data: Path
-) -> tuple[TrackGeometry, dict[str, Any], dict[str, str]]:
-    needed = [data / f for f in ("track_outline.parquet", "corners.parquet", "results.parquet")]
-    missing = [p.name for p in needed if not p.exists()]
-    if missing:
-        sys.exit(
-            f"missing {missing} in {data}. Run first:\n"
-            "    uv run python scripts/fetch_event.py --season <year> --round <n>"
-        )
-    outline = pd.read_parquet(needed[0])
-    corners = pd.read_parquet(needed[1])
-    results = pd.read_parquet(needed[2])
-
-    geometry = TrackGeometry.from_points(
-        list(zip(outline["x_m"].astype(float), outline["y_m"].astype(float), strict=True))
-    )
-    rotation = float(corners["display_rotation_deg"].iloc[0]) if len(corners) else 0.0
-    corner_records: list[dict[Hashable, Any]] = corners.to_dict("records")
-    corner_rows = [
-        {
-            "number": int(r["number"]),
-            "letter": None if pd.isna(r["letter"]) else str(r["letter"]),
-            "x_m": float(r["x_m"]),
-            "y_m": float(r["y_m"]),
-            "angle_deg": float(r["angle_deg"]),
-        }
-        for r in corner_records
-    ]
-    payload = track_view(
-        geometry,
-        engine_length_m=5793.0,
-        corners=corner_rows,
-        rotation_deg=rotation,
-        source=f"FastF1 {roster.event_id}: winner's typical-lap path (derived); circuit corners",
-    )
-    by_number = {e.car_number: e.driver_id for e in roster.entries}
-    result_records: list[dict[Hashable, Any]] = results.to_dict("records")
-    colors = {
-        by_number[int(r["driver_number"])]: str(r["team_color"])
-        for r in result_records
-        if int(r["driver_number"]) in by_number and not pd.isna(r["team_color"])
-    }
-    return geometry, payload, colors
 
 
 def main() -> None:
@@ -116,7 +67,12 @@ def main() -> None:
     if not roster_path.exists():
         parser.error(f"unknown event {args.event!r}: fetch it first with scripts/fetch_event.py")
     roster = load_roster(roster_path, expected_event_id=args.event)
-    geometry, payload, colors = load_assets(roster, PROCESSED / args.event)
+    length = track_for(args.event).length_m if args.event in SIMULATED_EVENTS else None
+    try:
+        assets = load_event_assets(roster, PROCESSED / args.event, engine_length_m=length)
+    except MissingEventAssetsError as exc:
+        sys.exit(str(exc))
+    geometry, payload, colors = assets.geometry, assets.track_payload, assets.team_colors
     sprite = CAR_SPRITE if CAR_SPRITE.exists() else None
     if sprite is None:
         print(f"note: {CAR_SPRITE.relative_to(ROOT)} not found, drawing dots instead of cars")

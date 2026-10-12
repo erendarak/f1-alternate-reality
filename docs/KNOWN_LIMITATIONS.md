@@ -2,7 +2,22 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
-## Current (end of M2)
+## M3 slice 1 (API)
+
+- **No UI yet** beyond Swagger (`/docs`); the React app is slice 2. The debug viewer is separate
+  and still uses its own `/api/debug/*` routes.
+- **One live world per backend**, one user, no authentication; bound to 127.0.0.1. Two browser
+  tabs share (and both control) the same live world.
+- **Auto-pause on disconnect** also pauses on a page reload or a brief network drop.
+- A command that reached the old runner just as another world was made live isn't applied and
+  times out (504) instead of being re-routed.
+- `step` takes ticks only; "step one lap / sector" (plan §14.2) isn't there yet.
+- Stream frames are full state views (~11 KB for 20 cars at ≤10 Hz), not deltas; fine locally.
+- The library can't rename or delete worlds; world names are derived (race + seed). Snapshots of
+  older engine versions are listed but refused on load (`snapshot_unusable`), as before.
+- Replay mode (`HISTORICAL_REPLAY`) isn't in the new API; it's still only in the debug viewer.
+
+## End of M2
 
 - **No weather at all** (no rain, wet/intermediate tyres, temperature or grip changes), although
   plan §16 lists weather states under M2. Both reference races were dry.

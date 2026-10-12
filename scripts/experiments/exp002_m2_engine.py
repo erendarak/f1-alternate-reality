@@ -352,7 +352,9 @@ def main() -> None:
         print_report(r)
     if args.json:
         args.json.parent.mkdir(parents=True, exist_ok=True)
-        args.json.write_text(json.dumps(reports, indent=2, default=str) + "\n", encoding="utf-8")
+        args.json.write_text(
+            json.dumps(reports, indent=2, default=str) + "\n", encoding="utf-8", newline="\n"
+        )
         print(f"\nwrote {args.json}")
 
 

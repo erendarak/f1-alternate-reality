@@ -156,6 +156,30 @@ def test_runner_logs_everything_and_idempotency_survives_a_restart(
     assert _send(restored, "new", type="STEP", ticks=1).accepted
 
 
+def test_resuming_a_manual_save_after_shutdown_continues_the_timeline(
+    store: SnapshotStore, two_car_world: WorldState
+) -> None:
+    """The SAVE's own log record comes after its snapshot; once the logs are flushed (shutdown)
+    it must not count as later history (found in M3: every load of a manual save branched).
+    Neither do a speed change or a refused command; a state-changing command does."""
+    created = engine.create_world(two_car_world.setup, seed=8, world_id="w_manual")
+    runner = WorldRunner(created, clock=lambda: 0.0, store=store, autosave=AutosavePolicy())
+    _send(runner, "start", type="START")
+    _send(runner, "pause", type="PAUSE")
+    _send(runner, "step", type="STEP", ticks=50)
+    saved = _send(runner, "save", type="SAVE", label="mine")
+    _send(runner, "speed", type="SET_SPEED", speed=5)
+    assert not _send(runner, "refused", type="START").accepted  # already started
+    runner.shutdown()
+    assert saved.snapshot_id is not None
+    assert store.resume(saved.snapshot_id).timeline_id == created.timeline_id
+
+    runner = WorldRunner(store.resume(saved.snapshot_id), clock=lambda: 0.0, store=store)
+    _send(runner, "step-more", type="STEP", ticks=1)
+    runner.shutdown()
+    assert store.resume(saved.snapshot_id).timeline_id != created.timeline_id
+
+
 def test_autosave_every_laps_keeps_the_newest(
     store: SnapshotStore, isolated_world: WorldState
 ) -> None:

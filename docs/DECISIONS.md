@@ -468,3 +468,35 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   rules (tested both ways) and is the action-mask source for M5.
 - **Measurement before calibration:** EXP-002 deliberately changes no coefficient; its gaps define
   M4's calibration order (tyres first, then overtaking, then incident rates).
+
+## D-027 — M3 API: one live world, ack-based commands, push-only stream, auto-pause (2026-10-12)
+
+- **Shape:** plan §13.2 endpoints under `/api` (FastAPI) + `WS /ws/worlds/{id}`; contract in
+  `docs/API_CONTRACTS.md`. The M0.5 debug viewer stays as a developer tool (separate app).
+- **One live world per backend process** (`api/session.py`). It's a local single-user app; one
+  runner keeps the threading and persistence simple. Making another world live first shuts the
+  current runner down (pause, autosave, logs), so two runners never write one timeline. During
+  the switch the old (paused) runner stays visible until the new one is active.
+- **Commands answer with their ack:** 200 accepted, 409 refused (body = ack). The UI shows
+  success only from an ack (plan §13.4); idempotency keys are client-chosen and survive
+  restarts (D-025). Errors are `{"error", "detail"}` with fixed codes.
+- **Create** saves the new world once ("created") so it is in the library at once. **Load**
+  goes through `SnapshotStore.resume` (continue or branch, never rewrite) and always ends
+  PAUSED (a logged `SYSTEM` PAUSE if the save was running). **Fork** from a live world first
+  saves a canonical fork point (a SAVE command at a tick boundary); decision overrides are
+  applied on the branch as logged commands, and refusals are reported, not hidden.
+- **Resume rule refined:** later commands that can't change the world (`SAVE`, `SET_SPEED`,
+  refused ones) don't make a snapshot "not the latest point". Otherwise every manual save would
+  branch when loaded, because the SAVE's own record follows its snapshot.
+- **Stream is push-only** (commands stay on REST, where they are acked and logged): frames on
+  change, ≤10 Hz, 1 s heartbeat, `stream_seq` per connection, `generation` per runner, events
+  per frame, `reset` frames with the timeline's recent history. The frame is the same state view
+  as the REST `state` (spectator view, not a policy observation).
+- **Auto-pause on disconnect** (plan §13.4 MVP): the last client leaving a running world pauses
+  it with a logged `SYSTEM` command. Consequence: a browser reload pauses the race.
+- **Driver card provenance:** values come from the profile revision pinned in the world; each
+  carries a `source_type` (identity/grid `historical_verified`, inputs from their notes, persona
+  `editorial_assumption`, live values `simulated_dynamic`).
+- **Race catalog:** a race is offered when it has personas (`SIMULATED_EVENTS`) and its data is
+  fetched; setups are built lazily and cached per (driver codes, synthetic).
+

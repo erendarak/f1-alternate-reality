@@ -1,6 +1,22 @@
 # Progress
 
-## Current milestone: M2 — Canonical race engine + persistent world (plan §16)
+## Current milestone: M3 — First playable 2D race (plan §16)
+
+M3 plan (agreed 2026-10-12, one slice per commit):
+
+- [x] **Slice 1: real API v1**: REST endpoints (plan §13.2), live session, WebSocket state stream,
+  auto-pause, driver card with source labels, `docs/API_CONTRACTS.md` (D-027).
+- [ ] Slice 2: React/Vite app: TrackCanvas, TimingTower, RaceControls, live stream, mode indicator.
+- [ ] Slice 3: World Library, save / load / fork dialogs, timelines, driver panel with source tags,
+  keyboard shortcuts.
+- [ ] Slice 4: Playwright E2E (play -> pause -> save -> restart backend + reload -> load ->
+  resume -> fork), M3 DoD check.
+
+Weather (open M2 item): moved to **M4**, together with tyre calibration, using a wet 2024 race.
+The owner's message left the choice as a placeholder, so this follows the recommendation;
+it can still be pulled forward.
+
+## Previous milestone: M2 — Canonical race engine + persistent world (plan §16) — COMPLETE except weather (-> M4)
 
 M2 plan (agreed 2026-10-12, one slice per commit; engine version bump per behaviour change):
 
@@ -502,3 +518,49 @@ Plan §22 checklist (adapted per D-002):
 **M2 is complete except weather**, which the plan lists under M2 but which needs wet compounds,
 a weather process and calibration (M4 territory). Decision for the owner: a weather slice now,
 or move it to M4.
+
+### 2026-10-12 — M3 slice 1: real API v1 (REST + WebSocket over one live session)
+
+- **API** (`backend/src/f1ar/api/`: `main.py`, `routes_worlds.py`, `routes_races.py`,
+  `websocket.py`, `session.py`, `catalog.py`, `schemas.py`, `views.py`; contract in
+  `docs/API_CONTRACTS.md`; D-027): health, races (catalog of simulated + fetched events, verified
+  entry list, track), world library, create, start/pause/resume/speed/step/save, actions (pit,
+  pace, controller, race director), load ("continue" or a chosen snapshot), fork (with seed mode
+  and decision overrides), timelines with snapshots, event history, driver card.
+  `scripts/serve.py` (port 8000, `saves/worlds.sqlite`); launch config `api`.
+- **One live world per backend** (`LiveSession`): create/load/fork shut the current runner down
+  the safe way first (pause, autosave, logs). Command responses are the runner's ack (200
+  accepted, 409 refused); save success only after the commit. Load is always PAUSED (a running
+  save gets a logged `SYSTEM` PAUSE). Fork from a live world saves a canonical fork point first.
+- **WebSocket** `/ws/worlds/{id}`: state frames on change (≤10 Hz, heartbeat 1 s) with
+  `stream_seq`, `generation` and per-frame events; `reset` frames carry the timeline's recent
+  stored history (after connect, fork, load); `closed` when another world becomes live.
+  **Auto-pause** when the last client of a running world disconnects (plan §13.4 MVP).
+- **Driver card** with a `source_type` on every value: identity and grid `historical_verified`,
+  start tyre / car offset from the world's input notes, persona `editorial_assumption` (+
+  confidence, template, overrides), live race values `simulated_dynamic`.
+- Shared `presentation/event_assets.py` (moved out of `scripts/debug_viewer.py`); store
+  `list_worlds()` (a query, no schema change).
+- **Bugs found:**
+  1. **Every load of a manual save branched** after a real restart (M2 slice 4 bug): the SAVE
+     command's own log record is written after its snapshot, so `resume` counted it as later
+     history once the logs were flushed. The existing test resumed before the flush and missed
+     it. Now later commands that can't change the world (SAVE, SET_SPEED, refused ones) don't
+     count; regression test both ways (a later STEP still branches).
+  2. **Stream race during a world switch:** the session cleared the live world before the new
+     one was ready, so a stream polling in between said "closed, live world: none" (2 of 6 runs
+     of the test). The old runner now stays visible (paused, read-only) until its replacement is
+     active. 15/15 runs green after the fix.
+  3. The debug viewer's track payload had Monza's length hardcoded as `engine_length_m` (wrong
+     for Spa; nothing read it). Now the event's own length.
+- **Verified against the real server** (real Monza data, 20 cars, runner thread, real WebSocket
+  client): create in 0.15 s; at x25, ticks 3..300 in 6 s (= 6 x 25 / 0.5) with 55 frames and
+  monotonic `stream_seq`; pause/save acked at tick 300; driver card for NOR (`historical_verified`
+  start tyre, `estimated_from_data` car offset, `editorial_assumption` persona); **backend
+  restarted** -> library lists the world, not live -> load: tick 300, PAUSED, same timeline ->
+  fork "NOR boxes for hards" (override accepted) -> 2 timelines. Swagger UI at `/docs`.
+- Leftover fixed: `exp002_m2_engine.py` writes its JSON with `newline="\n"`.
+- Tests: 292 offline passing (+19: 18 API incl. the restart -> load -> resume -> fork flow with a
+  1000-tick determinism check, stream order/reset/close/refusal, auto-pause, crash-then-load; 1
+  store regression) + 2 network.
+- Next: slice 2, the React/Vite app.

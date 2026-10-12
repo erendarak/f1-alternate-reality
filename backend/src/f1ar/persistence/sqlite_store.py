@@ -64,6 +64,9 @@ STORE_MIGRATIONS: dict[int, tuple[str, ...]] = {
 
 SnapshotKind = Literal["MANUAL", "AUTOSAVE"]
 
+STATELESS_COMMANDS = ("SAVE", "SET_SPEED")
+"""Command types that never change the world state (speed is pacing, not state)."""
+
 _DDL = """
 CREATE TABLE IF NOT EXISTS store_meta (
     key   TEXT PRIMARY KEY,
@@ -202,6 +205,18 @@ class TimelineMeta(BaseModel):
     fork_event_seq: int | None
     event_count: int
     command_count: int
+
+
+class WorldMeta(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    world_id: str
+    event_id: str
+    created_utc: str
+    timeline_count: int
+    snapshot_count: int
+    latest: SnapshotMeta | None
+    """Newest snapshot of any of the world's timelines (not verified; ``load`` verifies)."""
 
 
 _META_COLUMNS = (
@@ -464,9 +479,9 @@ class SnapshotStore:
     def resume(self, snapshot_id: str) -> WorldState:
         """The world to continue from ``snapshot_id`` without ever rewriting history.
 
-        If the snapshot is the latest point of its timeline (no later snapshot, no later event),
-        that timeline simply continues. Otherwise a new branch is created at the snapshot
-        (same luck), so the timeline's recorded future stays intact.
+        If the snapshot is the latest point of its timeline (no later snapshot, event or
+        state-changing command), that timeline simply continues. Otherwise a new branch is
+        created at the snapshot (same luck), so the timeline's recorded future stays intact.
         """
         state = self.load(snapshot_id)
         meta = self.get_meta(snapshot_id)
@@ -479,9 +494,12 @@ class SnapshotStore:
                 "SELECT COUNT(*) FROM snapshots WHERE timeline_id = ? AND tick > ?",
                 (state.timeline_id, state.sim_tick),
             ).fetchone()[0]
+            # A later command that couldn't change the race (a refused one, a save, a speed
+            # change) isn't divergent history: the SAVE's own record always follows its snapshot.
             later_commands = self._db.execute(
-                "SELECT COUNT(*) FROM commands WHERE timeline_id = ? AND log_seq >= ?",
-                (state.timeline_id, meta.command_seq),
+                "SELECT COUNT(*) FROM commands WHERE timeline_id = ? AND log_seq >= ? "
+                f"AND accepted = 1 AND type NOT IN ({','.join('?' * len(STATELESS_COMMANDS))})",
+                (state.timeline_id, meta.command_seq, *STATELESS_COMMANDS),
             ).fetchone()[0]
         if later_events == 0 and later_snapshots == 0 and later_commands == 0:
             return state
@@ -640,6 +658,35 @@ class SnapshotStore:
         with self._lock:
             rows = self._db.execute(query + " ORDER BY seq DESC", params).fetchall()
         return [self._meta(r) for r in rows]
+
+    def list_worlds(self) -> list[WorldMeta]:
+        """Every world in the file, most recently saved first (worlds without saves last)."""
+        with self._lock:
+            rows = self._db.execute(
+                "SELECT w.id, w.event_id, w.created_utc, "
+                "(SELECT COUNT(*) FROM timelines t WHERE t.world_id = w.id), "
+                "(SELECT COUNT(*) FROM snapshots s WHERE s.world_id = w.id), "
+                "(SELECT MAX(s.seq) FROM snapshots s WHERE s.world_id = w.id) AS newest "
+                "FROM worlds w ORDER BY newest IS NULL, newest DESC, w.created_utc DESC"
+            ).fetchall()
+            latest_rows = {
+                r[1]: r
+                for r in self._db.execute(
+                    f"SELECT {_META_COLUMNS} FROM snapshots WHERE seq IN "
+                    "(SELECT MAX(seq) FROM snapshots GROUP BY world_id)"
+                ).fetchall()
+            }
+        return [
+            WorldMeta(
+                world_id=world_id,
+                event_id=event_id,
+                created_utc=created,
+                timeline_count=timelines,
+                snapshot_count=snapshots,
+                latest=self._meta(latest_rows[world_id]) if world_id in latest_rows else None,
+            )
+            for world_id, event_id, created, timelines, snapshots, _ in rows
+        ]
 
     def latest_valid(self, world_id: str) -> SnapshotMeta | None:
         """Newest fully verified snapshot of ``world_id`` (recovery after corruption)."""

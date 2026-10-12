@@ -2,6 +2,18 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "api",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": [
+        "run",
+        "python",
+        "scripts/serve.py",
+        "--db",
+        "saves/m3_check.sqlite"
+      ],
+      "port": 8000
+    },
+    {
       "name": "debug-viewer",
       "runtimeExecutable": "uv",
       "runtimeArgs": [

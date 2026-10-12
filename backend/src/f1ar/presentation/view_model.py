@@ -7,6 +7,8 @@ can't know. Gaps are approximate display values derived from track position.
 import math
 from typing import Any
 
+from f1ar.domain.driver_profiles import STAGE1_FIELDS
+from f1ar.domain.provenance import SourceType
 from f1ar.domain.race_state import CarStatus, RaceEvent, RacePhase, WorldState
 from f1ar.history.reference import HistoricalRace
 from f1ar.presentation.track_geometry import TrackGeometry
@@ -18,7 +20,7 @@ DEFAULT_COLOR = "9AA0A6"
 def track_view(
     geometry: TrackGeometry,
     *,
-    engine_length_m: float,
+    engine_length_m: float | None,
     corners: list[dict[str, Any]],
     rotation_deg: float,
     source: str,
@@ -273,4 +275,78 @@ def replay_view(
             }
             for i, e in enumerate(events)
         ],
+    }
+
+
+# --- driver card (profile + provenance) -----------------------------------------------------
+
+
+def _note_source(note: str | None, default: SourceType) -> str:
+    """Source type named by a ``RaceSetup.inputs`` note prefix (``"<source_type>: ..."``)."""
+    if note is None:
+        return default.value
+    prefix = note.split(":", 1)[0].strip()
+    return prefix if prefix in {s.value for s in SourceType} else default.value
+
+
+def driver_view(state: WorldState, driver_id: str) -> dict[str, Any]:
+    """A driver's pinned profile and race inputs, each value labelled with its source type.
+
+    Read from the world itself (the profile revision this world was created with), not from
+    the config files, so a save shows the values its race actually used.
+    """
+    entry = state.setup.driver(driver_id)
+    profile = entry.profile
+    meta = profile.metadata
+    inputs = state.setup.inputs
+    car = state.car(driver_id)
+    return {
+        "driver_id": driver_id,
+        "code": entry.code,
+        "display_name": profile.display_name,
+        "team_id": entry.team_id,
+        "identity_source_type": profile.identity_source_type.value,
+        "grid_position": {
+            "value": entry.grid_position,
+            "source_type": SourceType.HISTORICAL_VERIFIED.value,
+        },
+        "start_compound": {
+            "value": entry.start_compound.value,
+            "source_type": _note_source(
+                inputs.get("start_compounds"), SourceType.EDITORIAL_ASSUMPTION
+            ),
+            "note": inputs.get("start_compounds", "editorial_assumption: synthetic default"),
+        },
+        "car_pace_offset_s": {
+            "value": entry.car_pace_offset_s,
+            "source_type": _note_source(
+                inputs.get("car_pace_offsets"), SourceType.EDITORIAL_ASSUMPTION
+            ),
+            "note": inputs.get("car_pace_offsets", "editorial_assumption: equal cars"),
+        },
+        "profile": {
+            "revision": profile.profile_revision,
+            "content_hash": profile.content_hash,
+            "source_type": meta.numeric_values_source_type.value,
+            "estimated": meta.estimated,
+            "confidence": meta.confidence,
+            "persona_label": meta.persona_label,
+            "base_template": meta.base_template,
+            "overridden_fields": list(meta.overridden_fields),
+            "explanation": meta.explanation,
+            "origin": meta.origin,
+            "values": profile.archetype.model_dump(),
+            "stage1_fields": list(STAGE1_FIELDS),
+        },
+        "policy": {"type": profile.policy.type, "version": profile.policy.version},
+        "race": {
+            "status": car.status.value,
+            "compound": car.compound.value,
+            "tyre_age_laps": car.tyre_age_laps,
+            "pit_stops": car.pit_stops,
+            "pace_mode": car.pace_mode.value,
+            "controller": car.controller.value,
+            "plan": plan_text(car.planned_stops),
+            "source_type": SourceType.SIMULATED_DYNAMIC.value,
+        },
     }
