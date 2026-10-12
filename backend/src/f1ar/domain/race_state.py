@@ -16,7 +16,7 @@ from f1ar.domain.provenance import SourceType
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 3
+WORLD_SCHEMA_VERSION = 4
 
 
 class _Frozen(BaseModel):
@@ -45,6 +45,15 @@ class PaceMode(StrEnum):
     CONSERVE = "CONSERVE"
     BALANCED = "BALANCED"
     PUSH = "PUSH"
+
+
+class StrategyController(StrEnum):
+    """Who decides a car's pit stops."""
+
+    BASELINE = "BASELINE"
+    """The built-in baseline team strategy (``f1ar.policy.baseline_strategy``)."""
+    USER = "USER"
+    """A human (or external agent) via pit actions; the baseline stays out of it."""
 
 
 # --- setup: fixed for the lifetime of a world ---------------------------------------------
@@ -97,6 +106,23 @@ class LapModelParams(_Frozen):
         return self
 
 
+class PitParams(_Frozen):
+    """Pit-stop time model (plan §7.5). Standstill shape credited to TUM FTM race-simulation
+    (Heilmeier et al.), which models standstill times with a log-logistic (fisk) distribution."""
+
+    source_type: Literal[SourceType.EDITORIAL_ASSUMPTION, SourceType.ESTIMATED_FROM_DATA]
+    note: str
+    lane_loss_s: float = Field(ge=0)
+    """Time lost driving pit entry + pit lane + pit exit instead of the racing line."""
+    standstill_median_s: float = Field(gt=0)
+    standstill_shape: float = Field(gt=1)
+    """Log-logistic shape: higher = fewer slow stops."""
+    standstill_max_s: float = Field(gt=0)
+    """Draws are capped here (a stuck wheel, not a lost race)."""
+    min_distinct_dry_compounds: int = Field(ge=0, le=3)
+    """Dry-race rule: compounds a finisher must have used (2 in 2024; 0 disables)."""
+
+
 class DriverEntry(_Frozen):
     driver_id: str
     code: str
@@ -113,6 +139,7 @@ class RaceSetup(_Frozen):
     event_id: str
     track: TrackSpec
     lap_model: LapModelParams
+    pit: PitParams
     tick_seconds: float = Field(gt=0)
     profile_set_manifest_hash: str
     """Hash of the full ProfileSet the embedded profiles were taken from."""
@@ -138,15 +165,24 @@ class RaceSetup(_Frozen):
 # --- dynamic state ------------------------------------------------------------------------
 
 
+class PlannedStop(_Frozen):
+    lap: int = Field(ge=1)
+    """Pit at the end of this lap (the car crosses the line in the pit lane)."""
+    compound: Compound
+
+
 class CarState(_Frozen):
     driver_id: str
     status: CarStatus
     laps_completed: int = Field(ge=0)
     distance_m: float = Field(ge=0)
-    """Distance into the current lap, in [0, track length)."""
+    """Distance into the current lap, in [0, track length). Derived from ``lap_elapsed_s``."""
     lap_elapsed_s: float = Field(ge=0)
     lap_target_s: float = Field(gt=0)
-    """Pre-sampled duration of the current lap. HIDDEN: never part of an observation."""
+    """Pre-sampled duration of the current lap, including ``pit_hold_s``. HIDDEN: never part
+    of an observation."""
+    pit_hold_s: float = Field(ge=0)
+    """Out-lap only: pit-lane loss + standstill, spent at the line before driving the lap."""
     compound: Compound
     tyre_age_laps: int = Field(ge=0)
     tyre_wear_s: float = Field(ge=0)
@@ -156,14 +192,37 @@ class CarState(_Frozen):
     """Driver's intended mode; applies from the next lap start."""
     lap_pace_mode: PaceMode
     """Mode the lap in progress is being driven in (locked when the lap started)."""
+    pit_request: Compound | None
+    """Pending stop: the car pits for this compound at its next line crossing."""
+    pit_stops: int = Field(ge=0)
+    compounds_used: tuple[Compound, ...]
+    """Distinct compounds raced so far, in first-use order (for the dry-tyre rule)."""
+    controller: StrategyController
+    planned_stops: tuple[PlannedStop, ...]
+    """Baseline strategy's remaining plan (empty under USER control)."""
     last_lap_time_s: float | None
     finish_time_s: float | None
+
+
+EventType = Literal[
+    "LAP_COMPLETED",
+    "CAR_FINISHED",
+    "RACE_COMPLETED",
+    "PACE_MODE_CHANGED",
+    "PIT_REQUESTED",
+    "PIT_CANCELLED",
+    "PIT_STOP",
+    "STRATEGY_PLANNED",
+    "CONTROLLER_CHANGED",
+    "CHEQUERED_FLAG",
+    "TYRE_RULE_BREACHED",
+]
 
 
 class RaceEvent(_Frozen):
     seq: int = Field(ge=0)
     tick: int = Field(ge=0)
-    type: Literal["LAP_COMPLETED", "CAR_FINISHED", "RACE_COMPLETED", "PACE_MODE_CHANGED"]
+    type: EventType
     driver_id: str | None
     payload: dict[str, float | int | str]
 
@@ -184,12 +243,41 @@ class SetPaceMode(_Frozen):
     actor_id: str = "USER"
 
 
-DriverAction = SetPaceMode
-"""Union of all driver/team actions; pit requests join in M2."""
+class RequestPitStop(_Frozen):
+    """Box at the end of the current lap for ``compound`` (plan §7.5: one command per stop).
+
+    Replaces any pending request. Takes the car's strategy over (controller -> USER).
+    """
+
+    type: Literal["REQUEST_PIT_STOP"] = "REQUEST_PIT_STOP"
+    driver_id: str
+    compound: Compound
+    actor_id: str = "USER"
+
+
+class CancelPitStop(_Frozen):
+    """Withdraw a pending request (stay out). Takes the car's strategy over (-> USER)."""
+
+    type: Literal["CANCEL_PIT_STOP"] = "CANCEL_PIT_STOP"
+    driver_id: str
+    actor_id: str = "USER"
+
+
+class SetStrategyController(_Frozen):
+    """Hand a car's pit decisions to the baseline (it replans from now) or to the user."""
+
+    type: Literal["SET_STRATEGY_CONTROLLER"] = "SET_STRATEGY_CONTROLLER"
+    driver_id: str
+    controller: StrategyController
+    actor_id: str = "USER"
+
+
+DriverAction = SetPaceMode | RequestPitStop | CancelPitStop | SetStrategyController
+"""Union of all driver/team actions."""
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[3]
+    schema_version: Literal[4]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None
@@ -201,6 +289,8 @@ class WorldState(_Frozen):
     sim_tick: int = Field(ge=0)
     sim_clock_s: float = Field(ge=0)
     cars: tuple[CarState, ...]
+    chequered_flag_s: float | None
+    """Sim time the leader took the flag; every later line crossing finishes that car."""
     event_seq: int = Field(ge=0)
     """Number of events emitted so far; the next event gets this sequence number."""
 

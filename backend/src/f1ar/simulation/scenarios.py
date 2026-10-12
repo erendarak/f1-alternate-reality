@@ -15,6 +15,7 @@ from f1ar.domain.race_state import (
     LapModelParams,
     PaceMode,
     PaceModeParams,
+    PitParams,
     RaceSetup,
     TrackSpec,
 )
@@ -56,21 +57,35 @@ def setup_from_codes(
     if data_dir is None:
         return build_setup(roster, profiles, driver_ids)
 
-    from f1ar.calibration.race_inputs import estimate_car_offsets, start_compounds
+    from f1ar.calibration.race_inputs import (
+        estimate_car_offsets,
+        estimate_pit_loss,
+        start_compounds,
+    )
 
     laps = pd.read_parquet(data_dir / "laps.parquet")
     lap_model = default_lap_model()
     estimate = estimate_car_offsets(laps, roster, profiles, lap_model)
+    try:
+        pit_loss = estimate_pit_loss(laps)
+        pit, pit_note = (
+            pit_params_from_total_loss(pit_loss.total_loss_s, pit_loss.note),
+            pit_loss.note,
+        )
+    except ValueError as exc:  # e.g. a race without any complete pit stop
+        pit, pit_note = default_pit_params(), f"editorial_assumption: default pit model ({exc})"
     return build_setup(
         roster,
         profiles,
         driver_ids,
         lap_model=lap_model,
+        pit=pit,
         start_compounds=start_compounds(laps, roster),
         car_offsets_s=estimate.offsets_s,
         inputs={
             "start_compounds": f"historical_verified: lap-1 compound, {data_dir.name}/laps.parquet",
             "car_pace_offsets": estimate.note,
+            "pit_loss": pit_note,
         },
     )
 
@@ -119,6 +134,37 @@ def default_lap_model() -> LapModelParams:
     )
 
 
+STANDSTILL_MEDIAN_S = 2.4
+"""Typical 2024 standstill; editorial (no stationary times in our data)."""
+
+
+def default_pit_params() -> PitParams:
+    """Synthetic Monza pit model: ~24 s whole stop. NOT calibrated."""
+    return PitParams(
+        source_type=SourceType.EDITORIAL_ASSUMPTION,
+        note="Synthetic placeholder: 21.5 s pit lane + ~2.4 s standstill (log-logistic).",
+        lane_loss_s=21.5,
+        standstill_median_s=STANDSTILL_MEDIAN_S,
+        standstill_shape=9.0,
+        standstill_max_s=12.0,
+        min_distinct_dry_compounds=2,
+    )
+
+
+def pit_params_from_total_loss(total_loss_s: float, note: str) -> PitParams:
+    """Pit model whose median whole-stop loss equals a data estimate (lane = total - standstill).
+
+    The standstill median and shape stay editorial; only the total is from data.
+    """
+    return default_pit_params().model_copy(
+        update={
+            "source_type": SourceType.ESTIMATED_FROM_DATA,
+            "note": f"{note}; standstill median {STANDSTILL_MEDIAN_S} s and shape are editorial",
+            "lane_loss_s": round(max(total_loss_s - STANDSTILL_MEDIAN_S, 0.0), 2),
+        }
+    )
+
+
 def build_setup(
     roster: RaceRoster,
     profiles: ProfileSet,
@@ -126,6 +172,7 @@ def build_setup(
     *,
     track: TrackSpec | None = None,
     lap_model: LapModelParams | None = None,
+    pit: PitParams | None = None,
     tick_seconds: float = DEFAULT_TICK_SECONDS,
     start_compound: Compound = Compound.MEDIUM,
     start_compounds: Mapping[str, Compound] | None = None,
@@ -144,6 +191,7 @@ def build_setup(
         event_id=roster.event_id,
         track=track or monza_2024_track(),
         lap_model=lap_model or default_lap_model(),
+        pit=pit or default_pit_params(),
         tick_seconds=tick_seconds,
         profile_set_manifest_hash=profiles.manifest_hash,
         drivers=tuple(

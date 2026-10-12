@@ -4,36 +4,56 @@ Plan option C in miniature (§7.2): no physics. Cars move along the track at a s
 by their pre-sampled lap time. Each ``step`` advances exactly one bounded tick of
 ``setup.tick_seconds``, so pausing between ticks is always possible.
 
-Not modelled yet (later steps): pit stops, strategy decisions, traffic/dirty air,
-overtaking cost, safety cars, weather, DNFs. Cars pass through each other freely.
+Pit stops (M2 slice 1): a stop happens at a line crossing (the pit box is treated as being on
+the line). The car takes the new compound and its out-lap starts with a *hold* of pit-lane
+loss + standstill time at the line, then the lap is driven as usual. The pit lane isn't drawn.
+
+Chequered flag: once the leader completes the race distance, every other car finishes at its
+next line crossing, so lapped cars finish a lap (or more) down, as in real racing.
+
+Not modelled yet (later M2 slices): traffic/dirty air, overtaking cost, blue flags, safety
+cars, DNFs. Cars pass through each other freely.
 """
 
 import math
 from collections.abc import Callable
 from dataclasses import dataclass
+from typing import assert_never
 
 from f1ar.domain.race_state import (
     WORLD_SCHEMA_VERSION,
+    CancelPitStop,
     CarState,
     CarStatus,
     Compound,
     DriverAction,
     PaceMode,
+    PlannedStop,
     RaceEvent,
     RaceSetup,
+    RequestPitStop,
+    SetPaceMode,
+    SetStrategyController,
+    StrategyController,
     WorldState,
     WorldStatus,
 )
+from f1ar.policy.baseline_strategy import POLICY_ID, plan_for_car
 from f1ar.simulation.lap_model import sample_lap_time_s, wear_per_lap_s
-from f1ar.simulation.rng_streams import RngSpec
+from f1ar.simulation.rng_streams import RngSpec, uniform
 
-ENGINE_VERSION = "lightweight_engine_v0.3.0"
-"""v0.3.0: per-car performance offset (``DriverEntry.car_pace_offset_s``).
+ENGINE_VERSION = "lightweight_engine_v0.4.0"
+"""v0.4.0: pit stops + tyre choice, baseline strategy, chequered-flag rule (lapped finishers).
+v0.3.0: per-car performance offset (``DriverEntry.car_pace_offset_s``).
 v0.2.0: tyre wear accumulated per lap at the mode driven (v0.1.0 scaled it retroactively)."""
 
 
 class EngineStateError(RuntimeError):
     """An operation was requested in a world status that does not allow it."""
+
+
+class ActionRejectedError(EngineStateError):
+    """An action is illegal in the current state (unknown driver, finished car, ...)."""
 
 
 @dataclass(frozen=True)
@@ -70,10 +90,40 @@ def _sample_next_lap(
     )
 
 
+def standstill_s(setup: RaceSetup, seed: int, driver_id: str, lap: int) -> float:
+    """Stationary time of a stop at the end of ``lap``: log-logistic, keyed by (driver, lap).
+
+    Inverse CDF of the fisk distribution: ``median * (u / (1 - u)) ** (1 / shape)``.
+    """
+    u = uniform(seed, "pit_standstill", driver_id, lap)
+    p = setup.pit
+    draw: float = p.standstill_median_s * (u / (1.0 - u)) ** (1.0 / p.standstill_shape)
+    return min(draw, p.standstill_max_s)
+
+
+def plan_text(plan: tuple[PlannedStop, ...]) -> str:
+    """Compact plan description for events and displays, e.g. ``"L24 HARD, L40 MEDIUM"``."""
+    return ", ".join(f"L{s.lap} {s.compound.value}" for s in plan) or "no stop"
+
+
+def pending_stop(car: CarState) -> Compound | None:
+    """Compound the car will pit for at its next line crossing, if any."""
+    if car.pit_request is not None:
+        return car.pit_request
+    if (
+        car.controller is StrategyController.BASELINE
+        and car.planned_stops
+        and car.planned_stops[0].lap == car.laps_completed + 1
+    ):
+        return car.planned_stops[0].compound
+    return None
+
+
 def create_world(
     setup: RaceSetup, *, seed: int, world_id: str, timeline_id: str = "timeline_main"
 ) -> WorldState:
-    """New world in CREATED status: all cars on the line at lap 0, first lap pre-sampled."""
+    """New world in CREATED status: all cars on the line at lap 0, first lap pre-sampled,
+    every car under the baseline strategy with an initial plan."""
     cars = []
     for entry in setup.drivers:
         pace_mode = PaceMode.BALANCED
@@ -86,23 +136,28 @@ def create_world(
             laps_completed=0,
             tyre_wear_s=0.0,
         )
-        cars.append(
-            CarState(
-                driver_id=entry.driver_id,
-                status=CarStatus.RUNNING,
-                laps_completed=0,
-                distance_m=0.0,
-                lap_elapsed_s=0.0,
-                lap_target_s=target,
-                compound=entry.start_compound,
-                tyre_age_laps=0,
-                tyre_wear_s=0.0,
-                pace_mode=pace_mode,
-                lap_pace_mode=pace_mode,
-                last_lap_time_s=None,
-                finish_time_s=None,
-            )
+        car = CarState(
+            driver_id=entry.driver_id,
+            status=CarStatus.RUNNING,
+            laps_completed=0,
+            distance_m=0.0,
+            lap_elapsed_s=0.0,
+            lap_target_s=target,
+            pit_hold_s=0.0,
+            compound=entry.start_compound,
+            tyre_age_laps=0,
+            tyre_wear_s=0.0,
+            pace_mode=pace_mode,
+            lap_pace_mode=pace_mode,
+            pit_request=None,
+            pit_stops=0,
+            compounds_used=(entry.start_compound,),
+            controller=StrategyController.BASELINE,
+            planned_stops=(),
+            last_lap_time_s=None,
+            finish_time_s=None,
         )
+        cars.append(car.model_copy(update={"planned_stops": plan_for_car(setup, car)}))
     return WorldState(
         schema_version=WORLD_SCHEMA_VERSION,
         world_id=world_id,
@@ -116,6 +171,7 @@ def create_world(
         sim_tick=0,
         sim_clock_s=0.0,
         cars=tuple(cars),
+        chequered_flag_s=None,
         event_seq=0,
     )
 
@@ -139,14 +195,14 @@ def resume(state: WorldState) -> WorldState:
     return state.model_copy(update={"world_status": WorldStatus.RUNNING})
 
 
-class ActionRejectedError(EngineStateError):
-    """An action is illegal in the current state (unknown driver, finished car, ...)."""
+# --- actions ----------------------------------------------------------------------------------
 
 
 def apply_action(state: WorldState, action: DriverAction) -> StepResult:
-    """Apply a driver action between ticks. Pure; returns the new state and its events.
+    """Apply a driver/team action between ticks. Pure; returns the new state and its events.
 
-    Re-requesting the mode a car already uses is an accepted no-op (no event).
+    Requests that change nothing (same pace mode, same pending compound, nothing to cancel)
+    are accepted no-ops without events.
     """
     if state.world_status is WorldStatus.COMPLETED:
         raise ActionRejectedError("the race is over")
@@ -155,28 +211,130 @@ def apply_action(state: WorldState, action: DriverAction) -> StepResult:
     car = state.car(action.driver_id)
     if car.status is not CarStatus.RUNNING:
         raise ActionRejectedError(f"{action.driver_id} is {car.status}, not RUNNING")
-    if car.pace_mode is action.pace_mode:
-        return StepResult(state, ())
 
-    event = RaceEvent(
-        seq=state.event_seq,
-        tick=state.sim_tick,
-        type="PACE_MODE_CHANGED",
-        driver_id=car.driver_id,
-        payload={
+    events: list[tuple[str, dict[str, float | int | str]]] = []
+
+    def emit(type_: str, payload: dict[str, float | int | str]) -> None:
+        events.append((type_, {**payload, "actor_id": action.actor_id}))
+
+    match action:
+        case SetPaceMode():
+            new = _set_pace_mode(state, car, action, emit)
+        case RequestPitStop():
+            new = _request_pit(state, car, action, emit)
+        case CancelPitStop():
+            new = _cancel_pit(car, emit)
+        case SetStrategyController():
+            new = _set_controller(state, car, action.controller, emit)
+        case _:
+            assert_never(action)
+
+    if not events:
+        return StepResult(state, ())
+    race_events = tuple(
+        RaceEvent.model_validate(
+            {
+                "seq": state.event_seq + i,
+                "tick": state.sim_tick,
+                "type": type_,
+                "driver_id": car.driver_id,
+                "payload": payload,
+            }
+        )
+        for i, (type_, payload) in enumerate(events)
+    )
+    cars = tuple(new if c.driver_id == car.driver_id else c for c in state.cars)
+    return StepResult(
+        state.model_copy(update={"cars": cars, "event_seq": state.event_seq + len(events)}),
+        race_events,
+    )
+
+
+_ActionEmit = Callable[[str, dict[str, float | int | str]], None]
+
+
+def _replan(state: WorldState, car: CarState, emit: _ActionEmit) -> CarState:
+    plan = plan_for_car(state.setup, car)
+    if plan != car.planned_stops:
+        emit("STRATEGY_PLANNED", {"plan": plan_text(plan), "policy_id": POLICY_ID})
+    return car.model_copy(update={"planned_stops": plan})
+
+
+def _set_pace_mode(
+    state: WorldState, car: CarState, action: SetPaceMode, emit: _ActionEmit
+) -> CarState:
+    if car.pace_mode is action.pace_mode:
+        return car
+    emit(
+        "PACE_MODE_CHANGED",
+        {
             "from": car.pace_mode.value,
             "to": action.pace_mode.value,
             "effective_from_lap": car.laps_completed + 2,
-            "actor_id": action.actor_id,
         },
     )
-    cars = tuple(
-        c.model_copy(update={"pace_mode": action.pace_mode}) if c.driver_id == car.driver_id else c
-        for c in state.cars
+    new = car.model_copy(update={"pace_mode": action.pace_mode})
+    if new.controller is StrategyController.BASELINE:
+        new = _replan(state, new, emit)  # a different wear rate moves the best stop lap
+    return new
+
+
+def _take_over(car: CarState, emit: _ActionEmit) -> CarState:
+    if car.controller is StrategyController.USER:
+        return car
+    emit("CONTROLLER_CHANGED", {"from": car.controller.value, "to": StrategyController.USER.value})
+    # A stop the baseline planned for this lap becomes an explicit request, so taking over
+    # never silently changes what the car was about to do.
+    request = pending_stop(car)
+    return car.model_copy(
+        update={
+            "controller": StrategyController.USER,
+            "planned_stops": (),
+            "pit_request": request,
+        }
     )
-    return StepResult(
-        state.model_copy(update={"cars": cars, "event_seq": state.event_seq + 1}), (event,)
+
+
+def _request_pit(
+    state: WorldState, car: CarState, action: RequestPitStop, emit: _ActionEmit
+) -> CarState:
+    if state.chequered_flag_s is not None:
+        raise ActionRejectedError("the chequered flag is out")
+    if car.laps_completed + 1 >= state.setup.track.total_laps:
+        raise ActionRejectedError(f"{car.driver_id} is on the final lap")
+    new = _take_over(car, emit)
+    if new.pit_request is action.compound:
+        return new
+    emit(
+        "PIT_REQUESTED",
+        {"compound": action.compound.value, "in_lap": new.laps_completed + 1},
     )
+    return new.model_copy(update={"pit_request": action.compound})
+
+
+def _cancel_pit(car: CarState, emit: _ActionEmit) -> CarState:
+    if pending_stop(car) is None:
+        return car  # nothing to cancel; a BASELINE car keeps its plan
+    new = _take_over(car, emit)
+    assert new.pit_request is not None
+    emit("PIT_CANCELLED", {"compound": new.pit_request.value, "in_lap": new.laps_completed + 1})
+    return new.model_copy(update={"pit_request": None})
+
+
+def _set_controller(
+    state: WorldState, car: CarState, controller: StrategyController, emit: _ActionEmit
+) -> CarState:
+    if car.controller is controller:
+        return car
+    if controller is StrategyController.USER:
+        return _take_over(car, emit)
+    emit("CONTROLLER_CHANGED", {"from": car.controller.value, "to": controller.value})
+    # The baseline decides from here on; a pending user request is replaced by its plan.
+    new = car.model_copy(update={"controller": controller, "pit_request": None})
+    return _replan(state, new, emit)
+
+
+# --- stepping ---------------------------------------------------------------------------------
 
 
 def step(state: WorldState, *, allow_paused: bool = False) -> StepResult:
@@ -206,7 +364,17 @@ def step(state: WorldState, *, allow_paused: bool = False) -> StepResult:
             )
         )
 
-    cars = tuple(_advance_car(state, car, emit) for car in state.cars)
+    flag_s = state.chequered_flag_s
+    new_flag = None if flag_s is not None else _flag_time_in_tick(state)
+    if new_flag is not None:
+        flag_s = new_flag
+
+    cars = tuple(_advance_car(state, car, flag_s, emit) for car in state.cars)
+    if new_flag is not None:
+        winner = min(
+            (c for c in cars if c.finish_time_s is not None), key=lambda c: c.finish_time_s or 0.0
+        )
+        emit("CHEQUERED_FLAG", winner.driver_id, {"flag_time_s": new_flag})
 
     status: WorldStatus = state.world_status
     if all(c.status is CarStatus.FINISHED for c in cars):
@@ -219,6 +387,7 @@ def step(state: WorldState, *, allow_paused: bool = False) -> StepResult:
             # Derived from the tick count, not accumulated, so the clock never drifts.
             "sim_clock_s": tick * setup.tick_seconds,
             "cars": cars,
+            "chequered_flag_s": flag_s,
             "world_status": status,
             "event_seq": state.event_seq + len(events),
         }
@@ -226,100 +395,191 @@ def step(state: WorldState, *, allow_paused: bool = False) -> StepResult:
     return StepResult(new_state, tuple(events))
 
 
-def _advance_car(state: WorldState, car: CarState, emit: _Emit) -> CarState:
+def _flag_time_in_tick(state: WorldState) -> float | None:
+    """Earliest time in this tick at which a car completes the full race distance, if any.
+
+    Known before any car advances, so a lapped car that crosses the line *after* the leader
+    in the same tick is flagged, and one that crosses before is not.
+    """
+    final_lap = state.setup.track.total_laps - 1
+    times = [
+        state.sim_clock_s + (c.lap_target_s - c.lap_elapsed_s)
+        for c in state.cars
+        if c.status is CarStatus.RUNNING
+        and c.laps_completed == final_lap
+        and c.lap_target_s - c.lap_elapsed_s <= state.setup.tick_seconds
+    ]
+    return min(times, default=None)
+
+
+def _distance(length: float, elapsed: float, target: float, hold: float) -> float:
+    """Position in the lap: parked at the line during the pit hold, then constant speed."""
+    if elapsed <= hold:
+        return 0.0
+    return min(length * (elapsed - hold) / (target - hold), math.nextafter(length, 0.0))
+
+
+def _advance_car(state: WorldState, car: CarState, flag_s: float | None, emit: _Emit) -> CarState:
     if car.status is CarStatus.FINISHED:
         return car
 
     setup = state.setup
-    length = setup.track.length_m
     dt = setup.tick_seconds
-    tick_start_clock = state.sim_clock_s
-
-    distance = car.distance_m
-    elapsed = car.lap_elapsed_s
-    target = car.lap_target_s
-    laps = car.laps_completed
-    tyre_age = car.tyre_age_laps
-    wear = car.tyre_wear_s
-    lap_mode = car.lap_pace_mode
-    last_lap = car.last_lap_time_s
     remaining = dt
-    driver = setup.driver(car.driver_id).profile.archetype
+    elapsed = car.lap_elapsed_s
 
-    while remaining > 0.0:
-        speed = length / target
-        time_to_line = (length - distance) / speed
-        if time_to_line > remaining:
-            distance = min(distance + speed * remaining, math.nextafter(length, 0.0))
-            elapsed += remaining
-            break
-
-        # Crossed the line inside this tick: interpolate the exact crossing time.
-        remaining -= time_to_line
-        crossing_time = tick_start_clock + (dt - remaining)
-        last_lap = elapsed + time_to_line
-        laps += 1
-        tyre_age += 1
-        # The lap just driven wears the tyres at the rate of the mode it was driven in.
-        wear += wear_per_lap_s(setup.lap_model, driver, compound=car.compound, pace_mode=lap_mode)
-        emit(
-            "LAP_COMPLETED",
-            car.driver_id,
-            {"lap": laps, "lap_time_s": last_lap, "crossing_time_s": crossing_time},
-        )
-        if laps == setup.track.total_laps:
-            emit("CAR_FINISHED", car.driver_id, {"finish_time_s": crossing_time, "laps": laps})
-            return car.model_copy(
-                update={
-                    "status": CarStatus.FINISHED,
-                    "laps_completed": laps,
-                    "distance_m": 0.0,
-                    "lap_elapsed_s": 0.0,
-                    "tyre_age_laps": tyre_age,
-                    "tyre_wear_s": wear,
-                    "last_lap_time_s": last_lap,
-                    "finish_time_s": crossing_time,
-                }
-            )
-        distance = 0.0
+    while car.lap_target_s - elapsed <= remaining:
+        # Crossed the line inside this tick: exact crossing time by interpolation.
+        remaining -= car.lap_target_s - elapsed
+        crossing_time = state.sim_clock_s + (dt - remaining)
+        car = _complete_lap(state, car, crossing_time, flag_s, emit)
+        if car.status is CarStatus.FINISHED:
+            return car
         elapsed = 0.0
-        lap_mode = car.pace_mode  # the driver's current intent is locked in for the new lap
-        target = _sample_next_lap(
-            setup,
-            state.rng.seed,
-            car.driver_id,
-            compound=car.compound,
-            pace_mode=lap_mode,
-            laps_completed=laps,
-            tyre_wear_s=wear,
-        )
 
+    elapsed += remaining
     return car.model_copy(
         update={
-            "laps_completed": laps,
-            "distance_m": distance,
             "lap_elapsed_s": elapsed,
-            "lap_target_s": target,
-            "tyre_age_laps": tyre_age,
-            "tyre_wear_s": wear,
-            "lap_pace_mode": lap_mode,
-            "last_lap_time_s": last_lap,
+            "distance_m": _distance(
+                setup.track.length_m, elapsed, car.lap_target_s, car.pit_hold_s
+            ),
         }
     )
 
 
+def _complete_lap(
+    state: WorldState, car: CarState, crossing_time: float, flag_s: float | None, emit: _Emit
+) -> CarState:
+    """The car crosses the line: lap bookkeeping, then finish, or pit and/or start a new lap."""
+    setup = state.setup
+    driver = setup.driver(car.driver_id).profile.archetype
+    stop = pending_stop(car)  # decided for the lap just driven, before the counter moves
+    laps = car.laps_completed + 1
+    lap_time = car.lap_target_s
+    # The lap just driven wears the tyres at the rate of the mode it was driven in.
+    wear = car.tyre_wear_s + wear_per_lap_s(
+        setup.lap_model, driver, compound=car.compound, pace_mode=car.lap_pace_mode
+    )
+    emit(
+        "LAP_COMPLETED",
+        car.driver_id,
+        {"lap": laps, "lap_time_s": lap_time, "crossing_time_s": crossing_time},
+    )
+    common = {
+        "laps_completed": laps,
+        "tyre_age_laps": car.tyre_age_laps + 1,
+        "tyre_wear_s": wear,
+        "last_lap_time_s": lap_time,
+        "distance_m": 0.0,
+        "lap_elapsed_s": 0.0,
+        "pit_hold_s": 0.0,
+    }
+
+    if laps == setup.track.total_laps or (flag_s is not None and crossing_time >= flag_s):
+        emit("CAR_FINISHED", car.driver_id, {"finish_time_s": crossing_time, "laps": laps})
+        need = setup.pit.min_distinct_dry_compounds
+        if len(set(car.compounds_used)) < need:
+            emit(
+                "TYRE_RULE_BREACHED",
+                car.driver_id,
+                {"compounds_used": len(set(car.compounds_used)), "required": need},
+            )
+        return car.model_copy(
+            update={
+                **common,
+                "status": CarStatus.FINISHED,
+                "finish_time_s": crossing_time,
+                "pit_request": None,
+                "planned_stops": (),
+            }
+        )
+
+    car = car.model_copy(update=common)
+    hold = 0.0
+    if stop is not None:
+        car, hold = _pit(state, car, stop, emit)
+
+    lap_mode = car.pace_mode  # the driver's current intent is locked in for the new lap
+    target = hold + _sample_next_lap(
+        setup,
+        state.rng.seed,
+        car.driver_id,
+        compound=car.compound,
+        pace_mode=lap_mode,
+        laps_completed=laps,
+        tyre_wear_s=car.tyre_wear_s,
+    )
+    return car.model_copy(
+        update={"lap_target_s": target, "pit_hold_s": hold, "lap_pace_mode": lap_mode}
+    )
+
+
+def _pit(
+    state: WorldState, car: CarState, compound: Compound, emit: _Emit
+) -> tuple[CarState, float]:
+    """Execute a stop at the end of lap ``car.laps_completed``; returns the car and its hold."""
+    setup = state.setup
+    standstill = standstill_s(setup, state.rng.seed, car.driver_id, car.laps_completed)
+    hold = setup.pit.lane_loss_s + standstill
+    emit(
+        "PIT_STOP",
+        car.driver_id,
+        {
+            "lap": car.laps_completed,
+            "from_compound": car.compound.value,
+            "to_compound": compound.value,
+            "tyre_age_laps": car.tyre_age_laps,
+            "standstill_s": standstill,
+            "pit_loss_s": hold,
+            "stop_number": car.pit_stops + 1,
+        },
+    )
+    used = car.compounds_used if compound in car.compounds_used else (*car.compounds_used, compound)
+    planned = car.planned_stops
+    if planned and planned[0].lap <= car.laps_completed:
+        planned = planned[1:]
+    car = car.model_copy(
+        update={
+            "compound": compound,
+            "tyre_age_laps": 0,
+            "tyre_wear_s": 0.0,
+            "pit_stops": car.pit_stops + 1,
+            "compounds_used": used,
+            "pit_request": None,
+            "planned_stops": planned,
+        }
+    )
+    if car.controller is StrategyController.BASELINE:
+        plan = plan_for_car(setup, car)
+        if plan != car.planned_stops:
+            emit(
+                "STRATEGY_PLANNED",
+                car.driver_id,
+                {"plan": plan_text(plan), "policy_id": POLICY_ID, "actor_id": POLICY_ID},
+            )
+        car = car.model_copy(update={"planned_stops": plan})
+    return car, hold
+
+
 def standings(state: WorldState) -> tuple[str, ...]:
-    """Driver ids in race order: finishers by finish time, then by race progress.
+    """Driver ids in race order.
 
-    Ties (e.g. everyone on the line at the start) are broken by grid position.
+    More completed laps first, then further into the lap. Cars parked at the line during a
+    pit hold are ordered by time since they crossed it. Among equal laps, a car that finished
+    (it's on the line) is behind a car already out on its next lap, which must have crossed
+    before the flag. Finishers with equal laps are ordered by finish time. Ties (e.g.
+    everyone on the line at the start) are broken by grid position.
     """
-    length = state.setup.track.length_m
 
-    def key(car: CarState) -> tuple[int, float, int]:
+    def key(car: CarState) -> tuple[int, float, float, float, int]:
         grid = state.setup.driver(car.driver_id).grid_position
-        if car.status is CarStatus.FINISHED:
-            assert car.finish_time_s is not None
-            return (0, car.finish_time_s, grid)
-        return (1, -(car.laps_completed * length + car.distance_m), grid)
+        return (
+            -car.laps_completed,
+            -car.distance_m,
+            -car.lap_elapsed_s,
+            car.finish_time_s or 0.0,
+            grid,
+        )
 
     return tuple(c.driver_id for c in sorted(state.cars, key=key))

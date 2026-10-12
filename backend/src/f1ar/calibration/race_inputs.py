@@ -54,6 +54,50 @@ def start_compounds(laps: pd.DataFrame, roster: RaceRoster) -> dict[str, Compoun
     return out
 
 
+@dataclass(frozen=True)
+class PitLossEstimate:
+    total_loss_s: float
+    """Median of (in-lap + out-lap - 2 x the driver's median representative lap)."""
+    stops_used: int
+    note: str
+
+
+def estimate_pit_loss(laps: pd.DataFrame) -> PitLossEstimate:
+    """Total time a stop costs on this track, from real in-laps and out-laps.
+
+    It includes standstill, pit-lane driving, cold tyres on the out-lap and whatever traffic
+    the stop caused, so it's a whole-stop figure, not a pure pit-lane length.
+    """
+    medians = representative_laps(laps).groupby("driver_number")["lap_time_s"].median()
+    losses: list[float] = []
+    for number, group in laps.groupby("driver_number"):
+        if number not in medians.index:
+            continue
+        rows = group.sort_values("lap_number").to_dict("records")
+        for in_lap, out_lap in zip(rows, rows[1:], strict=False):
+            if (
+                pd.isna(in_lap["pit_in_time_s"])
+                or pd.isna(out_lap["pit_out_time_s"])
+                or pd.isna(in_lap["lap_time_s"])
+                or pd.isna(out_lap["lap_time_s"])
+            ):
+                continue
+            losses.append(
+                float(in_lap["lap_time_s"]) + float(out_lap["lap_time_s"]) - 2 * medians[number]
+            )
+    if not losses:
+        raise ValueError("no complete in-lap/out-lap pairs")
+    total = round(float(pd.Series(losses).median()), 2)
+    return PitLossEstimate(
+        total_loss_s=total,
+        stops_used=len(losses),
+        note=(
+            f"estimated_from_data: median whole-stop loss {total} s over {len(losses)} stops "
+            f"(in-lap + out-lap - 2 x driver median representative lap)"
+        ),
+    )
+
+
 def estimate_car_offsets(
     laps: pd.DataFrame,
     roster: RaceRoster,

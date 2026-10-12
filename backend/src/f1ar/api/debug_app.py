@@ -18,7 +18,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, ConfigDict, Field
 
-from f1ar.domain.race_state import PaceMode, WorldState
+from f1ar.domain.race_state import Compound, PaceMode, StrategyController, WorldState
 from f1ar.persistence.sqlite_store import SnapshotStore
 from f1ar.presentation.track_geometry import TrackGeometry
 from f1ar.presentation.view_model import state_view
@@ -79,6 +79,8 @@ class CommandRequest(BaseModel):
     ticks: int = Field(default=1, ge=1, le=10_000)
     driver_id: str | None = None
     pace_mode: PaceMode | None = None
+    compound: Compound | None = None
+    controller: StrategyController | None = None
     label: str | None = None
 
 
@@ -171,6 +173,8 @@ def create_app(
             ticks=req.ticks,
             driver_id=req.driver_id,
             pace_mode=req.pace_mode,
+            compound=req.compound,
+            controller=req.controller,
             label=req.label,
         )
         future = runner.submit(cmd)

@@ -6,30 +6,48 @@ Usage:
     uv run python scripts/fork_demo.py --drivers VER HAM LEC NOR --driver LEC --at-lap 30
 
 Branches (all from the same saved snapshot, same luck = common random numbers):
-    main      the driver keeps BALANCED (the original timeline)
-    push      the driver switches to PUSH  (faster now, wears tyres faster)
-    conserve  the driver switches to CONSERVE (slower now, saves tyres)
-There are no pit stops yet, so tyres must last to the flag in every branch.
+    main      the driver keeps BALANCED and the baseline strategy (the original timeline)
+    push      the driver switches to PUSH (faster now, wears tyres faster; the plan adapts)
+    conserve  the driver switches to CONSERVE (slower now, saves tyres; the plan adapts)
+    box now   the team pits at the end of the current lap for the compound its plan intended,
+              then decides stops itself (none, unless the tyre rule still requires one)
 """
 
 import argparse
 import uuid
 from pathlib import Path
 
-from f1ar.domain.race_state import PaceMode, SetPaceMode, WorldState, WorldStatus
+from f1ar.domain.race_state import (
+    Compound,
+    DriverAction,
+    PaceMode,
+    RequestPitStop,
+    SetPaceMode,
+    WorldState,
+    WorldStatus,
+)
 from f1ar.persistence.sqlite_store import SnapshotStore
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.scenarios import event_data_dir, load_event, setup_from_codes
+from f1ar.simulation.timing import result_gap
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIGS = ROOT / "configs"
 DEFAULT_DB = ROOT / "saves" / "fork_demo.sqlite"
 
 
-def _run_to_end(state: WorldState) -> WorldState:
+def _run_to_end(state: WorldState, driver_id: str) -> tuple[WorldState, list[str]]:
+    """Finish the race; also returns ``driver_id``'s stops as ``L<lap> <compound>``."""
+    stops: list[str] = []
     while state.world_status is WorldStatus.RUNNING:
-        state = engine.step(state).state
-    return state
+        result = engine.step(state)
+        state = result.state
+        stops += [
+            f"L{e.payload['lap']} {str(e.payload['to_compound'])[0]}"
+            for e in result.events
+            if e.type == "PIT_STOP" and e.driver_id == driver_id
+        ]
+    return state, stops
 
 
 def main() -> None:
@@ -63,47 +81,61 @@ def main() -> None:
         state = engine.step(state).state
     state = engine.pause(state)
 
+    car = state.car(driver_id)
+    box_compound = car.planned_stops[0].compound if car.planned_stops else Compound.HARD
+    decisions: list[tuple[str, str, DriverAction]] = [
+        ("push", f"{code} -> PUSH", SetPaceMode(driver_id=driver_id, pace_mode=PaceMode.PUSH)),
+        (
+            "conserve",
+            f"{code} -> CONSERVE",
+            SetPaceMode(driver_id=driver_id, pace_mode=PaceMode.CONSERVE),
+        ),
+        (
+            "box now",
+            f"{code} boxes for {box_compound.value}",
+            RequestPitStop(driver_id=driver_id, compound=box_compound),
+        ),
+    ]
+
     with SnapshotStore(args.db) as store:
         source = store.save(state, label=f"lap {args.at_lap}, before the decision")
         print(f"[SAVED] main timeline at lap {args.at_lap}, tick {state.sim_tick}: ", end="")
         print(source.snapshot_id)
 
         branches: dict[str, tuple[str, WorldState]] = {}
-        for name, mode in (("push", PaceMode.PUSH), ("conserve", PaceMode.CONSERVE)):
-            branch, _ = store.fork(
-                source.snapshot_id, label=f"{code} {mode} from lap {args.at_lap}"
-            )
-            branch = engine.resume(branch)
-            branch = engine.apply_action(
-                branch, SetPaceMode(driver_id=driver_id, pace_mode=mode)
-            ).state
-            branches[name] = (f"{code} -> {mode}", branch)
+        for name, decision, action in decisions:
+            branch, _ = store.fork(source.snapshot_id, label=f"{decision} after lap {args.at_lap}")
+            branch = engine.apply_action(engine.resume(branch), action).state
+            branches[name] = (decision, branch)
             print(f"[FORK]  {name:<8} -> {branch.timeline_id} (parent {branch.parent_timeline_id})")
         main_state = engine.resume(store.load(source.snapshot_id))
-        branches = {"main": (f"{code} stays BALANCED", main_state), **branches}
+        branches = {"main": (f"{code} follows the plan", main_state), **branches}
 
-        results: dict[str, WorldState] = {}
+        results: dict[str, tuple[WorldState, list[str]]] = {}
         for name, (_, start) in branches.items():
-            final = _run_to_end(start)
+            final, stops = _run_to_end(start, driver_id)
             store.save(final, label=f"{name}: finished")
-            results[name] = final
+            results[name] = (final, stops)
 
         unchanged = store.get_meta(source.snapshot_id).payload_sha256 == source.payload_sha256
         unchanged = unchanged and store.load(source.snapshot_id) == state
         timelines = store.list_timelines(world_id)
 
-    print(f"\nSame snapshot, same luck, three decisions for {code} from lap {args.at_lap + 1}:\n")
-    main_time = results["main"].car(driver_id).finish_time_s or 0.0
-    for name, final in results.items():
+    print(f"\n{code}'s baseline plan at the branch point: {engine.plan_text(car.planned_stops)}")
+    print(f"Same snapshot, same luck, four decisions for {code} from lap {args.at_lap + 1}:\n")
+    main_time = results["main"][0].car(driver_id).finish_time_s or 0.0
+    for name, (final, stops) in results.items():
         decision = branches[name][0]
         order = engine.standings(final)
-        winner_t = final.car(order[0]).finish_time_s or 0.0
         cells = [code_of[order[0]]] + [
-            f"{code_of[d]} +{(final.car(d).finish_time_s or 0.0) - winner_t:.3f}" for d in order[1:]
+            f"{code_of[d]} {result_gap(final, d, order[0])}" for d in order[1:]
         ]
         t = final.car(driver_id).finish_time_s or 0.0
         delta = "" if name == "main" else f"   {code} {t - main_time:+.3f}s vs main"
-        print(f"  {name:<9} {decision:<22} {'  '.join(cells)}{delta}")
+        print(
+            f"  {name:<9} {decision:<24} {'  '.join(cells)}{delta}"
+            f"   [{code} stops: {', '.join(stops) or 'none'}]"
+        )
 
     print("\nTimeline tree:")
     for tl in timelines:

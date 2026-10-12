@@ -27,7 +27,19 @@ from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from f1ar.domain.race_state import PaceMode, RaceEvent, SetPaceMode, WorldState, WorldStatus
+from f1ar.domain.race_state import (
+    CancelPitStop,
+    Compound,
+    DriverAction,
+    PaceMode,
+    RaceEvent,
+    RequestPitStop,
+    SetPaceMode,
+    SetStrategyController,
+    StrategyController,
+    WorldState,
+    WorldStatus,
+)
 from f1ar.persistence.sqlite_store import SnapshotError, SnapshotStore
 from f1ar.simulation import lightweight_engine as engine
 
@@ -46,6 +58,12 @@ class CommandType(StrEnum):
     """Snapshot the world at the current tick boundary; acked only after the DB commit."""
     SET_PACE_MODE = "SET_PACE_MODE"
     """Driver action: change a driver's pace mode from their next lap."""
+    PIT_REQUEST = "PIT_REQUEST"
+    """Team action: box at the end of the current lap for ``compound`` (takes strategy over)."""
+    PIT_CANCEL = "PIT_CANCEL"
+    """Team action: stay out this lap (takes strategy over if a stop was pending)."""
+    SET_CONTROLLER = "SET_CONTROLLER"
+    """Hand a car's pit decisions to ``BASELINE`` (replans) or ``USER``."""
 
 
 class Command(BaseModel):
@@ -60,6 +78,8 @@ class Command(BaseModel):
     ticks: int = Field(default=1, ge=1, le=MAX_STEP_TICKS)
     driver_id: str | None = None
     pace_mode: PaceMode | None = None
+    compound: Compound | None = None
+    controller: StrategyController | None = None
 
 
 class CommandAck(BaseModel):
@@ -91,6 +111,30 @@ Listener = Callable[[WorldState, tuple[RaceEvent, ...]], None]
 
 class _Rejected(Exception):
     pass
+
+
+def _action(command: Command) -> DriverAction:
+    """Driver/team command -> engine action; missing fields are a rejection, not a crash."""
+    if command.driver_id is None:
+        raise _Rejected(f"{command.type} needs driver_id")
+    driver, actor = command.driver_id, command.actor_id
+    match command.type:
+        case CommandType.SET_PACE_MODE if command.pace_mode is not None:
+            return SetPaceMode(driver_id=driver, pace_mode=command.pace_mode, actor_id=actor)
+        case CommandType.PIT_REQUEST if command.compound is not None:
+            return RequestPitStop(driver_id=driver, compound=command.compound, actor_id=actor)
+        case CommandType.PIT_CANCEL:
+            return CancelPitStop(driver_id=driver, actor_id=actor)
+        case CommandType.SET_CONTROLLER if command.controller is not None:
+            return SetStrategyController(
+                driver_id=driver, controller=command.controller, actor_id=actor
+            )
+    field = {
+        CommandType.SET_PACE_MODE: "pace_mode",
+        CommandType.PIT_REQUEST: "compound",
+        CommandType.SET_CONTROLLER: "controller",
+    }.get(command.type, "a valid type")
+    raise _Rejected(f"{command.type} needs {field}")
 
 
 class WorldRunner:
@@ -273,15 +317,13 @@ class WorldRunner:
                     raise _Rejected("this runner has no snapshot store")
                 label = command.label or f"tick {self._state.sim_tick}"
                 return self._store.save(self._state, label=label).snapshot_id
-            case CommandType.SET_PACE_MODE:
-                if command.driver_id is None or command.pace_mode is None:
-                    raise _Rejected("SET_PACE_MODE needs driver_id and pace_mode")
-                action = SetPaceMode(
-                    driver_id=command.driver_id,
-                    pace_mode=command.pace_mode,
-                    actor_id=command.actor_id,
-                )
-                self._commit(engine.apply_action(self._state, action))
+            case (
+                CommandType.SET_PACE_MODE
+                | CommandType.PIT_REQUEST
+                | CommandType.PIT_CANCEL
+                | CommandType.SET_CONTROLLER
+            ):
+                self._commit(engine.apply_action(self._state, _action(command)))
         return None
 
     # --- background thread --------------------------------------------------------------------

@@ -2,16 +2,17 @@
 
 An observation = race/car state the driver could know + the driver's full profile vector.
 Hidden simulation internals (notably ``CarState.lap_target_s``, the pre-sampled duration
-of the lap in progress) are never exposed: that would leak the future.
+of the lap in progress, and the accumulated ``tyre_wear_s``) are never exposed: that would
+leak the future. The pit stop the team has called for this lap is known, so it's included.
 """
 
 from pydantic import BaseModel, ConfigDict
 
 from f1ar.domain.driver_profiles import PROFILE_FEATURE_NAMES
 from f1ar.domain.race_state import Compound, PaceMode, WorldState
-from f1ar.simulation.lightweight_engine import standings
+from f1ar.simulation.lightweight_engine import pending_stop, standings
 
-OBSERVATION_SCHEMA_VERSION = 1
+OBSERVATION_SCHEMA_VERSION = 2
 
 STATE_FEATURE_NAMES: tuple[str, ...] = (
     "race.lap_number",
@@ -23,6 +24,9 @@ STATE_FEATURE_NAMES: tuple[str, ...] = (
     *(f"car.pace_mode.{m.value.lower()}" for m in PaceMode),
     "car.last_lap_time_s",
     "car.has_last_lap",
+    "car.pit_stops",
+    "car.boxing_this_lap",
+    "car.distinct_compounds_used",
 )
 
 OBSERVATION_FEATURE_NAMES: tuple[str, ...] = STATE_FEATURE_NAMES + PROFILE_FEATURE_NAMES
@@ -55,6 +59,9 @@ def build_observation(state: WorldState, driver_id: str) -> Observation:
         **{f"car.pace_mode.{m.value.lower()}": float(car.pace_mode is m) for m in PaceMode},
         "car.last_lap_time_s": car.last_lap_time_s or 0.0,
         "car.has_last_lap": float(car.last_lap_time_s is not None),
+        "car.pit_stops": float(car.pit_stops),
+        "car.boxing_this_lap": float(pending_stop(car) is not None),
+        "car.distinct_compounds_used": float(len(set(car.compounds_used))),
         **profile.features(),
     }
     assert tuple(features) == OBSERVATION_FEATURE_NAMES

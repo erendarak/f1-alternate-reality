@@ -1,6 +1,21 @@
 # Progress
 
-## Current milestone: M1 — Historical data layer (plan §16) — COMPLETE
+## Current milestone: M2 — Canonical race engine + persistent world (plan §16)
+
+M2 plan (agreed 2026-10-12, one slice per commit; engine version bump per behaviour change):
+
+- [x] **Slice 1: pit stops + tyre choice, baseline strategy, chequered flag / lapped cars** (D-022, engine v0.4.0).
+- [ ] Slice 2: traffic, dirty air, overtaking cost, blue flags (v0.5.0).
+- [ ] Slice 3: race control: SC/VSC, mistakes, accidents/failures -> DNF (TUM ideas; keyed hazards) (v0.6.0).
+- [ ] Slice 4: persistence: event + command log tables, named saves + autosave, restore-and-continue
+  integration, invariants every tick, profile/model hash pinning.
+- [ ] Slice 5: batch headless benchmark, EXP-002 (EXP-001 again + 2024 Belgian GP), M2 DoD check.
+
+Already in place from M0 (plan §16 M2 items): runner + command queue + RUNNING/PAUSED state machine,
+SQLite snapshots with checksum/schema version/idempotency, forks with common random numbers,
+fresh-process restore test.
+
+## Previous milestone: M1 — Historical data layer (plan §16) — COMPLETE
 
 M0 and M0.5 are complete (gate 5/5; see below). M1 tasks, adapted to what step 7 already delivered:
 
@@ -15,8 +30,7 @@ M0 and M0.5 are complete (gate 5/5; see below). M1 tasks, adapted to what step 7
 
 **M1 DoD (plan §16) met:** one CLI fetches and validates the real race; the next run loads from
 cache; 20 cars / 53 laps checked (lapping and retirement handled); gaps reported; historical replay
-and simulation are separate modes. Next milestone: **M2: canonical race engine + persistent world**
-(pit stops, tyre choice, lapping, traffic, SC/VSC, DNF/mistake model, event/command persistence).
+and simulation are separate modes.
 
 ## Previous milestone: M0 — Feasibility & Bootstrap
 
@@ -277,3 +291,37 @@ Plan §22 checklist (adapted per D-002):
   real order 0.743 → 0.879, position error 3.27 → 1.99, better in 30/30 paired seeds. But LEC's
   strategy win can't happen without pit stops (McLaren wins every seed).
 - Tests: 183 offline passing (+6 inputs/engine/scenario) + 2 network.
+
+### 2026-10-12 — M2 slice 1: pit stops, tyre choice, baseline strategy, chequered flag
+
+- Engine v0.4.0, world schema v4 (D-022). Actions `RequestPitStop`, `CancelPitStop`,
+  `SetStrategyController`; runner commands `PIT_REQUEST`, `PIT_CANCEL`, `SET_CONTROLLER`.
+- A stop happens at the line crossing: new compound, tyre age/wear reset, and an out-lap that starts
+  with a **hold** (pit-lane loss + log-logistic standstill, keyed by driver and lap; TUM idea) during
+  which the car is parked at the line. 2024 dry rule (two compounds) checked at the finish.
+- `f1ar.policy.baseline_strategy`: the cheapest legal 0/1/2-stop plan under the expected lap model,
+  using the driver's own wear rate (`tire_management`, pace mode). Closed form + convexity, so a plan
+  costs O(laps x compound pairs); proven equal to brute-force enumeration in tests. It replans after
+  each stop and after a pace change. Any manual pit action takes the car over (`USER`); the
+  baseline can be handed control back.
+- **Chequered flag:** after the leader finishes, every car finishes at its next crossing, so lapped
+  finishers exist (full Monza grid seed 42: 7 cars +1 lap; the real race had 6). Standings, timing
+  sheet and results print `+1 lap`.
+- Pit loss from data: `calibration.estimate_pit_loss` (in-lap + out-lap - 2 x median). Real Monza
+  26.9 s over 30 stops, Spa 19.9 s over 34. The data setup uses it (`estimated_from_data`); the
+  standstill part stays editorial.
+- Viewer: Stops column, `PIT` / `BOX -> S` in the mode column, Box S/M/H / Stay out / Baseline
+  strategy buttons, readable pit events. `live_race.py`: `b HAM h`, `o HAM`, `a HAM`.
+  `fork_demo.py`: new **box now** branch. `demo_headless.py` prints stops and tyre sequence.
+- Verified in the browser: NOR/PIA shown `PIT` while parked, HAM/SAI `BOX -> S`; selecting HAM ->
+  Stay out (`BASELINE->USER`, `PIT_CANCELLED`), Box H -> `PIT_STOP MEDIUM->HARD ... 1.8 s stationary,
+  26.2 s total`; race to the flag; HAM finished P5 on the user strategy.
+- Gate demo: MATCH. Throughput unchanged (~0.44 s per 20-car race).
+- **Finding:** with the placeholder compound coefficients (D-010) every car plans a one-stop onto
+  SOFT around lap 27; real Monza was M->H. The planner is right for the model it's given; the
+  compound model is what's wrong (M4 calibration; EXP-002 will measure it).
+- Tests: 213 offline passing (+30: planner = brute force, legal plans, pit mechanics and hold,
+  pit-loss arithmetic, cancel/take-over/hand-back, tyre-rule breach, standstill distribution,
+  flag/lapped finishers, standings after the flag, timing sheet, view model, runner commands,
+  **plan §4.7 test 5 with a pit decision** in a fork) + 2 network.
+- Next: slice 2, traffic and overtaking.

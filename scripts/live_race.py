@@ -8,6 +8,9 @@ Type a command and press Enter:
     s [N]     step N ticks while paused (default 1; 168 ticks = about one lap)
     1 2 5 10 25   set speed multiplier
     p CODE MODE   pace mode for a driver from their next lap, e.g. 'p HAM push'
+    b CODE TYRE   box at the end of this lap for S/M/H, e.g. 'b HAM h' (takes strategy over)
+    o CODE        stay out: cancel the stop called for this lap
+    a CODE        hand the driver's pit decisions back to the baseline strategy
     q         quit
 
 The race runs on a background WorldRunner thread. Every keypress becomes a Command that is
@@ -18,7 +21,14 @@ import argparse
 import itertools
 from pathlib import Path
 
-from f1ar.domain.race_state import PaceMode, RaceEvent, WorldState, WorldStatus
+from f1ar.domain.race_state import (
+    Compound,
+    PaceMode,
+    RaceEvent,
+    StrategyController,
+    WorldState,
+    WorldStatus,
+)
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.scenarios import event_data_dir, load_event, setup_from_codes
 from f1ar.simulation.timing import LapTimingSheet
@@ -32,6 +42,7 @@ from f1ar.simulation.world_runner import (
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIGS = ROOT / "configs"
+_TYRES = {c.value[0]: c for c in Compound}
 _keys = itertools.count(1)
 
 
@@ -78,6 +89,15 @@ def main() -> None:
     def on_tick(state: WorldState, events: tuple[RaceEvent, ...]) -> None:
         for row in sheet.feed(events):
             print(row, flush=True)
+        for e in events:
+            if e.type == "PIT_STOP" and e.driver_id is not None:
+                p = e.payload
+                print(
+                    f"  PIT {setup.driver(e.driver_id).code} lap {p['lap']}: "
+                    f"{p['from_compound']} -> {p['to_compound']}, "
+                    f"{float(p['standstill_s']):.1f} s stationary",
+                    flush=True,
+                )
         if any(e.type == "RACE_COMPLETED" for e in events):
             order = " ".join(setup.driver(d).code for d in engine.standings(state))
             print(f"\nRACE COMPLETE: {order}\n{_describe(state)}\nPress Enter to exit.", flush=True)
@@ -85,7 +105,8 @@ def main() -> None:
     runner.add_listener(on_tick)
     runner.start_background()
     print(f"x{args.speed} | Enter = pause/resume, 's N' = step, 1/2/5/10/25 = speed,")
-    print("      'p HAM push' = pace mode from next lap, q = quit\n")
+    print("      'p HAM push' = pace mode, 'b HAM h' = box for hards, 'o HAM' = stay out,")
+    print("      'a HAM' = baseline strategy, q = quit\n")
     _send(runner, CommandType.START)
     try:
         while True:
@@ -108,6 +129,25 @@ def main() -> None:
                         CommandType.SET_PACE_MODE,
                         driver_id=by_code[code.upper()],
                         pace_mode=PaceMode(mode.upper()),
+                    )
+                elif line.startswith("b "):
+                    _, code, tyre = line.split()
+                    ack = _send(
+                        runner,
+                        CommandType.PIT_REQUEST,
+                        driver_id=by_code[code.upper()],
+                        compound=_TYRES[tyre[0].upper()],
+                    )
+                elif line.startswith("o "):
+                    _, code = line.split()
+                    ack = _send(runner, CommandType.PIT_CANCEL, driver_id=by_code[code.upper()])
+                elif line.startswith("a "):
+                    _, code = line.split()
+                    ack = _send(
+                        runner,
+                        CommandType.SET_CONTROLLER,
+                        driver_id=by_code[code.upper()],
+                        controller=StrategyController.BASELINE,
                     )
                 elif line.isdigit():
                     ack = _send(runner, CommandType.SET_SPEED, speed=int(line))

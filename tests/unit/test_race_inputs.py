@@ -5,14 +5,22 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from f1ar.calibration.race_inputs import MIN_LAPS, estimate_car_offsets, start_compounds
+from f1ar.calibration.race_inputs import (
+    MIN_LAPS,
+    estimate_car_offsets,
+    estimate_pit_loss,
+    start_compounds,
+)
+from f1ar.data.quality import representative_laps
 from f1ar.domain.driver_profiles import ProfileSet
 from f1ar.domain.identities import RaceRoster
+from f1ar.domain.provenance import SourceType
 from f1ar.domain.race_state import Compound, RaceSetup
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.scenarios import (
     default_lap_model,
     event_data_dir,
+    pit_params_from_total_loss,
     setup_from_codes,
 )
 from tests.conftest import HAM, VER, run_to_end
@@ -99,7 +107,9 @@ def test_setup_uses_data_when_given(
     assert setup.driver(VER).start_compound is Compound.HARD
     assert setup.driver(HAM).start_compound is Compound.MEDIUM
     assert setup.driver(VER).car_pace_offset_s == 0.0 < setup.driver(HAM).car_pace_offset_s
-    assert set(setup.inputs) == {"start_compounds", "car_pace_offsets"}
+    assert set(setup.inputs) == {"start_compounds", "car_pace_offsets", "pit_loss"}
+    # The synthetic race has no pit stops: the editorial pit model is used and labelled so.
+    assert setup.inputs["pit_loss"].startswith("editorial_assumption")
     plain = setup_from_codes(monza_roster, monza_profiles, ["VER", "HAM"])
     assert plain.inputs == {} and all(d.car_pace_offset_s == 0.0 for d in plain.drivers)
 
@@ -109,3 +119,23 @@ def test_event_data_dir(tmp_path: Path) -> None:
     (tmp_path / "data" / "processed" / "x").mkdir(parents=True)
     (tmp_path / "data" / "processed" / "x" / "laps.parquet").write_bytes(b"")
     assert event_data_dir(tmp_path, "x") == tmp_path / "data" / "processed" / "x"
+
+
+def test_pit_loss_from_in_and_out_laps() -> None:
+    laps = synthetic_laps()
+    # VER (median 84.0) pits at the end of lap 10: in-lap +5 s, out-lap +20 s -> 25 s loss.
+    in_lap = (laps["driver_number"] == 1) & (laps["lap_number"] == 10)
+    out_lap = (laps["driver_number"] == 1) & (laps["lap_number"] == 11)
+    laps.loc[in_lap, ["lap_time_s", "pit_in_time_s"]] = [89.0, 1000.0]
+    laps.loc[out_lap, ["lap_time_s", "pit_out_time_s"]] = [104.0, 1020.0]
+    est = estimate_pit_loss(laps)
+    reps = representative_laps(laps)
+    median = float(reps[reps["driver_number"] == 1]["lap_time_s"].median())
+    assert est.stops_used == 1 and est.total_loss_s == pytest.approx(89.0 + 104.0 - 2 * median)
+    assert est.note.startswith("estimated_from_data")
+    with pytest.raises(ValueError, match="no complete in-lap/out-lap pairs"):
+        estimate_pit_loss(synthetic_laps())
+
+    pit = pit_params_from_total_loss(est.total_loss_s, est.note)
+    assert pit.lane_loss_s + pit.standstill_median_s == pytest.approx(est.total_loss_s)
+    assert pit.source_type is SourceType.ESTIMATED_FROM_DATA

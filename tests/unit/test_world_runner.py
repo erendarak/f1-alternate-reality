@@ -5,7 +5,15 @@ from typing import Any
 
 import pytest
 
-from f1ar.domain.race_state import PaceMode, RaceEvent, RaceSetup, WorldState, WorldStatus
+from f1ar.domain.race_state import (
+    Compound,
+    PaceMode,
+    RaceEvent,
+    RaceSetup,
+    StrategyController,
+    WorldState,
+    WorldStatus,
+)
 from f1ar.persistence.sqlite_store import SnapshotStore
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.world_runner import Command, CommandAck, CommandType, WorldRunner
@@ -276,7 +284,7 @@ def test_set_pace_mode_command(runner: WorldRunner) -> None:
     )
     assert ack.accepted and ack.applied_tick == 6
     assert runner.state.car("lewis_hamilton_2024").pace_mode is PaceMode.PUSH
-    assert runner.events[-1].type == "PACE_MODE_CHANGED"
+    assert "PACE_MODE_CHANGED" in [e.type for e in runner.events[-2:]]
     assert runner.state.event_seq == len(runner.events)
 
 
@@ -288,3 +296,30 @@ def test_bad_pace_mode_commands_are_rejected(runner: WorldRunner) -> None:
     )
     assert not missing.accepted and "needs" in (missing.reason or "")
     assert not unknown.accepted and "unknown driver" in (unknown.reason or "")
+
+
+def test_pit_commands(runner: WorldRunner) -> None:
+    ham = "lewis_hamilton_2024"
+    started(runner)
+    box = send(runner, cmd(CommandType.PIT_REQUEST, driver_id=ham, compound=Compound.HARD), 0.0)
+    assert box.accepted
+    car = runner.state.car(ham)
+    assert car.pit_request is Compound.HARD and car.controller is StrategyController.USER
+    assert [e.type for e in runner.events[-2:]] == ["CONTROLLER_CHANGED", "PIT_REQUESTED"]
+
+    cancel = send(runner, cmd(CommandType.PIT_CANCEL, driver_id=ham), 0.0)
+    assert cancel.accepted and runner.state.car(ham).pit_request is None
+
+    back = send(
+        runner,
+        cmd(CommandType.SET_CONTROLLER, driver_id=ham, controller=StrategyController.BASELINE),
+        0.0,
+    )
+    assert back.accepted and runner.state.car(ham).planned_stops
+
+    no_compound = send(runner, cmd(CommandType.PIT_REQUEST, driver_id=ham), 0.0)
+    no_controller = send(runner, cmd(CommandType.SET_CONTROLLER, driver_id=ham), 0.0)
+    no_driver = send(runner, cmd(CommandType.PIT_CANCEL), 0.0)
+    assert "needs compound" in (no_compound.reason or "")
+    assert "needs controller" in (no_controller.reason or "")
+    assert "needs driver_id" in (no_driver.reason or "")

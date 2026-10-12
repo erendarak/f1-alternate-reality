@@ -97,7 +97,7 @@ def test_commands_go_through_the_runner(client: TestClient) -> None:
     state = client.get("/api/debug/state").json()
     assert state["tick"] == 7 and state["status"] == "PAUSED"
     assert next(c for c in state["cars"] if c["driver_id"] == HAM)["pace_mode"] == "PUSH"
-    assert state["events"][-1]["type"] == "PACE_MODE_CHANGED"
+    assert "PACE_MODE_CHANGED" in [e["type"] for e in state["events"][-2:]]
 
 
 def test_save_and_rejections_are_reported(client: TestClient) -> None:

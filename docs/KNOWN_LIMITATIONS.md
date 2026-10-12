@@ -2,11 +2,24 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
-## Current (M1 complete)
+## Current (M2 slice 1)
 
+- **Every baseline car plans a one-stop onto SOFT** (~lap 27 at Monza) because the placeholder
+  compound coefficients (D-010) make the soft a race tyre. The real race was M->H. The planner is
+  correct for its model; the compound model needs calibration (M4, measured in EXP-002).
+- **Strategy ignores traffic, rivals and safety cars** (none are modelled yet): there's no
+  undercut/overcut, and the baseline plans an "empty track" optimum. Slices 2-3.
+- **Pit stop happens on the start/finish line.** The pit lane isn't drawn; a pitting car parks at
+  the line for the whole hold (pit-lane loss + standstill), so it sits on top of the line in the
+  viewer, and its display gap reads +0.0 while parked. Entry/exit time loss is lumped into the
+  out-lap.
+- **Pit loss is one race's median of whole-stop losses** (it includes cold-tyre out-laps and any
+  traffic); the standstill distribution (median 2.4 s, shape 9) is editorial.
+- **Tyre rule breaches are only logged** (`TYRE_RULE_BREACHED`); no penalty or disqualification.
+  No tyre allocations (sets per compound) yet: any compound can be fitted any number of times.
+- A `USER`-controlled car gets no automatic stops at all; handing it back to the baseline replans.
 - **Car pace offsets are in-sample, one-race estimates** (Monza 2024 only, mixing fuel/tyre/traffic
-  effects). The real winner won on strategy, which the engine can't do yet (no pit stops), see EXP-001.
-- **No lapping**: slow cars finish all laps ~2+ minutes behind instead of a lap down.
+  effects). See EXP-001.
 
 - **Replay positions are interpolated linearly in time within each lap** (the timing feed gives lap
   start/end, not continuous speed). Cars move at constant speed through each lap, including in/out
@@ -26,8 +39,8 @@ Honest list of what does **not** work or is only approximate. Update whenever on
 - **Engine throughput** is about 0.5 s per 20-car race at 0.5 s ticks (~2 races/s). That's fine for live
   play and Monte Carlo of tens of races, but possibly slow for large RL training. Plan: a lap-level
   fast path sharing the same lap model (SIMULATOR_DECISION.md follow-up 3).
-- The engine has no safety car, VSC, failures, accidents or retirements yet (M2). TUM-derived modelling
-  ideas are noted but not implemented.
+- The engine has no safety car, VSC, failures, accidents or retirements yet (M2 slice 3).
+  TUM-derived ideas used so far: log-logistic standstill only.
 
 ## M0, step 7
 

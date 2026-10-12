@@ -15,7 +15,9 @@ def test_set_pace_mode_changes_car_and_emits_event(two_car_world: WorldState) ->
     result = engine.apply_action(state, _push())
     assert result.state.car(HAM).pace_mode is PaceMode.PUSH
     assert result.state.car(VER).pace_mode is PaceMode.BALANCED
-    (event,) = result.events
+    # The pace change, then (maybe) the baseline strategy reacting to the new wear rate.
+    event, *replans = result.events
+    assert [e.type for e in replans] in ([], ["STRATEGY_PLANNED"])
     assert event.type == "PACE_MODE_CHANGED" and event.driver_id == HAM
     assert event.seq == state.event_seq and event.tick == state.sim_tick
     assert event.payload == {
@@ -24,7 +26,7 @@ def test_set_pace_mode_changes_car_and_emits_event(two_car_world: WorldState) ->
         "effective_from_lap": 2,
         "actor_id": "USER",
     }
-    assert result.state.event_seq == state.event_seq + 1
+    assert result.state.event_seq == state.event_seq + len(result.events)
     assert result.state.sim_tick == state.sim_tick  # actions don't advance time
 
 

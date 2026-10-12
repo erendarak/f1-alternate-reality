@@ -5,7 +5,14 @@ from pathlib import Path
 
 import pytest
 
-from f1ar.domain.race_state import PaceMode, SetPaceMode, WorldState, WorldStatus
+from f1ar.domain.race_state import (
+    Compound,
+    PaceMode,
+    RequestPitStop,
+    SetPaceMode,
+    WorldState,
+    WorldStatus,
+)
 from f1ar.persistence.sqlite_store import SnapshotStore
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.timeline import SeedMode, fork_world
@@ -140,3 +147,27 @@ def test_late_push_is_faster_on_the_next_lap(
         return time
 
     assert next_lap_time(push) < next_lap_time(main) - 0.3
+
+
+def test_fork_with_a_different_pit_decision(
+    store: SnapshotStore, two_car_world: WorldState
+) -> None:
+    """Plan §4.7 test 5 with the decision it names: B pits HAM now for softs, A follows the plan.
+
+    A is unchanged, B differs, and VER's race is identical (no interaction model yet, and
+    common random numbers: his lap noise and standstill draws don't depend on HAM's choices).
+    """
+    a = engine.pause(run_ticks(two_car_world, 10 * 168))
+    meta = store.save(a, label="lap 10")
+    assert a.car(HAM).pit_stops == 0 and a.car(HAM).planned_stops[0].lap > 11
+
+    b, _ = store.fork(meta.snapshot_id, label="HAM boxes on lap 11 for softs")
+    b = engine.apply_action(b, RequestPitStop(driver_id=HAM, compound=Compound.SOFT)).state
+    b_final = run_to_end(engine.resume(b))
+    a_final = run_to_end(engine.resume(store.load(meta.snapshot_id)))
+
+    assert store.load(meta.snapshot_id) == a
+    assert a_final.car(HAM).pit_stops >= 1 and b_final.car(HAM).pit_stops >= 1
+    assert b_final.car(HAM).compounds_used[1] is Compound.SOFT
+    assert b_final.car(HAM).finish_time_s != a_final.car(HAM).finish_time_s
+    assert b_final.car(VER) == a_final.car(VER)

@@ -95,9 +95,14 @@ def test_full_race_invariants_hold_every_tick(two_car_world: WorldState) -> None
             assert 0.0 <= c.distance_m < length
             assert 0 <= c.laps_completed <= total
             assert c.laps_completed >= p.laps_completed
-            assert c.tyre_age_laps == c.laps_completed  # no pit stops yet
+            assert 0 <= c.tyre_age_laps <= c.laps_completed
+            assert c.pit_stops >= p.pit_stops and c.tyre_wear_s >= 0.0
+            assert c.compound in c.compounds_used
+            assert c.lap_target_s > c.pit_hold_s >= 0.0
             if c.status is CarStatus.FINISHED:
-                assert c.laps_completed == total and c.finish_time_s is not None
+                assert c.finish_time_s is not None
+                # Leader completes the distance; anyone else finishes at the flag.
+                assert c.laps_completed == total or state.chequered_flag_s is not None
         seqs += [e.seq for e in result.events]
         # Round-trips through JSON (the future save format) without loss.
         if state.sim_tick % 1000 == 0:

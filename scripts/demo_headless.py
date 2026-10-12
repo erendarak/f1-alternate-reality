@@ -24,7 +24,7 @@ from f1ar.domain.race_state import WorldState, WorldStatus
 from f1ar.persistence.sqlite_store import SnapshotStore
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.scenarios import MONZA_2024, event_data_dir, load_event, setup_from_codes
-from f1ar.simulation.timing import LapTimingSheet
+from f1ar.simulation.timing import LapTimingSheet, result_gap
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIGS = ROOT / "configs"
@@ -58,10 +58,17 @@ def _print_classification(state: WorldState) -> None:
     order = engine.standings(state)
     winner_t = state.car(order[0]).finish_time_s or 0.0
     for pos, driver_id in enumerate(order, start=1):
-        t = state.car(driver_id).finish_time_s or 0.0
-        gap = f"{t // 60:.0f}:{t % 60:06.3f}" if pos == 1 else f"+{t - winner_t:.3f}s"
-        entry = setup.driver(driver_id)
-        print(f"  P{pos:<2} {entry.code}  {gap:>12}   (started P{entry.grid_position})")
+        gap = (
+            f"{winner_t // 60:.0f}:{winner_t % 60:06.3f}"
+            if pos == 1
+            else result_gap(state, driver_id, order[0])
+        )
+        entry, car = setup.driver(driver_id), state.car(driver_id)
+        tyres = "-".join(c.value[0] for c in car.compounds_used)
+        print(
+            f"  P{pos:<2} {entry.code}  {gap:>12}   (started P{entry.grid_position}, "
+            f"{car.pit_stops} stop{'s' if car.pit_stops != 1 else ''} {tyres})"
+        )
     print(f"\nticks {state.sim_tick} | events {state.event_seq}")
     print(f"{FINAL_HASH_PREFIX}{state.canonical_hash()}", flush=True)
 

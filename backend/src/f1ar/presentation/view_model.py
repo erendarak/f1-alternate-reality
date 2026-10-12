@@ -10,7 +10,7 @@ from typing import Any
 from f1ar.domain.race_state import CarStatus, RaceEvent, WorldState
 from f1ar.history.reference import HistoricalRace
 from f1ar.presentation.track_geometry import TrackGeometry
-from f1ar.simulation.lightweight_engine import standings
+from f1ar.simulation.lightweight_engine import pending_stop, plan_text, standings
 
 DEFAULT_COLOR = "9AA0A6"
 
@@ -64,8 +64,12 @@ def state_view(
         x, y = geometry.point_at(fraction)
         if car.status is CarStatus.FINISHED and leader_car.finish_time_s is not None:
             gap = (car.finish_time_s or 0.0) - leader_car.finish_time_s
+            laps_down = leader_car.laps_completed - car.laps_completed
         else:
-            gap = (_progress_m(state, leader) - _progress_m(state, driver_id)) / nominal_speed
+            behind_m = _progress_m(state, leader) - _progress_m(state, driver_id)
+            gap = behind_m / nominal_speed
+            laps_down = math.floor(behind_m / track.length_m)
+        box = pending_stop(car)
         cars.append(
             {
                 "position": pos,
@@ -84,6 +88,12 @@ def state_view(
                 "lap_pace_mode": car.lap_pace_mode.value,
                 "last_lap_time_s": car.last_lap_time_s,
                 "gap_to_leader_s": round(gap, 3),
+                "laps_down": laps_down,
+                "pit_stops": car.pit_stops,
+                "box": None if box is None else box.value,
+                "in_pit": car.lap_elapsed_s < car.pit_hold_s,
+                "controller": car.controller.value,
+                "plan": plan_text(car.planned_stops),
             }
         )
     return {

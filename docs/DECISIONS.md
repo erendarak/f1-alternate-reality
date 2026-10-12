@@ -309,3 +309,43 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   the old defaults, and a missing data dir falls back automatically (tests/CI unchanged).
 - **Evidence:** EXP-001. Rank correlation with the real result 0.743 → 0.879 (30/30 paired seeds
   better), but the strategy-won real race can't be reproduced without pit stops.
+
+## D-022 — Pit stops, baseline strategy and the chequered-flag rule; engine v0.4.0 (2026-10-12)
+
+- **Pit model** (`RaceSetup.pit: PitParams`): a stop executes at the line crossing that ends the
+  in-lap (the pit box is treated as on the line). The out-lap target = hold + a normal lap sample,
+  where hold = `lane_loss_s` + standstill. During the hold the car is parked at distance 0, then it
+  drives the lap at constant speed. Standstill ~ log-logistic (fisk) with median 2.4 s and shape 9,
+  capped at 12 s, keyed `uniform(seed, "pit_standstill", driver, lap)`. So forks share it, and it
+  never sits in the state as a pre-drawn future. Shape credited to TUM FTM race-simulation.
+- **Pit loss from data:** `calibration.estimate_pit_loss` = median over real stops of (in-lap +
+  out-lap - 2 x the driver's median representative lap). `lane_loss_s` = that - 2.4 s standstill.
+  Monza 2024 26.9 s -> lane 24.5 s. Without data, or for a race with no complete stop: editorial
+  21.5 s, recorded as such in `RaceSetup.inputs["pit_loss"]`.
+- **Actions:** `RequestPitStop(compound)` (one command per stop, replaces a pending request;
+  rejected on the final lap or after the flag), `CancelPitStop` (no-op if nothing is pending),
+  `SetStrategyController(BASELINE|USER)`. A user pit action switches the car to `USER`, and a stop
+  the baseline had called for this lap becomes an explicit request, so taking over never silently
+  changes what the car was about to do. Back to `BASELINE` = replan from the current state.
+- **Baseline strategy** (`policy/baseline_strategy.py`, `baseline_strategy_v1`): it minimises
+  compound offset + accumulated wear + pit cost over all legal 0/1/2-stop plans, using the driver's
+  own wear rate under the current pace mode. Terms common to every plan (fuel, skill, car) drop
+  out. Stint cost is closed form and convex, so the best two-stint split is the floor/ceil of the
+  continuous optimum (tested equal to brute force). It runs inside the pure engine (create, after a
+  stop, on a pace change), so forks, saves and replays include the strategy. It knows nothing of
+  traffic, SC or rivals yet.
+- **Tyre rule:** `min_distinct_dry_compounds = 2` (2024 dry). The baseline always satisfies it. A
+  `USER` car that breaks it gets a `TYRE_RULE_BREACHED` event at the finish; no penalty is applied
+  yet.
+- **Chequered flag:** `WorldState.chequered_flag_s` is set the tick the first car completes the
+  distance, computed *before* cars advance. Any car crossing the line at or after that time
+  finishes there. Standings: completed laps, then distance, then time since the line (pit holds),
+  then finish time, then grid.
+- **Schema:** `CarState` gains `pit_hold_s`, `pit_request`, `pit_stops`, `compounds_used`,
+  `controller`, `planned_stops`. `distance_m` is now derived from elapsed time (hold, then constant
+  speed). New events: `PIT_REQUESTED`, `PIT_CANCELLED`, `PIT_STOP`, `STRATEGY_PLANNED`,
+  `CONTROLLER_CHANGED`, `CHEQUERED_FLAG`, `TYRE_RULE_BREACHED`. Observation schema v2 adds
+  `car.pit_stops`, `car.boxing_this_lap`, `car.distinct_compounds_used` (`tyre_wear_s` stays hidden).
+  `ENGINE_VERSION = lightweight_engine_v0.4.0`, `WORLD_SCHEMA_VERSION = 4`; older saves are
+  refused, as before.
+
