@@ -1,0 +1,115 @@
+dataset_id: 2024_abu_dhabi_gp_fastf1_v1
+event: 2024_abu_dhabi_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-12T23:21:35Z'
+session_key: 2024/round 24/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2024_abu_dhabi_gp/laps.parquet
+  sha256: sha256:b4254394211cb736ccb1688cd2014785c48508d6d52231286157bfc58b57ea90
+  rows: 1035
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2024_abu_dhabi_gp/results.parquet
+  sha256: sha256:1766cc8016827515ffc3caa90670f245c837b0e443745562c12c6686cdae39fb
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2024_abu_dhabi_gp/weather.parquet
+  sha256: sha256:a00fe3c5ee7cb1759d686f0102c0189e63577e032bdcf9e65841cca1c52a45ae
+  rows: 148
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2024_abu_dhabi_gp/track_status.parquet
+  sha256: sha256:cbe74c1771f9d495dc2e9cfa2245fa26df245b40f3413aff8d0522b0592b778c
+  rows: 13
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2024_abu_dhabi_gp/race_control.parquet
+  sha256: sha256:883ce639c8ca41e89a9e151c6c930e7882e12389bb476d674da40b916d4618ce
+  rows: 130
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2024_abu_dhabi_gp/corners.parquet
+  sha256: sha256:50d87df50ede49996e95ba3dfbd6cf81bf9064f005c6fc94f9108e61fbe98ede
+  rows: 16
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 2 rows
+- lap table `sector1_s` missing in 21 rows
+- lap table `sector2_s` missing in 2 rows
+- lap table `sector3_s` missing in 2 rows
+- lap table `pit_in_time_s` missing in 1005 rows
+- lap table `pit_out_time_s` missing in 1007 rows
+- lap table `position` missing in 2 rows
+- lap table `speed_trap_kph` missing in 2 rows

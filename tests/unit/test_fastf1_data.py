@@ -228,6 +228,21 @@ def test_duplicate_lap_fails_sequence_check() -> None:
     assert report_for(tables(laps=laps))["lap_sequence"] == "FAIL"
 
 
+def test_retirement_lap_row_is_explained_but_a_finisher_mismatch_fails() -> None:
+    """FastF1 keeps a row for the lap a car retired on (seen across 2024, M4): WARN, not FAIL.
+    The same +1 for a car classified as finished is unexplained and still FAILs."""
+    results = raw_results()
+    results.loc[0, "Laps"] = float(LAPS - 1)
+    results.loc[0, "Status"] = "Retired"
+    assert report_for(tables(results=results))["laps_vs_results"] == "WARN"
+    results.loc[0, "Status"] = "Finished"
+    assert report_for(tables(results=results))["laps_vs_results"] == "FAIL"
+    dsq = raw_results()
+    dsq.loc[0, "Laps"] = 0.0
+    dsq.loc[0, "Status"] = "Disqualified"
+    assert report_for(tables(results=dsq))["laps_vs_results"] == "WARN"
+
+
 def test_tyre_life_jump_and_safety_car_warn() -> None:
     laps = raw_laps()
     laps.loc[1, "TyreLife"] = 5.0

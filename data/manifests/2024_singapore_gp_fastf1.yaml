@@ -1,0 +1,111 @@
+dataset_id: 2024_singapore_gp_fastf1_v1
+event: 2024_singapore_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-12T23:21:08Z'
+session_key: 2024/round 18/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2024_singapore_gp/laps.parquet
+  sha256: sha256:adf7e1d9d4177ad946edbbf2acb4bf731679b99b1c53c8bbdf5cb068d2a6e836
+  rows: 1177
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2024_singapore_gp/results.parquet
+  sha256: sha256:7279e4cdb7a51c3629c679bddf10120b4c5fa741c1776fa1bd5919731cd318ed
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2024_singapore_gp/weather.parquet
+  sha256: sha256:f21358bbcfbbe53e15ba886e9594b860b3fe570725337e35a586e1924f1acae6
+  rows: 160
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2024_singapore_gp/track_status.parquet
+  sha256: sha256:36565328cd2db4ea284679c79e9da70f449d4c07f4c34ca65766e8c045a1d114
+  rows: 4
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2024_singapore_gp/race_control.parquet
+  sha256: sha256:eb64bb2337845b5421853529a19fd97d88c222414be2b3735f025a95beb8f9ba
+  rows: 61
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2024_singapore_gp/corners.parquet
+  sha256: sha256:24fca7ae29d5f1fb92c65a30a144a35bc504f30ea360cf7b72baec10bfb0d292
+  rows: 19
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 1 rows
+- lap table `sector1_s` missing in 20 rows
+- lap table `pit_in_time_s` missing in 1152 rows
+- lap table `pit_out_time_s` missing in 1154 rows

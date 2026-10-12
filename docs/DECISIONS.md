@@ -563,3 +563,28 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   tower and header values.
 - Not in CI yet (the repo has no CI; it would need the data fetch or a recorded fixture).
 
+## D-031 — Season lap dataset: availability-tagged features, leakage audit, splits by rule (2026-10-13)
+
+- **Scope:** the whole 2024 season (24 races) from the existing FastF1 pipeline, timing only
+  (no position telemetry: not needed for pace or calibration, ~9 MB per race instead of ~85).
+- **One row per lap.** Each column is a feature (with `available`: `pre_race` / `lap_start` /
+  `decision` and a source type), the target, or a lap fact (during-lap, never a feature). The
+  schema is versioned (`FEATURE_SCHEMA_VERSION`), recorded in the dataset manifest.
+- **No editorial values in the dataset.** Personas are joined at training time and labelled, so
+  a "trained on real data" claim can always be traced to real columns (plan §3.4, §8.3).
+- **Leakage is tested, not assumed:** a property test perturbs everything after a time T and
+  requires every feature of laps started by T to be unchanged (synthetic race at every lap
+  start + the real Monza race). Conditions use the latest observation at or before the lap start
+  (as-of joins); "decision" features (box this lap) are the team's own choice, known when the
+  lap starts.
+- **Splits are a rule, fixed before modelling:** wet (wet-tyre lap or rain at >= 5 % of lap
+  starts) / dry_test (dry rounds divisible by 4) / dry_train (the rest; leave-one-race-out
+  folds). Monza is in dry_test but its earlier use for editorial coefficients makes any Monza
+  result "in-sample" for those; reports must say so.
+- **Season reference metrics** use one shared counter for real and simulated races
+  (`calibration/reference_metrics.py`). Stops exclude pit entries during a red flag.
+- **Data quality rule refined:** a retirement lap kept as a row and a disqualification with 0
+  classified laps are explained differences (WARN); anything else still FAILs.
+- Derived per-race aggregates (stops, passes, SC counts) are committed as reference data; lap
+  tables stay local (research-only data, not redistributed).
+

@@ -1,0 +1,291 @@
+dataset_id: laps_2024_v1
+dataset_version: 1
+feature_schema_version: 1
+season: 2024
+license_review_status: research_only (F1 timing data via FastF1; not redistributed)
+built_by: scripts/build_lap_dataset.py
+file:
+  relative_path: data/processed/datasets/laps_2024_v1.parquet
+  sha256: sha256:8527bb660b4cb7cc08fe9f1d4a541d94093ffd9f6efbb07a1b96226fbee27d7a
+  content_sha256: sha256:e43cd3185e213cee8d80f4b82e69ec171f6f4fada093e7702ca914edcbf58181
+  rows: 26604
+  representative_rows: 22719
+target: lap_time_s
+features:
+- name: circuit_id
+  available: pre_race
+  source_type: historical_verified
+  description: Jolpica circuit id
+- name: driver_id
+  available: pre_race
+  source_type: historical_verified
+  description: season-specific driver id (roster)
+- name: team_id
+  available: pre_race
+  source_type: historical_verified
+  description: team id (roster)
+- name: grid_position
+  available: pre_race
+  source_type: historical_verified
+  description: official starting slot (0 = pit lane)
+- name: scheduled_laps
+  available: pre_race
+  source_type: historical_verified
+  description: race distance in laps (winner's laps)
+- name: lap_number
+  available: lap_start
+  source_type: historical_verified
+  description: 1-based lap number
+- name: laps_remaining
+  available: lap_start
+  source_type: estimated_from_data
+  description: scheduled_laps - lap_number + 1 (fuel proxy)
+- name: compound
+  available: lap_start
+  source_type: historical_verified
+  description: tyre compound on this lap
+- name: tyre_age_start
+  available: lap_start
+  source_type: estimated_from_data
+  description: laps already on the set when the lap starts
+- name: fresh_tyre
+  available: lap_start
+  source_type: historical_verified
+  description: the set was new when fitted (FastF1 FreshTyre)
+- name: stint
+  available: lap_start
+  source_type: historical_verified
+  description: stint number
+- name: stint_lap
+  available: lap_start
+  source_type: estimated_from_data
+  description: 1-based lap index within the stint
+- name: pit_out_lap
+  available: lap_start
+  source_type: historical_verified
+  description: the lap starts in the pit lane
+- name: pit_in_lap
+  available: decision
+  source_type: historical_verified
+  description: the car boxes at the end of this lap
+- name: position_start
+  available: lap_start
+  source_type: historical_verified
+  description: position when the lap starts (grid on lap 1)
+- name: gap_ahead_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds behind the car that crossed the line just before, same lap (NaN on lap 1)
+- name: gap_behind_prev_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds ahead of the next car at the PREVIOUS line crossing (the gap to the car behind
+    at this crossing isn't known yet when the lap starts; found by the leakage audit)
+- name: track_status_start
+  available: lap_start
+  source_type: historical_verified
+  description: track status code when the lap starts
+- name: air_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: track_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: humidity_pct
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: rainfall_start
+  available: lap_start
+  source_type: historical_verified
+  description: rain flag of the latest weather sample
+- name: wind_speed_ms
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+lap_facts_never_features:
+- lap_status
+- position_end
+- is_accurate
+- deleted
+- fastf1_generated
+- representative
+leakage_audit: tests/unit/test_lap_dataset.py::test_no_feature_uses_anything_after_the_lap_starts
+splits:
+  rule: wet = any intermediate/wet tyre lap or rain at >= 5% of lap starts; among dry races, rounds divisible
+    by 4 are held out (dry_test), the rest are dry_train; leave-one-race-out folds run over dry_train.
+    Rule fixed before any model was fitted.
+  wet:
+  - 2024_canadian_gp
+  - 2024_british_gp
+  - 2024_sao_paulo_gp
+  dry_test:
+  - 2024_japanese_gp
+  - 2024_monaco_gp
+  - 2024_italian_gp
+  - 2024_mexico_city_gp
+  - 2024_abu_dhabi_gp
+  dry_train:
+  - 2024_bahrain_gp
+  - 2024_saudi_arabian_gp
+  - 2024_australian_gp
+  - 2024_chinese_gp
+  - 2024_miami_gp
+  - 2024_emilia_romagna_gp
+  - 2024_spanish_gp
+  - 2024_austrian_gp
+  - 2024_hungarian_gp
+  - 2024_belgian_gp
+  - 2024_dutch_gp
+  - 2024_azerbaijan_gp
+  - 2024_singapore_gp
+  - 2024_united_states_gp
+  - 2024_las_vegas_gp
+  - 2024_qatar_gp
+events:
+  2024_abu_dhabi_gp:
+    round: 24
+    group: dry_test
+    rows: 1035
+    representative_rows: 857
+    source_manifest_sha256: sha256:97672bec13417625b6c979be1eb9248073399a183f5a16705b2e1d6d359602ba
+  2024_australian_gp:
+    round: 3
+    group: dry_train
+    rows: 998
+    representative_rows: 851
+    source_manifest_sha256: sha256:b12528927db3f6587d49b8b80e4e5d8c681be2629dac9fcdc73d104514d0cd2b
+  2024_austrian_gp:
+    round: 11
+    group: dry_train
+    rows: 1405
+    representative_rows: 1240
+    source_manifest_sha256: sha256:2fbf12d891905fee26dcf4e39e18e86ba078947dbee38f391b826aebf9985297
+  2024_azerbaijan_gp:
+    round: 17
+    group: dry_train
+    rows: 973
+    representative_rows: 852
+    source_manifest_sha256: sha256:f784ed9a1bcaff8dd87fbbc8754b6316e30a565a8b4a725d63356c0b2c77ba59
+  2024_bahrain_gp:
+    round: 1
+    group: dry_train
+    rows: 1129
+    representative_rows: 988
+    source_manifest_sha256: sha256:6f4b2c8f25102490d938f91628dba65c06224b5dc6f1867319c6cb7c2a6ce4b6
+  2024_belgian_gp:
+    round: 14
+    group: dry_train
+    rows: 841
+    representative_rows: 725
+    source_manifest_sha256: sha256:aafbce1117f767f2de327202e7aa49735f6c44f93d4a040bb2f0faaeeb8b93b6
+  2024_british_gp:
+    round: 12
+    group: wet
+    rows: 960
+    representative_rows: 841
+    source_manifest_sha256: sha256:7377f4337c44731231b9dbc3355efcc986cadb75bd7a0b1b1e6a1676765ad9b7
+  2024_canadian_gp:
+    round: 9
+    group: wet
+    rows: 1272
+    representative_rows: 892
+    source_manifest_sha256: sha256:6e25262a38946f65c584bc057174bf6251e22f702ddd41f36db280e33c9f9dc0
+  2024_chinese_gp:
+    round: 5
+    group: dry_train
+    rows: 1032
+    representative_rows: 739
+    source_manifest_sha256: sha256:9dfeb5973cc006f645e028fcf3a6073950aa9863469114c0f74a668f865e25fc
+  2024_dutch_gp:
+    round: 15
+    group: dry_train
+    rows: 1426
+    representative_rows: 1350
+    source_manifest_sha256: sha256:a7f425509798cb39d22442ace9ecddb70c208b65cfc66a43636e7560cb685032
+  2024_emilia_romagna_gp:
+    round: 7
+    group: dry_train
+    rows: 1238
+    representative_rows: 1153
+    source_manifest_sha256: sha256:326117a2dbc25bbbb3fd05c1223ada838decb3375c971b1457d18d7178343345
+  2024_hungarian_gp:
+    round: 13
+    group: dry_train
+    rows: 1355
+    representative_rows: 1228
+    source_manifest_sha256: sha256:bf7d65dcf4bc4af64908e994484cd5a68d282945901bf11e62cf7b2bf520b47e
+  2024_italian_gp:
+    round: 16
+    group: dry_test
+    rows: 1008
+    representative_rows: 914
+    source_manifest_sha256: sha256:4d11fdff762d3fb63de6bd052a8ae01bc0b8ddf9a653f6f09990fed4091482c6
+  2024_japanese_gp:
+    round: 4
+    group: dry_test
+    rows: 907
+    representative_rows: 756
+    source_manifest_sha256: sha256:a760d8cb11bdaebe81f995e55cd89dec203c40405fd47a3dea3bb3c9858c5724
+  2024_las_vegas_gp:
+    round: 22
+    group: dry_train
+    rows: 938
+    representative_rows: 820
+    source_manifest_sha256: sha256:71d495f4f4338fe0dbb4cf275a113c803a8c1803fdb1fe4d7bf831988143b89b
+  2024_mexico_city_gp:
+    round: 20
+    group: dry_test
+    rows: 1215
+    representative_rows: 1051
+    source_manifest_sha256: sha256:67f5200af4ec32b946b77f55cebad48ee8fedb7dc1bf43115e4e692936baf294
+  2024_miami_gp:
+    round: 6
+    group: dry_train
+    rows: 1111
+    representative_rows: 915
+    source_manifest_sha256: sha256:71efd87a3f684e2c5cf566ebffcc4513ced2e38f40d2ce87d568b7cd788c9488
+  2024_monaco_gp:
+    round: 8
+    group: dry_test
+    rows: 1237
+    representative_rows: 1168
+    source_manifest_sha256: sha256:0b3a35ddac7694eec2c12a416077f58c10c05fd0b77927c200c9d831b8129f4f
+  2024_qatar_gp:
+    round: 23
+    group: dry_train
+    rows: 943
+    representative_rows: 664
+    source_manifest_sha256: sha256:9b3e27d9c3f37680156fdf1fc906cefcbcc5125bfaad5617a3793b04495910fe
+  2024_sao_paulo_gp:
+    round: 21
+    group: wet
+    rows: 1134
+    representative_rows: 788
+    source_manifest_sha256: sha256:2992fa14e9110d20ca1b005a9a6e668a7c16115341dcd590c13ee72b80a64d70
+  2024_saudi_arabian_gp:
+    round: 2
+    group: dry_train
+    rows: 901
+    representative_rows: 786
+    source_manifest_sha256: sha256:5009fefe15c317c1a01102332fad5ded046487da593cd36051e583ba55aaab4d
+  2024_singapore_gp:
+    round: 18
+    group: dry_train
+    rows: 1177
+    representative_rows: 1097
+    source_manifest_sha256: sha256:d7a027dffdea67a72feab96fdce24f0edc6e4e08c7f981a301781d1d3f8d112b
+  2024_spanish_gp:
+    round: 10
+    group: dry_train
+    rows: 1310
+    representative_rows: 1192
+    source_manifest_sha256: sha256:9b89fdc01b3d7f3b9dac462e40d5a633925667d72dd11f4b83f637230d62165c
+  2024_united_states_gp:
+    round: 19
+    group: dry_train
+    rows: 1059
+    representative_rows: 852
+    source_manifest_sha256: sha256:332dc425472ab9638d9ee47c1b68765a7bcdfcf1308986f4de22b35552ff0364

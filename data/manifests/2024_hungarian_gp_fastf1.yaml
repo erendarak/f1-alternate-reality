@@ -1,0 +1,111 @@
+dataset_id: 2024_hungarian_gp_fastf1_v1
+event: 2024_hungarian_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-12T23:20:54Z'
+session_key: 2024/round 13/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2024_hungarian_gp/laps.parquet
+  sha256: sha256:93e1bc8fcae7a3039069e3b4f2be7e1c78bdb5bc0e6788ffb355af672f219826
+  rows: 1355
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2024_hungarian_gp/results.parquet
+  sha256: sha256:f03255b67b11a975846949a285688cb31749eabb44f75e735df23c5ff610ab8e
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2024_hungarian_gp/weather.parquet
+  sha256: sha256:0428888890c07610dda5abde50fa37e8d130c805e9e10ac3c3d1b8d10fa06d01
+  rows: 155
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2024_hungarian_gp/track_status.parquet
+  sha256: sha256:72c69a223b3fe3e591d08e24f0e0bbd4df59492abea95c186bdc4a61d65b2b76
+  rows: 3
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2024_hungarian_gp/race_control.parquet
+  sha256: sha256:11c814a1888cd39ae20970f23a3a20c535ebd9938853eae889805082ff9b86f0
+  rows: 75
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2024_hungarian_gp/corners.parquet
+  sha256: sha256:d4a4553603e1437f1291353c01794c0a8223799fe448b779eb8baaba79ad1c28
+  rows: 16
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `sector1_s` missing in 20 rows
+- lap table `pit_in_time_s` missing in 1314 rows
+- lap table `pit_out_time_s` missing in 1314 rows
+- lap table `speed_trap_kph` missing in 1 rows

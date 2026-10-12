@@ -2,6 +2,23 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## M4 slice 1 (season dataset)
+
+- **One season only (2024)**: 21 dry and 3 wet races. Leave-one-race-out over 16 training races
+  is small for some per-track conclusions; wet modelling rests on three races.
+- **No position telemetry for the 22 new races**: they can't be drawn on a map yet (no outline);
+  slice 3 decides how to get track length/outline for simulating them.
+- **Gaps are line-crossing gaps on the same lap**: the car ahead may be a car on another strategy
+  far away in race terms; lapped/lapping traffic isn't represented. Mini-sector live gaps are not
+  available in this data.
+- Fuel is only represented by laps remaining (no fuel data); tyre temperatures and setups are
+  unknown (plan §6.3).
+- The pass counter counts line-crossing order changes between consecutive laps (pit laps
+  excluded), so passes and re-passes within one lap, or passes during a lap a car pits, aren't
+  counted; the same rule applies to simulated races, so comparisons are fair, not absolute.
+- Red-flag periods come from track status code 5; a red flag shown at a time with no status
+  sample would be missed.
+
 ## M3 slice 4 (E2E)
 
 - The E2E test **needs the fetched Monza data** and a local `.venv`; without the data it skips. It

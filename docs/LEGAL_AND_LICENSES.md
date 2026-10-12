@@ -17,6 +17,12 @@ before heavier or different use.
 
 Attribution: data from Jolpica-F1 (CC BY-NC-SA 4.0) and from F1 live timing via the FastF1 library.
 
+Since M4 the whole 2024 season is fetched (24 races). Tracked in git from it: rosters (Jolpica
+facts), dataset manifests (hashes, row counts) and quality reports, as before, plus
+`docs/data/season_2024_reference.*`: per-race **aggregate counts** (stops, passes, SC/VSC,
+retirements) derived from the timing data. The lap tables themselves (`data/processed/`) stay
+local and are not redistributed.
+
 The debug viewer's track outline, corner markers, display rotation and team colours are all derived
 from that FastF1/F1-timing data and follow the same rules (generated locally, not committed).
 

@@ -1,6 +1,29 @@
 # Progress
 
-## Current milestone: M3 — First playable 2D race (plan §16) — COMPLETE (replay in the new UI -> M6)
+## Current milestone: M4 — Race models and calibration (plan §16, §7.6, §8)
+
+Why: EXP-002 showed every simulated car one-stopping onto SOFT (real: mostly M-H, many 2-stops),
+overtakes 2-5x too rare, no weather, editorial incident rates. M4 replaces guessed coefficients
+with values estimated from the 2024 season and measures the result, before M5 trains a
+strategist inside the engine. Plan (agreed 2026-10-13, one slice per commit):
+
+- [x] **Slice 1: 2024 season dataset**: all 24 races fetched; lap dataset with feature
+  availability + leakage audit; dataset manifest; splits by rule; season reference metrics (D-031).
+- [ ] Slice 2: pace models + tyre curves (EXP-003): rolling median, structural regression
+  (compound offsets, non-linear wear, fuel, car/driver), LightGBM; leave-one-race-out errors,
+  per track/driver, feature importance, profile ablation (read as "driver identity", not as a
+  validation of the editorial personas), model manifests.
+- [ ] Slice 3: engine integration (v0.7.0): calibrated tyre/fuel model, planner for non-linear
+  wear, optional learned-pace port pinned by hash with a safe fallback, any fetched 2024 race
+  simulatable; EXP-002 re-run.
+- [ ] Slice 4: weather (v0.8.0): rain process (historical or seeded), track wetness,
+  INTERMEDIATE/WET with crossovers fitted on Canada/Britain/São Paulo 2024, `wet_skill`,
+  forecast without future leakage (US-06), wet-tyre rule exemption, UI.
+- [ ] Slice 5: traffic + race-control calibration against the season reference; calibration
+  report (held-out races + Monza in-sample).
+- [ ] Slice 6: wrap-up: MLP only if slice 2 shows a gap it could close; ablations, registry, DoD.
+
+## Previous milestone: M3 — First playable 2D race (plan §16) — COMPLETE (replay in the new UI -> M6)
 
 M3 plan (agreed 2026-10-12, one slice per commit):
 
@@ -722,3 +745,56 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 
 **M3 is complete except the historical-replay mode inside the new UI.** Next milestone: M4
 (models and calibration: tyres + weather first, per EXP-002 and the weather decision).
+
+### 2026-10-13 — M4 slice 1: the 2024 season dataset
+
+- **All 24 races of 2024 fetched** (`scripts/fetch_season.py`; timing, weather, race control,
+  no position telemetry: ~16 s and ~9 MB each; Monza and Spa keep their telemetry). Rosters,
+  manifests and quality reports for the 22 new races are tracked.
+- **Lap dataset** (`f1ar/calibration/lap_dataset.py`, `scripts/build_lap_dataset.py`; D-031):
+  26,604 laps (22,719 representative green-flag laps), one row per lap. Every column is a
+  **feature** with its availability (`pre_race`, `lap_start`, `decision`) and source type, the
+  **target** (`lap_time_s`), or a **lap fact** (during-lap information for filtering only,
+  e.g. the lap's track-status string and end-of-lap position). Only real-data values: personas
+  are joined at training time, labelled. Features: circuit, driver, team, grid, scheduled laps,
+  lap, laps remaining, compound, tyre age at lap start, fresh set, stint/stint lap, pit out/in,
+  position at lap start, gap ahead, gap behind at the previous crossing, track status and
+  weather at lap start.
+- **Leakage audit** (property test): change everything after a time T (lap times, end
+  positions, flags, later weather and track-status samples) and check that no feature of a lap
+  that started by T moves; on a synthetic race at every lap start, and on the real Monza race.
+- **Dataset manifest** `data/manifests/dataset_laps_2024_v1.yaml`: file and content hashes, row
+  counts per race, feature schema with availability/source, the source manifests' hashes, the
+  split rule and assignment. The build is deterministic (identical outputs across two builds
+  with different Python hash seeds).
+- **Splits by rule** (fixed before any model): wet = Canada, Britain, São Paulo; dry_test =
+  rounds divisible by 4 (Japan, Monaco, Monza, Mexico, Abu Dhabi); dry_train = 16 races;
+  leave-one-race-out folds over dry_train.
+- **Season reference metrics** (`docs/data/season_2024_reference.md/.json`): per race stops per
+  finisher, 1-stop / 2+-stop shares, top compound sequences, on-track passes, retirements, SC,
+  VSC, red flags, wet-tyre share, winner, counted exactly like EXP-002 counts simulated races
+  (the counter moved from the EXP-002 script to `f1ar/calibration/reference_metrics.py`).
+  Dry-race means (21 races): 1.67 stops per finisher, one-stop share 0.42, **53.6 passes**,
+  1.95 retirements, 0.48 safety cars, 0.38 VSCs per race.
+- **Bugs and data findings:**
+  1. **The leakage audit caught a leak on its first run**: "gap to the car behind" at the line
+     where a lap starts is only known once that car crosses, after the lap has begun. Replaced
+     by the gap behind at the previous crossing, used only if that car had crossed before the
+     lap started (a car about to be lapped can cross later).
+  2. **Red-flag tyre changes counted as pit stops**: 2024 Japan showed 3.0 stops per finisher
+     and Monaco 1.44; entering the pit lane under a red flag (free tyre change) isn't a stop.
+     Fixed: Japan 2.0, Monaco 0.44 (most drivers ran from the lap-1 red flag to the flag on one
+     set, as in reality). Sequences still show the new stint.
+  3. **13 of 22 new races failed a quality check** that compared lap rows with classified laps:
+     FastF1 keeps a row for the lap a car retired on, and a disqualified car is classified with
+     0 laps (Hülkenberg, São Paulo). Explained differences are now WARN, others still FAIL
+     (tested); all 24 races WARN, none FAIL. Monza and Spa never had a mid-race retirement, so
+     the check hadn't met this.
+  4. **Spain was classified wet** by one stray rain sample (1 of 154, no wet tyres; the race was
+     dry). Wet now means a wet-tyre lap or rain at >= 5 % of lap starts.
+  5. Top compound sequences had ties ordered by set iteration (not reproducible); now sorted.
+  6. The as-of joins failed on real data (nullable floats, laps without a start time), which
+     the synthetic fixture didn't have; fixed, and the real-race audit covers it.
+- Tests: 302 offline (+7: leakage audit synthetic + real Monza, conventions, wet rule and
+  splits, red-flag periods, retirement/DSQ quality check) + 2 network; frontend 17 + 1 E2E.
+- Next: slice 2, pace models and tyre curves (EXP-003).

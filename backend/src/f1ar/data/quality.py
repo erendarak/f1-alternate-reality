@@ -231,14 +231,35 @@ def build_quality_report(
         for n in common
         if per_car.get(n, 0) != res[n]["laps"]
     ]
+    # Explained differences (seen across the 2024 season, M4): FastF1 keeps a row for the lap a
+    # car retired on, which isn't classified (+1); a disqualified car is classified with 0 laps.
+    explained, unexplained = [], []
+    for n, rows, classified in lap_count_diff:
+        status = res[n]["status"]
+        finished = status in ("Finished", "Lapped", "Disqualified")
+        retired_lap = not finished and rows == classified + 1
+        if retired_lap or status == "Disqualified":
+            explained.append((n, rows, classified, status))
+        else:
+            unexplained.append((n, rows, classified, status))
     checks.append(
         _check(
             "laps_vs_results",
             "Lap rows per car equal classified laps",
             not lap_count_diff,
-            f"(car, rows, classified): {lap_count_diff}"
-            if lap_count_diff
-            else "all cars consistent",
+            "all cars consistent"
+            if not lap_count_diff
+            else (
+                f"unexplained (car, rows, classified, status): {unexplained}; "
+                if unexplained
+                else ""
+            )
+            + (
+                f"explained (retirement lap kept as a row, or disqualified): {explained}"
+                if explained
+                else ""
+            ),
+            warn=not unexplained,
         )
     )
     short = results[results["laps"] < total]
