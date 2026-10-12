@@ -42,10 +42,12 @@ PASS_MARGIN_S = 0.1
 
 @dataclass(frozen=True)
 class Ahead:
-    """A car ahead on the road and the sim time its current lap started (line crossing)."""
+    """A car ahead on the road: when its current lap started (racing clock) and how far ahead
+    it is now, in seconds of its own driving."""
 
     car: CarState
     lap_start_s: float
+    gap_s: float
 
 
 @dataclass
@@ -61,18 +63,23 @@ def resolve(
     seed: int,
     me: CarState,
     my_lap_start_s: float,
-    now_s: float,
     ahead: Sequence[Ahead],
+    *,
+    context: str = "",
 ) -> TrafficOutcome:
-    """New lap target for ``me`` joining the track at ``now_s``; ``ahead`` is nearest first."""
+    """New lap target for ``me``; ``ahead`` is nearest first.
+
+    ``context`` separates the overtake draws of a second resolution in the same lap (the
+    restart after a safety car) from the first.
+    """
     p = setup.traffic
     out = TrafficOutcome(lap_target_s=me.lap_target_s)
     if not p.enabled or not ahead:
         return out
     lap = me.laps_completed + 1
+    salt = (context,) if context else ()
 
-    nearest = ahead[0]
-    if now_s - (nearest.lap_start_s + nearest.car.pit_hold_s) < p.dirty_air_window_s:
+    if ahead[0].gap_s < p.dirty_air_window_s:
         out.lap_target_s += p.dirty_air_loss_s
 
     passed: list[tuple[str, float]] = []  # (rival, their arrival) for passes made so far
@@ -93,7 +100,7 @@ def resolve(
             out.lap_target_s += p.blue_flag_attacker_loss_s
             _carry(out, rival, p.blue_flag_defender_loss_s)
             out.events.append(("BLUE_FLAG", {"yielded": rival, "lap": lap}))
-        elif chance > 0.0 and uniform(seed, "overtake", me.driver_id, rival, lap) < chance:
+        elif chance > 0.0 and uniform(seed, "overtake", me.driver_id, rival, lap, *salt) < chance:
             new_end = min(my_end + p.attacker_loss_s, their_end - PASS_MARGIN_S)
             out.lap_target_s = new_end - my_lap_start_s
             _carry(out, rival, p.defender_loss_s)

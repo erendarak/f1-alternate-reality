@@ -7,7 +7,11 @@ from f1ar.domain.driver_profiles import ProfileSet
 from f1ar.domain.identities import RaceRoster
 from f1ar.domain.race_state import RaceSetup, WorldState, WorldStatus
 from f1ar.simulation import lightweight_engine as engine
-from f1ar.simulation.scenarios import build_setup, default_traffic_params
+from f1ar.simulation.scenarios import (
+    build_setup,
+    default_race_control_params,
+    default_traffic_params,
+)
 from tests.conftest import HAM, REPO_ROOT, VER, run_ticks, run_to_end
 
 LEC = "charles_leclerc_2024"
@@ -50,7 +54,11 @@ from tests.conftest import CONFIGS, MONZA_2024, VER, HAM, run_ticks
 from f1ar.domain.identities import load_roster
 from f1ar.domain.driver_profiles import load_profiles
 from f1ar.simulation import lightweight_engine as engine
-from f1ar.simulation.scenarios import build_setup, default_traffic_params
+from f1ar.simulation.scenarios import (
+    build_setup,
+    default_race_control_params,
+    default_traffic_params,
+)
 r = load_roster(CONFIGS / "rosters" / f"{MONZA_2024}.json", expected_event_id=MONZA_2024)
 p = load_profiles(CONFIGS / "drivers" / "seed_2024_monza_drivers.yaml",
                   CONFIGS / "drivers" / "archetypes.yaml", r)
@@ -73,13 +81,15 @@ def test_common_random_numbers_across_scenarios(
 ) -> None:
     """Adding a third car doesn't change anyone else's luck: draws are keyed, not sequential.
 
-    Traffic off: with traffic, a third car may legitimately hold VER up.
+    Traffic and race control off: with them, a third car may legitimately hold VER up or
+    cause a safety car.
     """
     three = build_setup(
         monza_roster,
         monza_profiles,
         [VER, HAM, LEC],
         traffic=default_traffic_params(enabled=False),
+        race_control=default_race_control_params(enabled=False),
     )
     two_car_laps = _lap_times(_fresh(isolated_setup), VER)
     assert len(two_car_laps) == isolated_setup.track.total_laps

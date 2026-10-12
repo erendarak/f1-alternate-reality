@@ -9,15 +9,17 @@ leak the future. The pit stop the team has called for this lap is known, so it's
 from pydantic import BaseModel, ConfigDict
 
 from f1ar.domain.driver_profiles import PROFILE_FEATURE_NAMES
-from f1ar.domain.race_state import Compound, PaceMode, WorldState
+from f1ar.domain.race_state import Compound, PaceMode, RacePhase, WorldState
 from f1ar.simulation.lightweight_engine import pending_stop, standings
 
-OBSERVATION_SCHEMA_VERSION = 3
+OBSERVATION_SCHEMA_VERSION = 4
 
 STATE_FEATURE_NAMES: tuple[str, ...] = (
     "race.lap_number",
     "race.laps_remaining",
     "race.lap_fraction",
+    "race.vsc",
+    "race.safety_car",
     "car.position",
     "car.tyre_age_laps",
     *(f"car.compound.{c.value.lower()}" for c in Compound),
@@ -54,6 +56,8 @@ def build_observation(state: WorldState, driver_id: str) -> Observation:
         "race.lap_number": float(min(car.laps_completed + 1, total_laps)),
         "race.laps_remaining": float(total_laps - car.laps_completed),
         "race.lap_fraction": car.distance_m / state.setup.track.length_m,
+        "race.vsc": float(state.race_control.phase is RacePhase.VSC),
+        "race.safety_car": float(state.race_control.phase is RacePhase.SC),
         "car.position": float(standings(state).index(driver_id) + 1),
         "car.tyre_age_laps": float(car.tyre_age_laps),
         **{f"car.compound.{c.value.lower()}": float(car.compound is c) for c in Compound},

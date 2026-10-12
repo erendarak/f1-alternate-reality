@@ -16,6 +16,7 @@ from f1ar.domain.race_state import (
     PaceMode,
     PaceModeParams,
     PitParams,
+    RaceControlParams,
     RaceSetup,
     TrackSpec,
     TrafficParams,
@@ -170,6 +171,38 @@ def default_traffic_params(*, enabled: bool = True) -> TrafficParams:
     )
 
 
+def default_race_control_params(*, enabled: bool = True) -> RaceControlParams:
+    """Synthetic incident/neutralisation model: about one retirement and 0.6 neutralisations per
+    race on average. NOT calibrated."""
+    return RaceControlParams(
+        source_type=SourceType.EDITORIAL_ASSUMPTION,
+        note="Synthetic placeholders; rates to be compared with real 2024 races (EXP-002).",
+        enabled=enabled,
+        mistake_per_lap=0.012,
+        mistake_loss_min_s=0.8,
+        mistake_loss_max_s=4.0,
+        crash_per_lap=0.0012,
+        first_lap_crash_multiplier=6.0,
+        failure_per_lap=0.0005,
+        push_risk_multiplier=1.6,
+        conserve_risk_multiplier=0.6,
+        crash_sc_probability=0.65,
+        crash_vsc_probability=0.3,
+        failure_sc_probability=0.15,
+        failure_vsc_probability=0.4,
+        vsc_speed_fraction=0.7,
+        vsc_min_s=60.0,
+        vsc_max_s=160.0,
+        sc_min_laps=3,
+        sc_max_laps=5,
+        sc_lap_factor=1.5,
+        sc_catch_up_lap_factor=1.25,
+        sc_spacing_m=40.0,
+        sc_deploy_ahead_m=150.0,
+        neutralised_pit_window_laps=10,
+    )
+
+
 def pit_params_from_total_loss(total_loss_s: float, note: str) -> PitParams:
     """Pit model whose median whole-stop loss equals a data estimate (lane = total - standstill).
 
@@ -193,6 +226,7 @@ def build_setup(
     lap_model: LapModelParams | None = None,
     pit: PitParams | None = None,
     traffic: TrafficParams | None = None,
+    race_control: RaceControlParams | None = None,
     tick_seconds: float = DEFAULT_TICK_SECONDS,
     start_compound: Compound = Compound.MEDIUM,
     start_compounds: Mapping[str, Compound] | None = None,
@@ -213,6 +247,7 @@ def build_setup(
         lap_model=lap_model or default_lap_model(),
         pit=pit or default_pit_params(),
         traffic=traffic or default_traffic_params(),
+        race_control=race_control or default_race_control_params(),
         tick_seconds=tick_seconds,
         profile_set_manifest_hash=profiles.manifest_hash,
         drivers=tuple(

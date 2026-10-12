@@ -7,7 +7,7 @@ can't know. Gaps are approximate display values derived from track position.
 import math
 from typing import Any
 
-from f1ar.domain.race_state import CarStatus, RaceEvent, WorldState
+from f1ar.domain.race_state import CarStatus, RaceEvent, RacePhase, WorldState
 from f1ar.history.reference import HistoricalRace
 from f1ar.presentation.track_geometry import TrackGeometry
 from f1ar.simulation.lightweight_engine import pending_stop, plan_text, standings
@@ -62,7 +62,11 @@ def state_view(
         entry = state.setup.driver(driver_id)
         fraction = car.distance_m / track.length_m
         x, y = geometry.point_at(fraction)
-        if car.status is CarStatus.FINISHED and leader_car.finish_time_s is not None:
+        gap: float | None
+        laps_down: int | None
+        if car.status is CarStatus.RETIRED:
+            gap, laps_down = None, None
+        elif car.status is CarStatus.FINISHED and leader_car.finish_time_s is not None:
             gap = (car.finish_time_s or 0.0) - leader_car.finish_time_s
             laps_down = leader_car.laps_completed - car.laps_completed
         else:
@@ -87,7 +91,7 @@ def state_view(
                 "pace_mode": car.pace_mode.value,
                 "lap_pace_mode": car.lap_pace_mode.value,
                 "last_lap_time_s": car.last_lap_time_s,
-                "gap_to_leader_s": round(gap, 3),
+                "gap_to_leader_s": None if gap is None else round(gap, 3),
                 "laps_down": laps_down,
                 "pit_stops": car.pit_stops,
                 "box": None if box is None else box.value,
@@ -95,8 +99,19 @@ def state_view(
                 "controller": car.controller.value,
                 "plan": plan_text(car.planned_stops),
                 "last_lap_traffic_loss_s": round(car.last_lap_traffic_loss_s, 3),
+                "retired_reason": car.retired_reason,
             }
         )
+    rc = state.race_control
+    safety_car = None
+    if rc.phase is RacePhase.SC and rc.sc_distance_m is not None:
+        sc_fraction = rc.sc_distance_m / track.length_m
+        sx, sy = geometry.point_at(sc_fraction)
+        safety_car = {
+            "x": round(sx, 1),
+            "y": round(sy, 1),
+            "heading_deg": round(geometry.heading_at(sc_fraction), 1),
+        }
     return {
         "mode": state.mode,
         "world_id": state.world_id,
@@ -109,6 +124,19 @@ def state_view(
         "leader_lap": min(leader_car.laps_completed + 1, track.total_laps),
         "total_laps": track.total_laps,
         "engine_version": state.engine_version,
+        "race_control": {
+            "phase": rc.phase.value,
+            "safety_car": safety_car,
+            "sc_laps_left": rc.sc_laps_left if rc.phase is RacePhase.SC else None,
+            "vsc_left_s": (
+                round(rc.vsc_until_s - state.sim_clock_s, 1)
+                if rc.phase is RacePhase.VSC and rc.vsc_until_s is not None
+                else None
+            ),
+            "cause": rc.cause,
+            "sc_count": rc.sc_count,
+            "vsc_count": rc.vsc_count,
+        },
         "cars": cars,
         "events": [e.model_dump(mode="json") for e in recent_events],
     }

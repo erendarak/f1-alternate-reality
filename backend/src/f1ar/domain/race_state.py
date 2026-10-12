@@ -16,7 +16,7 @@ from f1ar.domain.provenance import SourceType
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 5
+WORLD_SCHEMA_VERSION = 6
 
 
 class _Frozen(BaseModel):
@@ -33,6 +33,17 @@ class WorldStatus(StrEnum):
 class CarStatus(StrEnum):
     RUNNING = "RUNNING"
     FINISHED = "FINISHED"
+    RETIRED = "RETIRED"
+    """Out of the race (crash or mechanical failure); parked where it stopped."""
+
+
+class RacePhase(StrEnum):
+    GREEN = "GREEN"
+    VSC = "VSC"
+    """Virtual safety car: every car at a fixed fraction of racing speed; the pit lane isn't
+    slowed down."""
+    SC = "SC"
+    """Safety car on track: the field queues behind it, no overtaking."""
 
 
 class Compound(StrEnum):
@@ -152,6 +163,50 @@ class TrafficParams(_Frozen):
     """A lapped car always yields; it loses this on its next lap."""
 
 
+class RaceControlParams(_Frozen):
+    """Incidents and neutralisations (plan §7.5, §10). Ideas credited to TUM FTM race-simulation
+    (per-driver accident probability, higher risk on lap 1, FCY phases); probabilities and
+    durations are editorial until calibrated against real seasons (EXP-002, M4)."""
+
+    source_type: Literal[SourceType.EDITORIAL_ASSUMPTION, SourceType.ESTIMATED_FROM_DATA]
+    note: str
+    enabled: bool = True
+    """False = no mistakes, crashes, failures or neutralisations (isolated experiments)."""
+    mistake_per_lap: float = Field(ge=0, le=1)
+    """Mistake probability per lap for a neutral driver (consistency = composure = 0.5) in
+    BALANCED mode."""
+    mistake_loss_min_s: float = Field(ge=0)
+    mistake_loss_max_s: float = Field(ge=0)
+    crash_per_lap: float = Field(ge=0, le=1)
+    """Crash (retirement) probability per lap for a neutral driver in BALANCED."""
+    first_lap_crash_multiplier: float = Field(ge=1)
+    failure_per_lap: float = Field(ge=0, le=1)
+    """Mechanical failure (retirement) probability per lap; the same for every car for now."""
+    push_risk_multiplier: float = Field(ge=1)
+    conserve_risk_multiplier: float = Field(gt=0, le=1)
+    crash_sc_probability: float = Field(ge=0, le=1)
+    crash_vsc_probability: float = Field(ge=0, le=1)
+    """After a crash: SC with the first probability, else VSC with the second, else nothing."""
+    failure_sc_probability: float = Field(ge=0, le=1)
+    failure_vsc_probability: float = Field(ge=0, le=1)
+    vsc_speed_fraction: float = Field(gt=0, le=1)
+    """Under VSC every car runs at this fraction of its racing speed."""
+    vsc_min_s: float = Field(gt=0)
+    vsc_max_s: float = Field(gt=0)
+    sc_min_laps: int = Field(ge=1)
+    sc_max_laps: int = Field(ge=1)
+    sc_lap_factor: float = Field(gt=1)
+    """Safety-car lap time = base lap x this."""
+    sc_catch_up_lap_factor: float = Field(gt=1)
+    """Cars behind the safety car close up at base lap x this until they reach the queue."""
+    sc_spacing_m: float = Field(gt=0)
+    """Distance kept to the car (or safety car) ahead in the queue."""
+    sc_deploy_ahead_m: float = Field(ge=0)
+    """The safety car joins this far ahead of the race leader."""
+    neutralised_pit_window_laps: int = Field(ge=0)
+    """Baseline strategy: under SC/VSC, bring a planned stop forward if it's this close."""
+
+
 class DriverEntry(_Frozen):
     driver_id: str
     code: str
@@ -170,6 +225,7 @@ class RaceSetup(_Frozen):
     lap_model: LapModelParams
     pit: PitParams
     traffic: TrafficParams
+    race_control: RaceControlParams
     tick_seconds: float = Field(gt=0)
     profile_set_manifest_hash: str
     """Hash of the full ProfileSet the embedded profiles were taken from."""
@@ -199,6 +255,16 @@ class PlannedStop(_Frozen):
     lap: int = Field(ge=1)
     """Pit at the end of this lap (the car crosses the line in the pit lane)."""
     compound: Compound
+
+
+class PendingOvertake(_Frozen):
+    """A pass decided when the attacker joined the track; announced (OVERTAKE) when the
+    attacker actually moves ahead on the road, dropped if a safety car comes out first."""
+
+    rival: str
+    lap: int = Field(ge=1)
+    margin_s: float
+    probability: float = Field(ge=0, le=1)
 
 
 class CarState(_Frozen):
@@ -237,8 +303,49 @@ class CarState(_Frozen):
     last_lap_traffic_loss_s: float
     carried_loss_s: float = Field(ge=0)
     """Time lost defending or yielding, added to the car's next lap."""
+    pending_overtakes: tuple[PendingOvertake, ...]
+    """HIDDEN: passes decided for this lap that haven't happened on the road yet."""
+    incident_kind: Literal["MISTAKE", "CRASH", "FAILURE"] | None
+    """This lap's incident, drawn at lap start from keyed randomness. HIDDEN, like
+    ``lap_target_s``: a MISTAKE's time loss is already in the lap time; it's announced, or the
+    car retires (CRASH/FAILURE), when the car reaches ``incident_at_fraction``."""
+    incident_at_fraction: float | None
+    lap_started_at_s: float = Field(ge=0)
+    """Sim time the lap in progress started (line crossing); lap times are measured from it."""
     last_lap_time_s: float | None
     finish_time_s: float | None
+    retired_reason: str | None
+    """``"CRASH"`` or ``"FAILURE"`` once RETIRED."""
+    retired_at_s: float | None
+
+
+class RaceControl(_Frozen):
+    """Neutralisation state. Under SC the safety car is a real entity on track."""
+
+    phase: RacePhase
+    since_s: float = Field(ge=0)
+    vsc_until_s: float | None
+    """VSC only: sim time the VSC ends."""
+    sc_distance_m: float | None
+    """SC only: the safety car's distance into the lap."""
+    sc_laps_left: int = Field(ge=0)
+    """SC only: line crossings of the safety car left before it pulls in (0 = pulls in now)."""
+    cause: str | None
+    """Driver whose incident caused the neutralisation."""
+    sc_count: int = Field(ge=0)
+    vsc_count: int = Field(ge=0)
+
+
+GREEN_FLAG = RaceControl(
+    phase=RacePhase.GREEN,
+    since_s=0.0,
+    vsc_until_s=None,
+    sc_distance_m=None,
+    sc_laps_left=0,
+    cause=None,
+    sc_count=0,
+    vsc_count=0,
+)
 
 
 EventType = Literal[
@@ -255,6 +362,13 @@ EventType = Literal[
     "TYRE_RULE_BREACHED",
     "OVERTAKE",
     "BLUE_FLAG",
+    "MISTAKE",
+    "CAR_RETIRED",
+    "VSC_DEPLOYED",
+    "VSC_ENDED",
+    "SAFETY_CAR_DEPLOYED",
+    "SAFETY_CAR_IN",
+    "RESTART",
 ]
 
 
@@ -316,7 +430,7 @@ DriverAction = SetPaceMode | RequestPitStop | CancelPitStop | SetStrategyControl
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[5]
+    schema_version: Literal[6]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None
@@ -330,6 +444,10 @@ class WorldState(_Frozen):
     cars: tuple[CarState, ...]
     chequered_flag_s: float | None
     """Sim time the leader took the flag; every later line crossing finishes that car."""
+    race_control: RaceControl
+    race_clock_s: float = Field(ge=0)
+    """Racing clock: runs with sim time under green, slower under VSC (all lap progress is
+    measured in it), and like sim time under SC (where the queue model moves cars)."""
     event_seq: int = Field(ge=0)
     """Number of events emitted so far; the next event gets this sequence number."""
 

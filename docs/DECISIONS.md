@@ -379,3 +379,43 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
 - **Not yet:** the baseline strategy still plans for an empty track (it doesn't aim for clean
   air or the undercut); there's no DRS train detection, no start performance, and no
   track-specific overtaking difficulty from data (EXP-002/M4).
+
+## D-024 — Incidents, VSC and the safety car; engine v0.6.0 (2026-10-12)
+
+- **Incidents** (`simulation/incidents.py`, TUM ideas re-implemented): per car and lap, one keyed
+  draw `uniform(seed, "incident", driver, lap)` picks crash / failure / mistake / nothing, with
+  keyed position in the lap and mistake size. Crash and mistake rates scale with
+  `(1.5 - consistency) x (1.5 - composure)` and the pace mode; crashes x6 on lap 1; failures are
+  the same for every car (no reliability data yet). The draw happens at lap start and is kept in
+  hidden car fields (`incident_kind`, `incident_at_fraction`), like the pre-sampled lap time:
+  never in an observation. Forks share the draws (common random numbers).
+- **Retirement:** when the car reaches the point, it becomes `RETIRED` and stays parked there.
+  Race control then picks SC / VSC / nothing with keyed probabilities (crash: SC 0.65, else VSC
+  0.3; failure: SC 0.15, else VSC 0.4) and a keyed length (SC 3-5 laps, VSC 60-160 s). The phase
+  changes at the next tick boundary (constant within a tick).
+- **VSC = slowed racing clock.** `WorldState.race_clock_s` advances by `k x dt` (k = 0.7) under
+  VSC and `dt` otherwise; all lap progress and traffic resolution use it, so the order and
+  relative gaps are preserved. Pit-lane holds advance in sim time, so stopping under VSC costs
+  less track position, as in reality.
+- **Safety car = queue model.** A real safety car moves at base lap x 1.5; cars close up at base
+  lap x 1.25 but keep 40 m to the car ahead, processed from the safety car backwards around the
+  lap, so nobody overtakes (tested). Cars that start closer than the spacing (racing nose to
+  tail, or leaving the pits together) are held until the gap has opened. The safety car pulls in
+  at its last line crossing; the restart re-expresses every car's current lap from its position
+  (the rest at racing pace) and resolves traffic front to back with separately keyed draws.
+- **Overtakes are announced when they happen** on the road (pending passes), not when they are
+  decided at lap start; a safety car voids pending passes.
+- **Baseline strategy under SC/VSC:** a planned stop within `neutralised_pit_window_laps` (10)
+  is brought forward to the current line crossing.
+- **Race director action** (`deploy_neutralisation`, runner `DEPLOY_SC`/`DEPLOY_VSC`): a user
+  command between ticks, logged and reproducible; VSC can be upgraded to SC; rejected after the
+  flag or while the safety car is out.
+- **Schema:** `CarStatus.RETIRED`; `CarState` gains `retired_reason`, `retired_at_s`,
+  `lap_started_at_s` (lap times are measured in sim time from it), `incident_kind`,
+  `incident_at_fraction`, `pending_overtakes`; `WorldState` gains `race_control` and
+  `race_clock_s`. Events `MISTAKE`, `CAR_RETIRED`, `VSC_DEPLOYED`, `VSC_ENDED`,
+  `SAFETY_CAR_DEPLOYED`, `SAFETY_CAR_IN`, `RESTART`; `PIT_STOP.under`. Observation v4 adds
+  `race.vsc`, `race.safety_car`. Standings put retired cars last (more laps first).
+  `ENGINE_VERSION = lightweight_engine_v0.6.0`, `WORLD_SCHEMA_VERSION = 6`.
+- **Visual asset:** the safety-car sprite is our own 16x16 pixel art defined in the page
+  (generic road car, no real make, livery or logo), in line with D-017.

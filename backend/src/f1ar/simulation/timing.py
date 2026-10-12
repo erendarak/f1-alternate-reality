@@ -8,8 +8,8 @@ from f1ar.domain.race_state import CarStatus, RaceEvent, WorldState
 
 class LapTimingSheet:
     """Collects line crossings and emits one text row per lap once every car still racing on
-    that lap has completed it. Cars flagged a lap (or more) down don't hold rows back. A ``P``
-    after a car's gap marks a lap that ended in the pit lane."""
+    that lap has completed it. Cars flagged a lap (or more) down or retired don't hold rows
+    back. A ``P`` after a car's gap marks a lap that ended in the pit lane."""
 
     def __init__(self, code_of: Mapping[str, str], total_laps: int, every: int = 1) -> None:
         self._code_of = dict(code_of)
@@ -34,7 +34,7 @@ class LapTimingSheet:
                 )
             elif e.type == "PIT_STOP":
                 self._pitted[int(e.payload["lap"])].add(e.driver_id)
-            elif e.type == "CAR_FINISHED":
+            elif e.type in ("CAR_FINISHED", "CAR_RETIRED"):
                 self._finished_after[e.driver_id] = int(e.payload["laps"])
         rows = []
         while self._next_lap <= self._total and self._lap_complete(self._next_lap):
@@ -60,8 +60,11 @@ class LapTimingSheet:
 
 
 def result_gap(state: WorldState, driver_id: str, winner_id: str) -> str:
-    """Gap to the winner as on a results sheet: ``+12.345s``, or ``+1 lap`` for lapped cars."""
+    """Gap to the winner as on a results sheet: ``+12.345s``, ``+1 lap`` for lapped cars,
+    ``DNF (CRASH, lap 24)`` for retirements."""
     car, winner = state.car(driver_id), state.car(winner_id)
+    if car.status is CarStatus.RETIRED:
+        return f"DNF ({car.retired_reason}, lap {car.laps_completed + 1})"
     laps_down = winner.laps_completed - car.laps_completed
     if car.status is CarStatus.FINISHED and laps_down > 0:
         return f"+{laps_down} lap{'s' if laps_down > 1 else ''}"

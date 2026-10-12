@@ -94,6 +94,8 @@
       <span class="break"></span>
       <span id="speeds"></span>
       <button id="save" class="sim-only">Save</button>
+      <button id="deploySC" class="sim-only" title="Race director: send out the safety car (4 laps)">Deploy SC</button>
+      <button id="deployVSC" class="sim-only" title="Race director: virtual safety car (90 s)">Deploy VSC</button>
       <span class="break sim-only"></span>
       <button id="restart" class="sim-only" title="Same seed: the identical race again">Restart (same seed)</button>
       <button id="newrace" class="sim-only" title="Fresh random seed: a different race">New race</button>
@@ -132,7 +134,7 @@ let track = null, view = null, selected = null, mode = "FREE_SIMULATION";
 let prev = new Map(), curr = new Map(), heading = new Map(), lastPoll = performance.now();
 let spriteSrc = null; const spriteCache = new Map();
 const POLL_MS = 100;
-const CAR_LENGTH_M = 5.6, TRACK_WIDTH_M = 14, MIN_CAR_PX = 22, MAX_CAR_PX = 90;
+const CAR_LENGTH_M = 5.6, TRACK_WIDTH_M = 14, MIN_CAR_PX = 22, MAX_CAR_PX = 90, SC_ID = "__safety_car__";
 const BATTLE_PX_PER_M = 7;          // battle cam scale: a car is ~40 px, ~200 m of track on screen
 const SIM_SPEEDS = [1, 2, 5, 10, 25], REPLAY_SPEEDS = [1, 2, 5, 10, 25, 50];
 
@@ -210,6 +212,41 @@ function teamSprite(hex) {
   g.putImageData(data, 0, 0); spriteCache.set(hex, c); return c;
 }
 
+// Safety car: generic top-down road car drawn as pixel art here (no real make or livery).
+// Nose up, like the race-car sprite. S body, k outline, G glass, w wheels, L light bar.
+const SC_PIXELS = [
+  "................",
+  ".....kkkkkk.....",
+  "....kSSSSSSk....",
+  "..wkSSSSSSSSkw..",
+  "..wkSSSSSSSSkw..",
+  "...kGGGGGGGGk...",
+  "...kGGGGGGGGk...",
+  "...kSLLSSLLSk...",
+  "...kSSSSSSSSk...",
+  "...kSSSSSSSSk...",
+  "...kGGGGGGGGk...",
+  "..wkSSSSSSSSkw..",
+  "..wkSSSSSSSSkw..",
+  "....kSSSSSSk....",
+  ".....kkkkkk.....",
+  "................",
+];
+const SC_COLORS = { S: "#d9dde3", k: "#2b2f36", G: "#1d2836", w: "#0d0f12" };
+const scSprites = [null, null];
+function safetyCarSprite(lightsOn) {
+  const i = lightsOn ? 1 : 0;
+  if (scSprites[i]) return scSprites[i];
+  const c = document.createElement("canvas"); c.width = 16; c.height = 16;
+  const g = c.getContext("2d");
+  SC_PIXELS.forEach((row, y) => [...row].forEach((ch, x) => {
+    if (ch === ".") return;
+    g.fillStyle = ch === "L" ? (lightsOn ? "#ffb000" : "#ff5a00") : SC_COLORS[ch];
+    g.fillRect(x, y, 1, 1);
+  }));
+  return (scSprites[i] = c);
+}
+
 // --- drawing ------------------------------------------------------------------------------------
 function drawTrack() {
   const path = new Path2D();
@@ -217,7 +254,8 @@ function drawTrack() {
   path.closePath();
   const w = Math.max(12, TRACK_WIDTH_M * pxPerM());
   ctx.lineJoin = "round"; ctx.lineCap = "round";
-  ctx.strokeStyle = getCss("--track-edge"); ctx.lineWidth = w + 4; ctx.stroke(path);
+  const neutralised = view && view.race_control && view.race_control.phase !== "GREEN";
+  ctx.strokeStyle = neutralised ? getCss("--warn") : getCss("--track-edge"); ctx.lineWidth = w + 4; ctx.stroke(path);
   ctx.strokeStyle = getCss("--track"); ctx.lineWidth = w; ctx.stroke(path);
   const [sx, sy] = toScreen(track.outline[0]), [nx, ny] = toScreen(track.outline[1]);
   const ang = Math.atan2(ny - sy, nx - sx) + Math.PI / 2, half = w / 2 + 2;
@@ -237,11 +275,11 @@ function drawTrack() {
 function framePositions(alpha) {
   const out = new Map();
   if (!view) return out;
-  for (const car of view.cars) {
-    const a = prev.get(car.driver_id), b = curr.get(car.driver_id);
+  for (const id of [...view.cars.map((c) => c.driver_id), SC_ID]) {
+    const a = prev.get(id), b = curr.get(id);
     if (!b) continue;
     const jump = a ? Math.hypot(b[0] - a[0], b[1] - a[1]) : 0;
-    out.set(car.driver_id, !a || jump > 400 || view.status !== "RUNNING" ? b : [a[0] + (b[0] - a[0]) * alpha, a[1] + (b[1] - a[1]) * alpha]);
+    out.set(id, !a || jump > 400 || view.status !== "RUNNING" ? b : [a[0] + (b[0] - a[0]) * alpha, a[1] + (b[1] - a[1]) * alpha]);
   }
   return out;
 }
@@ -250,7 +288,8 @@ function framePositions(alpha) {
 function spread(positions) {
   const placed = [], out = new Map(), minGap = CAR_LENGTH_M * 1.6, lateral = TRACK_WIDTH_M * 0.27;
   for (const car of view.cars) {
-    const p = positions.get(car.driver_id); if (!p || car.status === "RETIRED") continue;
+    const p = positions.get(car.driver_id); if (!p) continue;
+    if (car.status === "RETIRED") { if (mode !== "HISTORICAL_REPLAY") out.set(car.driver_id, p); continue; }
     const h = (heading.get(car.driver_id) || 0) * Math.PI / 180, nx = -Math.sin(h), ny = Math.cos(h);
     let q = p;
     for (const k of [0, 1, -1]) {
@@ -260,6 +299,7 @@ function spread(positions) {
     }
     placed.push(q); out.set(car.driver_id, q);
   }
+  if (positions.has(SC_ID)) out.set(SC_ID, positions.get(SC_ID));
   return out;
 }
 
@@ -273,6 +313,8 @@ function drawCars(positions) {
     const [x, y] = toScreen(p);
     if (x < -carPx || y < -carPx || x > W + carPx || y > H + carPx) continue;
     const sprite = teamSprite(car.team_color), isSel = car.driver_id === selected;
+    const out = car.status === "RETIRED";
+    ctx.globalAlpha = out ? 0.4 : 1;
     if (isSel) { ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(x, y, carPx * 0.62, 0, 2 * Math.PI); ctx.stroke(); }
     if (sprite) {
       const ang = -((heading.get(car.driver_id) || 0) + track.rotation_deg) * Math.PI / 180 + Math.PI / 2;
@@ -282,11 +324,43 @@ function drawCars(positions) {
       ctx.fillStyle = "#" + car.team_color; ctx.strokeStyle = "#0f1115"; ctx.lineWidth = 2;
       ctx.beginPath(); ctx.arc(x, y, 7, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
     }
-    const label = zoomedIn ? `P${car.position} ${car.code}` : car.code;
+    const label = out ? `${car.code} OUT` : zoomedIn ? `P${car.position} ${car.code}` : car.code;
     const tw = ctx.measureText(label).width, lx = x + carPx * 0.55, ly = y - carPx * 0.35;
     ctx.fillStyle = "rgba(15,17,21,.75)"; ctx.fillRect(lx - 3, ly - 8, tw + 6, 16);
     ctx.fillStyle = isSel ? "#fff" : "#e6e8eb"; ctx.fillText(label, lx, ly);
+    if (out) {  // a red cross over a retired car
+      ctx.globalAlpha = 0.9; ctx.strokeStyle = "#e10600"; ctx.lineWidth = 2; const r = carPx * 0.3;
+      ctx.beginPath(); ctx.moveTo(x - r, y - r); ctx.lineTo(x + r, y + r); ctx.moveTo(x + r, y - r); ctx.lineTo(x - r, y + r); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
   }
+  const scPos = positions.get(SC_ID);
+  if (scPos) {
+    const [x, y] = toScreen(scPos);
+    const lightsOn = Math.floor(performance.now() / 350) % 2 === 0;
+    const ang = -((heading.get(SC_ID) || 0) + track.rotation_deg) * Math.PI / 180 + Math.PI / 2;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(safetyCarSprite(lightsOn), -carPx / 2, -carPx / 2, carPx, carPx); ctx.restore();
+    const label = "SC", tw = ctx.measureText(label).width, lx = x + carPx * 0.55, ly = y - carPx * 0.35;
+    ctx.fillStyle = lightsOn ? "#ffb000" : "#ff8a00"; ctx.fillRect(lx - 3, ly - 8, tw + 6, 16);
+    ctx.fillStyle = "#111"; ctx.fillText(label, lx, ly);
+  }
+}
+
+function drawBanner() {
+  const rc = view && view.race_control;
+  if (!rc || rc.phase === "GREEN") return;
+  const text = rc.phase === "SC"
+    ? `SAFETY CAR${rc.sc_laps_left ? ` · ${rc.sc_laps_left} lap${rc.sc_laps_left > 1 ? "s" : ""} to go` : " · in this lap"}`
+    : `VIRTUAL SAFETY CAR${rc.vsc_left_s != null ? ` · ${Math.max(0, Math.ceil(rc.vsc_left_s))} s` : ""}`;
+  const cause = view.cars.find((c) => c.driver_id === rc.cause);
+  const sub = cause ? `${cause.code} ${cause.retired_reason === "FAILURE" ? "stopped on track" : "crashed"}` : "";
+  ctx.font = "bold 15px system-ui"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  const w = Math.max(ctx.measureText(text).width, 120) + 32;
+  const blink = Math.floor(performance.now() / 500) % 2 === 0;
+  ctx.fillStyle = blink ? "#ffcc00" : "#f5b041"; ctx.fillRect(W / 2 - w / 2, 34, w, sub ? 44 : 28);
+  ctx.fillStyle = "#111"; ctx.fillText(text, W / 2, 48);
+  if (sub) { ctx.font = "12px system-ui"; ctx.fillText(sub, W / 2, 68); }
 }
 
 // Time-based easing: smooth at 60 fps, and still converges when the browser throttles frames.
@@ -305,7 +379,7 @@ function frame() {
       const [tx, ty] = rotate(shown.get(cam.follow), track.rotation_deg), k = ease(dt, cam.zoom > 3 ? 60 : 120);
       cam.cx += (tx - cam.cx) * k; cam.cy += (ty - cam.cy) * k;
     }
-    drawTrack(); drawCars(shown); camLabel();
+    drawTrack(); drawCars(shown); drawBanner(); camLabel();
   }
   requestAnimationFrame(frame);
 }
@@ -331,7 +405,7 @@ function setMode(m) {
   $("clockLabel").firstChild.textContent = replay ? "Race " : "Sim ";
   $("modeHead").textContent = replay ? "Lap type" : "Mode";
   $("footer").textContent = (replay ? "Recorded race (FastF1/F1 timing) · no simulation"
-    : "Synthetic, uncalibrated lap model · pit stops + baseline strategy · traffic + overtakes · no SC/DNF yet") + " · Space play/pause · → step · wheel zoom · drag pan · F follow · B battle cam · Esc fit"
+    : "Synthetic, uncalibrated lap model · pit stops, traffic, incidents, VSC + safety car (editorial rates)") + " · Space play/pause · → step · wheel zoom · drag pan · F follow · B battle cam · Esc fit"
     + (track && track.car_sprite ? " · " + track.car_sprite.credit : "");
   $("speeds").innerHTML = (replay ? REPLAY_SPEEDS : SIM_SPEEDS).map((s) => `<button data-speed="${s}">x${s}</button>`).join(" ");
   document.querySelectorAll("[data-speed]").forEach((b) => (b.onclick = () => command({ type: "SET_SPEED", speed: Number(b.dataset.speed) })));
@@ -373,13 +447,20 @@ function render() {
     const p = e.payload;
     const txt = e.type === "LAP_COMPLETED" ? `lap ${p.lap} ${fmtLap(p.lap_time_s)}`
       : e.type === "PACE_MODE_CHANGED" ? `${p.from}→${p.to} from lap ${p.effective_from_lap}`
-      : e.type === "PIT_STOP" ? `lap ${p.lap} ${p.from_compound}→${p.to_compound} after ${p.tyre_age_laps} laps · ${p.standstill_s.toFixed(1)} s stationary, ${p.pit_loss_s.toFixed(1)} s total`
+      : e.type === "PIT_STOP" ? `lap ${p.lap} ${p.from_compound}→${p.to_compound} after ${p.tyre_age_laps} laps · ${p.standstill_s.toFixed(1)} s stationary, ${p.pit_loss_s.toFixed(1)} s total${p.under && p.under !== "GREEN" ? ` · under ${p.under} (cheap stop)` : ""}`
       : e.type === "PIT_REQUESTED" || e.type === "PIT_CANCELLED" ? `${p.compound} at end of lap ${p.in_lap}`
       : e.type === "STRATEGY_PLANNED" ? p.plan
       : e.type === "CONTROLLER_CHANGED" ? `${p.from}→${p.to}`
       : e.type === "CAR_FINISHED" ? `${p.laps} laps`
       : e.type === "OVERTAKE" ? `passes ${code(p.passed)} on lap ${p.lap} (chance ${Math.round(p.probability * 100)}%)`
       : e.type === "BLUE_FLAG" ? `laps ${code(p.yielded)} (blue flag) on lap ${p.lap}`
+      : e.type === "MISTAKE" ? `mistake on lap ${p.lap}, lost ${p.time_loss_s.toFixed(1)} s`
+      : e.type === "CAR_RETIRED" ? `OUT on lap ${p.lap} (${p.reason === "CRASH" ? "crash" : "mechanical failure"})`
+      : e.type === "SAFETY_CAR_DEPLOYED" ? `🚨 SAFETY CAR deployed for ${p.laps} laps${p.actor_id === "USER" ? " (race director)" : ""}`
+      : e.type === "VSC_DEPLOYED" ? `VIRTUAL SAFETY CAR for ${Math.round(p.duration_s)} s${p.actor_id === "USER" ? " (race director)" : ""}`
+      : e.type === "SAFETY_CAR_IN" ? "safety car in this lap"
+      : e.type === "VSC_ENDED" ? "VSC ending: green flag"
+      : e.type === "RESTART" ? "green flag: racing resumes"
       : p.detail ?? JSON.stringify(p);
     const when = e.tick != null ? `t${e.tick}` : `lap ${p.lap}`;
     return `<div>${when} · ${who} ${e.type} ${txt}</div>`;
@@ -391,6 +472,8 @@ async function poll() {
     if ((next.mode || "FREE_SIMULATION") !== mode || !view) { view = next; setMode(next.mode || "FREE_SIMULATION"); }
     prev = curr; curr = new Map(next.cars.map((c) => [c.driver_id, [c.x, c.y]]));
     heading = new Map(next.cars.map((c) => [c.driver_id, c.heading_deg]));
+    const sc = next.race_control && next.race_control.safety_car;
+    if (sc) { curr.set(SC_ID, [sc.x, sc.y]); heading.set(SC_ID, sc.heading_deg); }
     view = next; lastPoll = performance.now(); render();
   } catch (e) { $("msg").textContent = "backend unreachable: " + e; }
   setTimeout(poll, POLL_MS);
@@ -407,6 +490,8 @@ $("save").onclick = () => command({ type: "SAVE" });
 document.querySelectorAll("[data-step]").forEach((b) => (b.onclick = () => command({ type: "STEP", ticks: Number(b.dataset.step) })));
 document.querySelectorAll("[data-mode]").forEach((b) => (b.onclick = () => selected && command({ type: "SET_PACE_MODE", driver_id: selected, pace_mode: b.dataset.mode })));
 document.querySelectorAll("[data-box]").forEach((b) => (b.onclick = () => selected && command({ type: "PIT_REQUEST", driver_id: selected, compound: b.dataset.box })));
+$("deploySC").onclick = () => command({ type: "DEPLOY_SC", laps: 4 });
+$("deployVSC").onclick = () => command({ type: "DEPLOY_VSC", duration_s: 90 });
 $("stayOut").onclick = () => selected && command({ type: "PIT_CANCEL", driver_id: selected });
 $("aiStrategy").onclick = () => selected && command({ type: "SET_CONTROLLER", driver_id: selected, controller: "BASELINE" });
 $("seek").oninput = () => ($("seekLabel").textContent = $("seek").value);

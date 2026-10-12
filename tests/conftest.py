@@ -6,7 +6,11 @@ from f1ar.domain.driver_profiles import ProfileSet, load_profiles
 from f1ar.domain.identities import RaceRoster, load_roster
 from f1ar.domain.race_state import RaceSetup, WorldState, WorldStatus
 from f1ar.simulation import lightweight_engine as engine
-from f1ar.simulation.scenarios import build_setup, default_traffic_params
+from f1ar.simulation.scenarios import (
+    build_setup,
+    default_race_control_params,
+    default_traffic_params,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CONFIGS = REPO_ROOT / "configs"
@@ -48,9 +52,15 @@ def two_car_setup(monza_roster: RaceRoster, monza_profiles: ProfileSet) -> RaceS
 
 @pytest.fixture(scope="session")
 def isolated_setup(two_car_setup: RaceSetup) -> RaceSetup:
-    """VER + HAM with traffic disabled: cars can't affect each other, so tests can pin that a
-    decision or profile change moves only the car it belongs to (common random numbers)."""
-    return two_car_setup.model_copy(update={"traffic": default_traffic_params(enabled=False)})
+    """VER + HAM with traffic and race control disabled: cars can't affect each other (no
+    passing, no safety car caused by the other car), so tests can pin that a decision or
+    profile change moves only the car it belongs to (common random numbers)."""
+    return two_car_setup.model_copy(
+        update={
+            "traffic": default_traffic_params(enabled=False),
+            "race_control": default_race_control_params(enabled=False),
+        }
+    )
 
 
 @pytest.fixture

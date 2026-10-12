@@ -33,6 +33,7 @@ from f1ar.domain.race_state import (
     DriverAction,
     PaceMode,
     RaceEvent,
+    RacePhase,
     RequestPitStop,
     SetPaceMode,
     SetStrategyController,
@@ -64,6 +65,10 @@ class CommandType(StrEnum):
     """Team action: stay out this lap (takes strategy over if a stop was pending)."""
     SET_CONTROLLER = "SET_CONTROLLER"
     """Hand a car's pit decisions to ``BASELINE`` (replans) or ``USER``."""
+    DEPLOY_SC = "DEPLOY_SC"
+    """Race director: send out the safety car now (``laps``, default 4)."""
+    DEPLOY_VSC = "DEPLOY_VSC"
+    """Race director: start a virtual safety car now (``duration_s``, default 90)."""
 
 
 class Command(BaseModel):
@@ -80,6 +85,8 @@ class Command(BaseModel):
     pace_mode: PaceMode | None = None
     compound: Compound | None = None
     controller: StrategyController | None = None
+    laps: int = Field(default=4, ge=1, le=20)
+    duration_s: float = Field(default=90.0, gt=0, le=600)
 
 
 class CommandAck(BaseModel):
@@ -324,6 +331,17 @@ class WorldRunner:
                 | CommandType.SET_CONTROLLER
             ):
                 self._commit(engine.apply_action(self._state, _action(command)))
+            case CommandType.DEPLOY_SC | CommandType.DEPLOY_VSC:
+                phase = RacePhase.SC if command.type is CommandType.DEPLOY_SC else RacePhase.VSC
+                self._commit(
+                    engine.deploy_neutralisation(
+                        self._state,
+                        phase,
+                        sc_laps=command.laps,
+                        vsc_s=command.duration_s,
+                        actor_id=command.actor_id,
+                    )
+                )
         return None
 
     # --- background thread --------------------------------------------------------------------

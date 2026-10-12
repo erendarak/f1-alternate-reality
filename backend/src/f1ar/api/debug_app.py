@@ -81,6 +81,8 @@ class CommandRequest(BaseModel):
     pace_mode: PaceMode | None = None
     compound: Compound | None = None
     controller: StrategyController | None = None
+    laps: int = Field(default=4, ge=1, le=20)
+    duration_s: float = Field(default=90.0, gt=0, le=600)
     label: str | None = None
 
 
@@ -175,6 +177,8 @@ def create_app(
             pace_mode=req.pace_mode,
             compound=req.compound,
             controller=req.controller,
+            laps=req.laps,
+            duration_s=req.duration_s,
             label=req.label,
         )
         future = runner.submit(cmd)

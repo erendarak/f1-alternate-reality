@@ -8,6 +8,7 @@ Type a command and press Enter:
     s [N]     step N ticks while paused (default 1; 168 ticks = about one lap)
     1 2 5 10 25   set speed multiplier
     p CODE MODE   pace mode for a driver from their next lap, e.g. 'p HAM push'
+    sc / vsc      race director: safety car (4 laps) / virtual safety car (90 s)
     b CODE TYRE   box at the end of this lap for S/M/H, e.g. 'b HAM h' (takes strategy over)
     o CODE        stay out: cancel the stop called for this lap
     a CODE        hand the driver's pit decisions back to the baseline strategy
@@ -43,6 +44,14 @@ from f1ar.simulation.world_runner import (
 ROOT = Path(__file__).resolve().parents[1]
 CONFIGS = ROOT / "configs"
 _TYRES = {c.value[0]: c for c in Compound}
+RACE_CONTROL_LINES = {
+    "CAR_RETIRED": "{who} OUT on lap {lap} ({reason})",
+    "SAFETY_CAR_DEPLOYED": "SAFETY CAR deployed for {laps} laps",
+    "VSC_DEPLOYED": "VIRTUAL SAFETY CAR for {duration_s:.0f} s",
+    "SAFETY_CAR_IN": "safety car in this lap",
+    "VSC_ENDED": "VSC ending, green flag",
+    "RESTART": "green flag: racing resumes",
+}
 _keys = itertools.count(1)
 
 
@@ -95,9 +104,13 @@ def main() -> None:
                 print(
                     f"  PIT {setup.driver(e.driver_id).code} lap {p['lap']}: "
                     f"{p['from_compound']} -> {p['to_compound']}, "
-                    f"{float(p['standstill_s']):.1f} s stationary",
+                    f"{float(p['standstill_s']):.1f} s stationary"
+                    + (f" (under {p['under']})" if p.get("under", "GREEN") != "GREEN" else ""),
                     flush=True,
                 )
+            elif e.type in RACE_CONTROL_LINES:
+                who = setup.driver(e.driver_id).code if e.driver_id else ""
+                print(f"  !! {RACE_CONTROL_LINES[e.type].format(who=who, **e.payload)}", flush=True)
         if any(e.type == "RACE_COMPLETED" for e in events):
             order = " ".join(setup.driver(d).code for d in engine.standings(state))
             print(f"\nRACE COMPLETE: {order}\n{_describe(state)}\nPress Enter to exit.", flush=True)
@@ -106,7 +119,7 @@ def main() -> None:
     runner.start_background()
     print(f"x{args.speed} | Enter = pause/resume, 's N' = step, 1/2/5/10/25 = speed,")
     print("      'p HAM push' = pace mode, 'b HAM h' = box for hards, 'o HAM' = stay out,")
-    print("      'a HAM' = baseline strategy, q = quit\n")
+    print("      'a HAM' = baseline strategy, 'sc' / 'vsc' = race director, q = quit\n")
     _send(runner, CommandType.START)
     try:
         while True:
@@ -120,7 +133,7 @@ def main() -> None:
                         CommandType.RESUME if status is WorldStatus.PAUSED else CommandType.PAUSE
                     )
                     ack = _send(runner, pause_or_resume)
-                elif line.startswith("s"):
+                elif line.startswith("s") and line != "sc":
                     ack = _send(runner, CommandType.STEP, ticks=int(line[1:].strip() or 1))
                 elif line.startswith("p "):
                     _, code, mode = line.split()
@@ -149,6 +162,9 @@ def main() -> None:
                         driver_id=by_code[code.upper()],
                         controller=StrategyController.BASELINE,
                     )
+                elif line in ("sc", "vsc"):
+                    deploy = CommandType.DEPLOY_SC if line == "sc" else CommandType.DEPLOY_VSC
+                    ack = _send(runner, deploy)
                 elif line.isdigit():
                     ack = _send(runner, CommandType.SET_SPEED, speed=int(line))
                 else:

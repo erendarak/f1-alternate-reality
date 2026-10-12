@@ -2,7 +2,20 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
-## Current (M2 slice 2)
+## Current (M2 slice 3)
+
+- **Incident and neutralisation rates are editorial** (about 0.9 retirements, 0.3 safety cars and
+  0.17 VSCs per race at Monza); every car has the same mechanical reliability; there are no red
+  flags, penalties, damage-without-retirement, or start-performance (launch) model.
+- **Safety-car model simplifications:** no lapped cars un-lapping themselves, no "safety car in
+  this lap" lights before the line, no formation behind the car at the restart beyond the 40 m
+  spacing; a car can stop dead for a tick if it starts closer than the spacing. Under SC the
+  pit-lane entry/exit isn't drawn either.
+- **VSC slows everyone by exactly the same fraction**; real VSC delta times vary per sector and
+  drivers gain/lose a little.
+- A crashed car stays on track (drawn greyed out) but doesn't block or slow anyone.
+- The **retired car's followers** keep the hold they had computed against it until their next
+  line crossing (small, local inaccuracy).
 
 - **Traffic parameters are editorial** (min gap 0.4 s, threshold 0.3 s, dirty air 0.15 s, ...);
   overtaking frequency isn't calibrated. Seed-42 Monza gives 6 overtakes; the real count is
@@ -18,7 +31,8 @@ Honest list of what does **not** work or is only approximate. Update whenever on
 - **Every baseline car plans a one-stop onto SOFT** (~lap 27 at Monza) because the placeholder
   compound coefficients (D-010) make the soft a race tyre. The real race was M->H. The planner is
   correct for its model; the compound model needs calibration (M4, measured in EXP-002).
-- **Strategy ignores safety cars** (not modelled yet, slice 3).
+- **Strategy reacts to SC/VSC only with a simple rule** (bring a stop within 10 laps forward);
+  no tyre-choice change for the shorter remaining stint, no "stay out to gain track position".
 - **Pit stop happens on the start/finish line.** The pit lane isn't drawn; a pitting car parks at
   the line for the whole hold (pit-lane loss + standstill), so it sits on top of the line in the
   viewer, and its display gap reads +0.0 while parked. Entry/exit time loss is lumped into the
@@ -49,8 +63,8 @@ Honest list of what does **not** work or is only approximate. Update whenever on
 - **Engine throughput** is about 0.5 s per 20-car race at 0.5 s ticks (~2 races/s). That's fine for live
   play and Monte Carlo of tens of races, but possibly slow for large RL training. Plan: a lap-level
   fast path sharing the same lap model (SIMULATOR_DECISION.md follow-up 3).
-- The engine has no safety car, VSC, failures, accidents or retirements yet (M2 slice 3).
-  TUM-derived ideas used so far: log-logistic standstill only.
+- TUM-derived ideas used so far: log-logistic standstill, overtaking time loss, per-driver
+  accident probability with a lap-1 multiplier, FCY phases (all re-implemented, editorial values).
 
 ## M0, step 7
 

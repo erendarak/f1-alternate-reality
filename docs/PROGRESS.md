@@ -6,7 +6,7 @@ M2 plan (agreed 2026-10-12, one slice per commit; engine version bump per behavi
 
 - [x] **Slice 1: pit stops + tyre choice, baseline strategy, chequered flag / lapped cars** (D-022, engine v0.4.0).
 - [x] **Slice 2: traffic, dirty air, overtaking cost, blue flags** (D-023, engine v0.5.0).
-- [ ] Slice 3: race control: SC/VSC, mistakes, accidents/failures -> DNF (TUM ideas; keyed hazards) (v0.6.0).
+- [x] **Slice 3: race control: mistakes, crashes/failures -> RETIRED, VSC, safety car + restart** (D-024, engine v0.6.0).
 - [ ] Slice 4: persistence: event + command log tables, named saves + autosave, restore-and-continue
   integration, invariants every tick, profile/model hash pinning.
 - [ ] Slice 5: batch headless benchmark, EXP-002 (EXP-001 again + 2024 Belgian GP), M2 DoD check.
@@ -358,3 +358,47 @@ Plan §22 checklist (adapted per D-002):
   realistic is open; EXP-002 will count real on-track passes in the data.
 - Tests: 227 offline passing (+14) + 2 network.
 - Next: slice 3, race control (SC/VSC) and the mistake/DNF model.
+
+### 2026-10-12 — M2 slice 3: incidents, retirements, VSC and the safety car
+
+- Engine v0.6.0, world schema v6, observation schema v4 (D-024). New `simulation/incidents.py`;
+  `RaceSetup.race_control: RaceControlParams` (editorial, with an `enabled` switch);
+  `WorldState.race_control` (phase GREEN/VSC/SC, safety-car position, laps left) and
+  `race_clock_s`; `CarStatus.RETIRED`.
+- **Incidents** per car and lap from keyed randomness, drawn at lap start into hidden fields:
+  mistakes (time loss), crashes and mechanical failures (retire where the car stops). Risk
+  follows `consistency` and `composure` and the pace mode (PUSH x1.6, CONSERVE x0.6); lap 1 x6
+  for crashes. `risk_appetite` stays out (D-010).
+- **VSC:** lap progress runs on a racing clock at 70 % of sim time; pit-lane holds run in sim
+  time, so a VSC stop is cheap. **Safety car:** a real car on track (placed 150 m ahead of the
+  leader), the field queues behind it at 40 m with no overtaking, it pulls in after 3-5 laps,
+  and the restart re-expresses each car's lap from its position and re-resolves traffic (keyed
+  separately). The baseline strategy brings a planned stop forward if it's within 10 laps.
+- **Race director:** `deploy_neutralisation` / runner `DEPLOY_SC`, `DEPLOY_VSC` / viewer buttons
+  / `live_race.py` `sc` and `vsc`, for scenario exploration (M6 "what if a safety car on lap
+  18?"); logged and reproducible like any command.
+- **Viewer:** a safety-car sprite of our own (generic pixel-art road car, silver body, flashing
+  amber light bar, "SC" tag; no real make or livery), the field queuing behind it, a blinking
+  SAFETY CAR / VIRTUAL SAFETY CAR banner with laps/seconds left and cause, amber track edges,
+  retired cars greyed out with a red cross where they stopped, readable race-control log lines.
+- Verified in the browser: Deploy SC at lap 5 (banner "4 laps to go", amber edges, SC car ahead
+  of NOR, train SC-NOR-PIA at the queue spacing, ~2:00 laps under SC, restart at tick 1821 with
+  the field bunched within 3.6 s); Deploy VSC (banner with countdown); seed 14 where HAM crashes
+  on lap 1 at Parabolica and race control sends the safety car out ("HAM crashed").
+- **Bugs found while building it:**
+  1. An overtake decided at the start of a lap was logged even when a safety car came out
+     before it happened on the road. OVERTAKE is now announced when the attacker actually moves
+     ahead (pending passes are dropped under SC, or if the rival retires or pits first).
+  2. Re-resolving traffic mid-lap at a restart would have made cars jump; the restart keeps each
+     car's position and stretches the rest of its lap to the resolved arrival time.
+  3. Incident draws were recomputed every tick (1.38 s per race); drawn once per lap now
+     (0.62 s per race).
+- Rates over 40 seeded Monza races (real inputs): 0.88 retirements (0.40 crashes, 0.47
+  failures), 0.30 safety cars, 0.17 VSCs, 5 mistakes per race; 48 of 781 stops were taken under
+  SC/VSC. These are editorial targets in a plausible range, not calibrated (EXP-002).
+- Gate demo: MATCH. Tests: 244 offline passing (+17: incident rates by pace mode, race-control
+  choices, retirement handling, SC deployment, no overtaking and closing up behind the safety
+  car, SC laps and jump-free restart, cheap stops, VSC speed and duration, pit lane at full speed
+  under VSC, save/load mid-SC, reproducibility, race director) + 2 network. The independence
+  tests now also switch race control off (a crash of one car can bring out a safety car for all).
+- Next: slice 4, persistence (event + command log tables, named saves, autosave).

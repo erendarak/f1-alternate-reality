@@ -38,10 +38,9 @@ def _resolve(
     world: WorldState, *, ham_lap: float, ver_start: float, ver_lap: float, **ver: object
 ) -> tuple[float, list[tuple[str, dict[str, float | int | str]]], dict[str, float]]:
     me = _car(world, HAM, lap_target_s=ham_lap, laps_completed=10)
-    ahead = Ahead(
-        _car(world, VER, lap_target_s=ver_lap, **{"laps_completed": 10, **ver}), ver_start
-    )
-    out = resolve(world.setup, world.rng.seed, me, 100.0, 100.0, [ahead])
+    ver_car = _car(world, VER, lap_target_s=ver_lap, **{"laps_completed": 10, **ver})
+    ahead = Ahead(ver_car, ver_start, 100.0 - ver_start)  # it left the line at ver_start
+    out = resolve(world.setup, world.rng.seed, me, 100.0, [ahead])
     return out.lap_target_s, out.events, out.carried_losses
 
 
@@ -125,7 +124,7 @@ def test_overtake_probability_matches_the_formula(two_car_world: WorldState) -> 
         me = _car(two_car_world, HAM, lap_target_s=85.0, laps_completed=lap)
         their_end = 100.0 + 85.0 + margin - p.min_gap_s
         ver = _car(two_car_world, VER, lap_target_s=their_end - 50.0, laps_completed=lap)
-        out = resolve(two_car_world.setup, 7, me, 100.0, 100.0, [Ahead(ver, 50.0)])
+        out = resolve(two_car_world.setup, 7, me, 100.0, [Ahead(ver, 50.0, 50.0)])
         passes += any(k == "OVERTAKE" for k, _ in out.events)
     assert passes / n == pytest.approx(1 - math.exp(-1), abs=0.03)
 
@@ -240,7 +239,11 @@ def test_road_order_and_overtake_events_agree(
             for b in after.keys() & before.keys():
                 if before[a] < before[b] and after[a] > after[b] and (a, b) not in decided:
                     unexplained.append((state.sim_tick, a, b))
-    assert counts["OVERTAKE"] > 0 and counts["BLUE_FLAG"] > 0
+    assert counts["OVERTAKE"] > 0
+    # Blue flags whenever someone took the flag laps down (safety cars can prevent lapping).
+    finishers = [c for c in state.cars if c.status is CarStatus.FINISHED]
+    if max(c.laps_completed for c in finishers) > min(c.laps_completed for c in finishers):
+        assert counts["BLUE_FLAG"] > 0
     assert unexplained == []
     not_ahead = [
         (a, d, lap)
