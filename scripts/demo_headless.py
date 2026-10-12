@@ -12,7 +12,8 @@ Usage:
     # continue any saved snapshot (see scripts/inspect_save.py for ids)
     uv run python scripts/demo_headless.py --resume-from snap_... --db saves/demo.sqlite
 
-The race model is a synthetic placeholder (no pit stops, no traffic, uncalibrated).
+The race model is an uncalibrated placeholder (pit stops, traffic, incidents, safety car;
+editorial coefficients).
 """
 
 import argparse
@@ -24,6 +25,7 @@ from f1ar.domain.race_state import WorldState, WorldStatus
 from f1ar.persistence.sqlite_store import SnapshotStore
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.scenarios import MONZA_2024, event_data_dir, load_event, setup_from_codes
+from f1ar.simulation.timeline import new_world_id
 from f1ar.simulation.timing import LapTimingSheet, result_gap
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -130,7 +132,8 @@ def main() -> None:
         )
     except ValueError as exc:
         parser.error(str(exc))
-    world = engine.start(engine.create_world(setup, seed=args.seed, world_id="demo"))
+    world_id = new_world_id("demo")  # unique per run: runs share one save file
+    world = engine.start(engine.create_world(setup, seed=args.seed, world_id=world_id))
 
     print(
         f"{MONZA_2024} | {len(setup.drivers)} cars | {setup.track.total_laps} laps"
@@ -139,7 +142,10 @@ def main() -> None:
     print("grid: " + "  ".join(f"P{d.grid_position} {d.code}" for d in setup.drivers))
     data_note = ", ".join(setup.inputs) if setup.inputs else "synthetic defaults (no data)"
     print(f"inputs: {data_note}")
-    print(f"{engine.ENGINE_VERSION}: placeholder lap model, no pit stops, no traffic\n")
+    print(
+        f"{engine.ENGINE_VERSION}: uncalibrated placeholder model "
+        "(pit stops, traffic, incidents, safety car)\n"
+    )
 
     sheet = _sheet(world, args.every)
     state = _run(world, sheet, stop_after_lap=pause_lap)
@@ -197,7 +203,7 @@ def main() -> None:
 
     # Reference: the same race with no pause, save or reload at all.
     reference = _run(
-        engine.start(engine.create_world(setup, seed=args.seed, world_id="demo")),
+        engine.start(engine.create_world(setup, seed=args.seed, world_id=world_id)),
         None,  # silent
         stop_after_lap=None,
     ).canonical_hash()

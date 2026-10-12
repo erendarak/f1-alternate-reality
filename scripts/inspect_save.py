@@ -34,6 +34,23 @@ def main() -> None:
                 f"{m.snapshot_id}  {m.world_id}/{m.timeline_id}  tick {m.tick:<6} sim {clock:>7}  "
                 f"{m.world_status:<9} {m.kind:<8} {m.created_utc[:19]}  [{check}]  {m.label}"
             )
+            print(
+                f"    events<{m.event_seq} commands<{m.command_seq}  {m.engine_version}  "
+                f"policies {m.policy_manifest}  data {m.dataset_hash[:19] or '(synthetic)'}"
+            )
+
+        for world_id in sorted({m.world_id for m in snapshots}):
+            print(f"\nTimelines of {world_id}:")
+            for t in store.list_timelines(world_id):
+                parent = (
+                    ""
+                    if t.parent_timeline_id is None
+                    else (f"  <- {t.parent_timeline_id} at event {t.fork_event_seq}")
+                )
+                print(
+                    f"  {t.timeline_id}  [{t.label}]  {t.snapshot_count} snapshot(s), "
+                    f"{t.event_count} event(s), {t.command_count} command(s){parent}"
+                )
 
 
 if __name__ == "__main__":

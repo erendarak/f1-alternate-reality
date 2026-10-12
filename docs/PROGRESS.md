@@ -7,8 +7,8 @@ M2 plan (agreed 2026-10-12, one slice per commit; engine version bump per behavi
 - [x] **Slice 1: pit stops + tyre choice, baseline strategy, chequered flag / lapped cars** (D-022, engine v0.4.0).
 - [x] **Slice 2: traffic, dirty air, overtaking cost, blue flags** (D-023, engine v0.5.0).
 - [x] **Slice 3: race control: mistakes, crashes/failures -> RETIRED, VSC, safety car + restart** (D-024, engine v0.6.0).
-- [ ] Slice 4: persistence: event + command log tables, named saves + autosave, restore-and-continue
-  integration, invariants every tick, profile/model hash pinning.
+- [x] **Slice 4: persistence: event + command logs, autosave, crash recovery in a fresh process,
+  invariants every tick, policy/dataset pinning** (D-025, store schema v3, world schema v7).
 - [ ] Slice 5: batch headless benchmark, EXP-002 (EXP-001 again + 2024 Belgian GP), M2 DoD check.
 
 Already in place from M0 (plan §16 M2 items): runner + command queue + RUNNING/PAUSED state machine,
@@ -402,3 +402,48 @@ Plan §22 checklist (adapted per D-002):
   under VSC, save/load mid-SC, reproducibility, race director) + 2 network. The independence
   tests now also switch race control off (a crash of one car can bring out a safety car for all).
 - Next: slice 4, persistence (event + command log tables, named saves, autosave).
+
+### 2026-10-12 — M2 slice 4: persistence (logs, autosave, crash recovery, invariants, pinning)
+
+- **Store schema v3** (in-place migration from v1/v2, tested; the real `saves/viewer.sqlite` was
+  migrated on open): `events` and `commands` tables per timeline; snapshots record their event
+  and command cursors, the policy manifest and the dataset hash; timelines record the fork's
+  event/command cursors. A save writes the snapshot and the log records up to it in one
+  transaction. `store.events(timeline)` returns a branch's full history (parent prefix + own).
+- **History is never rewritten:** `store.resume(snapshot)` continues the timeline only if the
+  snapshot is its latest point (no later snapshot, event or command); otherwise it branches.
+- **Runner persistence** (`WorldRunner(store=, autosave=AutosavePolicy(...))`): buffers every event
+  and command record; writes them with each save, on pause, every 240 ticks and at shutdown;
+  autosaves every 5 leader laps, after critical commands (pace, pit, strategy, race director)
+  and at the flag, keeping the newest 5 autosaves (manual saves never pruned). Failures are
+  reported in `runner.persistence`, never raised (US-09). `shutdown()` pauses a running race,
+  autosaves and writes the logs (plan §4.7 test 8); the debug viewer calls it on New race /
+  Restart and on app exit. Stored command keys of the timeline *and its ancestors before the
+  branch point* are preloaded, so a command re-sent after a restart isn't applied twice.
+- **Pinning:** `RaceSetup.policy_manifest` (`{"strategy": "baseline_strategy_v1"}`) and
+  `inputs["dataset_sha256"]`; a save made with other policies is refused on load, and
+  `create_world` refuses a setup that pins other policies. `WorldState.branch_event_seq`
+  (plan's `branch_point_event_id`).
+- **Invariants** (`simulation/invariants.py`, plan §18.2): per-state and per-step checks (clocks,
+  distances, laps, tyres, statuses, race-control consistency, contiguous events, nothing changes
+  after finishing/retiring). Checked on every tick of full 20-car races with traffic, incidents,
+  a VSC and a safety car; `WorldRunner(check_invariants=True)` debug mode.
+- **Crash-recovery integration test** (fresh process): a scripted client drives a race (pit
+  request, race-director SC, push), the runner is abandoned mid-SC without shutdown, a child
+  process restores the latest valid save and re-plays the client script. Final race and the
+  full stored event history equal an uninterrupted run, and the re-sent pit request is applied
+  once. Both paths: periodic log flushes (recovery branches) and saves-only (same timeline).
+- **Bugs found while building it:**
+  1. A recovery that branches would have re-applied re-sent commands (HAM pitting twice): the
+     branch didn't know its parent's command keys. Fixed with command cursors and lineage-aware
+     idempotency; the integration test fails without the fix (checked).
+  2. Ids weren't unique: every world's main timeline was `timeline_main`, the viewer restarted
+     at `viewer_0` each session and the demo always used `demo`, so two runs in one save file
+     would have mixed their event histories. Now `new_world_id()` / `<world>.main`, and the
+     store refuses a conflicting event or a timeline owned by another world instead of
+     silently ignoring it (regression test). An older store test was mixing two worlds this way.
+- Verified in the browser + save file: race, Deploy SC, New race -> `inspect_save.py` shows the
+  autosaves "lap 5", "after DEPLOY_SC", "shutdown" (all OK, PAUSED) and 49 events / 5 commands
+  on the timeline; the gate demo gives MATCH twice in a row in one save file (two worlds).
+- Tests: 265 offline passing (+21) + 2 network.
+- Next: slice 5, batch benchmark + EXP-002 + M2 DoD check.

@@ -9,14 +9,28 @@ Snapshots are immutable: they are only ever inserted, never updated. Timelines r
 their lineage (parent timeline + the snapshot they were forked from), so the history of
 alternate realities can be shown even after a source snapshot is deleted.
 
+**Event and command logs** (store v3, plan §4.5, §13.1): every race event and every command
+(with its acknowledgement) is stored per timeline. A save writes the snapshot *and* the log
+records up to it in the same transaction, so a snapshot's ``event_seq`` is always backed by its
+events. A branch's full history is its parent's events before the branch point plus its own.
+Stored command keys keep commands idempotent across restarts (plan §4.7 test 9).
+
+**History is never rewritten:** resuming from a snapshot that isn't the latest point of its
+timeline creates a new branch instead of continuing (and overwriting) that timeline's future.
+
 Store schema history (``STORE_MIGRATIONS``): v1 = worlds/timelines/snapshots;
-v2 = timelines gain ``label`` and ``fork_snapshot_id``.
+v2 = timelines gain ``label`` and ``fork_snapshot_id``; v3 = events and commands tables,
+snapshots gain ``event_seq``, ``policy_manifest`` and ``dataset_hash``, timelines gain
+``fork_event_seq``.
 """
 
 import hashlib
+import json
 import sqlite3
 import threading
 import uuid
+from collections.abc import Sequence
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from types import TracebackType
@@ -24,18 +38,27 @@ from typing import Literal, Self
 
 from pydantic import BaseModel, ConfigDict, ValidationError
 
-from f1ar.domain.race_state import WORLD_SCHEMA_VERSION, WorldState, WorldStatus
+from f1ar.domain.race_state import WORLD_SCHEMA_VERSION, RaceEvent, WorldState, WorldStatus
 from f1ar.persistence.snapshot_codec import CODEC_VERSION, HASH_PREFIX, canonical_json
-from f1ar.simulation.lightweight_engine import ENGINE_VERSION
+from f1ar.simulation.lightweight_engine import ENGINE_VERSION, POLICY_MANIFEST
 from f1ar.simulation.timeline import SeedMode, fork_world, new_timeline_id
 
-STORE_SCHEMA_VERSION = 2
+STORE_SCHEMA_VERSION = 3
 
 STORE_MIGRATIONS: dict[int, tuple[str, ...]] = {
     # from version N to N+1
     1: (
         "ALTER TABLE timelines ADD COLUMN label TEXT NOT NULL DEFAULT ''",
         "ALTER TABLE timelines ADD COLUMN fork_snapshot_id TEXT",
+    ),
+    2: (
+        "ALTER TABLE timelines ADD COLUMN fork_event_seq INTEGER",
+        "ALTER TABLE snapshots ADD COLUMN event_seq INTEGER NOT NULL DEFAULT 0",
+        "ALTER TABLE snapshots ADD COLUMN policy_manifest TEXT NOT NULL DEFAULT '{}'",
+        "ALTER TABLE snapshots ADD COLUMN dataset_hash TEXT NOT NULL DEFAULT ''",
+        "ALTER TABLE snapshots ADD COLUMN command_seq INTEGER NOT NULL DEFAULT 0",
+        "ALTER TABLE timelines ADD COLUMN fork_command_seq INTEGER",
+        # events / commands tables are created by the DDL (CREATE TABLE IF NOT EXISTS)
     ),
 }
 
@@ -57,7 +80,9 @@ CREATE TABLE IF NOT EXISTS timelines (
     parent_timeline_id TEXT REFERENCES timelines(id),
     created_utc        TEXT NOT NULL,
     label              TEXT NOT NULL DEFAULT '',
-    fork_snapshot_id   TEXT  -- provenance only, deliberately not a foreign key
+    fork_snapshot_id   TEXT,  -- provenance only, deliberately not a foreign key
+    fork_event_seq     INTEGER,  -- parent events before this belong to this branch's history
+    fork_command_seq   INTEGER   -- parent commands before this were applied before the branch
 );
 CREATE TABLE IF NOT EXISTS snapshots (
     id                TEXT PRIMARY KEY,
@@ -75,9 +100,35 @@ CREATE TABLE IF NOT EXISTS snapshots (
     payload_sha256    TEXT NOT NULL,
     payload           BLOB NOT NULL,
     created_utc       TEXT NOT NULL,
-    seq               INTEGER NOT NULL UNIQUE
+    seq               INTEGER NOT NULL UNIQUE,
+    event_seq         INTEGER NOT NULL DEFAULT 0,
+    policy_manifest   TEXT NOT NULL DEFAULT '{}',
+    dataset_hash      TEXT NOT NULL DEFAULT '',
+    command_seq       INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS snapshots_by_world ON snapshots(world_id, seq);
+CREATE TABLE IF NOT EXISTS events (
+    timeline_id  TEXT NOT NULL REFERENCES timelines(id),
+    seq          INTEGER NOT NULL,
+    tick         INTEGER NOT NULL,
+    type         TEXT NOT NULL,
+    driver_id    TEXT,
+    payload_json TEXT NOT NULL,
+    PRIMARY KEY (timeline_id, seq)
+);
+CREATE TABLE IF NOT EXISTS commands (
+    timeline_id     TEXT NOT NULL REFERENCES timelines(id),
+    idempotency_key TEXT NOT NULL,
+    log_seq         INTEGER NOT NULL,
+    type            TEXT NOT NULL,
+    actor_id        TEXT NOT NULL,
+    applied_tick    INTEGER NOT NULL,
+    accepted        INTEGER NOT NULL,
+    command_json    TEXT NOT NULL,
+    ack_json        TEXT NOT NULL,
+    created_utc     TEXT NOT NULL,
+    PRIMARY KEY (timeline_id, idempotency_key)
+);
 """
 
 
@@ -115,6 +166,27 @@ class SnapshotMeta(BaseModel):
     payload_sha256: str
     payload_bytes: int
     created_utc: str
+    event_seq: int
+    policy_manifest: str
+    dataset_hash: str
+    command_seq: int
+    """Command-log cursor: commands of this timeline with ``log_seq`` below it were applied
+    before this snapshot (plan §4.4 ``command_cursor``)."""
+
+
+@dataclass(frozen=True)
+class CommandRecord:
+    """One command and the world's answer, as stored in the command log."""
+
+    idempotency_key: str
+    log_seq: int
+    """Position in the timeline's command log (order of arrival)."""
+    type: str
+    actor_id: str
+    applied_tick: int
+    accepted: bool
+    command_json: str
+    ack_json: str
 
 
 class TimelineMeta(BaseModel):
@@ -127,11 +199,16 @@ class TimelineMeta(BaseModel):
     fork_snapshot_id: str | None
     created_utc: str
     snapshot_count: int
+    fork_event_seq: int | None
+    event_count: int
+    command_count: int
 
 
 _META_COLUMNS = (
     "id, world_id, timeline_id, tick, sim_clock_s, world_status, label, kind, schema_version, "
-    "codec_version, engine_version, profile_set_hash, payload_sha256, length(payload), created_utc"
+    "codec_version, engine_version, profile_set_hash, payload_sha256, length(payload), "
+    "created_utc, "
+    "event_seq, policy_manifest, dataset_hash, command_seq"
 )
 
 
@@ -217,9 +294,145 @@ class SnapshotStore:
 
     # --- writing ----------------------------------------------------------------------------
 
-    def save(self, state: WorldState, *, label: str, kind: SnapshotKind = "MANUAL") -> SnapshotMeta:
-        """Persist ``state`` atomically. Returns only after the transaction has committed."""
-        return self._save(state, label=label, kind=kind, timeline_label="", fork_snapshot_id=None)
+    def save(
+        self,
+        state: WorldState,
+        *,
+        label: str,
+        kind: SnapshotKind = "MANUAL",
+        events: Sequence[RaceEvent] = (),
+        commands: Sequence[CommandRecord] = (),
+    ) -> SnapshotMeta:
+        """Persist ``state`` atomically, together with any not-yet-stored log records up to it.
+
+        Returns only after the transaction has committed.
+        """
+        return self._save(
+            state,
+            label=label,
+            kind=kind,
+            timeline_label="",
+            fork_snapshot_id=None,
+            events=events,
+            commands=commands,
+        )
+
+    def append_log(
+        self,
+        state: WorldState,
+        *,
+        events: Sequence[RaceEvent] = (),
+        commands: Sequence[CommandRecord] = (),
+    ) -> None:
+        """Store log records of ``state``'s timeline (idempotent: known records are skipped)."""
+        if not events and not commands:
+            return
+        with self._lock:
+            try:
+                self._db.execute("BEGIN IMMEDIATE")
+                self._ensure_timeline(state, created=_utc_now(), label="", fork_snapshot_id=None)
+                self._insert_log(state.timeline_id, events, commands)
+                self._db.execute("COMMIT")
+            except BaseException:
+                if self._db.in_transaction:
+                    self._db.execute("ROLLBACK")
+                raise
+
+    def _ensure_timeline(
+        self,
+        state: WorldState,
+        *,
+        created: str,
+        label: str,
+        fork_snapshot_id: str | None,
+        fork_command_seq: int | None = None,
+    ) -> None:
+        self._db.execute(
+            "INSERT OR IGNORE INTO worlds(id, event_id, created_utc) VALUES (?, ?, ?)",
+            (state.world_id, state.setup.event_id, created),
+        )
+        if state.parent_timeline_id is not None:
+            # Parent forked in memory but never saved: keep the lineage anyway.
+            self._db.execute(
+                "INSERT OR IGNORE INTO timelines(id, world_id, parent_timeline_id, label,"
+                " fork_snapshot_id, created_utc) VALUES (?, ?, NULL, '(unsaved)', NULL, ?)",
+                (state.parent_timeline_id, state.world_id, created),
+            )
+        owner = self._db.execute(
+            "SELECT world_id FROM timelines WHERE id = ?", (state.timeline_id,)
+        ).fetchone()
+        if owner is not None and owner[0] != state.world_id:
+            raise SnapshotIntegrityError(
+                f"timeline {state.timeline_id} belongs to world {owner[0]}, not {state.world_id}"
+            )
+        self._db.execute(
+            "INSERT OR IGNORE INTO timelines(id, world_id, parent_timeline_id, label,"
+            " fork_snapshot_id, fork_event_seq, fork_command_seq, created_utc)"
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            (
+                state.timeline_id,
+                state.world_id,
+                state.parent_timeline_id,
+                label or ("main" if state.parent_timeline_id is None else ""),
+                fork_snapshot_id,
+                state.branch_event_seq,
+                fork_command_seq,
+                created,
+            ),
+        )
+
+    def _insert_log(
+        self,
+        timeline_id: str,
+        events: Sequence[RaceEvent],
+        commands: Sequence[CommandRecord],
+    ) -> None:
+        rows = [
+            (timeline_id, e.seq, e.tick, e.type, e.driver_id, json.dumps(e.payload)) for e in events
+        ]
+        if rows:
+            # Writing the same record twice is a no-op; a *different* record under an existing
+            # (timeline, seq) means two histories are being mixed (e.g. a reused world id).
+            existing = {
+                r[0]: r[1:]
+                for r in self._db.execute(
+                    "SELECT seq, tick, type, driver_id, payload_json FROM events "
+                    "WHERE timeline_id = ? AND seq BETWEEN ? AND ?",
+                    (timeline_id, min(r[1] for r in rows), max(r[1] for r in rows)),
+                ).fetchall()
+            }
+            for row in rows:
+                if row[1] in existing and tuple(existing[row[1]]) != row[2:]:
+                    raise SnapshotIntegrityError(
+                        f"event {row[1]} of {timeline_id} is already stored with different "
+                        "content: two histories under one timeline id (world id reused?)"
+                    )
+            self._db.executemany(
+                "INSERT OR IGNORE INTO events(timeline_id, seq, tick, type, driver_id, "
+                "payload_json) VALUES (?, ?, ?, ?, ?, ?)",
+                rows,
+            )
+        now = _utc_now()
+        self._db.executemany(
+            "INSERT OR IGNORE INTO commands(timeline_id, idempotency_key, log_seq, type, actor_id,"
+            " applied_tick, accepted, command_json, ack_json, created_utc)"
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [
+                (
+                    timeline_id,
+                    c.idempotency_key,
+                    c.log_seq,
+                    c.type,
+                    c.actor_id,
+                    c.applied_tick,
+                    int(c.accepted),
+                    c.command_json,
+                    c.ack_json,
+                    now,
+                )
+                for c in commands
+            ],
+        )
 
     def fork(
         self,
@@ -234,6 +447,7 @@ class SnapshotStore:
         The source snapshot is only read (and verified), never modified.
         """
         source = self.load(snapshot_id)
+        source_meta = self.get_meta(snapshot_id)
         branch = fork_world(
             source, new_timeline_id=timeline_id or new_timeline_id(), seed_mode=seed_mode
         )
@@ -243,8 +457,36 @@ class SnapshotStore:
             kind="MANUAL",
             timeline_label=label,
             fork_snapshot_id=snapshot_id,
+            fork_command_seq=source_meta.command_seq,
         )
         return branch, meta
+
+    def resume(self, snapshot_id: str) -> WorldState:
+        """The world to continue from ``snapshot_id`` without ever rewriting history.
+
+        If the snapshot is the latest point of its timeline (no later snapshot, no later event),
+        that timeline simply continues. Otherwise a new branch is created at the snapshot
+        (same luck), so the timeline's recorded future stays intact.
+        """
+        state = self.load(snapshot_id)
+        meta = self.get_meta(snapshot_id)
+        with self._lock:
+            later_events = self._db.execute(
+                "SELECT COUNT(*) FROM events WHERE timeline_id = ? AND seq >= ?",
+                (state.timeline_id, state.event_seq),
+            ).fetchone()[0]
+            later_snapshots = self._db.execute(
+                "SELECT COUNT(*) FROM snapshots WHERE timeline_id = ? AND tick > ?",
+                (state.timeline_id, state.sim_tick),
+            ).fetchone()[0]
+            later_commands = self._db.execute(
+                "SELECT COUNT(*) FROM commands WHERE timeline_id = ? AND log_seq >= ?",
+                (state.timeline_id, meta.command_seq),
+            ).fetchone()[0]
+        if later_events == 0 and later_snapshots == 0 and later_commands == 0:
+            return state
+        branch, _ = self.fork(snapshot_id, label=f"resumed from: {meta.label}")
+        return branch
 
     def _save(
         self,
@@ -254,6 +496,9 @@ class SnapshotStore:
         kind: SnapshotKind,
         timeline_label: str,
         fork_snapshot_id: str | None,
+        events: Sequence[RaceEvent] = (),
+        commands: Sequence[CommandRecord] = (),
+        fork_command_seq: int | None = None,
     ) -> SnapshotMeta:
         payload = canonical_json(state.model_dump(mode="json"))
         meta = SnapshotMeta(
@@ -272,41 +517,36 @@ class SnapshotStore:
             payload_sha256=_sha256(payload),
             payload_bytes=len(payload),
             created_utc=_utc_now(),
+            event_seq=state.event_seq,
+            policy_manifest=json.dumps(state.setup.policy_manifest, sort_keys=True),
+            dataset_hash=state.setup.inputs.get("dataset_sha256", ""),
+            command_seq=0,  # set inside the transaction, once the commands are stored
         )
         with self._lock:
             try:
                 self._db.execute("BEGIN IMMEDIATE")
-                self._db.execute(
-                    "INSERT OR IGNORE INTO worlds(id, event_id, created_utc) VALUES (?, ?, ?)",
-                    (state.world_id, state.setup.event_id, meta.created_utc),
+                self._ensure_timeline(
+                    state,
+                    created=meta.created_utc,
+                    label=timeline_label,
+                    fork_snapshot_id=fork_snapshot_id,
+                    fork_command_seq=fork_command_seq,
                 )
-                if state.parent_timeline_id is not None:
-                    # Parent forked in memory but never saved: keep the lineage anyway.
-                    self._db.execute(
-                        "INSERT OR IGNORE INTO timelines(id, world_id, parent_timeline_id, label,"
-                        " fork_snapshot_id, created_utc) VALUES (?, ?, NULL, '(unsaved)', NULL, ?)",
-                        (state.parent_timeline_id, state.world_id, meta.created_utc),
-                    )
-                self._db.execute(
-                    "INSERT OR IGNORE INTO timelines(id, world_id, parent_timeline_id, label,"
-                    " fork_snapshot_id, created_utc) VALUES (?, ?, ?, ?, ?, ?)",
-                    (
-                        state.timeline_id,
-                        state.world_id,
-                        state.parent_timeline_id,
-                        timeline_label or ("main" if state.parent_timeline_id is None else ""),
-                        fork_snapshot_id,
-                        meta.created_utc,
-                    ),
-                )
+                self._insert_log(state.timeline_id, events, commands)
+                command_seq = self._db.execute(
+                    "SELECT COALESCE(MAX(log_seq) + 1, 0) FROM commands WHERE timeline_id = ?",
+                    (state.timeline_id,),
+                ).fetchone()[0]
+                meta = meta.model_copy(update={"command_seq": command_seq})
                 next_seq = self._db.execute(
                     "SELECT COALESCE(MAX(seq), 0) + 1 FROM snapshots"
                 ).fetchone()[0]
                 self._db.execute(
                     "INSERT INTO snapshots(id, world_id, timeline_id, tick, sim_clock_s, "
                     "world_status, label, kind, schema_version, codec_version, engine_version, "
-                    "profile_set_hash, payload_sha256, payload, created_utc, seq) "
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    "profile_set_hash, payload_sha256, payload, created_utc, seq, event_seq, "
+                    "policy_manifest, dataset_hash, command_seq) "
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     (
                         meta.snapshot_id,
                         meta.world_id,
@@ -324,6 +564,10 @@ class SnapshotStore:
                         payload,
                         meta.created_utc,
                         next_seq,
+                        meta.event_seq,
+                        meta.policy_manifest,
+                        meta.dataset_hash,
+                        meta.command_seq,
                     ),
                 )
                 self._db.execute("COMMIT")
@@ -370,6 +614,11 @@ class SnapshotStore:
             raise SnapshotIntegrityError(f"{snapshot_id}: payload is not a valid world") from exc
         if state.canonical_hash() != expected_sha:
             raise SnapshotIntegrityError(f"{snapshot_id}: decoded state does not re-encode exactly")
+        if state.setup.policy_manifest != POLICY_MANIFEST:
+            raise UnsupportedSnapshotError(
+                f"{snapshot_id} was decided by policies {state.setup.policy_manifest}; this build "
+                f"runs {POLICY_MANIFEST}. Refusing to continue it with different decision-makers."
+            )
         return state
 
     def get_meta(self, snapshot_id: str) -> SnapshotMeta:
@@ -402,12 +651,109 @@ class SnapshotStore:
             return meta
         return None
 
+    def events(self, timeline_id: str) -> list[RaceEvent]:
+        """The full event history of a timeline, in order: its ancestors' events before each
+        branch point, then its own events."""
+        segments: list[tuple[str, int | None]] = []  # (timeline, events strictly before this)
+        with self._lock:
+            current: str | None = timeline_id
+            limit: int | None = None
+            while current is not None:
+                row = self._db.execute(
+                    "SELECT parent_timeline_id, fork_event_seq FROM timelines WHERE id = ?",
+                    (current,),
+                ).fetchone()
+                segments.append((current, limit))
+                if row is None or row[0] is None or row[1] is None:
+                    break
+                current, limit = row[0], row[1]
+            rows: list[tuple[int, int, str, str | None, str]] = []
+            for tid, before in segments:
+                query = (
+                    "SELECT seq, tick, type, driver_id, payload_json FROM events "
+                    "WHERE timeline_id = ?"
+                )
+                params: tuple[str | int, ...] = (tid,)
+                if before is not None:
+                    query += " AND seq < ?"
+                    params = (tid, before)
+                rows += self._db.execute(query, params).fetchall()
+        rows.sort()
+        return [
+            RaceEvent.model_validate(
+                {
+                    "seq": seq,
+                    "tick": tick,
+                    "type": type_,
+                    "driver_id": driver_id,
+                    "payload": json.loads(payload),
+                }
+            )
+            for seq, tick, type_, driver_id, payload in rows
+        ]
+
+    def commands(self, timeline_id: str, *, with_ancestors: bool = False) -> list[CommandRecord]:
+        """The command log of one timeline, in arrival order. With ``with_ancestors``, first the
+        commands its ancestors applied before each branch point (for idempotency after a resume
+        into a branch: a re-sent command that already shaped this history isn't applied again)."""
+        segments: list[tuple[str, int | None]] = [(timeline_id, None)]
+        with self._lock:
+            if with_ancestors:
+                current = timeline_id
+                while True:
+                    row = self._db.execute(
+                        "SELECT parent_timeline_id, fork_command_seq FROM timelines WHERE id = ?",
+                        (current,),
+                    ).fetchone()
+                    if row is None or row[0] is None or row[1] is None:
+                        break
+                    current = row[0]
+                    segments.insert(0, (current, row[1]))
+            rows = []
+            for tid, before in segments:
+                query = (
+                    "SELECT idempotency_key, log_seq, type, actor_id, applied_tick, accepted, "
+                    "command_json, ack_json FROM commands WHERE timeline_id = ?"
+                )
+                params: tuple[str | int, ...] = (tid,)
+                if before is not None:
+                    query += " AND log_seq < ?"
+                    params = (tid, before)
+                rows += self._db.execute(query + " ORDER BY log_seq", params).fetchall()
+        return [
+            CommandRecord(
+                idempotency_key=r[0],
+                log_seq=r[1],
+                type=r[2],
+                actor_id=r[3],
+                applied_tick=r[4],
+                accepted=bool(r[5]),
+                command_json=r[6],
+                ack_json=r[7],
+            )
+            for r in rows
+        ]
+
+    def prune_autosaves(self, timeline_id: str, *, keep: int) -> int:
+        """Delete all but the newest ``keep`` AUTOSAVE snapshots of a timeline (manual saves are
+        never pruned). Returns how many were deleted."""
+        with self._lock:
+            cursor = self._db.execute(
+                "DELETE FROM snapshots WHERE id IN (SELECT id FROM snapshots WHERE timeline_id = ?"
+                " AND kind = 'AUTOSAVE' ORDER BY seq DESC LIMIT -1 OFFSET ?)",
+                (timeline_id, keep),
+            )
+        return cursor.rowcount
+
     def list_timelines(self, world_id: str) -> list[TimelineMeta]:
-        """All timelines of a world, oldest first, with lineage and snapshot counts."""
+        """All timelines of a world, oldest first, with lineage, snapshot and log counts."""
         with self._lock:
             rows = self._db.execute(
                 "SELECT t.id, t.world_id, t.parent_timeline_id, t.label, t.fork_snapshot_id, "
-                "t.created_utc, (SELECT COUNT(*) FROM snapshots s WHERE s.timeline_id = t.id) "
+                "t.created_utc, (SELECT COUNT(*) FROM snapshots s WHERE s.timeline_id = t.id), "
+                "t.fork_event_seq, "
+                "(SELECT COUNT(*) FROM events e WHERE e.timeline_id = t.id), "
+                "(SELECT COUNT(*) FROM commands c WHERE c.timeline_id = t.id) "
                 "FROM timelines t WHERE t.world_id = ? ORDER BY t.created_utc, t.rowid",
                 (world_id,),
             ).fetchall()

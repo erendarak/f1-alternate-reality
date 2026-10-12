@@ -419,3 +419,33 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   `ENGINE_VERSION = lightweight_engine_v0.6.0`, `WORLD_SCHEMA_VERSION = 6`.
 - **Visual asset:** the safety-car sprite is our own 16x16 pixel art defined in the page
   (generic road car, no real make, livery or logo), in line with D-017.
+
+## D-025 — Event/command logs, autosave, resume-as-branch, pinning; store v3, world schema v7 (2026-10-12)
+
+- **What is stored:** full snapshots (unchanged, D-012) plus per-timeline `events` (seq, tick,
+  type, driver, payload) and `commands` (key, log_seq, type, actor, applied tick, accepted,
+  command JSON, ack JSON). Snapshots carry `event_seq` and `command_seq` cursors (plan §4.4
+  `event_cursor` / `command_cursor`), `policy_manifest` and `dataset_hash`.
+- **Atomicity:** a save inserts the pending log records and the snapshot in one transaction, so
+  every snapshot is backed by its history. Between saves, logs are appended on pause, every
+  `flush_every_ticks` (240) and at shutdown. Re-writing identical records is a no-op; a
+  conflicting record (same timeline and seq, different content) is an integrity error.
+- **Branch history:** a branch stores only its own records; `fork_event_seq` / `fork_command_seq`
+  say which of the parent's records precede the branch point. `store.events()` and
+  `store.commands(with_ancestors=True)` stitch the lineage.
+- **Resume rule:** continuing from a snapshot that isn't its timeline's latest point creates a
+  branch ("resumed from: ..."), so recorded history is never overwritten. Consequence: after a
+  crash, if logs were flushed past the last autosave, recovery continues in a new branch (with
+  the identical history, as tested).
+- **Idempotency across restarts:** the runner preloads the acks of its timeline and of its
+  ancestors before the branch point; duplicates return the original ack (`duplicate=True`).
+- **Autosave policy:** every N leader laps (5), after critical commands, at the flag and at
+  shutdown; keep the newest K (5) autosaves per timeline; manual saves are never pruned; a
+  failed autosave or log write is reported in `runner.persistence` and the race continues.
+- **Pinning:** `RaceSetup.policy_manifest` must equal the engine's `POLICY_MANIFEST` to create a
+  world or load a save (like the engine version); `inputs["dataset_sha256"]` hashes the laps file
+  used for data-derived inputs.
+- **Ids:** world ids must be unique within a save file (`new_world_id(prefix)`); a world's main
+  timeline is `<world_id>.main`; the store refuses a timeline id that belongs to another world.
+- **Invariants:** `state_violations` / `step_violations` return lists of problems; tests check
+  every tick of full races; `WorldRunner(check_invariants=True)` raises `InvariantViolation`.

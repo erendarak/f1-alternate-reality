@@ -16,7 +16,7 @@ from f1ar.domain.provenance import SourceType
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 6
+WORLD_SCHEMA_VERSION = 7
 
 
 class _Frozen(BaseModel):
@@ -232,7 +232,11 @@ class RaceSetup(_Frozen):
     drivers: tuple[DriverEntry, ...]
     inputs: dict[str, str] = Field(default_factory=dict)
     """Provenance of data-derived inputs, e.g. ``{"start_compounds": "historical_verified: ..."}``.
-    Empty = synthetic defaults (all MEDIUM, equal cars)."""
+    Empty = synthetic defaults (all MEDIUM, equal cars). ``dataset_sha256`` pins the data file."""
+    policy_manifest: dict[str, str]
+    """Which decision policies drive the cars, e.g. ``{"strategy": "baseline_strategy_v1"}``
+    (plan §4.4 ``active_policy_manifest``). Pinned: a save made with another policy build is
+    refused, like one made with another engine version."""
 
     @model_validator(mode="after")
     def _unique(self) -> Self:
@@ -430,10 +434,13 @@ DriverAction = SetPaceMode | RequestPitStop | CancelPitStop | SetStrategyControl
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[6]
+    schema_version: Literal[7]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None
+    branch_event_seq: int | None = Field(ge=0)
+    """For a branch: the parent's event count at the fork (plan §4.4 ``branch_point_event_id``).
+    The branch's history = parent events before this + its own events."""
     world_status: WorldStatus
     mode: Literal["FREE_SIMULATION"]
     engine_version: str

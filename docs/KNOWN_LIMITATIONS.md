@@ -2,7 +2,20 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
-## Current (M2 slice 3)
+## Current (M2 slice 4)
+
+- **Crash recovery loses the race since the last autosave** (default: up to 5 laps or the last
+  critical command); a client must re-send its commands, as the scripted test does. If logs were
+  flushed past that autosave, recovery continues in a new branch rather than the same timeline.
+- **Snapshots are full copies** (~10-60 KB each); no deltas or compression yet.
+- Idempotency keys are per timeline lineage; reusing a key for a *different* command on another
+  branch is allowed.
+- Store schema migrations exist (v1 -> v2 -> v3), but **world saves from older engine versions are
+  still refused** (deliberate, D-014); there is no world-state migration.
+- The debug viewer only autosaves; there's no load/resume UI yet (scripts and the store API only;
+  the real UI is M3).
+
+## M2 slice 3
 
 - **Incident and neutralisation rates are editorial** (about 0.9 retirements, 0.3 safety cars and
   0.17 VSCs per race at Monza); every car has the same mechanical reliability; there are no red
@@ -85,8 +98,6 @@ Honest list of what does **not** work or is only approximate. Update whenever on
   see D-014. Delete `saves/demo.sqlite` or ignore its INVALID entry.
 - There's no runner-level FORK command or UI yet. Forks go through `SnapshotStore.fork` (API in M3).
 
-- Saves hold the full world state, but the **event log and command log are not persisted yet**
-  (in memory only). There's no autosave yet.
 - Loading requires the exact same engine/schema/codec version. Old saves become unloadable when the
   engine version is bumped, until migrations exist (deliberate: refusing beats silent drift).
 - The demo's reference determinism check compares final states only, not every intermediate tick.

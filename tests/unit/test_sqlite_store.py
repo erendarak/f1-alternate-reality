@@ -56,7 +56,9 @@ def test_list_is_newest_first_and_filters_by_world(
 ) -> None:
     a = store.save(two_car_world, label="first")
     b = store.save(run_ticks(two_car_world, 10), label="second")
-    other = two_car_world.model_copy(update={"world_id": "other_world"})
+    other = two_car_world.model_copy(
+        update={"world_id": "other_world", "timeline_id": "other_world.main"}
+    )
     store.save(other, label="other")
     assert [m.snapshot_id for m in store.list_snapshots(two_car_world.world_id)] == [
         b.snapshot_id,
@@ -168,7 +170,7 @@ INSERT INTO store_meta VALUES ('schema_version', '1');
 
 
 def test_v1_store_is_migrated_in_place(tmp_path: Path, two_car_world: WorldState) -> None:
-    """A save file from step 5 (store schema v1) still opens, loads and can be forked."""
+    """A save file from step 5 (store schema v1) migrates v1 -> v2 -> v3, loads and forks."""
     path = tmp_path / "v1.sqlite"
     state = run_ticks(two_car_world, 50)
     payload = canonical_json(state.model_dump(mode="json"))
@@ -195,7 +197,7 @@ def test_v1_store_is_migrated_in_place(tmp_path: Path, two_car_world: WorldState
     db.close()
 
     with SnapshotStore(path) as store:
-        assert store.schema_version == STORE_SCHEMA_VERSION == 2
+        assert store.schema_version == STORE_SCHEMA_VERSION == 3
         assert store.load("snap_v1") == state
         branch, _ = store.fork("snap_v1", label="after migration")
         assert {t.timeline_id for t in store.list_timelines(state.world_id)} == {

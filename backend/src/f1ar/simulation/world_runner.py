@@ -14,6 +14,13 @@ paused is never "caught up" (plan §4.7 test 4).
 
 ``pump(now)`` is the deterministic scheduling core and can be driven by a fake clock in
 tests. ``start_background()`` runs it in a thread against ``time.monotonic``.
+
+Persistence (M2 slice 4, D-025): with a store, every event and every command (with its ack)
+is buffered and written to the timeline's logs: atomically with each save, on pause, every
+``flush_every_ticks`` and at shutdown. An ``AutosavePolicy`` saves every few laps and after
+critical user commands, keeping the newest few autosaves. Persistence failures never stop the
+race (plan US-09); they are reported in ``persistence``. Command keys already stored for the
+timeline are loaded at start, so a command repeated after a restart is not applied twice.
 """
 
 import math
@@ -21,6 +28,7 @@ import queue
 import sqlite3
 import threading
 import time
+import uuid
 from collections.abc import Callable
 from concurrent.futures import Future
 from enum import StrEnum
@@ -41,8 +49,9 @@ from f1ar.domain.race_state import (
     WorldState,
     WorldStatus,
 )
-from f1ar.persistence.sqlite_store import SnapshotError, SnapshotStore
+from f1ar.persistence.sqlite_store import CommandRecord, SnapshotError, SnapshotStore
 from f1ar.simulation import lightweight_engine as engine
+from f1ar.simulation.invariants import step_violations
 
 ALLOWED_SPEEDS: tuple[int, ...] = (1, 2, 5, 10, 25)
 MAX_STEP_TICKS = 10_000
@@ -115,6 +124,32 @@ class AppliedCommand(BaseModel):
 
 Listener = Callable[[WorldState, tuple[RaceEvent, ...]], None]
 
+CRITICAL_COMMANDS = frozenset(
+    {
+        CommandType.SET_PACE_MODE,
+        CommandType.PIT_REQUEST,
+        CommandType.PIT_CANCEL,
+        CommandType.SET_CONTROLLER,
+        CommandType.DEPLOY_SC,
+        CommandType.DEPLOY_VSC,
+    }
+)
+"""Commands that change the race's future: autosaved right after (plan §4.6)."""
+
+
+class AutosavePolicy(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    every_laps: int = Field(default=5, ge=1)
+    """Autosave each time the leader completes a multiple of this many laps."""
+    after_critical_commands: bool = True
+    keep: int = Field(default=5, ge=1)
+    """Newest autosaves kept per timeline; older ones are pruned (manual saves never are)."""
+
+
+class InvariantViolation(RuntimeError):
+    """Debug mode: a tick produced a state that breaks a world invariant."""
+
 
 class _Rejected(Exception):
     pass
@@ -144,6 +179,10 @@ def _action(command: Command) -> DriverAction:
     raise _Rejected(f"{command.type} needs {field}")
 
 
+def _leader_laps(state: WorldState) -> int:
+    return max(c.laps_completed for c in state.cars)
+
+
 class WorldRunner:
     def __init__(
         self,
@@ -153,6 +192,9 @@ class WorldRunner:
         clock: Callable[[], float] = time.monotonic,
         max_catchup_ticks: int = 1_000,
         store: SnapshotStore | None = None,
+        autosave: AutosavePolicy | None = None,
+        flush_every_ticks: int = 240,
+        check_invariants: bool = False,
     ) -> None:
         if speed not in ALLOWED_SPEEDS:
             raise ValueError(f"speed must be one of {ALLOWED_SPEEDS}")
@@ -168,6 +210,26 @@ class WorldRunner:
         self._log: list[AppliedCommand] = []
         self._events: list[RaceEvent] = []
         self._listeners: list[Listener] = []
+
+        if autosave is not None and store is None:
+            raise ValueError("autosave needs a store")
+        self._autosave = autosave
+        self._flush_every = flush_every_ticks
+        self._check_invariants = check_invariants
+        self._pending_events: list[RaceEvent] = []
+        self._pending_commands: list[CommandRecord] = []
+        self._log_seq = 0
+        self._last_flush_tick = state.sim_tick
+        self._autosaved_lap = _leader_laps(state)
+        self._last_autosave: str | None = None
+        self._persistence_error: str | None = None
+        if store is not None:
+            # Commands already applied on this timeline (before a restart) stay idempotent. On a
+            # branch that includes what its ancestors applied before the branch point.
+            for record in store.commands(state.timeline_id, with_ancestors=True):
+                self._acks[record.idempotency_key] = CommandAck.model_validate_json(record.ack_json)
+            own = store.commands(state.timeline_id)
+            self._log_seq = max((r.log_seq for r in own), default=-1) + 1
 
         # Pacing anchor: tick ``_anchor_tick`` corresponds to wall time ``_anchor_wall``.
         self._anchor_wall = 0.0
@@ -200,6 +262,18 @@ class WorldRunner:
     def command_log(self) -> tuple[AppliedCommand, ...]:
         with self._lock:
             return tuple(self._log)
+
+    @property
+    def persistence(self) -> dict[str, object]:
+        """Save/log status for displays: last autosave, unsaved log records, last error."""
+        with self._lock:
+            return {
+                "store": self._store is not None,
+                "last_autosave": self._last_autosave,
+                "unsaved_events": len(self._pending_events),
+                "unsaved_commands": len(self._pending_commands),
+                "error": self._persistence_error,
+            }
 
     def add_listener(self, listener: Listener) -> None:
         """Called after every tick with (new_state, events), on the runner's thread.
@@ -251,13 +325,92 @@ class WorldRunner:
         self._anchor_tick = self._state.sim_tick
 
     def _advance(self, *, allow_paused: bool) -> None:
-        self._commit(engine.step(self._state, allow_paused=allow_paused))
+        before = self._state
+        result = engine.step(before, allow_paused=allow_paused)
+        if self._check_invariants:
+            problems = step_violations(before, result.state, result.events)
+            if problems:
+                raise InvariantViolation("; ".join(problems))
+        self._commit(result)
+        self._after_tick()
 
     def _commit(self, result: engine.StepResult) -> None:
         self._state = result.state
         self._events.extend(result.events)
+        if self._store is not None:
+            self._pending_events.extend(result.events)
         for listener in self._listeners:
             listener(result.state, result.events)
+
+    # --- persistence ------------------------------------------------------------------------
+
+    def _after_tick(self) -> None:
+        if self._store is None:
+            return
+        state = self._state
+        if self._autosave is not None:
+            leader = _leader_laps(state)
+            every = self._autosave.every_laps
+            if state.world_status is WorldStatus.COMPLETED:
+                self._autosave_now("race finished")
+                return
+            if leader // every > self._autosaved_lap // every:
+                self._autosaved_lap = leader
+                self._autosave_now(f"lap {leader}")
+                return
+        if state.sim_tick - self._last_flush_tick >= self._flush_every:
+            self.flush()
+
+    def _autosave_now(self, reason: str) -> None:
+        """Autosave the current tick boundary. Failures are reported, never raised."""
+        assert self._store is not None and self._autosave is not None
+        try:
+            meta = self._store.save(
+                self._state,
+                label=f"autosave: {reason}",
+                kind="AUTOSAVE",
+                events=self._pending_events,
+                commands=self._pending_commands,
+            )
+            self._store.prune_autosaves(self._state.timeline_id, keep=self._autosave.keep)
+        except (SnapshotError, sqlite3.Error, OSError) as exc:
+            self._persistence_error = f"autosave failed: {exc}"
+            return
+        self._pending_events.clear()
+        self._pending_commands.clear()
+        self._last_flush_tick = self._state.sim_tick
+        self._last_autosave = meta.snapshot_id
+        self._persistence_error = None
+
+    def flush(self) -> None:
+        """Write buffered log records to the store (no snapshot). Failures are reported."""
+        with self._lock:
+            if self._store is None:
+                return
+            try:
+                self._store.append_log(
+                    self._state, events=self._pending_events, commands=self._pending_commands
+                )
+            except (SnapshotError, sqlite3.Error, OSError) as exc:
+                self._persistence_error = f"log write failed: {exc}"
+                return
+            self._pending_events.clear()
+            self._pending_commands.clear()
+            self._last_flush_tick = self._state.sim_tick
+
+    def shutdown(self) -> None:
+        """Leave the world in a safe, saved state (plan §4.7 test 8): stop the thread, pause a
+        running race, autosave (if a policy is set) and write every buffered log record."""
+        self.stop_background()
+        with self._lock:
+            if self._state.world_status is WorldStatus.RUNNING:
+                pause = Command(
+                    idempotency_key=f"shutdown-{uuid.uuid4().hex}", type=CommandType.PAUSE
+                )
+                self._apply(pause, self._clock())
+            if self._autosave is not None:
+                self._autosave_now("shutdown")
+            self.flush()
 
     def _drain(self, now: float) -> None:
         while True:
@@ -294,6 +447,29 @@ class WorldRunner:
         )
         self._acks[command.idempotency_key] = ack
         self._log.append(AppliedCommand(command=command, ack=ack))
+        if self._store is not None:
+            self._pending_commands.append(
+                CommandRecord(
+                    idempotency_key=command.idempotency_key,
+                    log_seq=self._log_seq,
+                    type=command.type.value,
+                    actor_id=command.actor_id,
+                    applied_tick=ack.applied_tick,
+                    accepted=ack.accepted,
+                    command_json=command.model_dump_json(),
+                    ack_json=ack.model_dump_json(),
+                )
+            )
+            self._log_seq += 1
+            if accepted and command.type is CommandType.PAUSE:
+                self.flush()
+            elif (
+                accepted
+                and command.type in CRITICAL_COMMANDS
+                and self._autosave is not None
+                and self._autosave.after_critical_commands
+            ):
+                self._autosave_now(f"after {command.type.value}")
         return ack
 
     def _execute(self, command: Command, now: float) -> str | None:
@@ -323,7 +499,16 @@ class WorldRunner:
                 if self._store is None:
                     raise _Rejected("this runner has no snapshot store")
                 label = command.label or f"tick {self._state.sim_tick}"
-                return self._store.save(self._state, label=label).snapshot_id
+                meta = self._store.save(
+                    self._state,
+                    label=label,
+                    events=self._pending_events,
+                    commands=self._pending_commands,
+                )
+                self._pending_events.clear()
+                self._pending_commands.clear()
+                self._last_flush_tick = self._state.sim_tick
+                return meta.snapshot_id
             case (
                 CommandType.SET_PACE_MODE
                 | CommandType.PIT_REQUEST

@@ -438,6 +438,11 @@ function render() {
   }).join("");
   const sel = view.cars.find((c) => c.driver_id === selected);
   $("selname").textContent = sel ? `${sel.code} pace:` : "Select a driver";
+  const ps = view.persistence;
+  if (ps && ps.error) $("msg").textContent = "⚠ " + ps.error;
+  $("save").title = ps && ps.store
+    ? `Save now. Autosaves every 5 laps and after strategy / race-director commands${ps.last_autosave ? " (last: " + ps.last_autosave.slice(0, 13) + "…)" : ""}`
+    : "No save file configured";
   $("stratLine").textContent = !sel ? "" : sel.controller === "USER"
     ? `${sel.code}: user strategy${sel.box ? " · boxing this lap for " + sel.box : ""}`
     : `${sel.code}: baseline plan ${sel.plan}`;

@@ -70,6 +70,10 @@ v0.3.0: per-car performance offset (``DriverEntry.car_pace_offset_s``).
 v0.2.0: tyre wear accumulated per lap at the mode driven (v0.1.0 scaled it retroactively)."""
 
 
+POLICY_MANIFEST: dict[str, str] = {"strategy": POLICY_ID}
+"""Decision policies built into this engine. Worlds pin it (``RaceSetup.policy_manifest``)."""
+
+
 class EngineStateError(RuntimeError):
     """An operation was requested in a world status that does not allow it."""
 
@@ -142,10 +146,14 @@ def pending_stop(car: CarState) -> Compound | None:
 
 
 def create_world(
-    setup: RaceSetup, *, seed: int, world_id: str, timeline_id: str = "timeline_main"
+    setup: RaceSetup, *, seed: int, world_id: str, timeline_id: str | None = None
 ) -> WorldState:
     """New world in CREATED status: all cars on the line at lap 0, first lap pre-sampled,
     every car under the baseline strategy with an initial plan."""
+    if setup.policy_manifest != POLICY_MANIFEST:
+        raise EngineStateError(
+            f"setup pins policies {setup.policy_manifest}, this engine runs {POLICY_MANIFEST}"
+        )
     cars = []
     for entry in setup.drivers:
         pace_mode = PaceMode.BALANCED
@@ -192,8 +200,9 @@ def create_world(
     return WorldState(
         schema_version=WORLD_SCHEMA_VERSION,
         world_id=world_id,
-        timeline_id=timeline_id,
+        timeline_id=timeline_id or f"{world_id}.main",
         parent_timeline_id=None,
+        branch_event_seq=None,
         world_status=WorldStatus.CREATED,
         mode="FREE_SIMULATION",
         engine_version=ENGINE_VERSION,

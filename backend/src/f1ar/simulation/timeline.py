@@ -31,6 +31,16 @@ def new_timeline_id() -> str:
     return f"timeline_{uuid.uuid4().hex[:12]}"
 
 
+def new_world_id(prefix: str = "world") -> str:
+    """A world id that won't collide with another world in the same save file."""
+    return f"{prefix}_{uuid.uuid4().hex[:10]}"
+
+
+def main_timeline_id(world_id: str) -> str:
+    """The id of a world's original timeline (timeline ids are unique across worlds)."""
+    return f"{world_id}.main"
+
+
 def branch_seed(parent_seed: int, timeline_id: str) -> int:
     digest = hashlib.sha256(f"fork|{parent_seed}|{timeline_id}".encode()).digest()
     return int.from_bytes(digest[:8], "big") >> 1  # non-negative 63-bit
@@ -53,6 +63,7 @@ def fork_world(
         update={
             "timeline_id": new_timeline_id,
             "parent_timeline_id": state.timeline_id,
+            "branch_event_seq": state.event_seq,
             "world_status": status,
             "rng": rng,
         }

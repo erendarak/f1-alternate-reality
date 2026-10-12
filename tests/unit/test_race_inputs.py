@@ -108,7 +108,13 @@ def test_setup_uses_data_when_given(
     assert setup.driver(VER).start_compound is Compound.HARD
     assert setup.driver(HAM).start_compound is Compound.MEDIUM
     assert setup.driver(VER).car_pace_offset_s == 0.0 < setup.driver(HAM).car_pace_offset_s
-    assert set(setup.inputs) == {"start_compounds", "car_pace_offsets", "pit_loss"}
+    assert set(setup.inputs) == {
+        "start_compounds",
+        "car_pace_offsets",
+        "pit_loss",
+        "dataset_sha256",
+    }
+    assert setup.inputs["dataset_sha256"].startswith("sha256:")
     # The synthetic race has no pit stops: the editorial pit model is used and labelled so.
     assert setup.inputs["pit_loss"].startswith("editorial_assumption")
     plain = setup_from_codes(monza_roster, monza_profiles, ["VER", "HAM"])

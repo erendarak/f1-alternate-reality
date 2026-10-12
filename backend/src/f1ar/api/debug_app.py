@@ -22,7 +22,8 @@ from f1ar.domain.race_state import Compound, PaceMode, StrategyController, World
 from f1ar.persistence.sqlite_store import SnapshotStore
 from f1ar.presentation.track_geometry import TrackGeometry
 from f1ar.presentation.view_model import state_view
-from f1ar.simulation.world_runner import Command, CommandType, WorldRunner
+from f1ar.simulation.timeline import new_world_id
+from f1ar.simulation.world_runner import AutosavePolicy, Command, CommandType, WorldRunner
 
 STATIC = Path(__file__).with_name("static")
 COMMAND_TIMEOUT_S = 2.0
@@ -112,14 +113,14 @@ class _Session:
         self.runner = self._make(seed, speed)
 
     def _make(self, seed: int, speed: int) -> WorldRunner:
-        world = self.factory(seed, f"viewer_{self.generation}")
-        return WorldRunner(world, speed=speed, store=self.store)
+        world = self.factory(seed, new_world_id(f"viewer{self.generation}"))
+        autosave = AutosavePolicy() if self.store is not None else None
+        return WorldRunner(world, speed=speed, store=self.store, autosave=autosave)
 
     def restart(self, seed: int) -> WorldRunner:
         with self.lock:
             old = self.runner
-            if self.background:
-                old.stop_background()
+            old.shutdown()  # the replaced world is paused, autosaved and its logs written
             self.generation += 1
             self.runner = self._make(seed, old.speed)
             if self.background:
@@ -148,8 +149,7 @@ def create_app(
         try:
             yield
         finally:
-            if run_background:
-                session.runner.stop_background()
+            session.runner.shutdown()  # closing the app never loses the race (§4.7 test 8)
 
     app = FastAPI(title="F1AR debug viewer", lifespan=lifespan)
     add_shared_routes(app, track_payload, car_sprite)
@@ -157,13 +157,15 @@ def create_app(
     @app.get("/api/debug/state")
     def state() -> dict[str, Any]:
         runner = session.runner
-        return state_view(
+        view = state_view(
             runner.state,
             geometry,
             team_colors=team_colors,
             speed=runner.speed,
             recent_events=runner.events[-RECENT_EVENTS:],
         )
+        view["persistence"] = runner.persistence
+        return view
 
     @app.post("/api/debug/command")
     def command(req: CommandRequest) -> dict[str, Any]:

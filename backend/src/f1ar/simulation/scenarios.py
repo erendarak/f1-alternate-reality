@@ -1,5 +1,6 @@
 """Scenario builders: turn roster + profiles into a ``RaceSetup``."""
 
+import hashlib
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 
@@ -21,6 +22,7 @@ from f1ar.domain.race_state import (
     TrackSpec,
     TrafficParams,
 )
+from f1ar.policy.baseline_strategy import POLICY_ID as STRATEGY_POLICY_ID
 
 DEFAULT_TICK_SECONDS = 0.5
 MONZA_2024 = "2024_italian_gp"
@@ -65,7 +67,8 @@ def setup_from_codes(
         start_compounds,
     )
 
-    laps = pd.read_parquet(data_dir / "laps.parquet")
+    laps_file = data_dir / "laps.parquet"
+    laps = pd.read_parquet(laps_file)
     lap_model = default_lap_model()
     estimate = estimate_car_offsets(laps, roster, profiles, lap_model)
     try:
@@ -88,6 +91,7 @@ def setup_from_codes(
             "start_compounds": f"historical_verified: lap-1 compound, {data_dir.name}/laps.parquet",
             "car_pace_offsets": estimate.note,
             "pit_loss": pit_note,
+            "dataset_sha256": "sha256:" + hashlib.sha256(laps_file.read_bytes()).hexdigest(),
         },
     )
 
@@ -263,4 +267,5 @@ def build_setup(
             for e in entries
         ),
         inputs=dict(inputs or {}),
+        policy_manifest={"strategy": STRATEGY_POLICY_ID},
     )
