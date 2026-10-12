@@ -20,12 +20,20 @@ Attribution: data from Jolpica-F1 (CC BY-NC-SA 4.0) and from F1 live timing via 
 The debug viewer's track outline, corner markers, display rotation and team colours are all derived
 from that FastF1/F1-timing data and follow the same rules (generated locally, not committed).
 
+## Software dependencies (frontend, M3)
+
+Direct dependencies in `frontend/package.json` (checked 2026-10-12): React + React DOM 19.3 (MIT,
+shipped in the bundle); Vite 8.3, @vitejs/plugin-react 6.1, Vitest 5.0, @types/* (MIT, dev only);
+TypeScript 5.9 (Apache-2.0, dev only). The full dev tree (97 packages) is MIT / Apache-2.0 /
+ISC / BSD-3-Clause, plus 12 MPL-2.0 build-tool packages that aren't part of the shipped bundle.
+
 ## Visual assets
 
 | Asset | Status | Terms |
 |---|---|---|
 | Track drawing | Generated from data (above) | n/a |
 | Cars in the debug viewer | One pixel sprite (below) recoloured per team + 3-letter codes; dots if the sprite is missing; no logos | n/a |
+| Cars in the M3 app | Plain team-coloured circles + 3-letter codes, safety car as an amber "SC" box (drawn in code; no sprites, no logos) | n/a |
 | [palm-tree, "Formula 1 inspired 2D pixel art car pack"](https://palm-tree.itch.io/formula-1-inspired-2d-pixel-art-car-pack) | **In use** (debug viewer): files in `assets/third_party/palm-tree-f1-pack/` (see its `SOURCE.md`) | Read 2026-10-12. No formal licence on the page. The author's replies: commercial use *"Yes, you absolutely can"*; *"feel free to use it however you want. there's no charge."* Pay-what-you-want; the author asks for a link to games using it. 4 cars "inspired by" 2021 Red Bull/Mercedes/McLaren/Ferrari. Only `Ferrari/Ferrari.png` is used, as a neutral base recoloured per team in the browser (white → transparent, `#D30400` → team colour). Credit "palm-tree" is shown in the viewer footer. |
 
 ## Planned (not used yet)

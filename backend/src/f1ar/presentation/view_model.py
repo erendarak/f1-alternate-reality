@@ -85,6 +85,7 @@ def state_view(
                 "x": round(x, 1),
                 "y": round(y, 1),
                 "heading_deg": round(geometry.heading_at(fraction), 1),
+                "lap_fraction": round(fraction, 6),
                 "lap": min(car.laps_completed + 1, track.total_laps),
                 "laps_completed": car.laps_completed,
                 "status": car.status.value,
@@ -113,6 +114,7 @@ def state_view(
             "x": round(sx, 1),
             "y": round(sy, 1),
             "heading_deg": round(geometry.heading_at(sc_fraction), 1),
+            "lap_fraction": round(sc_fraction, 6),
         }
     return {
         "mode": state.mode,

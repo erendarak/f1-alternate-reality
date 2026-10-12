@@ -28,6 +28,7 @@ def test_state_view_places_cars_by_lap_fraction(two_car_world: WorldState) -> No
     for car in view["cars"]:
         fraction = state.car(car["driver_id"]).distance_m / state.setup.track.length_m
         assert (car["x"], car["y"]) == pytest.approx(SQUARE.point_at(fraction), abs=0.06)
+        assert car["lap_fraction"] == pytest.approx(fraction, abs=1e-6)  # for UI interpolation
         assert car["team_color"] == COLORS[car["driver_id"]]
     assert view["cars"][0]["gap_to_leader_s"] == 0.0
     assert view["status"] == "RUNNING" and view["tick"] == 100 and view["speed"] == 5

@@ -132,11 +132,12 @@ current config files.
 
 `world_id, timeline_id, parent_timeline_id, mode, event_id, race_name, seed, status, tick,
 sim_clock_s, speed, leader_lap, total_laps, engine_version, race_control{phase, safety_car{x,y,
-heading_deg}, sc_laps_left, vsc_left_s, cause, sc_count, vsc_count}, cars[]` (+ `persistence`
+heading_deg, lap_fraction}, sc_laps_left, vsc_left_s, cause, sc_count, vsc_count}, cars[]` (+ `persistence`
 for the live world: last autosave, unsaved log records, last error).
 
 Each car: `position, driver_id, code, team_color, x, y, heading_deg` (track coordinates in
-metres, same frame as `/track`), `lap, laps_completed, status, compound, tyre_age_laps,
+metres, same frame as `/track`), `lap_fraction` (0..1 from the line; for display
+interpolation), `lap, laps_completed, status, compound, tyre_age_laps,
 pace_mode, lap_pace_mode, last_lap_time_s, gap_to_leader_s` (display estimate),
 `laps_down, pit_stops, box, in_pit, controller, plan, last_lap_traffic_loss_s,
 retired_reason`. This is a spectator view and may show what a driver can't know.

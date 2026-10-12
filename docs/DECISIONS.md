@@ -500,3 +500,25 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
 - **Race catalog:** a race is offered when it has personas (`SIMULATED_EVENTS`) and its data is
   fetched; setups are built lazily and cached per (driver codes, synthetic).
 
+## D-028 — Frontend: Vite + React + TypeScript, canvas track, display-only interpolation (2026-10-12)
+
+- **Stack:** Vite 8, React 19, TypeScript 5.9 (strict, `noUncheckedIndexedAccess`), Vitest; exact
+  versions pinned in `frontend/package-lock.json`; no UI framework, no state library (one reducer
+  for the stream, React state elsewhere). Dev server proxies `/api` and `/ws` to the backend, so
+  the browser sees one origin and the backend needs no CORS.
+- **The frontend holds no authoritative state.** Every displayed race value comes from the latest
+  stream frame; buttons send commands and show success only from an accepted ack.
+- **Track drawing:** `<canvas>` with the outline from `/api/races/{id}/track`, the same
+  arc-length lap-fraction mapping as `presentation/track_geometry.py` (tested against the same
+  numbers), the track's display rotation, y up.
+- **Interpolation is display only:** cars are drawn one frame interval behind the newest frame,
+  moving along the outline from the previous frame's lap progress to the newest one's. Paused,
+  pitting, retired cars and jumps (backwards or > half a lap) are drawn exactly. The backend view
+  gained `lap_fraction` (cars, safety car) for this; it isn't a policy observation.
+- **Event history:** the stream carries recent events; after every reset (and on any detected
+  frame or event gap) the client fetches the full history from REST and merges by `seq`.
+- **Lap of an event** for the log and the lap strip = 1 + the laps the leader had completed at its
+  tick (from `LAP_COMPLETED` events), because SC/VSC events carry no lap number. No engine change.
+- **Accessibility basics now:** tyres show their letter (not colour only), status is text,
+  `aria-live` notices, reduced-motion turns off the banner blink. Keyboard shortcuts in slice 3.
+

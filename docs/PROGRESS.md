@@ -6,15 +6,16 @@ M3 plan (agreed 2026-10-12, one slice per commit):
 
 - [x] **Slice 1: real API v1**: REST endpoints (plan §13.2), live session, WebSocket state stream,
   auto-pause, driver card with source labels, `docs/API_CONTRACTS.md` (D-027).
-- [ ] Slice 2: React/Vite app: TrackCanvas, TimingTower, RaceControls, live stream, mode indicator.
+- [x] **Slice 2: React/Vite app**: TrackCanvas, TimingTower, RaceControls, live stream, mode
+  indicator, event log + lap strip, minimal start screen (D-028).
 - [ ] Slice 3: World Library, save / load / fork dialogs, timelines, driver panel with source tags,
   keyboard shortcuts.
 - [ ] Slice 4: Playwright E2E (play -> pause -> save -> restart backend + reload -> load ->
   resume -> fork), M3 DoD check.
 
-Weather (open M2 item): moved to **M4**, together with tyre calibration, using a wet 2024 race.
-The owner's message left the choice as a placeholder, so this follows the recommendation;
-it can still be pulled forward.
+Weather (open M2 item): **moved to M4** (owner's decision, 2026-10-12), designed together with the
+tyre recalibration and estimated from a wet 2024 race. It must be in before M5 (observation and
+action spaces).
 
 ## Previous milestone: M2 — Canonical race engine + persistent world (plan §16) — COMPLETE except weather (-> M4)
 
@@ -564,3 +565,54 @@ or move it to M4.
   1000-tick determinism check, stream order/reset/close/refusal, auto-pause, crash-then-load; 1
   store regression) + 2 network.
 - Next: slice 2, the React/Vite app.
+
+### 2026-10-12 — M3 slice 2: the React/Vite app
+
+- **`frontend/`** (D-028): Vite 8 + React 19 + TypeScript 5.9 (strict), exact versions in
+  `package-lock.json`, `npm audit`: 0 vulnerabilities (the first pick, vitest 3, had critical
+  tinypool advisories, so the dev tools are on current majors). Dev server on 5173 proxies `/api`
+  and `/ws` to the backend (launch configs `api` + `ui`). `npm run build` -> 242 KB JS (77 KB gz).
+- **Typed client + stream** (`src/api/`): command helpers return the ack (success only from an
+  accepted ack); a pure stream reducer (stale frames dropped by `stream_seq`, reset frames
+  replace the log unless it's a reconnect to the same runner and timeline, full history from
+  REST merged after every reset) and a hook that reconnects after drops and stops when the world
+  stops being live.
+- **TrackCanvas**: real outline, corner numbers, start/finish line, team-coloured car markers with
+  codes, selected car ring, retired cars greyed with a red cross, safety car marker, amber track
+  edges under SC/VSC. 60 fps display interpolation along the outline by lap progress
+  (`laps_completed + lap_fraction`), one frame interval behind the newest frame; exact positions
+  when paused, in the pit lane, or on jumps. Backend: `lap_fraction` added to the car and
+  safety-car views (display only; no engine change).
+- **TimingTower** (position, team colour, code, gap, last lap with traffic-loss tint, tyre as a
+  letter in a coloured ring so it reads without colour, tyre age, stops with a USER-strategy mark,
+  PIT/BOX/OUT/FIN), **RaceControls** (Start/Pause/Play from the authoritative status, +1 tick /
+  +10 s / +1 min while paused, x1/x5/x10/x25, Save: "Saving…" until the ack, then the tick, or the
+  refusal reason), **RaceHeader** (race, lap, clock, status, "Alternate simulation" mode badge with
+  engine/seed and an editorial-assumption note, Branch badge, connection state, SC/VSC banner),
+  **EventLog** (readable lines with the race lap), **LapStrip** (pit / SC / VSC / retirement /
+  overtake markers per lap; laps derived from the leader's lap completions, since SC/VSC events
+  carry no lap). **StartScreen**: attach to the live world, "Continue" the newest world, or a new
+  race (the World Library is slice 3).
+- **Verified in the browser pane** (real Monza data, 20 cars): start screen through the proxy;
+  new race -> Start at x5 (positions plausible: Lesmo at 0:39); x25; a race-director safety car
+  (banner "SAFETY CAR · 2 laps", amber edges, SC marker ahead of NOR, the field queued behind);
+  later a VSC; Save -> "Saved at tick 5074" only after the ack; selecting NOR in the tower rings
+  the car on the map; backend restart -> the page falls back to the start screen ("That world is
+  no longer loaded") with Continue; a page reload auto-paused the race (by design, D-027); no
+  console errors; the narrow layout stacks the panels.
+- **Bugs found:**
+  1. In the first browser run the log put the safety car on lap 6 while it was lap 8: the client
+     was missing two laps of lap-completion events. Two later runs (512 frames, 312 events) had no
+     gap, so the cause isn't proven; most likely the hidden browser pane throttled the page. The
+     client now **heals itself**: any frame or event sequence gap requests the full history again
+     (unit-tested). After a reload the label was right (lap 8), confirming the mapping itself.
+  2. A reconnect would have replaced the full log with the 50 events of the reset frame, and not
+     refetched the history (the fetch was tied to new generations only). Fixed before testing.
+  3. Overtake lines said "(lap 14)" next to the race lap "L15" (the car's lap vs the leader's);
+     the car lap is no longer printed there. The save notice repeated the default label.
+- Not measured: the live frame rate. The browser pane was hidden when I tried, and hidden pages
+  don't run animation frames; interpolation is covered by unit tests only.
+- Tests: 292 backend offline (unchanged count, one more assertion for `lap_fraction`) + 2 network;
+  frontend 14 (`npm test`: track mapping vs the backend rule, interpolation, stream ordering /
+  reconnect / reset / gap healing / history, formatting, event laps); `tsc` strict clean.
+- Next: slice 3, World Library + save/load/fork UI + driver panel.

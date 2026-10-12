@@ -2,10 +2,27 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## M3 slice 2 (React app)
+
+- **Cars all start from the same point** (the engine has no grid slots, lap 1 is resolved in grid
+  order), so at the start the markers sit on top of each other. Close cars' code labels overlap.
+- The **live frame rate wasn't measured** (the browser pane was hidden); smoothing is unit-tested.
+- **No World Library, save/load/fork dialogs, driver panel, race-director buttons or keyboard
+  shortcuts yet** (slice 3); the start screen only offers Continue (newest world) and New race
+  (full grid, random seed, x5).
+- Gaps in the tower are the backend's display estimates; laps of events in the log are derived
+  from the leader's lap completions (exact at line crossings, not a timing-loop lap count).
+- No pit lane on the map (as in the debug viewer): a pitting car parks on the start/finish line.
+- The first browser run lost two laps of events on a live connection without a reproducible
+  cause (probably a hidden, throttled page); the client now refetches the history whenever it
+  detects a gap, so the display heals, but the root cause is unconfirmed.
+- Production use of `npm run build` isn't wired into the backend yet (dev server + proxy only).
+- Build tools pull in MPL-2.0 packages (12, dev-only, not in the shipped bundle); the bundle
+  itself is React (MIT).
+
 ## M3 slice 1 (API)
 
-- **No UI yet** beyond Swagger (`/docs`); the React app is slice 2. The debug viewer is separate
-  and still uses its own `/api/debug/*` routes.
+- The debug viewer is separate and still uses its own `/api/debug/*` routes.
 - **One live world per backend**, one user, no authentication; bound to 127.0.0.1. Two browser
   tabs share (and both control) the same live world.
 - **Auto-pause on disconnect** also pauses on a page reload or a brief network drop.
