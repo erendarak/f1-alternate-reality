@@ -346,6 +346,32 @@ def test_load_after_a_crash_pauses_a_running_save(catalog: RaceCatalog, tmp_path
     store.close()
 
 
+def test_continue_after_a_crash_resumes_the_timeline_last_live(
+    catalog: RaceCatalog, tmp_path: Path
+) -> None:
+    """Fork (branch gets the newest saves), go back to the main timeline, crash: "continue"
+    must resume main, not the branch that happened to save last (found in M3 slice 3)."""
+    store = SnapshotStore(tmp_path / "w.sqlite")
+    first = LiveSession(store, catalog, run_background=False, clock=FakeClock())
+    world = first.create(MONZA_2024, seed=3)
+    w = world.world_id
+    first.command(w, Command(idempotency_key="start", type=CommandType.START))
+    first.command(w, Command(idempotency_key="pause", type=CommandType.PAUSE))
+    first.command(w, Command(idempotency_key="step", type=CommandType.STEP, ticks=40))
+    fork = first.fork(w, name="branch")
+    first.command(w, Command(idempotency_key="b-step", type=CommandType.STEP, ticks=25))
+    main_newest = [s for s in store.list_snapshots(w) if s.timeline_id == world.timeline_id][0]
+    back, _ = first.load(w, main_newest.snapshot_id)  # back on main (newest saves are the branch's)
+    assert back.timeline_id == world.timeline_id != fork.state.timeline_id
+    # crash: no shutdown
+
+    fresh = LiveSession(store, catalog, run_background=False, clock=FakeClock())
+    resumed, _ = fresh.load(w)  # "Continue"
+    assert resumed.timeline_id == world.timeline_id and resumed.sim_tick == 40
+    fresh.shutdown()
+    store.close()
+
+
 def test_continue_without_snapshot_id_does_not_branch(apps: Apps) -> None:
     client = apps.start()
     w = create(client)

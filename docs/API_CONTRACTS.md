@@ -58,7 +58,7 @@ cases):
 | GET | `/api/races` | | `races[]` (id, name, season, round, laps, length, `has_data`), `unavailable[]` |
 | GET | `/api/races/{race_id}` | | summary + `drivers[]` (verified entry list, `historical_verified`) |
 | GET | `/api/races/{race_id}/track` | | outline, corners, rotation, bounds, start/finish, `team_colors` |
-| GET | `/api/worlds` | | `live_world_id`, `worlds[]` (event, timeline/snapshot counts, `latest` snapshot, `live`) |
+| GET | `/api/worlds` | | `live_world_id`, `worlds[]` (event, timeline/snapshot counts, `active_timeline_id`, `latest` = where Continue resumes, `live`) |
 | POST | `/api/worlds` | `{race_id, seed?, drivers?, synthetic?, speed?}` | 201 `{world_id, seed, state}`; new world, live, saved once ("created") |
 | GET | `/api/worlds/{id}` | | `{live, state}` (+ `latest_snapshot` for a stored world, read from its newest valid save) |
 | GET | `/api/worlds/{id}/timelines` | | `live_timeline_id`, `timelines[]` with lineage, counts and their `snapshots[]` |
@@ -93,8 +93,9 @@ backend itself (auto-pause, pause-on-load).
 
 ### Load
 
-- No `snapshot_id` = **Continue** from the world's newest valid snapshot (taken after the live
-  runner's shutdown autosave, so continuing the live world doesn't branch).
+- No `snapshot_id` = **Continue**: the newest valid snapshot of the world's **active timeline**
+  (the one last made live; store v4, D-029), else the world's newest valid snapshot. Resolved
+  after the live runner's shutdown autosave, so continuing the live world doesn't branch.
 - `SnapshotStore.resume` decides the timeline: the snapshot's own timeline continues if nothing
   state-changing happened after it; otherwise a **new branch** is created (`branched: true`,
   label "resumed from: …"). History is never rewritten.
@@ -124,7 +125,8 @@ backend itself (auto-pause, pause-on-load).
 `car_pace_offset_s` carry the source named by the world's input notes (`historical_verified` /
 `estimated_from_data`, or `editorial_assumption` for synthetic defaults); `profile.source_type`
 is the persona's (`editorial_assumption` today) with `confidence`, `persona_label`,
-`base_template`, `overridden_fields`, `explanation`; `race` (live tyre, stint, plan) is
+`base_template`, `overridden_fields`, `explanation`, `used_by_engine` (the traits the race
+engine reads today; the others are stored for later stages); `race` (live tyre, stint, plan) is
 `simulated_dynamic`. Values come from the profile revision pinned in the world, not from the
 current config files.
 

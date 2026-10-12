@@ -13,6 +13,7 @@ from f1ar.persistence.sqlite_store import (
     SnapshotStore,
     UnsupportedSnapshotError,
 )
+from f1ar.simulation import lightweight_engine as engine
 from tests.conftest import run_ticks
 
 
@@ -170,7 +171,7 @@ INSERT INTO store_meta VALUES ('schema_version', '1');
 
 
 def test_v1_store_is_migrated_in_place(tmp_path: Path, two_car_world: WorldState) -> None:
-    """A save file from step 5 (store schema v1) migrates v1 -> v2 -> v3, loads and forks."""
+    """A save file from step 5 (store schema v1) migrates v1 -> ... -> v4, loads and forks."""
     path = tmp_path / "v1.sqlite"
     state = run_ticks(two_car_world, 50)
     payload = canonical_json(state.model_dump(mode="json"))
@@ -197,13 +198,32 @@ def test_v1_store_is_migrated_in_place(tmp_path: Path, two_car_world: WorldState
     db.close()
 
     with SnapshotStore(path) as store:
-        assert store.schema_version == STORE_SCHEMA_VERSION == 3
+        assert store.schema_version == STORE_SCHEMA_VERSION == 4
+        assert store.list_worlds()[0].active_timeline_id is None  # v4 column, not yet set
         assert store.load("snap_v1") == state
         branch, _ = store.fork("snap_v1", label="after migration")
         assert {t.timeline_id for t in store.list_timelines(state.world_id)} == {
             state.timeline_id,
             branch.timeline_id,
         }
+
+
+def test_continue_point_follows_the_active_timeline(
+    store: SnapshotStore, two_car_world: WorldState
+) -> None:
+    """ "Continue" resumes the timeline last made live, not whichever timeline saved last."""
+    main_save = store.save(run_ticks(two_car_world, 20), label="main")
+    branch, _ = store.fork(main_save.snapshot_id, label="branch")
+    branch_save = store.save(run_ticks(engine.resume(branch), 30), label="branch later")
+    world = two_car_world.world_id
+    assert store.continue_point(world) == store.get_meta(branch_save.snapshot_id)  # newest
+    store.set_active_timeline(world, two_car_world.timeline_id)
+    assert store.continue_point(world) == main_save
+    listed = store.list_worlds()[0]
+    assert listed.active_timeline_id == two_car_world.timeline_id
+    assert listed.latest == main_save
+    with pytest.raises(SnapshotIntegrityError):
+        store.set_active_timeline(world, "timeline_of_someone_else")
 
 
 def test_delete_snapshot(store: SnapshotStore, two_car_world: WorldState) -> None:

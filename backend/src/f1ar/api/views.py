@@ -38,7 +38,7 @@ def timeline_of(session: LiveSession, world_id: str, timeline_id: str | None) ->
         if live is not None:
             timeline_id = live.runner.state.timeline_id
         else:
-            latest = session.store.latest_valid(world_id)
+            latest = session.store.continue_point(world_id)
             timeline_id = latest.timeline_id if latest is not None else None
     for t in timelines:
         if t.timeline_id == timeline_id:

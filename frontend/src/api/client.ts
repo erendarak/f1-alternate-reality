@@ -1,7 +1,20 @@
 // REST client. Commands return the backend's acknowledgement: success is shown only from an
 // accepted ack (plan §13.4), never optimistically.
 
-import type { CommandAck, RaceEvent, RaceSummary, Track, WorldState, WorldSummary } from "./types";
+import type {
+  Action,
+  CommandAck,
+  DriverCard,
+  ForkResult,
+  Health,
+  RaceEvent,
+  RaceSummary,
+  SnapshotMeta,
+  TimelineInfo,
+  Track,
+  WorldState,
+  WorldSummary,
+} from "./types";
 
 export class ApiError extends Error {
   constructor(
@@ -54,13 +67,43 @@ export const api = {
   track: (raceId: string) => request<Track>("GET", `/api/races/${encodeURIComponent(raceId)}/track`),
   worlds: () =>
     request<{ live_world_id: string | null; worlds: WorldSummary[] }>("GET", "/api/worlds"),
-  createWorld: (raceId: string, speed: number) =>
+  health: () => request<Health>("GET", "/api/health"),
+  createWorld: (raceId: string, speed: number, seed?: number) =>
     request<{ world_id: string; seed: number; state: WorldState }>("POST", "/api/worlds", {
       race_id: raceId,
       speed,
+      ...(seed === undefined ? {} : { seed }),
     }),
-  load: (worldId: string) =>
-    request<{ branched: boolean; state: WorldState }>("POST", `${world(worldId)}/load`, {}),
+  /** Make a saved world live; no snapshot = continue from its newest valid save. */
+  load: (worldId: string, snapshotId?: string) =>
+    request<{ branched: boolean; loaded_snapshot: SnapshotMeta; state: WorldState }>(
+      "POST",
+      `${world(worldId)}/load`,
+      snapshotId ? { snapshot_id: snapshotId } : {},
+    ),
+  timelines: (worldId: string) =>
+    request<{ live_timeline_id: string | null; timelines: TimelineInfo[] }>(
+      "GET",
+      `${world(worldId)}/timelines`,
+    ),
+  driver: (worldId: string, driverId: string) =>
+    request<DriverCard>("GET", `${world(worldId)}/drivers/${encodeURIComponent(driverId)}`),
+  fork: (
+    worldId: string,
+    body: {
+      name: string;
+      source_snapshot_id?: string;
+      seed_mode: "COMMON_EXOGENOUS_RANDOMNESS" | "INDEPENDENT";
+      action_overrides: Action[];
+    },
+  ) =>
+    request<ForkResult>("POST", `${world(worldId)}/fork`, {
+      ...body,
+      action_overrides: body.action_overrides.map((a) => ({
+        ...a,
+        idempotency_key: crypto.randomUUID(),
+      })),
+    }),
   events: (worldId: string, limit = 5000) =>
     request<{ timeline_id: string; events: RaceEvent[] }>(
       "GET",
@@ -74,4 +117,6 @@ export const api = {
   step: (worldId: string, ticks: number) => command(`${world(worldId)}/step`, { ticks }),
   save: (worldId: string, label?: string) =>
     command(`${world(worldId)}/save`, label ? { label } : {}),
+  action: (worldId: string, action: Action) =>
+    command(`${world(worldId)}/actions`, { ...action }),
 };

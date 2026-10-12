@@ -522,3 +522,27 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
 - **Accessibility basics now:** tyres show their letter (not colour only), status is text,
   `aria-live` notices, reduced-motion turns off the banner blink. Keyboard shortcuts in slice 3.
 
+## D-029 — Active timeline (store v4), library/fork UI conventions (2026-10-12)
+
+- **Store schema v4:** `worlds.active_timeline_id` = the timeline last made live (create, load,
+  fork set it through `SnapshotStore.set_active_timeline`). **"Continue"** (load without a
+  snapshot) resumes `continue_point(world)`: the newest valid snapshot of that timeline, else the
+  world's newest valid snapshot. Reason: the newest snapshot of a world can belong to a branch the
+  user already left (its shutdown autosave), and after a crash the user's current timeline may
+  have no shutdown save at all. In-place migration v3 -> v4; worlds without the value fall back
+  to the old rule. `GET /api/worlds` reports `active_timeline_id` and the continue point as
+  `latest`.
+- **Returning to the main story** = loading the main timeline's newest save (continues it, no
+  branch). Loading an older save of a timeline creates a branch (D-025 resume rule); the UI says so.
+- **Fork UI** offers one decision per fork (the API takes up to 20); the default name describes
+  the decision and the lap; "same luck" (common random numbers) is the default.
+- **Driver panel provenance:** each value shows a text tag (not colour alone) for its source
+  type; persona traits are split by whether the race engine reads them (`ENGINE_TRAITS`,
+  checked against the engine source by a test), so the UI never implies a trait matters when it
+  doesn't.
+- **Dialogs** are native `<dialog>` opened with `showModal()`, closed only through React state;
+  Esc is handled on the synchronous `cancel` event (the async `close` event proved unreliable in
+  the embedded browser).
+- **Keyboard shortcuts** (plan §14.5): Space, S, →, Shift+→; never while typing or with a
+  dialog open; no ← (there is no rewind: earlier states are loaded, never stepped back to).
+

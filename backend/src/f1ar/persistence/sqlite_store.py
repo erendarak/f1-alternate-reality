@@ -21,7 +21,8 @@ timeline creates a new branch instead of continuing (and overwriting) that timel
 Store schema history (``STORE_MIGRATIONS``): v1 = worlds/timelines/snapshots;
 v2 = timelines gain ``label`` and ``fork_snapshot_id``; v3 = events and commands tables,
 snapshots gain ``event_seq``, ``policy_manifest`` and ``dataset_hash``, timelines gain
-``fork_event_seq``.
+``fork_event_seq``; v4 = worlds gain ``active_timeline_id`` (the timeline last made live, so
+"continue" resumes it even after a crash; plan §13.1).
 """
 
 import hashlib
@@ -43,7 +44,7 @@ from f1ar.persistence.snapshot_codec import CODEC_VERSION, HASH_PREFIX, canonica
 from f1ar.simulation.lightweight_engine import ENGINE_VERSION, POLICY_MANIFEST
 from f1ar.simulation.timeline import SeedMode, fork_world, new_timeline_id
 
-STORE_SCHEMA_VERSION = 3
+STORE_SCHEMA_VERSION = 4
 
 STORE_MIGRATIONS: dict[int, tuple[str, ...]] = {
     # from version N to N+1
@@ -60,6 +61,7 @@ STORE_MIGRATIONS: dict[int, tuple[str, ...]] = {
         "ALTER TABLE timelines ADD COLUMN fork_command_seq INTEGER",
         # events / commands tables are created by the DDL (CREATE TABLE IF NOT EXISTS)
     ),
+    3: ("ALTER TABLE worlds ADD COLUMN active_timeline_id TEXT",),
 }
 
 SnapshotKind = Literal["MANUAL", "AUTOSAVE"]
@@ -73,9 +75,10 @@ CREATE TABLE IF NOT EXISTS store_meta (
     value TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS worlds (
-    id          TEXT PRIMARY KEY,
-    event_id    TEXT NOT NULL,
-    created_utc TEXT NOT NULL
+    id                 TEXT PRIMARY KEY,
+    event_id           TEXT NOT NULL,
+    created_utc        TEXT NOT NULL,
+    active_timeline_id TEXT  -- last timeline made live; provenance only, not a foreign key
 );
 CREATE TABLE IF NOT EXISTS timelines (
     id                 TEXT PRIMARY KEY,
@@ -215,8 +218,11 @@ class WorldMeta(BaseModel):
     created_utc: str
     timeline_count: int
     snapshot_count: int
+    active_timeline_id: str | None
+    """The timeline last made live (``set_active_timeline``), if recorded."""
     latest: SnapshotMeta | None
-    """Newest snapshot of any of the world's timelines (not verified; ``load`` verifies)."""
+    """Where "continue" resumes: the newest snapshot of the active timeline, else of any
+    timeline (not verified here; ``load`` verifies)."""
 
 
 _META_COLUMNS = (
@@ -666,14 +672,19 @@ class SnapshotStore:
                 "SELECT w.id, w.event_id, w.created_utc, "
                 "(SELECT COUNT(*) FROM timelines t WHERE t.world_id = w.id), "
                 "(SELECT COUNT(*) FROM snapshots s WHERE s.world_id = w.id), "
-                "(SELECT MAX(s.seq) FROM snapshots s WHERE s.world_id = w.id) AS newest "
+                "(SELECT MAX(s.seq) FROM snapshots s WHERE s.world_id = w.id) AS newest, "
+                "w.active_timeline_id "
                 "FROM worlds w ORDER BY newest IS NULL, newest DESC, w.created_utc DESC"
             ).fetchall()
-            latest_rows = {
+            resume_rows = {
                 r[1]: r
                 for r in self._db.execute(
-                    f"SELECT {_META_COLUMNS} FROM snapshots WHERE seq IN "
-                    "(SELECT MAX(seq) FROM snapshots GROUP BY world_id)"
+                    f"SELECT {_META_COLUMNS} FROM snapshots WHERE seq IN ("
+                    "SELECT COALESCE("
+                    "  (SELECT MAX(s.seq) FROM snapshots s"
+                    "   WHERE s.timeline_id = w.active_timeline_id),"
+                    "  (SELECT MAX(s.seq) FROM snapshots s WHERE s.world_id = w.id))"
+                    " FROM worlds w)"
                 ).fetchall()
             }
         return [
@@ -683,10 +694,42 @@ class SnapshotStore:
                 created_utc=created,
                 timeline_count=timelines,
                 snapshot_count=snapshots,
-                latest=self._meta(latest_rows[world_id]) if world_id in latest_rows else None,
+                active_timeline_id=active,
+                latest=self._meta(resume_rows[world_id]) if world_id in resume_rows else None,
             )
-            for world_id, event_id, created, timelines, snapshots, _ in rows
+            for world_id, event_id, created, timelines, snapshots, _, active in rows
         ]
+
+    def set_active_timeline(self, world_id: str, timeline_id: str) -> None:
+        """Record the timeline the user is on, so "continue" resumes it (even after a crash)."""
+        with self._lock:
+            owner = self._db.execute(
+                "SELECT world_id FROM timelines WHERE id = ?", (timeline_id,)
+            ).fetchone()
+            if owner is None or owner[0] != world_id:
+                raise SnapshotIntegrityError(f"timeline {timeline_id} is not in world {world_id}")
+            self._db.execute(
+                "UPDATE worlds SET active_timeline_id = ? WHERE id = ?", (timeline_id, world_id)
+            )
+
+    def continue_point(self, world_id: str) -> SnapshotMeta | None:
+        """Newest fully verified snapshot of the world's active timeline; if there is none
+        (never recorded, or all its snapshots invalid), the world's newest valid snapshot."""
+        with self._lock:
+            row = self._db.execute(
+                "SELECT active_timeline_id FROM worlds WHERE id = ?", (world_id,)
+            ).fetchone()
+        active = row[0] if row is not None else None
+        if active is not None:
+            for meta in self.list_snapshots(world_id):
+                if meta.timeline_id != active:
+                    continue
+                try:
+                    self.load(meta.snapshot_id)
+                except SnapshotError:
+                    continue
+                return meta
+        return self.latest_valid(world_id)
 
     def latest_valid(self, world_id: str) -> SnapshotMeta | None:
         """Newest fully verified snapshot of ``world_id`` (recovery after corruption)."""

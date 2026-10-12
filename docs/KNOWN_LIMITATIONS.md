@@ -2,14 +2,25 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## M3 slice 3 (library, save/load/fork UI)
+
+- **No rename or delete** of worlds, timelines or saves in the UI (nor in the API).
+- **No timeline comparison** ("Compare Timelines", plan §14.2): branches can be opened one at a
+  time, not shown side by side (M6 Counterfactual Lab).
+- The fork dialog applies **one** decision; several decisions need several steps (decide, then
+  act on the branch).
+- Persona values are shown but **can't be edited** ("Edit Driver Profile (fork)", plan §14.2).
+- **Historical replay isn't in the new UI** (debug viewer only); the mode badge supports it.
+- "Continue" for worlds saved before store v4 falls back to the newest save of any timeline
+  (their active timeline was never recorded).
+- No "step one lap" (ticks / 10 s / 1 min only); no ← key (no rewind by design).
+- The library list isn't refreshed live (reload or reopen it to see changes made elsewhere).
+
 ## M3 slice 2 (React app)
 
 - **Cars all start from the same point** (the engine has no grid slots, lap 1 is resolved in grid
   order), so at the start the markers sit on top of each other. Close cars' code labels overlap.
 - The **live frame rate wasn't measured** (the browser pane was hidden); smoothing is unit-tested.
-- **No World Library, save/load/fork dialogs, driver panel, race-director buttons or keyboard
-  shortcuts yet** (slice 3); the start screen only offers Continue (newest world) and New race
-  (full grid, random seed, x5).
 - Gaps in the tower are the backend's display estimates; laps of events in the log are derived
   from the leader's lap completions (exact at line crossings, not a timing-loop lap count).
 - No pit lane on the map (as in the debug viewer): a pitting car parks on the start/finish line.

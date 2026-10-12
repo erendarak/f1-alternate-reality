@@ -88,7 +88,7 @@ def worlds_router(session: LiveSession) -> APIRouter:
         if live is not None:
             return {"world_id": world_id, "live": True, "state": live_view(live)}
         session.require_known(world_id)
-        latest = store.latest_valid(world_id)
+        latest = store.continue_point(world_id)
         state = session.current_state(world_id)
         race = catalog.get(state.setup.event_id)
         view = world_view(state, race, speed=1)

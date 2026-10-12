@@ -41,7 +41,9 @@ export type StreamAction =
   | { kind: "connecting" }
   | { kind: "message"; message: StreamMessage; at: number }
   | { kind: "history"; events: RaceEvent[]; timelineId: string }
-  | { kind: "dropped" };
+  | { kind: "dropped" }
+  /** The hook stopped watching this world: forget it, so reopening it starts clean. */
+  | { kind: "reset" };
 
 export const initialStream: StreamState = {
   connection: "connecting",
@@ -65,6 +67,8 @@ export function mergeEvents(a: RaceEvent[], b: RaceEvent[]): RaceEvent[] {
 
 export function streamReducer(s: StreamState, action: StreamAction): StreamState {
   switch (action.kind) {
+    case "reset":
+      return initialStream;
     case "connecting":
       // new connection = new sequence; keep showing the last frame meanwhile
       return { ...s, connection: s.frame ? "reconnecting" : "connecting", lastSeq: 0 };
@@ -172,6 +176,9 @@ export function useWorldStream(
       stopped = true;
       window.clearTimeout(timer);
       socket?.close();
+      // Otherwise a "closed" state from this connection would still be there when the same
+      // world is opened again, and the app would leave it at once (found in the browser).
+      dispatch({ kind: "reset" });
     };
   }, [worldId]);
 

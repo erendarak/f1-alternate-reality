@@ -7,6 +7,9 @@ test 8), so two runners never write to the same timeline.
 
 - **Create**: a new world (new id, US-01) is saved once right away ("created"), so it shows
   up in the library even before the first manual save.
+- **Continue** (load without a snapshot): the newest valid snapshot of the timeline that was
+  last live (``SnapshotStore.continue_point``), so a crash doesn't drop the user on another
+  branch.
 - **Load**: ``SnapshotStore.resume`` decides whether the timeline continues or a branch is
   created (history is never rewritten, D-025). A loaded world is always PAUSED: if the save
   was taken while running, a logged ``SYSTEM`` PAUSE is applied.
@@ -133,7 +136,7 @@ class LiveSession:
         live = self.live_world(world_id)
         if live is not None:
             return live.runner.state
-        meta = self.store.latest_valid(world_id)
+        meta = self.store.continue_point(world_id)
         if meta is None:
             raise UnknownWorldError(world_id)
         return self.store.load(meta.snapshot_id)
@@ -264,7 +267,7 @@ class LiveSession:
 
     def _snapshot_of(self, world_id: str, snapshot_id: str | None) -> SnapshotMeta:
         if snapshot_id is None:
-            meta = self.store.latest_valid(world_id)
+            meta = self.store.continue_point(world_id)
             if meta is None:
                 raise UnknownWorldError(world_id)
             return meta
@@ -281,6 +284,8 @@ class LiveSession:
         )
         if self._background:
             runner.start_background()
+        # "continue" must resume where the user is, even after a crash (store v4)
+        self.store.set_active_timeline(state.world_id, state.timeline_id)
         self._generation += 1
         self._live = LiveWorld(runner, race, self._generation)
         return self._live

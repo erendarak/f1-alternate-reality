@@ -17,13 +17,17 @@ const MODE: Record<string, { label: string; title: string }> = {
 interface Props {
   state: WorldState;
   connection: Connection;
+  onLibrary: () => void;
 }
 
-export function RaceHeader({ state, connection }: Props) {
+export function RaceHeader({ state, connection, onLibrary }: Props) {
   const mode = MODE[state.mode] ?? { label: state.mode, title: "" };
   const rc = state.race_control;
   return (
     <header className="race-header">
+      <button className="ghost" onClick={onLibrary} title="Back to the World Library (a running race pauses)">
+        ← Library
+      </button>
       <div className="brand">F1 ALTERNATE REALITY</div>
       <div className="race">{state.race_name}</div>
       <div className="lap" aria-label="lap">

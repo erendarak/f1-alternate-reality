@@ -129,6 +129,11 @@ describe("stream reducer", () => {
     s = streamReducer(s, { kind: "history", events: [ev(2), ev(3), ev(4)], timelineId: "w.main" });
     expect(s.events.map((e) => e.seq)).toEqual([0, 1, 2, 3, 4, 5, 6]);
   });
+  it("reset forgets a closed stream (reopening the same world must not bounce)", () => {
+    const closed = apply(initialStream, { type: "closed", reason: "world_unloaded", live_world_id: null });
+    expect(closed.connection).toBe("closed");
+    expect(streamReducer(closed, { kind: "reset" })).toEqual(initialStream);
+  });
   it("caps the event log", () => {
     const many = Array.from({ length: MAX_EVENTS + 10 }, (_, i) => ev(i));
     expect(mergeEvents(many, [])).toHaveLength(MAX_EVENTS);

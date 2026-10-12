@@ -282,6 +282,11 @@ def replay_view(
 
 # --- driver card (profile + provenance) -----------------------------------------------------
 
+ENGINE_TRAITS: tuple[str, ...] = ("race_pace_skill", "consistency", "tire_management", "composure")
+"""Persona traits that change the race today: lap model (pace, consistency, tyre management),
+baseline strategy (tyre management), incidents (consistency, composure). The others are stored
+for later stages. Kept honest by a test that searches the engine sources."""
+
 
 def _note_source(note: str | None, default: SourceType) -> str:
     """Source type named by a ``RaceSetup.inputs`` note prefix (``"<source_type>: ..."``)."""
@@ -339,6 +344,7 @@ def driver_view(state: WorldState, driver_id: str) -> dict[str, Any]:
             "origin": meta.origin,
             "values": profile.archetype.model_dump(),
             "stage1_fields": list(STAGE1_FIELDS),
+            "used_by_engine": list(ENGINE_TRAITS),
         },
         "policy": {"type": profile.policy.type, "version": profile.policy.version},
         "race": {

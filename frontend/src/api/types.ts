@@ -121,6 +121,7 @@ export interface SnapshotMeta {
   label: string;
   kind: "MANUAL" | "AUTOSAVE";
   created_utc: string;
+  engine_version: string;
 }
 
 export interface WorldSummary {
@@ -129,6 +130,8 @@ export interface WorldSummary {
   created_utc: string;
   timeline_count: number;
   snapshot_count: number;
+  active_timeline_id: string | null;
+  /** Where "Continue" resumes: newest save of the timeline last live. */
   latest: SnapshotMeta | null;
   race_name: string | null;
   race_available: boolean;
@@ -159,3 +162,108 @@ export type StreamMessage =
     }
   | { type: "closed"; reason: string; live_world_id: string | null }
   | { type: "error"; error: "world_not_live" | "unknown_world"; live_world_id: string | null };
+
+export type SourceType =
+  | "historical_verified"
+  | "estimated_from_data"
+  | "editorial_assumption"
+  | "simulated_dynamic"
+  | "learned_parameter";
+
+export interface Sourced<T> {
+  value: T;
+  source_type: SourceType;
+  note?: string;
+}
+
+export interface DriverCard {
+  driver_id: string;
+  code: string;
+  display_name: string;
+  team_id: string;
+  team_name: string;
+  car_number: number;
+  team_color: string | null;
+  identity_source_type: SourceType;
+  grid_position: Sourced<number>;
+  start_compound: Sourced<Compound>;
+  car_pace_offset_s: Sourced<number>;
+  profile: {
+    revision: string;
+    content_hash: string;
+    source_type: SourceType;
+    estimated: boolean;
+    confidence: number;
+    persona_label: string | null;
+    base_template: string;
+    overridden_fields: string[];
+    explanation: string;
+    origin: string;
+    values: Record<string, number>;
+    stage1_fields: string[];
+    used_by_engine: string[];
+  };
+  policy: { type: string; version: string };
+  race: {
+    status: CarStatus;
+    compound: Compound;
+    tyre_age_laps: number;
+    pit_stops: number;
+    pace_mode: string;
+    controller: "BASELINE" | "USER";
+    plan: string;
+    source_type: SourceType;
+  };
+}
+
+export interface TimelineInfo {
+  timeline_id: string;
+  world_id: string;
+  parent_timeline_id: string | null;
+  label: string;
+  fork_snapshot_id: string | null;
+  created_utc: string;
+  snapshot_count: number;
+  fork_event_seq: number | null;
+  event_count: number;
+  command_count: number;
+  snapshots: SnapshotMeta[];
+}
+
+export interface Health {
+  status: string;
+  engine_version: string;
+  world_schema_version: number;
+  store_schema_version: number;
+  allowed_speeds: number[];
+  races: string[];
+  live_world_id: string | null;
+}
+
+export type ActionType =
+  | "PIT_REQUEST"
+  | "PIT_CANCEL"
+  | "SET_PACE_MODE"
+  | "SET_CONTROLLER"
+  | "DEPLOY_SC"
+  | "DEPLOY_VSC";
+
+export interface Action {
+  action_type: ActionType;
+  driver_id?: string;
+  compound?: Compound;
+  pace_mode?: "PUSH" | "BALANCED" | "CONSERVE";
+  controller?: "BASELINE" | "USER";
+  laps?: number;
+  duration_s?: number;
+}
+
+export interface ForkResult {
+  world_id: string;
+  timeline_id: string;
+  parent_timeline_id: string;
+  source_snapshot_id: string;
+  override_acks: CommandAck[];
+  overrides_rejected: number;
+  state: WorldState;
+}

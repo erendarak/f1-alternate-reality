@@ -161,3 +161,21 @@ def test_sprite_is_served_with_recolour_instructions(client: TestClient) -> None
 def test_state_reports_heading(client: TestClient) -> None:
     cars = client.get("/api/debug/state").json()["cars"]
     assert all(car["heading_deg"] == 0.0 for car in cars)  # on the line, square track heads +x
+
+
+def test_engine_traits_label_matches_the_engine_sources() -> None:
+    """The UI says which persona traits change the race; check that against the engine code
+    (attribute accesses such as ``driver.consistency``; docstrings don't use that form)."""
+    import re
+
+    from f1ar.domain.driver_profiles import ARCHETYPE_FIELDS
+    from f1ar.presentation.view_model import ENGINE_TRAITS
+
+    src = Path(__file__).resolve().parents[2] / "backend" / "src" / "f1ar"
+    code = "".join(
+        f.read_text(encoding="utf-8")
+        for folder in ("simulation", "policy")
+        for f in sorted((src / folder).glob("*.py"))
+    )
+    used = {name for name in ARCHETYPE_FIELDS if re.search(r"\." + name + r"\b", code)}
+    assert used == set(ENGINE_TRAITS)

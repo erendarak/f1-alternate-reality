@@ -8,8 +8,8 @@ M3 plan (agreed 2026-10-12, one slice per commit):
   auto-pause, driver card with source labels, `docs/API_CONTRACTS.md` (D-027).
 - [x] **Slice 2: React/Vite app**: TrackCanvas, TimingTower, RaceControls, live stream, mode
   indicator, event log + lap strip, minimal start screen (D-028).
-- [ ] Slice 3: World Library, save / load / fork dialogs, timelines, driver panel with source tags,
-  keyboard shortcuts.
+- [x] **Slice 3: World Library, save / load / fork dialogs, timelines, driver panel with source
+  tags, race director, keyboard shortcuts** (D-029, store schema v4).
 - [ ] Slice 4: Playwright E2E (play -> pause -> save -> restart backend + reload -> load ->
   resume -> fork), M3 DoD check.
 
@@ -616,3 +616,58 @@ or move it to M4.
   frontend 14 (`npm test`: track mapping vs the backend rule, interpolation, stream ordering /
   reconnect / reset / gap healing / history, formatting, event laps); `tsc` strict clean.
 - Next: slice 3, World Library + save/load/fork UI + driver panel.
+
+### 2026-10-12 — M3 slice 3: World Library, save/load/fork UI, driver panel
+
+- **World Library** (replaces the start screen): every saved world with its race, creation time,
+  timeline and save counts, LIVE badge and the save "Continue" resumes; saves from another
+  engine version are marked as not loadable instead of failing; "Saves & timelines" lists every
+  save to load; New race form (race, optional seed, speed). "← Library" in the race header (the
+  race auto-pauses when you leave, D-027).
+- **Timelines tab**: main timeline and branches as a tree, each save (manual/auto, race time,
+  status) with **Load** and **Fork…**; the live timeline is marked; loading an older point says
+  when it created a new branch (history kept).
+- **Save as…** (named save), **Fork dialog** (from now or a chosen save; one decision: box for
+  S/M/H, a pace mode, or take over the strategy; same luck or new luck; refused decisions are
+  reported), **Race director** buttons (Safety car, VSC).
+- **Driver panel** (click a car or a row): name, team, number; *Verified history* (identity,
+  grid, start tyre), *Estimated from data* (car pace), *Editorial assumption* (persona, with
+  label, template, adjusted fields, confidence, explanation), *Simulated* (live tyre, stint,
+  plan); persona traits split into the four **used by the race engine** (`race_pace_skill`,
+  `consistency`, `tire_management`, `composure`) and the ones not used yet. Decisions: Box S/M/H,
+  Stay out, Push/Balanced/Conserve, Baseline/My strategy. Backend: `used_by_engine` in the
+  driver card, guarded by a test that searches the engine sources.
+- **Keyboard**: Space play/pause, S save, → +1 tick, Shift+→ +10 s (paused); ignored while typing
+  or with a dialog open. Layout: three columns on wide screens (track | tower | panel).
+- **Store schema v4** (D-029): `worlds.active_timeline_id`, set whenever a world becomes live;
+  "Continue" resumes the newest valid save of that timeline (`continue_point`); in-place
+  migration v3 -> v4 (the real save file migrated on open).
+- **User stories done by hand in the browser** (real Monza data, 20 cars):
+  US-01 create (seed 42, x10) -> new world; US-02 play/pause (also with Space); save as "before
+  HAM decision" -> acked; US-04 fork "What if HAM boxes for HARD (lap 14)" -> Branch badge, HAM
+  BOX + user strategy, played on: HAM pitted onto hards and dropped to P16; back to the main
+  timeline (Load its newest save, no new branch): HAM P6 on 13-lap mediums, no stop; US-03
+  stepped with Shift+→ (19:27 -> 19:57), saved with S, **backend hard-killed** -> library ->
+  Continue -> main timeline at 19:57, PAUSED. Driver panel decisions (VER box for soft -> BOX)
+  and race director (SC banner) checked too.
+- **Bugs found (all in the browser):**
+  1. **"Continue" after a crash resumed the wrong timeline**: after a fork and a return to the
+     main timeline, the branch had the newest saves, so Continue dropped the user on the branch.
+     Fixed with store v4 `active_timeline_id` (plan §13.1 had it); test with a crash in the API
+     tests and in the store tests.
+  2. **Dialogs**: `showModal()` focused the ✕ button, so typing went nowhere and Enter closed
+     the dialog; and the dialog `close` event never fired in the browser pane, so Esc left a
+     closed dialog mounted that couldn't be reopened. Now focus goes to the first field and Esc
+     is handled through the synchronous `cancel` event.
+  3. **Reopening the same world right after its stream closed bounced back to the library** (the
+     old "closed" stream state was still there); the stream state is now reset on disconnect
+     (unit-tested), and the exact sequence was re-run in the browser.
+  4. The active tab rendered as a white box (style clash); the driver panel was squeezed under
+     the tower (three-column layout now); snapshot actions wrapped.
+- Keyboard shortcuts were exercised with dispatched key events (the browser pane was hidden
+  for that part, so real key presses couldn't be sent); Space was also pressed for real earlier.
+- Tests: 295 backend offline (+3: engine-traits guard, continue point, crash -> continue) + 2
+  network; frontend 17 (+3: timeline tree, stream reset); `tsc` clean; build 263 KB JS.
+- Not in this slice: historical replay inside the new UI (still the debug viewer); proposal: with
+  M6's real-vs-simulated comparison.
+- Next: slice 4, Playwright E2E + M3 DoD check.
