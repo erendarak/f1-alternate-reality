@@ -114,6 +114,7 @@ def state_view(
         }
     return {
         "mode": state.mode,
+        "event_id": state.setup.event_id,
         "world_id": state.world_id,
         "timeline_id": state.timeline_id,
         "seed": state.rng.seed,

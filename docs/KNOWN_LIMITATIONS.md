@@ -2,7 +2,21 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
-## Current (M2 slice 4)
+## Current (end of M2)
+
+- **No weather at all** (no rain, wet/intermediate tyres, temperature or grip changes), although
+  plan §16 lists weather states under M2. Both reference races were dry.
+- **Strategy and overtaking don't match real races** (EXP-002): every simulated car one-stops onto
+  SOFT (real: mostly M-H, many 2-stops) and on-track passes are 2-5x too rare. Root cause: the
+  placeholder compound/degradation and traffic coefficients (calibration is M4).
+- Data-derived inputs (car offsets, base lap, pit loss, start tyres) are estimated from the same
+  race they're used on, at every track; EXP-002's Spa run is out-of-sample only for the
+  coefficients and personas set at Monza.
+- Only 2 events have personas (Monza, Spa 2024); other fetched events are replay-only.
+- Engine speed: ~55 % of time is pydantic copying; fine for M5's needs (BENCH-001), but it grows
+  with every CarState field.
+
+## M2 slice 4
 
 - **Crash recovery loses the race since the last autosave** (default: up to 5 laps or the last
   critical command); a client must re-send its commands, as the scripted test does. If logs were

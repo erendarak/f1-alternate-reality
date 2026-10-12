@@ -449,3 +449,22 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   timeline is `<world_id>.main`; the store refuses a timeline id that belongs to another world.
 - **Invariants:** `state_violations` / `step_violations` return lists of problems; tests check
   every tick of full races; `WorldRunner(check_invariants=True)` raises `InvariantViolation`.
+
+## D-026 — Simulating more than one event; data-estimated base lap; the RaceEngine port (2026-10-12)
+
+- **Personas belong to drivers, not races:** each simulated event has its own seed file (roster
+  coverage is enforced), but a driver's persona values are copied unchanged between events.
+  Spa 2024 adds Logan Sargeant (template-only, generic_balanced, confidence 0.15).
+  `SIMULATED_EVENTS` = events with a seed; any fetched event can still be replayed.
+- **Tracks:** `track_for(event_id)` (published length + race laps from Jolpica). Unknown events are
+  refused.
+- **Base lap from data:** `estimate_base_lap` sets `base_lap_s` so the model's mean prediction for
+  the fastest team's real representative laps equals their real median (after skill, compound,
+  wear-so-far and fuel terms). Other coefficients stay placeholders. Without data: an editorial
+  nominal base per track (Monza 82.0, Spa 104.0). Recorded in `inputs["base_lap"]`.
+- **RaceEngine port** (plan §7.3): `simulation/engine_port.py` defines the Protocol and
+  `LightweightRaceEngine`. `step(max_sim_delta_seconds)` runs whole ticks only (at least one, never
+  more than asked) and stops at the end of the race. `valid_actions` mirrors `apply_action`'s
+  rules (tested both ways) and is the action-mask source for M5.
+- **Measurement before calibration:** EXP-002 deliberately changes no coefficient; its gaps define
+  M4's calibration order (tyres first, then overtaking, then incident rates).

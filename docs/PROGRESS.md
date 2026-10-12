@@ -9,7 +9,7 @@ M2 plan (agreed 2026-10-12, one slice per commit; engine version bump per behavi
 - [x] **Slice 3: race control: mistakes, crashes/failures -> RETIRED, VSC, safety car + restart** (D-024, engine v0.6.0).
 - [x] **Slice 4: persistence: event + command logs, autosave, crash recovery in a fresh process,
   invariants every tick, policy/dataset pinning** (D-025, store schema v3, world schema v7).
-- [ ] Slice 5: batch headless benchmark, EXP-002 (EXP-001 again + 2024 Belgian GP), M2 DoD check.
+- [x] **Slice 5: Spa simulation, EXP-002, BENCH-001, `RaceEngine` port + action masks, M2 DoD check** (D-026).
 
 Already in place from M0 (plan §16 M2 items): runner + command queue + RUNNING/PAUSED state machine,
 SQLite snapshots with checksum/schema version/idempotency, forks with common random numbers,
@@ -447,3 +447,58 @@ Plan §22 checklist (adapted per D-002):
   on the timeline; the gate demo gives MATCH twice in a row in one save file (two worlds).
 - Tests: 265 offline passing (+21) + 2 network.
 - Next: slice 5, batch benchmark + EXP-002 + M2 DoD check.
+
+### 2026-10-12 — M2 slice 5: Spa simulation, EXP-002, benchmark, engine port, DoD check
+
+- **More than one simulated event** (D-026): `configs/drivers/seed_2024_belgian_drivers.yaml`
+  (the same personas; SAR template-only), per-event track specs (`track_for`, Spa 7.004 km / 44
+  laps), and a data-estimated base lap time (`calibration.estimate_base_lap`: Monza 81.7 s vs the
+  82.0 placeholder; Spa 106.2 s). `debug_viewer.py --event 2024_belgian_gp` simulates Spa
+  (launch config `spa-viewer`); verified in the browser: Spa outline, ~1:48.5 laps, a DRS-style
+  train and an overtake on lap 3.
+- **EXP-002** (`scripts/experiments/exp002_m2_engine.py`, results in `docs/EXPERIMENTS.md` and
+  `docs/experiments/exp002.json`): finishing order and race time are close at both tracks
+  (Spearman 0.885 / 0.905; race time within 0.3 min; Spa's official winner HAM wins 20/30); but
+  every simulated car one-stops onto SOFT (real: mostly M-H with many 2-stops) and overtakes are
+  2-5x too rare (10 vs 53, 17 vs 39). Incident/SC rates consistent with the two green races.
+  These set M4's calibration order.
+- **BENCH-001** (`scripts/benchmark.py`): ~1.5 s/race sequential on a loaded laptop, ~6,000
+  races/hour on 16 processes (~145k/day vs the plan's 100/day floor). ~55 % of the time is
+  pydantic copies. A worktree check showed the slice-3 code runs no faster on the same machine
+  today, so the day's slower timings are machine load, not a regression.
+- **`RaceEngine` port** (`simulation/engine_port.py`, plan §7.3): Protocol + `LightweightRaceEngine`
+  (initialize, get/set_state with version and policy checks, observation, **valid actions**,
+  apply_commands, bounded `step(max_sim_delta_seconds)`, events, positions, terminal) and a pure
+  `lightweight_engine.valid_actions()`. A property test checks over a whole race that every
+  listed action is accepted and every unlisted one rejected (M5's action masks rely on it).
+- Bug fixed in EXP-002 itself before reporting: the tyre-sequence helper merged repeated
+  compounds, hiding real M-M stints (ALO, STR at Spa); sequences are now per stint.
+- Tests: 273 offline passing (+8) + 2 network.
+
+#### M2 definition of done (plan §16) — check
+
+| M2 task | Status | Evidence |
+|---|---|---|
+| Engine adapter contract and `step(max_delta)` | done | `engine_port.py`, `test_engine_port.py` |
+| Tyres, tyre age, pit transitions | done | D-022, `test_pit_stops.py` |
+| **Weather event and grip proxy states** | **not done** | no weather/wet tyres in the engine; see note |
+| Driver profile -> pace/tyre effects (parametric baseline) | done (weather part not) | lap model (D-010/D-014), incidents (D-024) |
+| WorldRunner, command queue, RUNNING/PAUSED | done (M0) | D-011, `test_world_runner.py` |
+| SQLite snapshot + events + commands; idempotency, schema version, checksum | done | D-012, D-025 |
+| Named saves and autosave | done | D-025, `test_persistence_logs.py` |
+| Fork timelines + common-exogenous-randomness test | done | D-013, `test_fork.py` |
+| Restore in a fresh process | done | `test_save_load.py`, `test_crash_recovery.py` |
+| Invariants every tick; profile/model hash pinning | done | `invariants.py`, D-025 |
+| Batch headless benchmarking | done | BENCH-001 |
+
+| DoD criterion | Status |
+|---|---|
+| replay/property/integration test packages pass | yes (273 + 2 network) |
+| after pause no canonical field advances | yes (`test_world_runner.py`, M0 §4.7 test 3) |
+| a fork doesn't change the original | yes (`test_fork.py`, `fork_demo.py`) |
+| state hash equal 1000 ticks after a save | yes (`test_save_load.py`, gate demo MATCH) |
+| real state content stored, not an M0 placeholder | yes (full world + event/command logs) |
+
+**M2 is complete except weather**, which the plan lists under M2 but which needs wet compounds,
+a weather process and calibration (M4 territory). Decision for the owner: a weather slice now,
+or move it to M4.

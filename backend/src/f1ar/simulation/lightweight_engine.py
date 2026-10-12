@@ -240,6 +240,42 @@ def resume(state: WorldState) -> WorldState:
 # --- actions ----------------------------------------------------------------------------------
 
 
+@dataclass(frozen=True)
+class ValidActions:
+    """What ``apply_action`` will accept for one driver right now (plan §7.3, §9.3 action masks).
+
+    Re-requesting the current pace mode or compound is legal (an accepted no-op); a cancel is
+    only listed when there's a stop to cancel.
+    """
+
+    driver_id: str
+    pace_modes: tuple[PaceMode, ...]
+    pit_compounds: tuple[Compound, ...]
+    cancel_pit: bool
+    controllers: tuple[StrategyController, ...]
+
+    @property
+    def any(self) -> bool:
+        return bool(self.pace_modes or self.pit_compounds or self.cancel_pit or self.controllers)
+
+
+def valid_actions(state: WorldState, driver_id: str) -> ValidActions:
+    """Legal actions for ``driver_id`` (same rules as ``apply_action``, without trying them)."""
+    car = state.car(driver_id)
+    if state.world_status is WorldStatus.COMPLETED or car.status is not CarStatus.RUNNING:
+        return ValidActions(driver_id, (), (), False, ())
+    can_pit = (
+        state.chequered_flag_s is None and car.laps_completed + 1 < state.setup.track.total_laps
+    )
+    return ValidActions(
+        driver_id=driver_id,
+        pace_modes=tuple(PaceMode),
+        pit_compounds=tuple(Compound) if can_pit else (),
+        cancel_pit=pending_stop(car) is not None,
+        controllers=tuple(StrategyController),
+    )
+
+
 def apply_action(state: WorldState, action: DriverAction) -> StepResult:
     """Apply a driver/team action between ticks. Pure; returns the new state and its events.
 

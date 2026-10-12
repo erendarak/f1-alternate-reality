@@ -113,7 +113,9 @@ def test_setup_uses_data_when_given(
         "car_pace_offsets",
         "pit_loss",
         "dataset_sha256",
+        "base_lap",
     }
+    assert setup.inputs["base_lap"].startswith("estimated_from_data")
     assert setup.inputs["dataset_sha256"].startswith("sha256:")
     # The synthetic race has no pit stops: the editorial pit model is used and labelled so.
     assert setup.inputs["pit_loss"].startswith("editorial_assumption")

@@ -26,7 +26,13 @@ from f1ar.policy.baseline_strategy import POLICY_ID as STRATEGY_POLICY_ID
 
 DEFAULT_TICK_SECONDS = 0.5
 MONZA_2024 = "2024_italian_gp"
-_SEED_FILES = {MONZA_2024: "seed_2024_monza_drivers.yaml"}
+BELGIUM_2024 = "2024_belgian_gp"
+_SEED_FILES = {
+    MONZA_2024: "seed_2024_monza_drivers.yaml",
+    BELGIUM_2024: "seed_2024_belgian_drivers.yaml",
+}
+SIMULATED_EVENTS = tuple(_SEED_FILES)
+"""Events with driver personas, so they can be simulated (any fetched event can be replayed)."""
 
 
 def load_event(configs_dir: Path, event_id: str = MONZA_2024) -> tuple[RaceRoster, ProfileSet]:
@@ -58,10 +64,18 @@ def setup_from_codes(
     if unknown:
         raise ValueError(f"unknown driver code(s) {unknown}; choose from {sorted(by_code)}")
     driver_ids = [by_code[c] for c in wanted]
+    track = track_for(roster.event_id)
     if data_dir is None:
-        return build_setup(roster, profiles, driver_ids)
+        return build_setup(
+            roster,
+            profiles,
+            driver_ids,
+            track=track,
+            lap_model=default_lap_model(_NOMINAL_BASE_LAP_S[roster.event_id]),
+        )
 
     from f1ar.calibration.race_inputs import (
+        estimate_base_lap,
         estimate_car_offsets,
         estimate_pit_loss,
         start_compounds,
@@ -69,8 +83,10 @@ def setup_from_codes(
 
     laps_file = data_dir / "laps.parquet"
     laps = pd.read_parquet(laps_file)
-    lap_model = default_lap_model()
-    estimate = estimate_car_offsets(laps, roster, profiles, lap_model)
+    placeholder = default_lap_model(_NOMINAL_BASE_LAP_S[roster.event_id])
+    estimate = estimate_car_offsets(laps, roster, profiles, placeholder)
+    base = estimate_base_lap(laps, roster, profiles, placeholder, estimate, track.total_laps)
+    lap_model = default_lap_model(base.base_lap_s)
     try:
         pit_loss = estimate_pit_loss(laps)
         pit, pit_note = (
@@ -83,6 +99,7 @@ def setup_from_codes(
         roster,
         profiles,
         driver_ids,
+        track=track,
         lap_model=lap_model,
         pit=pit,
         start_compounds=start_compounds(laps, roster),
@@ -90,6 +107,7 @@ def setup_from_codes(
         inputs={
             "start_compounds": f"historical_verified: lap-1 compound, {data_dir.name}/laps.parquet",
             "car_pace_offsets": estimate.note,
+            "base_lap": base.note,
             "pit_loss": pit_note,
             "dataset_sha256": "sha256:" + hashlib.sha256(laps_file.read_bytes()).hexdigest(),
         },
@@ -114,12 +132,35 @@ def monza_2024_track() -> TrackSpec:
     )
 
 
-def default_lap_model() -> LapModelParams:
-    """Placeholder coefficients chosen to look plausible for Monza. NOT calibrated."""
+def spa_2024_track() -> TrackSpec:
+    return TrackSpec(
+        track_id="spa",
+        length_m=7004.0,
+        total_laps=44,
+        source_note=(
+            "Circuit length 7.004 km (published figure); 44 race laps per Jolpica results "
+            "for 2024 round 14. Geometry is not used yet."
+        ),
+    )
+
+
+_TRACKS = {MONZA_2024: monza_2024_track, BELGIUM_2024: spa_2024_track}
+_NOMINAL_BASE_LAP_S = {MONZA_2024: 82.0, BELGIUM_2024: 104.0}
+"""Editorial base lap per track for runs without data (data runs estimate it, D-026)."""
+
+
+def track_for(event_id: str) -> TrackSpec:
+    if event_id not in _TRACKS:
+        raise ValueError(f"no track spec for {event_id}; simulated events: {SIMULATED_EVENTS}")
+    return _TRACKS[event_id]()
+
+
+def default_lap_model(base_lap_s: float = 82.0) -> LapModelParams:
+    """Placeholder coefficients (the default base suits Monza). NOT calibrated."""
     return LapModelParams(
         source_type=SourceType.EDITORIAL_ASSUMPTION,
         note="Synthetic placeholder coefficients; to be replaced by FastF1 calibration (M1/M4).",
-        base_lap_s=82.0,
+        base_lap_s=base_lap_s,
         skill_gap_s=3.0,
         fuel_s_per_lap_remaining=0.035,
         tyre_mgmt_wear_max=1.3,

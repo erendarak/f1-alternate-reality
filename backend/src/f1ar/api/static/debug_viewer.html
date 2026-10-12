@@ -398,7 +398,8 @@ function setMode(m) {
   document.querySelectorAll(".sim-only").forEach((el) => (el.hidden = replay));
   document.querySelectorAll(".replay-only").forEach((el) => (el.hidden = !replay));
   const ev = (replay && view && view.world_id ? view.world_id : "2024_italian_gp").replace(/_/g, " ").toUpperCase();
-  $("title").textContent = replay ? `${ev} · REAL RACE REPLAY` : "MONZA 2024 · ALTERNATE SIMULATION";
+  const simEv = (view && view.event_id ? view.event_id : "2024_italian_gp").replace(/_/g, " ").toUpperCase();
+  $("title").textContent = replay ? `${ev} · REAL RACE REPLAY` : `${simEv} · ALTERNATE SIMULATION`;
   $("badge").innerHTML = replay
     ? '<b class="hist">RECORDED HISTORY</b> · real 2024 lap times from the timing feed · positions interpolated within each lap'
     : "<b>DEBUG VIEWER</b> · read-only view of backend state · positions interpolated on the FastF1 outline";

@@ -55,6 +55,68 @@ def start_compounds(laps: pd.DataFrame, roster: RaceRoster) -> dict[str, Compoun
 
 
 @dataclass(frozen=True)
+class BaseLapEstimate:
+    base_lap_s: float
+    laps_used: int
+    note: str
+
+
+def estimate_base_lap(
+    laps: pd.DataFrame,
+    roster: RaceRoster,
+    profiles: ProfileSet,
+    lap_model: LapModelParams,
+    car_estimate: "CarPaceEstimate",
+    total_laps: int,
+) -> BaseLapEstimate:
+    """``base_lap_s`` such that the lap model's mean prediction for the fastest team's real
+    representative laps matches them (median residual).
+
+    For each such lap: ``lap_time - skill term - compound offset - wear so far - fuel term``,
+    where wear so far = ``deg(compound) x wear_factor(driver) x (tyre life - 1)`` (the model's
+    wear before the lap, BALANCED mode) and fuel = ``fuel_s_per_lap_remaining x laps remaining``.
+    The other coefficients stay the placeholders (D-010), so this only anchors the overall
+    level of lap times to the track; it's not a calibration of the model.
+    """
+    from f1ar.simulation.lap_model import tyre_wear_factor
+
+    fastest = min(car_estimate.car_pace_s, key=lambda team: car_estimate.car_pace_s[team])
+    by_number = {e.car_number: e for e in roster.entries}
+    residuals: list[float] = []
+    for row in representative_laps(laps).to_dict("records"):
+        entry = by_number.get(int(row["driver_number"]))
+        compound = row["compound"]
+        if entry is None or entry.team_id != fastest or compound not in Compound.__members__:
+            continue
+        driver = profiles.get(entry.driver_id).archetype
+        c = Compound(compound)
+        skill = lap_model.skill_gap_s * (1.0 - driver.race_pace_skill)
+        life = row.get("tyre_life_laps")  # missing -> treat as a fresh tyre (no wear term)
+        tyre_life = 1 if life is None or pd.isna(life) else int(life)
+        wear = (
+            lap_model.compounds[c].deg_s_per_lap
+            * tyre_wear_factor(lap_model, driver)
+            * (tyre_life - 1)
+        )
+        fuel = lap_model.fuel_s_per_lap_remaining * (total_laps - int(row["lap_number"]) + 1)
+        residuals.append(
+            float(row["lap_time_s"]) - skill - lap_model.compounds[c].offset_s - wear - fuel
+        )
+    if not residuals:
+        raise ValueError("no representative laps of the fastest team")
+    base = round(float(pd.Series(residuals).median()), 3)
+    return BaseLapEstimate(
+        base_lap_s=base,
+        laps_used=len(residuals),
+        note=(
+            f"estimated_from_data: base lap {base} s = median residual of {len(residuals)} "
+            f"representative laps of the fastest team ({fastest}) after the model's skill, "
+            "compound, wear and fuel terms; other coefficients remain placeholders"
+        ),
+    )
+
+
+@dataclass(frozen=True)
 class PitLossEstimate:
     total_loss_s: float
     """Median of (in-lap + out-lap - 2 x the driver's median representative lap)."""

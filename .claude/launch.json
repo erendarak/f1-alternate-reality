@@ -44,6 +44,22 @@
         "8767"
       ],
       "port": 8767
+    },
+    {
+      "name": "spa-viewer",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": [
+        "run",
+        "python",
+        "scripts/debug_viewer.py",
+        "--event",
+        "2024_belgian_gp",
+        "--speed",
+        "10",
+        "--port",
+        "8768"
+      ],
+      "port": 8768
     }
   ]
 }

@@ -29,7 +29,13 @@ from f1ar.persistence.sqlite_store import SnapshotStore
 from f1ar.presentation.track_geometry import TrackGeometry
 from f1ar.presentation.view_model import track_view
 from f1ar.simulation import lightweight_engine as engine
-from f1ar.simulation.scenarios import MONZA_2024, event_data_dir, load_event, setup_from_codes
+from f1ar.simulation.scenarios import (
+    MONZA_2024,
+    SIMULATED_EVENTS,
+    event_data_dir,
+    load_event,
+    setup_from_codes,
+)
 from f1ar.simulation.world_runner import ALLOWED_SPEEDS
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -96,14 +102,16 @@ def main() -> None:
         "--synthetic", action="store_true", help="ignore fetched data: equal cars, all on MEDIUM"
     )
     parser.add_argument(
-        "--event", default=MONZA_2024, help="event id for --replay, e.g. 2024_belgian_gp"
+        "--event",
+        default=MONZA_2024,
+        help="event id, e.g. 2024_belgian_gp (simulation: events with personas; replay: any)",
     )
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--db", type=Path, default=ROOT / "saves" / "viewer.sqlite")
     args = parser.parse_args()
 
-    if not args.replay and args.event != MONZA_2024:
-        parser.error("the simulation has driver personas only for 2024_italian_gp; use --replay")
+    if not args.replay and args.event not in SIMULATED_EVENTS:
+        parser.error(f"driver personas exist only for {SIMULATED_EVENTS}; use --replay")
     roster_path = ROOT / "configs" / "rosters" / f"{args.event}.json"
     if not roster_path.exists():
         parser.error(f"unknown event {args.event!r}: fetch it first with scripts/fetch_event.py")
@@ -124,14 +132,14 @@ def main() -> None:
         print(f"F1AR REAL-RACE REPLAY -> http://127.0.0.1:{args.port}  (Ctrl+C to stop)")
         uvicorn.run(replay, host="127.0.0.1", port=args.port, log_level="warning")
         return
-    _, profiles = load_event(ROOT / "configs")
+    _, profiles = load_event(ROOT / "configs", args.event)
     if args.speed not in ALLOWED_SPEEDS:
         parser.error(f"simulation speed must be one of {ALLOWED_SPEEDS}")
     setup = setup_from_codes(
         roster,
         profiles,
         None if args.all else args.drivers,
-        data_dir=None if args.synthetic else event_data_dir(ROOT),
+        data_dir=None if args.synthetic else event_data_dir(ROOT, args.event),
     )
     data_note = ", ".join(setup.inputs) if setup.inputs else "synthetic defaults (no data)"
     print(f"inputs: {data_note}")
