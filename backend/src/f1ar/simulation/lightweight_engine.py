@@ -11,8 +11,12 @@ loss + standstill time at the line, then the lap is driven as usual. The pit lan
 Chequered flag: once the leader completes the race distance, every other car finishes at its
 next line crossing, so lapped cars finish a lap (or more) down, as in real racing.
 
-Not modelled yet (later M2 slices): traffic/dirty air, overtaking cost, blue flags, safety
-cars, DNFs. Cars pass through each other freely.
+Traffic (M2 slice 2, ``simulation/traffic.py``): when a car joins the track (line crossing,
+leaving the pit lane, or the start in grid order) its lap is adjusted for dirty air, being
+held up, overtaking and blue flags. Within a tick, joins are processed in time order, so every
+car reacts to cars ahead whose laps are already fixed.
+
+Not modelled yet (later M2 slices): safety cars, DNFs, start performance.
 """
 
 import math
@@ -41,9 +45,11 @@ from f1ar.domain.race_state import (
 from f1ar.policy.baseline_strategy import POLICY_ID, plan_for_car
 from f1ar.simulation.lap_model import sample_lap_time_s, wear_per_lap_s
 from f1ar.simulation.rng_streams import RngSpec, uniform
+from f1ar.simulation.traffic import Ahead, resolve
 
-ENGINE_VERSION = "lightweight_engine_v0.4.0"
-"""v0.4.0: pit stops + tyre choice, baseline strategy, chequered-flag rule (lapped finishers).
+ENGINE_VERSION = "lightweight_engine_v0.5.0"
+"""v0.5.0: traffic: dirty air, held up, overtakes, blue flags; lap 1 resolved in grid order.
+v0.4.0: pit stops + tyre choice, baseline strategy, chequered-flag rule (lapped finishers).
 v0.3.0: per-car performance offset (``DriverEntry.car_pace_offset_s``).
 v0.2.0: tyre wear accumulated per lap at the mode driven (v0.1.0 scaled it retroactively)."""
 
@@ -154,6 +160,9 @@ def create_world(
             compounds_used=(entry.start_compound,),
             controller=StrategyController.BASELINE,
             planned_stops=(),
+            traffic_loss_s=0.0,
+            last_lap_traffic_loss_s=0.0,
+            carried_loss_s=0.0,
             last_lap_time_s=None,
             finish_time_s=None,
         )
@@ -369,7 +378,7 @@ def step(state: WorldState, *, allow_paused: bool = False) -> StepResult:
     if new_flag is not None:
         flag_s = new_flag
 
-    cars = tuple(_advance_car(state, car, flag_s, emit) for car in state.cars)
+    cars = _advance_all(state, flag_s, emit)
     if new_flag is not None:
         winner = min(
             (c for c in cars if c.finish_time_s is not None), key=lambda c: c.finish_time_s or 0.0
@@ -419,33 +428,117 @@ def _distance(length: float, elapsed: float, target: float, hold: float) -> floa
     return min(length * (elapsed - hold) / (target - hold), math.nextafter(length, 0.0))
 
 
-def _advance_car(state: WorldState, car: CarState, flag_s: float | None, emit: _Emit) -> CarState:
-    if car.status is CarStatus.FINISHED:
-        return car
-
+def _advance_all(state: WorldState, flag_s: float | None, emit: _Emit) -> tuple[CarState, ...]:
+    """Move every car one tick, processing line crossings and pit exits in time order."""
     setup = state.setup
-    dt = setup.tick_seconds
-    remaining = dt
-    elapsed = car.lap_elapsed_s
+    t0 = state.sim_clock_s
+    t1 = t0 + setup.tick_seconds
+    cars = list(state.cars)
+    lap_start = [t0 - c.lap_elapsed_s for c in cars]
+    if state.sim_tick == 0:
+        _resolve_start(state, cars, emit)
 
-    while car.lap_target_s - elapsed <= remaining:
-        # Crossed the line inside this tick: exact crossing time by interpolation.
-        remaining -= car.lap_target_s - elapsed
-        crossing_time = state.sim_clock_s + (dt - remaining)
-        car = _complete_lap(state, car, crossing_time, flag_s, emit)
-        if car.status is CarStatus.FINISHED:
-            return car
-        elapsed = 0.0
+    # (time, car index, kind); each car has at most one such moment per tick.
+    due: list[tuple[float, int, str]] = []
+    for i, c in enumerate(cars):
+        if c.status is not CarStatus.RUNNING:
+            continue
+        if c.lap_elapsed_s < c.pit_hold_s:
+            t = lap_start[i] + c.pit_hold_s
+            if t <= t1:
+                due.append((t, i, "rejoin"))
+        elif lap_start[i] + c.lap_target_s <= t1:
+            due.append((lap_start[i] + c.lap_target_s, i, "line"))
 
-    elapsed += remaining
-    return car.model_copy(
+    joined: set[int] = set()
+    for t, i, kind in sorted(due):
+        if kind == "line":
+            cars[i] = _complete_lap(state, cars[i], t, flag_s, emit)
+            if cars[i].status is CarStatus.FINISHED:
+                continue
+            lap_start[i] = t
+            joined.add(i)
+            if cars[i].pit_hold_s > 0.0 and t + cars[i].pit_hold_s > t1:
+                continue  # in the pit lane; it joins the track at the end of its hold
+            t += cars[i].pit_hold_s
+        _join_track(state, i, t, cars, lap_start, emit)
+
+    for i, c in enumerate(cars):
+        if c.status is not CarStatus.RUNNING:
+            continue
+        if i in joined:
+            elapsed = t1 - lap_start[i]
+        else:
+            elapsed = c.lap_elapsed_s + setup.tick_seconds
+            if c.lap_elapsed_s < c.pit_hold_s <= elapsed + 1e-9:
+                elapsed = max(elapsed, c.pit_hold_s)  # the pit exit is handled exactly once
+        cars[i] = c.model_copy(
+            update={
+                "lap_elapsed_s": elapsed,
+                "distance_m": _distance(
+                    setup.track.length_m, elapsed, c.lap_target_s, c.pit_hold_s
+                ),
+            }
+        )
+    return tuple(cars)
+
+
+def _resolve_start(state: WorldState, cars: list[CarState], emit: _Emit) -> None:
+    """Lap 1: everyone leaves the line at t=0; the road order is the grid order."""
+    grid = sorted(
+        range(len(cars)), key=lambda i: state.setup.driver(cars[i].driver_id).grid_position
+    )
+    for k, i in enumerate(grid):
+        ahead = [Ahead(cars[j], 0.0) for j in reversed(grid[:k])]
+        _apply_traffic(state, i, 0.0, 0.0, ahead, cars, emit)
+
+
+def _join_track(
+    state: WorldState,
+    i: int,
+    t: float,
+    cars: list[CarState],
+    lap_start: list[float],
+    emit: _Emit,
+) -> None:
+    """Car ``i`` (at the line) joins the track at sim time ``t``: resolve the cars ahead."""
+    ahead: list[tuple[float, int]] = []
+    for j, other in enumerate(cars):
+        if j == i or other.status is not CarStatus.RUNNING:
+            continue
+        driving = t - lap_start[j] - other.pit_hold_s
+        if driving <= 0.0:
+            continue  # parked in the pit lane: not on the road ahead
+        ahead.append((driving / (other.lap_target_s - other.pit_hold_s), j))
+    ahead.sort()
+    _apply_traffic(
+        state, i, lap_start[i], t, [Ahead(cars[j], lap_start[j]) for _, j in ahead], cars, emit
+    )
+
+
+def _apply_traffic(
+    state: WorldState,
+    i: int,
+    my_lap_start: float,
+    t: float,
+    ahead: list[Ahead],
+    cars: list[CarState],
+    emit: _Emit,
+) -> None:
+    me = cars[i]
+    out = resolve(state.setup, state.rng.seed, me, my_lap_start, t, ahead)
+    cars[i] = me.model_copy(
         update={
-            "lap_elapsed_s": elapsed,
-            "distance_m": _distance(
-                setup.track.length_m, elapsed, car.lap_target_s, car.pit_hold_s
-            ),
+            "lap_target_s": out.lap_target_s,
+            "traffic_loss_s": me.traffic_loss_s + out.lap_target_s - me.lap_target_s,
         }
     )
+    for type_, payload in out.events:
+        emit(type_, me.driver_id, payload)
+    for j, other in enumerate(cars):
+        loss = out.carried_losses.get(other.driver_id)
+        if loss:
+            cars[j] = other.model_copy(update={"carried_loss_s": other.carried_loss_s + loss})
 
 
 def _complete_lap(
@@ -471,6 +564,7 @@ def _complete_lap(
         "tyre_age_laps": car.tyre_age_laps + 1,
         "tyre_wear_s": wear,
         "last_lap_time_s": lap_time,
+        "last_lap_traffic_loss_s": car.traffic_loss_s,
         "distance_m": 0.0,
         "lap_elapsed_s": 0.0,
         "pit_hold_s": 0.0,
@@ -492,6 +586,8 @@ def _complete_lap(
                 "finish_time_s": crossing_time,
                 "pit_request": None,
                 "planned_stops": (),
+                "traffic_loss_s": 0.0,
+                "carried_loss_s": 0.0,
             }
         )
 
@@ -501,17 +597,28 @@ def _complete_lap(
         car, hold = _pit(state, car, stop, emit)
 
     lap_mode = car.pace_mode  # the driver's current intent is locked in for the new lap
-    target = hold + _sample_next_lap(
-        setup,
-        state.rng.seed,
-        car.driver_id,
-        compound=car.compound,
-        pace_mode=lap_mode,
-        laps_completed=laps,
-        tyre_wear_s=car.tyre_wear_s,
+    # Time lost defending or yielding on the previous lap is paid on this one.
+    target = (
+        hold
+        + car.carried_loss_s
+        + _sample_next_lap(
+            setup,
+            state.rng.seed,
+            car.driver_id,
+            compound=car.compound,
+            pace_mode=lap_mode,
+            laps_completed=laps,
+            tyre_wear_s=car.tyre_wear_s,
+        )
     )
     return car.model_copy(
-        update={"lap_target_s": target, "pit_hold_s": hold, "lap_pace_mode": lap_mode}
+        update={
+            "lap_target_s": target,
+            "pit_hold_s": hold,
+            "lap_pace_mode": lap_mode,
+            "traffic_loss_s": car.carried_loss_s,
+            "carried_loss_s": 0.0,
+        }
     )
 
 

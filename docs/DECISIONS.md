@@ -349,3 +349,33 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   `ENGINE_VERSION = lightweight_engine_v0.4.0`, `WORLD_SCHEMA_VERSION = 4`; older saves are
   refused, as before.
 
+## D-023 — Traffic resolved when a car joins the track; engine v0.5.0 (2026-10-12)
+
+- **Why at join time:** the engine samples whole laps and moves cars linearly within a lap.
+  Deciding interaction when a car joins the track (line crossing, pit exit, the start in grid
+  order) keeps that model: at that instant every car ahead has already fixed its lap, so the
+  resolution is a one-directional chain with no circular dependencies and no mid-lap rewrites.
+  Within a tick, joins are processed in time order (`_advance_all`). Because both cars then move
+  linearly, a held car never visually passes the car ahead and a passing car crosses it exactly
+  once (tested on full races).
+- **Rules** (`simulation/traffic.py`, idea credited to TUM FTM race-simulation): dirty air
+  (`dirty_air_window_s` 1.2 s -> +0.15 s); conflict = arriving less than `min_gap_s` (0.4 s)
+  behind a car ahead. Lapped car -> blue flag (attacker +0.1 s, lapped car +0.6 s next lap).
+  Otherwise margin = time lost if held; no attempt below `overtake_threshold_s` (0.3 s);
+  P(pass) = `1 - exp(-(margin - threshold) / overtake_scale_s)` (scale 0.8 s), keyed
+  `uniform(seed, "overtake", attacker, defender, lap)`. A pass costs the attacker 0.25 s but
+  must end at least `PASS_MARGIN_S` (0.1 s) ahead (the DRS/slipstream stand-in); the defender
+  loses 0.35 s on its next lap. Failure -> held at exactly `min_gap_s`.
+- **Consistency rule** (bug fix during this slice): after every adjustment, any earlier pass in
+  the same resolution that no longer ends ahead is undone and becomes a hold behind that car.
+- **Losses on fixed laps** (defending, yielding) are carried to the car's next lap
+  (`CarState.carried_loss_s`), never applied to a lap already in progress.
+- **Switch:** `TrafficParams.enabled=False` restores pass-through behaviour for isolated
+  experiments and for tests that pin common random numbers per driver.
+- **Schema:** `CarState.traffic_loss_s` (hidden), `last_lap_traffic_loss_s` (observation
+  `car.last_lap_traffic_loss_s`, schema v3), `carried_loss_s`; events `OVERTAKE`
+  (`passed`, `lap`, `margin_s`, `probability`) and `BLUE_FLAG` (`yielded`, `lap`).
+  `ENGINE_VERSION = lightweight_engine_v0.5.0`, `WORLD_SCHEMA_VERSION = 5`.
+- **Not yet:** the baseline strategy still plans for an empty track (it doesn't aim for clean
+  air or the undercut); there's no DRS train detection, no start performance, and no
+  track-specific overtaking difficulty from data (EXP-002/M4).

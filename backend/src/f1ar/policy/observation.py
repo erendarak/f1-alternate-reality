@@ -12,7 +12,7 @@ from f1ar.domain.driver_profiles import PROFILE_FEATURE_NAMES
 from f1ar.domain.race_state import Compound, PaceMode, WorldState
 from f1ar.simulation.lightweight_engine import pending_stop, standings
 
-OBSERVATION_SCHEMA_VERSION = 2
+OBSERVATION_SCHEMA_VERSION = 3
 
 STATE_FEATURE_NAMES: tuple[str, ...] = (
     "race.lap_number",
@@ -27,6 +27,7 @@ STATE_FEATURE_NAMES: tuple[str, ...] = (
     "car.pit_stops",
     "car.boxing_this_lap",
     "car.distinct_compounds_used",
+    "car.last_lap_traffic_loss_s",
 )
 
 OBSERVATION_FEATURE_NAMES: tuple[str, ...] = STATE_FEATURE_NAMES + PROFILE_FEATURE_NAMES
@@ -62,6 +63,7 @@ def build_observation(state: WorldState, driver_id: str) -> Observation:
         "car.pit_stops": float(car.pit_stops),
         "car.boxing_this_lap": float(pending_stop(car) is not None),
         "car.distinct_compounds_used": float(len(set(car.compounds_used))),
+        "car.last_lap_traffic_loss_s": car.last_lap_traffic_loss_s,
         **profile.features(),
     }
     assert tuple(features) == OBSERVATION_FEATURE_NAMES

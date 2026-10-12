@@ -6,7 +6,7 @@ from f1ar.domain.driver_profiles import ProfileSet, load_profiles
 from f1ar.domain.identities import RaceRoster, load_roster
 from f1ar.domain.race_state import RaceSetup, WorldState, WorldStatus
 from f1ar.simulation import lightweight_engine as engine
-from f1ar.simulation.scenarios import build_setup
+from f1ar.simulation.scenarios import build_setup, default_traffic_params
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CONFIGS = REPO_ROOT / "configs"
@@ -44,6 +44,19 @@ def monza_profiles(monza_roster: RaceRoster) -> ProfileSet:
 @pytest.fixture(scope="session")
 def two_car_setup(monza_roster: RaceRoster, monza_profiles: ProfileSet) -> RaceSetup:
     return build_setup(monza_roster, monza_profiles, [VER, HAM])
+
+
+@pytest.fixture(scope="session")
+def isolated_setup(two_car_setup: RaceSetup) -> RaceSetup:
+    """VER + HAM with traffic disabled: cars can't affect each other, so tests can pin that a
+    decision or profile change moves only the car it belongs to (common random numbers)."""
+    return two_car_setup.model_copy(update={"traffic": default_traffic_params(enabled=False)})
+
+
+@pytest.fixture
+def isolated_world(isolated_setup: RaceSetup) -> WorldState:
+    """Fresh RUNNING two-car world without traffic, seed 42."""
+    return engine.start(engine.create_world(isolated_setup, seed=42, world_id="world_test"))
 
 
 @pytest.fixture

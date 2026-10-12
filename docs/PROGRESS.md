@@ -5,7 +5,7 @@
 M2 plan (agreed 2026-10-12, one slice per commit; engine version bump per behaviour change):
 
 - [x] **Slice 1: pit stops + tyre choice, baseline strategy, chequered flag / lapped cars** (D-022, engine v0.4.0).
-- [ ] Slice 2: traffic, dirty air, overtaking cost, blue flags (v0.5.0).
+- [x] **Slice 2: traffic, dirty air, overtaking cost, blue flags** (D-023, engine v0.5.0).
 - [ ] Slice 3: race control: SC/VSC, mistakes, accidents/failures -> DNF (TUM ideas; keyed hazards) (v0.6.0).
 - [ ] Slice 4: persistence: event + command log tables, named saves + autosave, restore-and-continue
   integration, invariants every tick, profile/model hash pinning.
@@ -325,3 +325,36 @@ Plan §22 checklist (adapted per D-002):
   flag/lapped finishers, standings after the flag, timing sheet, view model, runner commands,
   **plan §4.7 test 5 with a pit decision** in a fork) + 2 network.
 - Next: slice 2, traffic and overtaking.
+
+### 2026-10-12 — M2 slice 2: traffic, dirty air, overtakes, blue flags
+
+- Engine v0.5.0, world schema v5, observation schema v3 (D-023). New `simulation/traffic.py`
+  (pure `resolve`) and `RaceSetup.traffic: TrafficParams` (editorial, with an `enabled` switch).
+- Traffic is resolved when a car **joins the track**: line crossing, pit exit, or the start (lap 1
+  in grid order). Line crossings and pit exits inside a tick are processed **in time order**, so
+  every car reacts to cars ahead whose laps are already fixed.
+- Rules: dirty air within 1.2 s; a car that would arrive within `min_gap` of a car ahead is
+  **held** at exactly that gap, or **overtakes** with probability `1 - exp(-(margin - 0.3) / 0.8)`
+  (keyed by attacker, defender, lap, so forks share it); lapped cars yield under **blue
+  flags**. Defender/lapped-car losses are carried to their next lap. Events `OVERTAKE`,
+  `BLUE_FLAG`; per-car `traffic_loss_s` (hidden) and `last_lap_traffic_loss_s` (observed).
+- **Bug found while verifying in the browser:** the log said "VER passes HAM on lap 1", but VER
+  stayed behind. A pass followed by a hold behind a car further ahead (or by the time lost
+  passing more cars) left the attacker level with or behind the car it had "passed". Now every
+  pass is re-checked after each adjustment: a pass that can't end ahead is undone (event and
+  defender loss removed) and becomes a hold. In the seed-42 Monza race this removed 14 of 20
+  "overtakes". A new test checks both directions in full 20-car races (3 seeds): no road pass
+  without an event, and every OVERTAKE ends with the attacker crossing the line first; it fails
+  without the fix.
+- Effects now visible: grid position matters; **the undercut exists** (`fork_demo`: HAM boxing
+  early loses 0.7 s overall but finishes P3 ahead of SAI instead of P4); a driver's decision
+  changes rivals' races (HAM conserving holds SAI up by 12 s).
+- Tests that pin "only that driver changes" (common random numbers) now run on a traffic-off
+  setup (`isolated_setup` / `isolated_world` fixtures); new tests cover the interaction.
+- Viewer: OVERTAKE / BLUE FLAG lines in the log, last-lap time tinted when time was lost in
+  traffic (tooltip shows how much). Verified in the browser (screenshots at lap 1 and lap 28).
+- Gate demo: MATCH. Throughput ~0.5 s per 20-car race (was 0.44 s).
+- Seed-42 Monza (real inputs): 6 overtakes, 52 blue-flag passes, 9 cars lapped. Whether 6 is
+  realistic is open; EXP-002 will count real on-track passes in the data.
+- Tests: 227 offline passing (+14) + 2 network.
+- Next: slice 3, race control (SC/VSC) and the mistake/DNF model.

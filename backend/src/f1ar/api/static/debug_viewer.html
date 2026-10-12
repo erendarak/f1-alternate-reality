@@ -49,6 +49,7 @@
   .tyre.SOFT { border-color: #e8002d; } .tyre.MEDIUM { border-color: #ffd12e; } .tyre.HARD { border-color: #f0f0f0; }
   .tyre.INTERMEDIATE { border-color: #43b047; } .tyre.WET { border-color: #0067ad; }
   .note { font-size: 10px; font-weight: 700; color: #fff; background: var(--accent); border-radius: 4px; padding: 0 4px; }
+  td.tl { color: var(--warn); }
   .mode { font-size: 11px; color: var(--muted); }
   .mode.PUSH { color: #ff6b6b; } .mode.CONSERVE { color: #6bc2ff; } .mode.pit { color: var(--warn); font-weight: 600; }
   .driverbox { padding: 10px 14px; border-top: 1px solid var(--line); }
@@ -330,7 +331,7 @@ function setMode(m) {
   $("clockLabel").firstChild.textContent = replay ? "Race " : "Sim ";
   $("modeHead").textContent = replay ? "Lap type" : "Mode";
   $("footer").textContent = (replay ? "Recorded race (FastF1/F1 timing) · no simulation"
-    : "Synthetic, uncalibrated lap model · pit stops + baseline strategy · no traffic/SC yet") + " · Space play/pause · → step · wheel zoom · drag pan · F follow · B battle cam · Esc fit"
+    : "Synthetic, uncalibrated lap model · pit stops + baseline strategy · traffic + overtakes · no SC/DNF yet") + " · Space play/pause · → step · wheel zoom · drag pan · F follow · B battle cam · Esc fit"
     + (track && track.car_sprite ? " · " + track.car_sprite.credit : "");
   $("speeds").innerHTML = (replay ? REPLAY_SPEEDS : SIM_SPEEDS).map((s) => `<button data-speed="${s}">x${s}</button>`).join(" ");
   document.querySelectorAll("[data-speed]").forEach((b) => (b.onclick = () => command({ type: "SET_SPEED", speed: Number(b.dataset.speed) })));
@@ -359,13 +360,14 @@ function render() {
       <td><span class="tyre ${c.compound}" title="${c.compound}, ${c.tyre_age_laps} laps">${(c.compound || "?")[0]}</span> ${c.tyre_age_laps}</td>
       ${sim ? `<td title="${c.controller === "USER" ? "user strategy" : "baseline plan: " + c.plan}">${c.pit_stops}${c.controller === "USER" ? "ᵁ" : ""}</td>` : ""}
       <td class="mode ${pit ? "pit" : c.pace_mode}">${modeTxt}</td>
-      <td>${fmtLap(c.last_lap_time_s)}</td></tr>`;
+      <td class="${sim && c.last_lap_traffic_loss_s > 0.05 ? "tl" : ""}" title="${sim && c.last_lap_traffic_loss_s > 0.05 ? `lost ${c.last_lap_traffic_loss_s.toFixed(2)} s in traffic` : ""}">${fmtLap(c.last_lap_time_s)}</td></tr>`;
   }).join("");
   const sel = view.cars.find((c) => c.driver_id === selected);
   $("selname").textContent = sel ? `${sel.code} pace:` : "Select a driver";
   $("stratLine").textContent = !sel ? "" : sel.controller === "USER"
     ? `${sel.code}: user strategy${sel.box ? " · boxing this lap for " + sel.box : ""}`
     : `${sel.code}: baseline plan ${sel.plan}`;
+  const code = (id) => view.cars.find((c) => c.driver_id === id)?.code || id;
   $("log").innerHTML = [...view.events].reverse().map((e) => {
     const who = view.cars.find((c) => c.driver_id === e.driver_id)?.code || e.driver_id || "";
     const p = e.payload;
@@ -376,6 +378,8 @@ function render() {
       : e.type === "STRATEGY_PLANNED" ? p.plan
       : e.type === "CONTROLLER_CHANGED" ? `${p.from}→${p.to}`
       : e.type === "CAR_FINISHED" ? `${p.laps} laps`
+      : e.type === "OVERTAKE" ? `passes ${code(p.passed)} on lap ${p.lap} (chance ${Math.round(p.probability * 100)}%)`
+      : e.type === "BLUE_FLAG" ? `laps ${code(p.yielded)} (blue flag) on lap ${p.lap}`
       : p.detail ?? JSON.stringify(p);
     const when = e.tick != null ? `t${e.tick}` : `lap ${p.lap}`;
     return `<div>${when} · ${who} ${e.type} ${txt}</div>`;

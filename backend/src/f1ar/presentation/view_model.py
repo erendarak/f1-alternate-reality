@@ -94,6 +94,7 @@ def state_view(
                 "in_pit": car.lap_elapsed_s < car.pit_hold_s,
                 "controller": car.controller.value,
                 "plan": plan_text(car.planned_stops),
+                "last_lap_traffic_loss_s": round(car.last_lap_traffic_loss_s, 3),
             }
         )
     return {

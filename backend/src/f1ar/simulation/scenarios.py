@@ -18,6 +18,7 @@ from f1ar.domain.race_state import (
     PitParams,
     RaceSetup,
     TrackSpec,
+    TrafficParams,
 )
 
 DEFAULT_TICK_SECONDS = 0.5
@@ -151,6 +152,24 @@ def default_pit_params() -> PitParams:
     )
 
 
+def default_traffic_params(*, enabled: bool = True) -> TrafficParams:
+    """Synthetic traffic model for a DRS track like Monza. NOT calibrated."""
+    return TrafficParams(
+        source_type=SourceType.EDITORIAL_ASSUMPTION,
+        note="Synthetic placeholders; overtake counts to be compared with real races (EXP-002).",
+        enabled=enabled,
+        min_gap_s=0.4,
+        overtake_threshold_s=0.3,
+        overtake_scale_s=0.8,
+        attacker_loss_s=0.25,
+        defender_loss_s=0.35,
+        dirty_air_window_s=1.2,
+        dirty_air_loss_s=0.15,
+        blue_flag_attacker_loss_s=0.1,
+        blue_flag_defender_loss_s=0.6,
+    )
+
+
 def pit_params_from_total_loss(total_loss_s: float, note: str) -> PitParams:
     """Pit model whose median whole-stop loss equals a data estimate (lane = total - standstill).
 
@@ -173,6 +192,7 @@ def build_setup(
     track: TrackSpec | None = None,
     lap_model: LapModelParams | None = None,
     pit: PitParams | None = None,
+    traffic: TrafficParams | None = None,
     tick_seconds: float = DEFAULT_TICK_SECONDS,
     start_compound: Compound = Compound.MEDIUM,
     start_compounds: Mapping[str, Compound] | None = None,
@@ -192,6 +212,7 @@ def build_setup(
         track=track or monza_2024_track(),
         lap_model=lap_model or default_lap_model(),
         pit=pit or default_pit_params(),
+        traffic=traffic or default_traffic_params(),
         tick_seconds=tick_seconds,
         profile_set_manifest_hash=profiles.manifest_hash,
         drivers=tuple(

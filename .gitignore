@@ -42,3 +42,6 @@ artifacts/models/
 *.code-workspace
 Thumbs.db
 .DS_Store
+
+# Local assistant notes: never committed
+CLAUDE.md

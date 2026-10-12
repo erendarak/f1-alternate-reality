@@ -36,9 +36,13 @@ def _finish_with(branch: WorldState, mode: PaceMode | None) -> WorldState:
 
 
 def test_fork_with_different_decision_leaves_source_untouched(
-    store: SnapshotStore, two_car_world: WorldState
+    store: SnapshotStore, isolated_world: WorldState
 ) -> None:
-    """Plan §4.7 test 5: fork A->B, B takes another decision, A is unchanged and B differs."""
+    """Plan §4.7 test 5: fork A->B, B takes another decision, A is unchanged and B differs.
+
+    Traffic off, so VER's race must be bit-identical (common random numbers).
+    """
+    two_car_world = isolated_world
     reference_final = run_to_end(two_car_world)
     a = engine.pause(run_ticks(two_car_world, LAP_18_TICKS))
     a_meta = store.save(a, label="lap 18")
@@ -150,13 +154,15 @@ def test_late_push_is_faster_on_the_next_lap(
 
 
 def test_fork_with_a_different_pit_decision(
-    store: SnapshotStore, two_car_world: WorldState
+    store: SnapshotStore, isolated_world: WorldState
 ) -> None:
     """Plan §4.7 test 5 with the decision it names: B pits HAM now for softs, A follows the plan.
 
-    A is unchanged, B differs, and VER's race is identical (no interaction model yet, and
-    common random numbers: his lap noise and standstill draws don't depend on HAM's choices).
+    A is unchanged, B differs, and VER's race is identical (traffic off here, and common random
+    numbers: his lap noise and standstill draws don't depend on HAM's choices). With traffic,
+    see ``test_with_traffic_a_decision_can_change_a_rivals_race``.
     """
+    two_car_world = isolated_world
     a = engine.pause(run_ticks(two_car_world, 10 * 168))
     meta = store.save(a, label="lap 10")
     assert a.car(HAM).pit_stops == 0 and a.car(HAM).planned_stops[0].lap > 11

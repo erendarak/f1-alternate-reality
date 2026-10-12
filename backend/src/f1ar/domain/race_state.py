@@ -16,7 +16,7 @@ from f1ar.domain.provenance import SourceType
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 4
+WORLD_SCHEMA_VERSION = 5
 
 
 class _Frozen(BaseModel):
@@ -123,6 +123,35 @@ class PitParams(_Frozen):
     """Dry-race rule: compounds a finisher must have used (2 in 2024; 0 disables)."""
 
 
+class TrafficParams(_Frozen):
+    """Car-to-car interaction (plan §7.4: an overtake is a race event, not two sprites crossing).
+
+    Idea credited to TUM FTM race-simulation (Heilmeier et al.): a car that would reach a car
+    ahead is either held behind it at a minimum gap or overtakes, depending on its pace
+    advantage, with time lost by both. Values are editorial until calibrated (M4).
+    """
+
+    source_type: Literal[SourceType.EDITORIAL_ASSUMPTION, SourceType.ESTIMATED_FROM_DATA]
+    note: str
+    enabled: bool = True
+    """False = cars pass through each other (pre-v0.5.0 behaviour; for isolated experiments)."""
+    min_gap_s: float = Field(ge=0)
+    """A car held up crosses the line this far behind the car it's stuck behind."""
+    overtake_threshold_s: float = Field(ge=0)
+    """Lap-pace advantage needed before an overtake is possible at all."""
+    overtake_scale_s: float = Field(gt=0)
+    """P(success) = 1 - exp(-(advantage - threshold) / scale)."""
+    attacker_loss_s: float = Field(ge=0)
+    defender_loss_s: float = Field(ge=0)
+    """Applied to the defender's next lap (its current lap is already fixed)."""
+    dirty_air_window_s: float = Field(ge=0)
+    """Following closer than this (time gap) costs ``dirty_air_loss_s`` on that lap."""
+    dirty_air_loss_s: float = Field(ge=0)
+    blue_flag_attacker_loss_s: float = Field(ge=0)
+    blue_flag_defender_loss_s: float = Field(ge=0)
+    """A lapped car always yields; it loses this on its next lap."""
+
+
 class DriverEntry(_Frozen):
     driver_id: str
     code: str
@@ -140,6 +169,7 @@ class RaceSetup(_Frozen):
     track: TrackSpec
     lap_model: LapModelParams
     pit: PitParams
+    traffic: TrafficParams
     tick_seconds: float = Field(gt=0)
     profile_set_manifest_hash: str
     """Hash of the full ProfileSet the embedded profiles were taken from."""
@@ -200,6 +230,13 @@ class CarState(_Frozen):
     controller: StrategyController
     planned_stops: tuple[PlannedStop, ...]
     """Baseline strategy's remaining plan (empty under USER control)."""
+    traffic_loss_s: float
+    """Time the lap in progress lost to traffic (held up, dirty air, passing, carried losses);
+    slightly negative when a pass gained time (DRS/slipstream). HIDDEN: part of the
+    pre-sampled lap; ``last_lap_traffic_loss_s`` is the observable version."""
+    last_lap_traffic_loss_s: float
+    carried_loss_s: float = Field(ge=0)
+    """Time lost defending or yielding, added to the car's next lap."""
     last_lap_time_s: float | None
     finish_time_s: float | None
 
@@ -216,6 +253,8 @@ EventType = Literal[
     "CONTROLLER_CHANGED",
     "CHEQUERED_FLAG",
     "TYRE_RULE_BREACHED",
+    "OVERTAKE",
+    "BLUE_FLAG",
 ]
 
 
@@ -277,7 +316,7 @@ DriverAction = SetPaceMode | RequestPitStop | CancelPitStop | SetStrategyControl
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[4]
+    schema_version: Literal[5]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None

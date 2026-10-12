@@ -84,7 +84,8 @@ def test_drivers_with_too_few_laps_are_excluded(
         estimate_car_offsets(laps, monza_roster, monza_profiles, default_lap_model())
 
 
-def test_car_offset_slows_only_that_car(two_car_setup: RaceSetup) -> None:
+def test_car_offset_slows_only_that_car(isolated_setup: RaceSetup) -> None:
+    two_car_setup = isolated_setup  # no traffic: VER can't be affected through HAM
     drivers = tuple(
         d.model_copy(update={"car_pace_offset_s": 1.0}) if d.driver_id == HAM else d
         for d in two_car_setup.drivers

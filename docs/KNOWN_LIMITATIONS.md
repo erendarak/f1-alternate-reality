@@ -2,13 +2,23 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
-## Current (M2 slice 1)
+## Current (M2 slice 2)
+
+- **Traffic parameters are editorial** (min gap 0.4 s, threshold 0.3 s, dirty air 0.15 s, ...);
+  overtaking frequency isn't calibrated. Seed-42 Monza gives 6 overtakes; the real count is
+  unknown to us until EXP-002 counts on-track passes in the data.
+- **Overtakes are decided when the attacker joins the track** (line or pit exit) for the whole
+  lap; a car can't react mid-lap, and the pass point on screen is wherever the linear motion
+  crosses, not a braking zone. There's no DRS, no side-by-side battle, and no "defending" choice.
+- **The baseline strategy ignores traffic**: it doesn't time stops for clean air or to undercut,
+  even though the undercut now exists in the engine.
+- No start performance (launch, lap-1 chaos): lap 1 is resolved in grid order with the normal
+  rules.
 
 - **Every baseline car plans a one-stop onto SOFT** (~lap 27 at Monza) because the placeholder
   compound coefficients (D-010) make the soft a race tyre. The real race was M->H. The planner is
   correct for its model; the compound model needs calibration (M4, measured in EXP-002).
-- **Strategy ignores traffic, rivals and safety cars** (none are modelled yet): there's no
-  undercut/overcut, and the baseline plans an "empty track" optimum. Slices 2-3.
+- **Strategy ignores safety cars** (not modelled yet, slice 3).
 - **Pit stop happens on the start/finish line.** The pit lane isn't drawn; a pitting car parks at
   the line for the whole hold (pit-lane loss + standstill), so it sits on top of the line in the
   viewer, and its display gap reads +0.0 while parked. Entry/exit time loss is lumped into the
@@ -74,8 +84,6 @@ Honest list of what does **not** work or is only approximate. Update whenever on
   no pit stops, strategy decisions, weather, safety cars or DNFs.
 - Car performance now comes from data (D-021) when the race is fetched; with `--synthetic` or
   without data, cars are equal again.
-- **No traffic or overtaking model:** cars pass through each other with no time cost, so grid
-  position barely matters.
 - Every car finishes all 53 laps; nobody is lapped or flagged at the leader's finish.
 - There's no real lap data or UI yet.
 - 12 of 20 drivers use unmodified generic templates, so several drivers share identical personas
