@@ -2,7 +2,7 @@ dataset_id: 2024_australian_gp_fastf1_v1
 event: 2024_australian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-12T23:20:05Z'
+retrieved_utc: '2026-10-13T15:25:25Z'
 session_key: 2024/round 3/R
 license_review_status: research_only
 files:
@@ -99,6 +99,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2024_australian_gp/positions.parquet
+  sha256: sha256:f191b40e67974e7d8ffbe940144a617f7b9adbf0317291ef082ee89e0cbb37cb
+  rows: 631731
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2024_australian_gp/track_outline.parquet
+  sha256: sha256:6d071abfd84907fc0ea0885f3d374436cf09e6130084de398288a8f9c4654a08
+  rows: 318
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 55 lap 29 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

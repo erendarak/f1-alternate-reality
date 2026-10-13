@@ -67,7 +67,7 @@ from f1ar.simulation.incidents import (
     neutralisation_after,
 )
 from f1ar.simulation.lap_model import sample_lap_time_s, wear_per_lap_s
-from f1ar.simulation.rng_streams import RngSpec, uniform
+from f1ar.simulation.rng_streams import RngSpec, normal, uniform
 from f1ar.simulation.traffic import Ahead, resolve
 from f1ar.simulation.weather import (
     best_tyre,
@@ -80,8 +80,11 @@ from f1ar.simulation.weather import (
 )
 from f1ar.simulation.weather import penalty_s as weather_penalty_s
 
-ENGINE_VERSION = "lightweight_engine_v0.8.0"
-"""v0.6.0: mistakes, crashes, failures (RETIRED), VSC (racing clock), safety car + restart.
+ENGINE_VERSION = "lightweight_engine_v0.9.0"
+"""v0.9.0: launch spread on lap 1; overtaking and race-control rates from 2024 data (D-035).
+v0.8.0: weather: rain, track wetness, intermediate and wet tyres (D-034).
+v0.7.0: calibrated tyre/fuel model, curved wear, planner for it (D-033).
+v0.6.0: mistakes, crashes, failures (RETIRED), VSC (racing clock), safety car + restart.
 v0.5.0: traffic: dirty air, held up, overtakes, blue flags; lap 1 resolved in grid order.
 v0.4.0: pit stops + tyre choice, baseline strategy, chequered-flag rule (lapped finishers).
 v0.3.0: per-car performance offset (``DriverEntry.car_pace_offset_s``).
@@ -125,6 +128,8 @@ def _sample_next_lap(
     extra = weather_penalty_s(weather, compound, wetness) * driver_factor(
         weather, entry.profile.archetype.wet_skill
     )
+    if laps_completed == 0 and setup.traffic.start_spread_s > 0.0:  # the launch
+        extra += setup.traffic.start_spread_s * normal(seed, "launch", driver_id)
     return sample_lap_time_s(
         setup.lap_model,
         entry.profile.archetype,

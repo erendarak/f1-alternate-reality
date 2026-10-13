@@ -19,8 +19,9 @@ strategist inside the engine. Plan (agreed 2026-10-13, one slice per commit):
 - [x] **Slice 4: weather (v0.8.0, D-034, EXP-005)**: rain (historical or seeded), track wetness,
   INTERMEDIATE/WET with crossovers fitted on Canada/Britain/São Paulo 2024, `wet_skill`,
   forecast without future leakage (US-06), wet-tyre rule exemption, UI.
-- [ ] Slice 5: traffic + race-control calibration against the season reference; calibration
-  report (held-out races + Monza in-sample).
+- [x] **Slice 5: traffic + race control (v0.9.0, D-035, EXP-006)**: overtaking fitted on real
+  lap-level encounters with per-track thresholds, launch spread, race-control rates from the
+  season; calibration report on all 21 dry races (train vs test).
 - [ ] Slice 6: wrap-up: MLP only if slice 2 shows a gap it could close; ablations, registry, DoD.
 
 ## Previous milestone: M3 — First playable 2D race (plan §16) — COMPLETE (replay in the new UI -> M6)
@@ -913,3 +914,35 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
   switched, observation, revealed wetness band, params round-trip, green-only pit loss)
   + 2 network; frontend 17. ruff/mypy clean.
 - Next: slice 5, traffic and race-control calibration per track.
+
+### 2026-10-13 — M4 slice 5: overtaking, the start and race control (engine v0.9.0) and EXP-006
+
+- **Diagnosis:** passes split by cause, the same code for real and simulated races
+  (`reference_metrics.pass_causes`: lap 1 / restart / fresher tyres / green). v0.8.0 had almost
+  no lap-1 passes, few tyre-offset passes and no track dependence (Monaco 32 green passes, real 0).
+- **Overtaking fitted on 9,405 real lap-level encounters** (not on pass counts), with the
+  engine's own rule and its lap noise (`calibration/traffic_fit`): min gap 0.47 s, scale 1.04 s,
+  per-track thresholds from Monaco +0.46 s to Las Vegas -0.19 s, cross-validated shrinkage.
+  Well calibrated: predicted vs observed pass rate agree across the whole advantage range.
+- **Launch spread** (new in v0.9.0): lap 1 gets a keyed `N(0, 1.71 s)` per car, matched by
+  simulation to the real lap-1 passes of the training races. Checked in the browser (Monza seed
+  7: HAM P6 -> P3 and VER P7 -> P4 by lap 2; a lap-1 crash brought a 6-lap safety car).
+- **Race control from the season** (`calibration/race_control_fit`): retirement hazard on lap 1
+  and after, SC/VSC per retirement, SC 4-6 laps; crash/failure split editorial.
+- **All 24 races simulatable:** position data fetched for the other 15 races (16 manifests and
+  quality reports refreshed; lap data unchanged).
+- **EXP-006** (21 dry races x 10 seeds x 3 settings): pass error per race 30 -> 14, mean 25 -> 44
+  (real 54); per-track thresholds help on the test races (correlation 0.74 vs 0.20), not on the
+  training races; the mix is wrong (green 26 vs 14, fresher-tyre 4 vs 21: one stop for all,
+  M5); Monaco 27 vs 11; retirements 2.1 vs 2.0, SC 0.62 vs 0.48, VSC 0.52 vs 0.38.
+- **Bugs found:**
+  1. **Fitted negative overtake thresholds broke loading a save** (found by the M0 gate test):
+     `model_copy` skips validation, the schema said >= 0. Builders now validate; negative
+     thresholds are allowed; the fit got the engine's "cars must meet" condition; EXP-006 re-run.
+- Refactor: EXP-002's simulated-race metrics moved to `calibration/simulated_metrics` (shared).
+- Tests: 346 offline (+12: pass curve, noise convolution vs Monte Carlo, parameter recovery on
+  synthetic encounters, encounter selection, traffic/race-control builders, moments, launch
+  spread keyed and additive, fitted files, save/load round-trip for every fitted track, "must
+  meet" rule, pass causes) + 2 network; frontend 17; E2E passes, but 2 of 10 runs failed, one
+  a Playwright worker crash (0xC0000409), the other not captured (see known limitations).
+- Next: slice 6, M4 wrap-up.

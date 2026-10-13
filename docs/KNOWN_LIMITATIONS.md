@@ -2,6 +2,26 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## M4 slice 5 (overtaking, start, race control, engine v0.9.0, EXP-006)
+
+- **The pass mix is wrong:** too many same-tyre green passes (26 vs 14 per race) and far too
+  few fresher-tyre passes (4 vs 21), because every simulated car still one-stops at about the
+  same time (baseline planner, M5). Totals look closer partly because one error covers another.
+- **One race per track:** per-track thresholds are in-sample and noisy (they don't beat one
+  season threshold on the training races). Monaco still has too many passes (27 vs 11).
+- **The launch spread is season-wide** and was matched by simulation (one parameter, not a model
+  of starts): no grid spacing, no first-corner contact model; lap-1 passes on the test races
+  12 vs 20.
+- **Restarts rarely change the order** (1.2 vs 3.2 passes per race).
+- **Race control:** "Retired" doesn't say why, so the crash/failure split (and the lap-1 crash
+  multiplier of 37) is editorial; SC/VSC per retirement is an average over causes (debris SCs
+  have no cause in the engine); SC and VSC slightly too frequent (0.62 vs 0.48, 0.52 vs 0.38).
+  Rare events: a training-only fit predicted 0.9 lap-1 retirements for the test races, 9
+  happened. Mistakes, pace-mode risk factors, VSC length and passing time losses stay editorial.
+- No red flags in the simulation (Monaco, Japan 2024 had lap-1 red flags).
+- **E2E intermittent on Windows:** 2 of 10 runs failed, one a Playwright worker crash
+  (0xC0000409), the other not captured; no failed test assertion was seen.
+
 ## M4 slice 4 (weather, engine v0.8.0, EXP-005)
 
 - **The weather model rests on three races** and is unstable when one is left out (EXP-005:

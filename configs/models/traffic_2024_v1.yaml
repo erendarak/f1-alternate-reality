@@ -1,0 +1,34 @@
+model_name: traffic
+model_version: v1
+artifact: calibration/traffic_2024_v1.json
+artifact_sha256: sha256:af80392c3f678b752da9f1203413b4ea250908cf6ae312e1524261595f90ab79
+training_dataset_content_sha256: sha256:e43cd3185e213cee8d80f4b82e69ec171f6f4fada093e7702ca914edcbf58181
+kind: maximum likelihood on lap-level encounters (engine noise convolved), ridge-shrunk track thresholds;
+  launch spread matched by simulation
+source_type: estimated_from_data (passing/dirty-air/blue-flag losses editorial)
+training_races:
+- 2024_abu_dhabi_gp
+- 2024_australian_gp
+- 2024_austrian_gp
+- 2024_azerbaijan_gp
+- 2024_bahrain_gp
+- 2024_belgian_gp
+- 2024_chinese_gp
+- 2024_dutch_gp
+- 2024_emilia_romagna_gp
+- 2024_hungarian_gp
+- 2024_italian_gp
+- 2024_japanese_gp
+- 2024_las_vegas_gp
+- 2024_mexico_city_gp
+- 2024_miami_gp
+- 2024_monaco_gp
+- 2024_qatar_gp
+- 2024_saudi_arabian_gp
+- 2024_singapore_gp
+- 2024_spanish_gp
+- 2024_united_states_gp
+encounters: 9405
+passes: 614
+ridge: 50.0
+status: experimental (one race per track)

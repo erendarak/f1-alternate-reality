@@ -26,13 +26,8 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-from f1ar.calibration.reference_metrics import (
-    RaceMetrics,
-    count_overtakes,
-    real_metrics,
-    sequence_of,
-)
-from f1ar.domain.race_state import CarStatus, RaceSetup, WorldState, WorldStatus
+from f1ar.calibration.reference_metrics import real_metrics
+from f1ar.calibration.simulated_metrics import sim_metrics
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.scenarios import (
     BELGIUM_2024,
@@ -43,56 +38,6 @@ from f1ar.simulation.scenarios import (
 )
 
 ROOT = Path(__file__).resolve().parents[2]
-
-
-# --- a simulated race --------------------------------------------------------------------------
-
-
-def sim_metrics(setup: RaceSetup, seed: int) -> RaceMetrics:
-    state: WorldState = engine.start(engine.create_world(setup, seed=seed, world_id="exp002"))
-    code = {d.driver_id: d.code for d in setup.drivers}
-    crossings: dict[int, dict[str, float]] = {}
-    stopped: dict[str, set[int]] = {}
-    compounds: dict[str, list[str]] = {
-        code[d.driver_id]: [d.start_compound.value] for d in setup.drivers
-    }
-    counts: Counter[str] = Counter()
-    while state.world_status is WorldStatus.RUNNING:
-        result = engine.step(state)
-        state = result.state
-        for e in result.events:
-            counts[e.type] += 1
-            if e.driver_id is None:
-                continue
-            c = code[e.driver_id]
-            if e.type == "LAP_COMPLETED":
-                crossings.setdefault(int(e.payload["lap"]), {})[c] = float(
-                    e.payload["crossing_time_s"]
-                )
-            elif e.type == "PIT_STOP":
-                stopped.setdefault(c, set()).add(int(e.payload["lap"]))
-                compounds[c].append(str(e.payload["to_compound"]))
-    order = [code[d] for d in engine.standings(state)]
-    finished = {code[c.driver_id] for c in state.cars if c.status is CarStatus.FINISHED}
-    winner_car = state.car(engine.standings(state)[0])
-    grid = [d.code for d in sorted(setup.drivers, key=lambda d: d.grid_position)]
-    return RaceMetrics(
-        order=order,
-        finishers=finished,
-        winner=order[0],
-        winner_time_s=winner_car.finish_time_s or 0.0,
-        stops={code[c.driver_id]: c.pit_stops for c in state.cars if code[c.driver_id] in finished},
-        sequences={d: sequence_of(compounds[d]) for d in finished},
-        overtakes=count_overtakes(crossings, grid, stopped),
-        retirements=sum(1 for c in state.cars if c.status is CarStatus.RETIRED),
-        safety_cars=state.race_control.sc_count,
-        vscs=state.race_control.vsc_count,
-        lapped=sum(
-            1
-            for c in state.cars
-            if c.status is CarStatus.FINISHED and c.laps_completed < winner_car.laps_completed
-        ),
-    )
 
 
 # --- comparison --------------------------------------------------------------------------------

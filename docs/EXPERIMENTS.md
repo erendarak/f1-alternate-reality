@@ -384,6 +384,110 @@ Decision / next:      Keep the model as experimental, editorial parts labelled. 
                       control per track.
 ```
 
+## EXP-006 — Overtaking, the start and race control fitted on the 2024 season (2026-10-13)
+
+```text
+Experiment ID:        EXP-006
+Research question:    Fitted on real lap-level encounters (not on pass counts), does the engine's
+                      overtaking become track-specific and reproduce real pass counts? Do race
+                      control rates from the season match real retirements and neutralisations?
+Hypothesis:           Totals and the track ranking improve; the split of passes by cause stays off
+                      where it depends on strategy (one stop for everyone, EXP-004).
+Engine:               lightweight_engine_v0.9.0, world schema v10 (D-035)
+Data:                 21 dry 2024 races (16 dry_train, 5 dry_test); 9,405 encounters, 614 passes
+Seeds:                1..10 per race and setting
+Code:                 scripts/experiments/exp006_traffic_race_control.py -> docs/experiments/exp006.json
+Artifacts:            configs/calibration/{traffic,race_control}_2024_v1.json (+ configs/models/*.yaml)
+```
+
+Overtaking fit (pass probability by expected advantage, all encounters):
+
+| Expected advantage (s) | Encounters | Observed | Predicted |
+|---|---|---|---|
+| ≤ -1 | 5656 | 0.004 | 0.006 |
+| -1 .. -0.5 | 1874 | 0.030 | 0.018 |
+| -0.5 .. 0 | 1138 | 0.137 | 0.142 |
+| 0 .. 0.5 | 425 | 0.379 | 0.392 |
+| 0.5 .. 1 | 186 | 0.597 | 0.637 |
+| 1 .. 1.5 | 78 | 0.833 | 0.772 |
+| 1.5 .. 2 | 29 | 0.966 | 0.855 |
+| > 2 | 19 | 0.842 | 0.912 |
+
+Min gap 0.47 s, scale 1.04 s, season threshold +0.08 s (training races only: +0.09 s), unexplained
+pass floor 0.6 % per encounter. Track terms: odd/even-lap cross-validated log-likelihood
+-1291 (almost no track terms) vs -1252 (shrinkage 20-50): tracks differ. Launch spread 1.71 s
+(lap-1 passes on the training races: 1.3 at spread 0, 10.6 at 1.5, 17.8 at 2.0; target 13.6).
+
+Simulated vs real, three settings (v0.8 = editorial traffic and race control, no launch spread;
+season = fitted, one training-race threshold everywhere; per track = engine default):
+
+| Setting | Pass MAE train / test | Correlation train / test | Mean passes (real 53.6) | Lap 1 / restart / tyre / green (real 15.1 / 3.2 / 20.9 / 14.4) | Retirements (1.95) | SC (0.48) | VSC (0.38) |
+|---|---|---|---|---|---|---|---|
+| v0.8 | 28.2 / 36.3 | 0.55 / 0.14 | 25.5 | 0.7 / 0.4 / 3.1 / 21.3 | 1.22 | 0.31 | 0.51 |
+| season | 12.6 / 26.3 | 0.44 / 0.20 | 44.5 | 13.0 / 1.2 / 3.9 / 26.3 | 2.14 | 0.62 | 0.52 |
+| per track | 12.2 / 18.9 | 0.42 / 0.74 | 44.0 | 13.2 / 1.2 / 3.8 / 25.8 | 2.14 | 0.62 | 0.52 |
+
+| Race | Group | Threshold (s) | Real passes (lap 1 / restart / tyre / green) | v0.8 | Season | Per track (lap 1 / restart / tyre / green) |
+|---|---|---|---|---|---|---|
+| Abu Dhabi | test | +0.00 | 88 (57 / 2 / 20 / 9) | 33 | 54 | 59 (16 / 2 / 3 / 38) |
+| Australian | train | +0.10 | 30 (5 / 6 / 11 / 8) | 11 | 34 | 32 (12 / 1 / 4 / 15) |
+| Austrian | train | -0.06 | 44 (7 / 1 / 23 / 13) | 10 | 35 | 41 (15 / 1 / 1 / 24) |
+| Azerbaijan | train | +0.05 | 57 (7 / 6 / 28 / 16) | 37 | 54 | 48 (12 / 0 / 0 / 35) |
+| Bahrain | train | -0.12 | 44 (15 / 0 / 13 / 16) | 14 | 33 | 43 (14 / 1 / 0 / 28) |
+| Belgian | train | +0.00 | 39 (10 / 0 / 16 / 13) | 18 | 39 | 45 (14 / 1 / 3 / 27) |
+| Chinese | train | -0.10 | 69 (11 / 11 / 21 / 26) | 28 | 48 | 58 (19 / 1 / 1 / 37) |
+| Dutch | train | +0.32 | 51 (13 / 0 / 25 / 13) | 33 | 54 | 43 (12 / 2 / 11 / 18) |
+| Emilia Romagna | train | +0.35 | 35 (6 / 0 / 27 / 2) | 30 | 46 | 36 (10 / 1 / 13 / 13) |
+| Hungarian | train | +0.32 | 57 (22 / 0 / 27 / 8) | 25 | 53 | 36 (9 / 2 / 6 / 20) |
+| Italian | test | +0.03 | 53 (13 / 0 / 27 / 13) | 10 | 26 | 28 (12 / 1 / 0 / 16) |
+| Japanese | test | -0.05 | 63 (0 / 0 / 27 / 36) | 20 | 34 | 41 (12 / 1 / 1 / 26) |
+| Las Vegas | train | -0.19 | 67 (6 / 0 / 41 / 20) | 43 | 58 | 78 (22 / 1 / 5 / 50) |
+| Mexico City | test | +0.02 | 68 (25 / 0 / 27 / 16) | 48 | 64 | 67 (12 / 2 / 14 / 40) |
+| Miami | train | +0.07 | 45 (12 / 3 / 14 / 16) | 13 | 39 | 34 (13 / 1 / 2 / 18) |
+| Monaco | test | +0.46 | 11 (4 / 2 / 5 / 0) | 32 | 48 | 27 (8 / 1 / 1 / 17) |
+| Qatar | train | +0.22 | 91 (45 / 29 / 3 / 14) | 28 | 41 | 33 (11 / 1 / 0 / 21) |
+| Saudi Arabian | train | +0.18 | 34 (4 / 2 / 9 / 19) | 18 | 43 | 38 (15 / 1 / 6 / 15) |
+| Singapore | train | +0.19 | 35 (11 / 0 / 22 / 2) | 27 | 42 | 38 (11 / 1 / 6 / 20) |
+| Spanish | train | -0.10 | 63 (14 / 0 / 31 / 18) | 19 | 36 | 44 (16 / 2 / 3 / 24) |
+| United States | train | +0.02 | 82 (30 / 6 / 22 / 24) | 37 | 54 | 55 (13 / 1 / 0 / 40) |
+
+Race control, training races -> test races: lap-1 retirements predicted 0.9, observed 9 (Monaco 4,
+Japan 2, Mexico 2, Abu Dhabi 1); later retirements predicted 7.0, observed 6.
+
+```text
+Findings:
+  1. THE LAP-LEVEL MODEL IS WELL CALIBRATED: predicted pass rates follow the observed ones from
+     0.4 % to 97 % across the advantage range (largest gap 1.5-2 s: 0.86 vs 0.97, 29 cases).
+  2. TOTALS ARE MUCH CLOSER: mean pass error per race 30 -> 14; simulated mean 25 -> 44 (real 54).
+     Per-track thresholds help on the held-out test races (correlation 0.74 vs 0.20 with one
+     season threshold), not on the training races (0.42 vs 0.44): with one race per track,
+     the ranking is partly noise.
+  3. THE MIX IS WRONG (negative): too many same-tyre green passes (26 vs 14) and far too few
+     fresher-tyre passes (4 vs 21). Every simulated car still one-stops at about the same time
+     (EXP-004), so the tyre-offset passes of real races don't exist, and passing at a stable
+     pace order carries more of the total. The lap-level fit is right; the situations differ.
+     This is the strategy problem M5 addresses, not something to tune here.
+  4. Monaco still too many passes (27 vs 11; v0.8: 32): its threshold is shrunk to +0.46 s and
+     the launch spread is season-wide (Monaco real lap 1: 4 passes, simulated 8).
+  5. LAP 1 matched on the training races by construction (13.7 vs 13.6); test races 11.8 vs 19.8
+     (Abu Dhabi's 57 real lap-1 passes include cars dropping back after contact).
+  6. Restart passes too few (1.2 vs 3.2): simulated restarts rarely change the order (the restart
+     itself isn't calibrated; real counts are small and dominated by Qatar's 29).
+  7. Race control: retirements 2.1 vs 2.0 (v0.8: 1.2), SC 0.62 vs 0.48, VSC 0.52 vs 0.38 (both
+     a little high; not investigated: SC/VSC per retirement is an average over causes). Rare events with small counts: the training races predict 0.9 lap-1 retirements
+     for the test races, 9 happened; the engine uses all 21 races.
+  8. Bug found by the M0 gate: fitted negative thresholds passed model_copy and broke loading
+     a save; builders now validate, the schema allows negative thresholds, and the fit uses the
+     engine's "cars must meet" condition (re-run; numbers above are after the fix).
+Negative results:     3, 4, 6; per-track thresholds don't beat one season threshold in-sample.
+Reproduce:            uv run python scripts/fetch_season.py --season 2024 --telemetry --refresh \
+                        --rounds 1 2 3 5 6 7 10 11 13 14 15 17 18 19 22 23
+                      uv run python scripts/experiments/exp006_traffic_race_control.py --seeds 10 \
+                        --json docs/experiments/exp006.json
+Decision / next:      Keep the per-track fit (engine default) and the fitted race control. The
+                      pass mix waits for real strategy variety (M5). Slice 6: M4 wrap-up.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

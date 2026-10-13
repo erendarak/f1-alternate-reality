@@ -16,7 +16,7 @@ from f1ar.domain.provenance import SourceType
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 9
+WORLD_SCHEMA_VERSION = 10
 
 
 class _Frozen(BaseModel):
@@ -159,8 +159,9 @@ class TrafficParams(_Frozen):
     """False = cars pass through each other (pre-v0.5.0 behaviour; for isolated experiments)."""
     min_gap_s: float = Field(ge=0)
     """A car held up crosses the line this far behind the car it's stuck behind."""
-    overtake_threshold_s: float = Field(ge=0)
-    """Lap-pace advantage needed before an overtake is possible at all."""
+    overtake_threshold_s: float = Field(ge=-2.0, le=5.0)
+    """Margin above which an overtake is possible. Negative (fitted, M4): a car that only just
+    reaches the one ahead already has a chance (the attempt itself still needs margin > 0)."""
     overtake_scale_s: float = Field(gt=0)
     """P(success) = 1 - exp(-(advantage - threshold) / scale)."""
     attacker_loss_s: float = Field(ge=0)
@@ -172,6 +173,10 @@ class TrafficParams(_Frozen):
     blue_flag_attacker_loss_s: float = Field(ge=0)
     blue_flag_defender_loss_s: float = Field(ge=0)
     """A lapped car always yields; it loses this on its next lap."""
+    start_spread_s: float = Field(default=0.0, ge=0)
+    """Launch and first-corner spread: each car's lap 1 gets ``N(0, spread)`` seconds (keyed per
+    car), resolved in grid order like any other lap. 0 = everyone launches identically
+    (before v0.9.0)."""
 
 
 class RaceControlParams(_Frozen):
@@ -522,7 +527,7 @@ DriverAction = SetPaceMode | RequestPitStop | CancelPitStop | SetStrategyControl
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[9]
+    schema_version: Literal[10]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None

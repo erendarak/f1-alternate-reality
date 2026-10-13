@@ -6,7 +6,12 @@ from pathlib import Path
 
 import pandas as pd
 
-from f1ar.domain.driver_profiles import ProfileSet, load_profiles, load_season_profiles
+from f1ar.domain.driver_profiles import (
+    DriverArchetype,
+    ProfileSet,
+    load_profiles,
+    load_season_profiles,
+)
 from f1ar.domain.identities import RaceRoster, load_roster
 from f1ar.domain.provenance import SourceType
 from f1ar.domain.race_state import (
@@ -168,6 +173,8 @@ def setup_from_codes(
     if random_rain:
         weather = with_random_rain(weather)
         weather_note = weather.note
+    traffic, traffic_note = _fitted_traffic(configs, roster.event_id)
+    race_control, race_control_note = _fitted_race_control(configs, field)
     return build_setup(
         roster,
         profiles,
@@ -179,6 +186,8 @@ def setup_from_codes(
         # a car without a lap-1 row (didn't start) gets the field's usual start tyre
         start_compound=_common_start(start_compounds(raw_laps, roster)),
         weather=weather,
+        traffic=traffic,
+        race_control=race_control,
         car_offsets_s=estimate.offsets_s,
         inputs={
             "start_compounds": f"historical_verified: lap-1 compound, {data_dir.name}/laps.parquet",
@@ -187,9 +196,39 @@ def setup_from_codes(
             "pit_loss": pit_note,
             "tyre_model": calibrated.note,
             "weather": weather_note,
+            "traffic": traffic_note,
+            "race_control": race_control_note,
             "dataset_sha256": "sha256:" + hashlib.sha256(laps_file.read_bytes()).hexdigest(),
         },
     )
+
+
+def _fitted_traffic(configs: Path, event_id: str) -> tuple[TrafficParams, str]:
+    from f1ar.calibration.traffic_fit import TRAFFIC_FILE, load_traffic, traffic_params
+
+    base = default_traffic_params()
+    if not (configs / TRAFFIC_FILE).exists():
+        return base, base.note
+    params = traffic_params(*load_traffic(configs), event_id, base)
+    return params, params.note
+
+
+def _fitted_race_control(
+    configs: Path, field: Sequence[DriverArchetype]
+) -> tuple[RaceControlParams, str]:
+    from f1ar.calibration.race_control_fit import (
+        RACE_CONTROL_FILE,
+        load_race_control,
+        race_control_params,
+    )
+
+    base = default_race_control_params()
+    if not (configs / RACE_CONTROL_FILE).exists():
+        return base, base.note
+    # the engine's skill factor (incidents.skill_factor), averaged over the field
+    mean_skill = sum((1.5 - a.consistency) * (1.5 - a.composure) for a in field) / len(field)
+    params = race_control_params(*load_race_control(configs), base, mean_skill)
+    return params, params.note
 
 
 def _common_start(starts: Mapping[str, Compound]) -> Compound:

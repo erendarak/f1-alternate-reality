@@ -2,7 +2,7 @@ dataset_id: 2024_chinese_gp_fastf1_v1
 event: 2024_chinese_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-12T23:20:14Z'
+retrieved_utc: '2026-10-13T15:25:42Z'
 session_key: 2024/round 5/R
 license_review_status: research_only
 files:
@@ -99,6 +99,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2024_chinese_gp/positions.parquet
+  sha256: sha256:0b32c7401fc5ee6fb207f9e69a30139a2cd65e78634893685a6ba409ae501ca4
+  rows: 749080
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2024_chinese_gp/track_outline.parquet
+  sha256: sha256:1ca108e2de44172d683269940aee5e53738801d4aab67ace8b0a7727445a6770
+  rows: 401
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 15 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

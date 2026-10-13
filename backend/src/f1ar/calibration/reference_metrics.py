@@ -6,15 +6,24 @@ the end of either lap are excluded (stops, not passes). Safety cars / VSCs: depl
 track-status timeline (codes 4 and 6). Stops: pit entries, except entries during a red flag
 (tyre changes then are free and not stops; the new stint still shows in the sequence). Values
 are derived from F1 timing data via FastF1.
+
+Pass causes (M4 slice 5): every counted pass is put in one category, checked in this order:
+``lap1`` (the start), ``neutral`` (a lap under or right after SC/VSC: restarts),
+``tyre_offset`` (the attacker's tyres at least ``TYRE_OFFSET_LAPS`` younger: strategy) and
+``green`` (everything else: same-tyre racing).
 """
 
 import math
-from collections.abc import Iterable, Sequence
+from collections import Counter
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
 import pandas as pd
+
+TYRE_OFFSET_LAPS = 5
+PASS_CAUSES = ("lap1", "neutral", "tyre_offset", "green")
 
 
 @dataclass
@@ -60,6 +69,45 @@ def count_overtakes(
                 if before[a] > before[b] and after[a] < after[b]:
                     passes += 1
     return passes
+
+
+def pass_causes(
+    crossings: dict[int, dict[str, float]],
+    grid: Sequence[str],
+    stopped_at_end_of: dict[str, set[int]],
+    neutral_laps: set[int],
+    tyre_age: Mapping[tuple[str, int], int],
+) -> Counter[str]:
+    """The passes of ``count_overtakes``, by cause (``PASS_CAUSES``); ``tyre_age[(car, lap)]``
+    is the set's age during that lap."""
+    positions: dict[int, dict[str, int]] = {0: {d: i for i, d in enumerate(grid)}}
+    for lap, times in crossings.items():
+        positions[lap] = {d: i for i, d in enumerate(sorted(times, key=lambda d: times[d]))}
+    out: Counter[str] = Counter({c: 0 for c in PASS_CAUSES})
+    for lap in sorted(positions):
+        if lap == 0 or lap - 1 not in positions:
+            continue
+        before, after = positions[lap - 1], positions[lap]
+        cars = [
+            d
+            for d in after
+            if d in before
+            and lap not in stopped_at_end_of.get(d, set())
+            and lap - 1 not in stopped_at_end_of.get(d, set())
+        ]
+        for a in cars:
+            for b in cars:
+                if not (before[a] > before[b] and after[a] < after[b]):
+                    continue
+                if lap == 1:
+                    out["lap1"] += 1
+                elif lap in neutral_laps:
+                    out["neutral"] += 1
+                elif tyre_age.get((a, lap), 0) + TYRE_OFFSET_LAPS <= tyre_age.get((b, lap), 0):
+                    out["tyre_offset"] += 1
+                else:
+                    out["green"] += 1
+    return out
 
 
 def sequence_of(stint_compounds: Iterable[str]) -> str:
@@ -139,6 +187,18 @@ def real_metrics(data_dir: Path) -> RaceMetrics:
     def deployments(code: str) -> int:
         return sum(1 for i, c in enumerate(codes) if c == code and (i == 0 or codes[i - 1] != code))
 
+    # pass causes: neutralised laps (most of the field's lap under SC/VSC/red, and the lap
+    # after: the restart) and tyre ages
+    flagged: dict[int, list[bool]] = {}
+    tyre_age: dict[tuple[str, int], int] = {}
+    for r in rows:
+        lap = int(r["lap_number"])
+        s = "" if pd.isna(r["track_status"]) else str(r["track_status"])
+        flagged.setdefault(lap, []).append(any(x in s for x in "4567"))
+        if not pd.isna(r["tyre_life_laps"]):
+            tyre_age[(r["code"], lap)] = int(r["tyre_life_laps"])
+    neutral = {x for lap, f in flagged.items() if sum(f) > len(f) / 2 for x in (lap, lap + 1)}
+
     winner = order[0]
     return RaceMetrics(
         order=order,
@@ -152,4 +212,5 @@ def real_metrics(data_dir: Path) -> RaceMetrics:
         safety_cars=deployments("4"),
         vscs=deployments("6"),
         lapped=sum(1 for d in finishers if last[d][0] < total),
+        extra={"pass_causes": dict(pass_causes(crossings, grid, stopped, neutral, tyre_age))},
     )

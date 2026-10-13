@@ -691,3 +691,38 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
 - **Also fixed:** the WebSocket handler's disconnect cleanup is shielded from cancellation. The
   test client cancels the handler on close, so under load the client count sometimes never
   dropped and the world was never auto-paused (the intermittent API test since M3).
+
+## D-035 — Overtaking, the start and race control fitted on the 2024 season (engine v0.9.0) (2026-10-13)
+
+- **Diagnosis first:** real passes split into lap 1, restarts after SC/VSC, fresher-tyre passes
+  (attacker's set ≥ 5 laps younger) and same-tyre green racing (`reference_metrics.pass_causes`,
+  same code for real and simulated races). v0.8.0 had almost no lap-1 passes (0.7 vs 15 per
+  race), few tyre-offset passes (3 vs 21) and no track dependence (Monaco 32 green passes vs 0).
+- **Overtaking fitted on lap-level encounters, not on pass counts** (`calibration/traffic_fit`):
+  9,405 real cases of a car starting a green lap within 2.5 s of the car ahead, 614 passes. The
+  engine's own pass rule is fitted by maximum likelihood, with the expected lap times from the
+  season tyre shape + race adjustment + driver pace, **convolved with the engine's lap noise**
+  so the engine reproduces the real pass rate after adding its own noise. Including the
+  engine's "the cars must meet" condition. Fitted: min gap 0.47 s (median gap of faster cars that
+  stayed behind), scale 1.04 s, season threshold +0.08 s and a ridge-shrunk term per track
+  (Monaco +0.46 s ... Las Vegas -0.19 s; shrinkage by odd/even-lap cross-validation, flat 20-50,
+  50 used). Thresholds may be negative now (schema -2..5 s). A track the fit never saw uses the
+  season threshold. Passing/dirty-air/blue-flag time losses stay editorial.
+- **Launch spread (new engine behaviour, v0.9.0):** each car's lap 1 gets `N(0, spread)` keyed
+  per car; the field is then resolved in grid order as before. The spread (1.71 s) is the one
+  parameter matched **by simulation** to the mean real lap-1 passes of the 16 dry training races
+  (13.6); spread 0 is exactly the old lap 1 (tested).
+- **Race control by moments on the 21 dry races** (`calibration/race_control_fit`): retirements
+  0.00127 per car-lap after lap 1 and 0.0286 per starter on lap 1; SC 0.24 and VSC 0.26 per
+  retirement; SC 4-6 laps (deployment to green; SC turned red flag excluded). Timing data says
+  "Retired", not why: the crash/failure split (60/40 after lap 1, lap 1 all crashes) is editorial,
+  so the lap-1 crash multiplier comes out at 37. Crash rate divided by the field's mean persona
+  skill factor (the average driver crashes at the fitted rate). Fitted on all 21 dry races, not
+  the 16 training races only: a training-only fit predicts 0.9 lap-1 retirements for the 5 test
+  races, 9 happened (small counts; reported in EXP-006).
+- **Validation:** fitted values go through `model_validate` in the parameter builders. The M0
+  save/reload gate found a fitted negative threshold that `model_copy` let through and the
+  saved world then failed to load.
+- **Data:** position data fetched for the remaining 15 races; all 24 2024 races are now
+  simulatable (library lists 24). Files: `configs/calibration/{traffic,race_control}_2024_v1.json`
+  + manifests. World schema v10 (`TrafficParams.start_spread_s`), engine v0.9.0.

@@ -2,7 +2,7 @@ dataset_id: 2024_dutch_gp_fastf1_v1
 event: 2024_dutch_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-12T23:20:58Z'
+retrieved_utc: '2026-10-13T15:27:36Z'
 session_key: 2024/round 15/R
 license_review_status: research_only
 files:
@@ -99,6 +99,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2024_dutch_gp/positions.parquet
+  sha256: sha256:195bd6ac44c856b0b5b01652ec6cac74e76045e3efdd592ed67c6c734c4280ba
+  rows: 695620
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2024_dutch_gp/track_outline.parquet
+  sha256: sha256:4b08f287c933177088a0c4b25acc8133bfdb056cc5ff1ed2b7d9abc82c60b8db
+  rows: 277
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 4 lap 47 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

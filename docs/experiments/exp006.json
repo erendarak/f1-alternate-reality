@@ -1,0 +1,1511 @@
+{
+ "seeds": 10,
+ "overtaking": {
+  "fit": {
+   "min_gap_s": 0.474,
+   "threshold_s": 0.0816,
+   "scale_s": 1.04,
+   "eps": 0.00565,
+   "track_threshold_s": {
+    "2024_abu_dhabi_gp": 0.0014,
+    "2024_australian_gp": 0.0967,
+    "2024_austrian_gp": -0.0628,
+    "2024_azerbaijan_gp": 0.0459,
+    "2024_bahrain_gp": -0.1199,
+    "2024_belgian_gp": 0.0018,
+    "2024_chinese_gp": -0.1026,
+    "2024_dutch_gp": 0.3236,
+    "2024_emilia_romagna_gp": 0.3543,
+    "2024_hungarian_gp": 0.3233,
+    "2024_italian_gp": 0.027,
+    "2024_japanese_gp": -0.0458,
+    "2024_las_vegas_gp": -0.1896,
+    "2024_mexico_city_gp": 0.0215,
+    "2024_miami_gp": 0.0713,
+    "2024_monaco_gp": 0.4556,
+    "2024_qatar_gp": 0.2236,
+    "2024_saudi_arabian_gp": 0.1796,
+    "2024_singapore_gp": 0.1878,
+    "2024_spanish_gp": -0.1,
+    "2024_united_states_gp": 0.0172
+   },
+   "track_encounters": {
+    "2024_abu_dhabi_gp": 298,
+    "2024_australian_gp": 335,
+    "2024_austrian_gp": 535,
+    "2024_azerbaijan_gp": 438,
+    "2024_bahrain_gp": 404,
+    "2024_belgian_gp": 392,
+    "2024_chinese_gp": 414,
+    "2024_dutch_gp": 587,
+    "2024_emilia_romagna_gp": 479,
+    "2024_hungarian_gp": 515,
+    "2024_italian_gp": 393,
+    "2024_japanese_gp": 331,
+    "2024_las_vegas_gp": 430,
+    "2024_mexico_city_gp": 446,
+    "2024_miami_gp": 621,
+    "2024_monaco_gp": 694,
+    "2024_qatar_gp": 408,
+    "2024_saudi_arabian_gp": 443,
+    "2024_singapore_gp": 454,
+    "2024_spanish_gp": 469,
+    "2024_united_states_gp": 319
+   },
+   "track_passes": {
+    "2024_abu_dhabi_gp": 27,
+    "2024_australian_gp": 11,
+    "2024_austrian_gp": 32,
+    "2024_azerbaijan_gp": 33,
+    "2024_bahrain_gp": 26,
+    "2024_belgian_gp": 27,
+    "2024_chinese_gp": 34,
+    "2024_dutch_gp": 35,
+    "2024_emilia_romagna_gp": 26,
+    "2024_hungarian_gp": 31,
+    "2024_italian_gp": 34,
+    "2024_japanese_gp": 40,
+    "2024_las_vegas_gp": 49,
+    "2024_mexico_city_gp": 39,
+    "2024_miami_gp": 30,
+    "2024_monaco_gp": 6,
+    "2024_qatar_gp": 18,
+    "2024_saudi_arabian_gp": 20,
+    "2024_singapore_gp": 21,
+    "2024_spanish_gp": 48,
+    "2024_united_states_gp": 27
+   },
+   "encounters": 9405,
+   "passes": 614,
+   "log_likelihood": -1220.19,
+   "note": "EXP-006: lap-level encounters, 21 dry 2024 races; time losses editorial",
+   "start_spread_s": 1.712
+  },
+  "season_train_only": {
+   "threshold_s": 0.0854,
+   "scale_s": 0.9297,
+   "min_gap_s": 0.4445
+  },
+  "ridge_cv": {
+   "1000.0": -1291.0,
+   "150.0": -1264.3,
+   "50.0": -1252.3,
+   "30.0": -1251.9,
+   "20.0": -1252.1,
+   "8.0": -1256.1,
+   "1.0": -1263.3
+  },
+  "calibration": [
+   {
+    "advantage_s": "(-9.0, -1.0]",
+    "encounters": 5656,
+    "observed": 0.004,
+    "predicted": 0.006
+   },
+   {
+    "advantage_s": "(-1.0, -0.5]",
+    "encounters": 1874,
+    "observed": 0.03,
+    "predicted": 0.018
+   },
+   {
+    "advantage_s": "(-0.5, 0.0]",
+    "encounters": 1138,
+    "observed": 0.137,
+    "predicted": 0.142
+   },
+   {
+    "advantage_s": "(0.0, 0.5]",
+    "encounters": 425,
+    "observed": 0.379,
+    "predicted": 0.392
+   },
+   {
+    "advantage_s": "(0.5, 1.0]",
+    "encounters": 186,
+    "observed": 0.597,
+    "predicted": 0.637
+   },
+   {
+    "advantage_s": "(1.0, 1.5]",
+    "encounters": 78,
+    "observed": 0.833,
+    "predicted": 0.772
+   },
+   {
+    "advantage_s": "(1.5, 2.0]",
+    "encounters": 29,
+    "observed": 0.966,
+    "predicted": 0.855
+   },
+   {
+    "advantage_s": "(2.0, 9.0]",
+    "encounters": 19,
+    "observed": 0.842,
+    "predicted": 0.912
+   }
+  ],
+  "lap1": {
+   "target_mean_real_dry_train": 13.62,
+   "by_spread": {
+    "0.0": 1.28,
+    "0.5": 2.25,
+    "1.0": 5.5,
+    "1.5": 10.56,
+    "2.0": 17.81,
+    "3.0": 31.04
+   },
+   "spread_s": 1.712
+  }
+ },
+ "race_control": {
+  "fit": {
+   "lap1_retirement_per_starter": 0.02864,
+   "retirement_per_car_lap": 0.001271,
+   "crash_per_lap": 0.000763,
+   "failure_per_lap": 0.000508,
+   "first_lap_crash_multiplier": 36.89,
+   "sc_per_retirement": 0.2439,
+   "vsc_per_retirement_without_sc": 0.2581,
+   "sc_laps_median": 4.93,
+   "sc_laps_p25": 3.6,
+   "sc_laps_p75": 6.17,
+   "races": 21,
+   "retirements": 41,
+   "safety_cars": 10,
+   "vscs": 8,
+   "note": "EXP-006: 21 dry 2024 races"
+  },
+  "train_only": {
+   "lap1_retirement_per_starter": 0.0094,
+   "retirement_per_car_lap": 0.001313,
+   "crash_per_lap": 0.000788,
+   "failure_per_lap": 0.000525,
+   "first_lap_crash_multiplier": 11.27,
+   "sc_per_retirement": 0.3077,
+   "vsc_per_retirement_without_sc": 0.3889,
+   "sc_laps_median": 4.93,
+   "sc_laps_p25": 3.86,
+   "sc_laps_p75": 5.76,
+   "races": 16,
+   "retirements": 26,
+   "safety_cars": 8,
+   "vscs": 7,
+   "note": "dry_train only"
+  },
+  "train_to_test": {
+   "lap1_retirements": {
+    "predicted": 0.94,
+    "observed": 9
+   },
+   "later_retirements": {
+    "predicted": 6.96,
+    "observed": 6
+   }
+  }
+ },
+ "races": {
+  "2024_abu_dhabi_gp": {
+   "group": "dry_test",
+   "real": {
+    "passes": 88,
+    "lap1": 57,
+    "neutral": 2,
+    "tyre_offset": 20,
+    "green": 9,
+    "retirements": 4,
+    "safety_cars": 0,
+    "vscs": 1
+   },
+   "threshold_s": 0.0014,
+   "v0.8": {
+    "passes": {
+     "mean": 33.4,
+     "sd": 6.36
+    },
+    "lap1": 0.4,
+    "neutral": 0.8,
+    "tyre_offset": 2.6,
+    "green": 29.6,
+    "retirements": 1.0,
+    "safety_cars": 0.2,
+    "vscs": 0.3
+   },
+   "season": {
+    "passes": {
+     "mean": 53.9,
+     "sd": 9.71
+    },
+    "lap1": 15.3,
+    "neutral": 0.9,
+    "tyre_offset": 3.0,
+    "green": 34.7,
+    "retirements": 1.8,
+    "safety_cars": 0.5,
+    "vscs": 0.4
+   },
+   "per_track": {
+    "passes": {
+     "mean": 58.6,
+     "sd": 11.07
+    },
+    "lap1": 16.1,
+    "neutral": 1.5,
+    "tyre_offset": 3.1,
+    "green": 37.9,
+    "retirements": 1.8,
+    "safety_cars": 0.5,
+    "vscs": 0.4
+   }
+  },
+  "2024_australian_gp": {
+   "group": "dry_train",
+   "real": {
+    "passes": 30,
+    "lap1": 5,
+    "neutral": 6,
+    "tyre_offset": 11,
+    "green": 8,
+    "retirements": 3,
+    "safety_cars": 0,
+    "vscs": 2
+   },
+   "threshold_s": 0.0967,
+   "v0.8": {
+    "passes": {
+     "mean": 10.9,
+     "sd": 3.01
+    },
+    "lap1": 0.2,
+    "neutral": 0.2,
+    "tyre_offset": 2.6,
+    "green": 7.9,
+    "retirements": 1.1,
+    "safety_cars": 0.2,
+    "vscs": 0.5
+   },
+   "season": {
+    "passes": {
+     "mean": 34.2,
+     "sd": 9.68
+    },
+    "lap1": 12.0,
+    "neutral": 1.0,
+    "tyre_offset": 5.6,
+    "green": 15.6,
+    "retirements": 2.0,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   },
+   "per_track": {
+    "passes": {
+     "mean": 31.6,
+     "sd": 9.78
+    },
+    "lap1": 12.1,
+    "neutral": 0.7,
+    "tyre_offset": 4.1,
+    "green": 14.7,
+    "retirements": 2.0,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   }
+  },
+  "2024_austrian_gp": {
+   "group": "dry_train",
+   "real": {
+    "passes": 44,
+    "lap1": 7,
+    "neutral": 1,
+    "tyre_offset": 23,
+    "green": 13,
+    "retirements": 0,
+    "safety_cars": 0,
+    "vscs": 1
+   },
+   "threshold_s": -0.0628,
+   "v0.8": {
+    "passes": {
+     "mean": 9.7,
+     "sd": 5.55
+    },
+    "lap1": 0.2,
+    "neutral": 0.4,
+    "tyre_offset": 1.0,
+    "green": 8.1,
+    "retirements": 1.6,
+    "safety_cars": 0.6,
+    "vscs": 0.6
+   },
+   "season": {
+    "passes": {
+     "mean": 35.2,
+     "sd": 12.4
+    },
+    "lap1": 14.9,
+    "neutral": 0.9,
+    "tyre_offset": 1.1,
+    "green": 18.3,
+    "retirements": 2.5,
+    "safety_cars": 0.8,
+    "vscs": 0.6
+   },
+   "per_track": {
+    "passes": {
+     "mean": 41.1,
+     "sd": 13.99
+    },
+    "lap1": 15.1,
+    "neutral": 1.2,
+    "tyre_offset": 1.2,
+    "green": 23.6,
+    "retirements": 2.5,
+    "safety_cars": 0.8,
+    "vscs": 0.6
+   }
+  },
+  "2024_azerbaijan_gp": {
+   "group": "dry_train",
+   "real": {
+    "passes": 57,
+    "lap1": 7,
+    "neutral": 6,
+    "tyre_offset": 28,
+    "green": 16,
+    "retirements": 4,
+    "safety_cars": 0,
+    "vscs": 1
+   },
+   "threshold_s": 0.0459,
+   "v0.8": {
+    "passes": {
+     "mean": 37.0,
+     "sd": 4.12
+    },
+    "lap1": 0.2,
+    "neutral": 0.5,
+    "tyre_offset": 0.0,
+    "green": 36.3,
+    "retirements": 1.0,
+    "safety_cars": 0.2,
+    "vscs": 0.5
+   },
+   "season": {
+    "passes": {
+     "mean": 53.5,
+     "sd": 11.27
+    },
+    "lap1": 15.7,
+    "neutral": 0.9,
+    "tyre_offset": 0.0,
+    "green": 36.9,
+    "retirements": 1.9,
+    "safety_cars": 0.5,
+    "vscs": 0.5
+   },
+   "per_track": {
+    "passes": {
+     "mean": 47.6,
+     "sd": 7.09
+    },
+    "lap1": 12.4,
+    "neutral": 0.5,
+    "tyre_offset": 0.0,
+    "green": 34.7,
+    "retirements": 1.9,
+    "safety_cars": 0.5,
+    "vscs": 0.5
+   }
+  },
+  "2024_bahrain_gp": {
+   "group": "dry_train",
+   "real": {
+    "passes": 44,
+    "lap1": 15,
+    "neutral": 0,
+    "tyre_offset": 13,
+    "green": 16,
+    "retirements": 0,
+    "safety_cars": 0,
+    "vscs": 0
+   },
+   "threshold_s": -0.1199,
+   "v0.8": {
+    "passes": {
+     "mean": 14.4,
+     "sd": 4.82
+    },
+    "lap1": 0.3,
+    "neutral": 0.2,
+    "tyre_offset": 0.0,
+    "green": 13.9,
+    "retirements": 1.1,
+    "safety_cars": 0.2,
+    "vscs": 0.5
+   },
+   "season": {
+    "passes": {
+     "mean": 33.2,
+     "sd": 8.74
+    },
+    "lap1": 12.8,
+    "neutral": 0.6,
+    "tyre_offset": 0.0,
+    "green": 19.8,
+    "retirements": 2.1,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   },
+   "per_track": {
+    "passes": {
+     "mean": 43.4,
+     "sd": 11.29
+    },
+    "lap1": 14.2,
+    "neutral": 1.1,
+    "tyre_offset": 0.0,
+    "green": 28.1,
+    "retirements": 2.1,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   }
+  },
+  "2024_belgian_gp": {
+   "group": "dry_train",
+   "real": {
+    "passes": 39,
+    "lap1": 10,
+    "neutral": 0,
+    "tyre_offset": 16,
+    "green": 13,
+    "retirements": 1,
+    "safety_cars": 0,
+    "vscs": 0
+   },
+   "threshold_s": 0.0018,
+   "v0.8": {
+    "passes": {
+     "mean": 17.5,
+     "sd": 4.94
+    },
+    "lap1": 0.5,
+    "neutral": 0.3,
+    "tyre_offset": 1.0,
+    "green": 15.7,
+    "retirements": 0.9,
+    "safety_cars": 0.2,
+    "vscs": 0.4
+   },
+   "season": {
+    "passes": {
+     "mean": 39.2,
+     "sd": 7.92
+    },
+    "lap1": 11.4,
+    "neutral": 1.2,
+    "tyre_offset": 1.8,
+    "green": 24.8,
+    "retirements": 1.9,
+    "safety_cars": 0.6,
+    "vscs": 0.4
+   },
+   "per_track": {
+    "passes": {
+     "mean": 45.4,
+     "sd": 12.74
+    },
+    "lap1": 14.5,
+    "neutral": 1.1,
+    "tyre_offset": 2.6,
+    "green": 27.2,
+    "retirements": 1.9,
+    "safety_cars": 0.6,
+    "vscs": 0.4
+   }
+  },
+  "2024_chinese_gp": {
+   "group": "dry_train",
+   "real": {
+    "passes": 69,
+    "lap1": 11,
+    "neutral": 11,
+    "tyre_offset": 21,
+    "green": 26,
+    "retirements": 3,
+    "safety_cars": 2,
+    "vscs": 1
+   },
+   "threshold_s": -0.1026,
+   "v0.8": {
+    "passes": {
+     "mean": 28.5,
+     "sd": 2.2
+    },
+    "lap1": 0.1,
+    "neutral": 0.5,
+    "tyre_offset": 0.3,
+    "green": 27.6,
+    "retirements": 1.1,
+    "safety_cars": 0.2,
+    "vscs": 0.5
+   },
+   "season": {
+    "passes": {
+     "mean": 48.2,
+     "sd": 8.18
+    },
+    "lap1": 15.7,
+    "neutral": 0.6,
+    "tyre_offset": 0.6,
+    "green": 31.3,
+    "retirements": 2.1,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   },
+   "per_track": {
+    "passes": {
+     "mean": 58.3,
+     "sd": 11.8
+    },
+    "lap1": 18.9,
+    "neutral": 1.4,
+    "tyre_offset": 0.7,
+    "green": 37.3,
+    "retirements": 2.1,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   }
+  },
+  "2024_dutch_gp": {
+   "group": "dry_train",
+   "real": {
+    "passes": 51,
+    "lap1": 13,
+    "neutral": 0,
+    "tyre_offset": 25,
+    "green": 13,
+    "retirements": 0,
+    "safety_cars": 0,
+    "vscs": 0
+   },
+   "threshold_s": 0.3236,
+   "v0.8": {
+    "passes": {
+     "mean": 33.2,
+     "sd": 4.77
+    },
+    "lap1": 0.1,
+    "neutral": 1.0,
+    "tyre_offset": 11.7,
+    "green": 20.4,
+    "retirements": 1.6,
+    "safety_cars": 0.6,
+    "vscs": 0.6
+   },
+   "season": {
+    "passes": {
+     "mean": 54.2,
+     "sd": 9.59
+    },
+    "lap1": 13.8,
+    "neutral": 2.1,
+    "tyre_offset": 13.8,
+    "green": 24.5,
+    "retirements": 2.5,
+    "safety_cars": 0.8,
+    "vscs": 0.6
+   },
+   "per_track": {
+    "passes": {
+     "mean": 42.8,
+     "sd": 10.0
+    },
+    "lap1": 12.1,
+    "neutral": 1.5,
+    "tyre_offset": 11.4,
+    "green": 17.8,
+    "retirements": 2.5,
+    "safety_cars": 0.8,
+    "vscs": 0.6
+   }
+  },
+  "2024_emilia_romagna_gp": {
+   "group": "dry_train",
+   "real": {
+    "passes": 35,
+    "lap1": 6,
+    "neutral": 0,
+    "tyre_offset": 27,
+    "green": 2,
+    "retirements": 1,
+    "safety_cars": 0,
+    "vscs": 0
+   },
+   "threshold_s": 0.3543,
+   "v0.8": {
+    "passes": {
+     "mean": 29.6,
+     "sd": 3.88
+    },
+    "lap1": 0.6,
+    "neutral": 0.4,
+    "tyre_offset": 15.1,
+    "green": 13.5,
+    "retirements": 1.3,
+    "safety_cars": 0.3,
+    "vscs": 0.6
+   },
+   "season": {
+    "passes": {
+     "mean": 45.5,
+     "sd": 9.0
+    },
+    "lap1": 10.3,
+    "neutral": 1.7,
+    "tyre_offset": 13.3,
+    "green": 20.2,
+    "retirements": 2.2,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   },
+   "per_track": {
+    "passes": {
+     "mean": 36.4,
+     "sd": 6.65
+    },
+    "lap1": 9.9,
+    "neutral": 0.8,
+    "tyre_offset": 12.6,
+    "green": 13.1,
+    "retirements": 2.2,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   }
+  },
+  "2024_hungarian_gp": {
+   "group": "dry_train",
+   "real": {
+    "passes": 57,
+    "lap1": 22,
+    "neutral": 0,
+    "tyre_offset": 27,
+    "green": 8,
+    "retirements": 1,
+    "safety_cars": 0,
+    "vscs": 0
+   },
+   "threshold_s": 0.3233,
+   "v0.8": {
+    "passes": {
+     "mean": 25.4,
+     "sd": 4.84
+    },
+    "lap1": 0.1,
+    "neutral": 0.1,
+    "tyre_offset": 2.2,
+    "green": 23.0,
+    "retirements": 1.6,
+    "safety_cars": 0.6,
+    "vscs": 0.6
+   },
+   "season": {
+    "passes": {
+     "mean": 52.7,
+     "sd": 18.11
+    },
+    "lap1": 14.8,
+    "neutral": 2.7,
+    "tyre_offset": 5.1,
+    "green": 30.1,
+    "retirements": 2.5,
+    "safety_cars": 0.8,
+    "vscs": 0.6
+   },
+   "per_track": {
+    "passes": {
+     "mean": 36.0,
+     "sd": 15.4
+    },
+    "lap1": 9.2,
+    "neutral": 1.7,
+    "tyre_offset": 5.5,
+    "green": 19.6,
+    "retirements": 2.5,
+    "safety_cars": 0.8,
+    "vscs": 0.6
+   }
+  },
+  "2024_italian_gp": {
+   "group": "dry_test",
+   "real": {
+    "passes": 53,
+    "lap1": 13,
+    "neutral": 0,
+    "tyre_offset": 27,
+    "green": 13,
+    "retirements": 1,
+    "safety_cars": 0,
+    "vscs": 0
+   },
+   "threshold_s": 0.027,
+   "v0.8": {
+    "passes": {
+     "mean": 10.4,
+     "sd": 1.74
+    },
+    "lap1": 0.4,
+    "neutral": 0.8,
+    "tyre_offset": 0.0,
+    "green": 9.2,
+    "retirements": 1.1,
+    "safety_cars": 0.2,
+    "vscs": 0.5
+   },
+   "season": {
+    "passes": {
+     "mean": 25.7,
+     "sd": 5.87
+    },
+    "lap1": 10.2,
+    "neutral": 0.7,
+    "tyre_offset": 0.0,
+    "green": 14.8,
+    "retirements": 2.0,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   },
+   "per_track": {
+    "passes": {
+     "mean": 27.9,
+     "sd": 5.72
+    },
+    "lap1": 11.5,
+    "neutral": 0.8,
+    "tyre_offset": 0.0,
+    "green": 15.6,
+    "retirements": 2.0,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   }
+  },
+  "2024_japanese_gp": {
+   "group": "dry_test",
+   "real": {
+    "passes": 63,
+    "lap1": 0,
+    "neutral": 0,
+    "tyre_offset": 27,
+    "green": 36,
+    "retirements": 3,
+    "safety_cars": 0,
+    "vscs": 0
+   },
+   "threshold_s": -0.0458,
+   "v0.8": {
+    "passes": {
+     "mean": 19.7,
+     "sd": 4.2
+    },
+    "lap1": 0.1,
+    "neutral": 0.6,
+    "tyre_offset": 0.7,
+    "green": 18.3,
+    "retirements": 1.1,
+    "safety_cars": 0.2,
+    "vscs": 0.5
+   },
+   "season": {
+    "passes": {
+     "mean": 34.0,
+     "sd": 9.38
+    },
+    "lap1": 10.7,
+    "neutral": 1.7,
+    "tyre_offset": 0.5,
+    "green": 21.1,
+    "retirements": 2.1,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   },
+   "per_track": {
+    "passes": {
+     "mean": 40.7,
+     "sd": 12.74
+    },
+    "lap1": 11.9,
+    "neutral": 1.4,
+    "tyre_offset": 0.9,
+    "green": 26.5,
+    "retirements": 2.1,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   }
+  },
+  "2024_las_vegas_gp": {
+   "group": "dry_train",
+   "real": {
+    "passes": 67,
+    "lap1": 6,
+    "neutral": 0,
+    "tyre_offset": 41,
+    "green": 20,
+    "retirements": 2,
+    "safety_cars": 0,
+    "vscs": 0
+   },
+   "threshold_s": -0.1896,
+   "v0.8": {
+    "passes": {
+     "mean": 43.4,
+     "sd": 5.5
+    },
+    "lap1": 4.2,
+    "neutral": 0.1,
+    "tyre_offset": 2.9,
+    "green": 36.2,
+    "retirements": 1.0,
+    "safety_cars": 0.2,
+    "vscs": 0.4
+   },
+   "season": {
+    "passes": {
+     "mean": 58.1,
+     "sd": 8.61
+    },
+    "lap1": 13.3,
+    "neutral": 1.1,
+    "tyre_offset": 5.6,
+    "green": 38.1,
+    "retirements": 1.9,
+    "safety_cars": 0.5,
+    "vscs": 0.5
+   },
+   "per_track": {
+    "passes": {
+     "mean": 77.6,
+     "sd": 16.89
+    },
+    "lap1": 21.6,
+    "neutral": 1.4,
+    "tyre_offset": 5.0,
+    "green": 49.6,
+    "retirements": 1.9,
+    "safety_cars": 0.5,
+    "vscs": 0.5
+   }
+  },
+  "2024_mexico_city_gp": {
+   "group": "dry_test",
+   "real": {
+    "passes": 68,
+    "lap1": 25,
+    "neutral": 0,
+    "tyre_offset": 27,
+    "green": 16,
+    "retirements": 3,
+    "safety_cars": 1,
+    "vscs": 0
+   },
+   "threshold_s": 0.0215,
+   "v0.8": {
+    "passes": {
+     "mean": 47.9,
+     "sd": 5.99
+    },
+    "lap1": 3.1,
+    "neutral": 0.7,
+    "tyre_offset": 8.6,
+    "green": 35.5,
+    "retirements": 1.5,
+    "safety_cars": 0.5,
+    "vscs": 0.6
+   },
+   "season": {
+    "passes": {
+     "mean": 64.3,
+     "sd": 11.68
+    },
+    "lap1": 11.5,
+    "neutral": 2.0,
+    "tyre_offset": 13.5,
+    "green": 37.3,
+    "retirements": 2.3,
+    "safety_cars": 0.6,
+    "vscs": 0.6
+   },
+   "per_track": {
+    "passes": {
+     "mean": 66.8,
+     "sd": 10.33
+    },
+    "lap1": 11.5,
+    "neutral": 1.8,
+    "tyre_offset": 14.0,
+    "green": 39.5,
+    "retirements": 2.3,
+    "safety_cars": 0.6,
+    "vscs": 0.6
+   }
+  },
+  "2024_miami_gp": {
+   "group": "dry_train",
+   "real": {
+    "passes": 45,
+    "lap1": 12,
+    "neutral": 3,
+    "tyre_offset": 14,
+    "green": 16,
+    "retirements": 1,
+    "safety_cars": 1,
+    "vscs": 1
+   },
+   "threshold_s": 0.0713,
+   "v0.8": {
+    "passes": {
+     "mean": 12.9,
+     "sd": 4.44
+    },
+    "lap1": 0.1,
+    "neutral": 0.1,
+    "tyre_offset": 3.0,
+    "green": 9.7,
+    "retirements": 1.1,
+    "safety_cars": 0.2,
+    "vscs": 0.5
+   },
+   "season": {
+    "passes": {
+     "mean": 38.7,
+     "sd": 12.22
+    },
+    "lap1": 14.7,
+    "neutral": 0.7,
+    "tyre_offset": 2.0,
+    "green": 21.3,
+    "retirements": 2.1,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   },
+   "per_track": {
+    "passes": {
+     "mean": 34.5,
+     "sd": 6.71
+    },
+    "lap1": 13.2,
+    "neutral": 0.9,
+    "tyre_offset": 2.1,
+    "green": 18.3,
+    "retirements": 2.1,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   }
+  },
+  "2024_monaco_gp": {
+   "group": "dry_test",
+   "real": {
+    "passes": 11,
+    "lap1": 4,
+    "neutral": 2,
+    "tyre_offset": 5,
+    "green": 0,
+    "retirements": 4,
+    "safety_cars": 1,
+    "vscs": 0
+   },
+   "threshold_s": 0.4556,
+   "v0.8": {
+    "passes": {
+     "mean": 32.1,
+     "sd": 4.59
+    },
+    "lap1": 0.2,
+    "neutral": 0.8,
+    "tyre_offset": 1.1,
+    "green": 30.0,
+    "retirements": 1.8,
+    "safety_cars": 0.7,
+    "vscs": 0.7
+   },
+   "season": {
+    "passes": {
+     "mean": 48.4,
+     "sd": 9.73
+    },
+    "lap1": 12.4,
+    "neutral": 1.3,
+    "tyre_offset": 0.8,
+    "green": 33.9,
+    "retirements": 2.8,
+    "safety_cars": 0.8,
+    "vscs": 0.8
+   },
+   "per_track": {
+    "passes": {
+     "mean": 27.3,
+     "sd": 8.4
+    },
+    "lap1": 7.9,
+    "neutral": 1.4,
+    "tyre_offset": 0.6,
+    "green": 17.4,
+    "retirements": 2.8,
+    "safety_cars": 0.8,
+    "vscs": 0.8
+   }
+  },
+  "2024_qatar_gp": {
+   "group": "dry_train",
+   "real": {
+    "passes": 91,
+    "lap1": 45,
+    "neutral": 29,
+    "tyre_offset": 3,
+    "green": 14,
+    "retirements": 5,
+    "safety_cars": 3,
+    "vscs": 1
+   },
+   "threshold_s": 0.2236,
+   "v0.8": {
+    "passes": {
+     "mean": 27.7,
+     "sd": 3.87
+    },
+    "lap1": 2.7,
+    "neutral": 0.1,
+    "tyre_offset": 0.0,
+    "green": 24.9,
+    "retirements": 1.0,
+    "safety_cars": 0.2,
+    "vscs": 0.4
+   },
+   "season": {
+    "passes": {
+     "mean": 41.1,
+     "sd": 7.66
+    },
+    "lap1": 11.7,
+    "neutral": 0.6,
+    "tyre_offset": 0.0,
+    "green": 28.8,
+    "retirements": 1.9,
+    "safety_cars": 0.5,
+    "vscs": 0.5
+   },
+   "per_track": {
+    "passes": {
+     "mean": 33.2,
+     "sd": 7.26
+    },
+    "lap1": 11.1,
+    "neutral": 1.0,
+    "tyre_offset": 0.0,
+    "green": 21.1,
+    "retirements": 1.9,
+    "safety_cars": 0.5,
+    "vscs": 0.5
+   }
+  },
+  "2024_saudi_arabian_gp": {
+   "group": "dry_train",
+   "real": {
+    "passes": 34,
+    "lap1": 4,
+    "neutral": 2,
+    "tyre_offset": 9,
+    "green": 19,
+    "retirements": 2,
+    "safety_cars": 1,
+    "vscs": 0
+   },
+   "threshold_s": 0.1796,
+   "v0.8": {
+    "passes": {
+     "mean": 18.3,
+     "sd": 3.58
+    },
+    "lap1": 0.5,
+    "neutral": 0.2,
+    "tyre_offset": 2.2,
+    "green": 15.4,
+    "retirements": 1.1,
+    "safety_cars": 0.2,
+    "vscs": 0.5
+   },
+   "season": {
+    "passes": {
+     "mean": 43.0,
+     "sd": 13.47
+    },
+    "lap1": 15.7,
+    "neutral": 1.5,
+    "tyre_offset": 6.1,
+    "green": 19.7,
+    "retirements": 2.1,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   },
+   "per_track": {
+    "passes": {
+     "mean": 37.8,
+     "sd": 9.58
+    },
+    "lap1": 15.0,
+    "neutral": 1.1,
+    "tyre_offset": 6.4,
+    "green": 15.3,
+    "retirements": 2.1,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   }
+  },
+  "2024_singapore_gp": {
+   "group": "dry_train",
+   "real": {
+    "passes": 35,
+    "lap1": 11,
+    "neutral": 0,
+    "tyre_offset": 22,
+    "green": 2,
+    "retirements": 2,
+    "safety_cars": 0,
+    "vscs": 0
+   },
+   "threshold_s": 0.1878,
+   "v0.8": {
+    "passes": {
+     "mean": 26.7,
+     "sd": 4.24
+    },
+    "lap1": 0.0,
+    "neutral": 0.1,
+    "tyre_offset": 7.2,
+    "green": 19.4,
+    "retirements": 1.3,
+    "safety_cars": 0.3,
+    "vscs": 0.6
+   },
+   "season": {
+    "passes": {
+     "mean": 41.5,
+     "sd": 8.91
+    },
+    "lap1": 10.5,
+    "neutral": 1.0,
+    "tyre_offset": 6.4,
+    "green": 23.6,
+    "retirements": 2.1,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   },
+   "per_track": {
+    "passes": {
+     "mean": 38.0,
+     "sd": 9.97
+    },
+    "lap1": 10.6,
+    "neutral": 1.1,
+    "tyre_offset": 6.3,
+    "green": 20.0,
+    "retirements": 2.1,
+    "safety_cars": 0.6,
+    "vscs": 0.5
+   }
+  },
+  "2024_spanish_gp": {
+   "group": "dry_train",
+   "real": {
+    "passes": 63,
+    "lap1": 14,
+    "neutral": 0,
+    "tyre_offset": 31,
+    "green": 18,
+    "retirements": 0,
+    "safety_cars": 0,
+    "vscs": 0
+   },
+   "threshold_s": -0.1,
+   "v0.8": {
+    "passes": {
+     "mean": 19.1,
+     "sd": 5.66
+    },
+    "lap1": 0.1,
+    "neutral": 0.4,
+    "tyre_offset": 3.1,
+    "green": 15.5,
+    "retirements": 1.4,
+    "safety_cars": 0.4,
+    "vscs": 0.6
+   },
+   "season": {
+    "passes": {
+     "mean": 36.2,
+     "sd": 10.25
+    },
+    "lap1": 13.1,
+    "neutral": 0.9,
+    "tyre_offset": 3.1,
+    "green": 19.1,
+    "retirements": 2.3,
+    "safety_cars": 0.7,
+    "vscs": 0.5
+   },
+   "per_track": {
+    "passes": {
+     "mean": 43.9,
+     "sd": 14.65
+    },
+    "lap1": 15.6,
+    "neutral": 1.6,
+    "tyre_offset": 3.1,
+    "green": 23.6,
+    "retirements": 2.3,
+    "safety_cars": 0.7,
+    "vscs": 0.5
+   }
+  },
+  "2024_united_states_gp": {
+   "group": "dry_train",
+   "real": {
+    "passes": 82,
+    "lap1": 30,
+    "neutral": 6,
+    "tyre_offset": 22,
+    "green": 24,
+    "retirements": 1,
+    "safety_cars": 1,
+    "vscs": 0
+   },
+   "threshold_s": 0.0172,
+   "v0.8": {
+    "passes": {
+     "mean": 37.3,
+     "sd": 3.38
+    },
+    "lap1": 0.3,
+    "neutral": 0.1,
+    "tyre_offset": 0.2,
+    "green": 36.7,
+    "retirements": 1.0,
+    "safety_cars": 0.2,
+    "vscs": 0.4
+   },
+   "season": {
+    "passes": {
+     "mean": 53.5,
+     "sd": 8.56
+    },
+    "lap1": 13.1,
+    "neutral": 1.1,
+    "tyre_offset": 0.2,
+    "green": 39.1,
+    "retirements": 1.9,
+    "safety_cars": 0.5,
+    "vscs": 0.5
+   },
+   "per_track": {
+    "passes": {
+     "mean": 54.6,
+     "sd": 10.06
+    },
+    "lap1": 13.1,
+    "neutral": 1.1,
+    "tyre_offset": 0.3,
+    "green": 40.1,
+    "retirements": 1.9,
+    "safety_cars": 0.5,
+    "vscs": 0.5
+   }
+  }
+ },
+ "summary": {
+  "v0.8": {
+   "dry_train": {
+    "pass_mae": 28.21,
+    "pass_correlation": 0.551,
+    "real_mean_passes": 52.69,
+    "sim_mean_passes": 24.48,
+    "real_mean_retirements": 1.62,
+    "sim_mean_retirements": 1.2,
+    "real_mean_sc": 0.5,
+    "sim_mean_sc": 0.3,
+    "real_mean_vsc": 0.44,
+    "sim_mean_vsc": 0.51,
+    "real_lap1": 13.62,
+    "real_neutral": 4.0,
+    "real_tyre_offset": 20.81,
+    "real_green": 14.25,
+    "sim_lap1": 0.64,
+    "sim_neutral": 0.29,
+    "sim_tyre_offset": 3.28,
+    "sim_green": 20.26
+   },
+   "dry_test": {
+    "pass_mae": 36.34,
+    "pass_correlation": 0.135,
+    "real_mean_passes": 56.6,
+    "sim_mean_passes": 28.7,
+    "real_mean_retirements": 3.0,
+    "sim_mean_retirements": 1.3,
+    "real_mean_sc": 0.4,
+    "sim_mean_sc": 0.36,
+    "real_mean_vsc": 0.2,
+    "sim_mean_vsc": 0.52,
+    "real_lap1": 19.8,
+    "real_neutral": 0.8,
+    "real_tyre_offset": 21.2,
+    "real_green": 14.8,
+    "sim_lap1": 0.84,
+    "sim_neutral": 0.74,
+    "sim_tyre_offset": 2.6,
+    "sim_green": 24.52
+   },
+   "all_dry": {
+    "pass_mae": 30.15,
+    "pass_correlation": 0.403,
+    "real_mean_passes": 53.62,
+    "sim_mean_passes": 25.48,
+    "real_mean_retirements": 1.95,
+    "sim_mean_retirements": 1.22,
+    "real_mean_sc": 0.48,
+    "sim_mean_sc": 0.31,
+    "real_mean_vsc": 0.38,
+    "sim_mean_vsc": 0.51,
+    "real_lap1": 15.1,
+    "real_neutral": 3.24,
+    "real_tyre_offset": 20.9,
+    "real_green": 14.38,
+    "sim_lap1": 0.69,
+    "sim_neutral": 0.4,
+    "sim_tyre_offset": 3.12,
+    "sim_green": 21.28
+   }
+  },
+  "season": {
+   "dry_train": {
+    "pass_mae": 12.64,
+    "pass_correlation": 0.435,
+    "real_mean_passes": 52.69,
+    "sim_mean_passes": 44.25,
+    "real_mean_retirements": 1.62,
+    "sim_mean_retirements": 2.12,
+    "real_mean_sc": 0.5,
+    "sim_mean_sc": 0.62,
+    "real_mean_vsc": 0.44,
+    "sim_mean_vsc": 0.51,
+    "real_lap1": 13.62,
+    "real_neutral": 4.0,
+    "real_tyre_offset": 20.81,
+    "real_green": 14.25,
+    "sim_lap1": 13.34,
+    "sim_neutral": 1.16,
+    "sim_tyre_offset": 4.04,
+    "sim_green": 25.7
+   },
+   "dry_test": {
+    "pass_mae": 26.3,
+    "pass_correlation": 0.195,
+    "real_mean_passes": 56.6,
+    "sim_mean_passes": 45.26,
+    "real_mean_retirements": 3.0,
+    "sim_mean_retirements": 2.2,
+    "real_mean_sc": 0.4,
+    "sim_mean_sc": 0.62,
+    "real_mean_vsc": 0.2,
+    "sim_mean_vsc": 0.56,
+    "real_lap1": 19.8,
+    "real_neutral": 0.8,
+    "real_tyre_offset": 21.2,
+    "real_green": 14.8,
+    "sim_lap1": 12.02,
+    "sim_neutral": 1.32,
+    "sim_tyre_offset": 3.56,
+    "sim_green": 28.36
+   },
+   "all_dry": {
+    "pass_mae": 15.89,
+    "pass_correlation": 0.329,
+    "real_mean_passes": 53.62,
+    "sim_mean_passes": 44.49,
+    "real_mean_retirements": 1.95,
+    "sim_mean_retirements": 2.14,
+    "real_mean_sc": 0.48,
+    "sim_mean_sc": 0.62,
+    "real_mean_vsc": 0.38,
+    "sim_mean_vsc": 0.52,
+    "real_lap1": 15.1,
+    "real_neutral": 3.24,
+    "real_tyre_offset": 20.9,
+    "real_green": 14.38,
+    "sim_lap1": 13.03,
+    "sim_neutral": 1.2,
+    "sim_tyre_offset": 3.93,
+    "sim_green": 26.33
+   }
+  },
+  "per_track": {
+   "dry_train": {
+    "pass_mae": 12.15,
+    "pass_correlation": 0.42,
+    "real_mean_passes": 52.69,
+    "sim_mean_passes": 43.89,
+    "real_mean_retirements": 1.62,
+    "sim_mean_retirements": 2.12,
+    "real_mean_sc": 0.5,
+    "sim_mean_sc": 0.62,
+    "real_mean_vsc": 0.44,
+    "sim_mean_vsc": 0.51,
+    "real_lap1": 13.62,
+    "real_neutral": 4.0,
+    "real_tyre_offset": 20.81,
+    "real_green": 14.25,
+    "sim_lap1": 13.66,
+    "sim_neutral": 1.14,
+    "sim_tyre_offset": 3.83,
+    "sim_green": 25.26
+   },
+   "dry_test": {
+    "pass_mae": 18.86,
+    "pass_correlation": 0.743,
+    "real_mean_passes": 56.6,
+    "sim_mean_passes": 44.26,
+    "real_mean_retirements": 3.0,
+    "sim_mean_retirements": 2.2,
+    "real_mean_sc": 0.4,
+    "sim_mean_sc": 0.62,
+    "real_mean_vsc": 0.2,
+    "sim_mean_vsc": 0.56,
+    "real_lap1": 19.8,
+    "real_neutral": 0.8,
+    "real_tyre_offset": 21.2,
+    "real_green": 14.8,
+    "sim_lap1": 11.78,
+    "sim_neutral": 1.38,
+    "sim_tyre_offset": 3.72,
+    "sim_green": 27.38
+   },
+   "all_dry": {
+    "pass_mae": 13.75,
+    "pass_correlation": 0.547,
+    "real_mean_passes": 53.62,
+    "sim_mean_passes": 43.98,
+    "real_mean_retirements": 1.95,
+    "sim_mean_retirements": 2.14,
+    "real_mean_sc": 0.48,
+    "sim_mean_sc": 0.62,
+    "real_mean_vsc": 0.38,
+    "sim_mean_vsc": 0.52,
+    "real_lap1": 15.1,
+    "real_neutral": 3.24,
+    "real_tyre_offset": 20.9,
+    "real_green": 14.38,
+    "sim_lap1": 13.21,
+    "sim_neutral": 1.2,
+    "sim_tyre_offset": 3.8,
+    "sim_green": 25.76
+   }
+  }
+ },
+ "seconds": 462.9
+}

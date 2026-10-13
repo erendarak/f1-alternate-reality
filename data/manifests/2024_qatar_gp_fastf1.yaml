@@ -2,7 +2,7 @@ dataset_id: 2024_qatar_gp_fastf1_v1
 event: 2024_qatar_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-12T23:21:30Z'
+retrieved_utc: '2026-10-13T15:29:05Z'
 session_key: 2024/round 23/R
 license_review_status: research_only
 files:
@@ -99,6 +99,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2024_qatar_gp/positions.parquet
+  sha256: sha256:243dc5a4b099451d1e62ad7b54458c3d2340bf462649f68128f2082e24b8364c
+  rows: 697926
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2024_qatar_gp/track_outline.parquet
+  sha256: sha256:d829f77933628b615e3eb6a8611dacca7149dab4428cd0a1cce1dbb80b1dcb6d
+  rows: 328
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 27 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

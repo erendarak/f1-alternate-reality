@@ -117,12 +117,18 @@ def test_setup_uses_data_when_given(
         "base_lap",
         "tyre_model",
         "weather",
+        "traffic",
+        "race_control",
     }
     # M4: the calibrated tyre/fuel model, without a race adjustment (no race tables here)
     assert setup.lap_model.source_type is SourceType.ESTIMATED_FROM_DATA
     assert "season shape only" in setup.inputs["tyre_model"]
     assert setup.inputs["base_lap"].startswith("estimated_from_data")
     assert setup.inputs["dataset_sha256"].startswith("sha256:")
+    # M4 slice 5: overtaking and race control fitted on the season (Monza is in the fit)
+    assert setup.traffic.source_type is SourceType.ESTIMATED_FROM_DATA
+    assert "this track's" in setup.inputs["traffic"]
+    assert setup.race_control.source_type is SourceType.ESTIMATED_FROM_DATA
     # The synthetic race has no pit stops: the editorial pit model is used and labelled so.
     assert setup.inputs["pit_loss"].startswith("editorial_assumption")
     plain = setup_from_codes(monza_roster, monza_profiles, ["VER", "HAM"])

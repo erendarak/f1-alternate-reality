@@ -1,11 +1,8 @@
 """Simulating more than one event (Spa 2024) and the EXP-002 overtake counter."""
 
-import importlib.util
-import sys
-from types import ModuleType
-
 import pytest
 
+from f1ar.calibration.reference_metrics import count_overtakes, pass_causes
 from f1ar.domain.race_state import WorldStatus
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.scenarios import (
@@ -16,7 +13,7 @@ from f1ar.simulation.scenarios import (
     setup_from_codes,
     track_for,
 )
-from tests.conftest import CONFIGS, REPO_ROOT
+from tests.conftest import CONFIGS
 
 
 def test_spa_personas_match_monza_for_the_same_drivers() -> None:
@@ -48,18 +45,8 @@ def test_every_simulated_event_runs_a_full_race_without_data() -> None:
         track_for("2030_mars_gp")
 
 
-def _exp002() -> ModuleType:
-    path = REPO_ROOT / "scripts" / "experiments" / "exp002_m2_engine.py"
-    spec = importlib.util.spec_from_file_location("exp002", path)
-    assert spec is not None and spec.loader is not None
-    module = importlib.util.module_from_spec(spec)
-    sys.modules["exp002"] = module
-    spec.loader.exec_module(module)
-    return module
-
-
 def test_overtake_counter_counts_passes_and_ignores_pit_stops() -> None:
-    count = _exp002().count_overtakes
+    count = count_overtakes
     grid = ["A", "B", "C"]
     # Lap 1: B passes A. Lap 2: C passes both, but C pitted at the end of lap 2 -> excluded
     # from lap 2; lap 3: A passes B.
@@ -70,3 +57,17 @@ def test_overtake_counter_counts_passes_and_ignores_pit_stops() -> None:
     }
     assert count(crossings, grid, {}) == 1 + 2 + 1
     assert count(crossings, grid, {"C": {2}}) == 1 + 1  # C's laps 2 and 3 don't count
+
+
+def test_pass_causes_split_the_same_passes() -> None:
+    grid = ["A", "B", "C", "D"]
+    crossings = {
+        1: {"B": 100.0, "A": 100.5, "C": 101.0, "D": 101.5},  # lap 1: B passes A
+        2: {"B": 200.0, "C": 200.3, "A": 200.6, "D": 201.0},  # C passes A (fresher tyres)
+        3: {"B": 300.0, "A": 300.2, "C": 300.4, "D": 300.6},  # A passes C (same age)
+        4: {"B": 400.0, "A": 400.2, "D": 400.3, "C": 400.4},  # D passes C under SC
+    }
+    age = {("C", 2): 1, ("A", 2): 20, ("A", 3): 21, ("C", 3): 2}
+    causes = pass_causes(crossings, grid, {}, {4}, age)
+    assert causes == {"lap1": 1, "tyre_offset": 1, "green": 1, "neutral": 1}
+    assert sum(causes.values()) == count_overtakes(crossings, grid, {})
