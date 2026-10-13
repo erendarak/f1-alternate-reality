@@ -1,0 +1,70 @@
+model_name: pace_predictor_online
+model_version: v1
+kind: LightGBM residual on the driver's recent median
+source_type: learned_parameter
+artifact: artifacts/models/pace_lgbm_2024_v1.txt (gitignored; rebuild with this script)
+artifact_sha256: sha256:8a78f07e23fc4299d6c3eed6d23f189bebd4d46729cb34383aea23b58e522478
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2024_v1.yaml
+training_dataset_content_sha256: sha256:e43cd3185e213cee8d80f4b82e69ec171f6f4fada093e7702ca914edcbf58181
+training_config_sha256: sha256:9f909878c6d77be006e4f9d98967369dfb5acbee5a002b18c5053708dbacbb19
+seed: 42
+config:
+  lgb_params:
+    objective: regression_l1
+    learning_rate: 0.05
+    num_leaves: 31
+    min_data_in_leaf: 50
+    feature_fraction: 0.9
+    bagging_fraction: 0.8
+    bagging_freq: 1
+    lambda_l2: 1.0
+    seed: 42
+    deterministic: true
+    force_row_wise: true
+    num_threads: 1
+    verbosity: -1
+  rounds: 400
+  features:
+  - age
+  - fuel
+  - compound
+  - drv_recent_compound
+  - compound_changed
+  - d_age
+  - d_fuel
+  - stint_lap
+  - fresh_tyre
+  - gap_ahead_s
+  - gap_behind_prev_s
+  - dirty
+  - position_start
+  - lap_number
+  - scheduled_laps
+  - drv_recent_n
+  - field_vs_driver
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - wind_speed_ms
+  target: lap_time_s - drv_recent_s
+metrics:
+  dry_test:
+    n: 4655
+    mae: 0.53
+    median_ae: 0.287
+    rmse: 1.666
+    ci95:
+    - 0.337
+    - 0.746
+  quantiles:
+    p10_p90_interval_coverage: 0.644
+    below_p10: 0.204
+    above_p90: 0.152
+    median_width_s: 0.852
+    conformal_p10_p90_coverage: 0.753
+    conformal_offsets_s:
+    - -0.53
+    - 0.632
+    conformal_width_s: 1.162
+status: experimental

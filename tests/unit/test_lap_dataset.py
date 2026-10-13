@@ -21,6 +21,7 @@ from f1ar.calibration.lap_dataset import (
     make_splits,
     race_laps,
 )
+from f1ar.calibration.pace_features import RECENT_FEATURES, add_recent_features
 from f1ar.calibration.reference_metrics import red_flag_periods
 
 CARS = (1, 16, 44)
@@ -90,6 +91,11 @@ def synthetic_race(seed_shift: float = 0.0) -> dict[str, pd.DataFrame]:
 
 
 def build(tables: dict[str, pd.DataFrame]) -> pd.DataFrame:
+    """The dataset rows plus the in-race context features (both must be leakage-free)."""
+    return add_recent_features(_rows(tables))
+
+
+def _rows(tables: dict[str, pd.DataFrame]) -> pd.DataFrame:
     return race_laps(
         tables["laps"],
         tables["results"],
@@ -167,7 +173,7 @@ def test_no_feature_uses_anything_after_the_lap_starts() -> None:
         after = build(changed)
 
         started = before["lap_start_time_s"] <= cut
-        for name in FEATURE_NAMES:
+        for name in (*FEATURE_NAMES, *RECENT_FEATURES):
             a = before.loc[started, name].to_list()
             b = after.loc[started, name].to_list()
             same = all(
@@ -247,7 +253,7 @@ def test_leakage_audit_on_the_real_monza_race() -> None:
             team_ids=teams,
         )
 
-    before = build_real(tables)
+    before = add_recent_features(build_real(tables))
     assert len(before) == 1008 and before["driver_id"].notna().all()
     cut = float(before["lap_start_time_s"].quantile(0.5))
     changed = {k: v.copy() for k, v in tables.items()}
@@ -259,9 +265,21 @@ def test_leakage_audit_on_the_real_monza_race() -> None:
     laps.loc[later, "lap_start_time_s"] = laps.loc[later, "lap_start_time_s"] + 9.0
     late_wx = changed["weather"]["session_time_s"].astype(float) > cut
     changed["weather"].loc[late_wx, "air_temp_c"] = 99.0
-    after = build_real(changed)
+    after = add_recent_features(build_real(changed))
     started = before["lap_start_time_s"] <= cut
-    for name in FEATURE_NAMES:
+    assert before.loc[started, "drv_recent_s"].notna().sum() > 300  # the context is exercised
+    for name in (*FEATURE_NAMES, *RECENT_FEATURES):
         pd.testing.assert_series_equal(
             before.loc[started, name], after.loc[started, name], check_names=False, obj=name
         )
+
+
+def test_recent_pace_uses_only_finished_representative_laps() -> None:
+    df = build(synthetic_race()).set_index(["driver_code", "lap_number"])
+    # laps 2..: lap 1 isn't representative, so lap 2 has no history yet; lap 3 sees lap 2
+    assert df.loc[("VER", 2), "drv_recent_n"] == 0 and pd.isna(df.loc[("VER", 2), "drv_recent_s"])
+    assert df.loc[("VER", 3), "drv_recent_n"] == 1
+    assert df.loc[("VER", 3), "drv_recent_s"] == df.loc[("VER", 2), "lap_time_s"]
+    # LEC pitted at the end of lap 3: laps 3 (in) and 4 (out) never enter its history
+    assert df.loc[("LEC", 6), "drv_recent_n"] == 2  # laps 2 and 5
+    assert df.loc[("LEC", 6), "drv_recent_compound"] == "HARD"

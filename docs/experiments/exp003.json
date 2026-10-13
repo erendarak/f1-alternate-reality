@@ -1,0 +1,976 @@
+{
+  "experiment": "EXP-003",
+  "dataset_content_sha256": "sha256:e43cd3185e213cee8d80f4b82e69ec171f6f4fada093e7702ca914edcbf58181",
+  "races": {
+    "dry_train": [
+      "2024_bahrain_gp",
+      "2024_saudi_arabian_gp",
+      "2024_australian_gp",
+      "2024_chinese_gp",
+      "2024_miami_gp",
+      "2024_emilia_romagna_gp",
+      "2024_spanish_gp",
+      "2024_austrian_gp",
+      "2024_hungarian_gp",
+      "2024_belgian_gp",
+      "2024_dutch_gp",
+      "2024_azerbaijan_gp",
+      "2024_singapore_gp",
+      "2024_united_states_gp",
+      "2024_las_vegas_gp",
+      "2024_qatar_gp"
+    ],
+    "dry_test": [
+      "2024_japanese_gp",
+      "2024_monaco_gp",
+      "2024_italian_gp",
+      "2024_mexico_city_gp",
+      "2024_abu_dhabi_gp"
+    ]
+  },
+  "shape": {
+    "loro_dry_train": {
+      "placeholder": {
+        "mae": 0.579,
+        "ci95": [
+          0.517,
+          0.649
+        ]
+      },
+      "linear": {
+        "mae": 0.52,
+        "ci95": [
+          0.472,
+          0.57
+        ]
+      },
+      "quadratic": {
+        "mae": 0.521,
+        "ci95": [
+          0.47,
+          0.574
+        ]
+      },
+      "quadratic+race": {
+        "mae": 0.455,
+        "ci95": [
+          0.421,
+          0.49
+        ]
+      }
+    },
+    "dry_test": {
+      "placeholder": {
+        "mae": 0.801,
+        "ci95": [
+          0.433,
+          1.181
+        ]
+      },
+      "linear": {
+        "mae": 0.714,
+        "ci95": [
+          0.395,
+          1.049
+        ]
+      },
+      "quadratic": {
+        "mae": 0.664,
+        "ci95": [
+          0.4,
+          0.914
+        ]
+      },
+      "quadratic+race": {
+        "mae": 0.618,
+        "ci95": [
+          0.389,
+          0.868
+        ]
+      }
+    },
+    "per_race_mae": {
+      "2024_bahrain_gp": {
+        "placeholder": 0.6,
+        "linear": 0.435,
+        "quadratic": 0.426,
+        "quadratic+race": 0.381
+      },
+      "2024_saudi_arabian_gp": {
+        "placeholder": 0.843,
+        "linear": 0.771,
+        "quadratic": 0.763,
+        "quadratic+race": 0.518
+      },
+      "2024_australian_gp": {
+        "placeholder": 0.47,
+        "linear": 0.39,
+        "quadratic": 0.395,
+        "quadratic+race": 0.393
+      },
+      "2024_chinese_gp": {
+        "placeholder": 0.618,
+        "linear": 0.47,
+        "quadratic": 0.47,
+        "quadratic+race": 0.432
+      },
+      "2024_miami_gp": {
+        "placeholder": 0.544,
+        "linear": 0.398,
+        "quadratic": 0.395,
+        "quadratic+race": 0.335
+      },
+      "2024_emilia_romagna_gp": {
+        "placeholder": 0.413,
+        "linear": 0.499,
+        "quadratic": 0.51,
+        "quadratic+race": 0.448
+      },
+      "2024_spanish_gp": {
+        "placeholder": 0.583,
+        "linear": 0.453,
+        "quadratic": 0.452,
+        "quadratic+race": 0.437
+      },
+      "2024_austrian_gp": {
+        "placeholder": 0.381,
+        "linear": 0.595,
+        "quadratic": 0.587,
+        "quadratic+race": 0.491
+      },
+      "2024_hungarian_gp": {
+        "placeholder": 0.576,
+        "linear": 0.565,
+        "quadratic": 0.563,
+        "quadratic+race": 0.506
+      },
+      "2024_belgian_gp": {
+        "placeholder": 0.792,
+        "linear": 0.608,
+        "quadratic": 0.613,
+        "quadratic+race": 0.465
+      },
+      "2024_dutch_gp": {
+        "placeholder": 0.435,
+        "linear": 0.368,
+        "quadratic": 0.371,
+        "quadratic+race": 0.365
+      },
+      "2024_azerbaijan_gp": {
+        "placeholder": 0.705,
+        "linear": 0.621,
+        "quadratic": 0.62,
+        "quadratic+race": 0.529
+      },
+      "2024_singapore_gp": {
+        "placeholder": 0.511,
+        "linear": 0.52,
+        "quadratic": 0.552,
+        "quadratic+race": 0.525
+      },
+      "2024_united_states_gp": {
+        "placeholder": 0.589,
+        "linear": 0.471,
+        "quadratic": 0.471,
+        "quadratic+race": 0.448
+      },
+      "2024_las_vegas_gp": {
+        "placeholder": 0.76,
+        "linear": 0.635,
+        "quadratic": 0.64,
+        "quadratic+race": 0.619
+      },
+      "2024_qatar_gp": {
+        "placeholder": 0.799,
+        "linear": 0.679,
+        "quadratic": 0.664,
+        "quadratic+race": 0.421
+      },
+      "2024_japanese_gp": {
+        "placeholder": 1.224,
+        "linear": 1.085,
+        "quadratic": 1.076,
+        "quadratic+race": 1.116
+      },
+      "2024_monaco_gp": {
+        "placeholder": 1.371,
+        "linear": 1.225,
+        "quadratic": 1.017,
+        "quadratic+race": 0.828
+      },
+      "2024_italian_gp": {
+        "placeholder": 0.551,
+        "linear": 0.424,
+        "quadratic": 0.428,
+        "quadratic+race": 0.411
+      },
+      "2024_mexico_city_gp": {
+        "placeholder": 0.434,
+        "linear": 0.435,
+        "quadratic": 0.439,
+        "quadratic+race": 0.436
+      },
+      "2024_abu_dhabi_gp": {
+        "placeholder": 0.369,
+        "linear": 0.34,
+        "quadratic": 0.345,
+        "quadratic+race": 0.336
+      }
+    },
+    "final_shape": {
+      "dirty_air_s": 0.42559329343145336,
+      "fitted_on": [
+        "2024_australian_gp",
+        "2024_austrian_gp",
+        "2024_azerbaijan_gp",
+        "2024_bahrain_gp",
+        "2024_belgian_gp",
+        "2024_chinese_gp",
+        "2024_dutch_gp",
+        "2024_emilia_romagna_gp",
+        "2024_hungarian_gp",
+        "2024_las_vegas_gp",
+        "2024_miami_gp",
+        "2024_qatar_gp",
+        "2024_saudi_arabian_gp",
+        "2024_singapore_gp",
+        "2024_spanish_gp",
+        "2024_united_states_gp"
+      ],
+      "fuel_s_per_lap": 0.04849051932103614,
+      "label": "season 2024 dry_train, quadratic",
+      "offset": {
+        "HARD": 0.06963527260391059,
+        "MEDIUM": 0.0,
+        "SOFT": -0.13182676513627276
+      },
+      "wear_lin": {
+        "HARD": 0.0609328257324232,
+        "MEDIUM": 0.08451996179400671,
+        "SOFT": 0.09423448708194665
+      },
+      "wear_quad": {
+        "HARD": -0.0003638996692548052,
+        "MEDIUM": -0.001287864755109766,
+        "SOFT": -0.0013788451168124174
+      }
+    },
+    "coefficients_with_race_bootstrap_ci95": {
+      "fuel_s_per_lap": [
+        0.0485,
+        [
+          0.0401,
+          0.0603
+        ]
+      ],
+      "dirty_air_s": [
+        0.4256,
+        [
+          0.3193,
+          0.4978
+        ]
+      ],
+      "offset_SOFT": [
+        -0.1318,
+        [
+          -0.4369,
+          0.2779
+        ]
+      ],
+      "offset_MEDIUM": [
+        0.0,
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "offset_HARD": [
+        0.0696,
+        [
+          -0.1479,
+          0.3089
+        ]
+      ],
+      "wear_lin_SOFT": [
+        0.0942,
+        [
+          0.02,
+          0.1449
+        ]
+      ],
+      "wear_lin_MEDIUM": [
+        0.0845,
+        [
+          0.0507,
+          0.1202
+        ]
+      ],
+      "wear_lin_HARD": [
+        0.0609,
+        [
+          0.0404,
+          0.0804
+        ]
+      ],
+      "wear_quad_SOFT": [
+        -0.00138,
+        [
+          -0.004,
+          0.0021
+        ]
+      ],
+      "wear_quad_MEDIUM": [
+        -0.00129,
+        [
+          -0.0027,
+          0.0001
+        ]
+      ],
+      "wear_quad_HARD": [
+        -0.00036,
+        [
+          -0.0011,
+          0.0003
+        ]
+      ]
+    },
+    "race_adjustments_in_sample": {
+      "2024_bahrain_gp": {
+        "wear_multiplier": 1.501,
+        "offset_delta": {
+          "SOFT": 0.052,
+          "HARD": -0.052
+        }
+      },
+      "2024_saudi_arabian_gp": {
+        "wear_multiplier": 0.072,
+        "offset_delta": {
+          "SOFT": -0.617,
+          "HARD": -0.143
+        }
+      },
+      "2024_australian_gp": {
+        "wear_multiplier": 0.963,
+        "offset_delta": {
+          "SOFT": 0.119,
+          "HARD": 0.045
+        }
+      },
+      "2024_chinese_gp": {
+        "wear_multiplier": 1.216,
+        "offset_delta": {
+          "SOFT": -0.134,
+          "HARD": -0.378
+        }
+      },
+      "2024_miami_gp": {
+        "wear_multiplier": 0.564,
+        "offset_delta": {
+          "SOFT": 0.048,
+          "HARD": 0.1
+        }
+      },
+      "2024_emilia_romagna_gp": {
+        "wear_multiplier": 1.515,
+        "offset_delta": {
+          "SOFT": 0.115,
+          "HARD": 0.192
+        }
+      },
+      "2024_spanish_gp": {
+        "wear_multiplier": 1.366,
+        "offset_delta": {
+          "SOFT": -0.01,
+          "HARD": 0.025
+        }
+      },
+      "2024_austrian_gp": {
+        "wear_multiplier": 1.733,
+        "offset_delta": {
+          "SOFT": 0.707,
+          "HARD": 0.407
+        }
+      },
+      "2024_hungarian_gp": {
+        "wear_multiplier": 1.627,
+        "offset_delta": {
+          "SOFT": 0.16,
+          "HARD": 0.152
+        }
+      },
+      "2024_belgian_gp": {
+        "wear_multiplier": 0.507,
+        "offset_delta": {
+          "SOFT": -0.665,
+          "HARD": -0.646
+        }
+      },
+      "2024_dutch_gp": {
+        "wear_multiplier": 1.157,
+        "offset_delta": {
+          "SOFT": 0.028,
+          "HARD": -0.048
+        }
+      },
+      "2024_azerbaijan_gp": {
+        "wear_multiplier": 0.374,
+        "offset_delta": {
+          "SOFT": 0.0,
+          "HARD": -0.057
+        }
+      },
+      "2024_singapore_gp": {
+        "wear_multiplier": 1.307,
+        "offset_delta": {
+          "SOFT": -0.243,
+          "HARD": 0.263
+        }
+      },
+      "2024_united_states_gp": {
+        "wear_multiplier": 0.661,
+        "offset_delta": {
+          "SOFT": -0.194,
+          "HARD": -0.024
+        }
+      },
+      "2024_las_vegas_gp": {
+        "wear_multiplier": 0.735,
+        "offset_delta": {
+          "SOFT": -0.227,
+          "HARD": -0.409
+        }
+      },
+      "2024_qatar_gp": {
+        "wear_multiplier": -0.242,
+        "offset_delta": {
+          "SOFT": 0.806,
+          "HARD": -0.293
+        }
+      },
+      "2024_japanese_gp": {
+        "wear_multiplier": 0.279,
+        "offset_delta": {
+          "SOFT": 1.043,
+          "HARD": -0.209
+        }
+      },
+      "2024_monaco_gp": {
+        "wear_multiplier": 0.031,
+        "offset_delta": {
+          "SOFT": -0.67,
+          "HARD": -0.881
+        }
+      },
+      "2024_italian_gp": {
+        "wear_multiplier": 0.826,
+        "offset_delta": {
+          "SOFT": -0.963,
+          "HARD": -0.204
+        }
+      },
+      "2024_mexico_city_gp": {
+        "wear_multiplier": 0.997,
+        "offset_delta": {
+          "SOFT": 0.759,
+          "HARD": -0.034
+        }
+      },
+      "2024_abu_dhabi_gp": {
+        "wear_multiplier": 1.142,
+        "offset_delta": {
+          "SOFT": 0.516,
+          "HARD": 0.177
+        }
+      }
+    }
+  },
+  "online": {
+    "loro_dry_train": {
+      "rolling_median": {
+        "n": 15137,
+        "mae": 0.446,
+        "median_ae": 0.257,
+        "rmse": 0.71,
+        "ci95": [
+          0.417,
+          0.478
+        ]
+      },
+      "rolling+shape": {
+        "n": 15137,
+        "mae": 0.415,
+        "median_ae": 0.255,
+        "rmse": 0.652,
+        "ci95": [
+          0.386,
+          0.448
+        ]
+      },
+      "gbm": {
+        "n": 15137,
+        "mae": 0.397,
+        "median_ae": 0.267,
+        "rmse": 0.611,
+        "ci95": [
+          0.369,
+          0.425
+        ]
+      },
+      "gbm_no_weather": {
+        "n": 15137,
+        "mae": 0.387,
+        "median_ae": 0.256,
+        "rmse": 0.604,
+        "ci95": [
+          0.363,
+          0.412
+        ]
+      },
+      "gbm_identity": {
+        "n": 15137,
+        "mae": 0.392,
+        "median_ae": 0.263,
+        "rmse": 0.606,
+        "ci95": [
+          0.367,
+          0.419
+        ]
+      },
+      "gbm_persona": {
+        "n": 15137,
+        "mae": 0.397,
+        "median_ae": 0.267,
+        "rmse": 0.609,
+        "ci95": [
+          0.371,
+          0.424
+        ]
+      }
+    },
+    "dry_test": {
+      "rolling_median": {
+        "n": 4655,
+        "mae": 0.578,
+        "median_ae": 0.284,
+        "rmse": 1.743,
+        "ci95": [
+          0.377,
+          0.817
+        ]
+      },
+      "rolling+shape": {
+        "n": 4655,
+        "mae": 0.549,
+        "median_ae": 0.283,
+        "rmse": 1.717,
+        "ci95": [
+          0.35,
+          0.785
+        ]
+      },
+      "gbm": {
+        "n": 4655,
+        "mae": 0.53,
+        "median_ae": 0.287,
+        "rmse": 1.666,
+        "ci95": [
+          0.337,
+          0.746
+        ]
+      },
+      "gbm_no_weather": {
+        "n": 4655,
+        "mae": 0.524,
+        "median_ae": 0.284,
+        "rmse": 1.666,
+        "ci95": [
+          0.331,
+          0.755
+        ]
+      },
+      "gbm_identity": {
+        "n": 4655,
+        "mae": 0.53,
+        "median_ae": 0.29,
+        "rmse": 1.667,
+        "ci95": [
+          0.333,
+          0.76
+        ]
+      },
+      "gbm_persona": {
+        "n": 4655,
+        "mae": 0.527,
+        "median_ae": 0.284,
+        "rmse": 1.665,
+        "ci95": [
+          0.332,
+          0.742
+        ]
+      }
+    },
+    "per_race_mae": {
+      "2024_bahrain_gp": {
+        "rolling_median": 0.422,
+        "rolling+shape": 0.363,
+        "gbm": 0.344,
+        "gbm_no_weather": 0.341,
+        "gbm_identity": 0.351,
+        "gbm_persona": 0.352
+      },
+      "2024_saudi_arabian_gp": {
+        "rolling_median": 0.442,
+        "rolling+shape": 0.442,
+        "gbm": 0.391,
+        "gbm_no_weather": 0.397,
+        "gbm_identity": 0.39,
+        "gbm_persona": 0.39
+      },
+      "2024_australian_gp": {
+        "rolling_median": 0.389,
+        "rolling+shape": 0.361,
+        "gbm": 0.356,
+        "gbm_no_weather": 0.355,
+        "gbm_identity": 0.351,
+        "gbm_persona": 0.355
+      },
+      "2024_chinese_gp": {
+        "rolling_median": 0.451,
+        "rolling+shape": 0.4,
+        "gbm": 0.425,
+        "gbm_no_weather": 0.434,
+        "gbm_identity": 0.42,
+        "gbm_persona": 0.434
+      },
+      "2024_miami_gp": {
+        "rolling_median": 0.351,
+        "rolling+shape": 0.342,
+        "gbm": 0.306,
+        "gbm_no_weather": 0.312,
+        "gbm_identity": 0.304,
+        "gbm_persona": 0.307
+      },
+      "2024_emilia_romagna_gp": {
+        "rolling_median": 0.418,
+        "rolling+shape": 0.391,
+        "gbm": 0.375,
+        "gbm_no_weather": 0.373,
+        "gbm_identity": 0.369,
+        "gbm_persona": 0.372
+      },
+      "2024_spanish_gp": {
+        "rolling_median": 0.496,
+        "rolling+shape": 0.446,
+        "gbm": 0.391,
+        "gbm_no_weather": 0.399,
+        "gbm_identity": 0.396,
+        "gbm_persona": 0.393
+      },
+      "2024_austrian_gp": {
+        "rolling_median": 0.386,
+        "rolling+shape": 0.338,
+        "gbm": 0.376,
+        "gbm_no_weather": 0.323,
+        "gbm_identity": 0.361,
+        "gbm_persona": 0.381
+      },
+      "2024_hungarian_gp": {
+        "rolling_median": 0.541,
+        "rolling+shape": 0.501,
+        "gbm": 0.455,
+        "gbm_no_weather": 0.456,
+        "gbm_identity": 0.456,
+        "gbm_persona": 0.456
+      },
+      "2024_belgian_gp": {
+        "rolling_median": 0.454,
+        "rolling+shape": 0.397,
+        "gbm": 0.341,
+        "gbm_no_weather": 0.352,
+        "gbm_identity": 0.341,
+        "gbm_persona": 0.343
+      },
+      "2024_dutch_gp": {
+        "rolling_median": 0.392,
+        "rolling+shape": 0.36,
+        "gbm": 0.337,
+        "gbm_no_weather": 0.347,
+        "gbm_identity": 0.337,
+        "gbm_persona": 0.337
+      },
+      "2024_azerbaijan_gp": {
+        "rolling_median": 0.461,
+        "rolling+shape": 0.45,
+        "gbm": 0.411,
+        "gbm_no_weather": 0.409,
+        "gbm_identity": 0.408,
+        "gbm_persona": 0.406
+      },
+      "2024_singapore_gp": {
+        "rolling_median": 0.484,
+        "rolling+shape": 0.462,
+        "gbm": 0.474,
+        "gbm_no_weather": 0.415,
+        "gbm_identity": 0.457,
+        "gbm_persona": 0.477
+      },
+      "2024_united_states_gp": {
+        "rolling_median": 0.423,
+        "rolling+shape": 0.391,
+        "gbm": 0.39,
+        "gbm_no_weather": 0.389,
+        "gbm_identity": 0.384,
+        "gbm_persona": 0.388
+      },
+      "2024_las_vegas_gp": {
+        "rolling_median": 0.63,
+        "rolling+shape": 0.587,
+        "gbm": 0.521,
+        "gbm_no_weather": 0.508,
+        "gbm_identity": 0.514,
+        "gbm_persona": 0.517
+      },
+      "2024_qatar_gp": {
+        "rolling_median": 0.409,
+        "rolling+shape": 0.444,
+        "gbm": 0.496,
+        "gbm_no_weather": 0.418,
+        "gbm_identity": 0.474,
+        "gbm_persona": 0.48
+      },
+      "2024_japanese_gp": {
+        "rolling_median": 1.052,
+        "rolling+shape": 0.991,
+        "gbm": 0.944,
+        "gbm_no_weather": 0.95,
+        "gbm_identity": 0.943,
+        "gbm_persona": 0.941
+      },
+      "2024_monaco_gp": {
+        "rolling_median": 0.744,
+        "rolling+shape": 0.738,
+        "gbm": 0.727,
+        "gbm_no_weather": 0.708,
+        "gbm_identity": 0.733,
+        "gbm_persona": 0.722
+      },
+      "2024_italian_gp": {
+        "rolling_median": 0.408,
+        "rolling+shape": 0.384,
+        "gbm": 0.348,
+        "gbm_no_weather": 0.348,
+        "gbm_identity": 0.342,
+        "gbm_persona": 0.347
+      },
+      "2024_mexico_city_gp": {
+        "rolling_median": 0.395,
+        "rolling+shape": 0.365,
+        "gbm": 0.342,
+        "gbm_no_weather": 0.347,
+        "gbm_identity": 0.341,
+        "gbm_persona": 0.338
+      },
+      "2024_abu_dhabi_gp": {
+        "rolling_median": 0.339,
+        "rolling+shape": 0.306,
+        "gbm": 0.321,
+        "gbm_no_weather": 0.304,
+        "gbm_identity": 0.318,
+        "gbm_persona": 0.318
+      }
+    },
+    "per_driver_dry_test_gbm": {
+      "VER": {
+        "n": 275,
+        "mae_gbm": 0.343
+      },
+      "LEC": {
+        "n": 274,
+        "mae_gbm": 0.348
+      },
+      "NOR": {
+        "n": 273,
+        "mae_gbm": 0.365
+      },
+      "COL": {
+        "n": 129,
+        "mae_gbm": 0.396
+      },
+      "RUS": {
+        "n": 270,
+        "mae_gbm": 0.396
+      },
+      "PER": {
+        "n": 145,
+        "mae_gbm": 0.415
+      },
+      "HUL": {
+        "n": 199,
+        "mae_gbm": 0.418
+      },
+      "ALO": {
+        "n": 215,
+        "mae_gbm": 0.427
+      },
+      "SAI": {
+        "n": 276,
+        "mae_gbm": 0.427
+      },
+      "PIA": {
+        "n": 268,
+        "mae_gbm": 0.436
+      },
+      "DOO": {
+        "n": 45,
+        "mae_gbm": 0.438
+      },
+      "HAM": {
+        "n": 270,
+        "mae_gbm": 0.457
+      },
+      "LAW": {
+        "n": 103,
+        "mae_gbm": 0.463
+      },
+      "STR": {
+        "n": 255,
+        "mae_gbm": 0.524
+      },
+      "ALB": {
+        "n": 167,
+        "mae_gbm": 0.531
+      },
+      "RIC": {
+        "n": 119,
+        "mae_gbm": 0.536
+      },
+      "MAG": {
+        "n": 200,
+        "mae_gbm": 0.605
+      },
+      "TSU": {
+        "n": 164,
+        "mae_gbm": 0.628
+      },
+      "ZHO": {
+        "n": 230,
+        "mae_gbm": 0.749
+      },
+      "GAS": {
+        "n": 270,
+        "mae_gbm": 0.77
+      },
+      "OCO": {
+        "n": 153,
+        "mae_gbm": 0.853
+      },
+      "BOT": {
+        "n": 244,
+        "mae_gbm": 0.884
+      },
+      "SAR": {
+        "n": 111,
+        "mae_gbm": 1.114
+      }
+    },
+    "quantiles_dry_test": {
+      "p10_p90_interval_coverage": 0.644,
+      "below_p10": 0.204,
+      "above_p90": 0.152,
+      "median_width_s": 0.852,
+      "conformal_p10_p90_coverage": 0.753,
+      "conformal_offsets_s": [
+        -0.53,
+        0.632
+      ],
+      "conformal_width_s": 1.162
+    },
+    "feature_importance_gain_share": [
+      [
+        "field_vs_driver",
+        0.152
+      ],
+      [
+        "gap_ahead_s",
+        0.088
+      ],
+      [
+        "fuel",
+        0.075
+      ],
+      [
+        "track_temp_c",
+        0.074
+      ],
+      [
+        "air_temp_c",
+        0.07
+      ],
+      [
+        "gap_behind_prev_s",
+        0.068
+      ],
+      [
+        "d_age",
+        0.064
+      ],
+      [
+        "stint_lap",
+        0.064
+      ],
+      [
+        "lap_number",
+        0.064
+      ],
+      [
+        "humidity_pct",
+        0.056
+      ],
+      [
+        "position_start",
+        0.051
+      ],
+      [
+        "wind_speed_ms",
+        0.05
+      ],
+      [
+        "age",
+        0.041
+      ],
+      [
+        "d_fuel",
+        0.033
+      ],
+      [
+        "scheduled_laps",
+        0.03
+      ],
+      [
+        "compound",
+        0.008
+      ],
+      [
+        "drv_recent_compound",
+        0.005
+      ],
+      [
+        "fresh_tyre",
+        0.005
+      ],
+      [
+        "drv_recent_n",
+        0.002
+      ],
+      [
+        "compound_changed",
+        0.001
+      ],
+      [
+        "dirty",
+        0.0
+      ]
+    ],
+    "persona_missing_share": 0.018
+  }
+}

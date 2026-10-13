@@ -71,6 +71,7 @@ another decision, **Timelines** to load any save or go back to the main story. A
 | Fetch + validate ANY race (roster, data, manifest, report) | `uv run python scripts/fetch_event.py --season 2024 --round 14` |
 | Fetch a whole season (timing only, skips fetched races) | `uv run python scripts/fetch_season.py --season 2024` |
 | Build the lap dataset + season reference metrics (M4) | `uv run python scripts/build_lap_dataset.py --season 2024` |
+| Experiment: pace models + tyre/fuel coefficients (EXP-003) | `uv run python scripts/experiments/exp003_pace_models.py --json docs/experiments/exp003.json` |
 | Fetch + validate real Monza 2024 data (FastF1) | `uv run python scripts/fetch_monza_2024.py` (report: `docs/data/2024_italian_gp_quality.md`) |
 | Verify local data files against the manifest | `uv run python scripts/fetch_monza_2024.py --verify` |
 | Run the opt-in network tests | `uv run pytest -m network` |

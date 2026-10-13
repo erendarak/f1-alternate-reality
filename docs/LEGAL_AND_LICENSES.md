@@ -26,6 +26,11 @@ local and are not redistributed.
 The debug viewer's track outline, corner markers, display rotation and team colours are all derived
 from that FastF1/F1-timing data and follow the same rules (generated locally, not committed).
 
+## Software dependencies (ML, M4)
+
+LightGBM 4.7 (MIT) and scikit-learn 1.9 (BSD-3-Clause), Python, local training only. Learned
+artifacts are derived from research-only timing data: kept local, not redistributed.
+
 ## Software dependencies (frontend, M3)
 
 Direct dependencies in `frontend/package.json` (checked 2026-10-12): React + React DOM 19.3 (MIT,

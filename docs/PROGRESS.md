@@ -9,7 +9,7 @@ strategist inside the engine. Plan (agreed 2026-10-13, one slice per commit):
 
 - [x] **Slice 1: 2024 season dataset**: all 24 races fetched; lap dataset with feature
   availability + leakage audit; dataset manifest; splits by rule; season reference metrics (D-031).
-- [ ] Slice 2: pace models + tyre curves (EXP-003): rolling median, structural regression
+- [x] **Slice 2: pace models + tyre curves (EXP-003, D-032)**: rolling median, structural regression
   (compound offsets, non-linear wear, fuel, car/driver), LightGBM; leave-one-race-out errors,
   per track/driver, feature importance, profile ablation (read as "driver identity", not as a
   validation of the editorial personas), model manifests.
@@ -798,3 +798,36 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Tests: 302 offline (+7: leakage audit synthetic + real Monza, conventions, wet rule and
   splits, red-flag periods, retirement/DSQ quality check) + 2 network; frontend 17 + 1 E2E.
 - Next: slice 2, pace models and tyre curves (EXP-003).
+
+### 2026-10-13 — M4 slice 2: pace models and tyre/fuel coefficients (EXP-003)
+
+- **Engine shape** (`calibration/pace_models.py`): compound offsets, linear + quadratic wear per
+  compound, fuel (+ track evolution) and a following cost, fitted by least squares with a pace
+  term per driver per race; per-race adjustment (wear multiplier + offset deltas, ridge-shrunk
+  to the season shape); the placeholder converted into the same form for comparison.
+- **Online predictors** with as-of in-race context (`calibration/pace_features.py`: driver's last
+  3 representative laps, field pace in the last 5 min; all from laps that had ENDED; the leakage
+  audit now covers them too): rolling median, rolling median + shape correction, LightGBM on the
+  residual, with ablations (no weather, + identity, + persona) and p10/p90 quantile and
+  split-conformal intervals.
+- **Results (EXP-003):** shape residual 0.579 -> 0.52 leave-one-race-out and 0.80 -> 0.66 on the
+  held-out races vs the placeholder; + per-race adjustment 0.455 / 0.618. Online: rolling 0.578,
+  Baseline A 0.549, LightGBM 0.530 s/lap on held-out races. Personas and identity add nothing;
+  weather doesn't help in dry races; intervals 64 % (quantile) / 75 % (conformal) vs 80 %.
+- **Key finding for the engine:** the placeholder's SOFT is 0.6 s faster than MEDIUM; real race
+  trim says ~0.13 s (wide interval), with SOFT wearing fastest. This is why EXP-002 had every car
+  one-stop onto SOFT. Degradation differs strongly by track (multiplier ~0 Monaco/Saudi, ~1.6
+  Austria/Hungary), so the engine needs a per-race wear level.
+- **Registry:** `configs/calibration/tyre_shape_2024_v1.json` (the fitted shape, tracked) and
+  manifests `configs/models/tyre_shape_2024_v1.yaml`, `pace_lgbm_2024_v1.yaml` (dataset content
+  hash, training races, config hash, seed, metrics, status); the LightGBM file itself is a local
+  artifact (`artifacts/models/`, gitignored, rebuilt by the script). EXP-003 reproduces
+  byte-for-byte.
+- Found while building it: inside a stint tyre age and fuel are perfectly collinear (-1.0), so
+  the fit needed a per-driver-per-race (not per-stint) pace term to separate them through stops;
+  the fitted quadratic would make tyres faster beyond ~33 laps and Qatar's multiplier is
+  negative: both need guards before engine use (slice 3).
+- New dependencies: LightGBM 4.7 (MIT), scikit-learn 1.9 (BSD-3).
+- Tests: 308 offline (+6: shape recovery exact/noisy, race multiplier, placeholder, rolling
+  correction, recent-pace features; the leakage audit extended) + 2 network.
+- Next: slice 3, the calibrated shape in the engine (v0.7.0) and EXP-002 re-run.

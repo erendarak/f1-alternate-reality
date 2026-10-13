@@ -2,6 +2,20 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## M4 slice 2 (pace models, EXP-003)
+
+- **Compound offsets are poorly identified** from race laps (selection: teams choose compounds and
+  stint lengths; tyre management): SOFT vs MEDIUM -0.13 s with an interval from -0.44 to +0.28.
+- **Fuel and track evolution can't be separated** with timing data (one coefficient).
+- **The following cost (0.43 s) mixes dirty air and being held up**; not usable directly as the
+  engine's dirty-air parameter.
+- Per-race adjustments and nuisance pace terms are in-sample; only the season shape is tested on
+  unseen races. Concave wear is not established (intervals include 0).
+- Online intervals are too narrow on new races (75 % conformal coverage vs 80 % target).
+- One season, 16 training races; Japan and Monaco (red flags, cruising) dominate the test error.
+- The LightGBM artifact is local (gitignored) and rebuilt from the script; only its manifest and
+  hash are tracked.
+
 ## M4 slice 1 (season dataset)
 
 - **One season only (2024)**: 21 dry and 3 wet races. Leave-one-race-out over 16 training races

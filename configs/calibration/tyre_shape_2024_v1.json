@@ -1,0 +1,38 @@
+{
+  "dirty_air_s": 0.42559329343145336,
+  "fitted_on": [
+    "2024_australian_gp",
+    "2024_austrian_gp",
+    "2024_azerbaijan_gp",
+    "2024_bahrain_gp",
+    "2024_belgian_gp",
+    "2024_chinese_gp",
+    "2024_dutch_gp",
+    "2024_emilia_romagna_gp",
+    "2024_hungarian_gp",
+    "2024_las_vegas_gp",
+    "2024_miami_gp",
+    "2024_qatar_gp",
+    "2024_saudi_arabian_gp",
+    "2024_singapore_gp",
+    "2024_spanish_gp",
+    "2024_united_states_gp"
+  ],
+  "fuel_s_per_lap": 0.04849051932103614,
+  "label": "season 2024 dry_train, quadratic",
+  "offset": {
+    "HARD": 0.06963527260391059,
+    "MEDIUM": 0.0,
+    "SOFT": -0.13182676513627276
+  },
+  "wear_lin": {
+    "HARD": 0.0609328257324232,
+    "MEDIUM": 0.08451996179400671,
+    "SOFT": 0.09423448708194665
+  },
+  "wear_quad": {
+    "HARD": -0.0003638996692548052,
+    "MEDIUM": -0.001287864755109766,
+    "SOFT": -0.0013788451168124174
+  }
+}

@@ -588,3 +588,25 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
 - Derived per-race aggregates (stops, passes, SC counts) are committed as reference data; lap
   tables stay local (research-only data, not redistributed).
 
+## D-032 — Engine shape vs online predictor; what is learned from where (2026-10-13)
+
+- **Two different models, two jobs.** The engine's lap model uses a small, interpretable
+  *shape* (compound offsets, wear curve, fuel, following cost) fitted on real laps of other
+  races, plus per-race values estimated from the race itself (base lap, car offsets, wear
+  multiplier, offset deltas: in-sample, labelled `estimated_from_data`). The *online predictor*
+  (LightGBM on the driver's recent pace) is an experimental tool for M5's strategist and for
+  analysis; it is not part of the engine's lap model (it needs the real race's own laps).
+- **Fit design:** one pace term per driver per race; tyre age and fuel are separated only by
+  stops (collinear within a stint); "fuel" includes track evolution. Wet laps excluded.
+- **Evaluation protocol:** leave-one-race-out over dry_train, final fit on dry_train evaluated on
+  dry_test; race-resampling bootstrap intervals; nuisance pace terms fitted in-sample and said so.
+- **Profiles:** personas are editorial; the ablation measures whether they (or identity) improve
+  prediction, never whether they are "true". Result: no improvement -> no profile-conditioned
+  MLP unless a later model shows a gap (slice 6).
+- **Registry:** every fitted model has a manifest in `configs/models/` (dataset content hash,
+  training races, config hash, seed, metrics, status). Small artifacts the engine needs are
+  tracked (`configs/calibration/`); larger learned artifacts are rebuilt locally
+  (`artifacts/models/`, gitignored) from the pinned dataset and seed.
+- **Guards before engine use** (slice 3): wear may not decrease with age (clamp the quadratic at
+  its peak); per-race wear multipliers have a positive floor.
+
