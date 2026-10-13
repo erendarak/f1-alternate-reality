@@ -62,7 +62,7 @@ from f1ar.simulation.lap_model import sample_lap_time_s, wear_per_lap_s
 from f1ar.simulation.rng_streams import RngSpec, uniform
 from f1ar.simulation.traffic import Ahead, resolve
 
-ENGINE_VERSION = "lightweight_engine_v0.6.0"
+ENGINE_VERSION = "lightweight_engine_v0.7.0"
 """v0.6.0: mistakes, crashes, failures (RETIRED), VSC (racing clock), safety car + restart.
 v0.5.0: traffic: dirty air, held up, overtakes, blue flags; lap 1 resolved in grid order.
 v0.4.0: pit stops + tyre choice, baseline strategy, chequered-flag rule (lapped finishers).
@@ -1071,7 +1071,11 @@ def _complete_lap(
     lap_time = crossing_time - car.lap_started_at_s
     # The lap just driven wears the tyres at the rate of the mode it was driven in.
     wear = car.tyre_wear_s + wear_per_lap_s(
-        setup.lap_model, driver, compound=car.compound, pace_mode=car.lap_pace_mode
+        setup.lap_model,
+        driver,
+        compound=car.compound,
+        pace_mode=car.lap_pace_mode,
+        tyre_age_laps=car.tyre_age_laps,
     )
     emit(
         "LAP_COMPLETED",

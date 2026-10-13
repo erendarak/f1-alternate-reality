@@ -2,6 +2,8 @@
 
 import statistics
 
+import pytest
+
 from f1ar.domain.driver_profiles import DriverArchetype
 from f1ar.domain.race_state import Compound, PaceMode
 from f1ar.simulation.lap_model import (
@@ -9,7 +11,9 @@ from f1ar.simulation.lap_model import (
     expected_lap_time_s,
     noise_sd_s,
     sample_lap_time_s,
+    tyre_wear_factor,
     wear_per_lap_s,
+    wear_step_s,
 )
 from f1ar.simulation.scenarios import default_lap_model
 
@@ -102,3 +106,23 @@ def test_consistency_controls_lap_time_spread() -> None:
 
     assert noise_sd_s(PARAMS, _with(consistency=0.95)) < noise_sd_s(PARAMS, _with(consistency=0.6))
     assert spread(0.95) < spread(0.60)
+
+
+def test_wear_step_follows_the_curve_and_never_goes_negative() -> None:
+    concave = PARAMS.model_copy(
+        update={
+            "compounds": {
+                c: p.model_copy(update={"deg_s_per_lap": 0.1, "deg_quad_s_per_lap2": -0.002})
+                for c, p in PARAMS.compounds.items()
+            }
+        }
+    )
+    steps = [wear_step_s(concave, Compound.SOFT, a) for a in range(40)]
+    assert steps[0] == pytest.approx(0.1 - 0.002) and steps[10] == pytest.approx(0.1 - 0.042)
+    assert all(s >= 0.0 for s in steps) and steps[-1] == 0.0  # peak at ~25 laps, then flat
+    assert all(x >= y for x, y in zip(steps, steps[1:], strict=False))
+    d = _with(tire_management=0.5)
+    total = degradation_s(
+        concave, d, compound=Compound.SOFT, tyre_age_laps=40, pace_mode=PaceMode.BALANCED
+    )
+    assert total == pytest.approx(sum(steps) * tyre_wear_factor(concave, d))

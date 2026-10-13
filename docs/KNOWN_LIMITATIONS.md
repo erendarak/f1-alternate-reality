@@ -2,6 +2,24 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## M4 slice 3 (calibrated engine v0.7.0, EXP-004)
+
+- **Every simulated car still makes exactly one stop** (real 0.44-2.0 per finisher): with
+  real race-trim wear a second stop never pays on an empty track, and the baseline planner
+  ignores undercuts, traffic and track position. A strategy problem for M5, not a tyre-model
+  bug.
+- **Overtaking isn't track-specific** (Monaco 31 simulated passes vs 11 real; most tracks far
+  too few). Slice 5.
+- Final-stint compound can flip on small, in-sample offset differences (Abu Dhabi plans M-S,
+  real M-H).
+- Per-race wear level and offsets are estimated from the same race (in-sample), like base lap
+  and car offsets; only the season shape is out-of-sample for the dry_test races.
+- No red flags in the simulation (Japan's real race time includes a ~30 min stoppage).
+- Track length for new races comes from the outline (1-2 % shorter than official); 18 of 24
+  races still lack position data and can't be simulated yet.
+- Persona wear factor normalisation makes the field average match the data, but individual
+  drivers' wear differences are still editorial (tire_management).
+
 ## M4 slice 2 (pace models, EXP-003)
 
 - **Compound offsets are poorly identified** from race laps (selection: teams choose compounds and

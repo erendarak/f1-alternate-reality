@@ -194,7 +194,14 @@ def fit_race_adjustment(
     xd = _demean(x, r["dr"]).to_numpy()
     yd = _demean(y, r["dr"]).to_numpy()
     prior = np.array([1.0] + [0.0] * (xd.shape[1] - 1))
-    scale = np.maximum((xd**2).mean(axis=0), 1e-9)  # put the prior in data units per column
+    # The prior weighs like ``ridge`` laps of the kind the column describes: scale by the
+    # column's typical square on the laps where it applies. (Slice 2 averaged over ALL laps,
+    # which made the prior vanish for a rarely used compound: Monza's single representative
+    # SOFT lap, a late fastest-lap attempt, then set a -0.96 s SOFT offset; found in M4 slice 3.)
+    raw = x.to_numpy()
+    scale = np.array(
+        [float((col[col != 0] ** 2).mean()) if (col != 0).any() else 1.0 for col in raw.T]
+    )
     penalty = np.diag(ridge * scale)
     beta = np.linalg.solve(xd.T @ xd + penalty, xd.T @ yd + penalty @ prior)
     names = list(x.columns)

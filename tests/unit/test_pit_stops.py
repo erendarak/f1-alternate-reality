@@ -357,3 +357,85 @@ def test_state_view_shows_pit_state(two_car_world: WorldState) -> None:
     }
     assert cars[HAM]["in_pit"] and cars[HAM]["box"] is None and cars[HAM]["pit_stops"] == 1
     assert cars[HAM]["laps_down"] == 0
+
+
+# --- non-linear wear (M4, D-033) -----------------------------------------------------------------
+
+
+def _curved(setup: RaceSetup, quad: float, laps: int) -> RaceSetup:
+    compounds = {
+        c: p.model_copy(update={"deg_quad_s_per_lap2": quad})
+        for c, p in setup.lap_model.compounds.items()
+    }
+    return setup.model_copy(
+        update={
+            "lap_model": setup.lap_model.model_copy(update={"compounds": compounds}),
+            "track": TrackSpec(track_id="t", length_m=5000.0, total_laps=laps, source_note="t"),
+        }
+    )
+
+
+def _stint_by_laps(
+    setup: RaceSetup, c: Compound, mode: PaceMode, n: int, age0: int, w0: float
+) -> float:
+    """Lap-by-lap cost of n laps on compound c from tyre age age0 with wear w0 (reference)."""
+    driver = setup.drivers[0].profile.archetype
+    cost, wear = 0.0, w0
+    for k in range(n):
+        cost += setup.lap_model.compounds[c].offset_s + wear
+        wear += wear_per_lap_s(
+            setup.lap_model, driver, compound=c, pace_mode=mode, tyre_age_laps=age0 + k
+        )
+    return cost
+
+
+@pytest.mark.parametrize("quad", [0.004, -0.0015])
+@pytest.mark.parametrize("age0", [0, 7])
+def test_planner_finds_the_brute_force_optimum_with_curved_wear(
+    two_car_setup: RaceSetup, quad: float, age0: int
+) -> None:
+    setup = _curved(two_car_setup, quad, 22)
+    driver = setup.drivers[0].profile.archetype
+    start, mode, w0 = Compound.MEDIUM, PaceMode.BALANCED, 0.35 if age0 else 0.0
+    total = setup.track.total_laps
+    pit = setup.pit.lane_loss_s + setup.pit.standstill_median_s
+
+    def first(n: int) -> float:
+        return _stint_by_laps(setup, start, mode, n, age0, w0)
+
+    def fresh(c: Compound, n: int) -> float:
+        return _stint_by_laps(setup, c, mode, n, 0, 0.0)
+
+    options = []
+    for c2 in Compound:
+        if c2 != start:
+            options += [first(a) + pit + fresh(c2, total - a) for a in range(1, total)]
+    for c2, c3 in product(Compound, Compound):
+        if len({start, c2, c3}) >= 2:
+            for a in range(1, total - 1):
+                for b in range(1, total - a):
+                    options.append(first(a) + 2 * pit + fresh(c2, b) + fresh(c3, total - a - b))
+    plan = plan_stops(
+        setup,
+        driver,
+        laps_completed=0,
+        compound=start,
+        tyre_wear_s=w0,
+        pace_mode=mode,
+        compounds_used=(start,),
+        tyre_age_laps=age0,
+    )
+    bounds = [0, *(s.lap for s in plan), total]
+    compounds = [start, *(s.compound for s in plan)]
+    cost = len(plan) * pit + first(bounds[1])
+    for c, lo, hi in zip(compounds[1:], bounds[1:], bounds[2:], strict=False):
+        cost += fresh(c, hi - lo)
+    assert cost == pytest.approx(min(options))
+
+
+def test_strong_wear_curve_means_more_stops(two_car_setup: RaceSetup) -> None:
+    def stops(quad: float) -> int:
+        world = engine.create_world(_curved(two_car_setup, quad, 53), seed=1, world_id="w")
+        return len(world.car(HAM).planned_stops)
+
+    assert stops(0.0) <= stops(0.01) and stops(0.01) == 2

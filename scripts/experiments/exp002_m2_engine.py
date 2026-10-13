@@ -1,5 +1,6 @@
 """EXP-002: how close is the full M2 engine to real races? Monza 2024 (in-sample) and Spa 2024
-(out-of-sample), real vs a distribution of simulated races.
+(out-of-sample), real vs a distribution of simulated races. The same harness runs EXP-004 (the
+calibrated engine v0.7.0 on six races) with ``--events``; it always runs the current engine.
 
 For each event: real metrics from the fetched timing data, simulated metrics from N seeds of the
 full engine (pit stops + baseline strategy, traffic, incidents, VSC/SC) with the event's

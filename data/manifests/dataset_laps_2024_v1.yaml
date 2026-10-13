@@ -150,7 +150,7 @@ events:
     group: dry_test
     rows: 1035
     representative_rows: 857
-    source_manifest_sha256: sha256:97672bec13417625b6c979be1eb9248073399a183f5a16705b2e1d6d359602ba
+    source_manifest_sha256: sha256:a00557211e068dad725ff8c6386b35f5e61abf142e2f0cb9aad69acfb233a87c
   2024_australian_gp:
     round: 3
     group: dry_train
@@ -228,7 +228,7 @@ events:
     group: dry_test
     rows: 907
     representative_rows: 756
-    source_manifest_sha256: sha256:a760d8cb11bdaebe81f995e55cd89dec203c40405fd47a3dea3bb3c9858c5724
+    source_manifest_sha256: sha256:e8fa8ebbfee05a2c40230267e02ebe425169c03480bec5d0b95cacf7e42b57fd
   2024_las_vegas_gp:
     round: 22
     group: dry_train
@@ -240,7 +240,7 @@ events:
     group: dry_test
     rows: 1215
     representative_rows: 1051
-    source_manifest_sha256: sha256:67f5200af4ec32b946b77f55cebad48ee8fedb7dc1bf43115e4e692936baf294
+    source_manifest_sha256: sha256:cd071a65f6ef00ecd7259cf0d88caea88595b097572476d6c38c4e087bc9c2f2
   2024_miami_gp:
     round: 6
     group: dry_train
@@ -252,7 +252,7 @@ events:
     group: dry_test
     rows: 1237
     representative_rows: 1168
-    source_manifest_sha256: sha256:0b3a35ddac7694eec2c12a416077f58c10c05fd0b77927c200c9d831b8129f4f
+    source_manifest_sha256: sha256:441bc68be91ffed9a14c48dd79731f4592762323d5af523aa64f4d925954f848
   2024_qatar_gp:
     round: 23
     group: dry_train

@@ -11,16 +11,20 @@
 
 Tyre wear is STATE, not a formula of tyre age: each completed lap adds
 
-    wear_per_lap = compound_deg * wear_factor(tire_management) * pace_mode_wear_multiplier
+    wear_per_lap = max(0, deg + quad * (2 * age + 1))       # the curve's step at this age
+                   * wear_factor(tire_management) * pace_mode_wear_multiplier
 
-for the pace mode actually driven on that lap. Changing pace mode therefore changes how
+for the pace mode actually driven on that lap (M4: a quadratic curve fitted on real laps; the
+clamp means wear never decreases, even where a concave fit would turn down; quad = 0 gives the
+old linear model). Changing pace mode therefore changes how
 fast the tyres wear from now on. It never rewrites the wear already accumulated (engine
 v0.1.0 got this wrong: it scaled the whole stint's wear by the current mode).
 
 Each profile field gets its own causal channel: ``risk_appetite`` is a *preference* and
 does not enter the transition model here. It will shape strategy choices instead.
-This is a modelling schema with placeholder coefficients, NOT physics and NOT yet
-calibrated to real data (M1/M4).
+Coefficients: placeholders (D-010) for synthetic setups; for data-backed races the tyre/fuel
+part is fitted on the 2024 season (EXP-003, D-033). Skill, noise and pace modes stay editorial.
+This is a statistical model of lap times, not physics.
 """
 
 from f1ar.domain.driver_profiles import DriverArchetype
@@ -34,12 +38,24 @@ def tyre_wear_factor(params: LapModelParams, driver: DriverArchetype) -> float:
     return params.tyre_mgmt_wear_max + span * driver.tire_management
 
 
+def wear_step_s(params: LapModelParams, compound: Compound, tyre_age_laps: int) -> float:
+    """The neutral curve's increase over one lap at ``tyre_age_laps`` (>= 0, D-033)."""
+    c = params.compounds[compound]
+    return max(0.0, c.deg_s_per_lap + c.deg_quad_s_per_lap2 * (2 * tyre_age_laps + 1))
+
+
 def wear_per_lap_s(
-    params: LapModelParams, driver: DriverArchetype, *, compound: Compound, pace_mode: PaceMode
+    params: LapModelParams,
+    driver: DriverArchetype,
+    *,
+    compound: Compound,
+    pace_mode: PaceMode,
+    tyre_age_laps: int = 0,
 ) -> float:
-    """Lap time added to every later lap of this tyre set by one lap driven in ``pace_mode``."""
+    """Lap time added to every later lap of this tyre set by one lap driven in ``pace_mode``
+    on a set that was ``tyre_age_laps`` old when the lap started."""
     return (
-        params.compounds[compound].deg_s_per_lap
+        wear_step_s(params, compound, tyre_age_laps)
         * tyre_wear_factor(params, driver)
         * params.pace_modes[pace_mode].wear_multiplier
     )
@@ -54,7 +70,10 @@ def degradation_s(
     pace_mode: PaceMode,
 ) -> float:
     """Accumulated wear after ``tyre_age_laps`` laps all driven in the same mode (helper)."""
-    return tyre_age_laps * wear_per_lap_s(params, driver, compound=compound, pace_mode=pace_mode)
+    return sum(
+        wear_per_lap_s(params, driver, compound=compound, pace_mode=pace_mode, tyre_age_laps=a)
+        for a in range(tyre_age_laps)
+    )
 
 
 def expected_lap_time_s(

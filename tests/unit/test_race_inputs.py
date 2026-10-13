@@ -114,7 +114,11 @@ def test_setup_uses_data_when_given(
         "pit_loss",
         "dataset_sha256",
         "base_lap",
+        "tyre_model",
     }
+    # M4: the calibrated tyre/fuel model, without a race adjustment (no race tables here)
+    assert setup.lap_model.source_type is SourceType.ESTIMATED_FROM_DATA
+    assert "season shape only" in setup.inputs["tyre_model"]
     assert setup.inputs["base_lap"].startswith("estimated_from_data")
     assert setup.inputs["dataset_sha256"].startswith("sha256:")
     # The synthetic race has no pit stops: the editorial pit model is used and labelled so.

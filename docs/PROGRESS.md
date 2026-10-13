@@ -13,7 +13,7 @@ strategist inside the engine. Plan (agreed 2026-10-13, one slice per commit):
   (compound offsets, non-linear wear, fuel, car/driver), LightGBM; leave-one-race-out errors,
   per track/driver, feature importance, profile ablation (read as "driver identity", not as a
   validation of the editorial personas), model manifests.
-- [ ] Slice 3: engine integration (v0.7.0): calibrated tyre/fuel model, planner for non-linear
+- [x] **Slice 3: engine integration (v0.7.0, D-033, EXP-004)**: calibrated tyre/fuel model, planner for non-linear
   wear, optional learned-pace port pinned by hash with a safe fallback, any fetched 2024 race
   simulatable; EXP-002 re-run.
 - [ ] Slice 4: weather (v0.8.0): rain process (historical or seeded), track wetness,
@@ -831,3 +831,42 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Tests: 308 offline (+6: shape recovery exact/noisy, race multiplier, placeholder, rolling
   correction, recent-pace features; the leakage audit extended) + 2 network.
 - Next: slice 3, the calibrated shape in the engine (v0.7.0) and EXP-002 re-run.
+
+### 2026-10-13 — M4 slice 3: the calibrated engine (v0.7.0) and EXP-004
+
+- **Wear by tyre age** with the guard: each lap adds the fitted curve's step at the set's age,
+  never less than 0 (a concave fit flattens out). Linear (quad = 0) behaves exactly as before.
+  Engine v0.7.0, world schema v8 (older saves refused; the library flags them, verified).
+- **Calibrated lap model for data-backed races** (`calibration/lap_model_fit.py`): season shape x
+  this race's wear multiplier (floor 0.1) and S/H offset deltas (in-sample), wear normalised by
+  the field's persona wear factor; base lap and car offsets re-anchored with the new wear;
+  `inputs["tyre_model"]` explains it. Skill, noise, pace modes stay editorial. A data folder
+  without the race tables falls back to the season shape (labelled).
+- **Planner rewritten** on per-age wear tables; the two-fresh-stint split is a min-plus
+  convolution of convex costs (exact, ~0.5 ms per full replan); brute-force tests for linear,
+  convex and concave wear from a used set.
+- **Any 2024 race with its track outline is simulatable**: season persona file (Monza/Spa values
+  verbatim, tested; Bearman, Lawson, Doohan template-only), track spec from data (laps from
+  results, length from the outline, 1-2 % short). Position data fetched for Japan, Monaco,
+  Mexico, Abu Dhabi. The app's library now offers 6 races; Monaco checked in the browser on its
+  real outline (LEC leads from pole, ~1:19-1:22 laps).
+- **EXP-004** (six races x 30 seeds): compound choices now match the real races where the data
+  is clear (Monza and Spa M-S -> M-H; Mexico M-H/H-M like reality), order Spearman
+  0.80-0.91, real winners dominate where they were fastest. Still one stop for every car
+  (the empty-track planner never finds a second stop worth the pit loss with real race-trim
+  wear) and overtaking isn't track-specific (Monaco 31 passes vs 11 real; Monza 10 vs 53).
+- **Bugs found:**
+  1. **Per-race prior scaled wrongly (from slice 2)**: it vanished for rarely used compounds, so
+     Monza's single representative SOFT lap (a late fastest-lap attempt) gave SOFT -0.96 s and
+     kept Monza on M-S. Fixed (prior = 200 laps of that compound), regression test; EXP-003
+     re-run: the per-race row 0.455/0.618 -> 0.474/0.626 (corrected in the entry), Qatar's
+     multiplier -0.24 -> 0.60; season shape and online results unchanged.
+  2. The base-lap anchor still used the old linear wear; it now uses the engine's own wear.
+  3. A data folder with only the lap table (tests) broke the setup, and the shape file was
+     looked up relative to the data folder; now an explicit `configs_dir` and a labelled
+     fallback. The race summary lost its lap count for races built without data; fixed.
+- Tests: 322 offline (+14: curved-wear planner vs brute force x4, more stops with steep wear,
+  wear step clamp, season personas x2 + every 2024 race, track spec from data, calibrated model
+  floor/normalisation/deltas, shape file, Monza plans M-H, rare-compound prior, setup fallback)
+  + 2 network; frontend 17 + E2E 1 (passes on v0.7.0).
+- Next: slice 4, weather.

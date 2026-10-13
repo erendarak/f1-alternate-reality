@@ -1,0 +1,110 @@
+# Driver persona seed for the whole 2024 season (M4): used for every 2024 race that has no
+# race-specific seed file (Monza and Spa keep theirs; the values are identical).
+#
+# Identity (name, number, team, grid) comes from each race's roster in configs/rosters/
+# (historical_verified, Jolpica-F1). The NUMBERS BELOW ARE EDITORIAL ASSUMPTIONS: illustrative
+# simulation personas, not verified psychometrics, telemetry or official ratings.
+#
+# A driver's persona belongs to the driver, not the race: the entries are copied verbatim from
+# seed_2024_monza_drivers.yaml, plus Logan Sargeant (from the Spa seed) and the three 2024 drivers
+# who raced neither Monza nor Spa (Oliver Bearman, Liam Lawson, Jack Doohan), template-only
+# (generic_rookie, confidence 0.15). A race loads only the drivers of its roster.
+# Editing any value must create a new profile_revision (and, once worlds exist, a fork).
+schema_version: 1
+season: 2024
+event_id: 2024_season
+explanation: "Illustrative simulation persona; not verified driver psychometrics."
+profile_revision: v1
+policy:
+  type: profile_conditioned_baseline
+  version: untrained
+
+drivers:
+  # --- personas from the master plan ------------------------------------------------
+  max_verstappen_2024:
+    template: generic_veteran
+    confidence: 0.3
+    origin: "master plan §3.5 (all 14 fields)"
+    persona_label: "assertive competitor"
+    overrides:
+      race_pace_skill: 0.96
+      consistency: 0.90
+      risk_appetite: 0.82
+      tire_management: 0.88
+      wet_skill: 0.94
+      adaptability: 0.90
+      qualifying_skill: 0.94
+      overtake_skill: 0.92
+      defense_skill: 0.92
+      team_orientation: 0.70
+      composure: 0.88
+      ambition: 0.96
+      sociability: 0.55
+      negotiation_skill: 0.50
+
+  lewis_hamilton_2024:
+    template: generic_veteran
+    confidence: 0.3
+    origin: "master plan §3.3 (Stage 1 fields)"
+    persona_label: "smooth veteran"
+    overrides: {race_pace_skill: 0.93, consistency: 0.94, risk_appetite: 0.58, tire_management: 0.95, wet_skill: 0.93, adaptability: 0.88}
+
+  charles_leclerc_2024:
+    template: generic_balanced
+    confidence: 0.3
+    origin: "master plan §3.3 (Stage 1 fields)"
+    persona_label: "qualifying-oriented attacker"
+    overrides: {race_pace_skill: 0.92, consistency: 0.86, risk_appetite: 0.74, tire_management: 0.82, wet_skill: 0.83, adaptability: 0.85}
+
+  lando_norris_2024:
+    template: generic_balanced
+    confidence: 0.3
+    origin: "master plan §3.3 (Stage 1 fields)"
+    persona_label: "balanced adaptive racer"
+    overrides: {race_pace_skill: 0.91, consistency: 0.89, risk_appetite: 0.67, tire_management: 0.86, wet_skill: 0.86, adaptability: 0.92}
+
+  oscar_piastri_2024:
+    template: generic_balanced
+    confidence: 0.3
+    origin: "master plan §3.3 (Stage 1 fields)"
+    persona_label: "calculated competitor"
+    overrides: {race_pace_skill: 0.90, consistency: 0.92, risk_appetite: 0.62, tire_management: 0.90, wet_skill: 0.84, adaptability: 0.90}
+
+  fernando_alonso_2024:
+    template: generic_veteran
+    confidence: 0.3
+    origin: "master plan §3.3 (Stage 1 fields)"
+    persona_label: "tactical veteran"
+    overrides: {race_pace_skill: 0.89, consistency: 0.92, risk_appetite: 0.70, tire_management: 0.91, wet_skill: 0.89, adaptability: 0.94}
+
+  carlos_sainz_2024:
+    template: generic_balanced
+    confidence: 0.3
+    origin: "master plan §3.3 (Stage 1 fields)"
+    persona_label: "analytical stabilizer"
+    overrides: {race_pace_skill: 0.89, consistency: 0.90, risk_appetite: 0.60, tire_management: 0.88, wet_skill: 0.83, adaptability: 0.89}
+
+  george_russell_2024:
+    template: generic_balanced
+    confidence: 0.3
+    origin: "master plan §3.3 (Stage 1 fields)"
+    persona_label: "assertive precision"
+    overrides: {race_pace_skill: 0.89, consistency: 0.87, risk_appetite: 0.73, tire_management: 0.85, wet_skill: 0.86, adaptability: 0.89}
+
+  # --- template-only personas (estimated, edit freely) -------------------------------
+  sergio_perez_2024:     {template: generic_veteran,  confidence: 0.15, origin: "template only"}
+  nico_hulkenberg_2024:  {template: generic_veteran,  confidence: 0.15, origin: "template only"}
+  kevin_magnussen_2024:  {template: generic_veteran,  confidence: 0.15, origin: "template only"}
+  valtteri_bottas_2024:  {template: generic_veteran,  confidence: 0.15, origin: "template only"}
+  daniel_ricciardo_2024: {template: generic_veteran,  confidence: 0.15, origin: "template only"}
+  alexander_albon_2024:  {template: generic_balanced, confidence: 0.15, origin: "template only"}
+  pierre_gasly_2024:     {template: generic_balanced, confidence: 0.15, origin: "template only"}
+  esteban_ocon_2024:     {template: generic_balanced, confidence: 0.15, origin: "template only"}
+  yuki_tsunoda_2024:     {template: generic_balanced, confidence: 0.15, origin: "template only"}
+  lance_stroll_2024:     {template: generic_balanced, confidence: 0.15, origin: "template only"}
+  guanyu_zhou_2024:      {template: generic_balanced, confidence: 0.15, origin: "template only"}
+  franco_colapinto_2024: {template: generic_rookie,   confidence: 0.15, origin: "template only (F1 debut at this race)"}
+  logan_sargeant_2024:   {template: generic_balanced, confidence: 0.15, origin: "template only"}
+  oliver_bearman_2024:   {template: generic_rookie,   confidence: 0.15, origin: "template only (M4 season seed)"}
+  liam_lawson_2024:      {template: generic_rookie,   confidence: 0.15, origin: "template only (M4 season seed)"}
+  jack_doohan_2024:      {template: generic_rookie,   confidence: 0.15, origin: "template only (M4 season seed)"}

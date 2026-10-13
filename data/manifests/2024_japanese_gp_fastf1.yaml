@@ -2,7 +2,7 @@ dataset_id: 2024_japanese_gp_fastf1_v1
 event: 2024_japanese_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-12T23:20:09Z'
+retrieved_utc: '2026-10-13T00:41:23Z'
 session_key: 2024/round 4/R
 license_review_status: research_only
 files:
@@ -99,6 +99,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2024_japanese_gp/positions.parquet
+  sha256: sha256:3a8b40bdebd638f5268fbdbe0bc86310bfec1b6e6933b5d6b7e99e05415190ab
+  rows: 836020
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2024_japanese_gp/track_outline.parquet
+  sha256: sha256:c48142078b06f3698b31f9cf134eed82272cf7821562167d9eaf7b6e3f7c5ec3
+  rows: 363
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 20 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

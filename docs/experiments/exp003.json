@@ -52,10 +52,10 @@
         ]
       },
       "quadratic+race": {
-        "mae": 0.455,
+        "mae": 0.474,
         "ci95": [
-          0.421,
-          0.49
+          0.436,
+          0.512
         ]
       }
     },
@@ -82,10 +82,10 @@
         ]
       },
       "quadratic+race": {
-        "mae": 0.618,
+        "mae": 0.626,
         "ci95": [
-          0.389,
-          0.868
+          0.392,
+          0.878
         ]
       }
     },
@@ -94,61 +94,61 @@
         "placeholder": 0.6,
         "linear": 0.435,
         "quadratic": 0.426,
-        "quadratic+race": 0.381
+        "quadratic+race": 0.391
       },
       "2024_saudi_arabian_gp": {
         "placeholder": 0.843,
         "linear": 0.771,
         "quadratic": 0.763,
-        "quadratic+race": 0.518
+        "quadratic+race": 0.584
       },
       "2024_australian_gp": {
         "placeholder": 0.47,
         "linear": 0.39,
         "quadratic": 0.395,
-        "quadratic+race": 0.393
+        "quadratic+race": 0.394
       },
       "2024_chinese_gp": {
         "placeholder": 0.618,
         "linear": 0.47,
         "quadratic": 0.47,
-        "quadratic+race": 0.432
+        "quadratic+race": 0.448
       },
       "2024_miami_gp": {
         "placeholder": 0.544,
         "linear": 0.398,
         "quadratic": 0.395,
-        "quadratic+race": 0.335
+        "quadratic+race": 0.352
       },
       "2024_emilia_romagna_gp": {
         "placeholder": 0.413,
         "linear": 0.499,
         "quadratic": 0.51,
-        "quadratic+race": 0.448
+        "quadratic+race": 0.452
       },
       "2024_spanish_gp": {
         "placeholder": 0.583,
         "linear": 0.453,
         "quadratic": 0.452,
-        "quadratic+race": 0.437
+        "quadratic+race": 0.438
       },
       "2024_austrian_gp": {
         "placeholder": 0.381,
         "linear": 0.595,
         "quadratic": 0.587,
-        "quadratic+race": 0.491
+        "quadratic+race": 0.503
       },
       "2024_hungarian_gp": {
         "placeholder": 0.576,
         "linear": 0.565,
         "quadratic": 0.563,
-        "quadratic+race": 0.506
+        "quadratic+race": 0.514
       },
       "2024_belgian_gp": {
         "placeholder": 0.792,
         "linear": 0.608,
         "quadratic": 0.613,
-        "quadratic+race": 0.465
+        "quadratic+race": 0.523
       },
       "2024_dutch_gp": {
         "placeholder": 0.435,
@@ -160,61 +160,61 @@
         "placeholder": 0.705,
         "linear": 0.621,
         "quadratic": 0.62,
-        "quadratic+race": 0.529
+        "quadratic+race": 0.549
       },
       "2024_singapore_gp": {
         "placeholder": 0.511,
         "linear": 0.52,
         "quadratic": 0.552,
-        "quadratic+race": 0.525
+        "quadratic+race": 0.531
       },
       "2024_united_states_gp": {
         "placeholder": 0.589,
         "linear": 0.471,
         "quadratic": 0.471,
-        "quadratic+race": 0.448
+        "quadratic+race": 0.455
       },
       "2024_las_vegas_gp": {
         "placeholder": 0.76,
         "linear": 0.635,
         "quadratic": 0.64,
-        "quadratic+race": 0.619
+        "quadratic+race": 0.623
       },
       "2024_qatar_gp": {
         "placeholder": 0.799,
         "linear": 0.679,
         "quadratic": 0.664,
-        "quadratic+race": 0.421
+        "quadratic+race": 0.557
       },
       "2024_japanese_gp": {
         "placeholder": 1.224,
         "linear": 1.085,
         "quadratic": 1.076,
-        "quadratic+race": 1.116
+        "quadratic+race": 1.083
       },
       "2024_monaco_gp": {
         "placeholder": 1.371,
         "linear": 1.225,
         "quadratic": 1.017,
-        "quadratic+race": 0.828
+        "quadratic+race": 0.874
       },
       "2024_italian_gp": {
         "placeholder": 0.551,
         "linear": 0.424,
         "quadratic": 0.428,
-        "quadratic+race": 0.411
+        "quadratic+race": 0.416
       },
       "2024_mexico_city_gp": {
         "placeholder": 0.434,
         "linear": 0.435,
         "quadratic": 0.439,
-        "quadratic+race": 0.436
+        "quadratic+race": 0.437
       },
       "2024_abu_dhabi_gp": {
         "placeholder": 0.369,
         "linear": 0.34,
         "quadratic": 0.345,
-        "quadratic+race": 0.336
+        "quadratic+race": 0.339
       }
     },
     "final_shape": {
@@ -336,150 +336,150 @@
     },
     "race_adjustments_in_sample": {
       "2024_bahrain_gp": {
-        "wear_multiplier": 1.501,
+        "wear_multiplier": 1.312,
         "offset_delta": {
-          "SOFT": 0.052,
-          "HARD": -0.052
+          "SOFT": 0.038,
+          "HARD": -0.038
         }
       },
       "2024_saudi_arabian_gp": {
-        "wear_multiplier": 0.072,
+        "wear_multiplier": 0.471,
         "offset_delta": {
-          "SOFT": -0.617,
-          "HARD": -0.143
+          "SOFT": -0.096,
+          "HARD": -0.083
         }
       },
       "2024_australian_gp": {
-        "wear_multiplier": 0.963,
+        "wear_multiplier": 0.978,
         "offset_delta": {
-          "SOFT": 0.119,
-          "HARD": 0.045
+          "SOFT": 0.005,
+          "HARD": 0.017
         }
       },
       "2024_chinese_gp": {
-        "wear_multiplier": 1.216,
+        "wear_multiplier": 1.082,
         "offset_delta": {
-          "SOFT": -0.134,
-          "HARD": -0.378
+          "SOFT": -0.01,
+          "HARD": -0.179
         }
       },
       "2024_miami_gp": {
-        "wear_multiplier": 0.564,
+        "wear_multiplier": 0.75,
         "offset_delta": {
-          "SOFT": 0.048,
-          "HARD": 0.1
+          "SOFT": 0.006,
+          "HARD": 0.062
         }
       },
       "2024_emilia_romagna_gp": {
-        "wear_multiplier": 1.515,
+        "wear_multiplier": 1.341,
         "offset_delta": {
-          "SOFT": 0.115,
-          "HARD": 0.192
+          "SOFT": 0.001,
+          "HARD": 0.139
         }
       },
       "2024_spanish_gp": {
-        "wear_multiplier": 1.366,
+        "wear_multiplier": 1.226,
         "offset_delta": {
-          "SOFT": -0.01,
-          "HARD": 0.025
+          "SOFT": -0.009,
+          "HARD": 0.018
         }
       },
       "2024_austrian_gp": {
-        "wear_multiplier": 1.733,
+        "wear_multiplier": 1.483,
         "offset_delta": {
-          "SOFT": 0.707,
-          "HARD": 0.407
+          "SOFT": 0.019,
+          "HARD": 0.265
         }
       },
       "2024_hungarian_gp": {
-        "wear_multiplier": 1.627,
+        "wear_multiplier": 1.422,
         "offset_delta": {
-          "SOFT": 0.16,
-          "HARD": 0.152
+          "SOFT": 0.009,
+          "HARD": 0.094
         }
       },
       "2024_belgian_gp": {
-        "wear_multiplier": 0.507,
+        "wear_multiplier": 0.665,
         "offset_delta": {
-          "SOFT": -0.665,
-          "HARD": -0.646
+          "SOFT": -0.071,
+          "HARD": -0.308
         }
       },
       "2024_dutch_gp": {
-        "wear_multiplier": 1.157,
+        "wear_multiplier": 1.103,
         "offset_delta": {
-          "SOFT": 0.028,
-          "HARD": -0.048
+          "SOFT": 0.01,
+          "HARD": -0.028
         }
       },
       "2024_azerbaijan_gp": {
-        "wear_multiplier": 0.374,
+        "wear_multiplier": 0.621,
         "offset_delta": {
           "SOFT": 0.0,
-          "HARD": -0.057
+          "HARD": -0.068
         }
       },
       "2024_singapore_gp": {
-        "wear_multiplier": 1.307,
+        "wear_multiplier": 1.193,
         "offset_delta": {
-          "SOFT": -0.243,
-          "HARD": 0.263
+          "SOFT": -0.073,
+          "HARD": 0.17
         }
       },
       "2024_united_states_gp": {
-        "wear_multiplier": 0.661,
+        "wear_multiplier": 0.82,
         "offset_delta": {
-          "SOFT": -0.194,
-          "HARD": -0.024
+          "SOFT": -0.002,
+          "HARD": -0.014
         }
       },
       "2024_las_vegas_gp": {
-        "wear_multiplier": 0.735,
+        "wear_multiplier": 0.814,
         "offset_delta": {
-          "SOFT": -0.227,
-          "HARD": -0.409
-        }
-      },
-      "2024_qatar_gp": {
-        "wear_multiplier": -0.242,
-        "offset_delta": {
-          "SOFT": 0.806,
-          "HARD": -0.293
-        }
-      },
-      "2024_japanese_gp": {
-        "wear_multiplier": 0.279,
-        "offset_delta": {
-          "SOFT": 1.043,
+          "SOFT": -0.002,
           "HARD": -0.209
         }
       },
-      "2024_monaco_gp": {
-        "wear_multiplier": 0.031,
+      "2024_qatar_gp": {
+        "wear_multiplier": 0.602,
         "offset_delta": {
-          "SOFT": -0.67,
-          "HARD": -0.881
+          "SOFT": 0.147,
+          "HARD": -0.058
+        }
+      },
+      "2024_japanese_gp": {
+        "wear_multiplier": 0.59,
+        "offset_delta": {
+          "SOFT": 0.187,
+          "HARD": -0.162
+        }
+      },
+      "2024_monaco_gp": {
+        "wear_multiplier": 0.389,
+        "offset_delta": {
+          "SOFT": -0.048,
+          "HARD": -0.256
         }
       },
       "2024_italian_gp": {
-        "wear_multiplier": 0.826,
+        "wear_multiplier": 0.881,
         "offset_delta": {
-          "SOFT": -0.963,
-          "HARD": -0.204
+          "SOFT": -0.005,
+          "HARD": -0.118
         }
       },
       "2024_mexico_city_gp": {
-        "wear_multiplier": 0.997,
+        "wear_multiplier": 0.991,
         "offset_delta": {
-          "SOFT": 0.759,
-          "HARD": -0.034
+          "SOFT": 0.025,
+          "HARD": -0.026
         }
       },
       "2024_abu_dhabi_gp": {
-        "wear_multiplier": 1.142,
+        "wear_multiplier": 1.092,
         "offset_delta": {
-          "SOFT": 0.516,
-          "HARD": 0.177
+          "SOFT": 0.032,
+          "HARD": 0.088
         }
       }
     }

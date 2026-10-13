@@ -2,7 +2,7 @@ dataset_id: 2024_abu_dhabi_gp_fastf1_v1
 event: 2024_abu_dhabi_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-12T23:21:35Z'
+retrieved_utc: '2026-10-13T00:42:01Z'
 session_key: 2024/round 24/R
 license_review_status: research_only
 files:
@@ -99,6 +99,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2024_abu_dhabi_gp/positions.parquet
+  sha256: sha256:6f305c15752ab7e867c29c16b8513bf7e765a8ef24b393a17ade18720ff66eeb
+  rows: 688427
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2024_abu_dhabi_gp/track_outline.parquet
+  sha256: sha256:5eae453057ac09db7998f1ec8b6fad10536f84cff94bf0b8836841b1c4deef6d
+  rows: 340
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 4 lap 28 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

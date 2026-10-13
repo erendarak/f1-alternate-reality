@@ -610,3 +610,35 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
 - **Guards before engine use** (slice 3): wear may not decrease with age (clamp the quadratic at
   its peak); per-race wear multipliers have a positive floor.
 
+## D-033 — Calibrated lap model in the engine (v0.7.0); any 2024 race simulatable (2026-10-13)
+
+- **Wear by tyre age:** each lap adds ``max(0, deg + quad (2a + 1))`` x driver wear factor x
+  pace-mode multiplier, ``a`` = the set's age at lap start. The clamp is the guard EXP-003 asked
+  for: a concave fit flattens out instead of making old tyres faster. ``quad = 0`` reproduces
+  the old linear model exactly (all M2 behaviour tests unchanged). `CompoundParams` gains
+  ``deg_quad_s_per_lap2``; world schema v8, engine v0.7.0 (older saves refused, D-014).
+- **Data-backed setups use the calibrated model** (`calibration/lap_model_fit.py`): the season
+  shape (`configs/calibration/tyre_shape_2024_v1.json`, fitted on the 16 dry_train races) x this
+  race's wear multiplier and S/H offset deltas (in-sample, ridge prior worth 200 laps of that
+  kind), multiplier floor 0.1; wear rates divided by the field's mean persona wear factor so the
+  average driver wears at the fitted rate. Fuel from the shape; skill gap, noise and pace modes
+  stay editorial. Base lap and car offsets are re-anchored with this model's own wear. The note
+  goes to `RaceSetup.inputs["tyre_model"]` and `LapModelParams.note`; `source_type` becomes
+  `estimated_from_data`. Synthetic setups (`--synthetic`, tests) keep the placeholder.
+- **Planner:** stint costs from per-age wear tables; the best split of a lap budget between two
+  fresh stints is a min-plus convolution of convex sequences (merge of sorted marginal costs),
+  checked against brute force for linear, convex and concave wear and a used starting set.
+  ~0.5 ms per full replan.
+- **Season personas:** `configs/drivers/seed_2024_season_drivers.yaml` covers all 24 drivers of
+  2024 (the Monza/Spa values verbatim; Bearman, Lawson, Doohan template-only `generic_rookie`).
+  Monza and Spa keep their own seed files (identical values, tested), so their profile hashes
+  don't change.
+- **Track spec from data** for races other than Monza/Spa: laps from results, length from the
+  track outline (winner's racing line, 1-2 % shorter than the official length,
+  `estimated_from_data`). A race needs its position data (outline) to be simulated or drawn;
+  the other 18 races remain calibration data only until fetched with telemetry.
+- **Ridge prior fix (bug from slice 2):** the per-race prior is scaled by each column's typical
+  square on the laps where it applies, so it weighs like 200 laps of that compound; before, it
+  vanished for rarely used compounds (Monza's single representative SOFT lap set a -0.96 s
+  offset). EXP-003 re-run with the fix.
+

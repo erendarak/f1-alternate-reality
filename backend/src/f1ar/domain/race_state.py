@@ -16,7 +16,7 @@ from f1ar.domain.provenance import SourceType
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 7
+WORLD_SCHEMA_VERSION = 8
 
 
 class _Frozen(BaseModel):
@@ -82,6 +82,9 @@ class CompoundParams(_Frozen):
     """Lap-time offset of a fresh tyre vs. the reference compound."""
     deg_s_per_lap: float = Field(ge=0)
     """Added lap time per lap of tyre age for a neutral driver in BALANCED mode."""
+    deg_quad_s_per_lap2: float = 0.0
+    """Quadratic wear term (M4, D-033): wear after ``a`` laps = deg a + quad a^2. The lap's
+    increment ``deg + quad (2a + 1)`` is clamped at 0, so wear never decreases with age."""
 
 
 class PaceModeParams(_Frozen):
@@ -93,7 +96,9 @@ class PaceModeParams(_Frozen):
 class LapModelParams(_Frozen):
     """Coefficients of the minimal lap-time model. Synthetic placeholders until calibration (M4)."""
 
-    source_type: Literal[SourceType.EDITORIAL_ASSUMPTION]
+    source_type: Literal[SourceType.EDITORIAL_ASSUMPTION, SourceType.ESTIMATED_FROM_DATA]
+    """``estimated_from_data`` once calibrated (M4): tyre/fuel shape fitted on other races,
+    per-race values on the race itself; skill, noise and pace modes stay editorial."""
     note: str
     base_lap_s: float = Field(gt=0)
     skill_gap_s: float = Field(ge=0)
@@ -434,7 +439,7 @@ DriverAction = SetPaceMode | RequestPitStop | CancelPitStop | SetStrategyControl
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[7]
+    schema_version: Literal[8]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None

@@ -1,8 +1,9 @@
 """Races the API can simulate: roster, personas, setup builder and drawable assets per event.
 
-A race is listed when it has driver personas (``SIMULATED_EVENTS``) *and* its fetched data
-(outline, corners, colours, laps) is present locally. Setups are built lazily and cached, since
-the data-derived inputs (car offsets, base lap, pit loss) read the lap table.
+A race is listed when it has driver personas (its own seed or its season's, M4) *and* its
+fetched data (outline, corners, colours, laps) is present locally. Setups are built lazily and
+cached, since the data-derived inputs (car offsets, base lap, pit loss, tyre model) read the
+lap table.
 """
 
 import threading
@@ -13,11 +14,11 @@ from typing import Any
 
 from f1ar.domain.driver_profiles import ProfileSet
 from f1ar.domain.identities import RaceRoster
-from f1ar.domain.race_state import RaceSetup
+from f1ar.domain.race_state import RaceSetup, TrackSpec
 from f1ar.presentation.event_assets import EventAssets, load_event_assets, missing_assets
 from f1ar.simulation.scenarios import (
-    SIMULATED_EVENTS,
     event_data_dir,
+    has_personas,
     load_event,
     setup_from_codes,
     track_for,
@@ -46,6 +47,7 @@ class RaceSpec:
     build: SetupBuilder
     has_data: bool
     """Data-derived inputs available (else only synthetic setups)."""
+    track: TrackSpec | None = None
     _cache: dict[tuple[tuple[str, ...] | None, bool], RaceSetup] = field(default_factory=dict)
     _lock: threading.Lock = field(default_factory=threading.Lock)
 
@@ -61,7 +63,12 @@ class RaceSpec:
             return self._cache[key]
 
     def summary(self) -> dict[str, Any]:
-        track = track_for(self.race_id) if self.race_id in SIMULATED_EVENTS else None
+        track = self.track
+        if track is None:  # built without data: the published figures, if any
+            try:
+                track = track_for(self.race_id)
+            except ValueError:
+                track = None
         return {
             "race_id": self.race_id,
             "name": self.name,
@@ -112,18 +119,23 @@ class RaceCatalog:
 
 
 def load_catalog(root: Path) -> tuple[RaceCatalog, dict[str, str]]:
-    """Every simulated event whose data has been fetched under ``root``; plus why the others
-    are missing (event id -> reason)."""
+    """Every race with personas whose data (with the track outline) has been fetched under
+    ``root``, in round order; plus why the others are missing (event id -> reason)."""
     races: list[RaceSpec] = []
     skipped: dict[str, str] = {}
-    for event_id in SIMULATED_EVENTS:
+    configs = root / "configs"
+    events = sorted(p.stem for p in (configs / "rosters").glob("*.json"))
+    for event_id in events:
+        if not has_personas(configs, event_id):
+            continue
         data = root / "data" / "processed" / event_id
         missing = missing_assets(data)
         if missing:
-            skipped[event_id] = f"not fetched (missing {', '.join(missing)})"
+            skipped[event_id] = f"not fetched with telemetry (missing {', '.join(missing)})"
             continue
-        roster, profiles = load_event(root / "configs", event_id)
-        assets = load_event_assets(roster, data, engine_length_m=track_for(event_id).length_m)
+        roster, profiles = load_event(configs, event_id)
+        track = track_for(event_id, data)
+        assets = load_event_assets(roster, data, engine_length_m=track.length_m)
         data_dir = event_data_dir(root, event_id)
 
         def build(
@@ -137,5 +149,8 @@ def load_catalog(root: Path) -> tuple[RaceCatalog, dict[str, str]]:
                 roster, profiles, codes, data_dir=None if synthetic else data_dir
             )
 
-        races.append(RaceSpec(event_id, roster, profiles, assets, build, data_dir is not None))
+        races.append(
+            RaceSpec(event_id, roster, profiles, assets, build, data_dir is not None, track=track)
+        )
+    races.sort(key=lambda r: (r.roster.season, r.roster.round))
     return RaceCatalog(races), skipped

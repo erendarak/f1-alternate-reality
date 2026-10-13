@@ -3,23 +3,24 @@
 This is the reference every learned strategist must beat. It is deliberately simple:
 
 - It plans with the car's *expected* lap times (no noise), using the driver's own tyre wear
-  rate (``tire_management`` and the current pace mode). Two drivers in identical cars can
-  therefore pit on different laps.
+  (``tire_management``, the current pace mode, and the wear curve by tyre age). Two drivers in
+  identical cars can therefore pit on different laps.
 - Only terms that differ between plans count: compound offset, accumulated wear and pit
   loss. Fuel, skill and car pace add the same time to every plan.
 - The dry-tyre rule (``PitParams.min_distinct_dry_compounds``) is a hard constraint.
-- It doesn't know about traffic, safety cars or rivals. Those arrive in later M2 slices;
-  until then this is an "empty track" optimum.
+- It doesn't know about traffic or rivals; safety cars only bring a planned stop forward
+  (engine). It is an "empty track" optimum.
 
-Stint cost with linear wear, ``n`` laps on compound ``c`` starting at accumulated wear ``w0``:
-``n * (offset_c + w0) + rate_c * n (n - 1) / 2``. It's convex in ``n``, so the best split of a
-fixed lap budget between two fresh stints is at the floor or ceiling of the continuous
-optimum. One plan therefore costs O(laps x compound pairs), cheap enough to replan after
-every stop.
+Stint costs come from wear tables by tyre age (M4, D-033: wear is no longer linear). With the
+lap's wear step never negative, the cost of a fresh stint is convex in its length, so the best
+split of a lap budget between two fresh stints is a min-plus convolution of two convex
+sequences: merge their sorted marginal costs. That gives the best split for every budget at
+once, so one plan costs O(laps x compound pairs) as before.
 """
 
-import math
 from itertools import product
+
+import numpy as np
 
 from f1ar.domain.driver_profiles import DriverArchetype
 from f1ar.domain.race_state import (
@@ -35,7 +36,53 @@ POLICY_ID = "baseline_strategy_v1"
 
 
 def _stint_cost(offset: float, rate: float, laps: int, start_wear: float = 0.0) -> float:
+    """Linear-wear stint cost (reference formula; used by tests)."""
     return laps * (offset + start_wear) + rate * laps * (laps - 1) / 2.0
+
+
+def wear_table(
+    setup: RaceSetup, driver: DriverArchetype, compound: Compound, pace_mode: PaceMode, laps: int
+) -> np.ndarray:
+    """``W[k]`` = expected wear after ``k`` laps on a fresh set (``k = 0..laps``)."""
+    steps = [
+        wear_per_lap_s(
+            setup.lap_model, driver, compound=compound, pace_mode=pace_mode, tyre_age_laps=a
+        )
+        for a in range(laps)
+    ]
+    return np.concatenate(([0.0], np.cumsum(steps)))
+
+
+def fresh_stint_costs(offset: float, wear: np.ndarray) -> np.ndarray:
+    """``f[n]`` = cost of ``n`` laps on a fresh set (``n = 0..len(wear) - 1``)."""
+    n = np.arange(len(wear))
+    return n * offset + np.concatenate(([0.0], np.cumsum(wear[:-1])))
+
+
+def best_two_stints(f2: np.ndarray, f3: np.ndarray, laps: int) -> tuple[np.ndarray, np.ndarray]:
+    """For every budget ``L = 0..laps``: the cheapest ``f2[b] + f3[L - b]`` with both stints
+    >= 1 lap, and the ``b`` that achieves it (``inf`` / -1 where ``L < 2``).
+
+    Both sequences are convex, so their min-plus convolution merges the marginal costs in
+    increasing order; on ties the second stint's step is taken first (shorter first stint).
+    """
+    cost = np.full(laps + 1, np.inf)
+    first = np.full(laps + 1, -1)
+    if laps < 2:
+        return cost, first
+    d2 = np.diff(f2[1:laps])  # step from b to b+1 laps, b = 1..laps-2
+    d3 = np.diff(f3[1:laps])
+    steps = sorted(
+        [(float(v), 0, i) for i, v in enumerate(d3)] + [(float(v), 1, i) for i, v in enumerate(d2)]
+    )
+    total = float(f2[1] + f3[1])
+    b = 1
+    cost[2], first[2] = total, 1
+    for k, (v, src, _) in enumerate(steps[: laps - 2], start=3):
+        total += v
+        b += src
+        cost[k], first[k] = total, b
+    return cost, first
 
 
 def plan_stops(
@@ -47,11 +94,13 @@ def plan_stops(
     tyre_wear_s: float,
     pace_mode: PaceMode,
     compounds_used: tuple[Compound, ...],
+    tyre_age_laps: int = 0,
 ) -> tuple[PlannedStop, ...]:
     """Cheapest legal plan for the rest of the race, starting with the lap now beginning.
 
-    The lap now beginning (``laps_completed + 1``) is driven on the current tyres. A stop at
-    lap ``k`` means boxing at the end of lap ``k``; nobody stops at the end of the final lap.
+    The lap now beginning (``laps_completed + 1``) is driven on the current tyres, which are
+    ``tyre_age_laps`` old and carry ``tyre_wear_s``. A stop at lap ``k`` means boxing at the
+    end of lap ``k``; nobody stops at the end of the final lap.
     """
     total = setup.track.total_laps
     remaining = total - laps_completed
@@ -59,18 +108,24 @@ def plan_stops(
     pit_cost = setup.pit.lane_loss_s + setup.pit.standstill_median_s
     need = setup.pit.min_distinct_dry_compounds
     used = set(compounds_used) | {compound}
-
-    def offset(c: Compound) -> float:
-        return params.compounds[c].offset_s
-
-    def rate(c: Compound) -> float:
-        return wear_per_lap_s(params, driver, compound=c, pace_mode=pace_mode)
+    if remaining <= 0:
+        return ()
 
     def legal(*later: Compound) -> bool:
         return len(used | set(later)) >= need
 
-    def first(laps: int) -> float:
-        return _stint_cost(offset(compound), rate(compound), laps, tyre_wear_s)
+    # the current set: lap k of the rest (k = 0..) carries tyre_wear_s plus the curve's growth
+    # from its current age (the wear so far may come from other pace modes, so it's kept as is)
+    cur = wear_table(setup, driver, compound, pace_mode, tyre_age_laps + remaining)
+    growth = cur[tyre_age_laps : tyre_age_laps + remaining] - cur[tyre_age_laps]
+    per_lap = params.compounds[compound].offset_s + tyre_wear_s + growth
+    first = np.concatenate(([0.0], np.cumsum(per_lap)))  # first[a] = cost of a laps
+    fresh = {
+        c: fresh_stint_costs(
+            params.compounds[c].offset_s, wear_table(setup, driver, c, pace_mode, remaining)
+        )
+        for c in Compound
+    }
 
     # (cost, number of stops, plan): ties go to fewer stops, then to the enumeration order.
     best: tuple[float, int, tuple[PlannedStop, ...]] | None = None
@@ -81,51 +136,35 @@ def plan_stops(
             best = (cost, len(plan), plan)
 
     if legal():
-        consider(first(remaining), ())
+        consider(float(first[remaining]), ())
 
+    a = np.arange(1, remaining)
     for c2 in Compound:
-        if not legal(c2):
+        if not legal(c2) or remaining < 2:
             continue
-        for a in range(1, remaining):
-            cost = first(a) + pit_cost + _stint_cost(offset(c2), rate(c2), remaining - a)
-            consider(cost, (PlannedStop(lap=laps_completed + a, compound=c2),))
+        costs = first[a] + pit_cost + fresh[c2][remaining - a]
+        i = int(np.argmin(costs))
+        consider(float(costs[i]), (PlannedStop(lap=laps_completed + int(a[i]), compound=c2),))
 
-    for c2, c3 in product(Compound, Compound):
-        if not legal(c2, c3):
-            continue
-        for a in range(1, remaining - 1):
-            b = _best_split(offset(c2), rate(c2), offset(c3), rate(c3), remaining - a)
-            cost = (
-                first(a)
-                + 2 * pit_cost
-                + _stint_cost(offset(c2), rate(c2), b)
-                + _stint_cost(offset(c3), rate(c3), remaining - a - b)
-            )
+    if remaining >= 3:
+        a2 = np.arange(1, remaining - 1)
+        for c2, c3 in product(Compound, Compound):
+            if not legal(c2, c3):
+                continue
+            pair, split = best_two_stints(fresh[c2], fresh[c3], remaining - 1)
+            costs = first[a2] + 2 * pit_cost + pair[remaining - a2]
+            i = int(np.argmin(costs))
+            lap1 = int(a2[i])
+            b = int(split[remaining - lap1])
             consider(
-                cost,
+                float(costs[i]),
                 (
-                    PlannedStop(lap=laps_completed + a, compound=c2),
-                    PlannedStop(lap=laps_completed + a + b, compound=c3),
+                    PlannedStop(lap=laps_completed + lap1, compound=c2),
+                    PlannedStop(lap=laps_completed + lap1 + b, compound=c3),
                 ),
             )
 
     return () if best is None else best[2]
-
-
-def _best_split(off2: float, r2: float, off3: float, r3: float, laps: int) -> int:
-    """Laps of the first of two fresh stints sharing ``laps`` (each >= 1), minimising cost."""
-
-    def cost(b: int) -> float:
-        return _stint_cost(off2, r2, b) + _stint_cost(off3, r3, laps - b)
-
-    if r2 + r3 <= 0.0:
-        candidates = [1, laps - 1]
-    else:
-        # d/db = 0  ->  off2 + r2 (b - 1/2) = off3 + r3 (laps - b - 1/2)
-        b_star = (off3 - off2 + r3 * (laps - 0.5) + r2 * 0.5) / (r2 + r3)
-        candidates = [math.floor(b_star), math.ceil(b_star)]
-    clamped = sorted({min(max(b, 1), laps - 1) for b in candidates})
-    return min(clamped, key=cost)
 
 
 def plan_for_car(setup: RaceSetup, car: CarState) -> tuple[PlannedStop, ...]:
@@ -138,4 +177,5 @@ def plan_for_car(setup: RaceSetup, car: CarState) -> tuple[PlannedStop, ...]:
         tyre_wear_s=car.tyre_wear_s,
         pace_mode=car.pace_mode,
         compounds_used=car.compounds_used,
+        tyre_age_laps=car.tyre_age_laps,
     )

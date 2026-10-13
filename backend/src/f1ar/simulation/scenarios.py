@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from f1ar.domain.driver_profiles import ProfileSet, load_profiles
+from f1ar.domain.driver_profiles import ProfileSet, load_profiles, load_season_profiles
 from f1ar.domain.identities import RaceRoster, load_roster
 from f1ar.domain.provenance import SourceType
 from f1ar.domain.race_state import (
@@ -32,17 +32,37 @@ _SEED_FILES = {
     BELGIUM_2024: "seed_2024_belgian_drivers.yaml",
 }
 SIMULATED_EVENTS = tuple(_SEED_FILES)
-"""Events with driver personas, so they can be simulated (any fetched event can be replayed)."""
+"""Events with their own persona seed file (M2). Since M4 every 2024 race also has personas
+through the season seed (``SEASON_SEED_FILES``); see ``has_personas``."""
+SEASON_SEED_FILES = {2024: "seed_2024_season_drivers.yaml"}
+REPO_CONFIGS = Path(__file__).resolve().parents[4] / "configs"
+"""This repository's ``configs/`` (the package is installed from the repo, editable)."""
+
+
+def has_personas(configs_dir: Path, event_id: str) -> bool:
+    """A roster exists and a seed covers it (its own seed, or its season's seed)."""
+    roster_path = configs_dir / "rosters" / f"{event_id}.json"
+    if not roster_path.exists():
+        return False
+    season = load_roster(roster_path, expected_event_id=event_id).season
+    return event_id in _SEED_FILES or season in SEASON_SEED_FILES
 
 
 def load_event(configs_dir: Path, event_id: str = MONZA_2024) -> tuple[RaceRoster, ProfileSet]:
-    """Load the verified roster and the persona profiles of one event from ``configs/``."""
+    """Load the verified roster and the persona profiles of one event from ``configs/``.
+
+    Monza and Spa use their own seed files (M2); every other race of a season with a season
+    seed uses that one (same persona values for the same driver)."""
     roster = load_roster(configs_dir / "rosters" / f"{event_id}.json", expected_event_id=event_id)
-    profiles = load_profiles(
-        configs_dir / "drivers" / _SEED_FILES[event_id],
-        configs_dir / "drivers" / "archetypes.yaml",
-        roster,
-    )
+    templates = configs_dir / "drivers" / "archetypes.yaml"
+    if event_id in _SEED_FILES:
+        profiles = load_profiles(configs_dir / "drivers" / _SEED_FILES[event_id], templates, roster)
+    elif roster.season in SEASON_SEED_FILES:
+        profiles = load_season_profiles(
+            configs_dir / "drivers" / SEASON_SEED_FILES[roster.season], templates, roster
+        )
+    else:
+        raise ValueError(f"no persona seed for {event_id} (season {roster.season})")
     return roster, profiles
 
 
@@ -52,11 +72,14 @@ def setup_from_codes(
     codes: Sequence[str] | None,
     *,
     data_dir: Path | None = None,
+    configs_dir: Path | None = None,
 ) -> RaceSetup:
     """Setup from 3-letter driver codes (e.g. ``["VER", "HAM"]``); ``None`` = full grid.
 
-    With ``data_dir`` (a fetched ``data/processed/<event>/``) the setup uses the real start tyres
-    and the data-estimated car pace offsets; without it, synthetic defaults.
+    With ``data_dir`` (a fetched ``data/processed/<event>/``) the setup uses the real start tyres,
+    the calibrated tyre/fuel model (season shape + this race's adjustment, M4/D-033), and the
+    data-estimated car offsets, base lap and pit loss; without it, the editorial placeholders
+    (Monza and Spa only).
     """
     by_code = {e.code: e.driver_id for e in roster.entries}
     wanted = [e.code for e in roster.entries] if codes is None else [c.upper() for c in codes]
@@ -64,8 +87,10 @@ def setup_from_codes(
     if unknown:
         raise ValueError(f"unknown driver code(s) {unknown}; choose from {sorted(by_code)}")
     driver_ids = [by_code[c] for c in wanted]
-    track = track_for(roster.event_id)
+    track = track_for(roster.event_id, data_dir)
     if data_dir is None:
+        if roster.event_id not in _NOMINAL_BASE_LAP_S:
+            raise ValueError(f"{roster.event_id} can only be simulated with its fetched data")
         return build_setup(
             roster,
             profiles,
@@ -74,6 +99,8 @@ def setup_from_codes(
             lap_model=default_lap_model(_NOMINAL_BASE_LAP_S[roster.event_id]),
         )
 
+    from f1ar.calibration.lap_dataset import race_laps
+    from f1ar.calibration.lap_model_fit import calibrated_lap_model, load_shape
     from f1ar.calibration.race_inputs import (
         estimate_base_lap,
         estimate_car_offsets,
@@ -83,10 +110,26 @@ def setup_from_codes(
 
     laps_file = data_dir / "laps.parquet"
     laps = pd.read_parquet(laps_file)
-    placeholder = default_lap_model(_NOMINAL_BASE_LAP_S[roster.event_id])
-    estimate = estimate_car_offsets(laps, roster, profiles, placeholder)
-    base = estimate_base_lap(laps, roster, profiles, placeholder, estimate, track.total_laps)
-    lap_model = default_lap_model(base.base_lap_s)
+    tables = ("results.parquet", "weather.parquet", "track_status.parquet")
+    race = None
+    if all((data_dir / t).exists() for t in tables):
+        race = race_laps(
+            laps,
+            *(pd.read_parquet(data_dir / t) for t in tables),
+            event_id=roster.event_id,
+            season=roster.season,
+            round_=roster.round,
+            circuit_id=roster.circuit_id,
+            driver_ids={e.car_number: e.driver_id for e in roster.entries},
+            team_ids={e.car_number: e.team_id for e in roster.entries},
+        )
+    shape, shape_sha = load_shape(configs_dir or REPO_CONFIGS)
+    editorial = default_lap_model(_NOMINAL_BASE_LAP_S.get(roster.event_id, 90.0))
+    field = [profiles.get(d).archetype for d in roster.driver_ids()]
+    calibrated = calibrated_lap_model(editorial, shape, shape_sha, race, field)
+    estimate = estimate_car_offsets(laps, roster, profiles, calibrated.params)
+    base = estimate_base_lap(laps, roster, profiles, calibrated.params, estimate, track.total_laps)
+    lap_model = calibrated.params.model_copy(update={"base_lap_s": base.base_lap_s})
     try:
         pit_loss = estimate_pit_loss(laps)
         pit, pit_note = (
@@ -109,6 +152,7 @@ def setup_from_codes(
             "car_pace_offsets": estimate.note,
             "base_lap": base.note,
             "pit_loss": pit_note,
+            "tyre_model": calibrated.note,
             "dataset_sha256": "sha256:" + hashlib.sha256(laps_file.read_bytes()).hexdigest(),
         },
     )
@@ -149,10 +193,34 @@ _NOMINAL_BASE_LAP_S = {MONZA_2024: 82.0, BELGIUM_2024: 104.0}
 """Editorial base lap per track for runs without data (data runs estimate it, D-026)."""
 
 
-def track_for(event_id: str) -> TrackSpec:
-    if event_id not in _TRACKS:
-        raise ValueError(f"no track spec for {event_id}; simulated events: {SIMULATED_EVENTS}")
-    return _TRACKS[event_id]()
+def track_for(event_id: str, data_dir: Path | None = None) -> TrackSpec:
+    """Published figures for Monza/Spa; for other races, from the fetched data (M4): race laps
+    from the results, length from the track outline (the winner's typical racing line, 1-2 %
+    shorter than the official length; ``estimated_from_data``)."""
+    if event_id in _TRACKS:
+        return _TRACKS[event_id]()
+    if data_dir is None or not (data_dir / "track_outline.parquet").exists():
+        raise ValueError(
+            f"no track spec for {event_id}: it needs fetched data with the track outline "
+            "(scripts/fetch_event.py without --no-telemetry)"
+        )
+    from f1ar.presentation.track_geometry import TrackGeometry
+
+    outline = pd.read_parquet(data_dir / "track_outline.parquet")
+    length = TrackGeometry.from_points(
+        list(zip(outline["x_m"].astype(float), outline["y_m"].astype(float), strict=True))
+    ).length_m
+    laps = int(pd.read_parquet(data_dir / "results.parquet")["laps"].max())
+    return TrackSpec(
+        track_id=event_id.split("_", 1)[1],
+        length_m=round(length, 1),
+        total_laps=laps,
+        source_note=(
+            f"estimated_from_data: length {length / 1000:.3f} km = the fetched track outline "
+            "(winner's typical racing line, 1-2 % shorter than the official figure); "
+            f"{laps} race laps from results"
+        ),
+    )
 
 
 def default_lap_model(base_lap_s: float = 82.0) -> LapModelParams:

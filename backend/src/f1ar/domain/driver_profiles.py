@@ -238,3 +238,18 @@ def build_profiles(
 def load_profiles(seed_path: Path, templates_path: Path, roster: RaceRoster) -> ProfileSet:
     seed = yaml.safe_load(seed_path.read_text(encoding="utf-8"))
     return build_profiles(seed, load_templates(templates_path), roster)
+
+
+def load_season_profiles(seed_path: Path, templates_path: Path, roster: RaceRoster) -> ProfileSet:
+    """Profiles of one race from a season seed (M4): the seed covers every driver of the season,
+    the race takes those of its roster. A roster driver missing from the seed is still an error.
+    """
+    seed = yaml.safe_load(seed_path.read_text(encoding="utf-8"))
+    if seed.get("season") != roster.season:
+        raise ValueError(f"season seed is for {seed.get('season')}, roster is {roster.season}")
+    wanted = set(roster.driver_ids())
+    race_seed = seed | {
+        "event_id": roster.event_id,
+        "drivers": {d: v for d, v in seed["drivers"].items() if d in wanted},
+    }
+    return build_profiles(race_seed, load_templates(templates_path), roster)

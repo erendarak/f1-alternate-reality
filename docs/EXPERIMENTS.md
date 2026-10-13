@@ -159,7 +159,7 @@ races are resampled].
 | Placeholder (engine v0.6.0, editorial) | 0.579 [0.52–0.65] | 0.801 [0.43–1.18] |
 | Fitted, linear wear | 0.520 [0.47–0.57] | 0.714 [0.40–1.05] |
 | Fitted, quadratic wear | 0.521 [0.47–0.57] | 0.664 [0.40–0.91] |
-| Quadratic + per-race adjustment (in-sample) | 0.455 [0.42–0.49] | 0.618 [0.39–0.87] |
+| Quadratic + per-race adjustment (in-sample) | 0.474 [0.44–0.51] | 0.626 [0.39–0.88] |
 
 Fitted season shape (all 16 dry_train races) with 95 % intervals from refits on resampled races:
 
@@ -174,7 +174,9 @@ Fitted season shape (all 16 dry_train races) with 95 % intervals from refits on 
 | Wear HARD | +0.0609 [+0.0404, +0.0804] | +0.035 |
 | Quadratic wear S / M / H, s per age² | -0.0014 / -0.0013 / -0.0004 (intervals include 0) | 0 |
 
-Per-race wear multiplier (in-sample, ridge-shrunk to 1): qatar -0.24, monaco 0.03, saudi_arabian 0.07, japanese 0.28, azerbaijan 0.37, belgian 0.51, miami 0.56, united_states 0.66, las_vegas 0.73, italian 0.83, australian 0.96, mexico_city 1.00, abu_dhabi 1.14, dutch 1.16, chinese 1.22, singapore 1.31, spanish 1.37, bahrain 1.50, emilia_romagna 1.51, hungarian 1.63, austrian 1.73.
+Per-race wear multiplier (in-sample, ridge-shrunk to 1): monaco 0.39, saudi_arabian 0.47, japanese 0.59, qatar 0.60, azerbaijan 0.62, belgian 0.67, miami 0.75, las_vegas 0.81, united_states 0.82, italian 0.88, australian 0.98, mexico_city 0.99, chinese 1.08, abu_dhabi 1.09, dutch 1.10, singapore 1.19, spanish 1.23, bahrain 1.31, emilia_romagna 1.34, hungarian 1.42, austrian 1.48.
+
+> **Correction (M4 slice 3, 2026-10-13):** the per-race prior was scaled wrongly in the first run (it vanished for rarely used compounds; see D-033). This table and the multipliers are the corrected re-run: the per-race row went from 0.455 / 0.618 to 0.474 / 0.626 (the first numbers were flattered by over-fitting rare compounds) and Qatar's multiplier from -0.24 to 0.60; the season shape, the coefficient table and the online task are unchanged.
 
 **Task 2 — online lap prediction** (MAE s/lap [race-bootstrap 95 %], median AE):
 
@@ -195,7 +197,8 @@ field_vs_driver 15%, gap_ahead_s 9%, fuel 8%, track_temp_c 7%, air_temp_c 7%, ga
 ```text
 Findings:
   1. The fitted shape beats the placeholder: -10 % residual leave-one-race-out (0.579 -> 0.52)
-     and -17 % on dry_test (0.80 -> 0.66); per-race adjustment adds another -10 % / -7 %.
+     and -17 % on dry_test (0.80 -> 0.66); per-race adjustment adds another -9 % / -6 %
+     (0.474 / 0.626, corrected run).
      The race-resampled intervals overlap on the 5 test races (Japan and Monaco dominate).
   2. THE PLACEHOLDER'S SOFT IS THE BUG behind EXP-002's "everyone one-stops onto SOFT": it is
      0.6 s faster than MEDIUM; in real race trim the fresh SOFT is only ~0.13 s faster
@@ -207,8 +210,8 @@ Findings:
      Imola, Hungary, Austria). One track-independent wear rate can't produce realistic strategy
      everywhere: the engine needs a per-race wear level.
   4. Wear looks slightly concave (quadratic terms negative) but the intervals include 0; a
-     negative quadratic would make tyres faster after ~33 laps if extrapolated. Qatar's fitted
-     multiplier is negative (-0.24): not physical (traffic/track evolution not separated).
+     negative quadratic would make tyres faster after ~33 laps if extrapolated. (First run:
+     Qatar's multiplier came out -0.24; that was the prior-scaling bug, 0.60 when corrected.)
   5. "Dirty air" 0.43 s for following within 1.2 s is a FOLLOWING cost that includes being held
      up, not pure aerodynamic loss; the engine models holds separately, so it can't be used as
      is for the engine's dirty-air parameter (slice 5 calibrates traffic as a whole).
@@ -233,6 +236,74 @@ Decision / next:      Slice 3 uses the fitted season shape with a per-race wear 
                       wear never decreasing with age (quadratic clamped at its peak), multiplier
                       >= a small positive floor. The LightGBM model stays an experimental online
                       predictor (registry manifest), not in the engine's lap model.
+```
+
+## EXP-004 — The calibrated engine (v0.7.0) on six real races (2026-10-13)
+
+```text
+Experiment ID:        EXP-004
+Research question:    With the tyre/fuel shape fitted on other races (EXP-003) plus each race's
+                      own wear level, do simulated strategies, order and race time match real
+                      races better than the M2 engine (EXP-002)?
+Hypothesis:           Compound sequences move from "everyone onto SOFT" to M-H; order and race
+                      time stay good; stop counts and overtakes stay off (traffic/undercut and
+                      overtaking aren't calibrated yet).
+Engine:               lightweight_engine_v0.7.0, world schema v8 (D-033); baseline_strategy_v1
+Races:                Monza, Spa (in-sample for personas and M2 coefficients), Japan, Monaco,
+                      Mexico, Abu Dhabi (dry_test: the tyre shape never saw them). Per-race inputs
+                      (start tyres, car offsets, base lap, pit loss, wear multiplier, offset
+                      deltas) are estimated from each race itself: in-sample everywhere.
+Seeds:                1..30 per race; same harness and counters as EXP-002
+Code:                 scripts/experiments/exp002_m2_engine.py --events ... -> docs/experiments/exp004.json
+```
+
+Real / simulated mean (✗ = real value outside the simulated p10-p90):
+
+| Race | Stops per finisher | 1-stop share | Passes | Winner time (min) | Spearman | Real winner wins | Real sequences | Simulated sequences (all cars x 30) |
+|---|---|---|---|---|---|---|---|---|
+| Italian | 1.58 / 1.00 ✗ | 0.47 / 1.00 ✗ | 53 / 10 ✗ | 74.7 / 75.2 | 0.889 | 0/30 | M-H 7, M-H-H 7, H-H-M 2 | M-H 400, H-S 171 |
+| Belgian | 1.79 / 1.00 ✗ | 0.26 / 1.00 ✗ | 39 / 18 ✗ | 80.0 / 80.6 | 0.907 | 0/30 | M-H-H 6, M-H-M 3, M-M-H 2 | M-H 489, H-S 57, S-H 28 |
+| Japanese | 2.00 / 1.00 ✗ | 0.12 / 1.00 ✗ | 63 / 21 ✗ | 114.4 / 86.2 ✗ | 0.903 | 28/30 | M-M-M-H 3, M-H-H-M 2, S-S-H-H 2 | M-H 345, S-H 225 |
+| Monaco | 0.44 / 1.00 ✗ | 0.31 / 1.00 ✗ | 11 / 31 ✗ | 143.3 / 144.3 | 0.870 | 15/30 | M-H 7, H-M 3, H-M-H 3 | H-S 303, M-H 250 |
+| Mexico City | 1.24 / 1.00 ✗ | 0.82 / 1.00 ✗ | 68 / 47 ✗ | 100.9 / 97.8 ✗ | 0.872 | 24/30 | M-H 10, H-M 4, H-M-M-S 1 | M-H 390, H-M 169 |
+| Abu Dhabi | 1.44 / 1.00 ✗ | 0.69 / 1.00 ✗ | 88 / 34 ✗ | 86.6 / 87.1 | 0.799 | 15/30 | M-H 10, M-H-H 4, H-M 1 | M-S 542, H-M 27 |
+
+Against EXP-002 (engine v0.6.0):
+
+| Race | Simulated sequences | Spearman | Winner time (min) |
+|---|---|---|---|
+| Italian | M-S 400, H-S 171 -> M-H 400, H-S 171 | 0.885 -> 0.889 | 74.8 -> 75.2 (real 74.7) |
+| Belgian | M-S 489, H-S 57, S-M 28 -> M-H 489, H-S 57, S-H 28 | 0.905 -> 0.907 | 80.2 -> 80.6 (real 80.0) |
+
+```text
+Findings:
+  1. COMPOUND CHOICE FIXED where the data is clear: Monza and Spa now run M-H (EXP-002: M-S for
+     every car); Mexico M-H / H-M exactly like the real race; Japan M-H / S-H. The placeholder's
+     too-fast SOFT was the cause (EXP-003).
+  2. Abu Dhabi plans M-S (real M-H): its in-sample offsets (HARD +0.09 vs MEDIUM, SOFT about
+     equal) make a short final SOFT stint look free. Small offset differences decide the
+     compound of the final stint; race-trim data can't pin them down well (EXP-003).
+  3. STILL ONLY ONE STOP for every car (1.00 vs 0.44-2.0 real). With the fitted race-trim wear
+     (about 0.06-0.13 s per lap of age, flattening) a second stop never beats ~20-24 s of pit
+     loss on an empty track. Real two-stops also come from undercuts, track position, traffic
+     and safety-car timing, which the baseline planner ignores. This is not something to tune
+     the tyre model for; it is what M5's strategist must learn (and the planner could weigh
+     traffic later).
+  4. Order and pace stay good: Spearman 0.80-0.91; real winners
+     dominate where they had the fastest car on the day (Japan VER 28/30, Mexico SAI 24/30,
+     Monaco LEC 15/30). Race time within ~1 min except Japan (real time includes a ~30 min
+     red-flag stoppage; no red flags in the simulation) and Mexico (-3 min).
+  5. OVERTAKING IS NOT TRACK-SPECIFIC: too few passes almost everywhere (Monza 10 vs 53, Abu
+     Dhabi 34 vs 88), far too many at Monaco (31 vs 11). Slice 5 calibrates passing per track.
+  6. Speed 0.58-1.06 s per race (Monaco's 78 laps the slowest); a full replan ~0.5 ms.
+Negative results:     2, 3, 5.
+Reproduce:            uv run python scripts/fetch_season.py --season 2024 --telemetry --rounds 4 8 20 24
+                      uv run python scripts/experiments/exp002_m2_engine.py --seeds 30 --events \
+                        2024_italian_gp 2024_belgian_gp 2024_japanese_gp 2024_monaco_gp \
+                        2024_mexico_city_gp 2024_abu_dhabi_gp --json docs/experiments/exp004.json
+Decision / next:      Keep the calibrated model. Slice 4 (weather), slice 5 (traffic and race
+                      control per track). Stop counts are a strategy problem (M5), recorded as a
+                      known limitation of the baseline planner.
 ```
 
 ## BENCH-001 — Batch headless throughput (2026-10-12)

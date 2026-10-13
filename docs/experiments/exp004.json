@@ -1,0 +1,958 @@
+[
+  {
+    "event": "2024_italian_gp",
+    "seeds": 30,
+    "engine": "lightweight_engine_v0.7.0",
+    "seconds_per_race": 0.5846977633334366,
+    "inputs": {
+      "start_compounds": "historical_verified: lap-1 compound, 2024_italian_gp/laps.parquet",
+      "car_pace_offsets": "estimated_from_data: median of 914 representative laps per driver minus the persona skill term, averaged per team, relative to the fastest car; drivers with <10 laps excluded: ['yuki_tsunoda_2024']",
+      "base_lap": "estimated_from_data: base lap 81.578 s = median residual of 95 representative laps of the fastest team (mclaren_2024) after the model's skill, compound, wear and fuel terms",
+      "pit_loss": "estimated_from_data: median whole-stop loss 26.88 s over 30 stops (in-lap + out-lap - 2 x driver median representative lap)",
+      "tyre_model": "estimated_from_data: tyre/fuel shape calibration/tyre_shape_2024_v1.json (sha256:e9f6f525c82b..., fitted on 16 2024 dry races) x this race's wear multiplier 0.88 (used 0.88, floor 0.1) and offset deltas SOFT -0.005, HARD -0.118 (in-sample), wear rates / field persona wear factor 0.788; skill gap, noise and pace modes editorial (D-010)",
+      "dataset_sha256": "sha256:975113c251b94e54f8f22ef5e9f906b4e338af42f62f12da753700a106d606af"
+    },
+    "real": {
+      "winner": "LEC",
+      "podium": [
+        "LEC",
+        "PIA",
+        "NOR"
+      ],
+      "sequences": [
+        [
+          "M-H",
+          7
+        ],
+        [
+          "M-H-H",
+          7
+        ],
+        [
+          "H-H-M",
+          2
+        ],
+        [
+          "H-M",
+          2
+        ],
+        [
+          "H-H-M-S",
+          1
+        ]
+      ]
+    },
+    "metrics": {
+      "winner race time (min)": {
+        "real": 74.68308333333334,
+        "mean": 75.19680832429023,
+        "sd": 1.3344700874910902,
+        "p10": 74.4853982841663,
+        "p90": 77.78710475861591,
+        "real_in_p10_p90": true
+      },
+      "stops per finisher": {
+        "real": 1.5789473684210527,
+        "mean": 1.0,
+        "sd": 0.0,
+        "p10": 1.0,
+        "p90": 1.0,
+        "real_in_p10_p90": false
+      },
+      "share of 1-stop finishers": {
+        "real": 0.47368421052631576,
+        "mean": 1.0,
+        "sd": 0.0,
+        "p10": 1.0,
+        "p90": 1.0,
+        "real_in_p10_p90": false
+      },
+      "on-track overtakes": {
+        "real": 53,
+        "mean": 10.033333333333333,
+        "sd": 2.880779215574996,
+        "p10": 7,
+        "p90": 14,
+        "real_in_p10_p90": false
+      },
+      "retirements": {
+        "real": 1,
+        "mean": 0.9666666666666667,
+        "sd": 0.9122621455602672,
+        "p10": 0,
+        "p90": 2,
+        "real_in_p10_p90": true
+      },
+      "safety cars": {
+        "real": 0,
+        "mean": 0.26666666666666666,
+        "sd": 0.5734883511361751,
+        "p10": 0,
+        "p90": 1,
+        "real_in_p10_p90": true
+      },
+      "VSCs": {
+        "real": 0,
+        "mean": 0.2,
+        "sd": 0.47609522856952335,
+        "p10": 0,
+        "p90": 1,
+        "real_in_p10_p90": true
+      },
+      "lapped finishers": {
+        "real": 6,
+        "mean": 7.266666666666667,
+        "sd": 2.2050447211388304,
+        "p10": 5,
+        "p90": 9,
+        "real_in_p10_p90": true
+      }
+    },
+    "order": {
+      "spearman": {
+        "mean": 0.8894642242862058,
+        "sd": 0.02328446974661866,
+        "p10": 0.8602941176470589,
+        "p90": 0.9236326109391125
+      },
+      "position_error": {
+        "mean": 1.8130847953216374,
+        "sd": 0.23789610943668762,
+        "p10": 1.5294117647058822,
+        "p90": 2.1052631578947367
+      }
+    },
+    "winners": [
+      [
+        "NOR",
+        23
+      ],
+      [
+        "PIA",
+        7
+      ]
+    ],
+    "winner_teams": [
+      [
+        "McLaren",
+        30
+      ]
+    ],
+    "real_winner_wins": 0,
+    "real_podium_exact": 0,
+    "sim_sequences": [
+      [
+        "M-H",
+        400
+      ],
+      [
+        "H-S",
+        171
+      ]
+    ]
+  },
+  {
+    "event": "2024_belgian_gp",
+    "seeds": 30,
+    "engine": "lightweight_engine_v0.7.0",
+    "seconds_per_race": 0.6132904500000829,
+    "inputs": {
+      "start_compounds": "historical_verified: lap-1 compound, 2024_belgian_gp/laps.parquet",
+      "car_pace_offsets": "estimated_from_data: median of 725 representative laps per driver minus the persona skill term, averaged per team, relative to the fastest car; drivers with <10 laps excluded: ['guanyu_zhou_2024']",
+      "base_lap": "estimated_from_data: base lap 106.555 s = median residual of 77 representative laps of the fastest team (mercedes_2024) after the model's skill, compound, wear and fuel terms",
+      "pit_loss": "estimated_from_data: median whole-stop loss 19.89 s over 34 stops (in-lap + out-lap - 2 x driver median representative lap)",
+      "tyre_model": "estimated_from_data: tyre/fuel shape calibration/tyre_shape_2024_v1.json (sha256:e9f6f525c82b..., fitted on 16 2024 dry races) x this race's wear multiplier 0.67 (used 0.67, floor 0.1) and offset deltas SOFT -0.071, HARD -0.308 (in-sample), wear rates / field persona wear factor 0.786; skill gap, noise and pace modes editorial (D-010)",
+      "dataset_sha256": "sha256:d8bb6a25d8f83bbf930714e22c73cc7a28e7cf1d36a42bc6781264a1e3dc2676"
+    },
+    "real": {
+      "winner": "RUS",
+      "podium": [
+        "RUS",
+        "HAM",
+        "PIA"
+      ],
+      "sequences": [
+        [
+          "M-H-H",
+          6
+        ],
+        [
+          "M-H-M",
+          3
+        ],
+        [
+          "M-M-H",
+          2
+        ],
+        [
+          "M-M",
+          2
+        ],
+        [
+          "M-H",
+          2
+        ]
+      ]
+    },
+    "metrics": {
+      "winner race time (min)": {
+        "real": 79.95518333333332,
+        "mean": 80.6455586186191,
+        "sd": 1.8081663695217554,
+        "p10": 79.69539534062824,
+        "p90": 83.66764568916734,
+        "real_in_p10_p90": true
+      },
+      "stops per finisher": {
+        "real": 1.7894736842105263,
+        "mean": 1.0,
+        "sd": 0.0,
+        "p10": 1.0,
+        "p90": 1.0,
+        "real_in_p10_p90": false
+      },
+      "share of 1-stop finishers": {
+        "real": 0.2631578947368421,
+        "mean": 1.0,
+        "sd": 0.0,
+        "p10": 1.0,
+        "p90": 1.0,
+        "real_in_p10_p90": false
+      },
+      "on-track overtakes": {
+        "real": 39,
+        "mean": 18.033333333333335,
+        "sd": 4.159193297851026,
+        "p10": 13,
+        "p90": 24,
+        "real_in_p10_p90": false
+      },
+      "retirements": {
+        "real": 1,
+        "mean": 0.8666666666666667,
+        "sd": 0.9213516640723503,
+        "p10": 0,
+        "p90": 2,
+        "real_in_p10_p90": true
+      },
+      "safety cars": {
+        "real": 0,
+        "mean": 0.26666666666666666,
+        "sd": 0.5734883511361751,
+        "p10": 0,
+        "p90": 1,
+        "real_in_p10_p90": true
+      },
+      "VSCs": {
+        "real": 0,
+        "mean": 0.16666666666666666,
+        "sd": 0.45338235029118146,
+        "p10": 0,
+        "p90": 1,
+        "real_in_p10_p90": true
+      },
+      "lapped finishers": {
+        "real": 0,
+        "mean": 0.0,
+        "sd": 0.0,
+        "p10": 0,
+        "p90": 0,
+        "real_in_p10_p90": true
+      }
+    },
+    "order": {
+      "spearman": {
+        "mean": 0.9071422428620571,
+        "sd": 0.02653148974689846,
+        "p10": 0.8658410732714138,
+        "p90": 0.9473684210526316
+      },
+      "position_error": {
+        "mean": 1.79932347207889,
+        "sd": 0.28630308364664575,
+        "p10": 1.4444444444444444,
+        "p90": 2.2222222222222223
+      }
+    },
+    "winners": [
+      [
+        "HAM",
+        20
+      ],
+      [
+        "LEC",
+        7
+      ],
+      [
+        "NOR",
+        3
+      ]
+    ],
+    "winner_teams": [
+      [
+        "Mercedes",
+        20
+      ],
+      [
+        "Ferrari",
+        7
+      ],
+      [
+        "McLaren",
+        3
+      ]
+    ],
+    "real_winner_wins": 0,
+    "real_podium_exact": 0,
+    "sim_sequences": [
+      [
+        "M-H",
+        489
+      ],
+      [
+        "H-S",
+        57
+      ],
+      [
+        "S-H",
+        28
+      ]
+    ]
+  },
+  {
+    "event": "2024_japanese_gp",
+    "seeds": 30,
+    "engine": "lightweight_engine_v0.7.0",
+    "seconds_per_race": 0.6730551366667593,
+    "inputs": {
+      "start_compounds": "historical_verified: lap-1 compound, 2024_japanese_gp/laps.parquet",
+      "car_pace_offsets": "estimated_from_data: median of 756 representative laps per driver minus the persona skill term, averaged per team, relative to the fastest car; drivers with <10 laps excluded: ['guanyu_zhou_2024']",
+      "base_lap": "estimated_from_data: base lap 94.34 s = median residual of 89 representative laps of the fastest team (red_bull_2024) after the model's skill, compound, wear and fuel terms",
+      "pit_loss": "estimated_from_data: median whole-stop loss 22.9 s over 36 stops (in-lap + out-lap - 2 x driver median representative lap)",
+      "tyre_model": "estimated_from_data: tyre/fuel shape calibration/tyre_shape_2024_v1.json (sha256:e9f6f525c82b..., fitted on 16 2024 dry races) x this race's wear multiplier 0.59 (used 0.59, floor 0.1) and offset deltas SOFT +0.187, HARD -0.162 (in-sample), wear rates / field persona wear factor 0.786; skill gap, noise and pace modes editorial (D-010)",
+      "dataset_sha256": "sha256:ba8e1f1e7df202d4101eb97ddb221e7cd1b4fc58bf037c538441d24dfbaae713"
+    },
+    "real": {
+      "winner": "VER",
+      "podium": [
+        "VER",
+        "PER",
+        "SAI"
+      ],
+      "sequences": [
+        [
+          "M-M-M-H",
+          3
+        ],
+        [
+          "M-H-H-M",
+          2
+        ],
+        [
+          "S-S-H-H",
+          2
+        ],
+        [
+          "M-M-H-H",
+          2
+        ],
+        [
+          "M-M-H",
+          2
+        ]
+      ]
+    },
+    "metrics": {
+      "winner race time (min)": {
+        "real": 114.39675000000001,
+        "mean": 86.1931405882917,
+        "sd": 1.6515332901338293,
+        "p10": 85.3231748376926,
+        "p90": 89.05078790507423,
+        "real_in_p10_p90": false
+      },
+      "stops per finisher": {
+        "real": 2.0,
+        "mean": 1.0,
+        "sd": 0.0,
+        "p10": 1.0,
+        "p90": 1.0,
+        "real_in_p10_p90": false
+      },
+      "share of 1-stop finishers": {
+        "real": 0.11764705882352941,
+        "mean": 1.0,
+        "sd": 0.0,
+        "p10": 1.0,
+        "p90": 1.0,
+        "real_in_p10_p90": false
+      },
+      "on-track overtakes": {
+        "real": 63,
+        "mean": 21.366666666666667,
+        "sd": 10.467356665154558,
+        "p10": 15,
+        "p90": 26,
+        "real_in_p10_p90": false
+      },
+      "retirements": {
+        "real": 3,
+        "mean": 1.0,
+        "sd": 0.8944271909999159,
+        "p10": 0,
+        "p90": 2,
+        "real_in_p10_p90": false
+      },
+      "safety cars": {
+        "real": 0,
+        "mean": 0.26666666666666666,
+        "sd": 0.5734883511361751,
+        "p10": 0,
+        "p90": 1,
+        "real_in_p10_p90": true
+      },
+      "VSCs": {
+        "real": 0,
+        "mean": 0.2,
+        "sd": 0.47609522856952335,
+        "p10": 0,
+        "p90": 1,
+        "real_in_p10_p90": true
+      },
+      "lapped finishers": {
+        "real": 8,
+        "mean": 6.733333333333333,
+        "sd": 2.4485823562942612,
+        "p10": 4,
+        "p90": 8,
+        "real_in_p10_p90": true
+      }
+    },
+    "order": {
+      "spearman": {
+        "mean": 0.9028104575163399,
+        "sd": 0.024391911568682197,
+        "p10": 0.875,
+        "p90": 0.9352941176470588
+      },
+      "position_error": {
+        "mean": 1.6249183006535948,
+        "sd": 0.23255331406517235,
+        "p10": 1.3333333333333333,
+        "p90": 1.8823529411764706
+      }
+    },
+    "winners": [
+      [
+        "VER",
+        28
+      ],
+      [
+        "PER",
+        1
+      ],
+      [
+        "NOR",
+        1
+      ]
+    ],
+    "winner_teams": [
+      [
+        "Red Bull",
+        29
+      ],
+      [
+        "McLaren",
+        1
+      ]
+    ],
+    "real_winner_wins": 28,
+    "real_podium_exact": 3,
+    "sim_sequences": [
+      [
+        "M-H",
+        345
+      ],
+      [
+        "S-H",
+        225
+      ]
+    ]
+  },
+  {
+    "event": "2024_monaco_gp",
+    "seeds": 30,
+    "engine": "lightweight_engine_v0.7.0",
+    "seconds_per_race": 1.0603580133333403,
+    "inputs": {
+      "start_compounds": "historical_verified: lap-1 compound, 2024_monaco_gp/laps.parquet",
+      "car_pace_offsets": "estimated_from_data: median of 1168 representative laps per driver minus the persona skill term, averaged per team, relative to the fastest car; drivers with <10 laps excluded: none",
+      "base_lap": "estimated_from_data: base lap 75.747 s = median residual of 149 representative laps of the fastest team (mclaren_2024) after the model's skill, compound, wear and fuel terms",
+      "pit_loss": "estimated_from_data: median whole-stop loss 2476.21 s over 16 stops (in-lap + out-lap - 2 x driver median representative lap)",
+      "tyre_model": "estimated_from_data: tyre/fuel shape calibration/tyre_shape_2024_v1.json (sha256:e9f6f525c82b..., fitted on 16 2024 dry races) x this race's wear multiplier 0.39 (used 0.39, floor 0.1) and offset deltas SOFT -0.048, HARD -0.256 (in-sample), wear rates / field persona wear factor 0.786; skill gap, noise and pace modes editorial (D-010)",
+      "dataset_sha256": "sha256:45018bfb176b04b8dd5a1cc8fd5d235a8364a289950957f1af91d65bf77aacb1"
+    },
+    "real": {
+      "winner": "LEC",
+      "podium": [
+        "LEC",
+        "PIA",
+        "SAI"
+      ],
+      "sequences": [
+        [
+          "M-H",
+          7
+        ],
+        [
+          "H-M",
+          3
+        ],
+        [
+          "H-M-H",
+          3
+        ],
+        [
+          "H-M-H-S",
+          1
+        ],
+        [
+          "H-H-M",
+          1
+        ]
+      ]
+    },
+    "metrics": {
+      "winner race time (min)": {
+        "real": 143.26378333333332,
+        "mean": 144.2852175715444,
+        "sd": 1.9743704223493366,
+        "p10": 143.0354626124766,
+        "p90": 147.1987809329833,
+        "real_in_p10_p90": true
+      },
+      "stops per finisher": {
+        "real": 0.4375,
+        "mean": 1.0,
+        "sd": 0.0,
+        "p10": 1.0,
+        "p90": 1.0,
+        "real_in_p10_p90": false
+      },
+      "share of 1-stop finishers": {
+        "real": 0.3125,
+        "mean": 1.0,
+        "sd": 0.0,
+        "p10": 1.0,
+        "p90": 1.0,
+        "real_in_p10_p90": false
+      },
+      "on-track overtakes": {
+        "real": 11,
+        "mean": 31.4,
+        "sd": 6.636264009214823,
+        "p10": 25,
+        "p90": 40,
+        "real_in_p10_p90": false
+      },
+      "retirements": {
+        "real": 4,
+        "mean": 1.5666666666666667,
+        "sd": 1.3085190950927015,
+        "p10": 0,
+        "p90": 4,
+        "real_in_p10_p90": true
+      },
+      "safety cars": {
+        "real": 1,
+        "mean": 0.6333333333333333,
+        "sd": 0.9480975102218595,
+        "p10": 0,
+        "p90": 2,
+        "real_in_p10_p90": true
+      },
+      "VSCs": {
+        "real": 0,
+        "mean": 0.36666666666666664,
+        "sd": 0.6046119049072352,
+        "p10": 0,
+        "p90": 1,
+        "real_in_p10_p90": true
+      },
+      "lapped finishers": {
+        "real": 9,
+        "mean": 11.166666666666666,
+        "sd": 1.3437096247164249,
+        "p10": 10,
+        "p90": 12,
+        "real_in_p10_p90": false
+      }
+    },
+    "order": {
+      "spearman": {
+        "mean": 0.870367622573505,
+        "sd": 0.048134854128993,
+        "p10": 0.8181818181818181,
+        "p90": 0.9321428571428572
+      },
+      "position_error": {
+        "mean": 1.6684071484071483,
+        "sd": 0.3958178516881788,
+        "p10": 1.0666666666666667,
+        "p90": 2.125
+      }
+    },
+    "winners": [
+      [
+        "LEC",
+        15
+      ],
+      [
+        "PIA",
+        13
+      ],
+      [
+        "HAM",
+        1
+      ],
+      [
+        "VER",
+        1
+      ]
+    ],
+    "winner_teams": [
+      [
+        "Ferrari",
+        15
+      ],
+      [
+        "McLaren",
+        13
+      ],
+      [
+        "Mercedes",
+        1
+      ],
+      [
+        "Red Bull",
+        1
+      ]
+    ],
+    "real_winner_wins": 15,
+    "real_podium_exact": 3,
+    "sim_sequences": [
+      [
+        "H-S",
+        303
+      ],
+      [
+        "M-H",
+        250
+      ]
+    ]
+  },
+  {
+    "event": "2024_mexico_city_gp",
+    "seeds": 30,
+    "engine": "lightweight_engine_v0.7.0",
+    "seconds_per_race": 0.7562077733332747,
+    "inputs": {
+      "start_compounds": "historical_verified: lap-1 compound, 2024_mexico_city_gp/laps.parquet",
+      "car_pace_offsets": "estimated_from_data: median of 1051 representative laps per driver minus the persona skill term, averaged per team, relative to the fastest car; drivers with <10 laps excluded: ['fernando_alonso_2024']",
+      "base_lap": "estimated_from_data: base lap 78.262 s = median residual of 123 representative laps of the fastest team (ferrari_2024) after the model's skill, compound, wear and fuel terms",
+      "pit_loss": "estimated_from_data: median whole-stop loss 24.0 s over 21 stops (in-lap + out-lap - 2 x driver median representative lap)",
+      "tyre_model": "estimated_from_data: tyre/fuel shape calibration/tyre_shape_2024_v1.json (sha256:e9f6f525c82b..., fitted on 16 2024 dry races) x this race's wear multiplier 0.99 (used 0.99, floor 0.1) and offset deltas SOFT +0.025, HARD -0.026 (in-sample), wear rates / field persona wear factor 0.791; skill gap, noise and pace modes editorial (D-010)",
+      "dataset_sha256": "sha256:c831bef69d0218319cddb8e09b43a0a4741be7a80e3a9f9952b7ad20e793aacb"
+    },
+    "real": {
+      "winner": "SAI",
+      "podium": [
+        "SAI",
+        "NOR",
+        "LEC"
+      ],
+      "sequences": [
+        [
+          "M-H",
+          10
+        ],
+        [
+          "H-M",
+          4
+        ],
+        [
+          "H-M-M-S",
+          1
+        ],
+        [
+          "H-M-S",
+          1
+        ],
+        [
+          "M-H-S",
+          1
+        ]
+      ]
+    },
+    "metrics": {
+      "winner race time (min)": {
+        "real": 100.93413333333334,
+        "mean": 97.75019215397144,
+        "sd": 1.815108543695168,
+        "p10": 96.5474173870517,
+        "p90": 100.56654913793321,
+        "real_in_p10_p90": false
+      },
+      "stops per finisher": {
+        "real": 1.2352941176470589,
+        "mean": 1.0,
+        "sd": 0.0,
+        "p10": 1.0,
+        "p90": 1.0,
+        "real_in_p10_p90": false
+      },
+      "share of 1-stop finishers": {
+        "real": 0.8235294117647058,
+        "mean": 1.0,
+        "sd": 0.0,
+        "p10": 1.0,
+        "p90": 1.0,
+        "real_in_p10_p90": false
+      },
+      "on-track overtakes": {
+        "real": 68,
+        "mean": 46.96666666666667,
+        "sd": 5.516540784062257,
+        "p10": 42,
+        "p90": 55,
+        "real_in_p10_p90": false
+      },
+      "retirements": {
+        "real": 3,
+        "mean": 1.3666666666666667,
+        "sd": 1.1967548714010827,
+        "p10": 0,
+        "p90": 4,
+        "real_in_p10_p90": true
+      },
+      "safety cars": {
+        "real": 1,
+        "mean": 0.5,
+        "sd": 0.8465616732800196,
+        "p10": 0,
+        "p90": 2,
+        "real_in_p10_p90": true
+      },
+      "VSCs": {
+        "real": 0,
+        "mean": 0.36666666666666664,
+        "sd": 0.4818944098266987,
+        "p10": 0,
+        "p90": 1,
+        "real_in_p10_p90": true
+      },
+      "lapped finishers": {
+        "real": 9,
+        "mean": 10.2,
+        "sd": 2.072036035722674,
+        "p10": 9,
+        "p90": 12,
+        "real_in_p10_p90": true
+      }
+    },
+    "order": {
+      "spearman": {
+        "mean": 0.872497845291963,
+        "sd": 0.025485686318095953,
+        "p10": 0.8464285714285714,
+        "p90": 0.9
+      },
+      "position_error": {
+        "mean": 1.6908132227249875,
+        "sd": 0.23047990123396897,
+        "p10": 1.4666666666666666,
+        "p90": 2.0
+      }
+    },
+    "winners": [
+      [
+        "SAI",
+        24
+      ],
+      [
+        "LEC",
+        6
+      ]
+    ],
+    "winner_teams": [
+      [
+        "Ferrari",
+        30
+      ]
+    ],
+    "real_winner_wins": 24,
+    "real_podium_exact": 0,
+    "sim_sequences": [
+      [
+        "M-H",
+        390
+      ],
+      [
+        "H-M",
+        169
+      ]
+    ]
+  },
+  {
+    "event": "2024_abu_dhabi_gp",
+    "seeds": 30,
+    "engine": "lightweight_engine_v0.7.0",
+    "seconds_per_race": 0.6836234066665686,
+    "inputs": {
+      "start_compounds": "historical_verified: lap-1 compound, 2024_abu_dhabi_gp/laps.parquet",
+      "car_pace_offsets": "estimated_from_data: median of 857 representative laps per driver minus the persona skill term, averaged per team, relative to the fastest car; drivers with <10 laps excluded: none",
+      "base_lap": "estimated_from_data: base lap 86.005 s = median residual of 97 representative laps of the fastest team (ferrari_2024) after the model's skill, compound, wear and fuel terms",
+      "pit_loss": "estimated_from_data: median whole-stop loss 24.84 s over 28 stops (in-lap + out-lap - 2 x driver median representative lap)",
+      "tyre_model": "estimated_from_data: tyre/fuel shape calibration/tyre_shape_2024_v1.json (sha256:e9f6f525c82b..., fitted on 16 2024 dry races) x this race's wear multiplier 1.09 (used 1.09, floor 0.1) and offset deltas SOFT +0.032, HARD +0.088 (in-sample), wear rates / field persona wear factor 0.793; skill gap, noise and pace modes editorial (D-010)",
+      "dataset_sha256": "sha256:b4254394211cb736ccb1688cd2014785c48508d6d52231286157bfc58b57ea90"
+    },
+    "real": {
+      "winner": "NOR",
+      "podium": [
+        "NOR",
+        "SAI",
+        "LEC"
+      ],
+      "sequences": [
+        [
+          "M-H",
+          10
+        ],
+        [
+          "M-H-H",
+          4
+        ],
+        [
+          "H-M",
+          1
+        ],
+        [
+          "M-H-H-S-S",
+          1
+        ]
+      ]
+    },
+    "metrics": {
+      "winner race time (min)": {
+        "real": 86.55935000000001,
+        "mean": 87.06523410500473,
+        "sd": 1.5453325760759926,
+        "p10": 86.23156483281495,
+        "p90": 89.32949258737419,
+        "real_in_p10_p90": true
+      },
+      "stops per finisher": {
+        "real": 1.4375,
+        "mean": 1.0,
+        "sd": 0.0,
+        "p10": 1.0,
+        "p90": 1.0,
+        "real_in_p10_p90": false
+      },
+      "share of 1-stop finishers": {
+        "real": 0.6875,
+        "mean": 1.0,
+        "sd": 0.0,
+        "p10": 1.0,
+        "p90": 1.0,
+        "real_in_p10_p90": false
+      },
+      "on-track overtakes": {
+        "real": 88,
+        "mean": 33.6,
+        "sd": 6.014427099344819,
+        "p10": 27,
+        "p90": 42,
+        "real_in_p10_p90": false
+      },
+      "retirements": {
+        "real": 4,
+        "mean": 1.0333333333333334,
+        "sd": 0.9480975102218595,
+        "p10": 0,
+        "p90": 2,
+        "real_in_p10_p90": false
+      },
+      "safety cars": {
+        "real": 0,
+        "mean": 0.3,
+        "sd": 0.5859465277082315,
+        "p10": 0,
+        "p90": 1,
+        "real_in_p10_p90": true
+      },
+      "VSCs": {
+        "real": 1,
+        "mean": 0.2,
+        "sd": 0.4,
+        "p10": 0,
+        "p90": 1,
+        "real_in_p10_p90": true
+      },
+      "lapped finishers": {
+        "real": 6,
+        "mean": 2.7,
+        "sd": 2.297099620536007,
+        "p10": 0,
+        "p90": 6,
+        "real_in_p10_p90": true
+      }
+    },
+    "order": {
+      "spearman": {
+        "mean": 0.7989926250220367,
+        "sd": 0.04873414567977029,
+        "p10": 0.7428571428571429,
+        "p90": 0.8529411764705882
+      },
+      "position_error": {
+        "mean": 2.011111111111111,
+        "sd": 0.24397062922907303,
+        "p10": 1.7333333333333334,
+        "p90": 2.4
+      }
+    },
+    "winners": [
+      [
+        "SAI",
+        15
+      ],
+      [
+        "NOR",
+        15
+      ]
+    ],
+    "winner_teams": [
+      [
+        "Ferrari",
+        15
+      ],
+      [
+        "McLaren",
+        15
+      ]
+    ],
+    "real_winner_wins": 15,
+    "real_podium_exact": 0,
+    "sim_sequences": [
+      [
+        "M-S",
+        542
+      ],
+      [
+        "H-M",
+        27
+      ]
+    ]
+  }
+]

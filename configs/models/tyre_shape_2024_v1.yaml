@@ -42,8 +42,8 @@ metrics:
       - 0.4
       - 0.914
     quadratic+race:
-      mae: 0.618
+      mae: 0.626
       ci95:
-      - 0.389
-      - 0.868
+      - 0.392
+      - 0.878
 status: validated_for_engine_use (slice 3)

@@ -27,8 +27,8 @@ from f1ar.presentation.event_assets import MissingEventAssetsError, load_event_a
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.scenarios import (
     MONZA_2024,
-    SIMULATED_EVENTS,
     event_data_dir,
+    has_personas,
     load_event,
     setup_from_codes,
     track_for,
@@ -61,13 +61,14 @@ def main() -> None:
     parser.add_argument("--db", type=Path, default=ROOT / "saves" / "viewer.sqlite")
     args = parser.parse_args()
 
-    if not args.replay and args.event not in SIMULATED_EVENTS:
-        parser.error(f"driver personas exist only for {SIMULATED_EVENTS}; use --replay")
+    if not args.replay and not has_personas(ROOT / "configs", args.event):
+        parser.error(f"no driver personas for {args.event}; use --replay")
     roster_path = ROOT / "configs" / "rosters" / f"{args.event}.json"
     if not roster_path.exists():
         parser.error(f"unknown event {args.event!r}: fetch it first with scripts/fetch_event.py")
     roster = load_roster(roster_path, expected_event_id=args.event)
-    length = track_for(args.event).length_m if args.event in SIMULATED_EVENTS else None
+    data_dir = PROCESSED / args.event
+    length = None if args.replay else track_for(args.event, data_dir).length_m
     try:
         assets = load_event_assets(roster, PROCESSED / args.event, engine_length_m=length)
     except MissingEventAssetsError as exc:

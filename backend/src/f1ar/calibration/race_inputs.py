@@ -73,12 +73,13 @@ def estimate_base_lap(
     representative laps matches them (median residual).
 
     For each such lap: ``lap_time - skill term - compound offset - wear so far - fuel term``,
-    where wear so far = ``deg(compound) x wear_factor(driver) x (tyre life - 1)`` (the model's
-    wear before the lap, BALANCED mode) and fuel = ``fuel_s_per_lap_remaining x laps remaining``.
-    The other coefficients stay the placeholders (D-010), so this only anchors the overall
-    level of lap times to the track; it's not a calibration of the model.
+    where wear so far is the model's own wear after ``tyre life - 1`` laps (BALANCED mode, the
+    engine's ``degradation_s``) and fuel = ``fuel_s_per_lap_remaining x laps remaining``.
+    It anchors the overall level of lap times to the track for whatever ``lap_model`` is given
+    (since M4 the calibrated one, D-033).
     """
-    from f1ar.simulation.lap_model import tyre_wear_factor
+    from f1ar.domain.race_state import PaceMode
+    from f1ar.simulation.lap_model import degradation_s
 
     fastest = min(car_estimate.car_pace_s, key=lambda team: car_estimate.car_pace_s[team])
     by_number = {e.car_number: e for e in roster.entries}
@@ -93,10 +94,12 @@ def estimate_base_lap(
         skill = lap_model.skill_gap_s * (1.0 - driver.race_pace_skill)
         life = row.get("tyre_life_laps")  # missing -> treat as a fresh tyre (no wear term)
         tyre_life = 1 if life is None or pd.isna(life) else int(life)
-        wear = (
-            lap_model.compounds[c].deg_s_per_lap
-            * tyre_wear_factor(lap_model, driver)
-            * (tyre_life - 1)
+        wear = degradation_s(
+            lap_model,
+            driver,
+            compound=c,
+            tyre_age_laps=max(0, tyre_life - 1),
+            pace_mode=PaceMode.BALANCED,
         )
         fuel = lap_model.fuel_s_per_lap_remaining * (total_laps - int(row["lap_number"]) + 1)
         residuals.append(
@@ -111,7 +114,7 @@ def estimate_base_lap(
         note=(
             f"estimated_from_data: base lap {base} s = median residual of {len(residuals)} "
             f"representative laps of the fastest team ({fastest}) after the model's skill, "
-            "compound, wear and fuel terms; other coefficients remain placeholders"
+            "compound, wear and fuel terms"
         ),
     )
 

@@ -132,3 +132,22 @@ def test_rolling_correction_is_exact_when_the_shape_is_true() -> None:
     )
     rows["drv_recent_s"] = truth_then
     assert predict_rolling_corrected(rows, TRUE) == pytest.approx(truth_now)
+
+
+def test_one_odd_lap_on_a_rare_compound_barely_moves_its_offset() -> None:
+    """Regression (M4 slice 3): a race with a single, very fast SOFT lap must not get a large
+    SOFT offset delta; the prior acts like ``ridge`` laps of that compound."""
+    r = race("one_soft", TRUE, noise=0.0, seed=3)
+    r = r[r["compound"] != "SOFT"].copy()
+    lonely = r.iloc[[10]].copy()
+    lonely["compound"] = "SOFT"
+    lonely["lap_time_s"] = lonely["lap_time_s"] - 1.5  # e.g. a late fastest-lap attempt
+    r = pd.concat([r, lonely], ignore_index=True)
+    adj = fit_race_adjustment(r, TRUE)  # default ridge = 200 laps
+    assert abs(adj.offset_delta["SOFT"]) < 0.02
+    # 87 real SOFT laps 0.5 s faster: a light prior finds it, the 200-lap prior shrinks it
+    many = race("many_soft", TRUE, noise=0.0, seed=4)
+    many.loc[many["compound"] == "SOFT", "lap_time_s"] -= 0.5
+    light = fit_race_adjustment(many, TRUE, ridge=2.0).offset_delta["SOFT"]
+    assert light == pytest.approx(-0.5, abs=0.05)
+    assert -0.5 < fit_race_adjustment(many, TRUE).offset_delta["SOFT"] < -0.05
