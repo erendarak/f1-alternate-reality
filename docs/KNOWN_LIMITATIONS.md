@@ -2,6 +2,20 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## M5 slice 1 (training environment)
+
+- **Editorial pieces of the AI's goals:** the team principal's rules, the risk-utility curvature,
+  the position tie-breaker in the points objective, and the synthetic championship standings
+  used in training. They shape what the AI wants; they are not learned or measured.
+- **Rewards only at the race end** (sparse): learning may be slow; slice 3 decides on shaping
+  or MPC warm-starting, with the reason recorded.
+- **Points:** only classified finishers in the top 10 score (no fastest-lap point, no sprints,
+  no 90 % distance rule for retirements).
+- **Gaps ahead/behind** are estimated from track positions x the base lap, not from timing loops.
+- **Forecast changes don't trigger a decision** (the forecast is only in the observation).
+- The pace mode's effects (PUSH/CONSERVE) are editorial (D-010): an AI that learns to push learns
+  our assumption, which the slice 5 exploit audit must check.
+
 ## End of M4 (slice 6, EXP-007)
 
 - **No calibrated part improves the finishing order** (EXP-007: the editorial engine agrees

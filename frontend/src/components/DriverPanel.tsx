@@ -100,7 +100,13 @@ export function DriverPanel({ worldId, car, timelineId }: Props) {
         <dt>Pace</dt>
         <dd>{car.pace_mode.toLowerCase()}</dd>
         <dt>Strategy</dt>
-        <dd>{car.controller === "USER" ? "you (no automatic stops)" : `baseline plan: ${car.plan || "–"}`}</dd>
+        <dd>
+          {car.controller === "USER"
+            ? "you (no automatic stops)"
+            : car.controller === "AGENT"
+              ? "AI policy (learned)"
+              : `baseline plan: ${car.plan || "–"}`}
+        </dd>
       </dl>
 
       <div className="dp-actions" aria-label="Decisions">

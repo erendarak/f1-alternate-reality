@@ -571,3 +571,15 @@ Verdict:   ~145,000 races/day >> the plan's 100 races/day floor for M5. No optim
            now; if RL needs more, a lap-level fast path or a mutable internal car record behind
            the same API (SIMULATOR_DECISION follow-up 3).
 ```
+
+## BENCH-002 — Training environment throughput (2026-10-13)
+
+```text
+Command:   uv run python scripts/env_benchmark.py --races 5 (Monza and Monaco, random legal actions)
+Machine:   same laptop as BENCH-001 (16 logical CPUs); a backend server was running alongside
+Result:    one AI car vs the rule field: 0.71 s/race, 81 decisions/s, ~5,000 races/hour per core
+           all 20 cars AI: 1.12 s/race, ~1,200 decisions/s, ~3,200 races/hour per core
+Verdict:   1 M training decisions = ~3.4 core-hours with one AI car (~15 min on 14 workers),
+           ~14 core-minutes with a whole AI field. The simulation, not the GPU, will set the
+           training speed; the 20-car setting gives 15x more experience per simulated race.
+```

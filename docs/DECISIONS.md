@@ -777,3 +777,37 @@ judged by "did it really learn" **and** "does the world feel more alive".
 - **Human control** (owner): the user can decide anything for anyone; AI continues on release;
   user decisions are logged and never learned from inside the live world.
 - **Cut from plan §16:** DQN, the full C0-C5 curriculum, the polished outcome chart.
+
+## D-038 — M5 training environment: decisions, actions, observation, objectives (2026-10-13)
+
+- **Package `f1ar/training/`** (plan §12 layout): `session.py` (a race where any subset of cars
+  is AI-run), `gym_env.py` (Gymnasium `RaceStrategyEnv` + `run_race`), `features.py`
+  (observation vector), `objectives.py` (objectives, scoring, team principal),
+  `scenarios.py` (scenario sampler, synthetic standings), `regulations.py` (FIA rule set).
+  Dependency: `gymnasium` (PyTorch and sb3-contrib come with slice 3).
+- **`StrategyController.AGENT`:** AI cars are labelled as AI, not as "user". The baseline leaves
+  them alone; their commands carry `actor_id = "AGENT:<policy id>"`. A human command on an AI
+  car (pit, cancel, **or pace**, which didn't take over before) hands it to `USER` (D-037: the
+  user can decide for anyone). The API refuses `AGENT...` actor ids and the `AGENT` controller:
+  only an AI runner sets it. The engine version stays v0.9.0: nothing changes for cars that
+  aren't AGENT, and no existing save can contain one.
+- **Decision points:** each AI car's lap end (while running), and for every running AI car a
+  safety car/VSC deployment or rain start/stop. Forecast changes are continuous and only enter
+  the observation (no extra trigger yet). `apply_external` lets race-director or user changes
+  trigger decisions too.
+- **Actions:** 18 = pit choice `[stay out, S, M, H, I, W]` x pace `[conserve, balanced, push]`,
+  masked by the engine's legal actions and the regulation set (`fia_2024_v1`, no bans; a ban
+  removes actions from the mask).
+- **Observation `rl_obs_v1`:** 58 numbers: the engine observation v5 (no future, tested again
+  on the vector), gaps ahead/behind from track positions now, car strength, track (pit loss,
+  wear level, overtaking threshold, laps), the objective and the championship context.
+- **Objectives and rewards:** TIME, RESULT, POINTS, CHAMPIONSHIP (points + points vs the title
+  rival); terminal reward only; character as a risk utility from the persona's `risk_appetite`
+  (editorial curvature 4). Team principal rules (editorial): a driver in the title fight
+  (championship top 3, within 60 % of the points left) in a top-3 car plays for the title,
+  everyone else for points; at the season start nobody is in a title fight yet.
+- **Training scenarios** are ephemeral (never a saved world). The championship context during
+  training is synthetic (car strength + race-pace skill + noise, 2024 points), labelled
+  editorial.
+- **Speed (BENCH-002):** one AI car vs the rule field 0.71 s/race, 81 decisions/s per core; all
+  20 cars AI 1.12 s/race, ~1,200 decisions/s per core.

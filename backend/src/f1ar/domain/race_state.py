@@ -70,7 +70,11 @@ class StrategyController(StrEnum):
     BASELINE = "BASELINE"
     """The built-in baseline team strategy (``f1ar.policy.baseline_strategy``)."""
     USER = "USER"
-    """A human (or external agent) via pit actions; the baseline stays out of it."""
+    """A human via pit actions; the baseline stays out of it."""
+    AGENT = "AGENT"
+    """A learned policy (M5) via the same pit/pace actions; the baseline stays out of it. Set
+    only by an agent runner (actions whose ``actor_id`` starts with ``AGENT``); any human
+    command on the car takes it over (-> USER): the user can decide for anyone (D-037)."""
 
 
 # --- setup: fixed for the lifetime of a world ---------------------------------------------

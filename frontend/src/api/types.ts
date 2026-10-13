@@ -28,7 +28,7 @@ export interface Car {
   pit_stops: number;
   box: Compound | null;
   in_pit: boolean;
-  controller: "BASELINE" | "USER";
+  controller: "BASELINE" | "USER" | "AGENT";
   plan: string;
   last_lap_traffic_loss_s: number;
   retired_reason: string | null;
@@ -221,7 +221,7 @@ export interface DriverCard {
     tyre_age_laps: number;
     pit_stops: number;
     pace_mode: string;
-    controller: "BASELINE" | "USER";
+    controller: "BASELINE" | "USER" | "AGENT";
     plan: string;
     source_type: SourceType;
   };

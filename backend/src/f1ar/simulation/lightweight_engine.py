@@ -340,7 +340,7 @@ def apply_action(state: WorldState, action: DriverAction) -> StepResult:
         case RequestPitStop():
             new = _request_pit(state, car, action, emit)
         case CancelPitStop():
-            new = _cancel_pit(car, emit)
+            new = _cancel_pit(car, action.actor_id, emit)
         case SetStrategyController():
             new = _set_controller(state, car, action.controller, emit)
         case _:
@@ -380,6 +380,8 @@ def _replan(state: WorldState, car: CarState, emit: _ActionEmit) -> CarState:
 def _set_pace_mode(
     state: WorldState, car: CarState, action: SetPaceMode, emit: _ActionEmit
 ) -> CarState:
+    if car.controller is StrategyController.AGENT and not action.actor_id.startswith("AGENT"):
+        car = _take_over(car, emit)  # a human decision on an AI car: the human has it now
     if car.pace_mode is action.pace_mode:
         return car
     emit(
@@ -396,16 +398,23 @@ def _set_pace_mode(
     return new
 
 
-def _take_over(car: CarState, emit: _ActionEmit) -> CarState:
-    if car.controller is StrategyController.USER:
+def _controller_of(actor_id: str) -> StrategyController:
+    """Who takes a car over by acting on it: an agent runner, or else a human."""
+    return StrategyController.AGENT if actor_id.startswith("AGENT") else StrategyController.USER
+
+
+def _take_over(
+    car: CarState, emit: _ActionEmit, to: StrategyController = StrategyController.USER
+) -> CarState:
+    if car.controller is to:
         return car
-    emit("CONTROLLER_CHANGED", {"from": car.controller.value, "to": StrategyController.USER.value})
+    emit("CONTROLLER_CHANGED", {"from": car.controller.value, "to": to.value})
     # A stop the baseline planned for this lap becomes an explicit request, so taking over
     # never silently changes what the car was about to do.
     request = pending_stop(car)
     return car.model_copy(
         update={
-            "controller": StrategyController.USER,
+            "controller": to,
             "planned_stops": (),
             "pit_request": request,
         }
@@ -419,7 +428,7 @@ def _request_pit(
         raise ActionRejectedError("the chequered flag is out")
     if car.laps_completed + 1 >= state.setup.track.total_laps:
         raise ActionRejectedError(f"{car.driver_id} is on the final lap")
-    new = _take_over(car, emit)
+    new = _take_over(car, emit, _controller_of(action.actor_id))
     if new.pit_request is action.compound:
         return new
     emit(
@@ -429,10 +438,10 @@ def _request_pit(
     return new.model_copy(update={"pit_request": action.compound})
 
 
-def _cancel_pit(car: CarState, emit: _ActionEmit) -> CarState:
+def _cancel_pit(car: CarState, actor_id: str, emit: _ActionEmit) -> CarState:
     if pending_stop(car) is None:
         return car  # nothing to cancel; a BASELINE car keeps its plan
-    new = _take_over(car, emit)
+    new = _take_over(car, emit, _controller_of(actor_id))
     assert new.pit_request is not None
     emit("PIT_CANCELLED", {"compound": new.pit_request.value, "in_lap": new.laps_completed + 1})
     return new.model_copy(update={"pit_request": None})
@@ -443,8 +452,8 @@ def _set_controller(
 ) -> CarState:
     if car.controller is controller:
         return car
-    if controller is StrategyController.USER:
-        return _take_over(car, emit)
+    if controller is not StrategyController.BASELINE:
+        return _take_over(car, emit, controller)
     emit("CONTROLLER_CHANGED", {"from": car.controller.value, "to": controller.value})
     # The baseline decides from here on; a pending user request is replaced by its plan.
     new = car.model_copy(update={"controller": controller, "pit_request": None})

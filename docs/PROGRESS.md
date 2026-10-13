@@ -8,9 +8,9 @@ decides pit/tyre and pace for every car. Judged by: did it really learn (vs rule
 MPC, on held-out tracks and seeds), and is the race more alive (strategy variety vs 2024).
 Plan (agreed 2026-10-13, one slice per commit; nothing started):
 
-- [ ] Slice 1: Gymnasium env (single- and multi-agent, decision points, masks, regulation set v1),
-  objectives and reward variants, scenario sampler with championship context, speed benchmark,
-  determinism tests.
+- [x] **Slice 1: training environment (D-038, BENCH-002)**: Gymnasium env + multi-car session,
+  decision points, masks, regulation set v1, objectives and rewards, team principal rules,
+  scenario sampler with championship context, AGENT controller, speed benchmark, tests.
 - [ ] Slice 2: baselines B1 rules, B2 enumerator, B3 fork-based MPC; EXP-008.
 - [ ] Slice 3: training stack (PyTorch + MaskablePPO on CUDA, CPU sim workers); one learning car vs
   the rule field; policy registry + pinning; EXP-009.
@@ -1028,3 +1028,32 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Model technology: small PyTorch RL networks (one shared policy per role), not LLMs; LLMs only
   for Stage 3 language/negotiation (local, validator-gated).
 - No code yet. Next: M5 slice 1.
+
+### 2026-10-13 — M5 slice 1: the training environment (D-038, BENCH-002)
+
+- **`f1ar/training/`**: `RaceSession` runs a race where any subset of cars is AI-run and stops at
+  every decision (lap end; SC/VSC; rain start/stop); `RaceStrategyEnv` (Gymnasium, one learning
+  car, optional AI opponents via a given policy, `action_masks()` for MaskablePPO); `run_race`
+  for whole AI fields.
+- **Actions:** 18 (pit choice x pace), masked by the engine and the FIA rule set
+  (`fia_2024_v1`, no bans yet; a ban removes actions, tested).
+- **Observation `rl_obs_v1`:** 58 numbers, nothing from the future (tested on the vector).
+- **Objectives:** time / result / points / championship (vs the title rival); rewards at the
+  race end through each driver's risk utility (character, editorial); a rule-based team
+  principal picks title vs points from the standings and car strength.
+- **Scenarios:** random race, seed, weather, AI cars; synthetic championship standings
+  (labelled editorial) so the AI sees title fights and points chances.
+- **AGENT controller:** AI cars are labelled as AI (tower "A", driver panel "AI policy"); a
+  human pit or pace decision takes the car over (owner rule); the API can't set AGENT or use an
+  AGENT actor id.
+- **BENCH-002:** one AI car 81 decisions/s per core, a 20-car AI field ~1,200 decisions/s.
+- Smoke check on real Monza: Gymnasium's env checker passes; a random policy pits 32 times and
+  finishes P17 (as it should), the baseline never touches the AI car.
+- Not checked in the browser: no AI runs in the app yet (slice 6); the UI labels are covered by
+  the type check.
+- Tests: 371 offline (+18: action encoding, masks and bans, decisions every lap, AI pit carried
+  out and never pits on its own, race events trigger decisions, same seed same race, a whole AI
+  field, human takes over, API can't impersonate the AI, observation names/values and no
+  future, objectives, risk utility shapes, team principal, synthetic standings, Gymnasium
+  checker + reproducibility, AI opponents) + 2 network; frontend 17; E2E passes.
+- Next: slice 2, baselines (rules, enumerator, fork-based MPC) and EXP-008.

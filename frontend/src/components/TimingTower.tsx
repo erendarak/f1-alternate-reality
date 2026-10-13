@@ -77,9 +77,18 @@ export function TimingTower({ cars, totalLaps, selected, onSelect }: Props) {
                   <TyreBadge compound={car.compound} age={car.tyre_age_laps} />
                   <span className="age">{car.tyre_age_laps}</span>
                 </td>
-                <td className="num" title={car.controller === "USER" ? "strategy: user" : `baseline plan: ${car.plan}`}>
+                <td
+                  className="num"
+                  title={
+                    car.controller === "USER"
+                      ? "strategy: user"
+                      : car.controller === "AGENT"
+                        ? "strategy: AI policy"
+                        : `baseline plan: ${car.plan}`
+                  }
+                >
                   {car.pit_stops}
-                  {car.controller === "USER" ? <sup>U</sup> : null}
+                  {car.controller === "USER" ? <sup>U</sup> : car.controller === "AGENT" ? <sup>A</sup> : null}
                 </td>
                 <td className={`st ${st.cls}`} title={st.title}>
                   {st.text}

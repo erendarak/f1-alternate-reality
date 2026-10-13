@@ -10,7 +10,7 @@ import uuid
 from enum import StrEnum
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from f1ar.domain.race_state import Compound, PaceMode, StrategyController
 from f1ar.simulation.timeline import SeedMode
@@ -78,13 +78,22 @@ class ActionRequest(_Request):
     driver_id: str | None = None
     compound: Compound | None = None
     pace_mode: PaceMode | None = None
-    controller: StrategyController | None = None
+    controller: Literal[StrategyController.BASELINE, StrategyController.USER] | None = None
+    """AGENT is set by an AI runner only, never through the API."""
     laps: int = Field(default=4, ge=1, le=20)
     """DEPLOY_SC: safety-car laps."""
     duration_s: float = Field(default=90.0, gt=0, le=600)
     """DEPLOY_VSC: VSC length in sim seconds."""
     actor_id: str = ActorId
     idempotency_key: str | None = IdempotencyKey
+
+    @field_validator("actor_id")
+    @classmethod
+    def _human(cls, value: str) -> str:
+        """``AGENT...`` ids belong to AI runners (D-037); the API is for humans."""
+        if value.upper().startswith("AGENT"):
+            raise ValueError("actor ids starting with AGENT are reserved for AI runners")
+        return value
 
     def to_command(self) -> Command:
         return Command(
