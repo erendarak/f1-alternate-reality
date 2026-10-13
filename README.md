@@ -1,12 +1,22 @@
 # F1 Alternate Reality — Living Championship Simulator
 
-A persistent, forkable F1 world. It starts from real historical races (first target: **2024 Italian GP, Monza**).
-From there, profile-conditioned AI strategists decide what happens next. You can pause, save, reload and
-branch the timeline at any moment.
+A persistent, forkable F1 world for training AI. It starts from real historical races (the 2024
+season). The goal is a **live AI world**: AI drivers, strategists and teams with their own
+character decide what happens next, compete, make mistakes and, over seasons, write an
+alternative history. You can pause, save, reload and branch the timeline at any moment, and take
+any decision yourself.
 
-> **Status:** M0–M3 done: a deterministic race engine (pit stops, traffic, incidents, safety car)
-> on real 2024 Monza/Spa grids, persistent worlds with save/load/fork, and a 2D browser app.
-> Coefficients are not calibrated yet (M4). See [docs/PROGRESS.md](docs/PROGRESS.md).
+> **Status:** M0–M4 done:
+> - a deterministic race engine (pit stops, traffic, incidents, safety car, weather);
+> - calibrated on the 2024 season: tyre/fuel model, wet tyres, overtaking per track, the start,
+>   race-control rates;
+> - all 24 races of 2024 playable in a 2D browser app with save/load/fork.
+>
+> **No AI has been trained yet**: today's cars follow a rule-based strategy, and the fitted models
+> are statistical calibrations (see [docs/MODEL_REGISTRY.md](docs/MODEL_REGISTRY.md)).
+> **Next, M5:** the first trained AI, one shared reinforcement-learning policy that runs all 20
+> cars, conditioned on each driver's character and the team principal's objective
+> ([docs/M5_DESIGN.md](docs/M5_DESIGN.md)). Progress: [docs/PROGRESS.md](docs/PROGRESS.md).
 > The full product and technical plan is [F1_ALTERNATE_REALITY_MASTER_PLAN.md](F1_ALTERNATE_REALITY_MASTER_PLAN.md).
 
 Alternate outcomes are **simulation estimates** built on modelling assumptions. They are not historical facts.
@@ -16,7 +26,7 @@ Driver persona values are **editorial assumptions**, not real psychometrics.
 
 - Windows, macOS or Linux
 - [uv](https://docs.astral.sh/uv/) (installs and manages Python 3.12 for you)
-- Node.js 20+ (for the browser app)
+- Node.js 20.19+ (for the browser app; developed on Node 24)
 
 Install uv on Windows (PowerShell):
 
@@ -33,7 +43,8 @@ uv sync
 This creates `.venv/` with Python 3.12, the `f1ar` package (editable) and the dev tools.
 
 ```powershell
-uv run python scripts/fetch_event.py --season 2024 --round 16   # Monza 2024 data (once; cached)
+uv run python scripts/fetch_season.py --season 2024 --telemetry   # all 24 races of 2024 (once; cached)
+uv run python scripts/build_lap_dataset.py --season 2024          # lap dataset for the calibrations
 npm --prefix frontend install
 ```
 
@@ -46,7 +57,8 @@ uv run python scripts/serve.py          # backend API on http://127.0.0.1:8000 (
 npm --prefix frontend run dev           # app on http://localhost:5173
 ```
 
-World Library → create a race or continue one. In the race: Space play/pause, S save, → step (paused),
+World Library → pick any 2024 race, a seed and the weather (real conditions or random
+showers), or continue a saved world. In the race: Space play/pause, S save, → step (paused),
 click a car for its driver panel (tyres, decisions, data sources), **Fork…** to branch the race with
 another decision, **Timelines** to load any save or go back to the main story. API reference:
 [docs/API_CONTRACTS.md](docs/API_CONTRACTS.md).
@@ -62,6 +74,8 @@ another decision, **Timelines** to load any save or go back to the main story. A
 | Format | `uv run ruff format .` |
 | Type-check | `uv run mypy` |
 | Show Monza 2024 grid + driver personas | `uv run python scripts/show_profiles.py` |
+| Check every model manifest against its file and dataset | `uv run python scripts/model_registry.py` (writes `docs/MODEL_REGISTRY.md`) |
+| Experiments: calibrated engine, weather, overtaking/race control, ablation | `exp002_m2_engine.py --events …` · `exp005_weather.py` · `exp006_traffic_race_control.py` · `exp007_ablation.py` (in `scripts/experiments/`) |
 | Run a headless race (timing sheet) | `uv run python scripts/demo_headless.py --drivers VER HAM LEC` (or `--all`) |
 | Watch a live race, pause/resume with Enter | `uv run python scripts/live_race.py --speed 25` |
 | Experiment: do real-data inputs help? (EXP-001) | `uv run python scripts/experiments/exp001_data_inputs.py --seeds 30` |
@@ -87,10 +101,12 @@ another decision, **Timelines** to load any save or go back to the main story. A
 backend/src/f1ar/   Python package: domain, data, calibration, history, simulation, policy,
                     persistence, presentation, api (FastAPI + WebSocket)
 frontend/           React + TypeScript app (Vite); e2e/ = Playwright end-to-end test
-configs/            race rosters (verified facts) and driver persona seeds (editorial assumptions)
+configs/            race rosters (verified facts), driver persona seeds (editorial assumptions),
+                    calibration/ (fitted engine parameters) and models/ (model manifests)
 scripts/            CLI entry points
 tests/              pytest suites
-docs/               decisions, progress, assumptions, licenses, limitations, experiments
+docs/               decisions, progress, assumptions, licenses, limitations, experiments,
+                    model registry, M5 design
 ```
 
 Folders are created when a milestone needs them, not ahead of time.

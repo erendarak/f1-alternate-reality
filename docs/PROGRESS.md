@@ -1,6 +1,27 @@
 # Progress
 
-## Current milestone: M4 — Race models and calibration (plan §16, §7.6, §8) — COMPLETE
+## Current milestone: M5 — Stage 1: a field of AI strategists (plan §9, §16; design `docs/M5_DESIGN.md`, D-037)
+
+Why: the project exists to train AI for a live F1 world. M5 trains the first real AI: one shared
+policy, conditioned on driver profile, car, track and the team principal's objective, that
+decides pit/tyre and pace for every car. Judged by: did it really learn (vs rules and fork-based
+MPC, on held-out tracks and seeds), and is the race more alive (strategy variety vs 2024).
+Plan (agreed 2026-10-13, one slice per commit; nothing started):
+
+- [ ] Slice 1: Gymnasium env (single- and multi-agent, decision points, masks, regulation set v1),
+  objectives and reward variants, scenario sampler with championship context, speed benchmark,
+  determinism tests.
+- [ ] Slice 2: baselines B1 rules, B2 enumerator, B3 fork-based MPC; EXP-008.
+- [ ] Slice 3: training stack (PyTorch + MaskablePPO on CUDA, CPU sim workers); one learning car vs
+  the rule field; policy registry + pinning; EXP-009.
+- [ ] Slice 4: character and goals (profile + objective conditioning, risk utilities, rule-based
+  team principal); EXP-010.
+- [ ] Slice 5: all 20 cars AI (shared policy, frozen-opponent pool); realism vs 2024; exploit
+  audit; FIA ban mechanism; EXP-011.
+- [ ] Slice 6: weather generalisation, UI (thinking panel, behaviour cards, fork-and-try model,
+  pinned versions, override hand-back), M5 done-check.
+
+## Previous milestone: M4 — Race models and calibration (plan §16, §7.6, §8) — COMPLETE
 
 Why: EXP-002 showed every simulated car one-stopping onto SOFT (real: mostly M-H, many 2-stops),
 overtakes 2-5x too rare, no weather, editorial incident rates. M4 replaces guessed coefficients
@@ -996,3 +1017,14 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Tests: 353 offline (+7: registry matches, registry flags changed/missing artifacts, a race
   builds and runs without each fitted file and without all four) + 2 network; frontend 17.
 - **M4 complete.** Next: M5, Stage 1 strategy learning (plan §16).
+
+### 2026-10-13 — M5 design agreed (D-037, `docs/M5_DESIGN.md`)
+
+- Discussed M5 against the project's purpose (a live AI world). Owner decisions: winning depends
+  on the championship and is a team principal decision; all 20 cars AI by the end of M5;
+  characters change between seasons later; train on the GPU; engine-bug exploits are fixed,
+  real novel strategies allowed and the FIA can ban them; the user can decide for anyone, the AI
+  continues afterwards.
+- Model technology: small PyTorch RL networks (one shared policy per role), not LLMs; LLMs only
+  for Stage 3 language/negotiation (local, validator-gated).
+- No code yet. Next: M5 slice 1.

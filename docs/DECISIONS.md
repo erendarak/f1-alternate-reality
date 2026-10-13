@@ -748,3 +748,32 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   the result says which real-race properties each part is responsible for (see EXP-007).
 - **M4 done-check:** see PROGRESS (all plan items met; open issues are listed in
   KNOWN_LIMITATIONS and carried to M5).
+
+## D-037 — M5 direction: a field of AI strategists, goal- and character-conditioned (2026-10-13)
+
+Discussed with the owner before M5; the full design is `docs/M5_DESIGN.md` (it wins over plan
+§9/§16 where they differ). The project's purpose is training AI for a live F1 world, so M5 is
+judged by "did it really learn" **and** "does the world feel more alive".
+
+- **All 20 cars AI by the end of M5** (owner: apply the advice): one shared policy conditioned on
+  driver profile, car, track and team objective; first one learning car vs the rule field, then
+  the whole field with a pool of frozen earlier policies. Still Stage 1 (no opponent modelling).
+- **What "winning" means depends on the championship and is a team principal decision** (owner):
+  contenders play for the title, midfield and back-markers for points when a chance appears. The
+  team principal (rules in M5, editorial; learned later) sets each car's objective; the policy is
+  goal-conditioned and the reward follows the objective. Championship context is sampled during
+  training, taken from the world's season later.
+- **Characters change** (owner): fixed per world in M5 (pinned profile revision, D-007), entering
+  dynamics and preferences (a risk utility per driver, editorial); evolution between seasons
+  ("offseason learning", M9) with a model/profile lineage per driver. No online learning inside
+  a live world.
+- **Model technology:** small PyTorch actor-critic networks trained with RL (MaskablePPO) on the
+  RTX 4070; simulation on CPU workers. No LLM for race decisions (speed, reproducibility,
+  numeric trade-offs). Local LLMs (Qwen/Llama via Ollama) only in Stage 3 for language and
+  negotiation, validator-gated.
+- **Exploits and the FIA** (owner): engine-bug exploits are fixed, never rewarded (exploit audit
+  vs 2024 statistics and MPC); real but novel strategies are allowed; a versioned regulation set
+  can ban them (illegal through the action mask), changes between seasons, logged with reasons.
+- **Human control** (owner): the user can decide anything for anyone; AI continues on release;
+  user decisions are logged and never learned from inside the live world.
+- **Cut from plan §16:** DQN, the full C0-C5 curriculum, the polished outcome chart.
