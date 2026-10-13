@@ -21,20 +21,22 @@ from dataclasses import dataclass
 import numpy as np
 
 from f1ar.domain.race_state import (
-    CancelPitStop,
     CarStatus,
     Compound,
-    PaceMode,
     RaceEvent,
     RaceSetup,
-    RequestPitStop,
-    SetPaceMode,
     SetStrategyController,
     StrategyController,
     WorldState,
     WorldStatus,
 )
 from f1ar.simulation import lightweight_engine as engine
+from f1ar.training.actions import (
+    PACE_OPTIONS,
+    PIT_OPTIONS,
+    agent_commands,
+    decode,
+)
 from f1ar.training.features import rl_observation
 from f1ar.training.objectives import (
     CarResult,
@@ -44,29 +46,10 @@ from f1ar.training.objectives import (
 )
 from f1ar.training.regulations import REGULATIONS_2024, RegulationSet
 
-PIT_OPTIONS: tuple[Compound | None, ...] = (
-    None,
-    Compound.SOFT,
-    Compound.MEDIUM,
-    Compound.HARD,
-    Compound.INTERMEDIATE,
-    Compound.WET,
-)
-PACE_OPTIONS: tuple[PaceMode, ...] = (PaceMode.CONSERVE, PaceMode.BALANCED, PaceMode.PUSH)
-N_ACTIONS = len(PIT_OPTIONS) * len(PACE_OPTIONS)
 DECISION_EVENTS = ("SAFETY_CAR_DEPLOYED", "VSC_DEPLOYED", "RAIN_STARTED", "RAIN_STOPPED")
 """Race events that make every running AI car decide (besides its own lap end)."""
 MAX_TICKS = 200_000
 """Safety net: a race never needs this many ticks (Monaco ~ 30k)."""
-
-
-def decode(action: int) -> tuple[Compound | None, PaceMode]:
-    pit, pace = divmod(int(action), len(PACE_OPTIONS))
-    return PIT_OPTIONS[pit], PACE_OPTIONS[pace]
-
-
-def encode(pit: Compound | None, pace: PaceMode) -> int:
-    return PIT_OPTIONS.index(pit) * len(PACE_OPTIONS) + PACE_OPTIONS.index(pace)
 
 
 @dataclass(frozen=True)
@@ -111,6 +94,8 @@ class RaceSession:
         self.state: WorldState = engine.start(state)
         self._pending: deque[tuple[str, str]] = deque()
         self.decisions = 0
+        self.stop_compounds: dict[str, list[Compound]] = {}
+        """Every car's new compound at each of its pit stops, in order (from PIT_STOP events)."""
 
     # --- the loop ---------------------------------------------------------------------------
 
@@ -144,6 +129,9 @@ class RaceSession:
     def _enqueue(self, events: Sequence[RaceEvent]) -> None:
         queued = {d for d, _ in self._pending}
         for e in events:
+            if e.type == "PIT_STOP" and e.driver_id is not None:
+                compound = Compound(str(e.payload["to_compound"]))
+                self.stop_compounds.setdefault(e.driver_id, []).append(compound)
             if e.type == "LAP_COMPLETED" and e.driver_id in self.agents:
                 if e.driver_id not in queued:
                     self._pending.append((e.driver_id, "LAP_END"))
@@ -182,21 +170,7 @@ class RaceSession:
             raise ValueError(f"{driver_id} is not run by the AI")
         if not self.action_mask(driver_id)[action]:
             raise ValueError(f"action {action} {decode(action)} is not legal for {driver_id}")
-        pit, pace = decode(action)
-        car = self.state.car(driver_id)
-        commands: list[RequestPitStop | CancelPitStop | SetPaceMode] = []
-        if pit is None:
-            if engine.pending_stop(car) is not None:
-                commands.append(CancelPitStop(driver_id=driver_id, actor_id=self.actor_id))
-        elif car.pit_request is not pit:
-            commands.append(
-                RequestPitStop(driver_id=driver_id, compound=pit, actor_id=self.actor_id)
-            )
-        if car.pace_mode is not pace:
-            commands.append(
-                SetPaceMode(driver_id=driver_id, pace_mode=pace, actor_id=self.actor_id)
-            )
-        for c in commands:
+        for c in agent_commands(self.state.car(driver_id), action, self.actor_id):
             self.state = engine.apply_action(self.state, c).state
 
     # --- the result ---------------------------------------------------------------------------

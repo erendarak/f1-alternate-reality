@@ -26,6 +26,7 @@ from enum import StrEnum
 import numpy as np
 
 from f1ar.domain.race_state import CarStatus, RaceSetup, WorldState
+from f1ar.policy.baseline_strategy import dry_compounds_required
 from f1ar.simulation.lightweight_engine import standings
 
 POINTS_2024 = (25, 18, 15, 12, 10, 8, 6, 4, 2, 1)
@@ -119,32 +120,51 @@ def team_principal(
 @dataclass(frozen=True)
 class CarResult:
     position: int
-    """Classified order (finishers by laps then time, then retirements: engine standings)."""
+    """Classified order: legal finishers (by laps, then time), retirements, disqualifications."""
     finished: bool
     points: int
     gap_s: float
-    """Behind the winner, with laps down at the winner's average lap; NaN for a retirement."""
+    """Behind the winner, with laps down at the winner's average lap; NaN unless classified."""
+    disqualified: bool = False
+    """Finished without the compounds the rules require (see ``race_results``)."""
 
 
 def race_results(state: WorldState) -> dict[str, CarResult]:
-    order = standings(state)
-    winner = state.car(order[0])
-    winner_time = winner.finish_time_s or 0.0
-    avg_lap = winner_time / max(1, winner.laps_completed)
+    """Results as the AI is scored. The engine only *reports* a broken two-dry-compounds rule
+    (``TYRE_RULE_BREACHED``); here such a car is scored as disqualified (no points, classified
+    last), an editorial stand-in for the regulation penalty. Without it, an AI would learn to
+    skip the mandatory stop: an engine-bug exploit (D-037)."""
+    setup = state.setup
+    legal, retired, dsq = [], [], []
+    for driver_id in standings(state):
+        car = state.car(driver_id)
+        if car.status is not CarStatus.FINISHED:
+            retired.append(driver_id)
+        elif len(set(car.compounds_used)) < dry_compounds_required(setup, car.compounds_used):
+            dsq.append(driver_id)
+        else:
+            legal.append(driver_id)
+    order = legal + retired + dsq
+    winner = state.car(legal[0]) if legal else None
+    winner_time = winner.finish_time_s or 0.0 if winner else 0.0
+    winner_laps = winner.laps_completed if winner else 0
+    avg_lap = winner_time / max(1, winner_laps)
     out = {}
     for i, driver_id in enumerate(order):
         car = state.car(driver_id)
-        finished = car.status is CarStatus.FINISHED
         position = i + 1
+        classified = driver_id in legal
         gap = math.nan
-        if finished and car.finish_time_s is not None:
-            gap = (
-                car.finish_time_s
-                - winner_time
-                + avg_lap * (winner.laps_completed - car.laps_completed)
-            )
-        points = POINTS_2024[position - 1] if finished and position <= len(POINTS_2024) else 0
-        out[driver_id] = CarResult(position, finished, points, gap)
+        if classified and car.finish_time_s is not None:
+            gap = car.finish_time_s - winner_time + avg_lap * (winner_laps - car.laps_completed)
+        points = POINTS_2024[position - 1] if classified and position <= len(POINTS_2024) else 0
+        out[driver_id] = CarResult(
+            position,
+            car.status is CarStatus.FINISHED,
+            points,
+            gap,
+            disqualified=driver_id in dsq,
+        )
     return out
 
 
@@ -156,7 +176,9 @@ def objective_value(
     place = (field_size - me.position) / max(1, field_size - 1)  # 1 = win, 0 = last
     match order.objective:
         case Objective.TIME:
-            return -1.0 if not me.finished else max(-1.0, 1.0 - me.gap_s / TIME_SCALE_S)
+            if not me.finished or me.disqualified:
+                return -1.0
+            return max(-1.0, 1.0 - me.gap_s / TIME_SCALE_S)
         case Objective.RESULT:
             return place
         case Objective.POINTS:

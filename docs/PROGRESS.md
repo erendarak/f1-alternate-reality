@@ -11,7 +11,8 @@ Plan (agreed 2026-10-13, one slice per commit; nothing started):
 - [x] **Slice 1: training environment (D-038, BENCH-002)**: Gymnasium env + multi-car session,
   decision points, masks, regulation set v1, objectives and rewards, team principal rules,
   scenario sampler with championship context, AGENT controller, speed benchmark, tests.
-- [ ] Slice 2: baselines B1 rules, B2 enumerator, B3 fork-based MPC; EXP-008.
+- [x] **Slice 2: baselines (D-039, EXP-008)**: B0 real stops, B1 rules, B2 enumerator, B3
+  fork-based MPC, random; paired evaluation. Result: the rule planner is the bar (MPC is worse).
 - [ ] Slice 3: training stack (PyTorch + MaskablePPO on CUDA, CPU sim workers); one learning car vs
   the rule field; policy registry + pinning; EXP-009.
 - [ ] Slice 4: character and goals (profile + objective conditioning, risk utilities, rule-based
@@ -1057,3 +1058,32 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
   future, objectives, risk utility shapes, team principal, synthetic standings, Gymnasium
   checker + reproducibility, AI opponents) + 2 network; frontend 17; E2E passes.
 - Next: slice 2, baselines (rules, enumerator, fork-based MPC) and EXP-008.
+
+### 2026-10-13 — M5 slice 2: the baselines and EXP-008 (D-039)
+
+- **Strategists:** B0 real 2024 stops, B1 the rule planner, B2 enumerator (every legal 0-3-stop
+  compound sequence by dynamic programming, then the best 6 re-ranked by simulated races), B3
+  fork-based MPC (every option played out in imagined futures, the rules driving afterwards),
+  random. A paired evaluation harness (same race for every method).
+- **Imagined futures** never see the real future: new random draws, and rain drawn from the
+  forecast within its 10-minute horizon only.
+- **Two-compound rule:** a breach is now scored as a disqualification for the AI (an AI would
+  otherwise learn to skip the mandatory stop: an exploit, D-037).
+- **EXP-008** (100 paired cases x 5 methods, 2 h 22 min): the rule planner is the bar. The
+  enumerator ties it; **MPC is worse** (-0.037, CI below 0: noisy estimates, picking the best of
+  noisy options); real 2024 strategies much worse in our engine; random far worse.
+- **Bugs found:**
+  1. **Imagined rain:** the 10-minute forecast became a whole-race rain rate, so dry races
+     imagined showers in almost every future (a test caught it; the run in progress was stopped
+     and repeated).
+  2. **Tyre-rule exploit:** the engine only reported a missed mandatory stop; now penalised in
+     the AI's scoring.
+- Also: EXP-008 took 2 h 22 min instead of ~40 min estimated: each worker got only a third to a
+  half of a core (likely Windows throttling background processes; the machine was 25-48 %
+  loaded). Added progress output to the script and a tick safety net to the imagined-race loop.
+- Tests: 381 offline (+10: plan enumeration legal and cheapest-first, DP vs brute force, real
+  stops without red-flag entries, fixed plan carried out, imagined futures never use the real
+  seed or later real rain, imagined rain follows the forecast, rollouts reproducible and
+  side-effect free, MPC deterministic, paired evaluation, enumerator picks its best simulated
+  plan) + 2 network; frontend 17.
+- Next: slice 3, GPU training stack and the first learned policy vs B1.

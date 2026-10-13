@@ -75,6 +75,7 @@ another decision, **Timelines** to load any save or go back to the main story. A
 | Type-check | `uv run mypy` |
 | Show Monza 2024 grid + driver personas | `uv run python scripts/show_profiles.py` |
 | M5 training environment speed (decisions per second) | `uv run python scripts/env_benchmark.py --races 5` |
+| Experiment: baselines the AI must beat (EXP-008, ~2.5 h) | `uv run python scripts/experiments/exp008_baselines.py --seeds 5 --workers 14` |
 | Check every model manifest against its file and dataset | `uv run python scripts/model_registry.py` (writes `docs/MODEL_REGISTRY.md`) |
 | Experiments: calibrated engine, weather, overtaking/race control, ablation | `exp002_m2_engine.py --events …` · `exp005_weather.py` · `exp006_traffic_race_control.py` · `exp007_ablation.py` (in `scripts/experiments/`) |
 | Run a headless race (timing sheet) | `uv run python scripts/demo_headless.py --drivers VER HAM LEC` (or `--all`) |

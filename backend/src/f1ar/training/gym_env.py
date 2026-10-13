@@ -18,10 +18,11 @@ import gymnasium as gym
 import numpy as np
 
 from f1ar.domain.race_state import RaceSetup
+from f1ar.training.actions import N_ACTIONS
 from f1ar.training.features import RL_FEATURE_NAMES, RL_OBSERVATION_SCHEMA
 from f1ar.training.regulations import REGULATIONS_2024, RegulationSet
 from f1ar.training.scenarios import Scenario, ScenarioSampler
-from f1ar.training.session import N_ACTIONS, Decision, RaceSession
+from f1ar.training.session import Decision, RaceSession
 
 Policy = Callable[[Decision], int]
 """Picks a legal action index for a decision."""
@@ -137,6 +138,7 @@ class RaceStrategyEnv(gym.Env[np.ndarray, np.int64]):
             info["position"] = result.position
             info["points"] = result.points
             info["finished"] = result.finished
+            info["disqualified"] = result.disqualified
         return info
 
 

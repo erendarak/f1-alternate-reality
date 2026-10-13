@@ -22,6 +22,7 @@ from f1ar.domain.race_state import (
 )
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.scenarios import build_setup
+from f1ar.training.actions import N_ACTIONS, PIT_OPTIONS, decode, encode
 from f1ar.training.features import RL_FEATURE_NAMES, rl_observation
 from f1ar.training.gym_env import RaceStrategyEnv, random_policy, run_race
 from f1ar.training.objectives import (
@@ -37,13 +38,7 @@ from f1ar.training.objectives import (
 )
 from f1ar.training.regulations import REGULATIONS_2024, Ban
 from f1ar.training.scenarios import ScenarioSampler, synthetic_standings
-from f1ar.training.session import (
-    N_ACTIONS,
-    PIT_OPTIONS,
-    RaceSession,
-    decode,
-    encode,
-)
+from f1ar.training.session import RaceSession
 from tests.conftest import HAM, VER
 
 STAY = encode(None, PaceMode.BALANCED)
@@ -295,7 +290,9 @@ def test_gym_env_passes_the_checker_and_is_reproducible(isolated_setup: RaceSetu
     while not done:
         _, reward, done, _, info = env.step(STAY)
         steps += 1
-    assert info["finished"] and info["points"] == POINTS_2024[info["position"] - 1]
+    # never stopping breaks the two-dry-compounds rule: scored as a disqualification
+    assert info["finished"] and info["disqualified"] and info["points"] == 0
+    assert info["position"] == 2  # classified last of the two cars
     assert reward == env.session.rewards()[env.me]  # type: ignore[union-attr]
 
 

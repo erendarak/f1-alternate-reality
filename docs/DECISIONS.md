@@ -811,3 +811,33 @@ judged by "did it really learn" **and** "does the world feel more alive".
   editorial.
 - **Speed (BENCH-002):** one AI car vs the rule field 0.71 s/race, 81 decisions/s per core; all
   20 cars AI 1.12 s/race, ~1,200 decisions/s per core.
+
+## D-039 — M5 baselines B0-B3, imagined futures, the tyre-rule penalty in scoring (2026-10-13)
+
+- **Strategists** (`policy/strategists.py`): B0 the real driver's 2024 stops as a fixed plan
+  (reference only); B1 the engine's rule planner (the car simply stays BASELINE); B2
+  `Enumerator`: the cheapest plan of every legal dry compound sequence with 0-3 stops
+  (dynamic programming, stints >= 5 laps, checked against brute force), the 6 cheapest
+  re-ranked by simulating the whole race in 3 imagined futures; B3 `MonteCarlo` (MPC): at each
+  decision every legal option (stay out / stop for each compound) is played out in 3 imagined
+  futures, the rule planner driving from the car's next line crossing; the best mean score
+  wins. B3 keeps pace BALANCED and is pruned for speed (no deliberation on a normal lap end
+  while the tyres are younger than 6 laps; no wet tyres on a dry track). `RandomStrategist` is
+  the lower bound.
+- **Imagined futures** (`training/rollouts.py`) use the engine but never the real future: a new
+  seed (common across the options compared), and a rain timeline drawn from what the team knows
+  now: the forecast's probability of rain within its 10-minute horizon, rain now continuing
+  for a random time, **conditions persisting beyond the horizon**. The first version turned the
+  10-minute forecast into a whole-race rain rate (dry races imagined showers in almost every
+  future); a test caught it and the experiment was re-run. Known residue: the lap in progress
+  keeps the engine's already-drawn time (and any incident drawn at its start).
+- **The two-dry-compounds rule is scored as a disqualification** (no points, classified last) in
+  the AI's results. The engine only reports the breach; without a penalty an AI would learn to
+  skip the mandatory stop, an engine-bug exploit (D-037). The engine's own standings in the
+  app still don't apply it (limitation).
+- **Paired evaluation** (`training/evaluate.py`): every method plays the same race (setup,
+  seed, other cars, scoring); differences are paired, with bootstrap intervals over cases.
+- **Consequence for slice 3 (EXP-008):** B1, the rule planner, is the bar to beat: neither the
+  enumerator nor MPC beats it. MPC as built is *worse* than the rules (noise in 3 imagined
+  futures and choosing the best of several noisy estimates); it stays as a documented negative
+  result, not as the target.

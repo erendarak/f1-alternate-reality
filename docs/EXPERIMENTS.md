@@ -556,6 +556,63 @@ Decision / next:      Keep all four parts. Order agreement is not what they are 
                       strategist and better strategy variety are the next lever.
 ```
 
+## EXP-008 — The baselines a learned strategist must beat (2026-10-13)
+
+```text
+Experiment ID:        EXP-008
+Research question:    How good are the rule planner (B1), the real 2024 strategies (B0), an
+                      enumerator of 0-3-stop plans (B2) and a fork-based MPC (B3) in our engine,
+                      on the same races? What is the bar for the learned AI (slice 3)?
+Hypothesis:           MPC (the engine plus look-ahead) beats the rules; the enumerator matches or
+                      beats them; the real strategies are worse (chosen for a different race).
+Engine:               lightweight_engine_v0.9.0; training env D-038; baselines D-039
+Cases:                5 dry test races (Monza, Japan, Monaco, Mexico, Abu Dhabi) x 4 cars (grid
+                      P1, P5, P10, P15) x seeds 1-5 = 100; every method on every case (paired).
+                      One AI car per race; the other 19 follow the rules. Scoring: points under
+                      the driver's risk utility (no championship context).
+Code:                 scripts/experiments/exp008_baselines.py -> docs/experiments/exp008.json
+Compute:              2 h 22 min on 14 processes (MPC ~1,080 s per race under load, ~557
+                      imagined races and 46 deliberations per race)
+```
+
+| Method | Score | Points | Position | Stops (cases) | Score vs B1 [95 % CI] | Better / worse than B1 |
+|---|---|---|---|---|---|---|
+| B1 rules | 0.388 | 6.83 | 9.28 | 1: 94, 0: 6 (retired) | | |
+| B0 real 2024 stops | 0.174 | 3.46 | 13.33 | 0: 25, 1: 43, 2: 32 | -0.214 [-0.300, -0.139] | 2 / 68 |
+| B2 enumerator | 0.384 | 6.64 | 9.59 | 1: 93, 2: 1 | -0.004 [-0.032, +0.026] | 2 / 10 |
+| B3 MPC | 0.351 | 6.28 | 9.68 | 1: 69, 2: 19, 3: 6, 4: 1 | **-0.037 [-0.070, -0.008]** | 11 / 32 |
+| random | 0.002 | 0.00 | 17.90 | 32-54 | -0.386 [-0.496, -0.286] | 1 / 92 |
+
+Score per race (B1 / B2 / B3): Monza 0.354 / 0.354 / 0.339, Japan 0.475 / 0.475 / 0.434,
+Monaco 0.455 / 0.489 / 0.379, Mexico 0.416 / 0.404 / 0.409, Abu Dhabi 0.241 / 0.198 / 0.194.
+
+```text
+Findings:
+  1. THE RULE PLANNER IS THE BAR. The enumerator ties it (its 0/1/2-stop optimum is B1's; 3-stop
+     plans never won; re-ranking by 3 imagined races changed little: 2 better, 10 worse).
+  2. MPC IS WORSE THAN THE RULES (negative, significant): -0.037 [-0.070, -0.008], 11 cases
+     better, 32 worse. It stops more (2-4 stops in 26 cases) and prefers a final SOFT stint
+     (M-S 31 vs rules M-H 41). Diagnosis: with 3 imagined futures each option's estimate is
+     noisy (incidents, safety cars, traffic), and taking the best of 4-5 noisy estimates
+     systematically favours an option that got lucky; staying out only wins ties. A one-step
+     look-ahead over the rules should be at least as good *in expectation* (rollout
+     improvement), so the loss is estimation noise, not the idea. Fixing it needs many more
+     futures (cost: already ~18 min per race under load) or a margin before leaving the
+     default. Not pursued: MPC is a yardstick, not the target.
+  3. Real 2024 strategies are far worse in our engine (-0.214): they were chosen for a different
+     race; 25 of 100 have no stop outside a red flag (Monaco, Japan changed tyres under the red
+     flag, which the simulation doesn't have) and are disqualified under the two-compound rule.
+     A reference, never a fair opponent.
+  4. Retirements are identical across methods (7 cases, all methods): incidents come from the
+     same keyed draws, so the comparison is paired as designed.
+  5. Random policy: 32-54 stops, P17.9 on average: the env punishes nonsense.
+Negative results:     2 (MPC), 1 (no gain from 3-stop plans or simulated re-ranking).
+Reproduce:            uv run python scripts/experiments/exp008_baselines.py --seeds 5 --workers 14 \
+                        --json docs/experiments/exp008.json
+Decision / next:      Slice 3's learned policy is judged against B1 (paired, held-out tracks and
+                      seeds); B3's gap is reported as is. The training budget can't be "beat MPC".
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

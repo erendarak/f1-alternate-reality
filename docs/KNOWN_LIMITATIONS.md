@@ -2,6 +2,20 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## M5 slice 2 (baselines)
+
+- **MPC (B3) is weaker than the rules** in EXP-008 (estimation noise with 3 imagined futures);
+  it isn't a strong upper reference, and making it one costs far more compute.
+- Imagined futures keep the lap in progress as the engine already drew it (including an
+  incident drawn at its start): a small look-ahead advantage for B3 and B2's re-ranking.
+- The enumerator plans on an empty track with fixed BALANCED pace and dry tyres only; the
+  baselines don't optimise pace and aren't meaningful for wet races yet.
+- The engine's standings in the app still classify a car that missed the mandatory stop
+  normally; only the AI's scoring disqualifies it.
+- One AI car per race against a rule field; whole AI fields come in slice 5.
+- Long experiments run 2-3x slower than single-race timings suggest (Windows throttles the
+  background worker processes on this laptop).
+
 ## M5 slice 1 (training environment)
 
 - **Editorial pieces of the AI's goals:** the team principal's rules, the risk-utility curvature,
