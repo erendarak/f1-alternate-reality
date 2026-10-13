@@ -77,7 +77,12 @@ def worlds_router(session: LiveSession) -> APIRouter:
     def create_world(body: CreateWorldRequest) -> dict[str, Any]:
         seed = body.seed if body.seed is not None else random.SystemRandom().randrange(1, 10**6)
         state = session.create(
-            body.race_id, seed=seed, codes=body.drivers, synthetic=body.synthetic, speed=body.speed
+            body.race_id,
+            seed=seed,
+            codes=body.drivers,
+            synthetic=body.synthetic,
+            speed=body.speed,
+            random_rain=body.weather == "random",
         )
         live = session.require_live(state.world_id)
         return {"world_id": state.world_id, "seed": seed, "state": live_view(live)}

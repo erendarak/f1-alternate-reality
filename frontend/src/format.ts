@@ -46,6 +46,8 @@ export const LOGGED = new Set([
   "CAR_FINISHED",
   "RACE_COMPLETED",
   "TYRE_RULE_BREACHED",
+  "RAIN_STARTED",
+  "RAIN_STOPPED",
 ]);
 
 type CodeOf = (driverId: string | null | undefined) => string;
@@ -92,6 +94,10 @@ export function eventText(e: RaceEvent, code: CodeOf): string {
       return `${who} finishes (${p.laps} laps)`;
     case "RACE_COMPLETED":
       return "Race completed";
+    case "RAIN_STARTED":
+      return "Rain starting";
+    case "RAIN_STOPPED":
+      return "Rain stopping";
     case "TYRE_RULE_BREACHED":
       return `${who} didn't use two dry compounds`;
     default:

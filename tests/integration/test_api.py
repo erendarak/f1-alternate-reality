@@ -43,7 +43,7 @@ class FakeClock:
 def catalog(monza_roster: RaceRoster, monza_profiles: ProfileSet) -> RaceCatalog:
     by_code = {e.code: e.driver_id for e in monza_roster.entries}
 
-    def build(codes: tuple[str, ...] | None, synthetic: bool) -> RaceSetup:
+    def build(codes: tuple[str, ...] | None, synthetic: bool, random_rain: bool) -> RaceSetup:
         ids = [VER, HAM] if codes is None else [by_code[c] for c in codes]
         return build_setup(monza_roster, monza_profiles, ids)
 

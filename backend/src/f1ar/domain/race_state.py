@@ -16,7 +16,7 @@ from f1ar.domain.provenance import SourceType
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 8
+WORLD_SCHEMA_VERSION = 9
 
 
 class _Frozen(BaseModel):
@@ -50,6 +50,12 @@ class Compound(StrEnum):
     SOFT = "SOFT"
     MEDIUM = "MEDIUM"
     HARD = "HARD"
+    INTERMEDIATE = "INTERMEDIATE"
+    WET = "WET"
+
+
+DRY_COMPOUNDS: tuple[Compound, ...] = (Compound.SOFT, Compound.MEDIUM, Compound.HARD)
+"""Slicks. Strategy plans and the dry-compound rule are about these (M4: wet tyres, D-034)."""
 
 
 class PaceMode(StrEnum):
@@ -212,6 +218,80 @@ class RaceControlParams(_Frozen):
     """Baseline strategy: under SC/VSC, bring a planned stop forward if it's this close."""
 
 
+class WeatherMode(StrEnum):
+    HISTORICAL = "HISTORICAL"
+    """The real race's rain timeline (no rain for a dry race)."""
+    RANDOM = "RANDOM"
+    """A seeded two-state rain process per race minute (scenario worlds)."""
+
+
+class WeatherParams(_Frozen):
+    """Rain, track wetness and tyre penalties (M4 slice 4, D-034; ``simulation/weather.py``)."""
+
+    source_type: Literal[SourceType.EDITORIAL_ASSUMPTION, SourceType.ESTIMATED_FROM_DATA]
+    note: str
+    mode: WeatherMode = WeatherMode.HISTORICAL
+    rain_timeline: tuple[tuple[float, bool], ...] = ()
+    """HISTORICAL: (race time s, raining) samples, piecewise constant, from the race's weather
+    data (``historical_verified`` flags; times relative to the race start)."""
+    wetness_timeline: tuple[tuple[float, float], ...] = ()
+    """HISTORICAL: (race time s, wetness) as the real race had it, inferred from the field's
+    real tyre choices (``estimated_from_data``, D-034). When present it sets the track wetness
+    (interpolated); the rain flags then only drive the rain events. The on/off rain flag alone
+    can't tell how wet a track stays (2024 Canada stayed wet for ~25 min without rain, Britain
+    dried in ~10), so the wetting/drying dynamics are used only without it (RANDOM mode)."""
+    initial_wetness: float = Field(default=0.0, ge=0, le=1)
+    random_rain_start_per_min: float = Field(default=0.0, ge=0, le=1)
+    random_rain_stop_per_min: float = Field(default=0.1, ge=0, le=1)
+    wet_rate_per_s: float = Field(gt=0)
+    dry_rate_per_s: float = Field(gt=0)
+    slick_s_per_wetness: float = Field(ge=0)
+    inter_base_s: float = Field(ge=0)
+    inter_s_per_wetness: float = Field(ge=0)
+    wet_base_s: float = Field(ge=0)
+    wet_s_per_wetness: float = Field(ge=0)
+    wet_skill_effect: float = Field(ge=0, le=1.5)
+    """Penalty x (1 + effect (reference - wet_skill)): editorial."""
+    wet_skill_reference: float = Field(default=0.5, ge=0, le=1)
+    """The field's mean wet_skill for data races, so the average driver gets exactly the
+    fitted penalty (personas are editorial and mostly above 0.5)."""
+    wet_noise_factor: float = Field(ge=0)
+    """Lap-time noise sd x (1 + factor * wetness): editorial."""
+    wet_incident_factor: float = Field(ge=0)
+    """Mistake/crash rates x (1 + factor * wetness): editorial."""
+    switch_horizon_laps: int = Field(ge=1)
+    """Baseline wet strategy: change tyre type when the gain over this many laps beats the pit
+    loss (it assumes conditions stay as they are: it doesn't see the future)."""
+    forecast_horizon_s: float = Field(gt=0)
+    forecast_noise: float = Field(ge=0, le=1)
+
+
+def default_weather_params() -> "WeatherParams":
+    """Dry, with editorial tyre penalties (synthetic setups; data races use the fitted file)."""
+    return WeatherParams(
+        source_type=SourceType.EDITORIAL_ASSUMPTION,
+        note="editorial placeholders; no rain in HISTORICAL mode without a timeline",
+        wet_rate_per_s=1 / 600,
+        dry_rate_per_s=1 / 1800,
+        slick_s_per_wetness=30.0,
+        inter_base_s=5.0,
+        inter_s_per_wetness=10.0,
+        wet_base_s=9.0,
+        wet_s_per_wetness=5.0,
+        wet_skill_effect=0.4,
+        wet_noise_factor=1.0,
+        wet_incident_factor=2.0,
+        switch_horizon_laps=15,
+        forecast_horizon_s=600.0,
+        forecast_noise=0.2,
+    )
+
+
+class WeatherState(_Frozen):
+    raining: bool = False
+    wetness: float = Field(default=0.0, ge=0, le=1)
+
+
 class DriverEntry(_Frozen):
     driver_id: str
     code: str
@@ -231,6 +311,7 @@ class RaceSetup(_Frozen):
     pit: PitParams
     traffic: TrafficParams
     race_control: RaceControlParams
+    weather: WeatherParams = Field(default_factory=default_weather_params)
     tick_seconds: float = Field(gt=0)
     profile_set_manifest_hash: str
     """Hash of the full ProfileSet the embedded profiles were taken from."""
@@ -378,6 +459,8 @@ EventType = Literal[
     "SAFETY_CAR_DEPLOYED",
     "SAFETY_CAR_IN",
     "RESTART",
+    "RAIN_STARTED",
+    "RAIN_STOPPED",
 ]
 
 
@@ -439,7 +522,7 @@ DriverAction = SetPaceMode | RequestPitStop | CancelPitStop | SetStrategyControl
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[8]
+    schema_version: Literal[9]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None
@@ -462,6 +545,7 @@ class WorldState(_Frozen):
     measured in it), and like sim time under SC (where the queue model moves cars)."""
     event_seq: int = Field(ge=0)
     """Number of events emitted so far; the next event gets this sequence number."""
+    weather: WeatherState = Field(default_factory=WeatherState)
 
     @model_validator(mode="after")
     def _cars_match_setup(self) -> Self:

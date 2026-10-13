@@ -95,6 +95,8 @@ export function ForkDialog({ worldId, cars, driverId, leaderLap, source, onClose
               <option value="SOFT">Soft</option>
               <option value="MEDIUM">Medium</option>
               <option value="HARD">Hard</option>
+              <option value="INTERMEDIATE">Intermediate</option>
+              <option value="WET">Full wet</option>
             </select>
           </label>
           <label>

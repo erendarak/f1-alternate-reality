@@ -2,7 +2,7 @@
 // are display data, never a source of truth.
 
 export type WorldStatus = "CREATED" | "RUNNING" | "PAUSED" | "COMPLETED";
-export type Compound = "SOFT" | "MEDIUM" | "HARD"; // no wet tyres until M4
+export type Compound = "SOFT" | "MEDIUM" | "HARD" | "INTERMEDIATE" | "WET";
 export type CarStatus = "RUNNING" | "FINISHED" | "RETIRED";
 export type RacePhase = "GREEN" | "VSC" | "SC";
 
@@ -52,6 +52,16 @@ export interface Persistence {
   error: string | null;
 }
 
+export interface Weather {
+  mode: "HISTORICAL" | "RANDOM";
+  raining: boolean;
+  wetness: number;
+  best_tyre: Compound;
+  crossovers: [number, number];
+  forecast_rain_10min: number;
+  source_type: SourceType;
+}
+
 export interface WorldState {
   mode: string;
   event_id: string;
@@ -68,6 +78,7 @@ export interface WorldState {
   total_laps: number;
   engine_version: string;
   race_control: RaceControl;
+  weather?: Weather;
   cars: Car[];
   persistence?: Persistence;
 }

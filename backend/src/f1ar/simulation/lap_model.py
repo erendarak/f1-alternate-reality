@@ -113,8 +113,13 @@ def sample_lap_time_s(
     pace_mode: PaceMode,
     laps_remaining: int,
     car_offset_s: float = 0.0,
+    extra_s: float = 0.0,
+    noise_scale: float = 1.0,
 ) -> float:
-    """Lap time for ``lap_number``. The noise is keyed by (driver, lap): common across forks."""
+    """Lap time for ``lap_number``. The noise is keyed by (driver, lap): common across forks.
+
+    ``extra_s``: conditions on top of the dry lap (the weather penalty, M4); ``noise_scale``
+    widens the lap-to-lap spread (more in the wet)."""
     mean = expected_lap_time_s(
         params,
         driver,
@@ -125,4 +130,5 @@ def sample_lap_time_s(
         car_offset_s=car_offset_s,
     )
     z = normal(seed, "lap_noise", driver_id, lap_number)
-    return max(mean + noise_sd_s(params, driver) * z, params.min_lap_fraction * params.base_lap_s)
+    noisy = mean + extra_s + noise_sd_s(params, driver) * noise_scale * z
+    return max(noisy, params.min_lap_fraction * params.base_lap_s)

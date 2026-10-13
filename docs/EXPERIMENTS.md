@@ -306,6 +306,84 @@ Decision / next:      Keep the calibrated model. Slice 4 (weather), slice 5 (tra
                       known limitation of the baseline planner.
 ```
 
+## EXP-005 — Weather: fitting wet-tyre crossovers on the three wet 2024 races (2026-10-13)
+
+```text
+Experiment ID:        EXP-005
+Research question:    Can track wetness, wetting/drying rates and the slick/intermediate penalty
+                      lines be estimated from Canada, Britain and São Paulo 2024, and does the
+                      engine then switch tyres when the real field did?
+Hypothesis:           Lap times alone can't separate wetness from the penalty slope; the teams'
+                      tyre choices pin the crossover. Switch timing should land within a few laps.
+Engine:               lightweight_engine_v0.8.0, world schema v9 (D-034); baseline_strategy_v1
+Data:                 2024_canadian_gp, 2024_british_gp, 2024_sao_paulo_gp (the wet split, D-031):
+                      2521 green laps, 3366 tyre choices; rain flags from FastF1 weather data
+Seeds:                1..30 per race
+Code:                 scripts/experiments/exp005_weather.py --json docs/experiments/exp005.json
+Artifact:             configs/calibration/weather_2024_v1.json (+ configs/models/weather_2024_v1.yaml)
+```
+
+Fit on all three races (robust least squares, lap residuals + logistic choice term):
+
+| Parameter | Value |
+|---|---|
+| Wetting time constant | ~10 min |
+| Drying time constant | 5 min (**at its lower bound**) |
+| Slick penalty | 14.06 s x w |
+| Intermediate penalty | 5.92 + 3.52 x w s |
+| Full wet (editorial) | intermediate + 3 s at w = 0, crossing at 0.85 |
+| Crossovers slick/inter, inter/wet | 0.562, 0.851 |
+| Lap MAE (pace per driver in-sample) | 2.28 s (3.36 s without weather) |
+| Mean P(chosen tyre) | 0.627 |
+
+Leave one wet race out (fit on two, test on the third):
+
+| Held out | Lap MAE weather / none (s) | P(chosen tyre) | Crossovers |
+|---|---|---|---|
+| Britain | 14.70 / 4.45 | 0.628 | 0.085, 0.956 |
+| Canada | 2.81 / 4.11 | 0.463 | 1.247, 0.85 |
+| São Paulo | 2.58 / 1.35 | 0.189 | 1.926, 0.85 |
+
+Simulation, HISTORICAL weather (real / simulated mean over 30 seeds):
+
+| Race | Majority on wet tyres from lap | Back on slicks lap | Wet-tyre lap share | Full-wet share | Stops per finisher | Winners (real) |
+|---|---|---|---|---|---|---|
+| British | 27 / 29.0 | 39 / 40.8 | 0.24 / 0.22 | 0.00 / 0.00 | 2.44 / 2.84 | HAM 19, RUS 11 (HAM) |
+| Canadian | 1 / 1.0 | 45 / 47.6 | 0.62 / 0.67 | 0.015 / 0.07 | 2.2 / 1.0 | NOR 22, HAM 5, PIA 3 (VER) |
+| São Paulo | 1 / 1.0 | never / never | 1.00 / 1.00 | 0.016 / 0.00 | 1.0 / 0.0 | NOR 18, VER 5, RUS 4, HAM 3 (VER) |
+
+```text
+Findings:
+  1. The lap-time-only fit was degenerate (wetness and slope trade off); adding the choice term
+     and bounds gives sensible crossovers on all three races together (0.56 / 0.85).
+  2. NOT STABLE OUT OF SAMPLE: leaving a race out moves the crossovers from 0.09 to 1.9 and makes
+     held-out Britain worse than no weather model at all (14.7 vs 4.45 s). Three races are too
+     few; the all-race fit is used and labelled experimental.
+  3. Rain flags can't say how long a track stays wet (Britain's flag stops well before the field
+     returned to slicks). HISTORICAL mode therefore reveals wetness from the real field's tyre
+     choices. With that, switches land within 2-3 laps of reality and the wet-tyre share within
+     0.05. THIS IS PARTLY CIRCULAR: conditions are inferred from the same choices the
+     simulation is compared with. It shows the engine and baseline react consistently, not
+     that the timing is predicted.
+  4. The inference first put an all-intermediate Britain field on full wets (found in the
+     browser); it is now capped in the inter band unless most wet runners were on full wets.
+  5. Stops: Britain too many (2.84 vs 2.44); Canada and São Paulo too few (the baseline never
+     stops for fresh wet tyres, wear on wet tyres is editorial, and the São Paulo red flag's free
+     tyre change isn't simulated).
+  6. Winners: Britain HAM (real) most often; Canada and São Paulo favour NOR (real VER, 5/30 at
+     São Paulo). Wet-weather driver skill is editorial (wet_skill) and VER's São Paulo drive came
+     from P17 with a red-flag tyre change; neither is modelled from data.
+  7. Wet-race dry-pace inputs: pit loss from wet laps and SC/red-flag stops had been 37-54 s;
+     estimating on weather-adjusted laps and green stops only fixed it (also used for dry races).
+Negative results:     2, 5, 6.
+Reproduce:            uv run python scripts/fetch_season.py --season 2024 --telemetry --rounds 9 12 21
+                      uv run python scripts/experiments/exp005_weather.py --json docs/experiments/exp005.json
+                      (re-run on the final code: identical numbers)
+Decision / next:      Keep the model as experimental, editorial parts labelled. A second season of
+                      wet races would be the real fix (M9 data scope). Slice 5: traffic and race
+                      control per track.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

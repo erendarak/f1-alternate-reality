@@ -58,7 +58,8 @@ def synthetic_laps(n_laps: int = 20, start: dict[int, str] | None = None) -> pd.
 def test_start_compounds_from_lap_one(monza_roster: RaceRoster) -> None:
     laps = synthetic_laps(start={1: "HARD", 44: "INTERMEDIATE"})
     out = start_compounds(laps, monza_roster)
-    assert out == {VER: Compound.HARD}  # INTERMEDIATE isn't modelled by the engine yet
+    # M4: wet starts are modelled (engine v0.8.0); anything unknown is still left out
+    assert out == {VER: Compound.HARD, HAM: Compound.INTERMEDIATE}
 
 
 def test_car_offsets_remove_the_driver_skill_term(
@@ -115,6 +116,7 @@ def test_setup_uses_data_when_given(
         "dataset_sha256",
         "base_lap",
         "tyre_model",
+        "weather",
     }
     # M4: the calibrated tyre/fuel model, without a race adjustment (no race tables here)
     assert setup.lap_model.source_type is SourceType.ESTIMATED_FROM_DATA
@@ -152,3 +154,22 @@ def test_pit_loss_from_in_and_out_laps() -> None:
     pit = pit_params_from_total_loss(est.total_loss_s, est.note)
     assert pit.lane_loss_s + pit.standstill_median_s == pytest.approx(est.total_loss_s)
     assert pit.source_type is SourceType.ESTIMATED_FROM_DATA
+
+
+def test_pit_loss_ignores_stops_under_a_safety_car() -> None:
+    """M4: in/out laps under SC/VSC/red flag are slow for other reasons (2024 Canada and Sao Paulo
+    gave 49 s and 53 s whole-stop losses before this)."""
+    laps = synthetic_laps()
+    for number, lap, status in ((1, 10, "4"), (44, 12, "1")):
+        in_lap = (laps["driver_number"] == number) & (laps["lap_number"] == lap)
+        out_lap = (laps["driver_number"] == number) & (laps["lap_number"] == lap + 1)
+        for column, value in (
+            ("lap_time_s", 130.0),
+            ("pit_in_time_s", 1.0),
+            ("track_status", status),
+        ):
+            laps.loc[in_lap, column] = value
+        for column, value in (("lap_time_s", 130.0), ("pit_out_time_s", 2.0)):
+            laps.loc[out_lap, column] = value
+    assert estimate_pit_loss(laps).stops_used == 1  # only the green one
+    assert "under green" in estimate_pit_loss(laps).note

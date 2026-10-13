@@ -8,6 +8,7 @@ and never applies the command twice.
 
 import uuid
 from enum import StrEnum
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -35,6 +36,8 @@ class CreateWorldRequest(_Request):
     """3-letter codes; None = the full grid."""
     synthetic: bool = False
     """Ignore data-derived inputs (equal cars, all on MEDIUM)."""
+    weather: Literal["historical", "random"] = "historical"
+    """historical = the real race's conditions; random = seeded rain showers (what-if)."""
     speed: int = 1
 
 

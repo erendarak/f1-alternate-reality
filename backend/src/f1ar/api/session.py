@@ -151,9 +151,10 @@ class LiveSession:
         codes: Sequence[str] | None = None,
         synthetic: bool = False,
         speed: int = 1,
+        random_rain: bool = False,
     ) -> WorldState:
         race = self.catalog.get(race_id)
-        setup = race.setup(codes, synthetic=synthetic)
+        setup = race.setup(codes, synthetic=synthetic, random_rain=random_rain)
         with self._lock, self._replacing_live():
             state = engine.create_world(setup, seed=seed, world_id=new_world_id("world"))
             self.store.save(state, label="created")

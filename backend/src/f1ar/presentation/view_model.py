@@ -142,8 +142,30 @@ def state_view(
             "sc_count": rc.sc_count,
             "vsc_count": rc.vsc_count,
         },
+        "weather": weather_view(state),
         "cars": cars,
         "events": [e.model_dump(mode="json") for e in recent_events],
+    }
+
+
+def weather_view(state: WorldState) -> dict[str, Any]:
+    """Conditions as a team would see them, plus the (noisy) forecast; never the true future."""
+    from f1ar.simulation.weather import best_tyre, crossovers, forecast_rain_probability
+
+    params = state.setup.weather
+    return {
+        "mode": params.mode.value,
+        "raining": state.weather.raining,
+        "wetness": round(state.weather.wetness, 3),
+        "best_tyre": best_tyre(params, state.weather.wetness).value,
+        "crossovers": [round(x, 3) for x in crossovers(params)],
+        "forecast_rain_10min": round(
+            forecast_rain_probability(
+                params, state.rng.seed, state.sim_clock_s, state.weather.raining
+            ),
+            2,
+        ),
+        "source_type": params.source_type.value,
     }
 
 
@@ -282,10 +304,17 @@ def replay_view(
 
 # --- driver card (profile + provenance) -----------------------------------------------------
 
-ENGINE_TRAITS: tuple[str, ...] = ("race_pace_skill", "consistency", "tire_management", "composure")
+ENGINE_TRAITS: tuple[str, ...] = (
+    "race_pace_skill",
+    "consistency",
+    "tire_management",
+    "composure",
+    "wet_skill",
+)
 """Persona traits that change the race today: lap model (pace, consistency, tyre management),
-baseline strategy (tyre management), incidents (consistency, composure). The others are stored
-for later stages. Kept honest by a test that searches the engine sources."""
+baseline strategy (tyre management, wet skill), incidents (consistency, composure), weather
+penalty (wet skill, M4). The others are stored for later stages. Kept honest by a test that
+searches the engine sources."""
 
 
 def _note_source(note: str | None, default: SourceType) -> str:

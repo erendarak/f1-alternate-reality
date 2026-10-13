@@ -10,13 +10,20 @@ interface Props {
   onSelect: (driverId: string) => void;
 }
 
-const COMPOUND_NAME = { SOFT: "Soft", MEDIUM: "Medium", HARD: "Hard" } as const;
+const COMPOUND_NAME = {
+  SOFT: "Soft",
+  MEDIUM: "Medium",
+  HARD: "Hard",
+  INTERMEDIATE: "Intermediate",
+  WET: "Full wet",
+} as const;
+const COMPOUND_LETTER = { SOFT: "S", MEDIUM: "M", HARD: "H", INTERMEDIATE: "I", WET: "W" } as const;
 
 export function TyreBadge({ compound, age }: { compound: Car["compound"]; age?: number }) {
   const name = COMPOUND_NAME[compound];
   return (
     <span className={`tyre tyre-${compound.toLowerCase()}`} title={`${name}${age != null ? `, ${age} laps old` : ""}`}>
-      {compound[0]}
+      {COMPOUND_LETTER[compound]}
     </span>
   );
 }

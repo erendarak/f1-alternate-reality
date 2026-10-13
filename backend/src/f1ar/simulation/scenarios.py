@@ -21,6 +21,9 @@ from f1ar.domain.race_state import (
     RaceSetup,
     TrackSpec,
     TrafficParams,
+    WeatherMode,
+    WeatherParams,
+    default_weather_params,
 )
 from f1ar.policy.baseline_strategy import POLICY_ID as STRATEGY_POLICY_ID
 
@@ -73,6 +76,7 @@ def setup_from_codes(
     *,
     data_dir: Path | None = None,
     configs_dir: Path | None = None,
+    random_rain: bool = False,
 ) -> RaceSetup:
     """Setup from 3-letter driver codes (e.g. ``["VER", "HAM"]``); ``None`` = full grid.
 
@@ -107,9 +111,32 @@ def setup_from_codes(
         estimate_pit_loss,
         start_compounds,
     )
+    from f1ar.calibration.weather_fit import lap_weather_penalty, load_weather, race_weather
 
     laps_file = data_dir / "laps.parquet"
-    laps = pd.read_parquet(laps_file)
+    raw_laps = pd.read_parquet(laps_file)
+    configs = configs_dir or REPO_CONFIGS
+    weather = default_weather_params()
+    weather_note = "editorial_assumption: no weather data; dry"
+    laps = raw_laps
+    fitted = load_weather(configs)
+    if fitted is not None and (data_dir / "weather.parquet").exists():
+        race_start = float(raw_laps.loc[raw_laps["lap_number"] == 1, "lap_start_time_s"].min())
+        weather = race_weather(
+            fitted[0],
+            fitted[1],
+            pd.read_parquet(data_dir / "weather.parquet"),
+            race_start,
+            laps=raw_laps,
+        )
+        field_wet_skill = sum(p.archetype.wet_skill for p in profiles.profiles) / len(
+            profiles.profiles
+        )
+        weather = weather.model_copy(update={"wet_skill_reference": round(field_wet_skill, 4)})
+        weather_note = f"{weather.note}; wet_skill reference = field mean {field_wet_skill:.3f}"
+        # every pace estimate below is about DRY pace: take the weather penalty off wet laps
+        penalty = lap_weather_penalty(weather, raw_laps, race_start)
+        laps = raw_laps.assign(lap_time_s=raw_laps["lap_time_s"] - penalty)
     tables = ("results.parquet", "weather.parquet", "track_status.parquet")
     race = None
     if all((data_dir / t).exists() for t in tables):
@@ -131,13 +158,16 @@ def setup_from_codes(
     base = estimate_base_lap(laps, roster, profiles, calibrated.params, estimate, track.total_laps)
     lap_model = calibrated.params.model_copy(update={"base_lap_s": base.base_lap_s})
     try:
-        pit_loss = estimate_pit_loss(laps)
+        pit_loss = estimate_pit_loss(laps)  # weather-adjusted: a stop in the rain isn't slower
         pit, pit_note = (
             pit_params_from_total_loss(pit_loss.total_loss_s, pit_loss.note),
             pit_loss.note,
         )
     except ValueError as exc:  # e.g. a race without any complete pit stop
         pit, pit_note = default_pit_params(), f"editorial_assumption: default pit model ({exc})"
+    if random_rain:
+        weather = with_random_rain(weather)
+        weather_note = weather.note
     return build_setup(
         roster,
         profiles,
@@ -145,7 +175,10 @@ def setup_from_codes(
         track=track,
         lap_model=lap_model,
         pit=pit,
-        start_compounds=start_compounds(laps, roster),
+        start_compounds=start_compounds(raw_laps, roster),
+        # a car without a lap-1 row (didn't start) gets the field's usual start tyre
+        start_compound=_common_start(start_compounds(raw_laps, roster)),
+        weather=weather,
         car_offsets_s=estimate.offsets_s,
         inputs={
             "start_compounds": f"historical_verified: lap-1 compound, {data_dir.name}/laps.parquet",
@@ -153,9 +186,17 @@ def setup_from_codes(
             "base_lap": base.note,
             "pit_loss": pit_note,
             "tyre_model": calibrated.note,
+            "weather": weather_note,
             "dataset_sha256": "sha256:" + hashlib.sha256(laps_file.read_bytes()).hexdigest(),
         },
     )
+
+
+def _common_start(starts: Mapping[str, Compound]) -> Compound:
+    if not starts:
+        return Compound.MEDIUM
+    values = list(starts.values())
+    return max(set(values), key=lambda c: (values.count(c), c.value))
 
 
 def event_data_dir(root: Path, event_id: str = MONZA_2024) -> Path | None:
@@ -240,6 +281,7 @@ def default_lap_model(base_lap_s: float = 82.0) -> LapModelParams:
             Compound.SOFT: CompoundParams(offset_s=-0.6, deg_s_per_lap=0.09),
             Compound.MEDIUM: CompoundParams(offset_s=0.0, deg_s_per_lap=0.055),
             Compound.HARD: CompoundParams(offset_s=0.4, deg_s_per_lap=0.035),
+            **wet_tyre_params(),
         },
         pace_modes={
             PaceMode.CONSERVE: PaceModeParams(offset_s=0.6, wear_multiplier=0.7),
@@ -247,6 +289,40 @@ def default_lap_model(base_lap_s: float = 82.0) -> LapModelParams:
             PaceMode.PUSH: PaceModeParams(offset_s=-0.4, wear_multiplier=1.4),
         },
     )
+
+
+RANDOM_RAIN_START_PER_MIN = 0.02
+RANDOM_RAIN_STOP_PER_MIN = 0.08
+
+
+def with_random_rain(weather: WeatherParams) -> WeatherParams:
+    """A "what if it rains" world: the fitted wetting/drying dynamics driven by a seeded rain
+    process (editorial: rain starts about once per 50 min, a shower lasts ~12 min on average).
+    Same rain for every fork of the world with the same seed."""
+    return weather.model_copy(
+        update={
+            "mode": WeatherMode.RANDOM,
+            "rain_timeline": (),
+            "wetness_timeline": (),
+            "initial_wetness": 0.0,
+            "random_rain_start_per_min": RANDOM_RAIN_START_PER_MIN,
+            "random_rain_stop_per_min": RANDOM_RAIN_STOP_PER_MIN,
+            "note": (
+                f"{weather.note}; RANDOM rain (editorial: start {RANDOM_RAIN_START_PER_MIN}/min, "
+                f"stop {RANDOM_RAIN_STOP_PER_MIN}/min, seeded) instead of the real race's"
+            ),
+        }
+    )
+
+
+def wet_tyre_params() -> dict[Compound, CompoundParams]:
+    """Intermediates and full wets (M4): no dry offset (the weather penalty covers how they
+    compare with slicks) and modest wear; editorial (wet-tyre wear isn't separable in 2024's
+    data)."""
+    return {
+        Compound.INTERMEDIATE: CompoundParams(offset_s=0.0, deg_s_per_lap=0.03),
+        Compound.WET: CompoundParams(offset_s=0.0, deg_s_per_lap=0.02),
+    }
 
 
 STANDSTILL_MEDIAN_S = 2.4
@@ -340,6 +416,7 @@ def build_setup(
     pit: PitParams | None = None,
     traffic: TrafficParams | None = None,
     race_control: RaceControlParams | None = None,
+    weather: WeatherParams | None = None,
     tick_seconds: float = DEFAULT_TICK_SECONDS,
     start_compound: Compound = Compound.MEDIUM,
     start_compounds: Mapping[str, Compound] | None = None,
@@ -361,6 +438,7 @@ def build_setup(
         pit=pit or default_pit_params(),
         traffic=traffic or default_traffic_params(),
         race_control=race_control or default_race_control_params(),
+        weather=weather or default_weather_params(),
         tick_seconds=tick_seconds,
         profile_set_manifest_hash=profiles.manifest_hash,
         drivers=tuple(

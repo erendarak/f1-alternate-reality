@@ -2,7 +2,7 @@ dataset_id: 2024_british_gp_fastf1_v1
 event: 2024_british_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-12T23:20:49Z'
+retrieved_utc: '2026-10-13T01:13:18Z'
 session_key: 2024/round 12/R
 license_review_status: research_only
 files:
@@ -99,6 +99,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2024_british_gp/positions.parquet
+  sha256: sha256:cc14de19f6e72e2b3570077f13df00a9cb5cf0e28bf51cbd8ebd8bd480d7cdda
+  rows: 677980
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2024_british_gp/track_outline.parquet
+  sha256: sha256:ba53eb0118acc610a947cd99a4433a312a4c310e935400bae9393254da65e65a
+  rows: 361
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 7 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

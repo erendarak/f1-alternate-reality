@@ -16,7 +16,7 @@ strategist inside the engine. Plan (agreed 2026-10-13, one slice per commit):
 - [x] **Slice 3: engine integration (v0.7.0, D-033, EXP-004)**: calibrated tyre/fuel model, planner for non-linear
   wear, optional learned-pace port pinned by hash with a safe fallback, any fetched 2024 race
   simulatable; EXP-002 re-run.
-- [ ] Slice 4: weather (v0.8.0): rain process (historical or seeded), track wetness,
+- [x] **Slice 4: weather (v0.8.0, D-034, EXP-005)**: rain (historical or seeded), track wetness,
   INTERMEDIATE/WET with crossovers fitted on Canada/Britain/São Paulo 2024, `wet_skill`,
   forecast without future leakage (US-06), wet-tyre rule exemption, UI.
 - [ ] Slice 5: traffic + race-control calibration against the season reference; calibration
@@ -870,3 +870,46 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
   floor/normalisation/deltas, shape file, Monza plans M-H, rare-compound prior, setup fallback)
   + 2 network; frontend 17 + E2E 1 (passes on v0.7.0).
 - Next: slice 4, weather.
+
+### 2026-10-13 — M4 slice 4: weather (engine v0.8.0) and EXP-005
+
+- **Track wetness** (hidden, 0-1) with penalty lines per tyre; INTERMEDIATE and WET compounds;
+  wet laps are noisier and incidents likelier; driver factor from persona `wet_skill`,
+  normalised to the field's mean. Engine v0.8.0, world schema v9 (older saves refused).
+- **Two weather modes:** HISTORICAL (real rain flags; wetness revealed from the real field's tyre
+  choices, capped in the inter band unless most ran full wets) and RANDOM (seeded per-minute
+  showers, editorial rates). Forks share the weather. Rain start/stop events.
+- **Fitted** wetting/drying rates and slick/inter lines on Canada, Britain, São Paulo
+  (`configs/calibration/weather_2024_v1.json` + manifest); full-wet line and factors editorial.
+- **Baseline in the wet:** switch when gain x min(15, laps left - 1) beats the pit cost; back to
+  slicks by laps left; slick plans dropped while slicks are wrong; USER cars never switched;
+  wet tyre lifts the two-dry-compound rule.
+- **Forecast without the future (US-06):** observation schema v5 with raining, wetness and a
+  noisy 10-minute rain forecast; changing rain beyond the horizon doesn't change it (tested).
+- **Wet-race inputs:** dry pace estimated on weather-adjusted laps; pit loss from green stops
+  only (also affects dry races slightly); non-starters get the field's common start tyre.
+- **UI/API:** library weather select (real conditions / random showers), `weather` in
+  `POST /api/worlds`, header weather pill with 10-minute forecast, I/W tyre badges, Box I / Box W
+  in the driver panel and fork dialog, rain events in the log. Checked in the browser on
+  Britain (seed 1): 19 cars on inters at lap 32 (80 % wet, no full wets), 19 back on slicks by
+  lap 42 (real ~39).
+- **EXP-005:** fit is sensible on all three races (crossovers 0.56 / 0.85, lap MAE 2.28 vs 3.36 s)
+  but unstable when a race is left out (negative result). Simulated switches within 2-3 laps
+  of reality, partly circular because conditions are inferred from the real choices. Stop counts
+  off; Canada/São Paulo winners don't match (wet skill is editorial).
+- **Bugs found:**
+  1. The first weather fit was degenerate (lap times alone); fixed with the choice term + bounds.
+  2. A 5-lap switch horizon kept cars on slicks far too long; now 15 laps.
+  3. Rain flags end long before tracks dry; HISTORICAL uses revealed wetness.
+  4. Britain ran on full wets (browser); inferred wetness capped to the inter band.
+  5. Wet-race pit loss 37-54 s (wet laps, SC/red-flag stops); fixed as above.
+  6. ALB/STR (did not start São Paulo) got the default MEDIUM; now the field's common start tyre.
+  7. **The intermittent auto-pause API test (since M3) was a real bug:** the test client cancels
+     the WebSocket handler on close, which could cut off the disconnect cleanup, so the server
+     still counted a viewer and never auto-paused. Cleanup now shielded; 3 full runs clean
+     (before: 2 of 3 failed).
+- Tests: 334 offline (+12: wetness dynamics, tyre bands, timelines, keyed random rain, forecast
+  bounds and no-future, shower race inters and back, forks share weather, USER car not
+  switched, observation, revealed wetness band, params round-trip, green-only pit loss)
+  + 2 network; frontend 17. ruff/mypy clean.
+- Next: slice 5, traffic and race-control calibration per track.

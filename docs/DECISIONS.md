@@ -642,3 +642,52 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
   vanished for rarely used compounds (Monza's single representative SOFT lap set a -0.96 s
   offset). EXP-003 re-run with the fix.
 
+
+## D-034 — Weather: rain, track wetness, wet tyres (engine v0.8.0) (2026-10-13)
+
+- **Model:** a hidden track wetness `w` in [0, 1]. Each tyre loses a straight line of time against
+  `w`: slicks `a w`, INTERMEDIATE `b_i + a_i w`, WET `b_w + a_w w`. The crossovers follow from
+  the lines. Wetness rises towards 1 while it rains and decays towards 0 when dry (two time
+  constants). In the lap model, the penalty is multiplied by a driver factor
+  `1 + effect (reference - wet_skill)`, with the reference = the field's mean persona
+  `wet_skill`. Lap noise scales by `1 + noise_factor w`; incident risk by `1 + incident_factor w`.
+  `Compound` gains INTERMEDIATE and WET; `WeatherParams` / `WeatherState` live in the setup / world
+  (world schema v9, engine v0.8.0, older saves refused).
+- **Fitted on the three wet 2024 races** (Canada, Britain, São Paulo; EXP-005,
+  `configs/calibration/weather_2024_v1.json` + manifest). The fit uses wetting/drying rates and
+  the slick and inter lines. Robust least squares combines dry-corrected lap residuals (pace per
+  driver per race as a nuisance term) with a logistic term for the teams' slick-vs-wet-tyre
+  choices. Without the choice term, the fit was degenerate. Rates are bounded (wetting 2-30 min,
+  drying 5-90 min). **Editorial:** the full-wet line (inter + 3 s at w = 0, crossing at 0.85), the
+  `wet_skill` effect size, the noise and incident factors, the switch horizon, the forecast
+  noise and the random-rain rates.
+- **Two weather modes:**
+  - HISTORICAL (default for real races): the rain flags give rain on/off. Track wetness is
+    *revealed* from the real field's tyre choices: per minute, invert the logistic on the
+    wet-tyre share. It is capped inside the intermediate band unless most wet-tyre runners were
+    on full wets. Rain flags alone can't say how long a track stays wet (Britain's
+    rain flag stops long before the field went back to slicks).
+  - RANDOM ("random showers", what-if): a per-minute rain on/off process keyed on the world
+    seed. Wetness then follows the dynamics. The rates are editorial.
+- **Forks share the weather** (common random numbers): the weather depends on the seed and
+  time, never on decisions.
+- **Forecast without future leakage (US-06):** the observation gets `raining`, `wetness` and
+  `forecast_rain`. The forecast is the rain share of the next 10 minutes, blurred by keyed noise
+  (historical), or the process probability (random). Nothing beyond the horizon can change it
+  (tested). Observation schema v5.
+- **Baseline strategy in the wet:** on lap completion, a BASELINE car switches to the best tyre
+  for the current wetness. It switches when the per-lap gain times `min(15, laps left - 1)` beats
+  the pit cost. A return to slicks takes HARD with more than 30 laps left, MEDIUM with more than
+  15, otherwise SOFT. Planned slick stops are dropped while slicks are wrong. USER-controlled
+  cars are never switched automatically. Using a wet tyre lifts the two-dry-compounds rule (the
+  sporting regulation).
+- **Dry-pace inputs for wet races:** car offsets, base lap, wear level and pit loss are
+  estimated on weather-adjusted laps (penalty removed). Pit loss uses only stops made under
+  green: in-lap and out-lap with track status "1". Canada's and São Paulo's SC/red-flag stops had
+  given 49-54 s losses. Non-starters get the field's common start tyre.
+- **API / UI:** `POST /api/worlds` takes `weather: "historical" | "random"`. Library weather
+  select, header weather pill (state, wetness, 10-minute forecast). I/W tyre badges and Box I /
+  Box W buttons in the driver panel and fork dialog, and rain events in the log.
+- **Also fixed:** the WebSocket handler's disconnect cleanup is shielded from cancellation. The
+  test client cancels the handler on close, so under load the client count sometimes never
+  dropped and the world was never auto-paused (the intermittent API test since M3).

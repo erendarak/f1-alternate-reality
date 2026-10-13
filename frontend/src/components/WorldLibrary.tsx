@@ -27,6 +27,7 @@ export function WorldLibrary({ onOpen, message }: Props) {
   const [raceId, setRaceId] = useState("");
   const [seed, setSeed] = useState("");
   const [speed, setSpeed] = useState(5);
+  const [weather, setWeather] = useState<"historical" | "random">("historical");
   const [loadError, setLoadError] = useState<string | null>(null);
   const { pending, notice, request } = useCommand();
 
@@ -52,7 +53,7 @@ export function WorldLibrary({ onOpen, message }: Props) {
     if (parsed !== undefined && (!Number.isInteger(parsed) || parsed < 0)) return;
     const r = await request(
       "create",
-      () => api.createWorld(raceId, speed, parsed),
+      () => api.createWorld(raceId, speed, parsed, weather),
       (x) => `Created (seed ${x.seed})`,
       "Creating…",
     );
@@ -115,6 +116,13 @@ export function WorldLibrary({ onOpen, message }: Props) {
                   x{v}
                 </option>
               ))}
+            </select>
+          </label>
+          <label>
+            Weather
+            <select value={weather} onChange={(e) => setWeather(e.target.value as typeof weather)}>
+              <option value="historical">Real race conditions</option>
+              <option value="random">Random showers (what-if)</option>
             </select>
           </label>
           <button className="primary" disabled={pending !== null || !raceId || seedInvalid} onClick={create}>

@@ -65,12 +65,16 @@ def skill_factor(setup: RaceSetup, driver_id: str) -> float:
     return (1.5 - a.consistency) * (1.5 - a.composure)
 
 
-def lap_incident(setup: RaceSetup, seed: int, car: CarState, lap: int) -> Incident | None:
-    """The incident (if any) of ``car`` on ``lap``, driven in ``car.lap_pace_mode``."""
+def lap_incident(
+    setup: RaceSetup, seed: int, car: CarState, lap: int, wetness: float = 0.0
+) -> Incident | None:
+    """The incident (if any) of ``car`` on ``lap``, driven in ``car.lap_pace_mode``; a wet
+    track multiplies crash and mistake rates by ``1 + wet_incident_factor * wetness``."""
     p = setup.race_control
     if not p.enabled:
         return None
     risk = skill_factor(setup, car.driver_id) * _mode_factor(setup, car.lap_pace_mode)
+    risk *= 1.0 + setup.weather.wet_incident_factor * wetness
     crash = p.crash_per_lap * risk * (p.first_lap_crash_multiplier if lap == 1 else 1.0)
     failure = p.failure_per_lap
     mistake = p.mistake_per_lap * risk
@@ -81,10 +85,18 @@ def lap_incident(setup: RaceSetup, seed: int, car: CarState, lap: int) -> Incide
     if u < crash + failure:
         return Incident(IncidentKind.FAILURE, where)
     if u < crash + failure + mistake:
-        size = uniform(seed, "mistake_loss", car.driver_id, lap)
-        loss = p.mistake_loss_min_s + (p.mistake_loss_max_s - p.mistake_loss_min_s) * size
-        return Incident(IncidentKind.MISTAKE, where, loss)
+        return Incident(
+            IncidentKind.MISTAKE, where, mistake_loss_s(setup, seed, car.driver_id, lap)
+        )
     return None
+
+
+def mistake_loss_s(setup: RaceSetup, seed: int, driver_id: str, lap: int) -> float:
+    """Time lost by a mistake on ``lap``: its own keyed draw (doesn't depend on the rates, so
+    reporting it later in the lap gives the same value whatever the conditions are then)."""
+    p = setup.race_control
+    size = uniform(seed, "mistake_loss", driver_id, lap)
+    return p.mistake_loss_min_s + (p.mistake_loss_max_s - p.mistake_loss_min_s) * size
 
 
 def neutralisation_after(

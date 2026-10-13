@@ -24,6 +24,7 @@ import numpy as np
 
 from f1ar.domain.driver_profiles import DriverArchetype
 from f1ar.domain.race_state import (
+    DRY_COMPOUNDS,
     CarState,
     Compound,
     PaceMode,
@@ -38,6 +39,46 @@ POLICY_ID = "baseline_strategy_v1"
 def _stint_cost(offset: float, rate: float, laps: int, start_wear: float = 0.0) -> float:
     """Linear-wear stint cost (reference formula; used by tests)."""
     return laps * (offset + start_wear) + rate * laps * (laps - 1) / 2.0
+
+
+def dry_compounds_required(setup: RaceSetup, used: tuple[Compound, ...]) -> int:
+    """The dry-compound rule: lifted once a car has used intermediates or full wets (2024)."""
+    if any(c not in DRY_COMPOUNDS for c in used):
+        return 0
+    return setup.pit.min_distinct_dry_compounds
+
+
+def weather_stop(
+    setup: RaceSetup, car: CarState, wetness: float, laps_left: int
+) -> Compound | None:
+    """Baseline wet strategy: change tyre type when the expected gain over the next
+    ``switch_horizon_laps`` laps (conditions assumed to stay as they are) beats the pit loss.
+    The tyre for a return to slicks depends on the laps left. ``None`` = no weather stop."""
+    from f1ar.simulation.weather import best_tyre, driver_factor, is_slick, penalty_s
+
+    params = setup.weather
+    if laps_left < 2:
+        return None
+    best = best_tyre(params, wetness)
+    same_type = (is_slick(car.compound) and is_slick(best)) or car.compound is best
+    if same_type:
+        return None
+    wet_skill = setup.driver(car.driver_id).profile.archetype.wet_skill
+    gain = (penalty_s(params, car.compound, wetness) - penalty_s(params, best, wetness)) * (
+        driver_factor(params, wet_skill)
+    )
+    pit_cost = setup.pit.lane_loss_s + setup.pit.standstill_median_s
+    if gain * min(params.switch_horizon_laps, laps_left - 1) <= pit_cost:
+        return None
+    if is_slick(best):
+        return (
+            Compound.HARD
+            if laps_left > 30
+            else Compound.MEDIUM
+            if laps_left > 15
+            else Compound.SOFT
+        )
+    return best
 
 
 def wear_table(
@@ -106,10 +147,10 @@ def plan_stops(
     remaining = total - laps_completed
     params = setup.lap_model
     pit_cost = setup.pit.lane_loss_s + setup.pit.standstill_median_s
-    need = setup.pit.min_distinct_dry_compounds
     used = set(compounds_used) | {compound}
-    if remaining <= 0:
-        return ()
+    need = dry_compounds_required(setup, tuple(used))
+    if remaining <= 0 or compound not in DRY_COMPOUNDS:
+        return ()  # on wet-weather tyres the weather rule decides (engine, D-034)
 
     def legal(*later: Compound) -> bool:
         return len(used | set(later)) >= need
@@ -124,7 +165,7 @@ def plan_stops(
         c: fresh_stint_costs(
             params.compounds[c].offset_s, wear_table(setup, driver, c, pace_mode, remaining)
         )
-        for c in Compound
+        for c in DRY_COMPOUNDS
     }
 
     # (cost, number of stops, plan): ties go to fewer stops, then to the enumeration order.
@@ -139,7 +180,7 @@ def plan_stops(
         consider(float(first[remaining]), ())
 
     a = np.arange(1, remaining)
-    for c2 in Compound:
+    for c2 in DRY_COMPOUNDS:
         if not legal(c2) or remaining < 2:
             continue
         costs = first[a] + pit_cost + fresh[c2][remaining - a]
@@ -148,7 +189,7 @@ def plan_stops(
 
     if remaining >= 3:
         a2 = np.arange(1, remaining - 1)
-        for c2, c3 in product(Compound, Compound):
+        for c2, c3 in product(DRY_COMPOUNDS, DRY_COMPOUNDS):
             if not legal(c2, c3):
                 continue
             pair, split = best_two_stints(fresh[c2], fresh[c3], remaining - 1)

@@ -2,6 +2,29 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## M4 slice 4 (weather, engine v0.8.0, EXP-005)
+
+- **The weather model rests on three races** and is unstable when one is left out (EXP-005:
+  held-out crossovers anywhere from 0.09 to 1.9; held-out Britain lap error worse than no weather at
+  all). The all-race fit is used; treat it as experimental.
+- **HISTORICAL switch timing is partly circular:** track wetness is inferred from the real field's
+  tyre choices, so simulated switches matching the real laps is expected, not proof of a
+  learned behaviour. The inference also lags real conditions (a minute grid, a logistic on the share
+  of wet-tyre runners) and can't tell inters from full wets: it is capped in the inter band unless
+  most wet-tyre runners were on full wets.
+- **Editorial:** the full-wet line, `wet_skill` effect size (persona `wet_skill` itself is
+  editorial), wet noise and incident factors, switch horizon (15 laps), forecast noise,
+  random-rain rates. The drying rate sits at its lower bound (5 min).
+- **Baseline stops in the wet are off:** Britain about 2.8 stops per finisher (real 2.4); Canada and
+  São Paulo too few, because the baseline never stops for fresh wet tyres (wear on wet tyres is
+  an editorial placeholder) and the real red flag at São Paulo (free tyre change) isn't simulated.
+- **Drivers who did not start** the real race (São Paulo: ALB, STR) start in the simulation, on
+  the field's common start tyre.
+- No standing water, aquaplaning, red flags for rain, or per-corner drying; wetness is one number for
+  the whole track.
+- Dry races are slightly affected too: pit loss now comes from green stops only (EXP-004 numbers
+  are engine v0.7.0).
+
 ## M4 slice 3 (calibrated engine v0.7.0, EXP-004)
 
 - **Every simulated car still makes exactly one stop** (real 0.44-2.0 per finisher): with

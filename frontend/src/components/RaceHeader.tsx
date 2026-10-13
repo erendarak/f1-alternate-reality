@@ -45,13 +45,23 @@ export function RaceHeader({ state, connection, onLibrary }: Props) {
           Branch
         </span>
       ) : null}
+      {state.weather ? (
+        <span
+          className={`pill weather ${state.weather.raining ? "rain" : state.weather.wetness > 0.05 ? "damp" : ""}`}
+          title={`Track wetness ${Math.round(state.weather.wetness * 100)} % (0 dry, 100 soaked) · best tyre now: ${state.weather.best_tyre.toLowerCase()} · forecast: ${Math.round(state.weather.forecast_rain_10min * 100)} % chance of rain in the next 10 min (noisy, as a team would see it) · ${state.weather.mode === "RANDOM" ? "random showers (what-if world)" : "the real race's conditions"}`}
+        >
+          {state.weather.raining ? "🌧 Rain" : state.weather.wetness > 0.05 ? "☁ Damp" : "☀ Dry"}
+          {state.weather.wetness > 0.05 ? ` · wet ${Math.round(state.weather.wetness * 100)}%` : ""}
+          {` · rain 10′ ${Math.round(state.weather.forecast_rain_10min * 100)}%`}
+        </span>
+      ) : null}
       {connection !== "open" ? <span className="pill warn">{connection}…</span> : null}
       {rc.phase !== "GREEN" ? (
         <div className={`banner banner-${rc.phase.toLowerCase()}`} role="alert">
           {rc.phase === "SC"
             ? `SAFETY CAR${rc.sc_laps_left != null ? ` · ${rc.sc_laps_left} laps` : ""}`
             : `VIRTUAL SAFETY CAR${rc.vsc_left_s != null ? ` · ${Math.max(0, Math.round(rc.vsc_left_s))} s` : ""}`}
-          {rc.cause ? ` · ${rc.cause}` : ""}
+          {rc.cause ? ` · ${state.cars.find((c) => c.driver_id === rc.cause)?.code ?? rc.cause}` : ""}
         </div>
       ) : null}
     </header>

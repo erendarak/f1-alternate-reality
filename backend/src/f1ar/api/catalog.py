@@ -24,8 +24,8 @@ from f1ar.simulation.scenarios import (
     track_for,
 )
 
-SetupBuilder = Callable[[tuple[str, ...] | None, bool], RaceSetup]
-"""``(driver codes or None for the full grid, synthetic) -> RaceSetup``."""
+SetupBuilder = Callable[[tuple[str, ...] | None, bool, bool], RaceSetup]
+"""``(driver codes or None for the full grid, synthetic, random rain) -> RaceSetup``."""
 
 
 class UnknownRaceError(KeyError):
@@ -48,18 +48,24 @@ class RaceSpec:
     has_data: bool
     """Data-derived inputs available (else only synthetic setups)."""
     track: TrackSpec | None = None
-    _cache: dict[tuple[tuple[str, ...] | None, bool], RaceSetup] = field(default_factory=dict)
+    _cache: dict[tuple[tuple[str, ...] | None, bool, bool], RaceSetup] = field(default_factory=dict)
     _lock: threading.Lock = field(default_factory=threading.Lock)
 
     @property
     def name(self) -> str:
         return race_name(self.race_id)
 
-    def setup(self, codes: Sequence[str] | None = None, *, synthetic: bool = False) -> RaceSetup:
-        key = (None if codes is None else tuple(c.upper() for c in codes), synthetic)
+    def setup(
+        self,
+        codes: Sequence[str] | None = None,
+        *,
+        synthetic: bool = False,
+        random_rain: bool = False,
+    ) -> RaceSetup:
+        key = (None if codes is None else tuple(c.upper() for c in codes), synthetic, random_rain)
         with self._lock:
             if key not in self._cache:
-                self._cache[key] = self.build(key[0], key[1] or not self.has_data)
+                self._cache[key] = self.build(key[0], key[1] or not self.has_data, key[2])
             return self._cache[key]
 
     def summary(self) -> dict[str, Any]:
@@ -141,12 +147,17 @@ def load_catalog(root: Path) -> tuple[RaceCatalog, dict[str, str]]:
         def build(
             codes: tuple[str, ...] | None,
             synthetic: bool,
+            random_rain: bool,
             roster: RaceRoster = roster,
             profiles: ProfileSet = profiles,
             data_dir: Path | None = data_dir,
         ) -> RaceSetup:
             return setup_from_codes(
-                roster, profiles, codes, data_dir=None if synthetic else data_dir
+                roster,
+                profiles,
+                codes,
+                data_dir=None if synthetic else data_dir,
+                random_rain=random_rain and not synthetic,
             )
 
         races.append(

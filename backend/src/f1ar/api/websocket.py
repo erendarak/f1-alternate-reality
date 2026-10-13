@@ -21,6 +21,7 @@ import asyncio
 import contextlib
 from typing import Any
 
+import anyio
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from starlette.concurrency import run_in_threadpool
 
@@ -124,12 +125,15 @@ def stream_router(
         try:
             await asyncio.wait({receiver, sender}, return_when=asyncio.FIRST_COMPLETED)
         finally:
-            for task in (receiver, sender):
-                task.cancel()
-            for task in (receiver, sender):
-                # a send on a socket the client already closed may fail any which way
-                with contextlib.suppress(asyncio.CancelledError, Exception):
-                    await task
-            await run_in_threadpool(session.client_disconnected, world_id)
+            # shielded: the handler itself may be cancelled on disconnect (the test client does
+            # this); the client count must still drop, or the world is never auto-paused
+            with anyio.CancelScope(shield=True):
+                for task in (receiver, sender):
+                    task.cancel()
+                for task in (receiver, sender):
+                    # a send on a socket the client already closed may fail any which way
+                    with contextlib.suppress(asyncio.CancelledError, Exception):
+                        await task
+                await run_in_threadpool(session.client_disconnected, world_id)
 
     return router

@@ -147,6 +147,13 @@ def estimate_pit_loss(laps: pd.DataFrame) -> PitLossEstimate:
                 or pd.isna(out_lap["lap_time_s"])
             ):
                 continue
+            # only stops made under green: a stop under SC/VSC/red flag has slow in/out laps for
+            # other reasons (M4: 2024 Canada and São Paulo gave 49 s and 53 s whole-stop losses)
+            if (
+                str(in_lap.get("track_status", "1")) != "1"
+                or str(out_lap.get("track_status", "1")) != "1"
+            ):
+                continue
             losses.append(
                 float(in_lap["lap_time_s"]) + float(out_lap["lap_time_s"]) - 2 * medians[number]
             )
@@ -158,7 +165,7 @@ def estimate_pit_loss(laps: pd.DataFrame) -> PitLossEstimate:
         stops_used=len(losses),
         note=(
             f"estimated_from_data: median whole-stop loss {total} s over {len(losses)} stops "
-            f"(in-lap + out-lap - 2 x driver median representative lap)"
+            f"made under green (in-lap + out-lap - 2 x driver median representative lap)"
         ),
     )
 

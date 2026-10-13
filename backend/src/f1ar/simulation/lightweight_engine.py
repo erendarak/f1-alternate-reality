@@ -48,21 +48,39 @@ from f1ar.domain.race_state import (
     SetPaceMode,
     SetStrategyController,
     StrategyController,
+    WeatherMode,
+    WeatherState,
     WorldState,
     WorldStatus,
 )
-from f1ar.policy.baseline_strategy import POLICY_ID, plan_for_car
+from f1ar.policy.baseline_strategy import (
+    POLICY_ID,
+    dry_compounds_required,
+    plan_for_car,
+    weather_stop,
+)
 from f1ar.simulation.incidents import (
     IncidentKind,
     Neutralisation,
     lap_incident,
+    mistake_loss_s,
     neutralisation_after,
 )
 from f1ar.simulation.lap_model import sample_lap_time_s, wear_per_lap_s
 from f1ar.simulation.rng_streams import RngSpec, uniform
 from f1ar.simulation.traffic import Ahead, resolve
+from f1ar.simulation.weather import (
+    best_tyre,
+    driver_factor,
+    historical_rain,
+    historical_wetness,
+    is_slick,
+    next_wetness,
+    raining_at,
+)
+from f1ar.simulation.weather import penalty_s as weather_penalty_s
 
-ENGINE_VERSION = "lightweight_engine_v0.7.0"
+ENGINE_VERSION = "lightweight_engine_v0.8.0"
 """v0.6.0: mistakes, crashes, failures (RETIRED), VSC (racing clock), safety car + restart.
 v0.5.0: traffic: dirty air, held up, overtakes, blue flags; lap 1 resolved in grid order.
 v0.4.0: pit stops + tyre choice, baseline strategy, chequered-flag rule (lapped finishers).
@@ -100,8 +118,13 @@ def _sample_next_lap(
     pace_mode: PaceMode,
     laps_completed: int,
     tyre_wear_s: float,
+    wetness: float = 0.0,
 ) -> float:
     entry = setup.driver(driver_id)
+    weather = setup.weather
+    extra = weather_penalty_s(weather, compound, wetness) * driver_factor(
+        weather, entry.profile.archetype.wet_skill
+    )
     return sample_lap_time_s(
         setup.lap_model,
         entry.profile.archetype,
@@ -113,6 +136,8 @@ def _sample_next_lap(
         pace_mode=pace_mode,
         laps_remaining=setup.track.total_laps - laps_completed,
         car_offset_s=entry.car_pace_offset_s,
+        extra_s=extra,
+        noise_scale=1.0 + weather.wet_noise_factor * wetness,
     )
 
 
@@ -154,6 +179,13 @@ def create_world(
         raise EngineStateError(
             f"setup pins policies {setup.policy_manifest}, this engine runs {POLICY_MANIFEST}"
         )
+    historical = setup.weather.mode is WeatherMode.HISTORICAL
+    weather = WeatherState(
+        raining=historical and historical_rain(setup.weather, 0.0),
+        wetness=historical_wetness(setup.weather, 0.0)
+        if historical and setup.weather.wetness_timeline
+        else setup.weather.initial_wetness,
+    )
     cars = []
     for entry in setup.drivers:
         pace_mode = PaceMode.BALANCED
@@ -165,6 +197,7 @@ def create_world(
             pace_mode=pace_mode,
             laps_completed=0,
             tyre_wear_s=0.0,
+            wetness=weather.wetness,
         )
         car = CarState(
             driver_id=entry.driver_id,
@@ -215,6 +248,7 @@ def create_world(
         race_control=GREEN_FLAG,
         race_clock_s=0.0,
         event_seq=0,
+        weather=weather,
     )
 
 
@@ -447,6 +481,7 @@ def step(state: WorldState, *, allow_paused: bool = False) -> StepResult:
     else:
         moved = _advance_racing(state, emit)
     tick_end = tick * setup.tick_seconds
+    weather = _advance_weather(state, tick_end, emit)
     cars, race_control = _incidents_and_race_control(state, moved, tick_end, emit)
     cars = _announce_overtakes(cars, race_control, emit)
 
@@ -472,9 +507,29 @@ def step(state: WorldState, *, allow_paused: bool = False) -> StepResult:
             "race_control": race_control,
             "world_status": status,
             "event_seq": state.event_seq + len(events),
+            "weather": weather,
         }
     )
     return StepResult(new_state, tuple(events))
+
+
+def _advance_weather(state: WorldState, tick_end: float, emit: _Emit) -> WeatherState:
+    """Rain during this tick (timeline or keyed process) and the wetness at its end. Weather is
+    exogenous: decisions never change it, so every fork with the same seed shares it."""
+    params, dt = state.setup.weather, state.setup.tick_seconds
+    before = state.weather
+    raining = raining_at(params, state.rng.seed, tick_end, before.raining, dt)
+    if raining != before.raining:
+        emit(
+            "RAIN_STARTED" if raining else "RAIN_STOPPED",
+            None,
+            {"race_time_s": tick_end, "wetness": round(before.wetness, 3)},
+        )
+    if params.mode is WeatherMode.HISTORICAL and params.wetness_timeline:
+        wetness = historical_wetness(params, tick_end)  # the real race's conditions
+    else:
+        wetness = next_wetness(params, before.wetness, raining, dt)
+    return WeatherState(raining=raining, wetness=min(1.0, max(0.0, wetness)))
 
 
 @dataclass
@@ -823,8 +878,7 @@ def _incidents_and_race_control(
         lap = c.laps_completed + 1
         kind = IncidentKind(kind_name)
         if kind is IncidentKind.MISTAKE:
-            incident = lap_incident(setup, seed, c, lap)
-            loss = incident.time_loss_s if incident is not None else 0.0
+            loss = mistake_loss_s(setup, seed, c.driver_id, lap)
             emit("MISTAKE", c.driver_id, {"lap": lap, "time_loss_s": loss})
             cars[i] = c.model_copy(update={"incident_kind": None, "incident_at_fraction": None})
             continue
@@ -1039,7 +1093,9 @@ def _announce_overtakes(
 def _with_incident(state: WorldState, car: CarState) -> CarState:
     """Draw this lap's incident at lap start. A mistake's time loss goes into the lap time
     before traffic is resolved; behind the safety car there are no racing mistakes."""
-    incident = lap_incident(state.setup, state.rng.seed, car, car.laps_completed + 1)
+    incident = lap_incident(
+        state.setup, state.rng.seed, car, car.laps_completed + 1, state.weather.wetness
+    )
     if incident is None or (
         incident.kind is IncidentKind.MISTAKE and state.race_control.phase is RacePhase.SC
     ):
@@ -1067,6 +1123,15 @@ def _complete_lap(
     stop = pending_stop(car)  # decided for the lap just driven, before the counter moves
     if stop is None and neutralised:
         stop = _cheap_stop(setup, car)
+    if car.controller is StrategyController.BASELINE:
+        # the weather rule overrides a planned stop that would fit the wrong tyre type
+        wet_stop = weather_stop(
+            setup, car, state.weather.wetness, setup.track.total_laps - car.laps_completed - 1
+        )
+        if wet_stop is not None:
+            stop = wet_stop
+        elif stop is not None and not _fits_conditions(setup, car, stop, state.weather.wetness):
+            stop = None
     laps = car.laps_completed + 1
     lap_time = crossing_time - car.lap_started_at_s
     # The lap just driven wears the tyres at the rate of the mode it was driven in.
@@ -1099,7 +1164,7 @@ def _complete_lap(
 
     if laps == setup.track.total_laps or (flag_s is not None and crossing_time >= flag_s):
         emit("CAR_FINISHED", car.driver_id, {"finish_time_s": crossing_time, "laps": laps})
-        need = setup.pit.min_distinct_dry_compounds
+        need = dry_compounds_required(setup, car.compounds_used)
         if len(set(car.compounds_used)) < need:
             emit(
                 "TYRE_RULE_BREACHED",
@@ -1136,6 +1201,7 @@ def _complete_lap(
             pace_mode=lap_mode,
             laps_completed=laps,
             tyre_wear_s=car.tyre_wear_s,
+            wetness=state.weather.wetness,
         )
     )
     car = car.model_copy(
@@ -1148,6 +1214,14 @@ def _complete_lap(
         }
     )
     return _with_incident(state, car)
+
+
+def _fits_conditions(setup: RaceSetup, car: CarState, stop: Compound, wetness: float) -> bool:
+    """A planned dry stop still makes sense (the track isn't so wet that slicks are wrong)."""
+    if car.controller is not StrategyController.BASELINE:
+        return True
+    best = best_tyre(setup.weather, wetness)
+    return is_slick(stop) == is_slick(best)
 
 
 def _cheap_stop(setup: RaceSetup, car: CarState) -> Compound | None:

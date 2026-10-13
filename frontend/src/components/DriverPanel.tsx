@@ -105,14 +105,14 @@ export function DriverPanel({ worldId, car, timelineId }: Props) {
 
       <div className="dp-actions" aria-label="Decisions">
         <div className="group" role="group" aria-label="Pit">
-          {(["SOFT", "MEDIUM", "HARD"] as Compound[]).map((c) => (
+          {(["SOFT", "MEDIUM", "HARD", "INTERMEDIATE", "WET"] as Compound[]).map((c) => (
             <button
               key={c}
               disabled={busy}
               title={`Box at the end of this lap for ${c.toLowerCase()} (takes the strategy over)`}
               onClick={() => act("pit", { action_type: "PIT_REQUEST", compound: c }, `${car.code} will box for ${c}`)}
             >
-              Box {c[0]}
+              Box {c === "INTERMEDIATE" ? "I" : c === "WET" ? "W" : c[0]}
             </button>
           ))}
           <button

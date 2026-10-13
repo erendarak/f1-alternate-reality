@@ -4,6 +4,9 @@ An observation = race/car state the driver could know + the driver's full profil
 Hidden simulation internals (notably ``CarState.lap_target_s``, the pre-sampled duration
 of the lap in progress, and the accumulated ``tyre_wear_s``) are never exposed: that would
 leak the future. The pit stop the team has called for this lap is known, so it's included.
+
+Weather (M4, US-06): the current rain flag and track wetness (what the team sees) and a noisy
+forecast of rain in the next 10 minutes; never the true future rain timeline.
 """
 
 from pydantic import BaseModel, ConfigDict
@@ -11,8 +14,9 @@ from pydantic import BaseModel, ConfigDict
 from f1ar.domain.driver_profiles import PROFILE_FEATURE_NAMES
 from f1ar.domain.race_state import Compound, PaceMode, RacePhase, WorldState
 from f1ar.simulation.lightweight_engine import pending_stop, standings
+from f1ar.simulation.weather import forecast_rain_probability
 
-OBSERVATION_SCHEMA_VERSION = 4
+OBSERVATION_SCHEMA_VERSION = 5
 
 STATE_FEATURE_NAMES: tuple[str, ...] = (
     "race.lap_number",
@@ -20,6 +24,9 @@ STATE_FEATURE_NAMES: tuple[str, ...] = (
     "race.lap_fraction",
     "race.vsc",
     "race.safety_car",
+    "weather.raining",
+    "weather.wetness",
+    "weather.forecast_rain",
     "car.position",
     "car.tyre_age_laps",
     *(f"car.compound.{c.value.lower()}" for c in Compound),
@@ -58,6 +65,11 @@ def build_observation(state: WorldState, driver_id: str) -> Observation:
         "race.lap_fraction": car.distance_m / state.setup.track.length_m,
         "race.vsc": float(state.race_control.phase is RacePhase.VSC),
         "race.safety_car": float(state.race_control.phase is RacePhase.SC),
+        "weather.raining": float(state.weather.raining),
+        "weather.wetness": state.weather.wetness,
+        "weather.forecast_rain": forecast_rain_probability(
+            state.setup.weather, state.rng.seed, state.sim_clock_s, state.weather.raining
+        ),
         "car.position": float(standings(state).index(driver_id) + 1),
         "car.tyre_age_laps": float(car.tyre_age_laps),
         **{f"car.compound.{c.value.lower()}": float(car.compound is c) for c in Compound},

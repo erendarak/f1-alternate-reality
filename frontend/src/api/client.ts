@@ -68,10 +68,16 @@ export const api = {
   worlds: () =>
     request<{ live_world_id: string | null; worlds: WorldSummary[] }>("GET", "/api/worlds"),
   health: () => request<Health>("GET", "/api/health"),
-  createWorld: (raceId: string, speed: number, seed?: number) =>
+  createWorld: (
+    raceId: string,
+    speed: number,
+    seed?: number,
+    weather: "historical" | "random" = "historical",
+  ) =>
     request<{ world_id: string; seed: number; state: WorldState }>("POST", "/api/worlds", {
       race_id: raceId,
       speed,
+      weather,
       ...(seed === undefined ? {} : { seed }),
     }),
   /** Make a saved world live; no snapshot = continue from its newest valid save. */

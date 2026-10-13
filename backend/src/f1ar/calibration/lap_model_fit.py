@@ -22,7 +22,7 @@ import pandas as pd
 from f1ar.calibration.pace_models import RaceAdjustment, TyreShape, fit_race_adjustment
 from f1ar.domain.driver_profiles import DriverArchetype
 from f1ar.domain.provenance import SourceType
-from f1ar.domain.race_state import Compound, CompoundParams, LapModelParams
+from f1ar.domain.race_state import DRY_COMPOUNDS, Compound, CompoundParams, LapModelParams
 from f1ar.simulation.lap_model import tyre_wear_factor
 
 SHAPE_FILE = Path("calibration") / "tyre_shape_2024_v1.json"
@@ -60,8 +60,8 @@ def calibrated_lap_model(
     )
     k = max(WEAR_MULTIPLIER_FLOOR, adjustment.wear_multiplier)
     field = fmean(tyre_wear_factor(editorial, d) for d in drivers) if drivers else 1.0
-    compounds = {}
-    for c in Compound:
+    compounds = {c: editorial.compounds[c] for c in Compound if c not in DRY_COMPOUNDS}
+    for c in DRY_COMPOUNDS:
         name = c.value
         compounds[c] = CompoundParams(
             offset_s=shape.offset[name] + adjustment.offset_delta.get(name, 0.0),

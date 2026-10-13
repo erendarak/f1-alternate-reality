@@ -8,6 +8,7 @@ import pytest
 from f1ar.domain.driver_profiles import ProfileSet
 from f1ar.domain.identities import RaceRoster
 from f1ar.domain.race_state import (
+    DRY_COMPOUNDS,
     CancelPitStop,
     CarStatus,
     Compound,
@@ -84,10 +85,10 @@ def _brute_force_cost(setup: RaceSetup, *, start: Compound, pace_mode: PaceMode)
         return _stint_cost(setup.lap_model.compounds[c].offset_s, rate, n)
 
     best = [stint(start, total)] if setup.pit.min_distinct_dry_compounds <= 1 else []
-    for c2 in Compound:
+    for c2 in DRY_COMPOUNDS:
         if len({start, c2}) >= 2:
             best += [stint(start, a) + pit + stint(c2, total - a) for a in range(1, total)]
-    for c2, c3 in product(Compound, Compound):
+    for c2, c3 in product(DRY_COMPOUNDS, DRY_COMPOUNDS):
         if len({start, c2, c3}) < 2:
             continue
         for a in range(1, total - 1):
@@ -96,7 +97,7 @@ def _brute_force_cost(setup: RaceSetup, *, start: Compound, pace_mode: PaceMode)
     return min(best)
 
 
-@pytest.mark.parametrize("start", list(Compound))
+@pytest.mark.parametrize("start", DRY_COMPOUNDS)
 @pytest.mark.parametrize("pace_mode", [PaceMode.CONSERVE, PaceMode.PUSH])
 @pytest.mark.parametrize("pit_loss", [2.0, 22.0])
 def test_planner_finds_the_brute_force_optimum(
@@ -407,10 +408,10 @@ def test_planner_finds_the_brute_force_optimum_with_curved_wear(
         return _stint_by_laps(setup, c, mode, n, 0, 0.0)
 
     options = []
-    for c2 in Compound:
+    for c2 in DRY_COMPOUNDS:
         if c2 != start:
             options += [first(a) + pit + fresh(c2, total - a) for a in range(1, total)]
-    for c2, c3 in product(Compound, Compound):
+    for c2, c3 in product(DRY_COMPOUNDS, DRY_COMPOUNDS):
         if len({start, c2, c3}) >= 2:
             for a in range(1, total - 1):
                 for b in range(1, total - a):

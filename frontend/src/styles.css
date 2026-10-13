@@ -126,6 +126,11 @@ button:focus-visible { outline: 2px solid var(--caution); outline-offset: 1px; }
 .tyre-soft { border-color: var(--soft); color: var(--soft); }
 .tyre-medium { border-color: var(--medium); color: var(--medium); }
 .tyre-hard { border-color: var(--hard); color: var(--hard); }
+.tyre-intermediate { border-color: #43b02a; color: #43b02a; }
+.tyre-wet { border-color: #2f8de4; color: #2f8de4; }
+.pill.weather { text-transform: none; color: #f5c518; border-color: #8a6d00; }
+.pill.weather.damp { color: #9ecbff; border-color: #2f5f8f; }
+.pill.weather.rain { color: #2f8de4; border-color: #2f8de4; }
 .age { color: var(--muted); font-size: 12px; }
 .st { font-size: 11px; font-weight: 700; }
 .st-pit { color: #9ecbff; }
