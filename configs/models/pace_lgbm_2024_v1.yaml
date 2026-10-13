@@ -2,7 +2,8 @@ model_name: pace_predictor_online
 model_version: v1
 kind: LightGBM residual on the driver's recent median
 source_type: learned_parameter
-artifact: artifacts/models/pace_lgbm_2024_v1.txt (gitignored; rebuild with this script)
+artifact: artifacts/models/pace_lgbm_2024_v1.txt
+artifact_tracked: false
 artifact_sha256: sha256:8a78f07e23fc4299d6c3eed6d23f189bebd4d46729cb34383aea23b58e522478
 feature_schema_version: 1
 training_dataset_manifest: data/manifests/dataset_laps_2024_v1.yaml

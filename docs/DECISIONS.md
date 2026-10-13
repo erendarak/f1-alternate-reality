@@ -726,3 +726,25 @@ Newest last. Each entry: context → decision → consequences. Superseded decis
 - **Data:** position data fetched for the remaining 15 races; all 24 2024 races are now
   simulatable (library lists 24). Files: `configs/calibration/{traffic,race_control}_2024_v1.json`
   + manifests. World schema v10 (`TrafficParams.start_spread_s`), engine v0.9.0.
+
+## D-036 — M4 wrap-up: no MLP, model registry, ablation, safe fallbacks (2026-10-13)
+
+- **No profile-conditioned MLP.** The plan builds one only "if needed". EXP-003's ablation found
+  that neither driver/team identity nor the editorial persona vector improves the online pace
+  prediction (dry_test MAE 0.53 s with and without), and LightGBM beats the corrected rolling
+  median by only 3 %. There is no gap for an MLP to close with this data; revisit if M5's
+  strategist needs a better predictor or a second season arrives.
+- **Model registry** (`calibration/registry.py`, `scripts/model_registry.py`,
+  `docs/MODEL_REGISTRY.md`): reads every `configs/models/*.yaml`, checks the artifact hash and
+  the training dataset hash, and names the models the engine loads (`ENGINE_ARTIFACTS`: tyre
+  shape, weather, traffic, race control). The LightGBM predictor is registered as local-only
+  (`artifact_tracked: false`) and not used by the engine. Artifact paths in the manifests are
+  repo-relative (were mixed). A test fails if any manifest stops matching its artifact.
+- **Safe integration:** each engine artifact is optional. Without it the setup falls back to
+  the editorial model for that part, labels it `editorial_assumption` in `RaceSetup.inputs`,
+  and the race runs (tested for each file and for all four). The tyre shape used to crash the
+  setup when missing (found in this slice).
+- **Ablation by removal (EXP-007)**: each part is measured by building races without its file;
+  the result says which real-race properties each part is responsible for (see EXP-007).
+- **M4 done-check:** see PROGRESS (all plan items met; open issues are listed in
+  KNOWN_LIMITATIONS and carried to M5).

@@ -77,3 +77,12 @@ def sim_metrics(setup: RaceSetup, seed: int, *, until_lap: int | None = None) ->
         ),
         extra={"pass_causes": dict(pass_causes(crossings, grid, stopped, neutral, tyre_age))},
     )
+
+
+def spearman(a: list[str], b: list[str]) -> float:
+    """Rank correlation of two orders over the drivers in both."""
+    common = [d for d in a if d in b]
+    rank_b = {d: i for i, d in enumerate(x for x in b if x in common)}
+    n = len(common)
+    d2 = sum((i - rank_b[d]) ** 2 for i, d in enumerate(common))
+    return 1 - 6 * d2 / (n * (n * n - 1))

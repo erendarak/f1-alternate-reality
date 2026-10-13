@@ -2,7 +2,7 @@ model_name: weather
 model_version: v1
 kind: 'non-linear least squares: lap times + tyre choices (wetness from the rain flag)'
 source_type: estimated_from_data (wet-tyre line and factors editorial)
-artifact: calibration/weather_2024_v1.json
+artifact: configs/calibration/weather_2024_v1.json
 artifact_sha256: sha256:93380bf786f7e11eb663efe345e9398649e2a57ca27b08e1ebdb59c8c34450c8
 training_dataset_content_sha256: sha256:e43cd3185e213cee8d80f4b82e69ec171f6f4fada093e7702ca914edcbf58181
 training_races:

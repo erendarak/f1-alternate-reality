@@ -1,6 +1,6 @@
 # Progress
 
-## Current milestone: M4 — Race models and calibration (plan §16, §7.6, §8)
+## Current milestone: M4 — Race models and calibration (plan §16, §7.6, §8) — COMPLETE
 
 Why: EXP-002 showed every simulated car one-stopping onto SOFT (real: mostly M-H, many 2-stops),
 overtakes 2-5x too rare, no weather, editorial incident rates. M4 replaces guessed coefficients
@@ -14,15 +14,40 @@ strategist inside the engine. Plan (agreed 2026-10-13, one slice per commit):
   per track/driver, feature importance, profile ablation (read as "driver identity", not as a
   validation of the editorial personas), model manifests.
 - [x] **Slice 3: engine integration (v0.7.0, D-033, EXP-004)**: calibrated tyre/fuel model, planner for non-linear
-  wear, optional learned-pace port pinned by hash with a safe fallback, any fetched 2024 race
-  simulatable; EXP-002 re-run.
+  wear, any fetched 2024 race simulatable; EXP-002 re-run. *(Correction, slice 6: the planned
+  "optional learned-pace port" was not built; D-032 keeps the LightGBM predictor out of the
+  engine. The engine's predictor is the fitted lap model, with fallbacks since slice 6.)*
 - [x] **Slice 4: weather (v0.8.0, D-034, EXP-005)**: rain (historical or seeded), track wetness,
   INTERMEDIATE/WET with crossovers fitted on Canada/Britain/São Paulo 2024, `wet_skill`,
   forecast without future leakage (US-06), wet-tyre rule exemption, UI.
 - [x] **Slice 5: traffic + race control (v0.9.0, D-035, EXP-006)**: overtaking fitted on real
   lap-level encounters with per-track thresholds, launch spread, race-control rates from the
   season; calibration report on all 21 dry races (train vs test).
-- [ ] Slice 6: wrap-up: MLP only if slice 2 shows a gap it could close; ablations, registry, DoD.
+- [x] **Slice 6: wrap-up (D-036, EXP-007)**: no MLP (no gap to close), model registry with
+  hash checks, safe fallbacks for every engine artifact, ablation by removal, M4 done-check.
+
+**M4 done-check** (plan §16):
+
+| Plan item | Where | State |
+|---|---|---|
+| Pace dataset + leakage audits | slice 1, D-031 | done |
+| Feature schema (profile/car/track/tyre/weather) | slice 1-2 (`feature_schema_version` 1) | done |
+| Baselines: rolling median / linear / LightGBM | EXP-003 | done |
+| Profile-conditioned MLP "if needed" | D-036 | not built: no gap (EXP-003 ablation) |
+| MAE + confidence intervals, per track / driver | EXP-003 | done |
+| Pit-stop, weather, tyre curve, traffic calibration | D-033, D-034, D-035 | done (pit loss from green stops) |
+| Calibration report against Monza 2024 | EXP-004, EXP-006, EXP-007 (Monza in each) | done |
+| Feature importance / ablation, model registry | EXP-003, EXP-007, `docs/MODEL_REGISTRY.md` | done |
+| Deterministic baseline when a model is missing | D-036, tests | done (tyre shape crashed before) |
+| **DoD**: baseline report on test races | EXP-003 (online), EXP-004/006/007 (engine) | done |
+| **DoD**: profile-conditioned model ablation | EXP-003 (identity and persona: no gain) | done |
+| **DoD**: all model versions tracked | registry: 5 models, hashes checked by a test | done |
+| **DoD**: predictor safely integrated into the engine | fitted lap model with guards (D-033) + fallbacks | done |
+| **DoD**: dataset / feature / split manifest | `data/manifests/dataset_laps_2024_v1.yaml` | done |
+
+Carried to M5: every car still one-stops at the same time (no strategy variety), so passes
+come from the wrong causes; real winners win less often with the fitted start and passing;
+models rest on one season (3 wet races, one race per track).
 
 ## Previous milestone: M3 — First playable 2D race (plan §16) — COMPLETE (replay in the new UI -> M6)
 
@@ -946,3 +971,28 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
   meet" rule, pass causes) + 2 network; frontend 17; E2E passes, but 2 of 10 runs failed, one
   a Playwright worker crash (0xC0000409), the other not captured (see known limitations).
 - Next: slice 6, M4 wrap-up.
+
+### 2026-10-13 — M4 slice 6: wrap-up (registry, fallbacks, ablation, done-check)
+
+- **No MLP** (D-036): EXP-003 showed no gain from driver identity or personas and only 3 % from
+  LightGBM over the corrected rolling median; nothing for an MLP to close.
+- **Model registry**: `calibration/registry.py` + `scripts/model_registry.py` check every
+  `configs/models/*.yaml` against its artifact hash and the lap dataset hash and write
+  `docs/MODEL_REGISTRY.md` (5 models, 4 used by the engine, LightGBM local-only). Artifact paths
+  in the manifests made repo-relative; the writers updated to match.
+- **Safe fallbacks** for every engine artifact, each labelled `editorial_assumption`:
+  1. **Bug:** a missing tyre-shape file crashed the setup (FileNotFoundError); now the editorial
+     tyre model is used.
+  2. Missing traffic / race-control files fell back silently with the placeholder's note; now
+     labelled like the others.
+- **EXP-007 ablation** (8 races x 10 seeds x 5-6 settings): each part does its own job (tyre
+  shape -> real compound sequences, traffic -> pass error 37 -> 20, race control -> retirement
+  error 1.86 -> 1.32, weather -> wet tyres at all); none improves the finishing order
+  (editorial 0.875 vs full 0.852); the real winner wins less with the fitted start and passing
+  (0.32 vs 0.58).
+- **Correction:** slice 3's checkbox mentioned an "optional learned-pace port" that was never
+  built (D-032 kept LightGBM out of the engine); corrected in the plan list above.
+- Shared helper: `spearman` moved to `calibration/simulated_metrics` (EXP-002 and EXP-007).
+- Tests: 353 offline (+7: registry matches, registry flags changed/missing artifacts, a race
+  builds and runs without each fitted file and without all four) + 2 network; frontend 17.
+- **M4 complete.** Next: M5, Stage 1 strategy learning (plan §16).

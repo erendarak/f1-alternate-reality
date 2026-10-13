@@ -2,6 +2,20 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## End of M4 (slice 6, EXP-007)
+
+- **No calibrated part improves the finishing order** (EXP-007: the editorial engine agrees
+  slightly better, 0.875 vs 0.852): order comes from grid and car pace estimated from each race.
+- **Real winners win less often** with the fitted start and passing (0.32 vs 0.58 of runs on
+  the dry test races).
+- **No red flags** in the simulation: race times at Japan, Monaco and São Paulo 2024 are 27-39
+  min off.
+- Season race-control rates come from dry races; on wet races the fitted rates do slightly
+  worse than the editorial ones (3 races).
+- The LightGBM predictor exists only locally (gitignored) and is not used by the engine; M5 must
+  rebuild it with `exp003_pace_models.py` if the strategist uses it.
+- Everything rests on one season (2024): 3 wet races, one race per track.
+
 ## M4 slice 5 (overtaking, start, race control, engine v0.9.0, EXP-006)
 
 - **The pass mix is wrong:** too many same-tyre green passes (26 vs 14 per race) and far too

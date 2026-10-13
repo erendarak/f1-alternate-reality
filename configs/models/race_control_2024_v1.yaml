@@ -1,6 +1,6 @@
 model_name: race_control
 model_version: v1
-artifact: calibration/race_control_2024_v1.json
+artifact: configs/calibration/race_control_2024_v1.json
 artifact_sha256: sha256:dedbb11a8fdc01f124ef9292febe04312517418b4dfb44cb45178f3f52521f6d
 training_dataset_content_sha256: sha256:e43cd3185e213cee8d80f4b82e69ec171f6f4fada093e7702ca914edcbf58181
 kind: 'method of moments: retirement hazard, SC/VSC per retirement, SC length'

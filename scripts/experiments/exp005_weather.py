@@ -214,7 +214,7 @@ def main() -> None:
         "model_version": "v1",
         "kind": "non-linear least squares: lap times + tyre choices (wetness from the rain flag)",
         "source_type": "estimated_from_data (wet-tyre line and factors editorial)",
-        "artifact": WEATHER_FILE.as_posix(),
+        "artifact": (Path("configs") / WEATHER_FILE).as_posix(),
         "artifact_sha256": "sha256:" + hashlib.sha256(text.encode()).hexdigest(),
         "training_dataset_content_sha256": dataset["file"]["content_sha256"],
         "training_races": sorted(wet["event_id"].unique()),

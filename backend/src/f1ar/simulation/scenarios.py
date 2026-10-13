@@ -109,7 +109,7 @@ def setup_from_codes(
         )
 
     from f1ar.calibration.lap_dataset import race_laps
-    from f1ar.calibration.lap_model_fit import calibrated_lap_model, load_shape
+    from f1ar.calibration.lap_model_fit import SHAPE_FILE, calibrated_lap_model, load_shape
     from f1ar.calibration.race_inputs import (
         estimate_base_lap,
         estimate_car_offsets,
@@ -155,13 +155,20 @@ def setup_from_codes(
             driver_ids={e.car_number: e.driver_id for e in roster.entries},
             team_ids={e.car_number: e.team_id for e in roster.entries},
         )
-    shape, shape_sha = load_shape(configs_dir or REPO_CONFIGS)
     editorial = default_lap_model(_NOMINAL_BASE_LAP_S.get(roster.event_id, 90.0))
     field = [profiles.get(d).archetype for d in roster.driver_ids()]
-    calibrated = calibrated_lap_model(editorial, shape, shape_sha, race, field)
-    estimate = estimate_car_offsets(laps, roster, profiles, calibrated.params)
-    base = estimate_base_lap(laps, roster, profiles, calibrated.params, estimate, track.total_laps)
-    lap_model = calibrated.params.model_copy(update={"base_lap_s": base.base_lap_s})
+    if (configs / SHAPE_FILE).exists():
+        calibrated = calibrated_lap_model(editorial, *load_shape(configs), race, field)
+        lap_params, tyre_note = calibrated.params, calibrated.note
+    else:  # no fitted model: the deterministic editorial model still runs (plan §16 M4)
+        lap_params = editorial
+        tyre_note = (
+            f"editorial_assumption: no fitted tyre shape ({SHAPE_FILE.as_posix()} missing); "
+            "placeholder tyre/fuel model (D-010)"
+        )
+    estimate = estimate_car_offsets(laps, roster, profiles, lap_params)
+    base = estimate_base_lap(laps, roster, profiles, lap_params, estimate, track.total_laps)
+    lap_model = lap_params.model_copy(update={"base_lap_s": base.base_lap_s})
     try:
         pit_loss = estimate_pit_loss(laps)  # weather-adjusted: a stop in the rain isn't slower
         pit, pit_note = (
@@ -194,7 +201,7 @@ def setup_from_codes(
             "car_pace_offsets": estimate.note,
             "base_lap": base.note,
             "pit_loss": pit_note,
-            "tyre_model": calibrated.note,
+            "tyre_model": tyre_note,
             "weather": weather_note,
             "traffic": traffic_note,
             "race_control": race_control_note,
@@ -208,7 +215,10 @@ def _fitted_traffic(configs: Path, event_id: str) -> tuple[TrafficParams, str]:
 
     base = default_traffic_params()
     if not (configs / TRAFFIC_FILE).exists():
-        return base, base.note
+        return (
+            base,
+            f"editorial_assumption: no fitted traffic model ({TRAFFIC_FILE.as_posix()} missing)",
+        )
     params = traffic_params(*load_traffic(configs), event_id, base)
     return params, params.note
 
@@ -224,7 +234,10 @@ def _fitted_race_control(
 
     base = default_race_control_params()
     if not (configs / RACE_CONTROL_FILE).exists():
-        return base, base.note
+        note = (
+            f"editorial_assumption: no fitted race control ({RACE_CONTROL_FILE.as_posix()} missing)"
+        )
+        return base, note
     # the engine's skill factor (incidents.skill_factor), averaged over the field
     mean_skill = sum((1.5 - a.consistency) * (1.5 - a.composure) for a in field) / len(field)
     params = race_control_params(*load_race_control(configs), base, mean_skill)

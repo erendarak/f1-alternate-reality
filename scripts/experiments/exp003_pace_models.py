@@ -405,9 +405,8 @@ def write_artifacts(shape_res: dict[str, Any], online_res: dict[str, Any]) -> li
             "model_version": "v1",
             "kind": "LightGBM residual on the driver's recent median",
             "source_type": "learned_parameter",
-            "artifact": (
-                "artifacts/models/pace_lgbm_2024_v1.txt (gitignored; rebuild with this script)"
-            ),
+            "artifact": "artifacts/models/pace_lgbm_2024_v1.txt",
+            "artifact_tracked": False,  # gitignored: rebuilt locally by this script
             "artifact_sha256": sha(model_text.encode()),
             "feature_schema_version": FEATURE_SCHEMA_VERSION,
             "training_dataset_manifest": DATASET_MANIFEST.relative_to(ROOT).as_posix(),

@@ -1,6 +1,6 @@
 model_name: traffic
 model_version: v1
-artifact: calibration/traffic_2024_v1.json
+artifact: configs/calibration/traffic_2024_v1.json
 artifact_sha256: sha256:af80392c3f678b752da9f1203413b4ea250908cf6ae312e1524261595f90ab79
 training_dataset_content_sha256: sha256:e43cd3185e213cee8d80f4b82e69ec171f6f4fada093e7702ca914edcbf58181
 kind: maximum likelihood on lap-level encounters (engine noise convolved), ridge-shrunk track thresholds;

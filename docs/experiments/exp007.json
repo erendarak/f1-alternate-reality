@@ -1,0 +1,801 @@
+{
+ "seeds": 10,
+ "settings": {
+  "full": [],
+  "no_tyre_shape": [
+   "calibration/tyre_shape_2024_v1.json"
+  ],
+  "no_weather": [
+   "calibration/weather_2024_v1.json"
+  ],
+  "no_traffic": [
+   "calibration/traffic_2024_v1.json"
+  ],
+  "no_race_control": [
+   "calibration/race_control_2024_v1.json"
+  ],
+  "all_editorial": [
+   "calibration/tyre_shape_2024_v1.json",
+   "calibration/weather_2024_v1.json",
+   "calibration/traffic_2024_v1.json",
+   "calibration/race_control_2024_v1.json"
+  ]
+ },
+ "races": {
+  "2024_italian_gp": {
+   "group": "dry_test",
+   "full": {
+    "winner_time_error_min": 1.873,
+    "spearman": 0.887,
+    "real_winner_wins": 0.0,
+    "stops_error": 0.579,
+    "sequence_overlap": 0.7,
+    "passes_error": 25.1,
+    "retirements_error": 1.0,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_tyre_shape": {
+    "winner_time_error_min": 1.828,
+    "spearman": 0.896,
+    "real_winner_wins": 0.0,
+    "stops_error": 0.579,
+    "sequence_overlap": 0.0,
+    "passes_error": 24.0,
+    "retirements_error": 1.0,
+    "labels": {
+     "tyre_model": "editorial_assumption",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_traffic": {
+    "winner_time_error_min": 1.901,
+    "spearman": 0.891,
+    "real_winner_wins": 0.1,
+    "stops_error": 0.579,
+    "sequence_overlap": 0.7,
+    "passes_error": 43.4,
+    "retirements_error": 1.0,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "editorial_assumption",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_race_control": {
+    "winner_time_error_min": 0.659,
+    "spearman": 0.887,
+    "real_winner_wins": 0.0,
+    "stops_error": 0.579,
+    "sequence_overlap": 0.704,
+    "passes_error": 22.4,
+    "retirements_error": 0.5,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "editorial_assumption"
+    }
+   },
+   "all_editorial": {
+    "winner_time_error_min": 0.788,
+    "spearman": 0.893,
+    "real_winner_wins": 0.0,
+    "stops_error": 0.579,
+    "sequence_overlap": 0.0,
+    "passes_error": 43.1,
+    "retirements_error": 0.5,
+    "labels": {
+     "tyre_model": "editorial_assumption",
+     "weather": "editorial_assumption",
+     "traffic": "editorial_assumption",
+     "race_control": "editorial_assumption"
+    }
+   }
+  },
+  "2024_japanese_gp": {
+   "group": "dry_test",
+   "full": {
+    "winner_time_error_min": 26.631,
+    "spearman": 0.859,
+    "real_winner_wins": 0.7,
+    "stops_error": 1.0,
+    "sequence_overlap": 0.0,
+    "passes_error": 23.1,
+    "retirements_error": 0.9,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_tyre_shape": {
+    "winner_time_error_min": 26.488,
+    "spearman": 0.86,
+    "real_winner_wins": 0.7,
+    "stops_error": 1.0,
+    "sequence_overlap": 0.0,
+    "passes_error": 17.2,
+    "retirements_error": 0.9,
+    "labels": {
+     "tyre_model": "editorial_assumption",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_traffic": {
+    "winner_time_error_min": 26.678,
+    "spearman": 0.915,
+    "real_winner_wins": 0.9,
+    "stops_error": 1.0,
+    "sequence_overlap": 0.0,
+    "passes_error": 46.2,
+    "retirements_error": 0.9,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "editorial_assumption",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_race_control": {
+    "winner_time_error_min": 28.187,
+    "spearman": 0.862,
+    "real_winner_wins": 0.7,
+    "stops_error": 1.0,
+    "sequence_overlap": 0.0,
+    "passes_error": 20.8,
+    "retirements_error": 1.9,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "editorial_assumption"
+    }
+   },
+   "all_editorial": {
+    "winner_time_error_min": 28.079,
+    "spearman": 0.894,
+    "real_winner_wins": 0.9,
+    "stops_error": 1.0,
+    "sequence_overlap": 0.0,
+    "passes_error": 43.2,
+    "retirements_error": 1.9,
+    "labels": {
+     "tyre_model": "editorial_assumption",
+     "weather": "editorial_assumption",
+     "traffic": "editorial_assumption",
+     "race_control": "editorial_assumption"
+    }
+   }
+  },
+  "2024_monaco_gp": {
+   "group": "dry_test",
+   "full": {
+    "winner_time_error_min": 38.562,
+    "spearman": 0.87,
+    "real_winner_wins": 0.2,
+    "stops_error": 0.562,
+    "sequence_overlap": 0.448,
+    "passes_error": 16.3,
+    "retirements_error": 1.4,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_tyre_shape": {
+    "winner_time_error_min": 39.354,
+    "spearman": 0.905,
+    "real_winner_wins": 0.2,
+    "stops_error": 1.639,
+    "sequence_overlap": 0.0,
+    "passes_error": 14.6,
+    "retirements_error": 1.4,
+    "labels": {
+     "tyre_model": "editorial_assumption",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_traffic": {
+    "winner_time_error_min": 38.643,
+    "spearman": 0.882,
+    "real_winner_wins": 0.6,
+    "stops_error": 0.562,
+    "sequence_overlap": 0.448,
+    "passes_error": 17.0,
+    "retirements_error": 1.4,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "editorial_assumption",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_race_control": {
+    "winner_time_error_min": 39.312,
+    "spearman": 0.872,
+    "real_winner_wins": 0.3,
+    "stops_error": 0.562,
+    "sequence_overlap": 0.445,
+    "passes_error": 18.4,
+    "retirements_error": 2.2,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "editorial_assumption"
+    }
+   },
+   "all_editorial": {
+    "winner_time_error_min": 40.045,
+    "spearman": 0.924,
+    "real_winner_wins": 0.4,
+    "stops_error": 1.585,
+    "sequence_overlap": 0.0,
+    "passes_error": 15.8,
+    "retirements_error": 2.2,
+    "labels": {
+     "tyre_model": "editorial_assumption",
+     "weather": "editorial_assumption",
+     "traffic": "editorial_assumption",
+     "race_control": "editorial_assumption"
+    }
+   }
+  },
+  "2024_mexico_city_gp": {
+   "group": "dry_test",
+   "full": {
+    "winner_time_error_min": 2.596,
+    "spearman": 0.869,
+    "real_winner_wins": 0.4,
+    "stops_error": 0.235,
+    "sequence_overlap": 1.0,
+    "passes_error": 8.6,
+    "retirements_error": 1.1,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_tyre_shape": {
+    "winner_time_error_min": 2.767,
+    "spearman": 0.876,
+    "real_winner_wins": 0.4,
+    "stops_error": 0.765,
+    "sequence_overlap": 0.0,
+    "passes_error": 15.4,
+    "retirements_error": 1.1,
+    "labels": {
+     "tyre_model": "editorial_assumption",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_traffic": {
+    "winner_time_error_min": 2.618,
+    "spearman": 0.85,
+    "real_winner_wins": 0.9,
+    "stops_error": 0.235,
+    "sequence_overlap": 1.0,
+    "passes_error": 25.3,
+    "retirements_error": 1.1,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "editorial_assumption",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_race_control": {
+    "winner_time_error_min": 3.658,
+    "spearman": 0.884,
+    "real_winner_wins": 0.4,
+    "stops_error": 0.235,
+    "sequence_overlap": 1.0,
+    "passes_error": 10.6,
+    "retirements_error": 1.7,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "editorial_assumption"
+    }
+   },
+   "all_editorial": {
+    "winner_time_error_min": 3.822,
+    "spearman": 0.884,
+    "real_winner_wins": 1.0,
+    "stops_error": 0.765,
+    "sequence_overlap": 0.0,
+    "passes_error": 30.3,
+    "retirements_error": 1.7,
+    "labels": {
+     "tyre_model": "editorial_assumption",
+     "weather": "editorial_assumption",
+     "traffic": "editorial_assumption",
+     "race_control": "editorial_assumption"
+    }
+   }
+  },
+  "2024_abu_dhabi_gp": {
+   "group": "dry_test",
+   "full": {
+    "winner_time_error_min": 1.477,
+    "spearman": 0.773,
+    "real_winner_wins": 0.3,
+    "stops_error": 0.438,
+    "sequence_overlap": 0.055,
+    "passes_error": 29.4,
+    "retirements_error": 2.2,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_tyre_shape": {
+    "winner_time_error_min": 1.451,
+    "spearman": 0.768,
+    "real_winner_wins": 0.3,
+    "stops_error": 0.438,
+    "sequence_overlap": 0.0,
+    "passes_error": 31.1,
+    "retirements_error": 2.2,
+    "labels": {
+     "tyre_model": "editorial_assumption",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_traffic": {
+    "winner_time_error_min": 1.468,
+    "spearman": 0.774,
+    "real_winner_wins": 0.4,
+    "stops_error": 0.438,
+    "sequence_overlap": 0.055,
+    "passes_error": 53.8,
+    "retirements_error": 2.2,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "editorial_assumption",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_race_control": {
+    "winner_time_error_min": 0.657,
+    "spearman": 0.787,
+    "real_winner_wins": 0.1,
+    "stops_error": 0.438,
+    "sequence_overlap": 0.053,
+    "passes_error": 25.7,
+    "retirements_error": 3.0,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "editorial_assumption"
+    }
+   },
+   "all_editorial": {
+    "winner_time_error_min": 0.671,
+    "spearman": 0.781,
+    "real_winner_wins": 0.3,
+    "stops_error": 0.438,
+    "sequence_overlap": 0.0,
+    "passes_error": 53.4,
+    "retirements_error": 3.0,
+    "labels": {
+     "tyre_model": "editorial_assumption",
+     "weather": "editorial_assumption",
+     "traffic": "editorial_assumption",
+     "race_control": "editorial_assumption"
+    }
+   }
+  },
+  "2024_canadian_gp": {
+   "group": "wet",
+   "full": {
+    "winner_time_error_min": 4.805,
+    "spearman": 0.856,
+    "real_winner_wins": 0.0,
+    "stops_error": 1.2,
+    "sequence_overlap": 0.895,
+    "passes_error": 26.8,
+    "retirements_error": 1.4,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_tyre_shape": {
+    "winner_time_error_min": 5.13,
+    "spearman": 0.857,
+    "real_winner_wins": 0.0,
+    "stops_error": 1.2,
+    "sequence_overlap": 0.894,
+    "passes_error": 28.1,
+    "retirements_error": 1.5,
+    "labels": {
+     "tyre_model": "editorial_assumption",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_weather": {
+    "winner_time_error_min": 3.76,
+    "spearman": 0.734,
+    "real_winner_wins": 0.0,
+    "stops_error": 1.2,
+    "sequence_overlap": 0.0,
+    "passes_error": 37.4,
+    "retirements_error": 2.5,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "editorial_assumption",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_traffic": {
+    "winner_time_error_min": 4.742,
+    "spearman": 0.863,
+    "real_winner_wins": 0.0,
+    "stops_error": 1.2,
+    "sequence_overlap": 0.895,
+    "passes_error": 36.9,
+    "retirements_error": 1.4,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "editorial_assumption",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_race_control": {
+    "winner_time_error_min": 5.197,
+    "spearman": 0.859,
+    "real_winner_wins": 0.0,
+    "stops_error": 1.2,
+    "sequence_overlap": 0.903,
+    "passes_error": 14.4,
+    "retirements_error": 2.9,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "editorial_assumption"
+    }
+   },
+   "all_editorial": {
+    "winner_time_error_min": 3.753,
+    "spearman": 0.735,
+    "real_winner_wins": 0.0,
+    "stops_error": 0.8,
+    "sequence_overlap": 0.0,
+    "passes_error": 38.1,
+    "retirements_error": 3.4,
+    "labels": {
+     "tyre_model": "editorial_assumption",
+     "weather": "editorial_assumption",
+     "traffic": "editorial_assumption",
+     "race_control": "editorial_assumption"
+    }
+   }
+  },
+  "2024_british_gp": {
+   "group": "wet",
+   "full": {
+    "winner_time_error_min": 1.994,
+    "spearman": 0.755,
+    "real_winner_wins": 0.9,
+    "stops_error": 0.471,
+    "sequence_overlap": 0.269,
+    "passes_error": 5.1,
+    "retirements_error": 1.6,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_tyre_shape": {
+    "winner_time_error_min": 2.048,
+    "spearman": 0.83,
+    "real_winner_wins": 0.6,
+    "stops_error": 0.247,
+    "sequence_overlap": 0.721,
+    "passes_error": 4.4,
+    "retirements_error": 1.6,
+    "labels": {
+     "tyre_model": "editorial_assumption",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_weather": {
+    "winner_time_error_min": 1.858,
+    "spearman": 0.822,
+    "real_winner_wins": 0.9,
+    "stops_error": 1.444,
+    "sequence_overlap": 0.0,
+    "passes_error": 5.5,
+    "retirements_error": 1.1,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "editorial_assumption",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_traffic": {
+    "winner_time_error_min": 2.03,
+    "spearman": 0.778,
+    "real_winner_wins": 0.7,
+    "stops_error": 0.471,
+    "sequence_overlap": 0.269,
+    "passes_error": 22.6,
+    "retirements_error": 1.6,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "editorial_assumption",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_race_control": {
+    "winner_time_error_min": 0.919,
+    "spearman": 0.736,
+    "real_winner_wins": 0.9,
+    "stops_error": 0.496,
+    "sequence_overlap": 0.088,
+    "passes_error": 5.6,
+    "retirements_error": 0.6,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "editorial_assumption"
+    }
+   },
+   "all_editorial": {
+    "winner_time_error_min": 2.212,
+    "spearman": 0.889,
+    "real_winner_wins": 0.7,
+    "stops_error": 1.444,
+    "sequence_overlap": 0.0,
+    "passes_error": 19.7,
+    "retirements_error": 0.5,
+    "labels": {
+     "tyre_model": "editorial_assumption",
+     "weather": "editorial_assumption",
+     "traffic": "editorial_assumption",
+     "race_control": "editorial_assumption"
+    }
+   }
+  },
+  "2024_sao_paulo_gp": {
+   "group": "wet",
+   "full": {
+    "winner_time_error_min": 28.292,
+    "spearman": 0.496,
+    "real_winner_wins": 0.4,
+    "stops_error": 1.0,
+    "sequence_overlap": 0.0,
+    "passes_error": 16.5,
+    "retirements_error": 2.5,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_tyre_shape": {
+    "winner_time_error_min": 28.171,
+    "spearman": 0.496,
+    "real_winner_wins": 0.4,
+    "stops_error": 1.0,
+    "sequence_overlap": 0.0,
+    "passes_error": 16.6,
+    "retirements_error": 2.5,
+    "labels": {
+     "tyre_model": "editorial_assumption",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_weather": {
+    "winner_time_error_min": 27.746,
+    "spearman": 0.558,
+    "real_winner_wins": 0.1,
+    "stops_error": 1.0,
+    "sequence_overlap": 0.0,
+    "passes_error": 41.3,
+    "retirements_error": 0.7,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "editorial_assumption",
+     "traffic": "estimated_from_data",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_traffic": {
+    "winner_time_error_min": 28.222,
+    "spearman": 0.539,
+    "real_winner_wins": 0.2,
+    "stops_error": 1.0,
+    "sequence_overlap": 0.0,
+    "passes_error": 25.3,
+    "retirements_error": 2.5,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "editorial_assumption",
+     "race_control": "estimated_from_data"
+    }
+   },
+   "no_race_control": {
+    "winner_time_error_min": 28.571,
+    "spearman": 0.509,
+    "real_winner_wins": 0.3,
+    "stops_error": 1.0,
+    "sequence_overlap": 0.0,
+    "passes_error": 9.8,
+    "retirements_error": 1.1,
+    "labels": {
+     "tyre_model": "estimated_from_data",
+     "weather": "estimated_from_data",
+     "traffic": "estimated_from_data",
+     "race_control": "editorial_assumption"
+    }
+   },
+   "all_editorial": {
+    "winner_time_error_min": 27.889,
+    "spearman": 0.456,
+    "real_winner_wins": 0.0,
+    "stops_error": 1.626,
+    "sequence_overlap": 0.0,
+    "passes_error": 18.8,
+    "retirements_error": 1.0,
+    "labels": {
+     "tyre_model": "editorial_assumption",
+     "weather": "editorial_assumption",
+     "traffic": "editorial_assumption",
+     "race_control": "editorial_assumption"
+    }
+   }
+  }
+ },
+ "summary": {
+  "dry_test": {
+   "full": {
+    "winner_time_error_min": 14.228,
+    "spearman": 0.852,
+    "real_winner_wins": 0.32,
+    "stops_error": 0.563,
+    "sequence_overlap": 0.441,
+    "passes_error": 20.5,
+    "retirements_error": 1.32
+   },
+   "no_tyre_shape": {
+    "winner_time_error_min": 14.378,
+    "spearman": 0.861,
+    "real_winner_wins": 0.32,
+    "stops_error": 0.884,
+    "sequence_overlap": 0.0,
+    "passes_error": 20.46,
+    "retirements_error": 1.32
+   },
+   "no_traffic": {
+    "winner_time_error_min": 14.262,
+    "spearman": 0.862,
+    "real_winner_wins": 0.58,
+    "stops_error": 0.563,
+    "sequence_overlap": 0.441,
+    "passes_error": 37.14,
+    "retirements_error": 1.32
+   },
+   "no_race_control": {
+    "winner_time_error_min": 14.495,
+    "spearman": 0.858,
+    "real_winner_wins": 0.3,
+    "stops_error": 0.563,
+    "sequence_overlap": 0.44,
+    "passes_error": 19.58,
+    "retirements_error": 1.86
+   },
+   "all_editorial": {
+    "winner_time_error_min": 14.681,
+    "spearman": 0.875,
+    "real_winner_wins": 0.52,
+    "stops_error": 0.873,
+    "sequence_overlap": 0.0,
+    "passes_error": 37.16,
+    "retirements_error": 1.86
+   }
+  },
+  "wet": {
+   "full": {
+    "winner_time_error_min": 11.697,
+    "spearman": 0.702,
+    "real_winner_wins": 0.433,
+    "stops_error": 0.89,
+    "sequence_overlap": 0.388,
+    "passes_error": 16.133,
+    "retirements_error": 1.833
+   },
+   "no_tyre_shape": {
+    "winner_time_error_min": 11.783,
+    "spearman": 0.728,
+    "real_winner_wins": 0.333,
+    "stops_error": 0.816,
+    "sequence_overlap": 0.538,
+    "passes_error": 16.367,
+    "retirements_error": 1.867
+   },
+   "no_weather": {
+    "winner_time_error_min": 11.121,
+    "spearman": 0.705,
+    "real_winner_wins": 0.333,
+    "stops_error": 1.215,
+    "sequence_overlap": 0.0,
+    "passes_error": 28.067,
+    "retirements_error": 1.433
+   },
+   "no_traffic": {
+    "winner_time_error_min": 11.665,
+    "spearman": 0.727,
+    "real_winner_wins": 0.3,
+    "stops_error": 0.89,
+    "sequence_overlap": 0.388,
+    "passes_error": 28.267,
+    "retirements_error": 1.833
+   },
+   "no_race_control": {
+    "winner_time_error_min": 11.562,
+    "spearman": 0.701,
+    "real_winner_wins": 0.4,
+    "stops_error": 0.899,
+    "sequence_overlap": 0.33,
+    "passes_error": 9.933,
+    "retirements_error": 1.533
+   },
+   "all_editorial": {
+    "winner_time_error_min": 11.285,
+    "spearman": 0.693,
+    "real_winner_wins": 0.233,
+    "stops_error": 1.29,
+    "sequence_overlap": 0.0,
+    "passes_error": 25.533,
+    "retirements_error": 1.633
+   }
+  }
+ },
+ "seconds": 347.5
+}

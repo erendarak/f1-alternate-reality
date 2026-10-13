@@ -27,7 +27,7 @@ from pathlib import Path
 from typing import Any
 
 from f1ar.calibration.reference_metrics import real_metrics
-from f1ar.calibration.simulated_metrics import sim_metrics
+from f1ar.calibration.simulated_metrics import sim_metrics, spearman
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.scenarios import (
     BELGIUM_2024,
@@ -41,14 +41,6 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 # --- comparison --------------------------------------------------------------------------------
-
-
-def spearman(a: list[str], b: list[str]) -> float:
-    common = [d for d in a if d in b]
-    rank_b = {d: i for i, d in enumerate(x for x in b if x in common)}
-    n = len(common)
-    d2 = sum((i - rank_b[d]) ** 2 for i, d in enumerate(common))
-    return 1 - 6 * d2 / (n * (n * n - 1))
 
 
 def position_error(sim: list[str], real: list[str], both: set[str]) -> float:

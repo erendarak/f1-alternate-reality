@@ -488,6 +488,74 @@ Decision / next:      Keep the per-track fit (engine default) and the fitted rac
                       pass mix waits for real strategy variety (M5). Slice 6: M4 wrap-up.
 ```
 
+## EXP-007 — Ablation: what each calibrated part of the engine adds (2026-10-13)
+
+```text
+Experiment ID:        EXP-007
+Research question:    Which real-race properties does each fitted part (tyre shape, weather,
+                      traffic, race control) bring, against the editorial engine?
+Hypothesis:           Each part improves the property it was fitted for; none of them improves
+                      the finishing order much (that comes from grid and car pace, estimated
+                      from each race in every setting).
+Engine:               lightweight_engine_v0.9.0 (D-036)
+Method:               ablation by removal: the setup is built from a copy of configs/ without
+                      the artifact(s) and falls back to the editorial model (as on a machine
+                      without the file); "all editorial" removes all four.
+Races:                dry_test (Monza, Japan, Monaco, Mexico, Abu Dhabi) and wet (Canada,
+                      Britain, São Paulo); 10 seeds per race and setting
+Code:                 scripts/experiments/exp007_ablation.py -> docs/experiments/exp007.json
+```
+
+Dry test races (mean of 5 races; errors are |simulated - real|, lower is better):
+
+| Setting | Spearman (order) | Real winner wins | Stops error | Sequences a real finisher used | Passes error | Retirements error |
+|---|---|---|---|---|---|---|
+| full (v0.9.0) | 0.852 | 0.32 | 0.56 | 0.44 | 20.5 | 1.32 |
+| no tyre shape | 0.861 | 0.32 | 0.88 | 0.00 | 20.5 | 1.32 |
+| no traffic fit | 0.862 | 0.58 | 0.56 | 0.44 | 37.1 | 1.32 |
+| no race control fit | 0.858 | 0.30 | 0.56 | 0.44 | 19.6 | 1.86 |
+| all editorial | 0.875 | 0.52 | 0.87 | 0.00 | 37.2 | 1.86 |
+
+Wet races (mean of 3):
+
+| Setting | Spearman | Real winner wins | Stops error | Sequences a real finisher used | Passes error | Retirements error |
+|---|---|---|---|---|---|---|
+| full | 0.702 | 0.43 | 0.89 | 0.39 | 16.1 | 1.83 |
+| no tyre shape | 0.728 | 0.33 | 0.82 | 0.54 | 16.4 | 1.87 |
+| no weather | 0.705 | 0.33 | 1.22 | 0.00 | 28.1 | 1.43 |
+| no traffic fit | 0.727 | 0.30 | 0.89 | 0.39 | 28.3 | 1.83 |
+| no race control fit | 0.701 | 0.40 | 0.90 | 0.33 | 9.9 | 1.53 |
+| all editorial | 0.693 | 0.23 | 1.29 | 0.00 | 25.5 | 1.63 |
+
+```text
+Findings:
+  1. EACH PART DOES ITS OWN JOB: the tyre shape is what makes compound choices real (sequences a
+     real finisher used 0.44 -> 0 without it; stops error 0.56 -> 0.88); the traffic fit halves
+     the pass error (37 -> 20); the race-control fit cuts the retirement error (1.86 -> 1.32) on
+     the dry test races; weather is what puts cars on wet tyres at all (0.39 -> 0) and halves the
+     wet pass error.
+  2. NO PART IMPROVES THE FINISHING ORDER (negative): all editorial 0.875 vs full 0.852 on the dry
+     test races. The order comes from grid and car pace (estimated from each race in every
+     setting); the fitted parts add realistic variation (lap-1 shuffle, passing, incidents)
+     that costs a little order agreement.
+  3. THE REAL WINNER WINS LESS with the traffic fit (0.32 vs 0.58; Mexico 0.4 vs 0.9): the
+     launch spread and easier passing make races less predictable. Real races are not
+     deterministic either; one real result can't say which is right.
+  4. Wet races without the fitted race control get a lower pass error (9.9 vs 16.1) and
+     retirement error (1.53 vs 1.83): the season rates come from dry races only and the wet
+     incident factor (x(1 + 2w)) is editorial. Not tuned here (3 races).
+  5. Winner time error is dominated by red flags the engine doesn't simulate (Japan ~27 min,
+     Monaco ~39 min, São Paulo ~28 min); Monza 1.9 min, Mexico 2.6, Abu Dhabi 1.5.
+  6. Britain: removing the tyre shape raises its sequence overlap (0.27 -> 0.72): the editorial
+     offsets happen to pick the final slick compound more real finishers used; one race, no
+     conclusion.
+Negative results:     2, 4.
+Reproduce:            uv run python scripts/experiments/exp007_ablation.py --seeds 10 \
+                        --json docs/experiments/exp007.json
+Decision / next:      Keep all four parts. Order agreement is not what they are for; M5's
+                      strategist and better strategy variety are the next lever.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

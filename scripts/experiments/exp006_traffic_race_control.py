@@ -138,7 +138,7 @@ def manifest(name: str, artifact: Path, sha: str, data_sha: str, extra: dict[str
     body = {
         "model_name": name,
         "model_version": "v1",
-        "artifact": artifact.as_posix(),
+        "artifact": (Path("configs") / artifact).as_posix(),
         "artifact_sha256": sha,
         "training_dataset_content_sha256": data_sha,
         **extra,
@@ -401,7 +401,9 @@ def main() -> None:
         "seconds": round(time.perf_counter() - t0, 1),
     }
     if args.json:
-        args.json.write_text(json.dumps(out, indent=1, default=str) + "\n", encoding="utf-8")
+        args.json.write_text(
+            json.dumps(out, indent=1, default=str) + "\n", encoding="utf-8", newline="\n"
+        )
 
 
 if __name__ == "__main__":
