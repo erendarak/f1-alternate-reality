@@ -30,10 +30,23 @@ from typing import Protocol
 import numpy as np
 import pandas as pd
 
-from f1ar.domain.race_state import DRY_COMPOUNDS, Compound, PaceMode, PlannedStop, RaceSetup
-from f1ar.policy.baseline_strategy import dry_compounds_required, fresh_stint_costs, wear_table
+from f1ar.domain.race_state import (
+    DRY_COMPOUNDS,
+    Compound,
+    PaceMode,
+    PlannedStop,
+    RacePhase,
+    RaceSetup,
+)
+from f1ar.policy.baseline_strategy import (
+    dry_compounds_required,
+    fresh_stint_costs,
+    plan_for_car,
+    wear_table,
+)
 from f1ar.simulation import lightweight_engine as engine
-from f1ar.training.actions import PIT_OPTIONS, encode
+from f1ar.training.actions import PACE_OPTIONS, PIT_OPTIONS, encode
+from f1ar.training.policy_registry import NumpyPolicy
 from f1ar.training.rollouts import imagined_seed, imagined_world, rollout_reward
 from f1ar.training.session import Decision, RaceSession
 
@@ -283,3 +296,79 @@ class RandomStrategist:
 
     def decide(self, session: RaceSession, decision: Decision) -> int:
         return int(self.rng.choice(np.flatnonzero(decision.mask)))
+
+
+class LearnedStrategist:
+    """A trained policy (M5 slice 3, D-040): the most likely legal action of the pinned actor
+    network (``training.policy_registry``), deterministic.
+
+    ``sample_seed``: sample from the policy's distribution instead, with a generator seeded from
+    ``sample_seed`` and the race seed (reproducible: same race, same draws).
+
+    ``pace``: force one pace mode (an ablation that separates what the policy gains from pit
+    timing and compounds from what it gains from the editorial PUSH/CONSERVE effects). The pit
+    choice is then the one with the highest probability summed over pace modes."""
+
+    def __init__(
+        self,
+        policy: NumpyPolicy,
+        name: str,
+        pace: PaceMode | None = None,
+        sample_seed: int | None = None,
+    ) -> None:
+        self.policy = policy
+        self.name = name if pace is None else f"{name}+{pace.value.lower()}"
+        if sample_seed is not None:
+            self.name += "~sampled"
+        self.pace = pace
+        self.sample_seed = sample_seed
+        self.rng: np.random.Generator | None = None
+
+    def start(self, session: RaceSession, driver_id: str) -> None:
+        if self.sample_seed is not None:
+            self.rng = np.random.default_rng([self.sample_seed, session.state.rng.seed])
+
+    def decide(self, session: RaceSession, decision: Decision) -> int:
+        if self.rng is not None:
+            p = self.policy.probabilities(decision.observation, decision.mask)
+            return int(self.rng.choice(len(p), p=p))
+        if self.pace is None:
+            return self.policy.act(decision.observation, decision.mask)
+        p = self.policy.probabilities(decision.observation, decision.mask)
+        options = [(encode(pit, self.pace), pit) for pit in PIT_OPTIONS]
+        legal = [(a, pit) for a, pit in options if decision.mask[a]]
+        if not legal:
+            return self.policy.act(decision.observation, decision.mask)
+        by_pit = p.reshape(len(PIT_OPTIONS), len(PACE_OPTIONS)).sum(axis=1)
+        return max(legal, key=lambda o: by_pit[PIT_OPTIONS.index(o[1])])[0]
+
+
+class RulesTeacher:
+    """B1's rule planner expressed as the AI's actions (a teacher for imitation, D-040).
+
+    At each decision it replans like the engine's baseline (``plan_for_car``) and asks for a stop
+    when the plan stops at the end of this lap, or, under SC/VSC, when the next planned stop is
+    within the neutralised pit window (the baseline's cheap stop). Pace stays BALANCED. Dry races
+    only: the baseline's weather rule isn't reproduced. Not identical to B1 (the baseline
+    replans at its own moments); how close it gets is measured (EXP-009 notes, tests)."""
+
+    name = "rules_teacher"
+
+    def start(self, session: RaceSession, driver_id: str) -> None:
+        pass
+
+    def decide(self, session: RaceSession, decision: Decision) -> int:
+        state = session.state
+        car = state.car(decision.driver_id)
+        plan = plan_for_car(state.setup, car)
+        if plan:
+            nxt = plan[0]
+            window = state.setup.race_control.neutralised_pit_window_laps
+            neutralised = state.race_control.phase is not RacePhase.GREEN
+            if nxt.lap == car.laps_completed + 1 or (
+                neutralised and nxt.lap - car.laps_completed <= window
+            ):
+                action = encode(nxt.compound, PaceMode.BALANCED)
+                if decision.mask[action]:
+                    return action
+        return STAY

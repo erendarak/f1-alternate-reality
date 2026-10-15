@@ -1,0 +1,120 @@
+registry_schema: 1
+policy_id: strategist_m5s3_v1
+source_type: learned_parameter
+algorithm: MaskablePPO (sb3-contrib 2.9.0, torch 2.11.0+cu128)
+architecture: MLP 58-128-128-18, tanh; actor only (value net not exported)
+artifact: models/policies/strategist_m5s3_v1.npz
+artifact_sha256: sha256:ccedb8a9db802b33b8c39d5c2d5a5fe2f66e11f06b13da5298d2c65d8fb41e3c
+pinned_to:
+  observation_schema: rl_obs_v1
+  feature_names_sha256: sha256:7646e920d99e09f54fe6cc4e7f3a8a7d95c88aa0ba1145c8e56127a8d7061bb0
+  n_features: 58
+  n_actions: 18
+  regulations: fia_2024_v1
+  engine_version: lightweight_engine_v0.9.0
+training:
+  run: main_v1
+  config:
+    events:
+    - 2024_bahrain_gp
+    - 2024_saudi_arabian_gp
+    - 2024_australian_gp
+    - 2024_chinese_gp
+    - 2024_miami_gp
+    - 2024_emilia_romagna_gp
+    - 2024_spanish_gp
+    - 2024_austrian_gp
+    - 2024_hungarian_gp
+    - 2024_belgian_gp
+    - 2024_dutch_gp
+    - 2024_azerbaijan_gp
+    - 2024_singapore_gp
+    - 2024_united_states_gp
+    - 2024_las_vegas_gp
+    - 2024_qatar_gp
+    total_steps: 800000
+    seed: 0
+    n_envs: 14
+    envs_per_worker: 4
+    n_steps: 128
+    batch_size: 1792
+    n_epochs: 5
+    learning_rate: 0.0003
+    gamma: 1.0
+    gae_lambda: 0.95
+    clip_range: 0.2
+    ent_coef: 0.005
+    vf_coef: 0.5
+    max_grad_norm: 0.5
+    net_arch:
+    - 128
+    - 128
+    reward_baseline: rules
+    stay_prior: 0.0
+    warm_start_episodes: 1500
+    bc_epochs: 150
+    bc_stop_weight: 5.0
+    bc_target_entropy: 0.25
+    normalize_reward: false
+    championship_probability: 0.0
+    rain_probability: 0.0
+    device: cuda
+    eval_every: 100000
+    eval_events:
+    - 2024_bahrain_gp
+    - 2024_spanish_gp
+    - 2024_hungarian_gp
+    - 2024_singapore_gp
+    eval_slots:
+    - 1
+    - 8
+    - 15
+    eval_seeds:
+    - 1001
+    - 1002
+  selected: 'best paired check vs rules on training cases at step 501760 (check: {''steps'': 501760, ''vs_rules'':
+    0.0523, ''better'': 5, ''worse'': 3, ''stops'': 1.0, ''points'': 8.17})'
+  git_commit: 185f4c198dab06548af43ebbbee7fd338b39593d+dirty (slice 3 work in progress, uncommitted)
+  started: '2026-10-14T22:04:50+00:00'
+  finished: '2026-10-14T23:32:14+00:00'
+  note: 'stopped by hand at 602,112 of 800,000 planned decisions after 84 min: the paired checks had been
+    flat since 300k (+0.044/+0.049/+0.052/+0.045) and throughput had dropped to ~72 decisions/s; best
+    checkpoint = step 501,760'
+  torch_checkpoint: artifacts/training/main_v1/best.zip (not tracked)
+  torch_checkpoint_sha256: sha256:24c1fbea1a9579a37af2f8ccf6831c2dec6c05a05a452c86f653bbb02ef82637
+  setup: one learning car vs the rule field, dry, points objective
+lineage:
+  parent_policy: null
+  season: 2024
+  profiles_revision: sha256:70b5bfc5e1acac19874327b7f3db22f6e0f0de498e14d655013524533d8a872c
+  trained_from: behaviour cloning of the rules teacher (1500 races), then PPO
+evaluation:
+  EXP-009:
+    held_out: 5 dry test races x grid P1/P5/P10/P15; set A seeds 1-5 (EXP-008 cases), set B seeds 6-15
+    vs_rules_reward_set_A:
+      mean: -0.0276
+      ci95:
+      - -0.0613
+      - 0.0012
+      better: 11
+      worse: 15
+    vs_rules_reward_set_B:
+      mean: -0.0287
+      ci95:
+      - -0.0525
+      - -0.009
+      better: 15
+      worse: 33
+    vs_mpc_reward_set_A:
+      mean: 0.0097
+      ci95:
+      - -0.0287
+      - 0.0466
+      better: 27
+      worse: 10
+    verdict: 'does NOT beat the rule planner on held-out tracks (slightly worse, significant on set B);
+      diagnosis: rl_obs_v1 lacks per-compound track data, compound choice doesn''t generalise (docs/EXPERIMENTS.md
+      EXP-009)'
+notes:
+- Weights are learned_parameter; personas, risk utilities, the team principal's rules and the PUSH/CONSERVE
+  effects they were trained against are editorial_assumption.

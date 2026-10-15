@@ -841,3 +841,59 @@ judged by "did it really learn" **and** "does the world feel more alive".
   enumerator nor MPC beats it. MPC as built is *worse* than the rules (noise in 3 imagined
   futures and choosing the best of several noisy estimates); it stays as a documented negative
   result, not as the target.
+
+## D-040 — M5 training stack, policy registry, and how the first policy is trained (2026-10-14)
+
+- **Dependencies:** a `train` dependency group (default in `uv`): torch 2.11 from the official
+  CUDA 12.8 wheel index, stable-baselines3 + sb3-contrib 2.9 (MaskablePPO). Only training needs
+  them: a trained policy runs without torch.
+- **Training stack** (`training/ppo.py`, `scripts/train_policy.py`): MaskablePPO, MLP actor and
+  critic 58-128-128 (tanh), update on CUDA (RTX 4070); the simulation on 14 CPU worker processes,
+  each stepping 4 envs (`training/vec_env.py`, `GroupedSubprocVecEnv`: masks come back with the
+  step results). gamma = 1 (terminal reward), GAE lambda 0.95, 7,168 decisions per update.
+  Progress is printed per update; every 100k decisions a **paired check** on 24 fixed training
+  cases (4 tracks x 3 grid slots x 2 seeds) vs the rule planner (argmax and sampled play) and a
+  checkpoint; the best checkpoint by the argmax check is the one registered (selected on
+  training tracks only; held-out tracks are EXP-009's).
+- **Policy registry and pinning** (`training/policy_registry.py`): `configs/policies/<id>.yaml`
+  (manifest) + `models/policies/<id>.npz` (actor weights), both tracked. The manifest pins the
+  artifact SHA-256, observation schema + a hash of the feature names, action count, regulation
+  set and engine version, and records the training config/seeds/events, git commit, the torch
+  checkpoint's hash, lineage (parent policy, season, profile revision hash, how it was
+  initialised) and evaluation results. `load_policy` refuses any mismatch. The runtime is a
+  numpy forward pass (`NumpyPolicy`, checked against torch by a test), so worlds and the app can
+  run a pinned policy without PyTorch. `LearnedStrategist` plays it in the evaluation harness
+  (argmax; optionally sampled with a seed-keyed generator, or with pace forced to one mode).
+- **How the first policy is trained: rules warm start + paired reward** (decided from the
+  pilots, EXP-009 part 1, each with its reason):
+  1. *From scratch, plain reward* (pilot A): no learning. A near-random car stops on most laps
+     and finishes last whatever it does: the reward landscape is flat (only the 0.02 position
+     tie-break varies). *Reward normalisation* (pilot B) fixed the value fit but not that.
+  2. *A stay-out prior* (pilot C: only the initial stop rate, 3 % per decision) does learn
+     (sampled play 0.9 -> 3.2 points in 300k decisions) but would need many hours to reach the
+     rules, and its argmax play never stops. Kept as an option (`--stay-prior`), not used.
+  3. *Imitation of the rules* (`RulesTeacher`, B1's planner as actions; identical to B1 in 17 of
+     18 checked races): plain cloning learns "never stop" (stops are 2 % of decisions); stop
+     decisions are weighted x5 and trained 150 epochs (held-out stop recall 0.99). The cloned
+     policy is then **softened** (action head / temperature, mean entropy 0.25 nats), which
+     keeps its argmax choices but lets PPO explore: without it PPO froze at the teacher (D2/D3).
+  4. *Paired reward* (`--reward-baseline rules`): each race's reward is the car's score minus
+     the score the rule planner gets for it in the same race (same seed). It doesn't depend on
+     the policy's actions, so the optimum is unchanged, but near B1 most of the race-to-race
+     noise cancels (pilot D4 without it drifted +0.02/-0.03 between checks). The rules race runs
+     alongside the AI race, advanced to the same sim time after every decision (run in one go
+     at the end it stalled the lockstep workers: 53 instead of 136 decisions/s).
+  **Honesty:** a policy started from the rules is recorded as such (`lineage.trained_from`);
+  where it plays like B1 it copies the teacher, and only measured differences from B1 count as
+  learned.
+- **Slice 3 trains for points without championship context** (`championship_probability = 0`):
+  objectives and characters are slice 4. Dry races only (weather: slice 6).
+- **Throughput** on this laptop (i7-12650H, 6 P + 4 E cores): 130-235 decisions/s on 14 workers;
+  each worker gets ~0.6 of a core (lockstep waits on the slowest; Windows throttles background
+  processes). Grouping envs per worker didn't change it.
+- **Result (EXP-009):** the registered policy `strategist_m5s3_v1` (main run stopped by hand at
+  602k of 800k decisions: checks flat since 300k, throughput down to ~72/s; best checkpoint
+  501,760) does **not** beat B1 on held-out tracks (-0.029, CI below 0 on new seeds). The
+  cloned policy already fails on unseen tracks: `rl_obs_v1` lacks each compound's pace and wear
+  on the track, so compound choice doesn't generalise. It stays registered as the first,
+  measured version (lineage starts here); no world uses it. Proposed next: `rl_obs_v2`.

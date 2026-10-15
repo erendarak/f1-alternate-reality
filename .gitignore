@@ -31,6 +31,10 @@ saves/
 
 # Model artifacts (manifests are tracked separately)
 artifacts/models/
+# Training runs, logs and diagnostics (registered policies live in configs/ + models/policies/)
+artifacts/training/
+artifacts/*.log
+artifacts/exp*.json
 
 # Secrets / local config
 .env

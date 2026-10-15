@@ -13,8 +13,10 @@ Plan (agreed 2026-10-13, one slice per commit; nothing started):
   scenario sampler with championship context, AGENT controller, speed benchmark, tests.
 - [x] **Slice 2: baselines (D-039, EXP-008)**: B0 real stops, B1 rules, B2 enumerator, B3
   fork-based MPC, random; paired evaluation. Result: the rule planner is the bar (MPC is worse).
-- [ ] Slice 3: training stack (PyTorch + MaskablePPO on CUDA, CPU sim workers); one learning car vs
-  the rule field; policy registry + pinning; EXP-009.
+- [x] **Slice 3: training stack + first learned policy (D-040, EXP-009)**: PyTorch/CUDA +
+  MaskablePPO, CPU workers, policy registry + pinning, rules warm start + paired reward.
+  **Result negative**: the policy doesn't beat the rules on held-out tracks (-0.029; the
+  observation lacks per-compound track data). Proposed fix before slice 4: `rl_obs_v2` + retrain.
 - [ ] Slice 4: character and goals (profile + objective conditioning, risk utilities, rule-based
   team principal); EXP-010.
 - [ ] Slice 5: all 20 cars AI (shared policy, frozen-opponent pool); realism vs 2024; exploit
@@ -1087,3 +1089,41 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
   side-effect free, MPC deterministic, paired evaluation, enumerator picks its best simulated
   plan) + 2 network; frontend 17.
 - Next: slice 3, GPU training stack and the first learned policy vs B1.
+
+### 2026-10-15 — M5 slice 3: the training stack and the first trained AI (D-040, EXP-009)
+
+- **Stack:** `train` dependency group (torch 2.11 + CUDA 12.8, sb3-contrib 2.9 MaskablePPO);
+  `training/ppo.py` (config, workers, progress + paired checks, checkpoints),
+  `training/vec_env.py` (several envs per worker process, masks returned with each step),
+  `training/warm_start.py` (rules teacher demonstrations, stop-weighted cloning, softening),
+  `scripts/train_policy.py`. Update on the RTX 4070; simulation on 14 CPU workers.
+- **Registry + pinning:** `training/policy_registry.py`: manifest (`configs/policies/`) + actor
+  weights (`models/policies/`, tracked), hash / observation schema / feature list / actions /
+  regulations / engine version checked on load, lineage fields; torch-free numpy runtime
+  (`NumpyPolicy`, equal to torch in a test); `LearnedStrategist` (argmax, seeded sampling or
+  forced pace); `RulesTeacher` (B1 as actions, identical to B1 in 17/18 checked races).
+- **Pilots** (EXP-009 part 1): from scratch nothing is learned (flat reward: a near-random car
+  is last whatever it does); reward scaling doesn't help; a stay-out prior learns but slowly;
+  the rules warm start needs stop-weighted cloning (plain cloning learned "never stop") and
+  softening (otherwise PPO freezes); the paired reward (my score - the rules' score in the same
+  race) makes PPO progress near B1.
+- **Main run:** 602k decisions in 84 min, stopped by hand (flat checks since 300k, throughput
+  down to ~72/s); registered `strategist_m5s3_v1` (best on training cases, +0.052).
+- **EXP-009 (negative):** on the 5 held-out tracks it is slightly *worse* than the rules: -0.029
+  [-0.053, -0.009] on 200 new-seed cases, -0.028 [-0.061, +0.001] on EXP-008's cases; about MPC's
+  level (+0.010 n.s.). Same stops as B1, no pace use; it prefers a SOFT final stint (Monaco
+  0.40 -> 0.31). The cloned policy fails the same way before PPO: `rl_obs_v1` lacks each
+  compound's pace/wear on the track, so compound choice can't generalise to unseen tracks.
+- **Bugs / problems found and fixed along the way:** env factories weren't picklable for the
+  grouped workers (cloudpickle); SB3's `has_attr` pulled whole envs through pickle; the paired
+  rules race run at the episode end stalled the lockstep workers (now run alongside: 53 ->
+  136 decisions/s); plain cloning silently learned "never stop" (caught by the stop-recall
+  metric).
+- **Throughput:** 130-235 decisions/s (i7-12650H: workers get ~0.6 core each in lockstep).
+- Tests: 400 offline (+19 in `tests/unit/test_policy_training.py`: numpy runtime, registry refusals, repo
+  manifests load, numpy = torch, paired reward = B1's score, grouped workers = DummyVecEnv,
+  stay-out prior, cloning a rare stop rule, softening keeps argmax, deterministic and seeded
+  play, forced pace) + 2 network. One full run sat >40 min (killed); two re-runs took 2 min 15 s:
+  not reproduced.
+- Next (owner's call): `rl_obs_v2` (per-compound offsets and wear, tyre wear in seconds) +
+  retrain + EXP-009 again; then slice 4.

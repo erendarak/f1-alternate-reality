@@ -613,6 +613,95 @@ Decision / next:      Slice 3's learned policy is judged against B1 (paired, hel
                       seeds); B3's gap is reported as is. The training budget can't be "beat MPC".
 ```
 
+## EXP-009 — The first trained strategist vs the rule planner on held-out races (2026-10-15)
+
+```text
+Experiment ID:        EXP-009
+Research question:    Does a policy trained with MaskablePPO (one learning car vs the rule field,
+                      16 dry_train races) make better pit/tyre/pace decisions than the rule
+                      planner (B1) on the 5 held-out dry races and new seeds?
+Hypothesis:           Starting from the rules and trained with a paired reward, it at least matches
+                      B1 and gains a little (safety-car stops, pace), held-out included.
+Engine / rules:       lightweight_engine_v0.9.0, fia_2024_v1, rl_obs_v1 (58 features), D-040
+Policy:               strategist_m5s3_v1 (configs/policies/, sha256:ccedb8a9...), MLP 58-128-128-18
+                      tanh; behaviour cloning of the rules teacher (1,500 races) -> softened
+                      (T = 2.6) -> PPO with paired reward, 602k decisions in 84 min (stopped by
+                      hand: flat checks since 300k, throughput down to ~72/s); best checkpoint
+                      on training cases = step 501,760. Training seed 0.
+Cases (held out):     Monza, Japan, Monaco, Mexico, Abu Dhabi x grid P1/P5/P10/P15;
+                      set A = EXP-008's cases (seeds 1-5, 100), set B = new seeds 6-15 (200).
+                      One AI car, 19 rule cars, points objective under the driver's risk utility.
+Code:                 scripts/experiments/exp009_learned_vs_rules.py -> docs/experiments/exp009.json
+                      (+ exp009_diagnostics.json); 4 min on 14 processes
+```
+
+Pilots before the main run (part 1, training cases only; all 14 workers, one learning car):
+
+| Pilot | Setup | Decisions | Result (paired check on 24 training cases, argmax) |
+|---|---|---|---|
+| A | from scratch, plain reward | 100k | no learning: 36 -> 40 stops/race, explained variance ~ -5; -0.45 (0/24 better) |
+| B | + reward normalisation | 100k | value fits (EV +0.1), policy flat; -0.45 |
+| C | + stay-out prior 0.97 | 300k | learns (sampled: P17.1 -> P13.0, 0.9 -> 3.2 pts, DSQ 31 -> 8 %, PUSH 32 -> 68 %); argmax never stops: -0.45 |
+| D | rules warm start, plain cloning | 0 | cloning learned "never stop" (stop recall 0); -0.45 |
+| D2 | weighted cloning (x5, 150 ep), PPO ent 0.001 | 100k | starts = B1 (+0.002); PPO frozen (entropy 0.02): +0.023 |
+| D3 | same, PPO ent 0.01 | 50k | still frozen: +0.010 |
+| D4 | + softened clone (0.25 nats), raw reward | 150k | learns back from the exploration noise; check drifts +0.002 / +0.024 / -0.027 |
+| main | + paired reward | 602k | +0.024, +0.043, +0.044, +0.049, **+0.052 (500k, chosen)**, +0.045 |
+
+Held-out results:
+
+| Set | Method | Score | Points | Position | Stops | Most common sequences |
+|---|---|---|---|---|---|---|
+| A (100) | B1 rules | 0.388 | 6.83 | 9.28 | 1: 94, 0: 6 | M-H 41, H-S 19, M-S 19 |
+| A (100) | learned | 0.361 | 6.52 | 9.37 | 1: 94, 0: 6 | **M-S 53**, H-M 19, S-H 10 |
+| B (200) | B1 rules | 0.416 | 7.26 | 9.41 | 1: 186, 0: 14 | M-H 82, M-S 39, H-S 38 |
+| B (200) | learned | 0.387 | 6.82 | 9.62 | 1: 186, 0: 14 | **M-S 101**, H-M 35, M-H 20 |
+
+| Paired difference (score) | Set A | Set B |
+|---|---|---|
+| learned - B1 | -0.028 [-0.061, +0.001], 11 better / 15 worse | **-0.029 [-0.053, -0.009]**, 15 / 33 |
+| learned (pace forced BALANCED) - B1 | -0.030 [-0.064, -0.001] | -0.028 [-0.052, -0.008] |
+| learned - B2 enumerator (EXP-008 rows) | -0.023 [-0.068, +0.017] | |
+| learned - B3 MPC (EXP-008 rows) | +0.010 [-0.029, +0.047], 27 / 10 | |
+| learned - its own clone before PPO | +0.035 [-0.004, +0.079], 26 / 12 | +0.010 [-0.010, +0.032], 32 / 28 |
+
+Per race (set B, B1 / learned): Monza 0.457 / 0.442, Japan 0.466 / 0.472, **Monaco 0.400 / 0.306**,
+Mexico 0.383 / 0.376, Abu Dhabi 0.371 / 0.339. B1's EXP-008 rows were recomputed identically.
+Held-out curve over training (set B, vs B1): clone -0.039, 100k -0.029, 300k -0.036, 500k -0.029,
+602k -0.050.
+
+```text
+Findings:
+  1. NEGATIVE: THE LEARNED POLICY DOES NOT BEAT THE RULES ON HELD-OUT TRACKS. It is slightly
+     worse: -0.029 on new seeds (CI excludes 0), -0.028 on EXP-008's cases (CI touches 0),
+     about -0.4 points per race. On the training tracks it was +0.05 (24 cases): the gain doesn't
+     transfer.
+  2. It learned no stop-count or pace behaviour of its own: stops are identical to B1 in every
+     held-out case (one stop; zero = retired), no disqualification, PUSH/CONSERVE never used
+     (forcing BALANCED changes nothing). The whole difference is compound choice: it finishes
+     on SOFT (M-S) where B1 runs M-H; Monaco is the big loss.
+  3. DIAGNOSIS: the observation can't tell which compound suits an unseen track. The rule planner
+     reads each track's per-compound pace offsets and wear rates; rl_obs_v1 has only the medium
+     wear rate. The cloned policy (before PPO) already fails the same way (-0.039, Monaco
+     0.400 -> 0.266): imitation on 16 tracks memorises them instead of learning the rule.
+     PPO improved on the clone a little (+0.010 / +0.035, not significant).
+  4. Training from scratch can't get started in this env (flat reward for near-random play);
+     a stay-out prior learns but slowly; the rules warm start needs stop-weighted cloning and
+     softening; the paired reward makes PPO progress near B1 (pilots, D-040).
+  5. Learned vs MPC +0.010 (n.s.): the policy is about as good as B3 and below B1/B2.
+Negative results:     1 (the main question), plus pilots A, B, D, D2, D3.
+Reproduce:            uv run python scripts/train_policy.py --name main_v1 --steps 800000 \
+                        --warm-start 1500 --bc-entropy 0.25 --lr 3e-4 --ent-coef 0.005 \
+                        --reward-baseline rules --eval-every 100000 --register strategist_m5s3_v1
+                      (stopped by hand at 602k; best = step 501,760)
+                      uv run python scripts/experiments/exp009_learned_vs_rules.py \
+                        --policy strategist_m5s3_v1 --workers 14 --json docs/experiments/exp009.json
+Decision / next:      Proposed (owner's call): observation rl_obs_v2 with each compound's pace
+                      offset and wear rate on this track (+ tyre wear in seconds), retrain the same
+                      way and re-run EXP-009, before slice 4. M5's done-check item "beats B1 on
+                      held-out tracks" is NOT met yet.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

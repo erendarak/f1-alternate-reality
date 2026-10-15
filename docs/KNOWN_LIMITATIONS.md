@@ -2,6 +2,37 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## M5 slice 3 (training stack, first learned policy)
+
+- **The first learned policy is slightly worse than the rule planner on held-out tracks**
+  (EXP-009: -0.029 on new seeds): it learned compound choices that fit the 16 training tracks
+  (a soft final stint) and lose on unseen ones (Monaco most). Cause: **`rl_obs_v1` has no
+  per-compound track data** (each compound's pace offset and wear rate), which the rule planner
+  uses. Not to be used in a world; fix proposed (`rl_obs_v2`).
+- **It learned no pace behaviour**: PUSH/CONSERVE are never chosen (the teacher never used them
+  and PPO didn't find them worth it from there); stop counts equal the rules'.
+- **The first policy starts from the rules** (behaviour cloning of B1's planner, then PPO,
+  D-040): where it plays like B1 it copies the teacher. Training from scratch didn't reach the
+  rules within the pilots' budget (flat reward for near-random play; a stay-out prior learns
+  but slowly).
+- **One learning car vs the rule field, dry races, points objective only**: no championship
+  context, no character/objective conditioning beyond the observation (slice 4), no AI field
+  (slice 5), no weather (slice 6).
+- **Best checkpoint chosen on 24 training cases**: a noisy choice (the check moves by a few
+  hundredths between checkpoints); held-out tracks are only used in EXP-009.
+- **The observation has no tyre wear in seconds** (only tyre age, compound and the track's
+  medium wear rate): the policy infers wear from age; adding it means `rl_obs_v2`.
+- **The main run was stopped by hand** at 602k of 800k planned decisions (flat checks, falling
+  throughput); recorded in the manifest.
+- **Training throughput is CPU-bound and low on this laptop** (130-235 decisions/s, 14 workers
+  at ~0.6 core each): long runs take hours; the Windows background-process throttling setting
+  (`powercfg /powerthrottling`) is the owner's call.
+- **GPU training is reproducible from its seeds in practice** (two starts gave identical progress
+  lines), but CUDA arithmetic isn't guaranteed bit-identical across machines/drivers; a world
+  pins the exported weights, not the training run.
+- **The paired reward needs the rule planner's race** for every training race; it only exists
+  for a car the rules could drive (fine in M5; a whole AI field needs another baseline).
+
 ## M5 slice 2 (baselines)
 
 - **MPC (B3) is weaker than the rules** in EXP-008 (estimation noise with 3 imagined futures);
