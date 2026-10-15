@@ -161,7 +161,8 @@ def test_data_backed_race_uses_the_fitted_pace(
     assert ver.driver_pace_offset_s == pytest.approx(cfg["drivers"]["VER"]["pace_vs_teammate_s"])
     assert ver.lap_noise_s == pytest.approx(cfg["drivers"]["VER"]["lap_noise_s"])
     assert "estimated_from_data" in setup.inputs["driver_pace"]
-    assert "for W2 lap noise" in setup.inputs["traffic"]
+    # W3 refits overtaking with this noise (W2's global shift isn't applied then)
+    assert "refit with the W2 lap noise" in setup.inputs["traffic"]
     plain = setup_from_codes(monza_roster, monza_profiles, ["VER", "HAM"])
     assert plain.lap_model.skill_gap_s > 0 and plain.driver(VER).lap_noise_s is None
     assert Path(CONFIGS / PACE_FILE).exists()

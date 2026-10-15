@@ -15,7 +15,8 @@ into what makes the difference in real F1 and for the world to be adapted to it;
 - [x] **W2: race pace (engine v0.12.0, D-043, EXP-012)**: driver pace vs teammate, race form,
   lap noise per driver from 2024 (noise 0.14 -> ~0.45 s); passes kept at 2024's level.
   In-season development deferred to seasons (M9).
-- [ ] W3: racecraft (DRS, dirty air by gap, attack/defend skills, starts, lap-1 incidents).
+- [x] **W3: racecraft (engine v0.13.0, D-044, EXP-013)**: overtaking refit with W2 noise,
+  attack/defend and launch skills per driver, lap-1 risk by grid slot; DRS trains not modelled.
 - [ ] W5: drivers' character measured where possible.
 - [ ] W6: weather extensions.
 
@@ -1207,3 +1208,21 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Checked in the viewer: Spa lap times now vary realistically.
 - Tests: 425 offline (+3 in `tests/unit/test_driver_pace.py`, registry updated).
 - Next (per the plan): W3 racecraft.
+
+### 2026-10-15 — W3: racecraft (engine v0.13.0, D-044, EXP-013)
+
+- Overtaking refit on the 9,405 real encounters with the W2 lap noise (threshold 0.63 s, scale
+  0.37 s) + attack/defend per driver (ridge-shrunk); launch skill per driver (lap-1 gains beyond
+  grid and car pace); lap-1 risk by grid slot (Dartmouth shape); race-level shift +0.07 s and
+  launch spread 1.62 s fitted by simulation on dry_train.
+- Engine v0.13.0 / world schema 14; `calibration/racecraft_fit.py`, `scripts/fit_racecraft.py`,
+  `configs/calibration/racecraft_2024_v1.json` + registry manifest.
+- EXP-013: passes 54.9 vs 53.6; passes made per driver correlation 0.93 (0.91 without); lap-1
+  gain per driver 0.21 (0.12); lap-1 retirements now concentrated in the midfield; order and
+  stops unchanged.
+- Bugs found: launch skill skipped when the launch spread was 0; racecraft traffic kept an
+  "editorial" label without the old traffic file.
+- Checked in the viewer: Spa start, VER gains four places from P6.
+- Tests: 430 offline (+4 in `tests/unit/test_racecraft.py`; registry, inputs and W2 tests
+  updated).
+- Next (per the plan): W5 drivers' character, W6 weather.

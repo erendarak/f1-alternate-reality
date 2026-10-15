@@ -1,0 +1,39 @@
+model_name: racecraft
+model_version: v1
+kind: ML on lap-level encounters (W2 noise convolved) with ridge driver terms; lap-1 gains; launch spread
+  by simulation
+source_type: estimated_from_data (lap-1 grid profile editorial)
+artifact: configs/calibration/racecraft_2024_v1.json
+artifact_sha256: sha256:8ebceb87d506d27d8e10aaf4068ecd69ac5c6ae5dc96a8e909044b5791bd0f3c
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2024_v1.yaml
+training_dataset_content_sha256: sha256:e43cd3185e213cee8d80f4b82e69ec171f6f4fada093e7702ca914edcbf58181
+training_races:
+- 2024_abu_dhabi_gp
+- 2024_australian_gp
+- 2024_austrian_gp
+- 2024_azerbaijan_gp
+- 2024_bahrain_gp
+- 2024_belgian_gp
+- 2024_chinese_gp
+- 2024_dutch_gp
+- 2024_emilia_romagna_gp
+- 2024_hungarian_gp
+- 2024_italian_gp
+- 2024_japanese_gp
+- 2024_las_vegas_gp
+- 2024_mexico_city_gp
+- 2024_miami_gp
+- 2024_monaco_gp
+- 2024_qatar_gp
+- 2024_saudi_arabian_gp
+- 2024_singapore_gp
+- 2024_spanish_gp
+- 2024_united_states_gp
+metrics:
+  check:
+    dry_train_passes_sim: 53.16
+    dry_train_passes_real: 52.69
+    dry_train_lap1_passes_real: 13.62
+  held_out_check: EXP-013
+status: validated_for_engine_use (W3, engine v0.13.0, D-044)

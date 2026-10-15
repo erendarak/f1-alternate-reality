@@ -84,6 +84,7 @@ def setup_from_codes(
     random_rain: bool = False,
     tyre_life_overrides: dict[str, float] | None = None,
     race_events_overrides: dict[str, float] | None = None,
+    racecraft_overrides: dict[str, float] | None = None,
 ) -> RaceSetup:
     """Setup from 3-letter driver codes (e.g. ``["VER", "HAM"]``); ``None`` = full grid.
 
@@ -242,7 +243,13 @@ def setup_from_codes(
         weather = with_random_rain(weather)
         weather_note = weather.note
     traffic, traffic_note = _fitted_traffic(configs, roster.event_id)
-    if pace is not None and pace.get("overtake_threshold_shift_s"):
+    from f1ar.calibration.racecraft_fit import load_racecraft
+
+    if (
+        pace is not None
+        and pace.get("overtake_threshold_shift_s")
+        and load_racecraft(configs) is None  # W3's refit supersedes the global shift
+    ):
         # W2: realistic lap noise makes more passing chances; the pass threshold is shifted
         # (fitted on the simulated dry_train field) so passes stay at 2024's level
         shift = float(pace["overtake_threshold_shift_s"])
@@ -292,7 +299,75 @@ def setup_from_codes(
             }
         )
     setup = setup.model_copy(update={"inputs": {**setup.inputs, "driver_pace": pace_note}})
+    setup = with_racecraft(setup, configs, racecraft_overrides or {})
     return with_race_events(setup, configs, race_events_overrides or {})
+
+
+def with_racecraft(
+    setup: RaceSetup, configs: Path, overrides: Mapping[str, float] | None = None
+) -> RaceSetup:
+    """W3 (D-044): overtaking refit with the W2 lap noise, driver attack/defend and launch
+    skills, lap-1 risk by grid slot, from ``configs/calibration/racecraft_2024_v1.json``;
+    without it the setup is unchanged (and says so). ``overrides`` (``start_spread_s``) only
+    while fitting."""
+    from f1ar.calibration.racecraft_fit import RACECRAFT_FILE, load_racecraft
+
+    cfg = load_racecraft(configs)
+    if cfg is None:
+        note = f"editorial_assumption: no fitted racecraft ({RACECRAFT_FILE.as_posix()} missing)"
+        return setup.model_copy(update={"inputs": {**setup.inputs, "racecraft": note}})
+    ov = cfg["overtaking"]
+    own = setup.event_id in ov["track_threshold_s"]
+    o = dict(overrides or {})
+    shift = float(o.get("race_level_shift_s", ov.get("race_level_shift_s", 0.0)))
+    threshold = float(ov["track_threshold_s"].get(setup.event_id, ov["threshold_s"])) + shift
+    spread = float(o.get("start_spread_s", cfg["launch"]["start_spread_s"]))
+    traffic = setup.traffic.model_copy(
+        update={
+            "source_type": SourceType.ESTIMATED_FROM_DATA,
+            "min_gap_s": float(ov["min_gap_s"]),
+            "overtake_threshold_s": threshold,
+            "overtake_scale_s": float(ov["scale_s"]),
+            "start_spread_s": spread,
+            "note": (
+                f"estimated_from_data: overtaking refit with the W2 lap noise on "
+                f"{ov['encounters']} real encounters ({RACECRAFT_FILE.as_posix()}): "
+                f"{'this track' if own else 'season'} threshold {threshold:+.2f} s, scale "
+                f"{float(ov['scale_s']):.2f} s (incl. race-level shift {shift:+.2f} s fitted by "
+                f"simulation), driver attack/defend terms; launch spread "
+                f"{spread:.2f} s matched to real lap-1 passes; passing/dirty-air/blue-flag time "
+                f"losses editorial"
+            ),
+        }
+    )
+    skills, launch = ov["drivers"], cfg["launch"]["drivers"]
+    drivers = tuple(
+        d.model_copy(
+            update={
+                "attack_s": float(skills.get(d.code, {}).get("attack_s", 0.0)),
+                "defend_s": float(skills.get(d.code, {}).get("defend_s", 0.0)),
+                "launch_offset_s": float(launch.get(d.code, {}).get("launch_offset_s", 0.0)),
+            }
+        )
+        for d in setup.drivers
+    )
+    rc = setup.race_control.model_copy(
+        update={"first_lap_grid_profile": tuple(float(v) for v in cfg["lap1_grid_profile"])}
+    )
+    note = (
+        f"estimated_from_data: racecraft {RACECRAFT_FILE.as_posix()} (2024): attack/defend per "
+        f"driver (ridge-shrunk; driver and car effects not separable), launch skill per driver "
+        f"(lap-1 gains beyond grid and car pace, shrunk); lap-1 risk by grid slot: editorial "
+        f"shape from Dartmouth's 2022-23 lap-1 incident counts"
+    )
+    return setup.model_copy(
+        update={
+            "traffic": traffic,
+            "drivers": drivers,
+            "race_control": rc,
+            "inputs": {**setup.inputs, "traffic": traffic.note, "racecraft": note},
+        }
+    )
 
 
 def with_race_events(

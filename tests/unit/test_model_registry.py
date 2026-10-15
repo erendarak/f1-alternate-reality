@@ -10,6 +10,7 @@ from f1ar.calibration.driver_pace_fit import PACE_FILE
 from f1ar.calibration.lap_model_fit import LIFE_FILE, SHAPE_FILE
 from f1ar.calibration.race_control_fit import RACE_CONTROL_FILE
 from f1ar.calibration.race_events_fit import EVENTS_FILE
+from f1ar.calibration.racecraft_fit import RACECRAFT_FILE
 from f1ar.calibration.registry import ENGINE_ARTIFACTS, load_registry, registry_markdown
 from f1ar.calibration.traffic_fit import TRAFFIC_FILE
 from f1ar.calibration.weather_fit import WEATHER_FILE
@@ -29,6 +30,7 @@ CALIBRATION = (
     RACE_CONTROL_FILE,
     EVENTS_FILE,
     PACE_FILE,
+    RACECRAFT_FILE,
 )
 
 
@@ -46,6 +48,7 @@ def test_every_model_is_registered_and_matches_its_artifact() -> None:
         "race_control",
         "race_events",
         "driver_pace",
+        "racecraft",
     }
     lgbm = next(e for e in entries if e.model_name == "pace_predictor_online")
     assert not lgbm.artifact_tracked and lgbm.used_by_engine is None
@@ -87,8 +90,11 @@ def test_a_race_builds_and_runs_without_fitted_models(
     }
     assert setup.inputs["race_events"].startswith("editorial") == (EVENTS_FILE in missing)
     assert setup.inputs["driver_pace"].startswith("editorial") == (PACE_FILE in missing)
+    assert setup.inputs["racecraft"].startswith("editorial") == (RACECRAFT_FILE in missing)
     for f, (key, source) in parts.items():
         editorial = f in missing
+        if f == TRAFFIC_FILE:  # W3: the racecraft refit supplies the overtaking too
+            editorial = f in missing and RACECRAFT_FILE in missing
         assert setup.inputs[key].startswith("editorial") == editorial, key
         assert (source is SourceType.EDITORIAL_ASSUMPTION) == editorial, key
     # W1: the tyre-life model needs both files; without the life file the M4 tyre model runs

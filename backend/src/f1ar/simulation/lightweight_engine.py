@@ -84,8 +84,10 @@ from f1ar.simulation.weather import (
 )
 from f1ar.simulation.weather import penalty_s as weather_penalty_s
 
-ENGINE_VERSION = "lightweight_engine_v0.12.0"
-"""v0.12.0: driver race pace vs teammate, race form and lap noise per driver, fitted on 2024
+ENGINE_VERSION = "lightweight_engine_v0.13.0"
+"""v0.13.0: overtaking refit with W2 noise + driver attack/defend skills, launch skill, lap-1
+risk by grid position (D-044).
+v0.12.0: driver race pace vs teammate, race form and lap noise per driver, fitted on 2024
 (D-043).
 v0.11.0: debris SC/VSC, red flags (free tyre change), pit crews and reliability per team,
 time penalties, crash/mistake rates renormalised for the W1 pace mix (D-042).
@@ -141,6 +143,8 @@ def _sample_next_lap(
     )
     if laps_completed == 0 and setup.traffic.start_spread_s > 0.0:  # the launch
         extra += setup.traffic.start_spread_s * normal(seed, "launch", driver_id)
+    if laps_completed == 0:
+        extra += entry.launch_offset_s  # W3: the driver's launch skill
     return sample_lap_time_s(
         setup.lap_model,
         entry.profile.archetype,

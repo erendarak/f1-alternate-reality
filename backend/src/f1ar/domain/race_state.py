@@ -16,7 +16,7 @@ from f1ar.domain.provenance import SourceType
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 13
+WORLD_SCHEMA_VERSION = 14
 
 
 class _Frozen(BaseModel):
@@ -245,6 +245,8 @@ class RaceControlParams(_Frozen):
     """The safety car joins this far ahead of the race leader."""
     neutralised_pit_window_laps: int = Field(ge=0)
     """Baseline strategy: under SC/VSC, bring a planned stop forward if it's this close."""
+    first_lap_grid_profile: tuple[float, ...] = ()
+    """W3: lap-1 crash risk multiplier per grid slot (mean 1; empty = the same for all)."""
     # --- W4 (engine v0.11.0, D-042): all off by default -----------------------------------
     risk_scale: float = Field(default=1.0, gt=0)
     """Multiplies crash and mistake rates (W4: renormalised for the W1 pace-mode mix)."""
@@ -361,6 +363,12 @@ class DriverEntry(_Frozen):
     uses it, the lap model's persona skill term is off (``LapModelParams.skill_gap_s`` = 0)."""
     lap_noise_s: float | None = Field(default=None, gt=0)
     """W2: the driver's lap-to-lap spread (season fit); ``None`` = the persona formula."""
+    attack_s: float = Field(default=0.0, ge=-2.0, le=2.0)
+    """W3: lowers the pass threshold when this driver attacks (racecraft, 2024 encounters)."""
+    defend_s: float = Field(default=0.0, ge=-2.0, le=2.0)
+    """W3: raises the pass threshold when this driver defends."""
+    launch_offset_s: float = Field(default=0.0, ge=-3.0, le=3.0)
+    """W3: lap-1 time vs an average start (negative = good launches; 2024 lap-1 gains)."""
     profile: DriverProfile
 
 
@@ -591,7 +599,7 @@ DriverAction = SetPaceMode | RequestPitStop | CancelPitStop | SetStrategyControl
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[13]
+    schema_version: Literal[14]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None

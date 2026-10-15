@@ -1,0 +1,45 @@
+{
+ "seeds": 10,
+ "real": {
+  "passes": 53.6,
+  "lap1": {
+   "mean_abs_change": 1.285,
+   "gain_by_third": {
+    "back": 0.856,
+    "front": -0.31,
+    "mid": -0.218
+   }
+  }
+ },
+ "w3": {
+  "passes": 54.9,
+  "passes_per_track_corr": 0.492,
+  "driver_made_corr": 0.933,
+  "driver_suffered_corr": 0.918,
+  "lap1_mean_abs_change": 1.342,
+  "lap1_gain_per_driver_corr": 0.211,
+  "lap1_retirements_by_third_per_race": {
+   "back": 0.086,
+   "mid": 0.152,
+   "front": 0.071
+  },
+  "spearman": 0.654,
+  "stops": 1.4
+ },
+ "v0.12": {
+  "passes": 54.2,
+  "passes_per_track_corr": 0.478,
+  "driver_made_corr": 0.906,
+  "driver_suffered_corr": 0.93,
+  "lap1_mean_abs_change": 1.311,
+  "lap1_gain_per_driver_corr": 0.122,
+  "lap1_retirements_by_third_per_race": {
+   "back": 0.1,
+   "mid": 0.105,
+   "front": 0.067
+  },
+  "spearman": 0.658,
+  "stops": 1.4
+ },
+ "seconds": 82.0
+}

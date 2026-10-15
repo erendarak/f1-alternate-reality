@@ -903,6 +903,52 @@ Decision / next:      Keep W2 (engine v0.12.0). Next per the plan: W3 racecraft 
                       by gap, attack/defend skills, starts, lap-1 incidents).
 ```
 
+## EXP-013 — Racecraft (W3) against the 2024 races (2026-10-15)
+
+```text
+Experiment ID:        EXP-013
+Research question:    Does the racecraft refit (W2 noise, attack/defend, launch skill, lap-1 risk
+                      by grid slot) keep passes at 2024's level and make WHO passes, who gains at
+                      the start and where lap-1 incidents happen more like 2024?
+Fit:                  racecraft_2024_v1 (encounters of all 21 dry races; race-level shift and
+                      launch spread by simulation on dry_train)
+Engine:               v0.13.0 (W3) vs the same engine without the racecraft file (v0.12)
+Cases:                21 dry races x 10 per-race seeds each
+Code:                 scripts/fit_racecraft.py; scripts/experiments/exp013_racecraft.py
+                      -> docs/experiments/exp013.json
+```
+
+| | Real | W3 | v0.12 |
+|---|---|---|---|
+| Passes per race | 53.6 | 54.9 | 54.2 |
+| Passes per track, correlation with the real race | | 0.49 | 0.48 |
+| Passes made per driver (season), correlation | | **0.93** | 0.91 |
+| Passes suffered per driver, correlation | | 0.92 | 0.93 |
+| Lap 1: mean positions changed | 1.29 | 1.34 | 1.31 |
+| Lap 1: gain per driver, correlation | | **0.21** | 0.12 |
+| Lap-1 retirements per race, front / mid / back third | | 0.07 / **0.15** / 0.09 | 0.07 / 0.11 / 0.10 |
+| Finishing order vs real (Spearman) | | 0.654 | 0.658 |
+| Stops per finisher | 1.67 | 1.40 | 1.40 |
+
+```text
+Findings:
+  1. Passes stay at 2024's level with a principled fit: the threshold/scale now come from the real
+     encounters with the right lap noise; only a +0.07 s race-level shift (was +0.34 s in W2).
+  2. WHO passes is mostly car pace already (0.91 without driver terms); attack/defend add a
+     little for passes made (0.93), nothing for passes suffered (0.92 vs 0.93).
+  3. Launch skill doubles the per-driver lap-1 correlation but it stays weak (0.21): lap-1
+     outcomes are mostly luck and position.
+  4. Lap-1 retirements move to the midfield (0.15 per race from the middle third vs 0.07 front).
+  5. Per-track pass counts still only moderately follow the real races (0.49): one race per
+     track, per-track thresholds shrunk.
+Negative results:     attack/defend add little; per-track passes moderate; no DRS trains.
+Reproduce:            uv run python scripts/fit_racecraft.py --seeds 4
+                      uv run python scripts/experiments/exp013_racecraft.py --seeds 10 \
+                        --json docs/experiments/exp013.json
+Decision / next:      Keep W3 (engine v0.13.0). Next per the plan: W5 (drivers' character
+                      measured where possible) and W6 (weather extensions).
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

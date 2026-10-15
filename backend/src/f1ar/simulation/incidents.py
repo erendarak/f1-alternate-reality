@@ -83,7 +83,12 @@ def lap_incident(
     risk = skill_factor(setup, car.driver_id) * _mode_factor(setup, car.lap_pace_mode)
     risk *= p.risk_scale
     risk *= 1.0 + setup.weather.wet_incident_factor * wetness
-    crash = p.crash_per_lap * risk * (p.first_lap_crash_multiplier if lap == 1 else 1.0)
+    first = p.first_lap_crash_multiplier if lap == 1 else 1.0
+    if lap == 1 and p.first_lap_grid_profile:  # W3: midfield starts are riskier
+        slot = setup.driver(car.driver_id).grid_position
+        profile = p.first_lap_grid_profile
+        first *= profile[min(max(slot, 1), len(profile)) - 1]
+    crash = p.crash_per_lap * risk * first
     failure = p.failure_per_lap * setup.driver(car.driver_id).failure_multiplier
     mistake = p.mistake_per_lap * risk
     where = 0.05 + 0.9 * uniform(seed, "incident_where", car.driver_id, lap)

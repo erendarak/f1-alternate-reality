@@ -1009,3 +1009,28 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   times in data-backed races.
 - In-season car development is not modelled: per-race car pace follows each real race; trends
   matter once worlds run seasons (M9).
+
+## D-044 — W3: racecraft (engine v0.13.0, 2026-10-15)
+
+- **Engine v0.13.0, world schema 14.** Data-backed races only;
+  `configs/calibration/racecraft_2024_v1.json` (registry `racecraft v1`;
+  `calibration/racecraft_fit.py`, `scripts/fit_racecraft.py`).
+- **Overtaking refit with the W2 lap noise.** The 9,405 real lap-level encounters of the 21 dry
+  races (EXP-006 method) are fitted again with each driver's fitted noise convolved: season
+  threshold 0.63 s (was 0.08 with the persona noise), scale 0.37 s (was 1.04), min gap 0.47 s;
+  a race-level shift of +0.07 s (fitted by simulation on dry_train) matches the passes per race;
+  W2's +0.34 s global shift is no longer applied when this file exists.
+- **Attack/defend per driver** (`DriverEntry.attack_s` / `defend_s`): ridge-shrunk terms on the
+  pass threshold in the same likelihood. E.g. attack HUL +0.18, SAI +0.15, PER +0.12 ... TSU -0.20;
+  defend BOT +0.20, PIA +0.16 ... HAM -0.18, LEC -0.15. Driver and car effects (straight-line
+  speed, setup) aren't separable here: labelled as "racecraft of driver and car".
+- **Launch skill** (`DriverEntry.launch_offset_s`): lap-1 positions gained beyond the grid slot's
+  mean and the car's pace vs its slot, per driver over the season (shrunk with 6 starts), times
+  0.61 s per position (median lap-1 gap between cars): e.g. VER/MAG +0.5 positions per start,
+  SAR -0.8. The launch spread is re-matched to the real lap-1 passes (1.62 s).
+- **Lap-1 risk by grid slot** (`RaceControlParams.first_lap_grid_profile`): front row x0.22,
+  midfield up to x1.34, back rows lower, mean 1 (editorial shape from Dartmouth Sports
+  Analytics' 2022-23 lap-1 incident counts by grid row; rows 4-7 interpolated).
+- **Not done:** explicit DRS / DRS trains and a gap-dependent dirty air (the pass model is fitted
+  on real outcomes that include DRS; the gap-vs-lap-time data is confounded by cars held up).
+- Bug found by the tests: the launch skill was only applied when the launch spread was > 0.

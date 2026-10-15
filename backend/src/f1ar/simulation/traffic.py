@@ -91,9 +91,15 @@ def resolve(
         rival = other.car.driver_id
 
         margin = their_end + p.min_gap_s - my_end
+        # W3: the attacker's and the defender's racecraft move the threshold
+        threshold = (
+            p.overtake_threshold_s
+            - setup.driver(me.driver_id).attack_s
+            + setup.driver(rival).defend_s
+        )
         chance = (
-            1.0 - math.exp(-(margin - p.overtake_threshold_s) / p.overtake_scale_s)
-            if margin > p.overtake_threshold_s
+            1.0 - math.exp(-(margin - threshold) / p.overtake_scale_s)
+            if margin > threshold
             else 0.0
         )
         if other.car.laps_completed < me.laps_completed:

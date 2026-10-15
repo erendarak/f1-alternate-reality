@@ -2,6 +2,19 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## W3 (racecraft, engine v0.13.0, EXP-013)
+
+- **Attack/defend terms mix driver and car** (straight-line speed, setup); they add little
+  beyond car pace. They are season-level (no learning, no pressure effects).
+- **No explicit DRS, DRS trains or gap-dependent dirty air;** the pass model is fitted on real
+  outcomes that include them.
+- **Launch skill is weakly identified** (24 starts, lap 1 is mostly luck); rookies shrunk.
+- **Lap-1 risk shape is editorial** (Dartmouth 2022-23 counts, rows 4-7 interpolated); no
+  multi-car pile-ups.
+- Per-track pass counts follow the real races only moderately (0.49).
+- W2's global threshold shift stays in its config but isn't applied while the racecraft file
+  exists.
+
 ## W2 (driver pace, engine v0.12.0, EXP-012)
 
 - **Race form is random:** a driver's good or bad day is drawn per race; its causes (setup,
