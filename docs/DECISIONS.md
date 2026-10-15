@@ -1058,3 +1058,23 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
 - EXP-014: the editorial personas agree only weakly with the data where it is measurable
   (consistency 0.33, overtake 0.32, defense -0.14, tyre management -0.23; race pace within teams
   0.58 over 7 pairs). Race-level metrics are unchanged.
+
+## D-046 — W6: wet races (engine v0.14.0, world schema 16, 2026-10-15)
+
+- **Engine v0.14.0, world schema 16** (`WeatherParams.wet_refresh_min_age_laps` /
+  `wet_refresh_share`). `configs/calibration/wet_race_2024_v1.json` (registry `wet_race v1`;
+  `calibration/wet_race_fit.py`, `scripts/fit_wet_race.py`).
+- **Fresh wet tyres under SC/VSC** (data): at the 2024 neutralisations with cars on
+  intermediates/wets (Canada lap 24, São Paulo laps 27 and 39; the red-flag change excluded), a
+  threshold model on set age: sets >= 11 laps old were replaced by a new wet-weather set 77% of
+  the time (27/35), younger ones 5% (type changes). The baseline strategy copies it: under SC/VSC
+  a car on wet tyres >= 11 laps old takes a new set of the same type with probability 0.77 (one
+  keyed draw per car and neutralisation). Before, the baseline only ever changed tyre TYPE in the
+  wet, so cars never took new inters (Canada 1.0 stops per finisher vs real 2.2, São Paulo 0 vs 1).
+- **Wet incident factor** (data, by simulation): risk x (1 + f w); Poisson likelihood of
+  neutralisations and retirements in the 3 wet races over a grid of f: **f = 4.35, 95% range
+  2-8** (was editorial 2.0, at the edge of the range).
+- **Not added (negative results, EXP-015):** track temperature -> tyre wear (no effect in 2024:
+  within races the sign flips, median ~0; across tracks Spearman 0.00 with tyre life);
+  graining/blistering (no numbers); visibility red flags and the SC/VSC choice in rain (rain is
+  on/off in the data, no intensity).

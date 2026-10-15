@@ -16,7 +16,7 @@ from f1ar.domain.provenance import SourceType
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 15
+WORLD_SCHEMA_VERSION = 16
 
 
 class _Frozen(BaseModel):
@@ -313,6 +313,11 @@ class WeatherParams(_Frozen):
     switch_horizon_laps: int = Field(ge=1)
     """Baseline wet strategy: change tyre type when the gain over this many laps beats the pit
     loss (it assumes conditions stay as they are: it doesn't see the future)."""
+    wet_refresh_min_age_laps: int = Field(default=99, ge=0)
+    wet_refresh_share: float = Field(default=0.0, ge=0, le=1)
+    """W6: under SC/VSC a baseline car on wet-weather tyres at least ``min_age`` laps old takes
+    a new set of the same type with this probability (one keyed draw per car and
+    neutralisation). Fitted on 2024 Canada / São Paulo; off (share 0) in editorial setups."""
     forecast_horizon_s: float = Field(gt=0)
     forecast_noise: float = Field(ge=0, le=1)
 
@@ -602,7 +607,7 @@ DriverAction = SetPaceMode | RequestPitStop | CancelPitStop | SetStrategyControl
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[15]
+    schema_version: Literal[16]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None

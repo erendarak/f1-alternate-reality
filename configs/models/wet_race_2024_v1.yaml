@@ -1,0 +1,23 @@
+model_name: wet_race
+model_version: v1
+kind: fresh wet tyres under SC/VSC (threshold ML on real neutralisations); wet incident factor by simulation
+  (Poisson likelihood, profile 95% range)
+source_type: estimated_from_data
+artifact: configs/calibration/wet_race_2024_v1.json
+artifact_sha256: sha256:eab6dc3a0653eb84892c1472969defd76453a0cc47fd2187d1143f00204caf09
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2024_v1.yaml
+training_dataset_content_sha256: sha256:e43cd3185e213cee8d80f4b82e69ec171f6f4fada093e7702ca914edcbf58181
+training_races:
+- 2024_canadian_gp
+- 2024_british_gp
+- 2024_sao_paulo_gp
+metrics:
+  refresh_min_age_laps: 11
+  refresh_share: 0.771
+  best: 4.35
+  range_95:
+  - 2.0
+  - 8.0
+  held_out_check: none (3 wet races, all used); EXP-015
+status: validated_for_engine_use (W6, D-046)

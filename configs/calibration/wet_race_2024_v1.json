@@ -1,0 +1,516 @@
+{
+ "label": "2024 incidents in the wet (W6, D-046)",
+ "fitted_on": [
+  "2024_canadian_gp",
+  "2024_british_gp",
+  "2024_sao_paulo_gp"
+ ],
+ "seeds_per_race": 20,
+ "wet_refresh": {
+  "min_age_laps": 11,
+  "share": 0.771,
+  "young_share": 0.053,
+  "old_n": 35,
+  "young_n": 19,
+  "loglik": -22.732,
+  "observations": [
+   {
+    "first_lap": 24,
+    "driver": "ALB",
+    "age": 23.0,
+    "refresh": true,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "ALO",
+    "age": 23.0,
+    "refresh": true,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "BOT",
+    "age": 23.0,
+    "refresh": false,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "GAS",
+    "age": 23.0,
+    "refresh": true,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "HAM",
+    "age": 23.0,
+    "refresh": true,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "HUL",
+    "age": 11.0,
+    "refresh": true,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "LEC",
+    "age": 23.0,
+    "refresh": true,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "MAG",
+    "age": 16.0,
+    "refresh": true,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "NOR",
+    "age": 23.0,
+    "refresh": true,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "OCO",
+    "age": 23.0,
+    "refresh": false,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "PER",
+    "age": 23.0,
+    "refresh": true,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "PIA",
+    "age": 23.0,
+    "refresh": true,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "RIC",
+    "age": 23.0,
+    "refresh": true,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "RUS",
+    "age": 23.0,
+    "refresh": true,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "SAI",
+    "age": 23.0,
+    "refresh": true,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "SAR",
+    "age": 23.0,
+    "refresh": false,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "STR",
+    "age": 23.0,
+    "refresh": true,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "TSU",
+    "age": 23.0,
+    "refresh": false,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "VER",
+    "age": 23.0,
+    "refresh": true,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 24,
+    "driver": "ZHO",
+    "age": 23.0,
+    "refresh": true,
+    "event": "2024_canadian_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "ALO",
+    "age": 26.0,
+    "refresh": true,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "BEA",
+    "age": 26.0,
+    "refresh": true,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "BOT",
+    "age": 26.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "COL",
+    "age": 0.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "GAS",
+    "age": 26.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "HAM",
+    "age": 26.0,
+    "refresh": true,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "HUL",
+    "age": 1.0,
+    "refresh": true,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "LAW",
+    "age": 29.0,
+    "refresh": true,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "LEC",
+    "age": 5.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "NOR",
+    "age": 29.0,
+    "refresh": true,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "OCO",
+    "age": 28.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "PER",
+    "age": 26.0,
+    "refresh": true,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "PIA",
+    "age": 29.0,
+    "refresh": true,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "RUS",
+    "age": 29.0,
+    "refresh": true,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "SAI",
+    "age": 26.0,
+    "refresh": true,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "TSU",
+    "age": 29.0,
+    "refresh": true,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "VER",
+    "age": 26.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 27,
+    "driver": "ZHO",
+    "age": 26.0,
+    "refresh": true,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 39,
+    "driver": "ALO",
+    "age": 6.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 39,
+    "driver": "BEA",
+    "age": 6.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 39,
+    "driver": "BOT",
+    "age": 6.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 39,
+    "driver": "GAS",
+    "age": 6.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 39,
+    "driver": "HAM",
+    "age": 6.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 39,
+    "driver": "LAW",
+    "age": 9.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 39,
+    "driver": "LEC",
+    "age": 9.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 39,
+    "driver": "NOR",
+    "age": 10.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 39,
+    "driver": "OCO",
+    "age": 8.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 39,
+    "driver": "PER",
+    "age": 6.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 39,
+    "driver": "PIA",
+    "age": 8.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 39,
+    "driver": "RUS",
+    "age": 9.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 39,
+    "driver": "SAI",
+    "age": 6.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 39,
+    "driver": "TSU",
+    "age": 9.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 39,
+    "driver": "VER",
+    "age": 6.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   },
+   {
+    "first_lap": 39,
+    "driver": "ZHO",
+    "age": 7.0,
+    "refresh": false,
+    "event": "2024_sao_paulo_gp"
+   }
+  ]
+ },
+ "wet_incident_factor": {
+  "best": 4.35,
+  "range_95": [
+   2.0,
+   8.0
+  ],
+  "range_open_above": false,
+  "loglik": {
+   "0.0": -14.177,
+   "1.0": -11.578,
+   "2.0": -10.398,
+   "3.0": -9.82,
+   "4.0": -9.271,
+   "5.0": -9.368,
+   "6.0": -9.841,
+   "8.0": -10.489,
+   "10.0": -11.524
+  }
+ },
+ "previous_editorial_value": 2.0,
+ "real_per_race": {
+  "2024_canadian_gp": {
+   "neutralisations": 2.0,
+   "retirements": 5.0,
+   "safety_cars": 2.0,
+   "vscs": 0.0,
+   "red_flags": 0.0
+  },
+  "2024_british_gp": {
+   "neutralisations": 0.0,
+   "retirements": 1.0,
+   "safety_cars": 0.0,
+   "vscs": 0.0,
+   "red_flags": 0.0
+  },
+  "2024_sao_paulo_gp": {
+   "neutralisations": 4.0,
+   "retirements": 2.0,
+   "safety_cars": 2.0,
+   "vscs": 1.0,
+   "red_flags": 1.0
+  }
+ },
+ "sim_per_race": {
+  "0.0": {
+   "2024_canadian_gp": {
+    "neutralisations": 0.8,
+    "retirements": 1.4,
+    "safety_cars": 0.4,
+    "vscs": 0.3,
+    "red_flags": 0.1
+   },
+   "2024_british_gp": {
+    "neutralisations": 0.65,
+    "retirements": 1.1,
+    "safety_cars": 0.35,
+    "vscs": 0.25,
+    "red_flags": 0.05
+   },
+   "2024_sao_paulo_gp": {
+    "neutralisations": 0.85,
+    "retirements": 1.45,
+    "safety_cars": 0.35,
+    "vscs": 0.4,
+    "red_flags": 0.1
+   }
+  },
+  "2.0": {
+   "2024_canadian_gp": {
+    "neutralisations": 1.25,
+    "retirements": 2.3,
+    "safety_cars": 0.6,
+    "vscs": 0.55,
+    "red_flags": 0.1
+   },
+   "2024_british_gp": {
+    "neutralisations": 0.7,
+    "retirements": 1.25,
+    "safety_cars": 0.35,
+    "vscs": 0.3,
+    "red_flags": 0.05
+   },
+   "2024_sao_paulo_gp": {
+    "neutralisations": 1.7,
+    "retirements": 3.0,
+    "safety_cars": 0.9,
+    "vscs": 0.6,
+    "red_flags": 0.2
+   }
+  },
+  "4.0": {
+   "2024_canadian_gp": {
+    "neutralisations": 1.8,
+    "retirements": 3.45,
+    "safety_cars": 0.85,
+    "vscs": 0.7,
+    "red_flags": 0.25
+   },
+   "2024_british_gp": {
+    "neutralisations": 0.8,
+    "retirements": 1.4,
+    "safety_cars": 0.4,
+    "vscs": 0.25,
+    "red_flags": 0.15
+   },
+   "2024_sao_paulo_gp": {
+    "neutralisations": 2.8,
+    "retirements": 4.5,
+    "safety_cars": 1.55,
+    "vscs": 0.75,
+    "red_flags": 0.5
+   }
+  }
+ },
+ "not_modelled": {
+  "track temperature -> tyre wear": "no effect in 2024 (within races: sign flips, median ~0 per degree; across tracks: Spearman 0.00 with tyre life); EXP-015",
+  "graining / blistering": "no published numbers",
+  "visibility red flags, SC vs VSC choice in rain": "rain is on/off in the data (no intensity)"
+ }
+}

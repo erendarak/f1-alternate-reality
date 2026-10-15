@@ -15,6 +15,7 @@ from f1ar.calibration.racecraft_fit import RACECRAFT_FILE
 from f1ar.calibration.registry import ENGINE_ARTIFACTS, load_registry, registry_markdown
 from f1ar.calibration.traffic_fit import TRAFFIC_FILE
 from f1ar.calibration.weather_fit import WEATHER_FILE
+from f1ar.calibration.wet_race_fit import WET_FILE
 from f1ar.domain.driver_profiles import ProfileSet
 from f1ar.domain.identities import RaceRoster
 from f1ar.domain.provenance import SourceType
@@ -33,6 +34,7 @@ CALIBRATION = (
     PACE_FILE,
     RACECRAFT_FILE,
     PERSONA_FILE,
+    WET_FILE,
 )
 
 
@@ -52,6 +54,7 @@ def test_every_model_is_registered_and_matches_its_artifact() -> None:
         "driver_pace",
         "racecraft",
         "personas",
+        "wet_race",
     }
     lgbm = next(e for e in entries if e.model_name == "pace_predictor_online")
     assert not lgbm.artifact_tracked and lgbm.used_by_engine is None
@@ -95,6 +98,7 @@ def test_a_race_builds_and_runs_without_fitted_models(
     assert setup.inputs["driver_pace"].startswith("editorial") == (PACE_FILE in missing)
     assert setup.inputs["racecraft"].startswith("editorial") == (RACECRAFT_FILE in missing)
     assert setup.inputs["personas"].startswith("editorial") == (PERSONA_FILE in missing)
+    assert setup.inputs["wet_incidents"].startswith("editorial") == (WET_FILE in missing)
     for f, (key, source) in parts.items():
         editorial = f in missing
         if f == TRAFFIC_FILE:  # W3: the racecraft refit supplies the overtaking too

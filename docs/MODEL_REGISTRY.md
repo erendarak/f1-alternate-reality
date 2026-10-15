@@ -15,6 +15,7 @@ model is a fit on the 2024 lap dataset; none is a trained agent (that starts in 
 | tyre_life v1 | stint-length life + same-lap wear regression; globals fitted on behaviour | estimated_from_data | validated_for_engine_use (W1, engine v0.10.0, D-041) | tyre life, wear, management (W1, D-041) | `configs/calibration/tyre_life_2024_v1.json` (tracked) | ok |
 | tyre_shape v1 | structural least squares (driver-race pace absorbed) | estimated_from_data | validated_for_engine_use (slice 3) | fuel (D-033; tyres before W1) | `configs/calibration/tyre_shape_2024_v1.json` (tracked) | ok |
 | weather v1 | non-linear least squares: lap times + tyre choices (wetness from the rain flag) | estimated_from_data (wet-tyre line and factors editorial) | experimental (3 races) | weather (D-034) | `configs/calibration/weather_2024_v1.json` (tracked) | ok |
+| wet_race v1 | fresh wet tyres under SC/VSC (threshold ML on real neutralisations); wet incident factor by simulation (Poisson likelihood, profile 95% range) | estimated_from_data | validated_for_engine_use (W6, D-046) | fresh wet sets under SC/VSC, wet incidents (W6, D-046) | `configs/calibration/wet_race_2024_v1.json` (tracked) | ok |
 
 Without any of the engine's artifacts a race still builds: the setup falls back to the
 editorial model for that part and labels it `editorial_assumption` in `RaceSetup.inputs`.

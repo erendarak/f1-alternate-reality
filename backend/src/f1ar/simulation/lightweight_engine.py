@@ -74,6 +74,7 @@ from f1ar.simulation.lap_model import life_use_per_lap, sample_lap_time_s, wear_
 from f1ar.simulation.rng_streams import RngSpec, normal, uniform
 from f1ar.simulation.traffic import Ahead, resolve
 from f1ar.simulation.weather import (
+    WET_TYRES,
     best_tyre,
     driver_factor,
     historical_rain,
@@ -84,8 +85,10 @@ from f1ar.simulation.weather import (
 )
 from f1ar.simulation.weather import penalty_s as weather_penalty_s
 
-ENGINE_VERSION = "lightweight_engine_v0.13.0"
-"""v0.13.0: overtaking refit with W2 noise + driver attack/defend skills, launch skill, lap-1
+ENGINE_VERSION = "lightweight_engine_v0.14.0"
+"""v0.14.0: fresh wet-weather tyres under SC/VSC and the wet incident factor, fitted on the 2024
+wet races (D-046).
+v0.13.0: overtaking refit with W2 noise + driver attack/defend skills, launch skill, lap-1
 risk by grid position (D-044).
 v0.12.0: driver race pace vs teammate, race form and lap noise per driver, fitted on 2024
 (D-043).
@@ -1247,7 +1250,7 @@ def _complete_lap(
     neutralised = state.race_control.phase is not RacePhase.GREEN
     stop = pending_stop(car)  # decided for the lap just driven, before the counter moves
     if stop is None and neutralised:
-        stop = _cheap_stop(setup, car)
+        stop = _cheap_stop(state, car)
     if car.controller is StrategyController.BASELINE:
         # the weather rule overrides a planned stop that would fit the wrong tyre type
         wet_stop = weather_stop(
@@ -1374,9 +1377,23 @@ def _fits_conditions(setup: RaceSetup, car: CarState, stop: Compound, wetness: f
     return is_slick(stop) == is_slick(best)
 
 
-def _cheap_stop(setup: RaceSetup, car: CarState) -> Compound | None:
-    """Baseline strategy under SC/VSC: bring the next planned stop forward if it's close."""
-    if car.controller is not StrategyController.BASELINE or not car.planned_stops:
+def _cheap_stop(state: WorldState, car: CarState) -> Compound | None:
+    """Baseline strategy under SC/VSC: bring the next planned stop forward if it's close; on
+    old wet-weather tyres, maybe take a new set of the same type (W6, D-046)."""
+    setup = state.setup
+    if car.controller is not StrategyController.BASELINE:
+        return None
+    weather = setup.weather
+    if (
+        car.compound in WET_TYRES
+        and car.tyre_age_laps >= weather.wet_refresh_min_age_laps
+        and setup.track.total_laps - car.laps_completed > 3
+    ):
+        episode = state.race_control.sc_count + state.race_control.vsc_count
+        draw = uniform(state.rng.seed, "wet_refresh", car.driver_id, episode)
+        if draw < weather.wet_refresh_share:
+            return car.compound
+    if not car.planned_stops:
         return None
     nxt = car.planned_stops[0]
     window = setup.race_control.neutralised_pit_window_laps

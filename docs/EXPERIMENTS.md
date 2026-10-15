@@ -1004,6 +1004,64 @@ Decision / next:      Keep W5 (labels and data order where measurable). Next per
                       (weather extensions), then M5 AI resumes.
 ```
 
+## EXP-015 — Weather extensions (W6): temperature and wet races (2026-10-15)
+
+```text
+Experiment ID:        EXP-015
+Research question:    Does track temperature drive tyre wear in 2024, and do the fitted wet-race
+                      rules (fresh wet sets under SC/VSC, wet incident factor) make the wet races
+                      more like 2024?
+Fit:                  wet_race_2024_v1 (3 wet races: refresh rule on real neutralisations; incident
+                      factor by simulation, 20 seeds per race and grid point)
+Engine:               v0.14.0 with the file vs without it (= v0.13 behaviour)
+Cases:                temperature: 21 dry races; wet races x 20 seeds (seeds 1000+, not the fit's);
+                      random rain on 5 dry races x 20 seeds; dry races x 3 seeds (identity check)
+Code:                 scripts/fit_wet_race.py; scripts/experiments/exp015_weather.py
+                      -> docs/experiments/exp015.json
+```
+
+Track temperature: within races, wear change per lap per °C has median 0.00004 s and is positive
+in 52% of races (no direction); across tracks, Spearman(mean track temp, medium tyre life) = 0.00.
+
+| Wet race | | Real | W6 | v0.13 |
+|---|---|---|---|---|
+| Canada | stops per finisher | 2.2 | **1.64** | 1.00 |
+| | neutralisations | 2 | 2.80 | 2.15 |
+| | retirements | 5 | 5.40 | 3.75 |
+| | order vs real (Spearman) | | 0.545 | 0.625 |
+| Britain | stops per finisher | 2.44 | 2.87 | 2.87 |
+| | neutralisations | 0 | 0.85 | 0.85 |
+| | retirements | 1 | 1.70 | 1.65 |
+| São Paulo | stops per finisher | 1.0 | **0.74** | 0.00 |
+| | neutralisations | 4 | 2.50 | 2.10 |
+| | retirements | 2 | 4.20 | 2.90 |
+| | order vs real (Spearman) | | 0.433 | 0.509 |
+
+Random-rain what-if (5 dry tracks): neutralisations 1.24 vs 1.18, retirements 2.20 vs 2.05 per
+race. Dry races: identical results with and without the file.
+
+```text
+Findings:
+  1. Track temperature explains nothing about tyre wear in 2024 (within or across races): no
+     temperature effect is added (an editorial one would contradict the data).
+  2. Fresh inters under SC/VSC close most of the wet-race stop gap (Canada 1.0 -> 1.64 vs 2.2,
+     São Paulo 0 -> 0.74 vs 1.0). Seen in the app: Canada, SC at lap 17, most cars take new
+     inters, a few (VER) stay out.
+  3. Wet incidents: neutralisations + retirements now match 2024 in total (f = 4.35), but the
+     mix is off: in São Paulo the engine makes too many retirements (4.2 vs 2) and too few
+     neutralisations (2.5 vs 4). Real wet incidents are often spins and stranded cars that
+     neutralise the race without a retirement; the engine has no such incident.
+  4. Trade-off: more wet crashes make the finishing order less like the real race (Canada 0.63
+     -> 0.55, São Paulo 0.51 -> 0.43).
+Negative results:     no temperature effect measurable; wet incident mix wrong; order correlation
+                      lower in the wet; all checks in-sample (only 3 wet races in 2024).
+Reproduce:            uv run python scripts/fit_wet_race.py --seeds 20
+                      uv run python scripts/experiments/exp015_weather.py --seeds 20 \
+                        --json docs/experiments/exp015.json
+Decision / next:      Keep W6 (engine v0.14.0). The world realism plan (W1-W6) is complete; next:
+                      M5 AI resumes (rl_obs_v2 with the new world).
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

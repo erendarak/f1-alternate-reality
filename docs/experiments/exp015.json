@@ -1,0 +1,197 @@
+{
+ "temperature": {
+  "within_races": [
+   {
+    "event": "2024_bahrain_gp",
+    "track_temp_range_c": 1.9,
+    "wear_per_lap_per_c_s": 0.01344
+   },
+   {
+    "event": "2024_saudi_arabian_gp",
+    "track_temp_range_c": 1.8,
+    "wear_per_lap_per_c_s": 0.00433
+   },
+   {
+    "event": "2024_australian_gp",
+    "track_temp_range_c": 2.1,
+    "wear_per_lap_per_c_s": -0.01586
+   },
+   {
+    "event": "2024_chinese_gp",
+    "track_temp_range_c": 4.0,
+    "wear_per_lap_per_c_s": 0.02905
+   },
+   {
+    "event": "2024_miami_gp",
+    "track_temp_range_c": 8.2,
+    "wear_per_lap_per_c_s": 0.00038
+   },
+   {
+    "event": "2024_emilia_romagna_gp",
+    "track_temp_range_c": 6.9,
+    "wear_per_lap_per_c_s": -0.00278
+   },
+   {
+    "event": "2024_spanish_gp",
+    "track_temp_range_c": 5.3,
+    "wear_per_lap_per_c_s": 0.00164
+   },
+   {
+    "event": "2024_austrian_gp",
+    "track_temp_range_c": 5.3,
+    "wear_per_lap_per_c_s": -0.00055
+   },
+   {
+    "event": "2024_hungarian_gp",
+    "track_temp_range_c": 7.9,
+    "wear_per_lap_per_c_s": -0.00091
+   },
+   {
+    "event": "2024_belgian_gp",
+    "track_temp_range_c": 2.4,
+    "wear_per_lap_per_c_s": 0.00646
+   },
+   {
+    "event": "2024_dutch_gp",
+    "track_temp_range_c": 3.9,
+    "wear_per_lap_per_c_s": -0.00894
+   },
+   {
+    "event": "2024_azerbaijan_gp",
+    "track_temp_range_c": 4.4,
+    "wear_per_lap_per_c_s": 0.00625
+   },
+   {
+    "event": "2024_singapore_gp",
+    "track_temp_range_c": 3.0,
+    "wear_per_lap_per_c_s": -0.00995
+   },
+   {
+    "event": "2024_united_states_gp",
+    "track_temp_range_c": 2.0,
+    "wear_per_lap_per_c_s": -0.00199
+   },
+   {
+    "event": "2024_las_vegas_gp",
+    "track_temp_range_c": 1.5,
+    "wear_per_lap_per_c_s": -0.07857
+   },
+   {
+    "event": "2024_qatar_gp",
+    "track_temp_range_c": 1.1,
+    "wear_per_lap_per_c_s": 0.00843
+   },
+   {
+    "event": "2024_japanese_gp",
+    "track_temp_range_c": 7.7,
+    "wear_per_lap_per_c_s": 0.00679
+   },
+   {
+    "event": "2024_monaco_gp",
+    "track_temp_range_c": 8.7,
+    "wear_per_lap_per_c_s": 0.00495
+   },
+   {
+    "event": "2024_italian_gp",
+    "track_temp_range_c": 7.5,
+    "wear_per_lap_per_c_s": -0.001
+   },
+   {
+    "event": "2024_mexico_city_gp",
+    "track_temp_range_c": 9.6,
+    "wear_per_lap_per_c_s": 4e-05
+   },
+   {
+    "event": "2024_abu_dhabi_gp",
+    "track_temp_range_c": 2.6,
+    "wear_per_lap_per_c_s": -0.01428
+   }
+  ],
+  "within_median_s_per_lap_per_c": 4e-05,
+  "within_positive_share": 0.524,
+  "across_tracks": {
+   "spearman_temp_vs_medium_life": 0.0,
+   "races": 21
+  }
+ },
+ "wet_races": {
+  "2024_canadian_gp": {
+   "real": {
+    "neutralisations": 2,
+    "retirements": 5,
+    "stops": 2.2
+   },
+   "w6": {
+    "neutralisations": 2.8,
+    "retirements": 5.4,
+    "mistakes": 10.5,
+    "stops": 1.64,
+    "spearman_vs_real": 0.545
+   },
+   "v0.13": {
+    "neutralisations": 2.15,
+    "retirements": 3.75,
+    "mistakes": 7.2,
+    "stops": 1.0,
+    "spearman_vs_real": 0.625
+   }
+  },
+  "2024_british_gp": {
+   "real": {
+    "neutralisations": 0,
+    "retirements": 1,
+    "stops": 2.444
+   },
+   "w6": {
+    "neutralisations": 0.85,
+    "retirements": 1.7,
+    "mistakes": 4.85,
+    "stops": 2.865,
+    "spearman_vs_real": 0.371
+   },
+   "v0.13": {
+    "neutralisations": 0.85,
+    "retirements": 1.65,
+    "mistakes": 3.45,
+    "stops": 2.865,
+    "spearman_vs_real": 0.369
+   }
+  },
+  "2024_sao_paulo_gp": {
+   "real": {
+    "neutralisations": 4,
+    "retirements": 2,
+    "stops": 1.0
+   },
+   "w6": {
+    "neutralisations": 2.5,
+    "retirements": 4.2,
+    "mistakes": 16.3,
+    "stops": 0.739,
+    "spearman_vs_real": 0.433
+   },
+   "v0.13": {
+    "neutralisations": 2.1,
+    "retirements": 2.9,
+    "mistakes": 9.95,
+    "stops": 0.0,
+    "spearman_vs_real": 0.509
+   }
+  }
+ },
+ "random_rain_what_if": {
+  "w6": {
+   "neutralisations": 1.24,
+   "retirements": 2.2,
+   "mistakes": 6.45,
+   "rain_starts": 1.41
+  },
+  "v0.13": {
+   "neutralisations": 1.18,
+   "retirements": 2.05,
+   "mistakes": 5.47,
+   "rain_starts": 1.41
+  }
+ },
+ "dry_identical": true
+}

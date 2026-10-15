@@ -85,6 +85,7 @@ def setup_from_codes(
     tyre_life_overrides: dict[str, float] | None = None,
     race_events_overrides: dict[str, float] | None = None,
     racecraft_overrides: dict[str, float] | None = None,
+    wet_overrides: dict[str, float] | None = None,
 ) -> RaceSetup:
     """Setup from 3-letter driver codes (e.g. ``["VER", "HAM"]``); ``None`` = full grid.
 
@@ -92,7 +93,8 @@ def setup_from_codes(
     the calibrated tyre/fuel model (season shape + this race's adjustment, M4/D-033), and the
     data-estimated car offsets, base lap and pit loss; without it, the editorial placeholders
     (Monza and Spa only). ``tyre_life_overrides`` (``kappa``, ``delta``) replace the tyre-life
-    globals: only for fitting them (W1).
+    globals: only for fitting them (W1). ``wet_overrides`` (``wet_incident_factor``,
+    ``wet_refresh_min_age_laps``, ``wet_refresh_share``) replace the W6 fit: only for fitting.
     """
     tyre_life_overrides = tyre_life_overrides or {}
     by_code = {e.code: e.driver_id for e in roster.entries}
@@ -266,6 +268,36 @@ def setup_from_codes(
         )
     except ValueError as exc:  # e.g. a race without any complete pit stop
         pit, pit_note = default_pit_params(), f"editorial_assumption: default pit model ({exc})"
+    # W6 (D-046): incidents in the wet, fitted on the three wet 2024 races
+    from f1ar.calibration.wet_race_fit import WET_FILE, load_wet_race
+
+    wet_cfg = load_wet_race(configs)
+    wet_note = (
+        f"editorial_assumption: wet incident factor, no fresh wet tyres under SC/VSC "
+        f"({WET_FILE.as_posix()} missing)"
+    )
+    if wet_overrides:
+        update: dict[str, float | int] = dict(wet_overrides)
+        if "wet_refresh_min_age_laps" in update:
+            update["wet_refresh_min_age_laps"] = int(update["wet_refresh_min_age_laps"])
+        weather = weather.model_copy(update=update)
+        wet_note = f"override: {dict(wet_overrides)} (fitting)"
+    elif wet_cfg is not None:
+        refresh = wet_cfg["wet_refresh"]
+        weather = weather.model_copy(
+            update={
+                "wet_incident_factor": float(wet_cfg["wet_incident_factor"]["best"]),
+                "wet_refresh_min_age_laps": int(refresh["min_age_laps"]),
+                "wet_refresh_share": float(refresh["share"]),
+            }
+        )
+        lo, hi = wet_cfg["wet_incident_factor"]["range_95"]
+        wet_note = (
+            f"estimated_from_data: wet incident factor {weather.wet_incident_factor} (95% range "
+            f"{lo}-{hi}); under SC/VSC {refresh['share']:.0%} of cars on wet tyres "
+            f">= {refresh['min_age_laps']} laps old take a new set (3 wet 2024 races, "
+            f"{WET_FILE.as_posix()})"
+        )
     if random_rain:
         weather = with_random_rain(weather)
         weather_note = weather.note
@@ -306,6 +338,7 @@ def setup_from_codes(
             "pit_loss": pit_note,
             "tyre_model": tyre_note,
             "weather": weather_note,
+            "wet_incidents": wet_note,
             "traffic": traffic_note,
             "race_control": race_control_note,
             "dataset_sha256": "sha256:" + hashlib.sha256(laps_file.read_bytes()).hexdigest(),

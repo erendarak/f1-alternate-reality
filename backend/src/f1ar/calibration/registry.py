@@ -26,6 +26,7 @@ from f1ar.calibration.race_events_fit import EVENTS_FILE
 from f1ar.calibration.racecraft_fit import RACECRAFT_FILE
 from f1ar.calibration.traffic_fit import TRAFFIC_FILE
 from f1ar.calibration.weather_fit import WEATHER_FILE
+from f1ar.calibration.wet_race_fit import WET_FILE
 
 DATASET_MANIFEST = Path("data") / "manifests" / "dataset_laps_2024_v1.yaml"
 ENGINE_ARTIFACTS = {
@@ -40,6 +41,7 @@ ENGINE_ARTIFACTS = {
         (PACE_FILE, "driver race pace vs teammate, form, lap noise (D-043)"),
         (RACECRAFT_FILE, "overtaking (W2 noise), attack/defend, launch, lap-1 risk (D-044)"),
         (PERSONA_FILE, "persona fields estimated from data (W5, D-045)"),
+        (WET_FILE, "fresh wet sets under SC/VSC, wet incidents (W6, D-046)"),
     )
 }
 """Artifacts the engine's setup loads (repo-relative path -> what it drives)."""

@@ -2,6 +2,18 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## W6 (wet races, engine v0.14.0, EXP-015)
+
+- **Fitted on 3 wet races, checked in-sample** (no other wet 2024 races): the wet incident factor
+  has a 95% range of 2-8.
+- **Wet incident mix:** the engine turns wet incidents into retirements too often; real wet races
+  have more neutralisations without a retirement (spins, stranded cars).
+- **No track temperature effect** (not measurable in 2024), no graining/blistering, no visibility
+  red flags, no rain intensity (the data's rain flag is on/off).
+- **Inters/wets have no tyre life**: a long wet race without a neutralisation never takes new
+  wet sets (only the SC/VSC rule and type changes do).
+- Finishing order vs the real wet races is lower with the fitted incident rate (more randomness).
+
 ## W5 (personas from data, world schema 15, EXP-014)
 
 - **Only consistency, overtake and defense skill are estimated from data**, and only their

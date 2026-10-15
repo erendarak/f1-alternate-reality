@@ -20,7 +20,9 @@ into what makes the difference in real F1 and for the world to be adapted to it;
 - [x] **W5: personas from data where measurable (world schema 15, D-045, EXP-014)**:
   consistency, overtake/defense skill rank-mapped from W2/W3; tyre management and mistakes
   not measurable reliably (stay editorial).
-- [ ] W6: weather extensions.
+- [x] **W6: wet races (engine v0.14.0, D-046, EXP-015)**: fresh wet sets under SC/VSC and
+  the wet incident factor fitted on the 3 wet races; track temperature has no measurable
+  effect (not added).
 
 ## Current milestone: M5 — Stage 1: a field of AI strategists (plan §9, §16; design `docs/M5_DESIGN.md`, D-037)
 
@@ -1246,3 +1248,18 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Tests: 435 offline (+4 in `tests/unit/test_persona_fit.py`, +1 registry case; inputs tests
   updated); frontend 17.
 - Next (per the plan): W6 weather extensions, then M5 AI.
+
+### 2026-10-15 — W6: wet races (engine v0.14.0, D-046, EXP-015)
+
+- Measured first: track temperature has no effect on tyre wear in 2024 (within races and across
+  tracks): not added. Real wet races had stops our baseline never made: new inters under SC/VSC.
+- Fresh wet sets under SC/VSC fitted on the real neutralisations (sets >= 11 laps: 77% replaced);
+  wet incident factor fitted by simulation on the 3 wet races (4.35, range 2-8; was 2.0).
+- Engine v0.14.0 / world schema 16; `calibration/wet_race_fit.py`, `scripts/fit_wet_race.py`,
+  `configs/calibration/wet_race_2024_v1.json` + registry manifest.
+- EXP-015: wet stops Canada 1.0 -> 1.64 (real 2.2), São Paulo 0 -> 0.74 (real 1.0); incident
+  totals match, the mix doesn't (too many retirements, too few neutralisations); order vs the
+  real wet races lower; dry races identical.
+- Checked in the app: Canada, SC at lap 17, most cars took new inters, VER stayed out.
+- Tests: 441 offline (+5 in `tests/unit/test_wet_race.py`, +1 registry case).
+- World realism plan W1-W6 complete. Next: M5 AI resumes.
