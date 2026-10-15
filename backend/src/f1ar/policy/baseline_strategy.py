@@ -254,7 +254,36 @@ def plan_stops(
     tyre_age_laps: int = 0,
     life_used: float = 0.0,
 ) -> tuple[PlannedStop, ...]:
-    """Cheapest legal plan for the rest of the race, starting with the lap now beginning.
+    """Cheapest legal plan for the rest of the race (see ``best_plan``)."""
+    best = best_plan(
+        setup,
+        driver,
+        laps_completed=laps_completed,
+        compound=compound,
+        tyre_wear_s=tyre_wear_s,
+        pace_mode=pace_mode,
+        compounds_used=compounds_used,
+        tyre_age_laps=tyre_age_laps,
+        life_used=life_used,
+    )
+    return () if best is None else best[1]
+
+
+def best_plan(
+    setup: RaceSetup,
+    driver: DriverArchetype,
+    *,
+    laps_completed: int,
+    compound: Compound,
+    tyre_wear_s: float,
+    pace_mode: PaceMode,
+    compounds_used: tuple[Compound, ...],
+    tyre_age_laps: int = 0,
+    life_used: float = 0.0,
+) -> tuple[float, tuple[PlannedStop, ...]] | None:
+    """Cheapest legal plan for the rest of the race and its cost (time on an empty track that
+    differs between plans, stop margins included), starting with the lap now beginning; None
+    if no legal plan (or on wet-weather tyres).
 
     The lap now beginning (``laps_completed + 1``) is driven on the current tyres, which are
     ``tyre_age_laps`` old and carry ``tyre_wear_s``. A stop at lap ``k`` means boxing at the
@@ -266,7 +295,7 @@ def plan_stops(
     used = set(compounds_used) | {compound}
     need = dry_compounds_required(setup, tuple(used))
     if remaining <= 0 or compound not in DRY_COMPOUNDS:
-        return ()  # on wet-weather tyres the weather rule decides (engine, D-034)
+        return None  # on wet-weather tyres the weather rule decides (engine, D-034)
 
     def legal(*later: Compound) -> bool:
         return len(used | set(later)) >= need
@@ -330,7 +359,33 @@ def plan_stops(
                 ),
             )
 
-    return () if best is None else best[2]
+    return None if best is None else (best[0], best[2])
+
+
+def free_change_compound(setup: RaceSetup, car: CarState, wetness: float) -> Compound:
+    """W4 red flag: the compound the baseline fits when a new set is free now: the right tyre
+    type for the conditions, and among dry tyres the one with the cheapest rest of the race."""
+    from f1ar.simulation.weather import best_tyre, is_slick
+
+    wanted = best_tyre(setup.weather, wetness)
+    if not is_slick(wanted):
+        return wanted
+    driver = setup.driver(car.driver_id).profile.archetype
+    options = []
+    for c in DRY_COMPOUNDS:
+        used = car.compounds_used if c in car.compounds_used else (*car.compounds_used, c)
+        best = best_plan(
+            setup,
+            driver,
+            laps_completed=car.laps_completed,
+            compound=c,
+            tyre_wear_s=0.0,
+            pace_mode=PaceMode.BALANCED,
+            compounds_used=used,
+        )
+        if best is not None:
+            options.append((best[0], DRY_COMPOUNDS.index(c), c))
+    return min(options)[2] if options else car.compound
 
 
 def plan_for_car(setup: RaceSetup, car: CarState) -> tuple[PlannedStop, ...]:

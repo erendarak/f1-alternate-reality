@@ -797,6 +797,57 @@ Decision / next:      Keep W1 (engine v0.10.0). Next in the research plan: W4 (r
                       joint fit; the AI comes back after the world is closer to 2024.
 ```
 
+## EXP-011 — Race control and random events (W4) against the 2024 races (2026-10-15)
+
+```text
+Experiment ID:        EXP-011
+Research question:    Does W4 (debris SC/VSC, red flags, pit crews and reliability per team,
+                      penalties, risk renormalised for W1's pace mix) bring retirements,
+                      neutralisations, red flags and penalties to 2024's level without breaking
+                      W1 (stops) or the finishing order?
+Data / fit:           race_events_2024_v1 (all 24 races' timing; risk_scale, red flags per crash
+                      and the penalty scale fitted on the simulated dry_train field)
+Engine:               v0.11.0 (W4) vs the same engine without the race-events file (v0.10),
+                      identical per-race seeds (10 per race), 21 dry races
+Code:                 scripts/fit_race_events.py; scripts/experiments/exp011_race_events.py
+                      -> docs/experiments/exp011.json (420 races, 1.2 min)
+```
+
+| Per race (21 dry races) | Real | W4 | v0.10 |
+|---|---|---|---|
+| Retirements | 1.95 | 1.49 | 2.24 |
+| Safety cars / VSCs | 0.43 / 0.38 | 0.51 / 0.37 | 0.51 / 0.46 |
+| Races with an SC / with SC or VSC | 29 % / 48 % | 41 % / 62 % | 41 % / 64 % |
+| Red flags | 0.095 | 0.12 | 0 |
+| Time penalties | 2.10 | 2.03 | 0 |
+| Passes | 53.6 | 52.9 | 53.4 |
+| Stops per finisher (error per race) | 1.67 | 1.40 (0.34) | 1.44 (0.32) |
+| Finishing order vs real (Spearman) | | **0.675** | 0.616 |
+
+Train (16) / test (5): retirements real 1.63 / 3.0, W4 1.51 / 1.44; penalties real 1.88 / 2.8,
+W4 1.89 / 2.46; order 0.679 / 0.662 (v0.10: 0.620 / 0.603).
+
+```text
+Findings:
+  1. The race-event rates now match 2024: red flags 0.12 vs 0.095, penalties 2.0 vs 2.1, VSCs
+     0.37 vs 0.38, SCs 0.51 vs 0.43; retirements back down from W1's 2.24 (train 1.51 vs 1.63).
+  2. The finishing order follows the real races more closely (Spearman 0.616 -> 0.675): fewer
+     random retirements of fast cars, team reliability.
+  3. The test races had more retirements in reality (3.0: Monaco's and Japan's lap-1 crashes)
+     than simulated (1.44); single races are noisy and lap-1 pile-ups aren't modelled as such.
+  4. Neutralisations are spread over too many races (an SC in 41 % of simulated races vs 29 %):
+     real SCs cluster (Qatar 3, China 2); the simulation draws them more independently.
+  5. Stops per finisher unchanged within noise (free tyres under red flags lower them slightly).
+  6. Method: shared seeds across tracks repeat the same luck (keyed draws without the event);
+     per-race seeds fixed the fit and change some earlier numbers (passes, D-042).
+Negative results:     SC clustering; lap-1 pile-ups; real red-flag stoppage time not simulated.
+Reproduce:            uv run python scripts/fit_race_events.py --seeds 8
+                      uv run python scripts/experiments/exp011_race_events.py --seeds 10 \
+                        --json docs/experiments/exp011.json
+Decision / next:      Keep W4 (engine v0.11.0). Next per the plan: W2 (race pace realism: lap
+                      noise, driver race pace vs teammate, development).
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

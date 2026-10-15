@@ -83,6 +83,7 @@ def setup_from_codes(
     configs_dir: Path | None = None,
     random_rain: bool = False,
     tyre_life_overrides: dict[str, float] | None = None,
+    race_events_overrides: dict[str, float] | None = None,
 ) -> RaceSetup:
     """Setup from 3-letter driver codes (e.g. ``["VER", "HAM"]``); ``None`` = full grid.
 
@@ -208,7 +209,7 @@ def setup_from_codes(
         weather_note = weather.note
     traffic, traffic_note = _fitted_traffic(configs, roster.event_id)
     race_control, race_control_note = _fitted_race_control(configs, field)
-    return build_setup(
+    setup = build_setup(
         roster,
         profiles,
         driver_ids,
@@ -233,6 +234,73 @@ def setup_from_codes(
             "race_control": race_control_note,
             "dataset_sha256": "sha256:" + hashlib.sha256(laps_file.read_bytes()).hexdigest(),
         },
+    )
+    return with_race_events(setup, configs, race_events_overrides or {})
+
+
+def with_race_events(
+    setup: RaceSetup, configs: Path, overrides: Mapping[str, float] | None = None
+) -> RaceSetup:
+    """W4 (D-042): pit crews, reliability per team, debris, red flags, penalties, the risk scale
+    from ``configs/calibration/race_events_2024_v1.json``; without it the setup is unchanged
+    (and says so). ``overrides`` replace fitted values (only while fitting them)."""
+    from f1ar.calibration.race_events_fit import EVENTS_FILE, load_events
+
+    cfg = load_events(configs)
+    if cfg is None:
+        note = f"editorial_assumption: no fitted race events ({EVENTS_FILE.as_posix()} missing)"
+        return setup.model_copy(update={"inputs": {**setup.inputs, "race_events": note}})
+    o = dict(overrides or {})
+    fitted = cfg["fitted"]
+    pens = cfg["penalties"]
+    rc = setup.race_control.model_copy(
+        update={
+            "risk_scale": float(o.get("risk_scale", fitted["risk_scale"])),
+            "debris_per_lap": float(cfg["debris"]["per_lap"]),
+            "debris_sc_share": float(cfg["debris"]["sc_share"]),
+            "red_flag_per_crash": float(o.get("red_flag_per_crash", fitted["red_flag_per_crash"])),
+            "penalty_collision_per_pass": float(pens["collision_per_pass"]),
+            "penalty_false_start": float(pens["false_start_per_starter"]),
+            "penalty_pit_speeding_per_stop": float(pens["pit_speeding_per_stop"]),
+            "penalty_per_lap": float(pens["other_per_car_lap"]),
+        }
+    )
+    pit = setup.pit.model_copy(
+        update={
+            "slow_stop_probability": float(cfg["pit"]["slow_stop_probability"]),
+            "slow_stop_scale_s": float(cfg["pit"]["slow_stop_scale_s"]),
+        }
+    )
+    crews, teams = cfg["crews"], cfg["reliability"]["teams"]
+    drivers = tuple(
+        d.model_copy(
+            update={
+                "pit_crew_offset_s": float(crews.get(d.team_id, {}).get("pit_crew_offset_s", 0.0)),
+                "pit_slow_multiplier": float(
+                    crews.get(d.team_id, {}).get("pit_slow_multiplier", 1.0)
+                ),
+                "failure_multiplier": float(
+                    teams.get(d.team_id, {}).get("failure_multiplier", 1.0)
+                ),
+            }
+        )
+        for d in setup.drivers
+    )
+    note = (
+        f"estimated_from_data: race events {EVENTS_FILE.as_posix()} (2024): pit crews and "
+        f"slow stops per team from {cfg['pit']['stops']} green stops, team failure multipliers "
+        f"(all-cause retirements as proxy, shrunk), debris SC/VSC {cfg['debris']['per_lap']}/lap, "
+        f"penalties by type; risk scale {rc.risk_scale:.2f} and red flags per crash "
+        f"{rc.red_flag_per_crash:.3f} fitted on the simulated dry_train field; penalty-proneness "
+        f"(1.5 - composure) editorial"
+    )
+    return setup.model_copy(
+        update={
+            "race_control": rc,
+            "pit": pit,
+            "drivers": drivers,
+            "inputs": {**setup.inputs, "race_events": note},
+        }
     )
 
 

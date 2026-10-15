@@ -944,3 +944,37 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   0.66 / 0.56 for v0.9, correlation with the real races 0.40 / **0.75**; many races reproduce
   the real sequences. Misses and side effects are in KNOWN_LIMITATIONS. `strategist_m5s3_v1`
   is pinned to v0.9.0 and is refused by worlds on v0.10.0 (as designed).
+
+## D-042 — W4: race control and random events (engine v0.11.0, 2026-10-15)
+
+- **Engine v0.11.0, world schema 12.** Every new part is off by default (synthetic setups and every
+  existing test unchanged); data-backed races get them from
+  `configs/calibration/race_events_2024_v1.json` (registry manifest `race_events v1`;
+  `calibration/race_events_fit.py`, `scripts/fit_race_events.py`).
+- **Neutralisations without a retirement** ("debris": a stopped car that rejoined, parts on track):
+  5 of the SC/VSC deployments in the 21 dry 2024 races had no retirement within a lap -> 0.004 per
+  race lap, drawn when the leader starts a lap, 40 % SC.
+- **Red flags** follow a crash (`red_flag_per_crash`, fitted 0.111 so the simulated field has
+  2024's 3 red flags in 24 races): every running car gets a free set of new tyres (the baseline
+  picks the compound with the cheapest rest of the race, `free_change_compound`; a USER/AGENT car
+  takes its requested compound or a new set of the same one); it counts for the two-compound
+  rule but not as a stop; the race restarts behind the safety car. The real stoppage time isn't
+  simulated.
+- **Pit crews per team**: pit-lane time of 623 green-flag stops vs the race median gives a team
+  stationary offset (Red Bull -0.21 s ... Sauber +0.28 s, shrunk with 20 stops) and a slow-stop
+  tail: 7.4 % of stops lose 3 s + Exp(7.7 s) (Ferrari x0.61 ... Sauber x1.57, shrunk).
+- **Reliability per team**: the data has no retirement causes, so all-cause retirements per
+  start stand in for failure rates (McLaren x0.33 ... Williams x1.90, shrunk with 24 starts);
+  labelled as a proxy.
+- **Time penalties** from the 47 stewards' penalties of 2024, by type: collisions (10 s, per
+  pass), false starts, pit-lane speeding, everything else (5 s); scaled x1.29 so the simulated
+  dry_train field matches the real rate; who gets them follows `1.5 - composure` relative to the
+  field (editorial). They are added to the race time at the finish (`CarState.penalty_s`).
+- **Crash/mistake rates renormalised** for the W1 pace mix: `risk_scale` 0.61, fitted so the
+  simulated retirements match the dry_train races (W1 had raised them to 2.4 per race).
+- **Keyed random draws don't include the event**: seeds 1..N on every track repeat the same luck
+  everywhere (the first fit saw no red flag at all). Fitting and EXP-011 now use a different seed
+  per race; earlier experiments (EXP-008..010) used shared seeds, so their samples are more
+  correlated than they look (EXP-010's pass counts: 47.5 with shared seeds, 52.9 with per-race
+  seeds, real 53.6).
+- New events `RED_FLAG` and `TIME_PENALTY` (frontend log texts added).

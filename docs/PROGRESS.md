@@ -9,8 +9,9 @@ into what makes the difference in real F1 and for the world to be adapted to it;
 - [x] **W1: tyres v2 (engine v0.10.0, D-041, EXP-010)**: tyre life, management vs push, cliff,
   fresh-tyre peak, a planner that manages and needs 6.5 s per stop; stops per finisher now
   follow the real races (test error 0.56 -> 0.28). Tyre allocation deferred.
-- [ ] W4: race control and random events (debris SCs per track, red flags with tyre changes,
-  pit crews and reliability per team, penalties; refit retirements for the new pace mix).
+- [x] **W4: race control and random events (engine v0.11.0, D-042, EXP-011)**: debris SC/VSC,
+  red flags with free tyre changes, pit crews and reliability per team, time penalties,
+  retirements refit for W1's pace mix; event rates at 2024's level, order vs real 0.62 -> 0.68.
 - [ ] W2: race pace realism (lap noise ~0.5 s, driver race pace vs teammate, development).
 - [ ] W3: racecraft (DRS, dirty air by gap, attack/defend skills, starts, lap-1 incidents).
 - [ ] W5: drivers' character measured where possible.
@@ -1168,3 +1169,24 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Tests: 411 offline (+10 in `tests/unit/test_tyre_life.py`, +1 registry fallback; registry and two calibrated-engine
   tests updated for W1).
 - Next (owner's call): W4 (race control and random events) per the plan, or a W1b joint fit.
+
+### 2026-10-15 — W4: race control and random events (engine v0.11.0, D-042, EXP-011)
+
+- From the 2024 timing: SC/VSC without a retirement (5 in 21 dry races), red flags (3 in 24),
+  623 green stops' pit-lane times (team crew offsets, slow-stop tail 7.4 %), retirements per team
+  (proxy for reliability), the 47 stewards' penalties by type.
+- Engine v0.11.0 / world schema 12: debris neutralisations, red flags after crashes with a free
+  tyre change for everyone and an SC restart, per-team pit crews and failure rates, 5/10 s
+  penalties added at the finish, crash/mistake rates renormalised (risk_scale 0.61) for W1.
+- `calibration/race_events_fit.py`, `scripts/fit_race_events.py`,
+  `configs/calibration/race_events_2024_v1.json` + registry manifest; frontend log texts for
+  RED_FLAG / TIME_PENALTY.
+- EXP-011 (21 dry races, W4 vs v0.10, per-race seeds): red flags 0.12 (real 0.095), penalties
+  2.03 (2.10), VSCs 0.37 (0.38), SCs 0.51 (0.43), retirements 1.49 (1.95; train 1.51 vs 1.63),
+  passes 52.9 (53.6), order vs real 0.675 (v0.10 0.616).
+- Found: keyed random draws don't include the event, so shared seeds repeat the same luck on
+  every track (the first fit saw zero red flags); fits and EXP-011 use per-race seeds now.
+- Checked in the app: a Bahrain race shows a false-start penalty in the race log.
+- Tests: 421 offline (+9 in `tests/unit/test_race_events.py`; registry and inputs tests
+  updated); frontend 17 (penalty and red-flag texts).
+- Next (per the plan): W2 race pace realism.

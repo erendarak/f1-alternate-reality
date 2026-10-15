@@ -16,7 +16,7 @@ from f1ar.domain.provenance import SourceType
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 11
+WORLD_SCHEMA_VERSION = 12
 
 
 class _Frozen(BaseModel):
@@ -160,6 +160,11 @@ class PitParams(_Frozen):
     """Draws are capped here (a stuck wheel, not a lost race)."""
     min_distinct_dry_compounds: int = Field(ge=0, le=3)
     """Dry-race rule: compounds a finisher must have used (2 in 2024; 0 disables)."""
+    slow_stop_probability: float = Field(default=0.0, ge=0, le=1)
+    """W4: share of stops that go wrong (wheel nut, jack, ...): ``slow_stop_min_s`` plus an
+    exponential with mean ``slow_stop_scale_s`` on top of the standstill (0 = off)."""
+    slow_stop_min_s: float = Field(default=3.0, ge=0)
+    slow_stop_scale_s: float = Field(default=7.5, gt=0)
 
 
 class TrafficParams(_Frozen):
@@ -238,6 +243,26 @@ class RaceControlParams(_Frozen):
     """The safety car joins this far ahead of the race leader."""
     neutralised_pit_window_laps: int = Field(ge=0)
     """Baseline strategy: under SC/VSC, bring a planned stop forward if it's this close."""
+    # --- W4 (engine v0.11.0, D-042): all off by default -----------------------------------
+    risk_scale: float = Field(default=1.0, gt=0)
+    """Multiplies crash and mistake rates (W4: renormalised for the W1 pace-mode mix)."""
+    debris_per_lap: float = Field(default=0.0, ge=0, le=1)
+    """A neutralisation that doesn't come from a retirement (debris, a car stopped and
+    recovered), per race lap, drawn when the leader starts a lap."""
+    debris_sc_share: float = Field(default=0.4, ge=0, le=1)
+    """Of those: safety car (else VSC)."""
+    red_flag_per_crash: float = Field(default=0.0, ge=0, le=1)
+    """A crash stops the race (red flag): everyone gets a free tyre change, then a restart
+    behind the safety car."""
+    red_flag_sc_laps: int = Field(default=3, ge=1)
+    penalty_collision_per_pass: float = Field(default=0.0, ge=0, le=1)
+    """10 s for the attacker of a pass (causing a collision / forcing a driver off)."""
+    penalty_false_start: float = Field(default=0.0, ge=0, le=1)
+    """5 s per car at the start."""
+    penalty_pit_speeding_per_stop: float = Field(default=0.0, ge=0, le=1)
+    """5 s per stop."""
+    penalty_per_lap: float = Field(default=0.0, ge=0, le=1)
+    """5 s per car and lap (track limits, leaving the track, SC infringements, ...)."""
 
 
 class WeatherMode(StrEnum):
@@ -323,6 +348,12 @@ class DriverEntry(_Frozen):
     car_pace_offset_s: float = Field(default=0.0, ge=0.0, le=10.0)
     """Car performance: lap time lost vs. the fastest car in the field (0 = fastest car).
     Separate from driver skill (plan §5.2); see ``RaceSetup.inputs`` for its provenance."""
+    pit_crew_offset_s: float = Field(default=0.0, ge=-2.0, le=5.0)
+    """W4: the team's stationary time vs. the field's median."""
+    pit_slow_multiplier: float = Field(default=1.0, ge=0)
+    """W4: the team's slow-stop rate vs. the field's."""
+    failure_multiplier: float = Field(default=1.0, ge=0)
+    """W4: the team's mechanical failure rate vs. the field's."""
     profile: DriverProfile
 
 
@@ -393,6 +424,8 @@ class CarState(_Frozen):
     """Out-lap only: pit-lane loss + standstill, spent at the line before driving the lap."""
     compound: Compound
     tyre_age_laps: int = Field(ge=0)
+    penalty_s: float = Field(default=0.0, ge=0)
+    """W4: time penalties collected (added to the race time at the finish)."""
     tyre_life_used: float = Field(default=0.0, ge=0)
     """W1: share of the set's life used (1 = at the cliff); 0 without a life model. HIDDEN."""
     tyre_wear_s: float = Field(ge=0)
@@ -488,6 +521,8 @@ EventType = Literal[
     "RESTART",
     "RAIN_STARTED",
     "RAIN_STOPPED",
+    "RED_FLAG",
+    "TIME_PENALTY",
 ]
 
 
@@ -549,7 +584,7 @@ DriverAction = SetPaceMode | RequestPitStop | CancelPitStop | SetStrategyControl
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[11]
+    schema_version: Literal[12]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None

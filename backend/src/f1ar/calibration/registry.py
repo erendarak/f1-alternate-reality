@@ -20,6 +20,7 @@ import yaml
 
 from f1ar.calibration.lap_model_fit import LIFE_FILE, SHAPE_FILE
 from f1ar.calibration.race_control_fit import RACE_CONTROL_FILE
+from f1ar.calibration.race_events_fit import EVENTS_FILE
 from f1ar.calibration.traffic_fit import TRAFFIC_FILE
 from f1ar.calibration.weather_fit import WEATHER_FILE
 
@@ -32,6 +33,7 @@ ENGINE_ARTIFACTS = {
         (WEATHER_FILE, "weather (D-034)"),
         (TRAFFIC_FILE, "overtaking + launch spread (D-035)"),
         (RACE_CONTROL_FILE, "race control rates (D-035)"),
+        (EVENTS_FILE, "race events: crews, reliability, debris, red flags, penalties (D-042)"),
     )
 }
 """Artifacts the engine's setup loads (repo-relative path -> what it drives)."""

@@ -48,6 +48,8 @@ export const LOGGED = new Set([
   "TYRE_RULE_BREACHED",
   "RAIN_STARTED",
   "RAIN_STOPPED",
+  "RED_FLAG",
+  "TIME_PENALTY",
 ]);
 
 type CodeOf = (driverId: string | null | undefined) => string;
@@ -63,6 +65,7 @@ export function eventText(e: RaceEvent, code: CodeOf): string {
   const director = p.actor_id === "USER" ? " (race director)" : "";
   switch (e.type) {
     case "PIT_STOP":
+      if (p.under === "RED_FLAG") return `${who} new tyres under the red flag: ${p.from_compound} → ${p.to_compound}`;
       return `${who} pits: ${p.from_compound} → ${p.to_compound} after ${p.tyre_age_laps} laps, ${num(p.pit_loss_s)} s${p.under && p.under !== "GREEN" ? ` (under ${p.under})` : ""}`;
     case "PIT_REQUESTED":
       return `${who} told to box for ${p.compound} at the end of lap ${p.in_lap}`;
@@ -100,6 +103,10 @@ export function eventText(e: RaceEvent, code: CodeOf): string {
       return "Rain stopping";
     case "TYRE_RULE_BREACHED":
       return `${who} didn't use two dry compounds`;
+    case "RED_FLAG":
+      return `RED FLAG (${who} crash on lap ${p.lap}): free tyre change, restart behind the safety car`;
+    case "TIME_PENALTY":
+      return `${who} ${num(p.seconds, 0)} s penalty (${p.reason})`;
     default:
       return `${who} ${e.type}`.trim();
   }

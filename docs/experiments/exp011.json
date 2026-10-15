@@ -1,0 +1,1273 @@
+{
+ "seeds": 10,
+ "train": {
+  "real": {
+   "stops": 1.775,
+   "retirements": 1.625,
+   "safety_cars": 0.5,
+   "vscs": 0.438,
+   "red_flags": 0.0,
+   "penalties": 1.875,
+   "passes": 52.688,
+   "share_races_with_sc": 0.312,
+   "share_races_with_sc_or_vsc": 0.5,
+   "per_race": {
+    "2024_bahrain_gp": {
+     "stops": 2.15,
+     "retirements": 0,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 0,
+     "passes": 44
+    },
+    "2024_saudi_arabian_gp": {
+     "stops": 1.0555555555555556,
+     "retirements": 2,
+     "safety_cars": 1,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 3,
+     "passes": 34
+    },
+    "2024_australian_gp": {
+     "stops": 2.0625,
+     "retirements": 3,
+     "safety_cars": 0,
+     "vscs": 2,
+     "red_flags": 0,
+     "penalties": 1,
+     "passes": 30
+    },
+    "2024_chinese_gp": {
+     "stops": 2.1176470588235294,
+     "retirements": 3,
+     "safety_cars": 2,
+     "vscs": 1,
+     "red_flags": 0,
+     "penalties": 3,
+     "passes": 69
+    },
+    "2024_miami_gp": {
+     "stops": 1.4210526315789473,
+     "retirements": 1,
+     "safety_cars": 1,
+     "vscs": 1,
+     "red_flags": 0,
+     "penalties": 2,
+     "passes": 45
+    },
+    "2024_emilia_romagna_gp": {
+     "stops": 1.2105263157894737,
+     "retirements": 1,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 0,
+     "passes": 35
+    },
+    "2024_spanish_gp": {
+     "stops": 2.1,
+     "retirements": 0,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 3,
+     "passes": 63
+    },
+    "2024_austrian_gp": {
+     "stops": 2.3,
+     "retirements": 0,
+     "safety_cars": 0,
+     "vscs": 1,
+     "red_flags": 0,
+     "penalties": 6,
+     "passes": 44
+    },
+    "2024_hungarian_gp": {
+     "stops": 2.0526315789473686,
+     "retirements": 1,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 0,
+     "passes": 57
+    },
+    "2024_belgian_gp": {
+     "stops": 1.7894736842105263,
+     "retirements": 1,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 0,
+     "passes": 39
+    },
+    "2024_dutch_gp": {
+     "stops": 1.3,
+     "retirements": 0,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 1,
+     "passes": 51
+    },
+    "2024_azerbaijan_gp": {
+     "stops": 1.0625,
+     "retirements": 4,
+     "safety_cars": 0,
+     "vscs": 1,
+     "red_flags": 0,
+     "penalties": 0,
+     "passes": 57
+    },
+    "2024_singapore_gp": {
+     "stops": 1.1111111111111112,
+     "retirements": 2,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 0,
+     "passes": 35
+    },
+    "2024_united_states_gp": {
+     "stops": 1.2105263157894737,
+     "retirements": 1,
+     "safety_cars": 1,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 4,
+     "passes": 82
+    },
+    "2024_las_vegas_gp": {
+     "stops": 2.0555555555555554,
+     "retirements": 2,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 1,
+     "passes": 67
+    },
+    "2024_qatar_gp": {
+     "stops": 3.4,
+     "retirements": 5,
+     "safety_cars": 3,
+     "vscs": 1,
+     "red_flags": 0,
+     "penalties": 6,
+     "passes": 91
+    }
+   }
+  },
+  "w4": {
+   "stops": 1.439,
+   "retirements": 1.506,
+   "safety_cars": 0.519,
+   "vscs": 0.369,
+   "red_flags": 0.125,
+   "penalties": 1.894,
+   "passes": 52.312,
+   "spearman": 0.679,
+   "share_races_with_sc": 0.419,
+   "share_races_with_sc_or_vsc": 0.606,
+   "stops_mae": 0.355,
+   "per_race": {
+    "2024_bahrain_gp": {
+     "stops": 2.0,
+     "retirements": 0.9,
+     "safety_cars": 0.4,
+     "vscs": 0.3,
+     "red_flags": 0.1,
+     "penalties": 1.9,
+     "passes": 48.0
+    },
+    "2024_saudi_arabian_gp": {
+     "stops": 1.0,
+     "retirements": 1.3,
+     "safety_cars": 0.1,
+     "vscs": 0.5,
+     "red_flags": 0.1,
+     "penalties": 1.0,
+     "passes": 33.8
+    },
+    "2024_australian_gp": {
+     "stops": 1.906,
+     "retirements": 1.6,
+     "safety_cars": 0.4,
+     "vscs": 0.4,
+     "red_flags": 0.2,
+     "penalties": 2.0,
+     "passes": 37.3
+    },
+    "2024_chinese_gp": {
+     "stops": 2.101,
+     "retirements": 1.5,
+     "safety_cars": 0.4,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 2.0,
+     "passes": 56.5
+    },
+    "2024_miami_gp": {
+     "stops": 1.118,
+     "retirements": 1.1,
+     "safety_cars": 0.5,
+     "vscs": 0.2,
+     "red_flags": 0.1,
+     "penalties": 2.1,
+     "passes": 49.8
+    },
+    "2024_emilia_romagna_gp": {
+     "stops": 1.09,
+     "retirements": 1.3,
+     "safety_cars": 0.3,
+     "vscs": 0.2,
+     "red_flags": 0.0,
+     "penalties": 2.1,
+     "passes": 32.7
+    },
+    "2024_spanish_gp": {
+     "stops": 1.857,
+     "retirements": 1.6,
+     "safety_cars": 0.7,
+     "vscs": 0.3,
+     "red_flags": 0.2,
+     "penalties": 2.1,
+     "passes": 60.4
+    },
+    "2024_austrian_gp": {
+     "stops": 1.928,
+     "retirements": 1.4,
+     "safety_cars": 0.5,
+     "vscs": 0.2,
+     "red_flags": 0.3,
+     "penalties": 1.7,
+     "passes": 47.4
+    },
+    "2024_hungarian_gp": {
+     "stops": 1.947,
+     "retirements": 2.7,
+     "safety_cars": 0.5,
+     "vscs": 0.8,
+     "red_flags": 0.1,
+     "penalties": 1.3,
+     "passes": 42.5
+    },
+    "2024_belgian_gp": {
+     "stops": 1.761,
+     "retirements": 1.3,
+     "safety_cars": 0.5,
+     "vscs": 0.3,
+     "red_flags": 0.1,
+     "penalties": 1.5,
+     "passes": 46.3
+    },
+    "2024_dutch_gp": {
+     "stops": 1.454,
+     "retirements": 1.6,
+     "safety_cars": 0.5,
+     "vscs": 0.3,
+     "red_flags": 0.1,
+     "penalties": 2.9,
+     "passes": 53.2
+    },
+    "2024_azerbaijan_gp": {
+     "stops": 1.035,
+     "retirements": 1.4,
+     "safety_cars": 0.3,
+     "vscs": 0.4,
+     "red_flags": 0.0,
+     "penalties": 2.3,
+     "passes": 82.7
+    },
+    "2024_singapore_gp": {
+     "stops": 0.791,
+     "retirements": 2.0,
+     "safety_cars": 1.2,
+     "vscs": 0.5,
+     "red_flags": 0.4,
+     "penalties": 1.5,
+     "passes": 48.1
+    },
+    "2024_united_states_gp": {
+     "stops": 1.0,
+     "retirements": 1.2,
+     "safety_cars": 0.6,
+     "vscs": 0.4,
+     "red_flags": 0.0,
+     "penalties": 2.1,
+     "passes": 76.4
+    },
+    "2024_las_vegas_gp": {
+     "stops": 1.121,
+     "retirements": 1.6,
+     "safety_cars": 0.8,
+     "vscs": 0.2,
+     "red_flags": 0.1,
+     "penalties": 2.5,
+     "passes": 83.7
+    },
+    "2024_qatar_gp": {
+     "stops": 0.911,
+     "retirements": 1.6,
+     "safety_cars": 0.6,
+     "vscs": 0.4,
+     "red_flags": 0.2,
+     "penalties": 1.3,
+     "passes": 38.2
+    }
+   }
+  },
+  "v0.10": {
+   "stops": 1.487,
+   "retirements": 2.294,
+   "safety_cars": 0.531,
+   "vscs": 0.469,
+   "red_flags": 0.0,
+   "penalties": 0.0,
+   "passes": 52.4,
+   "spearman": 0.62,
+   "share_races_with_sc": 0.419,
+   "share_races_with_sc_or_vsc": 0.644,
+   "stops_mae": 0.334,
+   "per_race": {
+    "2024_bahrain_gp": {
+     "stops": 2.0,
+     "retirements": 1.9,
+     "safety_cars": 0.3,
+     "vscs": 0.6,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 45.4
+    },
+    "2024_saudi_arabian_gp": {
+     "stops": 1.0,
+     "retirements": 2.3,
+     "safety_cars": 0.4,
+     "vscs": 0.6,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 34.7
+    },
+    "2024_australian_gp": {
+     "stops": 2.0,
+     "retirements": 2.1,
+     "safety_cars": 0.4,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 43.4
+    },
+    "2024_chinese_gp": {
+     "stops": 2.188,
+     "retirements": 2.6,
+     "safety_cars": 0.5,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 54.2
+    },
+    "2024_miami_gp": {
+     "stops": 1.05,
+     "retirements": 2.0,
+     "safety_cars": 0.6,
+     "vscs": 0.2,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 44.9
+    },
+    "2024_emilia_romagna_gp": {
+     "stops": 1.088,
+     "retirements": 2.0,
+     "safety_cars": 0.6,
+     "vscs": 0.4,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 36.3
+    },
+    "2024_spanish_gp": {
+     "stops": 1.948,
+     "retirements": 2.4,
+     "safety_cars": 0.5,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 59.4
+    },
+    "2024_austrian_gp": {
+     "stops": 2.0,
+     "retirements": 2.5,
+     "safety_cars": 0.3,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 49.1
+    },
+    "2024_hungarian_gp": {
+     "stops": 2.036,
+     "retirements": 3.3,
+     "safety_cars": 0.4,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 41.8
+    },
+    "2024_belgian_gp": {
+     "stops": 1.847,
+     "retirements": 2.4,
+     "safety_cars": 0.6,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 44.8
+    },
+    "2024_dutch_gp": {
+     "stops": 1.545,
+     "retirements": 2.4,
+     "safety_cars": 0.5,
+     "vscs": 0.3,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 55.4
+    },
+    "2024_azerbaijan_gp": {
+     "stops": 1.035,
+     "retirements": 2.0,
+     "safety_cars": 0.4,
+     "vscs": 0.6,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 79.5
+    },
+    "2024_singapore_gp": {
+     "stops": 1.0,
+     "retirements": 2.7,
+     "safety_cars": 1.1,
+     "vscs": 0.6,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 51.0
+    },
+    "2024_united_states_gp": {
+     "stops": 1.0,
+     "retirements": 2.0,
+     "safety_cars": 0.8,
+     "vscs": 0.6,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 79.4
+    },
+    "2024_las_vegas_gp": {
+     "stops": 1.056,
+     "retirements": 2.0,
+     "safety_cars": 0.7,
+     "vscs": 0.1,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 81.2
+    },
+    "2024_qatar_gp": {
+     "stops": 1.0,
+     "retirements": 2.1,
+     "safety_cars": 0.4,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 37.9
+    }
+   }
+  }
+ },
+ "test": {
+  "real": {
+   "stops": 1.338,
+   "retirements": 3.0,
+   "safety_cars": 0.2,
+   "vscs": 0.2,
+   "red_flags": 0.4,
+   "penalties": 2.8,
+   "passes": 56.6,
+   "share_races_with_sc": 0.2,
+   "share_races_with_sc_or_vsc": 0.4,
+   "per_race": {
+    "2024_japanese_gp": {
+     "stops": 2.0,
+     "retirements": 3,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 1,
+     "penalties": 0,
+     "passes": 63
+    },
+    "2024_monaco_gp": {
+     "stops": 0.4375,
+     "retirements": 4,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 1,
+     "penalties": 1,
+     "passes": 11
+    },
+    "2024_italian_gp": {
+     "stops": 1.5789473684210527,
+     "retirements": 1,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 4,
+     "passes": 53
+    },
+    "2024_mexico_city_gp": {
+     "stops": 1.2352941176470589,
+     "retirements": 3,
+     "safety_cars": 1,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 4,
+     "passes": 68
+    },
+    "2024_abu_dhabi_gp": {
+     "stops": 1.4375,
+     "retirements": 4,
+     "safety_cars": 0,
+     "vscs": 1,
+     "red_flags": 0,
+     "penalties": 5,
+     "passes": 88
+    }
+   }
+  },
+  "w4": {
+   "stops": 1.262,
+   "retirements": 1.44,
+   "safety_cars": 0.46,
+   "vscs": 0.38,
+   "red_flags": 0.1,
+   "penalties": 2.46,
+   "passes": 54.68,
+   "spearman": 0.662,
+   "share_races_with_sc": 0.4,
+   "share_races_with_sc_or_vsc": 0.68,
+   "stops_mae": 0.301,
+   "per_race": {
+    "2024_japanese_gp": {
+     "stops": 2.0,
+     "retirements": 1.2,
+     "safety_cars": 0.2,
+     "vscs": 0.6,
+     "red_flags": 0.0,
+     "penalties": 1.8,
+     "passes": 54.1
+    },
+    "2024_monaco_gp": {
+     "stops": 1.0,
+     "retirements": 1.1,
+     "safety_cars": 0.4,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 2.3,
+     "passes": 37.6
+    },
+    "2024_italian_gp": {
+     "stops": 1.409,
+     "retirements": 1.4,
+     "safety_cars": 0.5,
+     "vscs": 0.2,
+     "red_flags": 0.0,
+     "penalties": 2.7,
+     "passes": 52.8
+    },
+    "2024_mexico_city_gp": {
+     "stops": 1.0,
+     "retirements": 2.3,
+     "safety_cars": 0.5,
+     "vscs": 0.6,
+     "red_flags": 0.1,
+     "penalties": 3.3,
+     "passes": 69.0
+    },
+    "2024_abu_dhabi_gp": {
+     "stops": 0.9,
+     "retirements": 1.2,
+     "safety_cars": 0.7,
+     "vscs": 0.0,
+     "red_flags": 0.4,
+     "penalties": 2.2,
+     "passes": 59.9
+    }
+   }
+  },
+  "v0.10": {
+   "stops": 1.283,
+   "retirements": 2.08,
+   "safety_cars": 0.42,
+   "vscs": 0.42,
+   "red_flags": 0.0,
+   "penalties": 0.0,
+   "passes": 56.78,
+   "spearman": 0.603,
+   "share_races_with_sc": 0.36,
+   "share_races_with_sc_or_vsc": 0.62,
+   "stops_mae": 0.279,
+   "per_race": {
+    "2024_japanese_gp": {
+     "stops": 2.0,
+     "retirements": 1.9,
+     "safety_cars": 0.3,
+     "vscs": 0.4,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 52.2
+    },
+    "2024_monaco_gp": {
+     "stops": 1.0,
+     "retirements": 1.6,
+     "safety_cars": 0.3,
+     "vscs": 0.4,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 41.0
+    },
+    "2024_italian_gp": {
+     "stops": 1.417,
+     "retirements": 2.0,
+     "safety_cars": 0.4,
+     "vscs": 0.4,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 53.7
+    },
+    "2024_mexico_city_gp": {
+     "stops": 1.0,
+     "retirements": 3.2,
+     "safety_cars": 0.8,
+     "vscs": 0.6,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 74.3
+    },
+    "2024_abu_dhabi_gp": {
+     "stops": 1.0,
+     "retirements": 1.7,
+     "safety_cars": 0.3,
+     "vscs": 0.3,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 62.7
+    }
+   }
+  }
+ },
+ "all_dry": {
+  "real": {
+   "stops": 1.671,
+   "retirements": 1.952,
+   "safety_cars": 0.429,
+   "vscs": 0.381,
+   "red_flags": 0.095,
+   "penalties": 2.095,
+   "passes": 53.619,
+   "share_races_with_sc": 0.286,
+   "share_races_with_sc_or_vsc": 0.476,
+   "per_race": {
+    "2024_bahrain_gp": {
+     "stops": 2.15,
+     "retirements": 0,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 0,
+     "passes": 44
+    },
+    "2024_saudi_arabian_gp": {
+     "stops": 1.0555555555555556,
+     "retirements": 2,
+     "safety_cars": 1,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 3,
+     "passes": 34
+    },
+    "2024_australian_gp": {
+     "stops": 2.0625,
+     "retirements": 3,
+     "safety_cars": 0,
+     "vscs": 2,
+     "red_flags": 0,
+     "penalties": 1,
+     "passes": 30
+    },
+    "2024_chinese_gp": {
+     "stops": 2.1176470588235294,
+     "retirements": 3,
+     "safety_cars": 2,
+     "vscs": 1,
+     "red_flags": 0,
+     "penalties": 3,
+     "passes": 69
+    },
+    "2024_miami_gp": {
+     "stops": 1.4210526315789473,
+     "retirements": 1,
+     "safety_cars": 1,
+     "vscs": 1,
+     "red_flags": 0,
+     "penalties": 2,
+     "passes": 45
+    },
+    "2024_emilia_romagna_gp": {
+     "stops": 1.2105263157894737,
+     "retirements": 1,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 0,
+     "passes": 35
+    },
+    "2024_spanish_gp": {
+     "stops": 2.1,
+     "retirements": 0,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 3,
+     "passes": 63
+    },
+    "2024_austrian_gp": {
+     "stops": 2.3,
+     "retirements": 0,
+     "safety_cars": 0,
+     "vscs": 1,
+     "red_flags": 0,
+     "penalties": 6,
+     "passes": 44
+    },
+    "2024_hungarian_gp": {
+     "stops": 2.0526315789473686,
+     "retirements": 1,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 0,
+     "passes": 57
+    },
+    "2024_belgian_gp": {
+     "stops": 1.7894736842105263,
+     "retirements": 1,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 0,
+     "passes": 39
+    },
+    "2024_dutch_gp": {
+     "stops": 1.3,
+     "retirements": 0,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 1,
+     "passes": 51
+    },
+    "2024_azerbaijan_gp": {
+     "stops": 1.0625,
+     "retirements": 4,
+     "safety_cars": 0,
+     "vscs": 1,
+     "red_flags": 0,
+     "penalties": 0,
+     "passes": 57
+    },
+    "2024_singapore_gp": {
+     "stops": 1.1111111111111112,
+     "retirements": 2,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 0,
+     "passes": 35
+    },
+    "2024_united_states_gp": {
+     "stops": 1.2105263157894737,
+     "retirements": 1,
+     "safety_cars": 1,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 4,
+     "passes": 82
+    },
+    "2024_las_vegas_gp": {
+     "stops": 2.0555555555555554,
+     "retirements": 2,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 1,
+     "passes": 67
+    },
+    "2024_qatar_gp": {
+     "stops": 3.4,
+     "retirements": 5,
+     "safety_cars": 3,
+     "vscs": 1,
+     "red_flags": 0,
+     "penalties": 6,
+     "passes": 91
+    },
+    "2024_japanese_gp": {
+     "stops": 2.0,
+     "retirements": 3,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 1,
+     "penalties": 0,
+     "passes": 63
+    },
+    "2024_monaco_gp": {
+     "stops": 0.4375,
+     "retirements": 4,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 1,
+     "penalties": 1,
+     "passes": 11
+    },
+    "2024_italian_gp": {
+     "stops": 1.5789473684210527,
+     "retirements": 1,
+     "safety_cars": 0,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 4,
+     "passes": 53
+    },
+    "2024_mexico_city_gp": {
+     "stops": 1.2352941176470589,
+     "retirements": 3,
+     "safety_cars": 1,
+     "vscs": 0,
+     "red_flags": 0,
+     "penalties": 4,
+     "passes": 68
+    },
+    "2024_abu_dhabi_gp": {
+     "stops": 1.4375,
+     "retirements": 4,
+     "safety_cars": 0,
+     "vscs": 1,
+     "red_flags": 0,
+     "penalties": 5,
+     "passes": 88
+    }
+   }
+  },
+  "w4": {
+   "stops": 1.397,
+   "retirements": 1.49,
+   "safety_cars": 0.505,
+   "vscs": 0.371,
+   "red_flags": 0.119,
+   "penalties": 2.029,
+   "passes": 52.876,
+   "spearman": 0.675,
+   "share_races_with_sc": 0.414,
+   "share_races_with_sc_or_vsc": 0.624,
+   "stops_mae": 0.342,
+   "per_race": {
+    "2024_bahrain_gp": {
+     "stops": 2.0,
+     "retirements": 0.9,
+     "safety_cars": 0.4,
+     "vscs": 0.3,
+     "red_flags": 0.1,
+     "penalties": 1.9,
+     "passes": 48.0
+    },
+    "2024_saudi_arabian_gp": {
+     "stops": 1.0,
+     "retirements": 1.3,
+     "safety_cars": 0.1,
+     "vscs": 0.5,
+     "red_flags": 0.1,
+     "penalties": 1.0,
+     "passes": 33.8
+    },
+    "2024_australian_gp": {
+     "stops": 1.906,
+     "retirements": 1.6,
+     "safety_cars": 0.4,
+     "vscs": 0.4,
+     "red_flags": 0.2,
+     "penalties": 2.0,
+     "passes": 37.3
+    },
+    "2024_chinese_gp": {
+     "stops": 2.101,
+     "retirements": 1.5,
+     "safety_cars": 0.4,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 2.0,
+     "passes": 56.5
+    },
+    "2024_miami_gp": {
+     "stops": 1.118,
+     "retirements": 1.1,
+     "safety_cars": 0.5,
+     "vscs": 0.2,
+     "red_flags": 0.1,
+     "penalties": 2.1,
+     "passes": 49.8
+    },
+    "2024_emilia_romagna_gp": {
+     "stops": 1.09,
+     "retirements": 1.3,
+     "safety_cars": 0.3,
+     "vscs": 0.2,
+     "red_flags": 0.0,
+     "penalties": 2.1,
+     "passes": 32.7
+    },
+    "2024_spanish_gp": {
+     "stops": 1.857,
+     "retirements": 1.6,
+     "safety_cars": 0.7,
+     "vscs": 0.3,
+     "red_flags": 0.2,
+     "penalties": 2.1,
+     "passes": 60.4
+    },
+    "2024_austrian_gp": {
+     "stops": 1.928,
+     "retirements": 1.4,
+     "safety_cars": 0.5,
+     "vscs": 0.2,
+     "red_flags": 0.3,
+     "penalties": 1.7,
+     "passes": 47.4
+    },
+    "2024_hungarian_gp": {
+     "stops": 1.947,
+     "retirements": 2.7,
+     "safety_cars": 0.5,
+     "vscs": 0.8,
+     "red_flags": 0.1,
+     "penalties": 1.3,
+     "passes": 42.5
+    },
+    "2024_belgian_gp": {
+     "stops": 1.761,
+     "retirements": 1.3,
+     "safety_cars": 0.5,
+     "vscs": 0.3,
+     "red_flags": 0.1,
+     "penalties": 1.5,
+     "passes": 46.3
+    },
+    "2024_dutch_gp": {
+     "stops": 1.454,
+     "retirements": 1.6,
+     "safety_cars": 0.5,
+     "vscs": 0.3,
+     "red_flags": 0.1,
+     "penalties": 2.9,
+     "passes": 53.2
+    },
+    "2024_azerbaijan_gp": {
+     "stops": 1.035,
+     "retirements": 1.4,
+     "safety_cars": 0.3,
+     "vscs": 0.4,
+     "red_flags": 0.0,
+     "penalties": 2.3,
+     "passes": 82.7
+    },
+    "2024_singapore_gp": {
+     "stops": 0.791,
+     "retirements": 2.0,
+     "safety_cars": 1.2,
+     "vscs": 0.5,
+     "red_flags": 0.4,
+     "penalties": 1.5,
+     "passes": 48.1
+    },
+    "2024_united_states_gp": {
+     "stops": 1.0,
+     "retirements": 1.2,
+     "safety_cars": 0.6,
+     "vscs": 0.4,
+     "red_flags": 0.0,
+     "penalties": 2.1,
+     "passes": 76.4
+    },
+    "2024_las_vegas_gp": {
+     "stops": 1.121,
+     "retirements": 1.6,
+     "safety_cars": 0.8,
+     "vscs": 0.2,
+     "red_flags": 0.1,
+     "penalties": 2.5,
+     "passes": 83.7
+    },
+    "2024_qatar_gp": {
+     "stops": 0.911,
+     "retirements": 1.6,
+     "safety_cars": 0.6,
+     "vscs": 0.4,
+     "red_flags": 0.2,
+     "penalties": 1.3,
+     "passes": 38.2
+    },
+    "2024_japanese_gp": {
+     "stops": 2.0,
+     "retirements": 1.2,
+     "safety_cars": 0.2,
+     "vscs": 0.6,
+     "red_flags": 0.0,
+     "penalties": 1.8,
+     "passes": 54.1
+    },
+    "2024_monaco_gp": {
+     "stops": 1.0,
+     "retirements": 1.1,
+     "safety_cars": 0.4,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 2.3,
+     "passes": 37.6
+    },
+    "2024_italian_gp": {
+     "stops": 1.409,
+     "retirements": 1.4,
+     "safety_cars": 0.5,
+     "vscs": 0.2,
+     "red_flags": 0.0,
+     "penalties": 2.7,
+     "passes": 52.8
+    },
+    "2024_mexico_city_gp": {
+     "stops": 1.0,
+     "retirements": 2.3,
+     "safety_cars": 0.5,
+     "vscs": 0.6,
+     "red_flags": 0.1,
+     "penalties": 3.3,
+     "passes": 69.0
+    },
+    "2024_abu_dhabi_gp": {
+     "stops": 0.9,
+     "retirements": 1.2,
+     "safety_cars": 0.7,
+     "vscs": 0.0,
+     "red_flags": 0.4,
+     "penalties": 2.2,
+     "passes": 59.9
+    }
+   }
+  },
+  "v0.10": {
+   "stops": 1.439,
+   "retirements": 2.243,
+   "safety_cars": 0.505,
+   "vscs": 0.457,
+   "red_flags": 0.0,
+   "penalties": 0.0,
+   "passes": 53.443,
+   "spearman": 0.616,
+   "share_races_with_sc": 0.405,
+   "share_races_with_sc_or_vsc": 0.638,
+   "stops_mae": 0.321,
+   "per_race": {
+    "2024_bahrain_gp": {
+     "stops": 2.0,
+     "retirements": 1.9,
+     "safety_cars": 0.3,
+     "vscs": 0.6,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 45.4
+    },
+    "2024_saudi_arabian_gp": {
+     "stops": 1.0,
+     "retirements": 2.3,
+     "safety_cars": 0.4,
+     "vscs": 0.6,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 34.7
+    },
+    "2024_australian_gp": {
+     "stops": 2.0,
+     "retirements": 2.1,
+     "safety_cars": 0.4,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 43.4
+    },
+    "2024_chinese_gp": {
+     "stops": 2.188,
+     "retirements": 2.6,
+     "safety_cars": 0.5,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 54.2
+    },
+    "2024_miami_gp": {
+     "stops": 1.05,
+     "retirements": 2.0,
+     "safety_cars": 0.6,
+     "vscs": 0.2,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 44.9
+    },
+    "2024_emilia_romagna_gp": {
+     "stops": 1.088,
+     "retirements": 2.0,
+     "safety_cars": 0.6,
+     "vscs": 0.4,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 36.3
+    },
+    "2024_spanish_gp": {
+     "stops": 1.948,
+     "retirements": 2.4,
+     "safety_cars": 0.5,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 59.4
+    },
+    "2024_austrian_gp": {
+     "stops": 2.0,
+     "retirements": 2.5,
+     "safety_cars": 0.3,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 49.1
+    },
+    "2024_hungarian_gp": {
+     "stops": 2.036,
+     "retirements": 3.3,
+     "safety_cars": 0.4,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 41.8
+    },
+    "2024_belgian_gp": {
+     "stops": 1.847,
+     "retirements": 2.4,
+     "safety_cars": 0.6,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 44.8
+    },
+    "2024_dutch_gp": {
+     "stops": 1.545,
+     "retirements": 2.4,
+     "safety_cars": 0.5,
+     "vscs": 0.3,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 55.4
+    },
+    "2024_azerbaijan_gp": {
+     "stops": 1.035,
+     "retirements": 2.0,
+     "safety_cars": 0.4,
+     "vscs": 0.6,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 79.5
+    },
+    "2024_singapore_gp": {
+     "stops": 1.0,
+     "retirements": 2.7,
+     "safety_cars": 1.1,
+     "vscs": 0.6,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 51.0
+    },
+    "2024_united_states_gp": {
+     "stops": 1.0,
+     "retirements": 2.0,
+     "safety_cars": 0.8,
+     "vscs": 0.6,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 79.4
+    },
+    "2024_las_vegas_gp": {
+     "stops": 1.056,
+     "retirements": 2.0,
+     "safety_cars": 0.7,
+     "vscs": 0.1,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 81.2
+    },
+    "2024_qatar_gp": {
+     "stops": 1.0,
+     "retirements": 2.1,
+     "safety_cars": 0.4,
+     "vscs": 0.5,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 37.9
+    },
+    "2024_japanese_gp": {
+     "stops": 2.0,
+     "retirements": 1.9,
+     "safety_cars": 0.3,
+     "vscs": 0.4,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 52.2
+    },
+    "2024_monaco_gp": {
+     "stops": 1.0,
+     "retirements": 1.6,
+     "safety_cars": 0.3,
+     "vscs": 0.4,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 41.0
+    },
+    "2024_italian_gp": {
+     "stops": 1.417,
+     "retirements": 2.0,
+     "safety_cars": 0.4,
+     "vscs": 0.4,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 53.7
+    },
+    "2024_mexico_city_gp": {
+     "stops": 1.0,
+     "retirements": 3.2,
+     "safety_cars": 0.8,
+     "vscs": 0.6,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 74.3
+    },
+    "2024_abu_dhabi_gp": {
+     "stops": 1.0,
+     "retirements": 1.7,
+     "safety_cars": 0.3,
+     "vscs": 0.3,
+     "red_flags": 0.0,
+     "penalties": 0.0,
+     "passes": 62.7
+    }
+   }
+  }
+ },
+ "seconds": 74.6
+}

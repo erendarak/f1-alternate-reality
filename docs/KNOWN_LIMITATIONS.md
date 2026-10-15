@@ -2,6 +2,22 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## W4 (race events, engine v0.11.0, EXP-011)
+
+- **Retirement causes are unknown in the data:** team reliability uses all-cause retirements as a
+  proxy (shrunk). Crashes stay on the drivers' side (personas, editorial).
+- **Red flags:** no stoppage time (the real race clock stops for 20-30 min), no standing restart;
+  AI cars don't decide their red-flag tyres yet (requested compound or a new set of the same).
+- **SCs are spread over too many races** (41 % vs 29 %); real neutralisations cluster.
+- **Lap-1 pile-ups** (several cars out at once) aren't modelled as such.
+- **Penalties are rates, not stewarding:** a collision penalty is drawn per pass (no contact
+  model); who gets one follows the editorial `1.5 - composure`; serving one at a stop isn't
+  modelled (always added at the finish); no grid penalties, no drive-throughs.
+- **Pit crews:** offsets come from pit-lane time, which includes lane driving differences.
+- **Experiments with shared seeds** (EXP-008..010) have more correlated samples than their
+  counts suggest (keyed draws don't include the event, D-042).
+- Retirements in the held-out races were higher in reality (Monaco/Japan lap-1 crashes).
+
 ## W1 (tyre life, engine v0.10.0, EXP-010)
 
 - **Some races still miss their stop count:** Las Vegas (real 2.06, sim 1.05; graining on a cold,
@@ -19,7 +35,7 @@ Honest list of what does **not** work or is only approximate. Update whenever on
   (like the car pace offsets). Only the two globals were held out from the test races.
 - **More retirements:** cars push more (63 % of laps in the fit), so the editorial x1.6 PUSH
   risk raised retirements to 2.40 per race (v0.9 2.14, real 1.95). They need refitting with the
-  new pace mix (W4).
+  new pace mix (W4). *Fixed in W4 (risk_scale), EXP-011.*
 - **No tyre allocation yet:** sets are unlimited and new (the 13-set rule and used qualifying
   sets were in the plan for W1 and are deferred).
 - **The AI's observation (`rl_obs_v1`) doesn't contain tyre life;** `strategist_m5s3_v1` is

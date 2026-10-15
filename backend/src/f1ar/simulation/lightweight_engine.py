@@ -57,15 +57,18 @@ from f1ar.policy.baseline_strategy import (
     POLICY_ID,
     baseline_pace_mode,
     dry_compounds_required,
+    free_change_compound,
     plan_for_car,
     weather_stop,
 )
 from f1ar.simulation.incidents import (
     IncidentKind,
     Neutralisation,
+    debris_neutralisation,
     lap_incident,
     mistake_loss_s,
     neutralisation_after,
+    penalty_draw,
 )
 from f1ar.simulation.lap_model import life_use_per_lap, sample_lap_time_s, wear_per_lap_s
 from f1ar.simulation.rng_streams import RngSpec, normal, uniform
@@ -81,8 +84,11 @@ from f1ar.simulation.weather import (
 )
 from f1ar.simulation.weather import penalty_s as weather_penalty_s
 
-ENGINE_VERSION = "lightweight_engine_v0.10.0"
-"""v0.9.0: launch spread on lap 1; overtaking and race-control rates from 2024 data (D-035).
+ENGINE_VERSION = "lightweight_engine_v0.11.0"
+"""v0.11.0: debris SC/VSC, red flags (free tyre change), pit crews and reliability per team,
+time penalties, crash/mistake rates renormalised for the W1 pace mix (D-042).
+v0.10.0: tyre life (management vs push, cliff), fresh-tyre peak, baseline manages (D-041).
+v0.9.0: launch spread on lap 1; overtaking and race-control rates from 2024 data (D-035).
 v0.8.0: weather: rain, track wetness, intermediate and wet tyres (D-034).
 v0.7.0: calibrated tyre/fuel model, curved wear, planner for it (D-033).
 v0.6.0: mistakes, crashes, failures (RETIRED), VSC (racing clock), safety car + restart.
@@ -158,8 +164,14 @@ def standstill_s(setup: RaceSetup, seed: int, driver_id: str, lap: int) -> float
     """
     u = uniform(seed, "pit_standstill", driver_id, lap)
     p = setup.pit
-    draw: float = p.standstill_median_s * (u / (1.0 - u)) ** (1.0 / p.standstill_shape)
-    return min(draw, p.standstill_max_s)
+    entry = setup.driver(driver_id)
+    median = max(0.5, p.standstill_median_s + entry.pit_crew_offset_s)  # W4: the team's crew
+    draw: float = min(median * (u / (1.0 - u)) ** (1.0 / p.standstill_shape), p.standstill_max_s)
+    slow = p.slow_stop_probability * entry.pit_slow_multiplier
+    if slow > 0.0 and uniform(seed, "pit_slow", driver_id, lap) < slow:  # W4: a stop goes wrong
+        v = uniform(seed, "pit_slow_size", driver_id, lap)
+        draw += p.slow_stop_min_s - p.slow_stop_scale_s * math.log(1.0 - v)
+    return draw
 
 
 def plan_text(plan: tuple[PlannedStop, ...]) -> str:
@@ -510,7 +522,7 @@ def step(state: WorldState, *, allow_paused: bool = False) -> StepResult:
     tick_end = tick * setup.tick_seconds
     weather = _advance_weather(state, tick_end, emit)
     cars, race_control = _incidents_and_race_control(state, moved, tick_end, emit)
-    cars = _announce_overtakes(cars, race_control, emit)
+    cars = _announce_overtakes(state, cars, race_control, emit)
 
     if moved.new_flag_s is not None:
         winner = min(
@@ -930,6 +942,20 @@ def _incidents_and_race_control(
         if moved.flag_s is None:
             rc = _neutralise(state, cars, rc, c, kind, now, emit)
 
+    # W4: a neutralisation without a retirement, drawn when the leader starts a new lap
+    lead_before = max((c.laps_completed for c in state.cars), default=0)
+    lead_now = max((c.laps_completed for c in cars), default=0)
+    if (
+        lead_now > lead_before
+        and lead_now >= 1
+        and moved.flag_s is None
+        and rc.phase is RacePhase.GREEN
+        and lead_now < setup.track.total_laps - 1
+    ):
+        debris = debris_neutralisation(setup, seed, lead_now + 1)
+        if debris is not None:
+            rc = _deploy(state, cars, rc, debris, now, emit, cause=None)
+
     if moved.restart:
         emit("SAFETY_CAR_IN", None, {"sc_number": rc.sc_count})
         cars = _restart(state, cars, moved.race_clock_s, emit)
@@ -967,7 +993,52 @@ def _neutralise(
     )
     if decision is None:
         return rc
+    if decision.red_flag:
+        emit("RED_FLAG", car.driver_id, {"lap": car.laps_completed + 1})
+        _red_flag_tyres(state, cars, emit)
     return _deploy(state, cars, rc, decision, now, emit, cause=car.driver_id)
+
+
+def _red_flag_tyres(state: WorldState, cars: list[CarState], emit: _Emit) -> None:
+    """Red flag (W4): every running car gets a set of new tyres for free (2024 rules), chosen by
+    the baseline planner for BASELINE cars; a USER/AGENT car takes its requested compound, or a
+    new set of the same one. It counts for the two-compound rule, not as a pit stop."""
+    setup = state.setup
+    for i, c in enumerate(cars):
+        if c.status is not CarStatus.RUNNING:
+            continue
+        if c.controller is StrategyController.BASELINE:
+            compound = free_change_compound(setup, c, state.weather.wetness)
+        else:
+            compound = c.pit_request or c.compound
+        used = c.compounds_used if compound in c.compounds_used else (*c.compounds_used, compound)
+        new = c.model_copy(
+            update={
+                "compound": compound,
+                "tyre_age_laps": 0,
+                "tyre_wear_s": 0.0,
+                "tyre_life_used": 0.0,
+                "compounds_used": used,
+                "pit_request": None,
+            }
+        )
+        if new.controller is StrategyController.BASELINE:
+            new = new.model_copy(update={"planned_stops": plan_for_car(setup, new)})
+        emit(
+            "PIT_STOP",
+            c.driver_id,
+            {
+                "lap": c.laps_completed,
+                "from_compound": c.compound.value,
+                "to_compound": compound.value,
+                "tyre_age_laps": c.tyre_age_laps,
+                "standstill_s": 0.0,
+                "pit_loss_s": 0.0,
+                "stop_number": c.pit_stops,
+                "under": "RED_FLAG",
+            },
+        )
+        cars[i] = new
 
 
 def _deploy(
@@ -1081,7 +1152,7 @@ def deploy_neutralisation(
 
 
 def _announce_overtakes(
-    cars: tuple[CarState, ...], race_control: RaceControl, emit: _Emit
+    state: WorldState, cars: tuple[CarState, ...], race_control: RaceControl, emit: _Emit
 ) -> tuple[CarState, ...]:
     """Emit OVERTAKE for every pending pass that has now happened on the road (the attacker
     is further into the lap than the rival). Under a safety car all pending passes are void:
@@ -1110,11 +1181,29 @@ def _announce_overtakes(
                         "probability": p.probability,
                     },
                 )
+                setup = state.setup
+                if penalty_draw(  # W4: the move caused a collision / forced the rival off
+                    setup,
+                    state.rng.seed,
+                    "collision",
+                    c.driver_id,
+                    p.lap,
+                    p.rival,
+                    rate=setup.race_control.penalty_collision_per_pass,
+                ):
+                    c = _penalise(c, 10.0, "collision", p.lap, emit)
+                    out[i] = c
             else:
                 keep.append(p)
         if len(keep) != len(c.pending_overtakes):
             out[i] = c.model_copy(update={"pending_overtakes": tuple(keep)})
     return tuple(out)
+
+
+def _penalise(car: CarState, seconds: float, reason: str, lap: int, emit: _Emit) -> CarState:
+    """A time penalty (W4): added to the car's race time at the finish."""
+    emit("TIME_PENALTY", car.driver_id, {"seconds": seconds, "reason": reason, "lap": lap})
+    return car.model_copy(update={"penalty_s": car.penalty_s + seconds})
 
 
 def _with_incident(state: WorldState, car: CarState) -> CarState:
@@ -1194,8 +1283,22 @@ def _complete_lap(
         "pending_overtakes": (),
     }
 
+    rc_params = setup.race_control
+    if laps == 1 and penalty_draw(
+        setup, state.rng.seed, "false_start", car.driver_id, rate=rc_params.penalty_false_start
+    ):
+        car = _penalise(car, 5.0, "false start", laps, emit)
+    if not neutralised and penalty_draw(
+        setup, state.rng.seed, "lap", car.driver_id, laps, rate=rc_params.penalty_per_lap
+    ):
+        car = _penalise(car, 5.0, "track limits / race conduct", laps, emit)
     if laps == setup.track.total_laps or (flag_s is not None and crossing_time >= flag_s):
-        emit("CAR_FINISHED", car.driver_id, {"finish_time_s": crossing_time, "laps": laps})
+        finish = crossing_time + car.penalty_s  # W4: time penalties count in the result
+        emit(
+            "CAR_FINISHED",
+            car.driver_id,
+            {"finish_time_s": finish, "laps": laps, "penalty_s": car.penalty_s},
+        )
         need = dry_compounds_required(setup, car.compounds_used)
         if len(set(car.compounds_used)) < need:
             emit(
@@ -1207,7 +1310,7 @@ def _complete_lap(
             update={
                 **common,
                 "status": CarStatus.FINISHED,
-                "finish_time_s": crossing_time,
+                "finish_time_s": finish,
                 "pit_request": None,
                 "planned_stops": (),
                 "traffic_loss_s": 0.0,

@@ -1,0 +1,257 @@
+{
+ "label": "2024 race events (W4, D-042)",
+ "events": [
+  "2024_bahrain_gp",
+  "2024_saudi_arabian_gp",
+  "2024_australian_gp",
+  "2024_chinese_gp",
+  "2024_miami_gp",
+  "2024_emilia_romagna_gp",
+  "2024_spanish_gp",
+  "2024_austrian_gp",
+  "2024_hungarian_gp",
+  "2024_belgian_gp",
+  "2024_dutch_gp",
+  "2024_azerbaijan_gp",
+  "2024_singapore_gp",
+  "2024_united_states_gp",
+  "2024_las_vegas_gp",
+  "2024_qatar_gp",
+  "2024_japanese_gp",
+  "2024_monaco_gp",
+  "2024_italian_gp",
+  "2024_mexico_city_gp",
+  "2024_abu_dhabi_gp",
+  "2024_canadian_gp",
+  "2024_british_gp",
+  "2024_sao_paulo_gp"
+ ],
+ "dry_events": [
+  "2024_bahrain_gp",
+  "2024_saudi_arabian_gp",
+  "2024_australian_gp",
+  "2024_chinese_gp",
+  "2024_miami_gp",
+  "2024_emilia_romagna_gp",
+  "2024_spanish_gp",
+  "2024_austrian_gp",
+  "2024_hungarian_gp",
+  "2024_belgian_gp",
+  "2024_dutch_gp",
+  "2024_azerbaijan_gp",
+  "2024_singapore_gp",
+  "2024_united_states_gp",
+  "2024_las_vegas_gp",
+  "2024_qatar_gp",
+  "2024_japanese_gp",
+  "2024_monaco_gp",
+  "2024_italian_gp",
+  "2024_mexico_city_gp",
+  "2024_abu_dhabi_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": 0.0738,
+  "slow_stop_scale_s": 7.74,
+  "stops": 623,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {
+  "alpine_2024": {
+   "pit_crew_offset_s": -0.03,
+   "pit_slow_multiplier": 0.957,
+   "stops": 58,
+   "raw_median_rel_s": -0.041,
+   "raw_slow_share": 0.069
+  },
+  "aston_martin_2024": {
+   "pit_crew_offset_s": 0.051,
+   "pit_slow_multiplier": 0.997,
+   "stops": 68,
+   "raw_median_rel_s": 0.066,
+   "raw_slow_share": 0.074
+  },
+  "ferrari_2024": {
+   "pit_crew_offset_s": -0.182,
+   "pit_slow_multiplier": 0.614,
+   "stops": 63,
+   "raw_median_rel_s": -0.239,
+   "raw_slow_share": 0.032
+  },
+  "haas_2024": {
+   "pit_crew_offset_s": 0.252,
+   "pit_slow_multiplier": 1.051,
+   "stops": 63,
+   "raw_median_rel_s": 0.332,
+   "raw_slow_share": 0.079
+  },
+  "mclaren_2024": {
+   "pit_crew_offset_s": -0.14,
+   "pit_slow_multiplier": 0.905,
+   "stops": 63,
+   "raw_median_rel_s": -0.184,
+   "raw_slow_share": 0.063
+  },
+  "mercedes_2024": {
+   "pit_crew_offset_s": -0.177,
+   "pit_slow_multiplier": 0.759,
+   "stops": 63,
+   "raw_median_rel_s": -0.233,
+   "raw_slow_share": 0.048
+  },
+  "rb_2024": {
+   "pit_crew_offset_s": -0.074,
+   "pit_slow_multiplier": 0.831,
+   "stops": 55,
+   "raw_median_rel_s": -0.101,
+   "raw_slow_share": 0.055
+  },
+  "red_bull_2024": {
+   "pit_crew_offset_s": -0.213,
+   "pit_slow_multiplier": 1.196,
+   "stops": 63,
+   "raw_median_rel_s": -0.281,
+   "raw_slow_share": 0.095
+  },
+  "sauber_2024": {
+   "pit_crew_offset_s": 0.283,
+   "pit_slow_multiplier": 1.566,
+   "stops": 67,
+   "raw_median_rel_s": 0.367,
+   "raw_slow_share": 0.134
+  },
+  "williams_2024": {
+   "pit_crew_offset_s": 0.097,
+   "pit_slow_multiplier": 1.086,
+   "stops": 60,
+   "raw_median_rel_s": 0.129,
+   "raw_slow_share": 0.083
+  }
+ },
+ "reliability": {
+  "field_retirements_per_start": 0.1086,
+  "teams": {
+   "alpine_2024": {
+    "failure_multiplier": 1.101,
+    "retirements": 6,
+    "starts": 48
+   },
+   "aston_martin_2024": {
+    "failure_multiplier": 0.973,
+    "retirements": 5,
+    "starts": 48
+   },
+   "ferrari_2024": {
+    "failure_multiplier": 0.845,
+    "retirements": 4,
+    "starts": 48
+   },
+   "haas_2024": {
+    "failure_multiplier": 0.845,
+    "retirements": 4,
+    "starts": 48
+   },
+   "mclaren_2024": {
+    "failure_multiplier": 0.333,
+    "retirements": 0,
+    "starts": 48
+   },
+   "mercedes_2024": {
+    "failure_multiplier": 0.845,
+    "retirements": 4,
+    "starts": 48
+   },
+   "rb_2024": {
+    "failure_multiplier": 1.229,
+    "retirements": 7,
+    "starts": 48
+   },
+   "red_bull_2024": {
+    "failure_multiplier": 1.101,
+    "retirements": 6,
+    "starts": 48
+   },
+   "sauber_2024": {
+    "failure_multiplier": 0.845,
+    "retirements": 4,
+    "starts": 48
+   },
+   "williams_2024": {
+    "failure_multiplier": 1.895,
+    "retirements": 12,
+    "starts": 47
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.00399,
+  "sc_share": 0.4,
+  "count": 5,
+  "race_laps": 1253,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 3,
+  "races": 24,
+  "per_race": 0.125
+ },
+ "penalties": {
+  "counts": {
+   "other": 14,
+   "collision": 22,
+   "false_start": 6,
+   "pit_speeding": 5
+  },
+  "collision_per_pass": 0.021421,
+  "false_start_per_starter": 0.016272,
+  "pit_speeding_per_stop": 0.007601,
+  "other_per_car_lap": 0.000631,
+  "passes": 1325,
+  "raw": {
+   "collision_per_pass": 0.0166,
+   "false_start_per_starter": 0.01261,
+   "pit_speeding_per_stop": 0.00589,
+   "other_per_car_lap": 0.000489
+  },
+  "scale": 1.2904,
+  "scale_note": "x1.290: simulated dry_train 1.45 vs real 1.88 per race"
+ },
+ "fitted": {
+  "risk_scale": 0.6076,
+  "red_flag_per_crash": 0.1111,
+  "fit": {
+   "races": [
+    "2024_bahrain_gp",
+    "2024_saudi_arabian_gp",
+    "2024_australian_gp",
+    "2024_chinese_gp",
+    "2024_miami_gp",
+    "2024_emilia_romagna_gp",
+    "2024_spanish_gp",
+    "2024_austrian_gp",
+    "2024_hungarian_gp",
+    "2024_belgian_gp",
+    "2024_dutch_gp",
+    "2024_azerbaijan_gp",
+    "2024_singapore_gp",
+    "2024_united_states_gp",
+    "2024_las_vegas_gp",
+    "2024_qatar_gp"
+   ],
+   "seeds": 8,
+   "sim_crashes_per_race_at_1": 1.852,
+   "sim_failures_per_race": 0.5,
+   "real_retirements_per_race": 1.625,
+   "target_red_flags_per_race": 0.125
+  },
+  "check": {
+   "retirements_per_race": 1.609,
+   "red_flags_per_race": 0.125,
+   "safety_cars_per_race": 0.531,
+   "vscs_per_race": 0.406,
+   "penalties_per_race": 1.453,
+   "penalties_per_race_after_scale": 1.883
+  }
+ }
+}

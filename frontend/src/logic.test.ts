@@ -153,6 +153,12 @@ describe("format", () => {
     expect(eventText(ev(1, "OVERTAKE", 1, { passed: "b", lap: 3 }), code)).toBe("VER passes HAM");
     expect(eventText({ ...ev(2, "SAFETY_CAR_DEPLOYED", 2, { laps: 4, actor_id: "USER" }), driver_id: null }, code))
       .toBe("SAFETY CAR for 4 laps (race director)");
+    // W4: penalties and red flags
+    expect(eventText(ev(3, "TIME_PENALTY", 3, { seconds: 10, reason: "collision", lap: 7 }), code))
+      .toBe("VER 10 s penalty (collision)");
+    expect(eventText(ev(4, "RED_FLAG", 4, { lap: 1 }), code)).toContain("RED FLAG");
+    expect(eventText(ev(5, "PIT_STOP", 5, { under: "RED_FLAG", from_compound: "MEDIUM", to_compound: "HARD" }), code))
+      .toBe("VER new tyres under the red flag: MEDIUM → HARD");
   });
   it("laps of events from the leader's lap completions", () => {
     const events = [

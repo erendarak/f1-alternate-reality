@@ -18,7 +18,11 @@ Skill factor = ``(1.5 - consistency) x (1.5 - composure)`` (1.0 for a neutral 0.
 strategy preference (D-010), not a crash rate.
 
 After a retirement, the race control decision (SC / VSC / nothing) and its duration are keyed by
-(driver, lap) too. Ideas credited to TUM FTM race-simulation (per-driver accident probability,
+(driver, lap) too. W4 (engine v0.11.0, D-042): a crash can stop the race (red flag); a
+neutralisation can also come without a retirement (debris), drawn per race lap; failure rates
+differ by team (``DriverEntry.failure_multiplier``) and crash/mistake rates are renormalised
+for the W1 pace-mode mix (``risk_scale``). Time penalties are drawn here too
+(``penalty_draw``). Ideas credited to TUM FTM race-simulation (per-driver accident probability,
 first-lap risk, FCY phases); all rates are editorial (D-024).
 """
 
@@ -49,6 +53,9 @@ class Neutralisation:
     phase: RacePhase
     vsc_s: float = 0.0
     sc_laps: int = 0
+    red_flag: bool = False
+    """W4: the race is stopped first (free tyre change for everyone), then restarted behind the
+    safety car (``phase`` SC)."""
 
 
 def _mode_factor(setup: RaceSetup, mode: PaceMode) -> float:
@@ -74,9 +81,10 @@ def lap_incident(
     if not p.enabled:
         return None
     risk = skill_factor(setup, car.driver_id) * _mode_factor(setup, car.lap_pace_mode)
+    risk *= p.risk_scale
     risk *= 1.0 + setup.weather.wet_incident_factor * wetness
     crash = p.crash_per_lap * risk * (p.first_lap_crash_multiplier if lap == 1 else 1.0)
-    failure = p.failure_per_lap
+    failure = p.failure_per_lap * setup.driver(car.driver_id).failure_multiplier
     mistake = p.mistake_per_lap * risk
     where = 0.05 + 0.9 * uniform(seed, "incident_where", car.driver_id, lap)
     u = uniform(seed, "incident", car.driver_id, lap)
@@ -111,6 +119,10 @@ def neutralisation_after(
     )
     u = uniform(seed, "race_control", driver_id, lap)
     length = uniform(seed, "race_control_length", driver_id, lap)
+    if kind is IncidentKind.CRASH and uniform(seed, "red_flag", driver_id, lap) < (
+        p.red_flag_per_crash
+    ):
+        return Neutralisation(RacePhase.SC, sc_laps=p.red_flag_sc_laps, red_flag=True)
     if u < sc:
         laps = p.sc_min_laps + min(
             int(length * (p.sc_max_laps - p.sc_min_laps + 1)), p.sc_max_laps - p.sc_min_laps
@@ -121,3 +133,37 @@ def neutralisation_after(
             RacePhase.VSC, vsc_s=p.vsc_min_s + (p.vsc_max_s - p.vsc_min_s) * length
         )
     return None
+
+
+def debris_neutralisation(setup: RaceSetup, seed: int, lap: int) -> Neutralisation | None:
+    """A neutralisation without a retirement (debris, a car stopped and recovered), drawn when
+    the leader starts ``lap`` (W4). Keyed by the lap: every fork shares it."""
+    p = setup.race_control
+    if not p.enabled or p.debris_per_lap <= 0.0:
+        return None
+    if uniform(seed, "debris", lap) >= p.debris_per_lap:
+        return None
+    length = uniform(seed, "debris_length", lap)
+    if uniform(seed, "debris_kind", lap) < p.debris_sc_share:
+        laps = p.sc_min_laps + min(
+            int(length * (p.sc_max_laps - p.sc_min_laps + 1)), p.sc_max_laps - p.sc_min_laps
+        )
+        return Neutralisation(RacePhase.SC, sc_laps=laps)
+    return Neutralisation(RacePhase.VSC, vsc_s=p.vsc_min_s + (p.vsc_max_s - p.vsc_min_s) * length)
+
+
+def penalty_factor(setup: RaceSetup, driver_id: str) -> float:
+    """How penalty-prone a driver is relative to the field: ``1.5 - composure`` over the
+    field's mean (editorial: it decides *who* is penalised; the rates set how often)."""
+    field = [1.5 - d.profile.archetype.composure for d in setup.drivers]
+    mean = sum(field) / len(field)
+    return (1.5 - setup.driver(driver_id).profile.archetype.composure) / mean
+
+
+def penalty_draw(
+    setup: RaceSetup, seed: int, kind: str, driver_id: str, *key: str | int, rate: float
+) -> bool:
+    """Whether ``driver_id`` gets a ``kind`` penalty for the event keyed by ``key`` (W4)."""
+    if not setup.race_control.enabled or rate <= 0.0:
+        return False
+    return uniform(seed, "penalty", kind, driver_id, *key) < rate * penalty_factor(setup, driver_id)

@@ -75,7 +75,10 @@ def sim_metrics(setup: RaceSetup, seed: int, *, until_lap: int | None = None) ->
             for c in state.cars
             if c.status is CarStatus.FINISHED and c.laps_completed < winner_car.laps_completed
         ),
-        extra={"pass_causes": dict(pass_causes(crossings, grid, stopped, neutral, tyre_age))},
+        extra={
+            "pass_causes": dict(pass_causes(crossings, grid, stopped, neutral, tyre_age)),
+            "event_counts": dict(counts),
+        },
     )
 
 
