@@ -122,6 +122,7 @@ def test_setup_uses_data_when_given(
         "race_events",
         "driver_pace",
         "racecraft",
+        "personas",
     }
     # W1: the tyre-life model (life from the season fit's Monza stints)
     assert setup.lap_model.source_type is SourceType.ESTIMATED_FROM_DATA

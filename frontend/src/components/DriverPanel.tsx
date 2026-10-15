@@ -26,10 +26,18 @@ const TRAIT_NAMES: Record<string, string> = {
   negotiation_skill: "Negotiation",
 };
 
-function Trait({ name, value, used }: { name: string; value: number; used: boolean }) {
+function Trait({ name, value, used, estimated }: { name: string; value: number; used: boolean; estimated?: string }) {
   return (
     <div className={`trait ${used ? "" : "unused"}`}>
-      <span className="trait-name">{TRAIT_NAMES[name] ?? name}</span>
+      <span className="trait-name">
+        {TRAIT_NAMES[name] ?? name}
+        {estimated ? (
+          <>
+            {" "}
+            <SourceTag source="estimated_from_data" note={estimated} />
+          </>
+        ) : null}
+      </span>
       <span className="bar" role="meter" aria-valuemin={0} aria-valuemax={1} aria-valuenow={value} aria-label={name}>
         <span style={{ width: `${Math.round(value * 100)}%` }} />
       </span>
@@ -193,7 +201,7 @@ export function DriverPanel({ worldId, car, timelineId }: Props) {
         {traits
           .filter(([k]) => used.has(k))
           .map(([k, v]) => (
-            <Trait key={k} name={k} value={v} used />
+            <Trait key={k} name={k} value={v} used estimated={p.estimated_fields?.[k]} />
           ))}
         <button className="ghost small" aria-expanded={showAll} onClick={() => setShowAll(!showAll)}>
           {showAll ? "Hide" : "Show"} traits not used yet ({traits.length - used.size})
@@ -201,12 +209,15 @@ export function DriverPanel({ worldId, car, timelineId }: Props) {
         {showAll
           ? traits
               .filter(([k]) => !used.has(k))
-              .map(([k, v]) => <Trait key={k} name={k} value={v} used={false} />)
+              .map(([k, v]) => (
+                <Trait key={k} name={k} value={v} used={false} estimated={p.estimated_fields?.[k]} />
+              ))
           : null}
       </div>
       <p className="meta">
         Profile {p.revision} · {card.policy.type} {card.policy.version}. Persona values are design
-        assumptions, not claims about the real driver.
+        assumptions, not claims about the real driver, except those tagged as estimated from 2024
+        data.
       </p>
     </div>
   );

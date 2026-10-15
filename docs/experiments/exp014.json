@@ -1,0 +1,85 @@
+{
+ "reliability": {
+  "all_dry": {
+   "pace": {
+    "split_half_r": 0.594,
+    "season_reliability": 0.746,
+    "drivers": 22
+   },
+   "noise": {
+    "split_half_r": 0.572,
+    "season_reliability": 0.728,
+    "drivers": 22
+   },
+   "wear": {
+    "split_half_r": 0.345,
+    "season_reliability": 0.513,
+    "drivers": 22
+   },
+   "big": {
+    "split_half_r": 0.734,
+    "season_reliability": 0.846,
+    "drivers": 22
+   }
+  },
+  "dry_train": {
+   "pace": {
+    "split_half_r": 0.537,
+    "season_reliability": 0.699,
+    "drivers": 21
+   },
+   "noise": {
+    "split_half_r": 0.617,
+    "season_reliability": 0.763,
+    "drivers": 21
+   },
+   "wear": {
+    "split_half_r": 0.07,
+    "season_reliability": 0.131,
+    "drivers": 21
+   },
+   "big": {
+    "split_half_r": 0.508,
+    "season_reliability": 0.674,
+    "drivers": 21
+   }
+  }
+ },
+ "persona_vs_data": {
+  "consistency_vs_low_noise": {
+   "spearman": 0.33,
+   "drivers": 23
+  },
+  "tire_management_vs_low_wear": {
+   "spearman": -0.23,
+   "drivers": 23
+  },
+  "overtake_skill_vs_attack": {
+   "spearman": 0.32,
+   "drivers": 23
+  },
+  "defense_skill_vs_defend": {
+   "spearman": -0.137,
+   "drivers": 23
+  },
+  "race_pace_skill_vs_teammate_gap": {
+   "spearman": 0.577,
+   "pairs": 7
+  }
+ },
+ "races": {
+  "w5": {
+   "stops": 1.393,
+   "passes": 53.6,
+   "retirements": 1.68,
+   "spearman": 0.658
+  },
+  "v0.13": {
+   "stops": 1.393,
+   "passes": 53.8,
+   "retirements": 1.66,
+   "spearman": 0.656
+  }
+ },
+ "tire_management_applied": false
+}

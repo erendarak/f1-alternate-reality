@@ -16,7 +16,7 @@ from f1ar.domain.provenance import SourceType
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 14
+WORLD_SCHEMA_VERSION = 15
 
 
 class _Frozen(BaseModel):
@@ -369,6 +369,9 @@ class DriverEntry(_Frozen):
     """W3: raises the pass threshold when this driver defends."""
     launch_offset_s: float = Field(default=0.0, ge=-3.0, le=3.0)
     """W3: lap-1 time vs an average start (negative = good launches; 2024 lap-1 gains)."""
+    persona_estimates: dict[str, str] = Field(default_factory=dict)
+    """W5: persona fields of this race's profile copy that were estimated from data, with a note
+    (the rest of the persona stays editorial)."""
     profile: DriverProfile
 
 
@@ -599,7 +602,7 @@ DriverAction = SetPaceMode | RequestPitStop | CancelPitStop | SetStrategyControl
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[14]
+    schema_version: Literal[15]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None

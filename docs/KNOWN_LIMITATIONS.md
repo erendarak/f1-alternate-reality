@@ -2,6 +2,17 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## W5 (personas from data, world schema 15, EXP-014)
+
+- **Only consistency, overtake and defense skill are estimated from data**, and only their
+  order (rank-mapped onto the persona spread). Tyre management (reliability 0.13), mistake
+  proneness (blue flags), composure, wet skill, risk appetite and the Stage 2/3 fields stay
+  editorial.
+- The editorial personas disagree with the data on the measurable traits (EXP-014): personas
+  remain design assumptions where they aren't tagged "Estimated from data".
+- Overtake/defense skill come from W3 terms that mix driver and car.
+- No in-season change of character (form is W2's per-race draw).
+
 ## W3 (racecraft, engine v0.13.0, EXP-013)
 
 - **Attack/defend terms mix driver and car** (straight-line speed, setup); they add little

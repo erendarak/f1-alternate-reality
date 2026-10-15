@@ -1034,3 +1034,27 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
 - **Not done:** explicit DRS / DRS trains and a gap-dependent dirty air (the pass model is fitted
   on real outcomes that include DRS; the gap-vs-lap-time data is confounded by cars held up).
 - Bug found by the tests: the launch skill was only applied when the launch spread was > 0.
+
+## D-045 — W5: driver personas estimated from data where measurable (world schema 15, 2026-10-15)
+
+- **Engine code unchanged (v0.13.0); world schema 15** (`DriverEntry.persona_estimates`).
+  Data-backed races only; `configs/calibration/personas_2024_v1.json` (registry `personas v1`;
+  `calibration/persona_fit.py`, `scripts/fit_personas.py`).
+- **The rule:** a persona field is replaced by a data estimate only if 2024 measures it reliably
+  (odd vs even races, Spearman-Brown season reliability >= 0.3 on the fit races). The race's copy
+  of the profile records which fields were estimated (`persona_estimates`, profile revision
+  `+w5`, `overridden_fields`), and the driver panel tags them "Estimated from data".
+- **Estimated (rank-mapped):** `consistency` from W2's lap noise (reliability 0.76),
+  `overtake_skill` / `defense_skill` from W3's attack / defend terms. The data orders the drivers;
+  the values keep the persona spread, because their engine effects (mistakes and incidents, the
+  M5 observation) are calibrated on that spread.
+- **Fitted but not applied:** `tire_management` (tyre wear slope vs teammate and team, per-race
+  regression with lap terms and stint intercepts): reliability 0.13 on dry_train (r = 0.07; all
+  21 dry races 0.51), wear multipliers 0.98-1.01 after shrinkage. Stays editorial.
+- **Not measurable from 2024 timing, stay editorial:** mistake proneness (big losses are
+  dominated by blue-flag laps: their rate is reliable, 0.67, but measures being lapped),
+  composure, wet skill (3 wet races), risk appetite, qualifying skill (the grid is real), Stage
+  2/3 fields. `race_pace_skill` is not used by the engine since W2 (fitted driver offsets).
+- EXP-014: the editorial personas agree only weakly with the data where it is measurable
+  (consistency 0.33, overtake 0.32, defense -0.14, tyre management -0.23; race pace within teams
+  0.58 over 7 pairs). Race-level metrics are unchanged.

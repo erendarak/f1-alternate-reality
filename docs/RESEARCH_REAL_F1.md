@@ -148,7 +148,7 @@ Editorial pieces stay labelled. Targets come from section 2.
 | **W2** ✅ D-043 | **Race pace realism** (done; EXP-012; development deferred) | Lap noise to the real 0.4-0.7 s per driver (fitted per driver); driver race-pace offsets fitted vs teammate (shrunk); per-team in-season development and track-type offsets (for seasons); track evolution | 2024 clean-air residuals, teammate comparisons | lap-time spread per driver, teammate gaps, race-pace order |
 | **W3** ✅ D-044 | **Racecraft** (done; EXP-013; no explicit DRS) | Explicit DRS (1 s window, from lap 3, off after SC); dirty air by gap + tyre overheating when following; attack/defend skills fitted from net passes vs pace delta; duel costs; per-driver start skill; lap-1 incidents by grid zone | 2024 gap traces and position changes | passes per race per track (Monaco 4 … Suzuka 48), lap-1 changes (1.29 positions; front −0.3, back +0.9), grid-finish correlation 0.83 |
 | **W4** ✅ D-042 | **Race control and events** (done; EXP-011) | Debris/incident safety cars per track (not only after retirements), lap-1 SC share, real SC/VSC lengths; red flags with free tyre change; per-team pit crew distributions with rare disasters; per-team reliability; 5/10 s penalties (track limits, collisions; aggression-linked, editorial) | 2024 track status, pit timing, results/status | SC races 10/24, SC+VSC ~14/24, red flags ~3/season, stationary-time medians per team, DNF rates |
-| **W5** | **Drivers' character, measured where possible** | Personas re-fitted from data where measurable (consistency, mistake rate, start skill, race pace, tyre management, overtaking/defending); PUSH/MANAGE pace modes fitted from stints that were pushed vs managed; aggression ↔ penalties/incidents and wet skill stay editorial | 2024 data | per-driver spreads; every remaining editorial trait labelled |
+| **W5** ✅ D-045 | **Drivers' character, measured where possible** (done; EXP-014; tyre management and mistakes not measurable) | Personas re-fitted from data where measurable (consistency, mistake rate, start skill, race pace, tyre management, overtaking/defending); PUSH/MANAGE pace modes fitted from stints that were pushed vs managed; aggression ↔ penalties/incidents and wet skill stay editorial | 2024 data | per-driver spreads; every remaining editorial trait labelled |
 | **W6** | **Weather extensions** | Track temperature → degradation, graining/blistering (editorial ranges), visibility red flags, SC probability in rain | literature + 3 wet races | small set of wet-race checks (EXP-005 style) |
 
 Then back to **M5** with:
@@ -205,3 +205,6 @@ belong to Stage 2 (M8).
   teammate gaps of the real size (with race form), passes kept at 2024's level.
 - **After W3 (EXP-013):** passes from a principled refit; attack/defend and launch skills add
   a little (car pace dominates); lap-1 incidents concentrated in the midfield.
+- **After W5 (EXP-014):** only lap noise and race pace are stable driver traits in one season
+  of timing; consistency and overtake/defense now follow the data's order; tyre management
+  (reliability 0.13) and mistake proneness stay editorial.

@@ -949,6 +949,61 @@ Decision / next:      Keep W3 (engine v0.13.0). Next per the plan: W5 (drivers' 
                       measured where possible) and W6 (weather extensions).
 ```
 
+## EXP-014 — Which driver traits can 2024 measure? Personas vs data (W5) (2026-10-15)
+
+```text
+Experiment ID:        EXP-014
+Research question:    Which persona traits does 2024 timing measure reliably, do the editorial
+                      personas agree with the data, and does the W5 refit change the races?
+Fit:                  personas_2024_v1 (tyre wear on dry_train); consistency / overtake / defense
+                      rank-mapped at setup from driver_pace_2024_v1 and racecraft_2024_v1
+Engine:               v0.13.0 with W5 personas vs the same configs without the personas file
+Cases:                21 dry races x 5 per-race seeds each
+Code:                 scripts/fit_personas.py; scripts/experiments/exp014_personas.py
+                      -> docs/experiments/exp014.json
+```
+
+| Trait (per driver, per race) | Split-half r (dry_train) | Season reliability (dry_train) | All 21 dry races |
+|---|---|---|---|
+| Race pace vs teammate | 0.54 | 0.70 | 0.75 |
+| Lap noise | 0.62 | **0.76** | 0.73 |
+| Tyre wear vs teammate | 0.07 | **0.13** | 0.51 |
+| Big losses (> 2.5 s, clear ahead) | 0.51 | 0.67 | 0.85 |
+
+| Persona field vs measured trait | Spearman |
+|---|---|
+| consistency vs low lap noise | 0.33 |
+| tire_management vs low tyre wear | -0.23 |
+| overtake_skill vs W3 attack | 0.32 |
+| defense_skill vs W3 defend | -0.14 |
+| race_pace_skill vs pace within teams (7 pairs) | 0.58 |
+
+| Races | W5 | v0.13 |
+|---|---|---|
+| Stops per finisher | 1.39 | 1.39 |
+| Passes per race | 53.6 | 53.8 |
+| Retirements per race | 1.68 | 1.66 |
+| Finishing order vs real (Spearman) | 0.658 | 0.656 |
+
+```text
+Findings:
+  1. Race pace and lap noise are stable driver traits (reliability ~0.7); W2 already uses them.
+  2. Tyre wear vs teammate is not stable on the fit races (0.13): it is not applied.
+  3. The big-loss rate is stable but it measures being lapped (blue flags), not mistakes; earlier
+     check with lapped laps removed: odd vs even r = -0.33. Mistake proneness stays editorial.
+  4. The editorial personas agree only weakly with the data (0.33 / 0.32 / -0.14 / -0.23):
+     where measurable, the data now sets the order (consistency, overtake, defense).
+  5. Race-level metrics are unchanged: these fields shift incidents and the AI observation
+     between drivers, not the season totals.
+Negative results:     tyre management and mistake proneness are not measurable from one season of
+                      timing; the persona refit does not improve race-level realism.
+Reproduce:            uv run python scripts/fit_personas.py
+                      uv run python scripts/experiments/exp014_personas.py --seeds 5 \
+                        --json docs/experiments/exp014.json
+Decision / next:      Keep W5 (labels and data order where measurable). Next per the plan: W6
+                      (weather extensions), then M5 AI resumes.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

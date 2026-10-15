@@ -208,6 +208,8 @@ export interface DriverCard {
     persona_label: string | null;
     base_template: string;
     overridden_fields: string[];
+    /** W5: persona fields estimated from 2024 data for this race (field -> note) */
+    estimated_fields?: Record<string, string>;
     explanation: string;
     origin: string;
     values: Record<string, number>;

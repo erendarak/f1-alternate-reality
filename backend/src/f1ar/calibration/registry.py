@@ -20,6 +20,7 @@ import yaml
 
 from f1ar.calibration.driver_pace_fit import PACE_FILE
 from f1ar.calibration.lap_model_fit import LIFE_FILE, SHAPE_FILE
+from f1ar.calibration.persona_fit import PERSONA_FILE
 from f1ar.calibration.race_control_fit import RACE_CONTROL_FILE
 from f1ar.calibration.race_events_fit import EVENTS_FILE
 from f1ar.calibration.racecraft_fit import RACECRAFT_FILE
@@ -38,6 +39,7 @@ ENGINE_ARTIFACTS = {
         (EVENTS_FILE, "race events: crews, reliability, debris, red flags, penalties (D-042)"),
         (PACE_FILE, "driver race pace vs teammate, form, lap noise (D-043)"),
         (RACECRAFT_FILE, "overtaking (W2 noise), attack/defend, launch, lap-1 risk (D-044)"),
+        (PERSONA_FILE, "persona fields estimated from data (W5, D-045)"),
     )
 }
 """Artifacts the engine's setup loads (repo-relative path -> what it drives)."""

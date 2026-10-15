@@ -369,6 +369,7 @@ def driver_view(state: WorldState, driver_id: str) -> dict[str, Any]:
             "persona_label": meta.persona_label,
             "base_template": meta.base_template,
             "overridden_fields": list(meta.overridden_fields),
+            "estimated_fields": dict(entry.persona_estimates),
             "explanation": meta.explanation,
             "origin": meta.origin,
             "values": profile.archetype.model_dump(),

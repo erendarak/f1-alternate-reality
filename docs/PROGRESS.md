@@ -17,7 +17,9 @@ into what makes the difference in real F1 and for the world to be adapted to it;
   In-season development deferred to seasons (M9).
 - [x] **W3: racecraft (engine v0.13.0, D-044, EXP-013)**: overtaking refit with W2 noise,
   attack/defend and launch skills per driver, lap-1 risk by grid slot; DRS trains not modelled.
-- [ ] W5: drivers' character measured where possible.
+- [x] **W5: personas from data where measurable (world schema 15, D-045, EXP-014)**:
+  consistency, overtake/defense skill rank-mapped from W2/W3; tyre management and mistakes
+  not measurable reliably (stay editorial).
 - [ ] W6: weather extensions.
 
 ## Current milestone: M5 — Stage 1: a field of AI strategists (plan §9, §16; design `docs/M5_DESIGN.md`, D-037)
@@ -1226,3 +1228,21 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Tests: 430 offline (+4 in `tests/unit/test_racecraft.py`; registry, inputs and W2 tests
   updated).
 - Next (per the plan): W5 drivers' character, W6 weather.
+
+### 2026-10-15 — W5: personas estimated from data where measurable (D-045, EXP-014)
+
+- Rule: a persona field is replaced only if 2024 measures it reliably (odd vs even races,
+  season reliability >= 0.3). Consistency (W2 lap noise, 0.76), overtake/defense skill (W3
+  attack/defend) are rank-mapped; tyre management fitted (wear vs teammate/team) but reliability
+  0.13: not applied; mistake proneness not measurable (blue flags).
+- World schema 15 (`DriverEntry.persona_estimates`); `calibration/persona_fit.py`,
+  `scripts/fit_personas.py`, `configs/calibration/personas_2024_v1.json` + registry manifest;
+  driver panel tags estimated traits.
+- EXP-014: personas vs data 0.33 / 0.32 / -0.14 / -0.23; race metrics unchanged (stops 1.39,
+  passes 53.6, order 0.658).
+- Bug found in the experiment itself: a lap-1 residual per grid slot within one race is always 0
+  (one driver per slot); removed (W3 measures the launch over the season).
+- Checked in the UI: Bahrain, VER's consistency tagged "Estimated from data".
+- Tests: 435 offline (+4 in `tests/unit/test_persona_fit.py`, +1 registry case; inputs tests
+  updated); frontend 17.
+- Next (per the plan): W6 weather extensions, then M5 AI.

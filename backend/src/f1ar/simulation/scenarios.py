@@ -132,6 +132,33 @@ def setup_from_codes(
     laps_file = data_dir / "laps.parquet"
     raw_laps = pd.read_parquet(laps_file)
     configs = configs_dir or REPO_CONFIGS
+    # W5 (D-045): the persona fields that 2024 data can measure, estimated for this race's copy
+    from f1ar.calibration.driver_pace_fit import load_pace as _load_pace
+    from f1ar.calibration.persona_fit import PERSONA_FILE, load_personas, refit_profiles
+    from f1ar.calibration.racecraft_fit import load_racecraft as _load_racecraft
+
+    personas_cfg = load_personas(configs)
+    persona_notes: dict[str, dict[str, str]] = {}
+    personas_note = (
+        f"editorial_assumption: personas as configured ({PERSONA_FILE.as_posix()} missing)"
+    )
+    if personas_cfg is not None:
+        lm0 = default_lap_model(90.0)
+        profiles, persona_notes = refit_profiles(
+            profiles,
+            roster,
+            personas_cfg,
+            _load_pace(configs),
+            _load_racecraft(configs),
+            lm0.tyre_mgmt_wear_max,
+            lm0.tyre_mgmt_wear_min,
+        )
+        personas_note = (
+            f"estimated_from_data: persona fields re-fitted from 2024 where measurable "
+            f"({PERSONA_FILE.as_posix()}): consistency (W2 lap noise rank), overtake/defense "
+            f"skill (W3 terms rank); tire_management only if its reliability >= 0.3 (2024: "
+            f"{personas_cfg['wear']['reliability_drivers']}); other persona fields editorial"
+        )
     weather = default_weather_params()
     weather_note = "editorial_assumption: no weather data; dry"
     laps = raw_laps
@@ -299,6 +326,15 @@ def setup_from_codes(
             }
         )
     setup = setup.model_copy(update={"inputs": {**setup.inputs, "driver_pace": pace_note}})
+    setup = setup.model_copy(
+        update={
+            "drivers": tuple(
+                d.model_copy(update={"persona_estimates": persona_notes.get(d.driver_id, {})})
+                for d in setup.drivers
+            ),
+            "inputs": {**setup.inputs, "personas": personas_note},
+        }
+    )
     setup = with_racecraft(setup, configs, racecraft_overrides or {})
     return with_race_events(setup, configs, race_events_overrides or {})
 

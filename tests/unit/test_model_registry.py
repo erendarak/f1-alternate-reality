@@ -8,6 +8,7 @@ import pytest
 
 from f1ar.calibration.driver_pace_fit import PACE_FILE
 from f1ar.calibration.lap_model_fit import LIFE_FILE, SHAPE_FILE
+from f1ar.calibration.persona_fit import PERSONA_FILE
 from f1ar.calibration.race_control_fit import RACE_CONTROL_FILE
 from f1ar.calibration.race_events_fit import EVENTS_FILE
 from f1ar.calibration.racecraft_fit import RACECRAFT_FILE
@@ -31,6 +32,7 @@ CALIBRATION = (
     EVENTS_FILE,
     PACE_FILE,
     RACECRAFT_FILE,
+    PERSONA_FILE,
 )
 
 
@@ -49,6 +51,7 @@ def test_every_model_is_registered_and_matches_its_artifact() -> None:
         "race_events",
         "driver_pace",
         "racecraft",
+        "personas",
     }
     lgbm = next(e for e in entries if e.model_name == "pace_predictor_online")
     assert not lgbm.artifact_tracked and lgbm.used_by_engine is None
@@ -91,6 +94,7 @@ def test_a_race_builds_and_runs_without_fitted_models(
     assert setup.inputs["race_events"].startswith("editorial") == (EVENTS_FILE in missing)
     assert setup.inputs["driver_pace"].startswith("editorial") == (PACE_FILE in missing)
     assert setup.inputs["racecraft"].startswith("editorial") == (RACECRAFT_FILE in missing)
+    assert setup.inputs["personas"].startswith("editorial") == (PERSONA_FILE in missing)
     for f, (key, source) in parts.items():
         editorial = f in missing
         if f == TRAFFIC_FILE:  # W3: the racecraft refit supplies the overtaking too
