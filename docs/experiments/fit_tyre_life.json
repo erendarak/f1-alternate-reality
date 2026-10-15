@@ -1,0 +1,910 @@
+{
+ "real_share_train": {
+  "SOFT": 0.079,
+  "MEDIUM": 0.356,
+  "HARD": 0.565
+ },
+ "grid": [
+  {
+   "kappa": 0.8,
+   "delta": 0.0,
+   "loss": 0.8708328953164639,
+   "stops_sim": 1.9019377910852662,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.027,
+    "MEDIUM": 0.266,
+    "HARD": 0.707
+   },
+   "modes": {
+    "PUSH": 0.257,
+    "BALANCED": 0.412,
+    "CONSERVE": 0.331
+   }
+  },
+  {
+   "kappa": 0.8,
+   "delta": 0.1,
+   "loss": 1.0148721221682382,
+   "stops_sim": 1.8694940656108803,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.041,
+    "MEDIUM": 0.339,
+    "HARD": 0.62
+   },
+   "modes": {
+    "PUSH": 0.265,
+    "BALANCED": 0.398,
+    "CONSERVE": 0.338
+   }
+  },
+  {
+   "kappa": 0.8,
+   "delta": 0.2,
+   "loss": 1.0014032991508344,
+   "stops_sim": 1.8579347117048282,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.042,
+    "MEDIUM": 0.372,
+    "HARD": 0.586
+   },
+   "modes": {
+    "PUSH": 0.256,
+    "BALANCED": 0.407,
+    "CONSERVE": 0.336
+   }
+  },
+  {
+   "kappa": 0.8,
+   "delta": 0.35,
+   "loss": 0.9059556910627931,
+   "stops_sim": 1.9103990771157462,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.053,
+    "MEDIUM": 0.457,
+    "HARD": 0.49
+   },
+   "modes": {
+    "PUSH": 0.241,
+    "BALANCED": 0.449,
+    "CONSERVE": 0.31
+   }
+  },
+  {
+   "kappa": 0.8,
+   "delta": 0.5,
+   "loss": 1.1534747903764022,
+   "stops_sim": 2.0334265300318646,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.107,
+    "MEDIUM": 0.556,
+    "HARD": 0.338
+   },
+   "modes": {
+    "PUSH": 0.184,
+    "BALANCED": 0.475,
+    "CONSERVE": 0.341
+   }
+  },
+  {
+   "kappa": 0.9,
+   "delta": 0.0,
+   "loss": 0.8067108959111287,
+   "stops_sim": 1.8521945201898031,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.03,
+    "MEDIUM": 0.253,
+    "HARD": 0.716
+   },
+   "modes": {
+    "PUSH": 0.369,
+    "BALANCED": 0.434,
+    "CONSERVE": 0.197
+   }
+  },
+  {
+   "kappa": 0.9,
+   "delta": 0.1,
+   "loss": 0.982566320128534,
+   "stops_sim": 1.8444407396412112,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.04,
+    "MEDIUM": 0.323,
+    "HARD": 0.636
+   },
+   "modes": {
+    "PUSH": 0.384,
+    "BALANCED": 0.432,
+    "CONSERVE": 0.184
+   }
+  },
+  {
+   "kappa": 0.9,
+   "delta": 0.2,
+   "loss": 0.9880162857922147,
+   "stops_sim": 1.8231498244354991,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.042,
+    "MEDIUM": 0.352,
+    "HARD": 0.606
+   },
+   "modes": {
+    "PUSH": 0.375,
+    "BALANCED": 0.441,
+    "CONSERVE": 0.184
+   }
+  },
+  {
+   "kappa": 0.9,
+   "delta": 0.35,
+   "loss": 1.0558741079487186,
+   "stops_sim": 1.8206838866715047,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.048,
+    "MEDIUM": 0.436,
+    "HARD": 0.516
+   },
+   "modes": {
+    "PUSH": 0.33,
+    "BALANCED": 0.462,
+    "CONSERVE": 0.208
+   }
+  },
+  {
+   "kappa": 0.9,
+   "delta": 0.5,
+   "loss": 1.3198683632165824,
+   "stops_sim": 1.900057366201234,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.113,
+    "MEDIUM": 0.586,
+    "HARD": 0.301
+   },
+   "modes": {
+    "PUSH": 0.227,
+    "BALANCED": 0.5,
+    "CONSERVE": 0.273
+   }
+  },
+  {
+   "kappa": 1.0,
+   "delta": 0.0,
+   "loss": 0.7424959949151764,
+   "stops_sim": 1.7271456829385519,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.027,
+    "MEDIUM": 0.272,
+    "HARD": 0.7
+   },
+   "modes": {
+    "PUSH": 0.44,
+    "BALANCED": 0.432,
+    "CONSERVE": 0.128
+   }
+  },
+  {
+   "kappa": 1.0,
+   "delta": 0.1,
+   "loss": 0.8539987121003577,
+   "stops_sim": 1.7007688394661202,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.035,
+    "MEDIUM": 0.351,
+    "HARD": 0.615
+   },
+   "modes": {
+    "PUSH": 0.426,
+    "BALANCED": 0.456,
+    "CONSERVE": 0.118
+   }
+  },
+  {
+   "kappa": 1.0,
+   "delta": 0.2,
+   "loss": 0.9077598479851018,
+   "stops_sim": 1.6837739147644808,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.036,
+    "MEDIUM": 0.392,
+    "HARD": 0.572
+   },
+   "modes": {
+    "PUSH": 0.41,
+    "BALANCED": 0.455,
+    "CONSERVE": 0.134
+   }
+  },
+  {
+   "kappa": 1.0,
+   "delta": 0.35,
+   "loss": 1.0320060961251918,
+   "stops_sim": 1.6873819139081943,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.067,
+    "MEDIUM": 0.473,
+    "HARD": 0.46
+   },
+   "modes": {
+    "PUSH": 0.361,
+    "BALANCED": 0.472,
+    "CONSERVE": 0.166
+   }
+  },
+  {
+   "kappa": 1.0,
+   "delta": 0.5,
+   "loss": 1.3229005144951227,
+   "stops_sim": 1.7699536670527236,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.112,
+    "MEDIUM": 0.605,
+    "HARD": 0.283
+   },
+   "modes": {
+    "PUSH": 0.332,
+    "BALANCED": 0.453,
+    "CONSERVE": 0.214
+   }
+  },
+  {
+   "kappa": 1.1,
+   "delta": 0.0,
+   "loss": 0.7766006373334216,
+   "stops_sim": 1.5808237174687647,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.026,
+    "MEDIUM": 0.305,
+    "HARD": 0.669
+   },
+   "modes": {
+    "PUSH": 0.514,
+    "BALANCED": 0.392,
+    "CONSERVE": 0.095
+   }
+  },
+  {
+   "kappa": 1.1,
+   "delta": 0.1,
+   "loss": 0.8792748025766418,
+   "stops_sim": 1.5601495733553863,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.037,
+    "MEDIUM": 0.374,
+    "HARD": 0.589
+   },
+   "modes": {
+    "PUSH": 0.513,
+    "BALANCED": 0.394,
+    "CONSERVE": 0.093
+   }
+  },
+  {
+   "kappa": 1.1,
+   "delta": 0.2,
+   "loss": 0.9373597975134622,
+   "stops_sim": 1.5440628582710298,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.049,
+    "MEDIUM": 0.433,
+    "HARD": 0.517
+   },
+   "modes": {
+    "PUSH": 0.489,
+    "BALANCED": 0.409,
+    "CONSERVE": 0.102
+   }
+  },
+  {
+   "kappa": 1.1,
+   "delta": 0.35,
+   "loss": 1.0020874690217263,
+   "stops_sim": 1.5538537364026404,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.081,
+    "MEDIUM": 0.502,
+    "HARD": 0.418
+   },
+   "modes": {
+    "PUSH": 0.45,
+    "BALANCED": 0.425,
+    "CONSERVE": 0.125
+   }
+  },
+  {
+   "kappa": 1.1,
+   "delta": 0.5,
+   "loss": 1.3698220879151928,
+   "stops_sim": 1.6464066530517003,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.125,
+    "MEDIUM": 0.604,
+    "HARD": 0.271
+   },
+   "modes": {
+    "PUSH": 0.418,
+    "BALANCED": 0.416,
+    "CONSERVE": 0.166
+   }
+  },
+  {
+   "kappa": 1.2,
+   "delta": 0.0,
+   "loss": 0.7367743195437239,
+   "stops_sim": 1.517423121381273,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.029,
+    "MEDIUM": 0.311,
+    "HARD": 0.661
+   },
+   "modes": {
+    "PUSH": 0.631,
+    "BALANCED": 0.31,
+    "CONSERVE": 0.059
+   }
+  },
+  {
+   "kappa": 1.2,
+   "delta": 0.1,
+   "loss": 0.8753596081967884,
+   "stops_sim": 1.4841287963036367,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.044,
+    "MEDIUM": 0.376,
+    "HARD": 0.58
+   },
+   "modes": {
+    "PUSH": 0.615,
+    "BALANCED": 0.324,
+    "CONSERVE": 0.061
+   }
+  },
+  {
+   "kappa": 1.2,
+   "delta": 0.2,
+   "loss": 1.0119343773824054,
+   "stops_sim": 1.4813647116643787,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.064,
+    "MEDIUM": 0.45,
+    "HARD": 0.486
+   },
+   "modes": {
+    "PUSH": 0.593,
+    "BALANCED": 0.34,
+    "CONSERVE": 0.067
+   }
+  },
+  {
+   "kappa": 1.2,
+   "delta": 0.35,
+   "loss": 1.1139820486086562,
+   "stops_sim": 1.520513038737581,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.098,
+    "MEDIUM": 0.525,
+    "HARD": 0.377
+   },
+   "modes": {
+    "PUSH": 0.567,
+    "BALANCED": 0.336,
+    "CONSERVE": 0.097
+   }
+  },
+  {
+   "kappa": 1.2,
+   "delta": 0.5,
+   "loss": 1.4610850051430921,
+   "stops_sim": 1.6092056930691088,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.146,
+    "MEDIUM": 0.606,
+    "HARD": 0.248
+   },
+   "modes": {
+    "PUSH": 0.509,
+    "BALANCED": 0.367,
+    "CONSERVE": 0.124
+   }
+  },
+  {
+   "kappa": 1.45,
+   "delta": 0.0,
+   "loss": 0.7726773417684982,
+   "stops_sim": 1.2733767936702176,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.046,
+    "MEDIUM": 0.335,
+    "HARD": 0.619
+   },
+   "modes": {
+    "PUSH": 0.771,
+    "BALANCED": 0.216,
+    "CONSERVE": 0.013
+   }
+  },
+  {
+   "kappa": 1.45,
+   "delta": 0.1,
+   "loss": 1.051948615016735,
+   "stops_sim": 1.2673671782856022,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.077,
+    "MEDIUM": 0.425,
+    "HARD": 0.497
+   },
+   "modes": {
+    "PUSH": 0.774,
+    "BALANCED": 0.214,
+    "CONSERVE": 0.012
+   }
+  },
+  {
+   "kappa": 1.45,
+   "delta": 0.2,
+   "loss": 1.1959286357486325,
+   "stops_sim": 1.2666253698604906,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.078,
+    "MEDIUM": 0.455,
+    "HARD": 0.467
+   },
+   "modes": {
+    "PUSH": 0.771,
+    "BALANCED": 0.216,
+    "CONSERVE": 0.013
+   }
+  },
+  {
+   "kappa": 1.45,
+   "delta": 0.35,
+   "loss": 1.2306002721640354,
+   "stops_sim": 1.3399491571745614,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.136,
+    "MEDIUM": 0.511,
+    "HARD": 0.353
+   },
+   "modes": {
+    "PUSH": 0.724,
+    "BALANCED": 0.246,
+    "CONSERVE": 0.03
+   }
+  },
+  {
+   "kappa": 1.45,
+   "delta": 0.5,
+   "loss": 1.546190097746372,
+   "stops_sim": 1.4756123134627177,
+   "stops_real": 1.7620893532851738,
+   "share_sim": {
+    "SOFT": 0.233,
+    "MEDIUM": 0.551,
+    "HARD": 0.217
+   },
+   "modes": {
+    "PUSH": 0.609,
+    "BALANCED": 0.342,
+    "CONSERVE": 0.049
+   }
+  }
+ ],
+ "best": {
+  "kappa": 1.2,
+  "delta": 0.0
+ },
+ "per_race_best": [
+  {
+   "event": "2024_bahrain_gp",
+   "kappa": 1.2,
+   "delta": 0.0,
+   "stops": 2.0,
+   "shares": {
+    "SOFT": 0.1516889738687062,
+    "MEDIUM": 0.0,
+    "HARD": 0.8483110261312938
+   },
+   "modes": {
+    "PUSH": 0.373,
+    "CONSERVE": 0.045,
+    "BALANCED": 0.581
+   },
+   "real": {
+    "stops": 2.1052631578947367,
+    "shares": {
+     "SOFT": 0.2990239574090506,
+     "MEDIUM": 0.0,
+     "HARD": 0.7009760425909495
+    }
+   }
+  },
+  {
+   "event": "2024_saudi_arabian_gp",
+   "kappa": 1.2,
+   "delta": 0.0,
+   "stops": 1.0,
+   "shares": {
+    "SOFT": 0.028148682785997834,
+    "MEDIUM": 0.42619992782389027,
+    "HARD": 0.5456513893901118
+   },
+   "modes": {
+    "PUSH": 0.991,
+    "CONSERVE": 0.0,
+    "BALANCED": 0.009
+   },
+   "real": {
+    "stops": 1.0555555555555556,
+    "shares": {
+     "SOFT": 0.07168037602820211,
+     "MEDIUM": 0.25616921269095183,
+     "HARD": 0.6721504112808461
+    }
+   }
+  },
+  {
+   "event": "2024_australian_gp",
+   "kappa": 1.2,
+   "delta": 0.0,
+   "stops": 2.0,
+   "shares": {
+    "SOFT": 0.015274618134546636,
+    "MEDIUM": 0.14462138446538836,
+    "HARD": 0.840103997400065
+   },
+   "modes": {
+    "PUSH": 0.734,
+    "CONSERVE": 0.003,
+    "BALANCED": 0.264
+   },
+   "real": {
+    "stops": 2.0588235294117645,
+    "shares": {
+     "SOFT": 0.018518518518518517,
+     "MEDIUM": 0.18415637860082304,
+     "HARD": 0.7973251028806584
+    }
+   }
+  },
+  {
+   "event": "2024_chinese_gp",
+   "kappa": 1.2,
+   "delta": 0.0,
+   "stops": 2.6346153846153846,
+   "shares": {
+    "SOFT": 0.026921829386960753,
+    "MEDIUM": 0.19721050924424263,
+    "HARD": 0.7758676613687966
+   },
+   "modes": {
+    "PUSH": 0.336,
+    "CONSERVE": 0.054,
+    "BALANCED": 0.61
+   },
+   "real": {
+    "stops": 2.1176470588235294,
+    "shares": {
+     "SOFT": 0.07900943396226415,
+     "MEDIUM": 0.38443396226415094,
+     "HARD": 0.5365566037735849
+    }
+   }
+  },
+  {
+   "event": "2024_miami_gp",
+   "kappa": 1.2,
+   "delta": 0.0,
+   "stops": 1.0576923076923077,
+   "shares": {
+    "SOFT": 0.0060374960279631395,
+    "MEDIUM": 0.44550365427391164,
+    "HARD": 0.5484588496981252
+   },
+   "modes": {
+    "PUSH": 0.552,
+    "CONSERVE": 0.0,
+    "BALANCED": 0.448
+   },
+   "real": {
+    "stops": 1.4210526315789473,
+    "shares": {
+     "SOFT": 0.039177277179236046,
+     "MEDIUM": 0.5142017629774731,
+     "HARD": 0.44662095984329087
+    }
+   }
+  },
+  {
+   "event": "2024_emilia_romagna_gp",
+   "kappa": 1.2,
+   "delta": 0.0,
+   "stops": 1.1153846153846154,
+   "shares": {
+    "SOFT": 0.012195121951219513,
+    "MEDIUM": 0.4259581881533101,
+    "HARD": 0.5618466898954704
+   },
+   "modes": {
+    "PUSH": 0.54,
+    "CONSERVE": 0.009,
+    "BALANCED": 0.451
+   },
+   "real": {
+    "stops": 1.2105263157894737,
+    "shares": {
+     "SOFT": 0.014539579967689823,
+     "MEDIUM": 0.41195476575121165,
+     "HARD": 0.5735056542810986
+    }
+   }
+  },
+  {
+   "event": "2024_spanish_gp",
+   "kappa": 1.2,
+   "delta": 0.0,
+   "stops": 1.9411764705882353,
+   "shares": {
+    "SOFT": 0.11968897528464316,
+    "MEDIUM": 0.024715356845320745,
+    "HARD": 0.855595667870036
+   },
+   "modes": {
+    "PUSH": 0.978,
+    "CONSERVE": 0.0,
+    "BALANCED": 0.022
+   },
+   "real": {
+    "stops": 2.1052631578947367,
+    "shares": {
+     "SOFT": 0.3900763358778626,
+     "MEDIUM": 0.3351145038167939,
+     "HARD": 0.2748091603053435
+    }
+   }
+  },
+  {
+   "event": "2024_austrian_gp",
+   "kappa": 1.2,
+   "delta": 0.0,
+   "stops": 2.0,
+   "shares": {
+    "SOFT": 0.0,
+    "MEDIUM": 0.3099248509976678,
+    "HARD": 0.6900751490023322
+   },
+   "modes": {
+    "PUSH": 0.763,
+    "CONSERVE": 0.007,
+    "BALANCED": 0.231
+   },
+   "real": {
+    "stops": 2.2222222222222223,
+    "shares": {
+     "SOFT": 0.005734767025089606,
+     "MEDIUM": 0.4745519713261649,
+     "HARD": 0.5197132616487455
+    }
+   }
+  },
+  {
+   "event": "2024_hungarian_gp",
+   "kappa": 1.2,
+   "delta": 0.0,
+   "stops": 2.0392156862745097,
+   "shares": {
+    "SOFT": 0.026038926880589165,
+    "MEDIUM": 0.23540241977906365,
+    "HARD": 0.7385586533403472
+   },
+   "modes": {
+    "PUSH": 0.735,
+    "CONSERVE": 0.006,
+    "BALANCED": 0.259
+   },
+   "real": {
+    "stops": 2.0526315789473686,
+    "shares": {
+     "SOFT": 0.032520325203252036,
+     "MEDIUM": 0.3259423503325942,
+     "HARD": 0.6415373244641537
+    }
+   }
+  },
+  {
+   "event": "2024_belgian_gp",
+   "kappa": 1.2,
+   "delta": 0.0,
+   "stops": 1.849056603773585,
+   "shares": {
+    "SOFT": 0.006475111290975314,
+    "MEDIUM": 0.22015378389316068,
+    "HARD": 0.773371104815864
+   },
+   "modes": {
+    "PUSH": 0.567,
+    "CONSERVE": 0.04,
+    "BALANCED": 0.393
+   },
+   "real": {
+    "stops": 1.7894736842105263,
+    "shares": {
+     "SOFT": 0.07372175980975029,
+     "MEDIUM": 0.4351961950059453,
+     "HARD": 0.49108204518430437
+    }
+   }
+  },
+  {
+   "event": "2024_dutch_gp",
+   "kappa": 1.2,
+   "delta": 0.0,
+   "stops": 1.5510204081632653,
+   "shares": {
+    "SOFT": 0.025924024640657083,
+    "MEDIUM": 0.3316221765913758,
+    "HARD": 0.6424537987679672
+   },
+   "modes": {
+    "PUSH": 0.752,
+    "CONSERVE": 0.0,
+    "BALANCED": 0.248
+   },
+   "real": {
+    "stops": 1.2222222222222223,
+    "shares": {
+     "SOFT": 0.07924263674614306,
+     "MEDIUM": 0.3555399719495091,
+     "HARD": 0.5652173913043478
+    }
+   }
+  },
+  {
+   "event": "2024_azerbaijan_gp",
+   "kappa": 1.2,
+   "delta": 0.0,
+   "stops": 1.037037037037037,
+   "shares": {
+    "SOFT": 0.0,
+    "MEDIUM": 0.386216308427158,
+    "HARD": 0.6137836915728421
+   },
+   "modes": {
+    "PUSH": 0.702,
+    "CONSERVE": 0.02,
+    "BALANCED": 0.278
+   },
+   "real": {
+    "stops": 1.0555555555555556,
+    "shares": {
+     "SOFT": 0.0010559662090813093,
+     "MEDIUM": 0.22914466737064415,
+     "HARD": 0.7697993664202746
+    }
+   }
+  },
+  {
+   "event": "2024_singapore_gp",
+   "kappa": 1.2,
+   "delta": 0.0,
+   "stops": 1.0,
+   "shares": {
+    "SOFT": 0.03468208092485549,
+    "MEDIUM": 0.42254335260115605,
+    "HARD": 0.5427745664739885
+   },
+   "modes": {
+    "PUSH": 0.699,
+    "CONSERVE": 0.014,
+    "BALANCED": 0.286
+   },
+   "real": {
+    "stops": 1.1111111111111112,
+    "shares": {
+     "SOFT": 0.08666100254885302,
+     "MEDIUM": 0.45964316057774,
+     "HARD": 0.453695836873407
+    }
+   }
+  },
+  {
+   "event": "2024_united_states_gp",
+   "kappa": 1.2,
+   "delta": 0.0,
+   "stops": 1.0,
+   "shares": {
+    "SOFT": 0.0,
+    "MEDIUM": 0.4428300694883133,
+    "HARD": 0.5571699305116866
+   },
+   "modes": {
+    "PUSH": 0.959,
+    "CONSERVE": 0.0,
+    "BALANCED": 0.041
+   },
+   "real": {
+    "stops": 1.2105263157894737,
+    "shares": {
+     "SOFT": 0.00398406374501992,
+     "MEDIUM": 0.4362549800796813,
+     "HARD": 0.5597609561752988
+    }
+   }
+  },
+  {
+   "event": "2024_las_vegas_gp",
+   "kappa": 1.2,
+   "delta": 0.0,
+   "stops": 1.0535714285714286,
+   "shares": {
+    "SOFT": 0.007194244604316547,
+    "MEDIUM": 0.40972935936964716,
+    "HARD": 0.5830763960260363
+   },
+   "modes": {
+    "PUSH": 0.027,
+    "CONSERVE": 0.663,
+    "BALANCED": 0.31
+   },
+   "real": {
+    "stops": 2.0555555555555554,
+    "shares": {
+     "SOFT": 0.010660980810234541,
+     "MEDIUM": 0.2345415778251599,
+     "HARD": 0.7547974413646056
+    }
+   }
+  },
+  {
+   "event": "2024_qatar_gp",
+   "kappa": 1.2,
+   "delta": 0.0,
+   "stops": 1.0,
+   "shares": {
+    "SOFT": 0.0,
+    "MEDIUM": 0.548708372237784,
+    "HARD": 0.451291627762216
+   },
+   "modes": {
+    "PUSH": 0.381,
+    "CONSERVE": 0.085,
+    "BALANCED": 0.533
+   },
+   "real": {
+    "stops": 3.4,
+    "shares": {
+     "SOFT": 0.05725190839694656,
+     "MEDIUM": 0.6552162849872774,
+     "HARD": 0.2875318066157761
+    }
+   }
+  }
+ ],
+ "seconds": 219.8
+}

@@ -12,17 +12,26 @@ the race afterwards (``race_inputs.estimate_base_lap``) with this model's own we
 """
 
 import hashlib
+import json
 from dataclasses import dataclass
 from functools import cache
 from pathlib import Path
 from statistics import fmean
+from typing import Any
 
 import pandas as pd
 
 from f1ar.calibration.pace_models import RaceAdjustment, TyreShape, fit_race_adjustment
 from f1ar.domain.driver_profiles import DriverArchetype
 from f1ar.domain.provenance import SourceType
-from f1ar.domain.race_state import DRY_COMPOUNDS, Compound, CompoundParams, LapModelParams
+from f1ar.domain.race_state import (
+    DRY_COMPOUNDS,
+    Compound,
+    CompoundParams,
+    LapModelParams,
+    PaceMode,
+    PaceModeParams,
+)
 from f1ar.simulation.lap_model import tyre_wear_factor
 
 SHAPE_FILE = Path("calibration") / "tyre_shape_2024_v1.json"
@@ -87,3 +96,95 @@ def calibrated_lap_model(
         }
     )
     return CalibratedLapModel(params, adjustment, k, field, note)
+
+
+# --- W1: tyre life (engine v0.10.0, D-041) ----------------------------------------------------
+
+LIFE_FILE = Path("calibration") / "tyre_life_2024_v1.json"
+
+
+@cache
+def load_life(configs_dir: Path) -> tuple[dict[str, Any], str] | None:
+    path = configs_dir / LIFE_FILE
+    if not path.exists():
+        return None
+    text = path.read_text(encoding="utf-8")
+    return json.loads(text), "sha256:" + hashlib.sha256(text.encode()).hexdigest()
+
+
+@dataclass(frozen=True)
+class LifeLapModel:
+    params: LapModelParams
+    """What the simulation runs: the tyres' potential pace (``delta`` steps), life, cliff."""
+    estimation_params: LapModelParams
+    """The same model with the compound offsets seen on race laps (same-lap fit): used to
+    read car pace and the base lap off real laps, where drivers drove managed race pace."""
+    note: str
+
+
+def life_lap_model(
+    editorial: LapModelParams,
+    life_cfg: dict[str, Any],
+    life_sha: str,
+    event_id: str,
+    drivers: list[DriverArchetype],
+    fuel_s_per_lap: float,
+    *,
+    kappa: float | None = None,
+    delta: float | None = None,
+) -> LifeLapModel:
+    """The v0.10.0 lap model of one data-backed race. ``kappa`` / ``delta`` override the
+    fitted globals (used while fitting them)."""
+    g = life_cfg["globals"]
+    k_life = float(g["kappa"] if kappa is None else kappa)
+    step = float(g["delta_s"] if delta is None else delta)
+    ev = life_cfg["events"].get(event_id)
+    season = life_cfg["season_wear"]
+    ed = life_cfg["editorial"]
+    wear_k = float(ev["wear_multiplier"]) if ev else 1.0
+    field = fmean(tyre_wear_factor(editorial, d) for d in drivers) if drivers else 1.0
+    potential = {"SOFT": -step, "MEDIUM": 0.0, "HARD": step}
+    observed = {c: float(season["same_lap_offsets"].get(c, 0.0)) for c in potential}
+    if ev is None:  # a race outside the fit (e.g. wet): the season's median life
+        ratios = life_cfg["life_ratios_vs_medium"]
+        raw = {c: 0.28 * 60 * float(ratios[c]) for c in potential}
+    else:
+        raw = {c: float(v) for c, v in ev["life_raw"].items()}
+
+    def build(offsets: dict[str, float]) -> LapModelParams:
+        compounds = {c: editorial.compounds[c] for c in Compound if c not in DRY_COMPOUNDS}
+        for c in DRY_COMPOUNDS:
+            name = c.value
+            compounds[c] = CompoundParams(
+                offset_s=offsets[name],
+                deg_s_per_lap=max(0.0, float(season["lin"][name])) * wear_k / field,
+                deg_quad_s_per_lap2=float(season["quad"][name]) * wear_k / field,
+                life_laps=k_life * raw[name] * field,
+            )
+        return editorial.model_copy(
+            update={
+                "source_type": SourceType.ESTIMATED_FROM_DATA,
+                "fuel_s_per_lap_remaining": fuel_s_per_lap,
+                "compounds": compounds,
+                "pace_modes": {
+                    PaceMode(m): PaceModeParams(**v) for m, v in ed["pace_modes"].items()
+                },
+                "fresh_tyre_bonus_s": float(season["fresh_bonus_s"]),
+                "cliff_s_per_lap": float(ed["cliff_s_per_lap"]),
+                "neutralised_life_factor": float(ed["neutralised_life_factor"]),
+            }
+        )
+
+    lives = ", ".join(f"{c[0]} {k_life * raw[c]:.1f}" for c in potential)
+    note = (
+        f"estimated_from_data: tyre life {LIFE_FILE.as_posix()} ({life_sha[:19]}...): life "
+        f"(laps, neutral driver) {lives} = kappa {k_life:.2f} x this race's stint lengths "
+        f"({'in-sample' if ev else 'season median'}); wear = same-lap season curve x "
+        f"{wear_k:.2f}; potential pace steps +-{step:.2f} s (fitted on dry_train behaviour); "
+        f"fresh-tyre peak {float(season['fresh_bonus_s']):+.2f} s; editorial_assumption: "
+        f"pace-mode trade-offs, cliff {ed['cliff_s_per_lap']} s/lap, SC/VSC life factor "
+        f"{ed['neutralised_life_factor']}; skill gap and noise editorial (D-010)"
+    )
+    params = build(potential).model_copy(update={"note": note})
+    estimation = build(observed).model_copy(update={"note": note + " [estimation variant]"})
+    return LifeLapModel(params, estimation, note)

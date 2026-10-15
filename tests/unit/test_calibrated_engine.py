@@ -116,7 +116,8 @@ MONZA_DATA = REPO_ROOT / "data" / "processed" / MONZA_2024
 @pytest.mark.skipif(not (MONZA_DATA / "laps.parquet").exists(), reason="Monza data not fetched")
 def test_calibrated_monza_plans_medium_to_hard() -> None:
     """The EXP-002 symptom (every car one-stopping onto SOFT) is gone at Monza: the calibrated
-    model makes the real race's main strategy, MEDIUM -> HARD, the most common plan."""
+    model makes the real race's strategies, MEDIUM -> HARD (and, with tyre life since W1,
+    MEDIUM -> HARD -> HARD, as in the real race: 7 + 7 cars), the plans."""
     roster, profiles = load_event(CONFIGS, MONZA_2024)
     setup = setup_from_codes(roster, profiles, None, data_dir=MONZA_DATA)
     world = engine.create_world(setup, seed=1, world_id="w")
@@ -125,6 +126,7 @@ def test_calibrated_monza_plans_medium_to_hard() -> None:
         for c in world.cars
         if c.compound is Compound.MEDIUM
     ]
-    assert plans and all(stops == (Compound.HARD,) for _, stops in plans)
+    assert plans and all(set(stops) == {Compound.HARD} for _, stops in plans)
+    assert {len(stops) for _, stops in plans} <= {1, 2}
     assert setup.lap_model.source_type is SourceType.ESTIMATED_FROM_DATA
     assert "in-sample" in setup.inputs["tyre_model"]

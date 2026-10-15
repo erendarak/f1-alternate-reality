@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from f1ar.calibration.lap_model_fit import SHAPE_FILE
+from f1ar.calibration.lap_model_fit import LIFE_FILE, SHAPE_FILE
 from f1ar.calibration.race_control_fit import RACE_CONTROL_FILE
 from f1ar.calibration.registry import ENGINE_ARTIFACTS, load_registry, registry_markdown
 from f1ar.calibration.traffic_fit import TRAFFIC_FILE
@@ -19,7 +19,7 @@ from f1ar.simulation.scenarios import setup_from_codes
 from tests.conftest import CONFIGS, REPO_ROOT, run_ticks
 from tests.unit.test_race_inputs import synthetic_laps
 
-CALIBRATION = (SHAPE_FILE, WEATHER_FILE, TRAFFIC_FILE, RACE_CONTROL_FILE)
+CALIBRATION = (SHAPE_FILE, LIFE_FILE, WEATHER_FILE, TRAFFIC_FILE, RACE_CONTROL_FILE)
 
 
 def test_every_model_is_registered_and_matches_its_artifact() -> None:
@@ -28,7 +28,7 @@ def test_every_model_is_registered_and_matches_its_artifact() -> None:
     registered = {e.artifact for e in entries}
     assert set(ENGINE_ARTIFACTS) <= registered  # every file the engine loads has a manifest
     used = {e.model_name for e in entries if e.used_by_engine}
-    assert used == {"tyre_shape", "weather", "traffic", "race_control"}
+    assert used == {"tyre_shape", "tyre_life", "weather", "traffic", "race_control"}
     lgbm = next(e for e in entries if e.model_name == "pace_predictor_online")
     assert not lgbm.artifact_tracked and lgbm.used_by_engine is None
     assert "pace_predictor_online" in registry_markdown(entries)
@@ -71,6 +71,10 @@ def test_a_race_builds_and_runs_without_fitted_models(
         editorial = f in missing
         assert setup.inputs[key].startswith("editorial") == editorial, key
         assert (source is SourceType.EDITORIAL_ASSUMPTION) == editorial, key
+    # W1: the tyre-life model needs both files; without the life file the M4 tyre model runs
+    if SHAPE_FILE not in missing:
+        expected = "tyre life" if LIFE_FILE not in missing else "tyre/fuel shape"
+        assert expected in setup.inputs["tyre_model"]
     # the synthetic race has no weather data: dry and editorial either way
     assert setup.inputs["weather"].startswith("editorial_assumption")
     state = run_ticks(engine.start(engine.create_world(setup, seed=1, world_id="w")), 2000)

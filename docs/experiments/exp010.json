@@ -1,0 +1,1611 @@
+{
+ "seeds": 10,
+ "train": {
+  "life": {
+   "stops_mean": 1.49,
+   "stops_mae": 0.34,
+   "stops_corr": 0.4,
+   "passes_mean": 47.5,
+   "retirements_mean": 2.38,
+   "spearman_mean": 0.631,
+   "winner_time_error_min": 0.49,
+   "per_race": {
+    "2024_bahrain_gp": {
+     "stops": 2.0,
+     "share_1_2_3": [
+      0.0,
+      1.0,
+      0.0
+     ],
+     "passes": 44.6,
+     "retirements": 2.3,
+     "winner_time_min": 94.17,
+     "spearman": 0.739,
+     "top_sequences": {
+      "S-H-H": 177
+     }
+    },
+    "2024_saudi_arabian_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 35.4,
+     "retirements": 2.6,
+     "winner_time_min": 80.06,
+     "spearman": 0.666,
+     "top_sequences": {
+      "M-H": 156,
+      "S-H": 18
+     }
+    },
+    "2024_australian_gp": {
+     "stops": 2.0,
+     "share_1_2_3": [
+      0.0,
+      1.0,
+      0.0
+     ],
+     "passes": 41.6,
+     "retirements": 2.4,
+     "winner_time_min": 81.45,
+     "spearman": 0.272,
+     "top_sequences": {
+      "M-H-H": 121,
+      "S-H-H": 29,
+      "H-M-H": 16
+     }
+    },
+    "2024_chinese_gp": {
+     "stops": 2.21,
+     "share_1_2_3": [
+      0.0,
+      0.79,
+      0.21
+     ],
+     "passes": 57.7,
+     "retirements": 2.1,
+     "winner_time_min": 96.29,
+     "spearman": 0.738,
+     "top_sequences": {
+      "M-H-H": 111,
+      "M-H-H-H": 25,
+      "S-H-H": 24,
+      "S-H-H-H": 11
+     }
+    },
+    "2024_miami_gp": {
+     "stops": 1.06,
+     "share_1_2_3": [
+      0.94,
+      0.06,
+      0.0
+     ],
+     "passes": 40.9,
+     "retirements": 2.2,
+     "winner_time_min": 90.47,
+     "spearman": 0.7,
+     "top_sequences": {
+      "M-H": 133,
+      "H-M": 35,
+      "S-H-H": 10
+     }
+    },
+    "2024_emilia_romagna_gp": {
+     "stops": 1.09,
+     "share_1_2_3": [
+      0.91,
+      0.09,
+      0.0
+     ],
+     "passes": 26.7,
+     "retirements": 2.4,
+     "winner_time_min": 87.42,
+     "spearman": 0.722,
+     "top_sequences": {
+      "M-H": 132,
+      "H-M": 28,
+      "S-H-H": 16
+     }
+    },
+    "2024_spanish_gp": {
+     "stops": 1.95,
+     "share_1_2_3": [
+      0.05,
+      0.95,
+      0.0
+     ],
+     "passes": 53.2,
+     "retirements": 2.8,
+     "winner_time_min": 90.47,
+     "spearman": 0.703,
+     "top_sequences": {
+      "S-H-H": 164,
+      "M-H": 8
+     }
+    },
+    "2024_austrian_gp": {
+     "stops": 2.0,
+     "share_1_2_3": [
+      0.0,
+      1.0,
+      0.0
+     ],
+     "passes": 41.7,
+     "retirements": 2.9,
+     "winner_time_min": 85.95,
+     "spearman": 0.482,
+     "top_sequences": {
+      "M-H-H": 162,
+      "H-M-H": 9
+     }
+    },
+    "2024_hungarian_gp": {
+     "stops": 2.02,
+     "share_1_2_3": [
+      0.0,
+      0.98,
+      0.02
+     ],
+     "passes": 40.2,
+     "retirements": 2.9,
+     "winner_time_min": 100.77,
+     "spearman": 0.69,
+     "top_sequences": {
+      "M-H-H": 114,
+      "S-H-H": 27,
+      "H-M-H": 27,
+      "S-H-H-H": 3
+     }
+    },
+    "2024_belgian_gp": {
+     "stops": 1.87,
+     "share_1_2_3": [
+      0.13,
+      0.87,
+      0.0
+     ],
+     "passes": 46.6,
+     "retirements": 1.9,
+     "winner_time_min": 82.11,
+     "spearman": 0.782,
+     "top_sequences": {
+      "M-H-H": 129,
+      "M-H": 24,
+      "H-M-H": 19,
+      "S-H-H": 9
+     }
+    },
+    "2024_dutch_gp": {
+     "stops": 1.56,
+     "share_1_2_3": [
+      0.44,
+      0.56,
+      0.0
+     ],
+     "passes": 47.0,
+     "retirements": 2.9,
+     "winner_time_min": 93.3,
+     "spearman": 0.68,
+     "top_sequences": {
+      "M-H": 68,
+      "M-H-H": 67,
+      "S-H-H": 28,
+      "H-M": 7
+     }
+    },
+    "2024_azerbaijan_gp": {
+     "stops": 1.02,
+     "share_1_2_3": [
+      0.98,
+      0.02,
+      0.0
+     ],
+     "passes": 78.0,
+     "retirements": 2.1,
+     "winner_time_min": 94.41,
+     "spearman": 0.41,
+     "top_sequences": {
+      "M-H": 121,
+      "H-M": 54,
+      "M-H-H": 4
+     }
+    },
+    "2024_singapore_gp": {
+     "stops": 1.02,
+     "share_1_2_3": [
+      0.98,
+      0.02,
+      0.0
+     ],
+     "passes": 38.9,
+     "retirements": 2.5,
+     "winner_time_min": 103.68,
+     "spearman": 0.639,
+     "top_sequences": {
+      "M-H": 121,
+      "H-M": 35,
+      "S-H": 16,
+      "S-H-H": 3
+     }
+    },
+    "2024_united_states_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 58.1,
+     "retirements": 2.4,
+     "winner_time_min": 95.03,
+     "spearman": 0.588,
+     "top_sequences": {
+      "M-H": 132,
+      "H-M": 44
+     }
+    },
+    "2024_las_vegas_gp": {
+     "stops": 1.05,
+     "share_1_2_3": [
+      0.95,
+      0.05,
+      0.0
+     ],
+     "passes": 76.2,
+     "retirements": 1.7,
+     "winner_time_min": 83.06,
+     "spearman": 0.774,
+     "top_sequences": {
+      "M-H": 144,
+      "H-M": 30,
+      "S-H-H": 8,
+      "M-H-H": 1
+     }
+    },
+    "2024_qatar_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 33.4,
+     "retirements": 2.0,
+     "winner_time_min": 82.96,
+     "spearman": 0.507,
+     "top_sequences": {
+      "M-H": 172,
+      "H-M": 8
+     }
+    }
+   }
+  },
+  "v0.9": {
+   "stops_mean": 1.12,
+   "stops_mae": 0.66,
+   "stops_corr": 0.25,
+   "passes_mean": 43.9,
+   "retirements_mean": 2.12,
+   "spearman_mean": 0.653,
+   "winner_time_error_min": 0.33,
+   "per_race": {
+    "2024_bahrain_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 43.4,
+     "retirements": 2.1,
+     "winner_time_min": 93.79,
+     "spearman": 0.772,
+     "top_sequences": {
+      "S-H": 179
+     }
+    },
+    "2024_saudi_arabian_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 37.8,
+     "retirements": 2.1,
+     "winner_time_min": 79.91,
+     "spearman": 0.705,
+     "top_sequences": {
+      "M-S": 160,
+      "S-H": 19
+     }
+    },
+    "2024_australian_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 31.6,
+     "retirements": 2.0,
+     "winner_time_min": 81.15,
+     "spearman": 0.348,
+     "top_sequences": {
+      "M-S": 125,
+      "S-M": 29,
+      "H-S": 16
+     }
+    },
+    "2024_chinese_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 58.3,
+     "retirements": 2.1,
+     "winner_time_min": 96.26,
+     "spearman": 0.737,
+     "top_sequences": {
+      "M-H": 136,
+      "S-H": 35,
+      "H-S": 8
+     }
+    },
+    "2024_miami_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 34.5,
+     "retirements": 2.1,
+     "winner_time_min": 90.07,
+     "spearman": 0.689,
+     "top_sequences": {
+      "M-S": 134,
+      "H-S": 35,
+      "S-M": 10
+     }
+    },
+    "2024_emilia_romagna_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 36.4,
+     "retirements": 2.2,
+     "winner_time_min": 87.34,
+     "spearman": 0.69,
+     "top_sequences": {
+      "M-S": 133,
+      "H-M": 28,
+      "S-M": 17
+     }
+    },
+    "2024_spanish_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 43.9,
+     "retirements": 2.3,
+     "winner_time_min": 90.26,
+     "spearman": 0.756,
+     "top_sequences": {
+      "S-M": 169,
+      "M-S": 8
+     }
+    },
+    "2024_austrian_gp": {
+     "stops": 1.95,
+     "share_1_2_3": [
+      0.05,
+      0.95,
+      0.0
+     ],
+     "passes": 41.1,
+     "retirements": 2.5,
+     "winner_time_min": 85.64,
+     "spearman": 0.513,
+     "top_sequences": {
+      "M-S-M": 156,
+      "H-M-M": 10,
+      "M-S": 9
+     }
+    },
+    "2024_hungarian_gp": {
+     "stops": 1.95,
+     "share_1_2_3": [
+      0.05,
+      0.95,
+      0.0
+     ],
+     "passes": 36.0,
+     "retirements": 2.5,
+     "winner_time_min": 100.51,
+     "spearman": 0.743,
+     "top_sequences": {
+      "M-S-M": 62,
+      "M-M-H": 46,
+      "S-M-M": 31,
+      "H-M-M": 27
+     }
+    },
+    "2024_belgian_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 45.4,
+     "retirements": 1.9,
+     "winner_time_min": 82.18,
+     "spearman": 0.766,
+     "top_sequences": {
+      "M-H": 153,
+      "H-S": 19,
+      "S-H": 9
+     }
+    },
+    "2024_dutch_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 42.8,
+     "retirements": 2.5,
+     "winner_time_min": 93.13,
+     "spearman": 0.71,
+     "top_sequences": {
+      "M-H": 139,
+      "S-M": 28,
+      "H-M": 8
+     }
+    },
+    "2024_azerbaijan_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 47.6,
+     "retirements": 1.9,
+     "winner_time_min": 94.34,
+     "spearman": 0.42,
+     "top_sequences": {
+      "M-S": 127,
+      "H-S": 54
+     }
+    },
+    "2024_singapore_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 38.0,
+     "retirements": 2.1,
+     "winner_time_min": 103.32,
+     "spearman": 0.673,
+     "top_sequences": {
+      "M-S": 125,
+      "H-S": 35,
+      "S-M": 19
+     }
+    },
+    "2024_united_states_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 54.6,
+     "retirements": 1.9,
+     "winner_time_min": 94.73,
+     "spearman": 0.642,
+     "top_sequences": {
+      "M-S": 135,
+      "H-S": 46
+     }
+    },
+    "2024_las_vegas_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 77.6,
+     "retirements": 1.9,
+     "winner_time_min": 83.74,
+     "spearman": 0.752,
+     "top_sequences": {
+      "M-H": 143,
+      "H-S": 30,
+      "S-H": 8
+     }
+    },
+    "2024_qatar_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 33.2,
+     "retirements": 1.9,
+     "winner_time_min": 82.59,
+     "spearman": 0.539,
+     "top_sequences": {
+      "M-H": 173,
+      "H-M": 8
+     }
+    }
+   }
+  },
+  "real": {
+   "stops_mean": 1.77,
+   "passes_mean": 52.7,
+   "retirements_mean": 1.62,
+   "per_race": {
+    "2024_bahrain_gp": {
+     "stops": 2.15,
+     "share_1_2_3": [
+      0.0,
+      0.85,
+      0.15
+     ],
+     "passes": 44,
+     "retirements": 0,
+     "winner_time_min": 91.75,
+     "order": [
+      "VER",
+      "PER",
+      "SAI",
+      "LEC",
+      "RUS",
+      "NOR",
+      "HAM",
+      "PIA",
+      "ALO",
+      "STR",
+      "ZHO",
+      "MAG",
+      "RIC",
+      "TSU",
+      "ALB",
+      "HUL",
+      "OCO",
+      "GAS",
+      "BOT",
+      "SAR"
+     ],
+     "top_sequences": {
+      "S-H-H": 14,
+      "S-H-S": 3,
+      "S-H-H-S": 3
+     }
+    },
+    "2024_saudi_arabian_gp": {
+     "stops": 1.06,
+     "share_1_2_3": [
+      0.94,
+      0.06,
+      0.0
+     ],
+     "passes": 34,
+     "retirements": 2,
+     "winner_time_min": 80.73,
+     "order": [
+      "VER",
+      "PER",
+      "LEC",
+      "PIA",
+      "ALO",
+      "RUS",
+      "BEA",
+      "NOR",
+      "HAM",
+      "HUL",
+      "MAG",
+      "ALB",
+      "OCO",
+      "TSU",
+      "SAR",
+      "RIC",
+      "BOT",
+      "ZHO",
+      "STR",
+      "GAS"
+     ],
+     "top_sequences": {
+      "M-H": 13,
+      "M-S": 3,
+      "S-H-S": 1,
+      "S-H": 1
+     }
+    },
+    "2024_australian_gp": {
+     "stops": 2.06,
+     "share_1_2_3": [
+      0.0,
+      0.94,
+      0.06
+     ],
+     "passes": 30,
+     "retirements": 3,
+     "winner_time_min": 80.45,
+     "order": [
+      "SAI",
+      "LEC",
+      "NOR",
+      "PIA",
+      "PER",
+      "ALO",
+      "STR",
+      "TSU",
+      "HUL",
+      "MAG",
+      "ALB",
+      "RIC",
+      "GAS",
+      "BOT",
+      "ZHO",
+      "OCO",
+      "RUS",
+      "HAM",
+      "VER"
+     ],
+     "top_sequences": {
+      "M-H-H": 11,
+      "S-H-H": 2,
+      "H-M-H": 2,
+      "M-H-H-H": 1
+     }
+    },
+    "2024_chinese_gp": {
+     "stops": 2.12,
+     "share_1_2_3": [
+      0.18,
+      0.59,
+      0.24
+     ],
+     "passes": 69,
+     "retirements": 3,
+     "winner_time_min": 100.88,
+     "order": [
+      "VER",
+      "NOR",
+      "PER",
+      "LEC",
+      "SAI",
+      "RUS",
+      "ALO",
+      "PIA",
+      "HAM",
+      "HUL",
+      "OCO",
+      "ALB",
+      "GAS",
+      "ZHO",
+      "MAG",
+      "STR",
+      "SAR",
+      "RIC",
+      "TSU",
+      "BOT"
+     ],
+     "top_sequences": {
+      "M-H-H": 4,
+      "M-H": 3,
+      "M-M-H": 3,
+      "S-M-H": 2
+     }
+    },
+    "2024_miami_gp": {
+     "stops": 1.42,
+     "share_1_2_3": [
+      0.63,
+      0.32,
+      0.05
+     ],
+     "passes": 45,
+     "retirements": 1,
+     "winner_time_min": 90.84,
+     "order": [
+      "NOR",
+      "VER",
+      "LEC",
+      "SAI",
+      "PER",
+      "HAM",
+      "TSU",
+      "RUS",
+      "ALO",
+      "OCO",
+      "HUL",
+      "GAS",
+      "STR",
+      "PIA",
+      "ZHO",
+      "RIC",
+      "BOT",
+      "MAG",
+      "ALB",
+      "SAR"
+     ],
+     "top_sequences": {
+      "M-H": 8,
+      "M-H-M": 4,
+      "H-M": 3,
+      "S-H-M": 1
+     }
+    },
+    "2024_emilia_romagna_gp": {
+     "stops": 1.21,
+     "share_1_2_3": [
+      0.84,
+      0.11,
+      0.05
+     ],
+     "passes": 35,
+     "retirements": 1,
+     "winner_time_min": 85.42,
+     "order": [
+      "VER",
+      "NOR",
+      "LEC",
+      "PIA",
+      "SAI",
+      "HAM",
+      "RUS",
+      "PER",
+      "STR",
+      "TSU",
+      "HUL",
+      "MAG",
+      "RIC",
+      "OCO",
+      "ZHO",
+      "GAS",
+      "SAR",
+      "BOT",
+      "ALO",
+      "ALB"
+     ],
+     "top_sequences": {
+      "M-H": 13,
+      "H-M": 3,
+      "S-H-M-S": 1,
+      "M-H-M": 1
+     }
+    },
+    "2024_spanish_gp": {
+     "stops": 2.1,
+     "share_1_2_3": [
+      0.0,
+      0.9,
+      0.1
+     ],
+     "passes": 63,
+     "retirements": 0,
+     "winner_time_min": 88.34,
+     "order": [
+      "VER",
+      "NOR",
+      "HAM",
+      "RUS",
+      "LEC",
+      "SAI",
+      "PIA",
+      "PER",
+      "GAS",
+      "OCO",
+      "HUL",
+      "ALO",
+      "ZHO",
+      "STR",
+      "RIC",
+      "BOT",
+      "MAG",
+      "ALB",
+      "TSU",
+      "SAR"
+     ],
+     "top_sequences": {
+      "S-M-H": 11,
+      "S-M-S": 5,
+      "S-S-M-S": 1,
+      "S-S-H": 1
+     }
+    },
+    "2024_austrian_gp": {
+     "stops": 2.3,
+     "share_1_2_3": [
+      0.0,
+      0.75,
+      0.25
+     ],
+     "passes": 44,
+     "retirements": 0,
+     "winner_time_min": 84.38,
+     "order": [
+      "RUS",
+      "PIA",
+      "SAI",
+      "HAM",
+      "VER",
+      "HUL",
+      "PER",
+      "MAG",
+      "RIC",
+      "GAS",
+      "LEC",
+      "OCO",
+      "STR",
+      "ALB",
+      "TSU",
+      "BOT",
+      "ZHO",
+      "ALO",
+      "SAR",
+      "NOR"
+     ],
+     "top_sequences": {
+      "M-H-M": 7,
+      "M-H-H": 6,
+      "M-M-H": 2,
+      "M-H-M-M-M": 1
+     }
+    },
+    "2024_hungarian_gp": {
+     "stops": 2.05,
+     "share_1_2_3": [
+      0.05,
+      0.84,
+      0.11
+     ],
+     "passes": 57,
+     "retirements": 1,
+     "winner_time_min": 98.04,
+     "order": [
+      "PIA",
+      "NOR",
+      "HAM",
+      "LEC",
+      "VER",
+      "SAI",
+      "PER",
+      "RUS",
+      "TSU",
+      "STR",
+      "ALO",
+      "RIC",
+      "HUL",
+      "ALB",
+      "MAG",
+      "BOT",
+      "SAR",
+      "OCO",
+      "ZHO",
+      "GAS"
+     ],
+     "top_sequences": {
+      "M-H-M": 5,
+      "M-H-H": 5,
+      "S-M-H": 2,
+      "M-H-H-S": 2
+     }
+    },
+    "2024_belgian_gp": {
+     "stops": 1.79,
+     "share_1_2_3": [
+      0.26,
+      0.68,
+      0.05
+     ],
+     "passes": 39,
+     "retirements": 1,
+     "winner_time_min": 79.96,
+     "order": [
+      "RUS",
+      "HAM",
+      "PIA",
+      "LEC",
+      "VER",
+      "NOR",
+      "SAI",
+      "PER",
+      "ALO",
+      "OCO",
+      "RIC",
+      "STR",
+      "ALB",
+      "GAS",
+      "MAG",
+      "BOT",
+      "TSU",
+      "SAR",
+      "HUL",
+      "ZHO"
+     ],
+     "top_sequences": {
+      "M-H-H": 6,
+      "M-H-M": 3,
+      "M-M": 2,
+      "M-H": 2
+     }
+    },
+    "2024_dutch_gp": {
+     "stops": 1.3,
+     "share_1_2_3": [
+      0.7,
+      0.3,
+      0.0
+     ],
+     "passes": 51,
+     "retirements": 0,
+     "winner_time_min": 90.76,
+     "order": [
+      "NOR",
+      "VER",
+      "LEC",
+      "PIA",
+      "SAI",
+      "PER",
+      "RUS",
+      "HAM",
+      "GAS",
+      "ALO",
+      "HUL",
+      "STR",
+      "RIC",
+      "ALB",
+      "OCO",
+      "SAR",
+      "TSU",
+      "MAG",
+      "BOT",
+      "ZHO"
+     ],
+     "top_sequences": {
+      "M-H": 13,
+      "M-H-S": 2,
+      "S-H-M": 1,
+      "S-M-H": 1
+     }
+    },
+    "2024_azerbaijan_gp": {
+     "stops": 1.06,
+     "share_1_2_3": [
+      0.94,
+      0.06,
+      0.0
+     ],
+     "passes": 57,
+     "retirements": 4,
+     "winner_time_min": 92.97,
+     "order": [
+      "PIA",
+      "LEC",
+      "RUS",
+      "NOR",
+      "VER",
+      "ALO",
+      "ALB",
+      "COL",
+      "HAM",
+      "BEA",
+      "HUL",
+      "GAS",
+      "RIC",
+      "ZHO",
+      "OCO",
+      "BOT",
+      "PER",
+      "SAI",
+      "STR",
+      "TSU"
+     ],
+     "top_sequences": {
+      "M-H": 9,
+      "H-M": 3,
+      "H-S": 3,
+      "M-H-S": 1
+     }
+    },
+    "2024_singapore_gp": {
+     "stops": 1.11,
+     "share_1_2_3": [
+      0.94,
+      0.0,
+      0.06
+     ],
+     "passes": 35,
+     "retirements": 2,
+     "winner_time_min": 100.88,
+     "order": [
+      "NOR",
+      "VER",
+      "PIA",
+      "RUS",
+      "LEC",
+      "HAM",
+      "SAI",
+      "ALO",
+      "HUL",
+      "PER",
+      "COL",
+      "TSU",
+      "OCO",
+      "STR",
+      "ZHO",
+      "BOT",
+      "GAS",
+      "RIC",
+      "MAG",
+      "ALB"
+     ],
+     "top_sequences": {
+      "M-H": 11,
+      "H-M": 3,
+      "M-S": 2,
+      "S-H": 1
+     }
+    },
+    "2024_united_states_gp": {
+     "stops": 1.21,
+     "share_1_2_3": [
+      0.79,
+      0.21,
+      0.0
+     ],
+     "passes": 82,
+     "retirements": 1,
+     "winner_time_min": 95.16,
+     "order": [
+      "LEC",
+      "SAI",
+      "NOR",
+      "VER",
+      "PIA",
+      "RUS",
+      "PER",
+      "HUL",
+      "LAW",
+      "COL",
+      "MAG",
+      "GAS",
+      "ALO",
+      "TSU",
+      "STR",
+      "ALB",
+      "BOT",
+      "OCO",
+      "ZHO",
+      "HAM"
+     ],
+     "top_sequences": {
+      "M-H": 11,
+      "H-M": 4,
+      "M-M-H": 2,
+      "M-H-S": 1
+     }
+    },
+    "2024_las_vegas_gp": {
+     "stops": 2.06,
+     "share_1_2_3": [
+      0.06,
+      0.83,
+      0.11
+     ],
+     "passes": 67,
+     "retirements": 2,
+     "winner_time_min": 82.1,
+     "order": [
+      "RUS",
+      "HAM",
+      "SAI",
+      "LEC",
+      "VER",
+      "NOR",
+      "PIA",
+      "HUL",
+      "TSU",
+      "PER",
+      "ALO",
+      "MAG",
+      "ZHO",
+      "COL",
+      "STR",
+      "LAW",
+      "OCO",
+      "BOT",
+      "ALB",
+      "GAS"
+     ],
+     "top_sequences": {
+      "M-H-H": 11,
+      "H-M-H": 3,
+      "S-H-H": 1,
+      "M-H-H-S": 1
+     }
+    },
+    "2024_qatar_gp": {
+     "stops": 3.4,
+     "share_1_2_3": [
+      0.0,
+      0.0,
+      1.0
+     ],
+     "passes": 91,
+     "retirements": 5,
+     "winner_time_min": 91.09,
+     "order": [
+      "VER",
+      "LEC",
+      "PIA",
+      "RUS",
+      "GAS",
+      "SAI",
+      "ALO",
+      "ZHO",
+      "MAG",
+      "NOR",
+      "BOT",
+      "HAM",
+      "TSU",
+      "LAW",
+      "ALB",
+      "HUL",
+      "PER",
+      "STR",
+      "OCO",
+      "COL"
+     ],
+     "top_sequences": {
+      "M-H-H-H": 7,
+      "M-H-H-H-H": 3,
+      "M-H-M-M": 2,
+      "M-H-H-H-S": 2
+     }
+    }
+   }
+  }
+ },
+ "test": {
+  "life": {
+   "stops_mean": 1.28,
+   "stops_mae": 0.28,
+   "stops_corr": 0.75,
+   "passes_mean": 50.1,
+   "retirements_mean": 2.44,
+   "spearman_mean": 0.599,
+   "winner_time_error_min": -12.91,
+   "per_race": {
+    "2024_japanese_gp": {
+     "stops": 2.0,
+     "share_1_2_3": [
+      0.0,
+      1.0,
+      0.0
+     ],
+     "passes": 56.1,
+     "retirements": 2.2,
+     "winner_time_min": 88.26,
+     "spearman": 0.617,
+     "top_sequences": {
+      "M-H-H": 109,
+      "S-H-H": 69
+     }
+    },
+    "2024_monaco_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 30.1,
+     "retirements": 3.4,
+     "winner_time_min": 104.41,
+     "spearman": 0.513,
+     "top_sequences": {
+      "H-M": 93,
+      "M-H": 73
+     }
+    },
+    "2024_italian_gp": {
+     "stops": 1.39,
+     "share_1_2_3": [
+      0.61,
+      0.39,
+      0.0
+     ],
+     "passes": 44.4,
+     "retirements": 2.0,
+     "winner_time_min": 76.06,
+     "spearman": 0.755,
+     "top_sequences": {
+      "M-H": 80,
+      "M-H-H": 46,
+      "H-M": 29,
+      "H-M-H": 25
+     }
+    },
+    "2024_mexico_city_gp": {
+     "stops": 1.02,
+     "share_1_2_3": [
+      0.98,
+      0.02,
+      0.0
+     ],
+     "passes": 60.7,
+     "retirements": 2.8,
+     "winner_time_min": 98.66,
+     "spearman": 0.588,
+     "top_sequences": {
+      "M-H": 116,
+      "H-M": 52,
+      "H-M-H": 4
+     }
+    },
+    "2024_abu_dhabi_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 59.3,
+     "retirements": 1.8,
+     "winner_time_min": 87.88,
+     "spearman": 0.522,
+     "top_sequences": {
+      "M-H": 172,
+      "H-M": 10
+     }
+    }
+   }
+  },
+  "v0.9": {
+   "stops_mean": 1.0,
+   "stops_mae": 0.56,
+   "stops_corr": null,
+   "passes_mean": 44.3,
+   "retirements_mean": 2.2,
+   "spearman_mean": 0.618,
+   "winner_time_error_min": -12.95,
+   "per_race": {
+    "2024_japanese_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 40.7,
+     "retirements": 2.1,
+     "winner_time_min": 87.77,
+     "spearman": 0.664,
+     "top_sequences": {
+      "M-H": 111,
+      "S-H": 68
+     }
+    },
+    "2024_monaco_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 27.3,
+     "retirements": 2.8,
+     "winner_time_min": 104.7,
+     "spearman": 0.54,
+     "top_sequences": {
+      "H-S": 95,
+      "M-H": 77
+     }
+    },
+    "2024_italian_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 27.9,
+     "retirements": 2.0,
+     "winner_time_min": 76.47,
+     "spearman": 0.732,
+     "top_sequences": {
+      "M-H": 126,
+      "H-S": 54
+     }
+    },
+    "2024_mexico_city_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 66.8,
+     "retirements": 2.3,
+     "winner_time_min": 98.35,
+     "spearman": 0.629,
+     "top_sequences": {
+      "M-H": 120,
+      "H-M": 57
+     }
+    },
+    "2024_abu_dhabi_gp": {
+     "stops": 1.0,
+     "share_1_2_3": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "passes": 58.6,
+     "retirements": 1.8,
+     "winner_time_min": 87.77,
+     "spearman": 0.527,
+     "top_sequences": {
+      "M-S": 172,
+      "H-M": 10
+     }
+    }
+   }
+  },
+  "real": {
+   "stops_mean": 1.34,
+   "passes_mean": 56.6,
+   "retirements_mean": 3.0,
+   "per_race": {
+    "2024_japanese_gp": {
+     "stops": 2.0,
+     "share_1_2_3": [
+      0.12,
+      0.76,
+      0.12
+     ],
+     "passes": 63,
+     "retirements": 3,
+     "winner_time_min": 114.4,
+     "order": [
+      "VER",
+      "PER",
+      "SAI",
+      "LEC",
+      "NOR",
+      "ALO",
+      "RUS",
+      "PIA",
+      "HAM",
+      "TSU",
+      "HUL",
+      "STR",
+      "MAG",
+      "BOT",
+      "OCO",
+      "GAS",
+      "SAR",
+      "ZHO",
+      "RIC",
+      "ALB"
+     ],
+     "top_sequences": {
+      "M-M-M-H": 3,
+      "M-M-H": 2,
+      "S-S-H-H": 2,
+      "M-M-H-H": 2
+     }
+    },
+    "2024_monaco_gp": {
+     "stops": 0.44,
+     "share_1_2_3": [
+      0.31,
+      0.06,
+      0.0
+     ],
+     "passes": 11,
+     "retirements": 4,
+     "winner_time_min": 143.26,
+     "order": [
+      "LEC",
+      "PIA",
+      "SAI",
+      "NOR",
+      "RUS",
+      "VER",
+      "HAM",
+      "TSU",
+      "ALB",
+      "GAS",
+      "ALO",
+      "RIC",
+      "BOT",
+      "STR",
+      "SAR",
+      "ZHO",
+      "PER",
+      "MAG",
+      "HUL",
+      "OCO"
+     ],
+     "top_sequences": {
+      "M-H": 7,
+      "H-M-H": 3,
+      "H-M": 3,
+      "M-H-S": 1
+     }
+    },
+    "2024_italian_gp": {
+     "stops": 1.58,
+     "share_1_2_3": [
+      0.47,
+      0.47,
+      0.05
+     ],
+     "passes": 53,
+     "retirements": 1,
+     "winner_time_min": 74.68,
+     "order": [
+      "LEC",
+      "PIA",
+      "NOR",
+      "SAI",
+      "HAM",
+      "VER",
+      "RUS",
+      "PER",
+      "MAG",
+      "ALB",
+      "ALO",
+      "RIC",
+      "COL",
+      "OCO",
+      "GAS",
+      "BOT",
+      "HUL",
+      "ZHO",
+      "STR",
+      "TSU"
+     ],
+     "top_sequences": {
+      "M-H": 7,
+      "M-H-H": 7,
+      "H-H-M": 2,
+      "H-M": 2
+     }
+    },
+    "2024_mexico_city_gp": {
+     "stops": 1.24,
+     "share_1_2_3": [
+      0.82,
+      0.12,
+      0.06
+     ],
+     "passes": 68,
+     "retirements": 3,
+     "winner_time_min": 100.93,
+     "order": [
+      "SAI",
+      "NOR",
+      "LEC",
+      "HAM",
+      "RUS",
+      "VER",
+      "MAG",
+      "PIA",
+      "HUL",
+      "GAS",
+      "STR",
+      "COL",
+      "OCO",
+      "BOT",
+      "ZHO",
+      "LAW",
+      "PER",
+      "ALO",
+      "TSU",
+      "ALB"
+     ],
+     "top_sequences": {
+      "M-H": 10,
+      "H-M": 4,
+      "M-H-S": 1,
+      "H-M-M-S": 1
+     }
+    },
+    "2024_abu_dhabi_gp": {
+     "stops": 1.44,
+     "share_1_2_3": [
+      0.69,
+      0.25,
+      0.06
+     ],
+     "passes": 88,
+     "retirements": 4,
+     "winner_time_min": 86.56,
+     "order": [
+      "NOR",
+      "SAI",
+      "LEC",
+      "HAM",
+      "RUS",
+      "VER",
+      "GAS",
+      "HUL",
+      "ALO",
+      "PIA",
+      "ALB",
+      "STR",
+      "TSU",
+      "ZHO",
+      "DOO",
+      "MAG",
+      "LAW",
+      "BOT",
+      "COL",
+      "PER"
+     ],
+     "top_sequences": {
+      "M-H": 10,
+      "M-H-H": 4,
+      "H-M": 1,
+      "M-H-H-S-S": 1
+     }
+    }
+   }
+  }
+ },
+ "same_lap": {
+  "real": {
+   "offsets": {
+    "SOFT": -0.2840960955707634,
+    "MEDIUM": 0.0,
+    "HARD": -0.03329385269888189
+   },
+   "lin": {
+    "SOFT": 0.06681501992878103,
+    "MEDIUM": 0.03773420287764789,
+    "HARD": 0.037348591518597464
+   },
+   "fresh": -0.13218799869726708
+  },
+  "sim": {
+   "offsets": {
+    "SOFT": 0.007235401479326863,
+    "MEDIUM": 0.0,
+    "HARD": -0.1440003063753598
+   },
+   "lin": {
+    "SOFT": 0.13086251801997936,
+    "MEDIUM": 0.06258253987261585,
+    "HARD": 0.0572831152280322
+   },
+   "fresh": -0.07475627489451181
+  }
+ },
+ "seconds": 87.3
+}

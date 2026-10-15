@@ -11,6 +11,18 @@ This is the reference every learned strategist must beat. It is deliberately sim
 - It doesn't know about traffic or rivals; safety cars only bring a planned stop forward
   (engine). It is an "empty track" optimum.
 
+**Tyre life (W1, D-041).** When the compounds have a life (data-backed races), a stint's cost
+also includes how the driver has to drive it: a stint longer than the set's life at BALANCED
+pace is managed (a share of CONSERVE laps, each slower but using less life), and beyond what
+full management allows the cliff is paid; a stint shorter than the life leaves life to spend
+on PUSH laps (faster). ``stint_costs`` gives this in closed form per stint length; with the
+pace modes' trade-offs ordered (a lap of life saved by managing costs more than a lap of life
+spent pushing gains) the cost stays convex in the length, so the split below still holds.
+``baseline_pace_mode`` then drives the plan lap by lap: manage when the set wouldn't last to
+its planned stop at BALANCED pace, push when there's life to spare. This is what makes two-
+and three-stop races (short stints, pushed) compete with one-stoppers (long, managed); each
+stop must also beat ``STOP_MARGIN_S`` (track position, which the empty-track plan ignores).
+
 Stint costs come from wear tables by tyre age (M4, D-033: wear is no longer linear). With the
 lap's wear step never negative, the cost of a fresh stint is convex in its length, so the best
 split of a lap budget between two fresh stints is a min-plus convolution of two convex
@@ -31,9 +43,13 @@ from f1ar.domain.race_state import (
     PlannedStop,
     RaceSetup,
 )
-from f1ar.simulation.lap_model import wear_per_lap_s
+from f1ar.simulation.lap_model import life_use_per_lap, wear_per_lap_s
 
-POLICY_ID = "baseline_strategy_v1"
+POLICY_ID = "baseline_strategy_v2"
+STOP_MARGIN_S = 6.5
+"""W1: what each stop must save on an empty track to be worth giving up track position
+(McLaren's 2024 strategy review: an extra stop must be "at least six or seven seconds
+quicker" on paper). Only with tyre life (data-backed races); sourced, not fitted."""
 
 
 def _stint_cost(offset: float, rate: float, laps: int, start_wear: float = 0.0) -> float:
@@ -100,6 +116,106 @@ def fresh_stint_costs(offset: float, wear: np.ndarray) -> np.ndarray:
     return n * offset + np.concatenate(([0.0], np.cumsum(wear[:-1])))
 
 
+def management_cost(
+    setup: RaceSetup,
+    driver: DriverArchetype,
+    compound: Compound,
+    laps: np.ndarray,
+    life_left: float,
+) -> np.ndarray:
+    """Lap time a stint of ``laps`` laps costs (or gains, < 0) through tyre management, from a
+    set with ``life_left`` of its life (W1). 0 without a life model.
+
+    ``u`` = life one BALANCED lap uses. If ``u n`` fits in ``life_left``, the spare life is
+    spent on PUSH laps (share ``(left / (u n) - 1) / (m_push - 1)``, at most all laps);
+    otherwise a share ``(1 - left / (u n)) / (1 - m_conserve)`` of the laps is managed (each
+    extra lap then costs ``offset / (1 - m)``); beyond full management that marginal cost goes
+    on and the cliff is paid for every lap past the life."""
+    params = setup.lap_model
+    u = life_use_per_lap(params, driver, compound=compound, pace_mode=PaceMode.BALANCED)
+    n = laps.astype(float)
+    if u <= 0.0:
+        return np.zeros_like(n)
+    push = params.pace_modes[PaceMode.PUSH]
+    cons = params.pace_modes[PaceMode.CONSERVE]
+    need = u * n
+    out = np.zeros_like(n)
+    spare = need <= life_left
+    with np.errstate(divide="ignore", invalid="ignore"):
+        if push.wear_multiplier > 1.0:
+            fp = np.clip((life_left / need - 1.0) / (push.wear_multiplier - 1.0), 0.0, 1.0)
+            out = np.where(spare & (n > 0), fp * n * push.offset_s, out)
+        # managed share: life used n u (1 - fc (1 - m)) = what's left
+        fc = (1.0 - life_left / need) / (1.0 - cons.wear_multiplier)
+        managed = ~spare & (fc <= 1.0) & (life_left > 0)
+        out = np.where(managed, fc * n * cons.offset_s, out)
+        # beyond what full management can stretch: every further lap costs at least the
+        # managed stint's last marginal lap, plus the cliff for every lap past the life (this
+        # keeps the cost convex; a slope that dropped here broke the planner's split, D-041)
+        m = cons.wear_multiplier
+        if life_left > 0:
+            n_b = life_left / (u * m)  # the longest fully managed stint
+            slope_b = cons.offset_s / (1.0 - m)  # the managed stint's marginal lap
+            over = np.maximum(0.0, n - n_b)
+            beyond = n_b * cons.offset_s + slope_b * over + params.cliff_s_per_lap * over**2 / 2.0
+        else:  # already past the life: full management and the cliff from here on
+            over_start = -life_left / (u * m)
+            beyond = (
+                n * cons.offset_s
+                + params.cliff_s_per_lap * ((over_start + n) ** 2 - over_start**2) / 2.0
+            )
+        out = np.where(~spare & ~managed, beyond, out)
+    return np.asarray(out)
+
+
+def stint_costs(
+    setup: RaceSetup,
+    driver: DriverArchetype,
+    compound: Compound,
+    laps: int,
+    *,
+    tyre_age_laps: int = 0,
+    tyre_wear_s: float = 0.0,
+    life_used: float = 0.0,
+    pace_mode: PaceMode = PaceMode.BALANCED,
+) -> np.ndarray:
+    """``f[n]`` = cost of the next ``n`` laps (``n = 0..laps``) on this set: compound offset,
+    wear carried and growing from ``tyre_age_laps``, and (W1) tyre management."""
+    params = setup.lap_model
+    table = wear_table(setup, driver, compound, pace_mode, tyre_age_laps + laps)
+    growth = table[tyre_age_laps : tyre_age_laps + laps] - table[tyre_age_laps]
+    per_lap = params.compounds[compound].offset_s + tyre_wear_s + growth
+    f = np.concatenate(([0.0], np.cumsum(per_lap)))
+    out: np.ndarray = f + management_cost(
+        setup, driver, compound, np.arange(laps + 1), 1.0 - life_used
+    )
+    return out
+
+
+def has_tyre_life(setup: RaceSetup) -> bool:
+    return any(setup.lap_model.compounds[c].life_laps is not None for c in DRY_COMPOUNDS)
+
+
+def baseline_pace_mode(setup: RaceSetup, car: CarState) -> PaceMode:
+    """The baseline's pace for the lap now beginning (W1): manage when the set wouldn't reach its
+    planned stop (or the flag) at BALANCED pace; push when it would still get there after a
+    pushed lap; else BALANCED. Without a tyre life the car keeps its mode."""
+    params = setup.lap_model
+    driver = setup.driver(car.driver_id).profile.archetype
+    u = life_use_per_lap(params, driver, compound=car.compound, pace_mode=PaceMode.BALANCED)
+    if u <= 0.0:
+        return car.pace_mode
+    end = car.planned_stops[0].lap if car.planned_stops else setup.track.total_laps
+    laps_left = max(1, end - car.laps_completed)
+    left = 1.0 - car.tyre_life_used
+    if left < u * laps_left:
+        return PaceMode.CONSERVE
+    u_push = life_use_per_lap(params, driver, compound=car.compound, pace_mode=PaceMode.PUSH)
+    if left - u_push >= u * (laps_left - 1):
+        return PaceMode.PUSH
+    return PaceMode.BALANCED
+
+
 def best_two_stints(f2: np.ndarray, f3: np.ndarray, laps: int) -> tuple[np.ndarray, np.ndarray]:
     """For every budget ``L = 0..laps``: the cheapest ``f2[b] + f3[L - b]`` with both stints
     >= 1 lap, and the ``b`` that achieves it (``inf`` / -1 where ``L < 2``).
@@ -136,6 +252,7 @@ def plan_stops(
     pace_mode: PaceMode,
     compounds_used: tuple[Compound, ...],
     tyre_age_laps: int = 0,
+    life_used: float = 0.0,
 ) -> tuple[PlannedStop, ...]:
     """Cheapest legal plan for the rest of the race, starting with the lap now beginning.
 
@@ -145,7 +262,6 @@ def plan_stops(
     """
     total = setup.track.total_laps
     remaining = total - laps_completed
-    params = setup.lap_model
     pit_cost = setup.pit.lane_loss_s + setup.pit.standstill_median_s
     used = set(compounds_used) | {compound}
     need = dry_compounds_required(setup, tuple(used))
@@ -155,24 +271,33 @@ def plan_stops(
     def legal(*later: Compound) -> bool:
         return len(used | set(later)) >= need
 
+    # W1: with tyre life the plan assumes BALANCED wear plus management (the baseline then
+    # manages / pushes lap by lap); without it, the car's current mode as before
+    if has_tyre_life(setup):
+        pace_mode = PaceMode.BALANCED
     # the current set: lap k of the rest (k = 0..) carries tyre_wear_s plus the curve's growth
     # from its current age (the wear so far may come from other pace modes, so it's kept as is)
-    cur = wear_table(setup, driver, compound, pace_mode, tyre_age_laps + remaining)
-    growth = cur[tyre_age_laps : tyre_age_laps + remaining] - cur[tyre_age_laps]
-    per_lap = params.compounds[compound].offset_s + tyre_wear_s + growth
-    first = np.concatenate(([0.0], np.cumsum(per_lap)))  # first[a] = cost of a laps
+    first = stint_costs(  # first[a] = cost of a laps
+        setup,
+        driver,
+        compound,
+        remaining,
+        tyre_age_laps=tyre_age_laps,
+        tyre_wear_s=tyre_wear_s,
+        life_used=life_used,
+        pace_mode=pace_mode,
+    )
     fresh = {
-        c: fresh_stint_costs(
-            params.compounds[c].offset_s, wear_table(setup, driver, c, pace_mode, remaining)
-        )
-        for c in DRY_COMPOUNDS
+        c: stint_costs(setup, driver, c, remaining, pace_mode=pace_mode) for c in DRY_COMPOUNDS
     }
 
     # (cost, number of stops, plan): ties go to fewer stops, then to the enumeration order.
     best: tuple[float, int, tuple[PlannedStop, ...]] | None = None
+    margin = STOP_MARGIN_S if has_tyre_life(setup) else 0.0
 
     def consider(cost: float, plan: tuple[PlannedStop, ...]) -> None:
         nonlocal best
+        cost += margin * len(plan)
         if best is None or (cost, len(plan)) < (best[0], best[1]):
             best = (cost, len(plan), plan)
 
@@ -219,4 +344,5 @@ def plan_for_car(setup: RaceSetup, car: CarState) -> tuple[PlannedStop, ...]:
         pace_mode=car.pace_mode,
         compounds_used=car.compounds_used,
         tyre_age_laps=car.tyre_age_laps,
+        life_used=car.tyre_life_used,
     )

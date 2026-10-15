@@ -16,7 +16,7 @@ from f1ar.domain.provenance import SourceType
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 10
+WORLD_SCHEMA_VERSION = 11
 
 
 class _Frozen(BaseModel):
@@ -95,6 +95,11 @@ class CompoundParams(_Frozen):
     deg_quad_s_per_lap2: float = 0.0
     """Quadratic wear term (M4, D-033): wear after ``a`` laps = deg a + quad a^2. The lap's
     increment ``deg + quad (2a + 1)`` is clamped at 0, so wear never decreases with age."""
+    life_laps: float | None = Field(default=None, gt=0)
+    """Tyre life (W1, D-041): laps a neutral driver gets from a new set in BALANCED mode before
+    the cliff. ``None`` = no life limit (synthetic setups, wet tyres: the pre-W1 model). With
+    a life, managing (CONSERVE) stretches a set and PUSH uses it up; past the life the cliff
+    adds lap time."""
 
 
 class PaceModeParams(_Frozen):
@@ -124,6 +129,14 @@ class LapModelParams(_Frozen):
     """Sampled lap times are clamped to at least this fraction of ``base_lap_s``."""
     compounds: dict[Compound, CompoundParams]
     pace_modes: dict[PaceMode, PaceModeParams]
+    fresh_tyre_bonus_s: float = 0.0
+    """W1: lap-time change on the first flying lap of a new set after a stop (negative = the
+    fresh-tyre peak, measured on 2024 laps)."""
+    cliff_s_per_lap: float = Field(default=0.0, ge=0)
+    """W1: lap time added per BALANCED-lap of use beyond a set's life, growing with every lap
+    past it (editorial shape)."""
+    neutralised_life_factor: float = Field(default=1.0, gt=0)
+    """W1: tyre life used on a lap that ends under SC/VSC, relative to a racing lap."""
 
     @model_validator(mode="after")
     def _complete(self) -> Self:
@@ -380,10 +393,15 @@ class CarState(_Frozen):
     """Out-lap only: pit-lane loss + standstill, spent at the line before driving the lap."""
     compound: Compound
     tyre_age_laps: int = Field(ge=0)
+    tyre_life_used: float = Field(default=0.0, ge=0)
+    """W1: share of the set's life used (1 = at the cliff); 0 without a life model. HIDDEN."""
     tyre_wear_s: float = Field(ge=0)
     """Accumulated degradation of the current tyre set, as lap time added. HIDDEN: a real
     team only infers this from lap times, so it is not part of an observation."""
     pace_mode: PaceMode
+    pace_by_user: bool = False
+    """W1: a human set this car's pace mode; the baseline's automatic tyre management leaves it
+    alone (until the car is handed back to the baseline)."""
     """Driver's intended mode; applies from the next lap start."""
     lap_pace_mode: PaceMode
     """Mode the lap in progress is being driven in (locked when the lap started)."""
@@ -531,7 +549,7 @@ DriverAction = SetPaceMode | RequestPitStop | CancelPitStop | SetStrategyControl
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[10]
+    schema_version: Literal[11]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None

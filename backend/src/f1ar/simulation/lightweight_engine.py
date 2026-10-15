@@ -55,6 +55,7 @@ from f1ar.domain.race_state import (
 )
 from f1ar.policy.baseline_strategy import (
     POLICY_ID,
+    baseline_pace_mode,
     dry_compounds_required,
     plan_for_car,
     weather_stop,
@@ -66,7 +67,7 @@ from f1ar.simulation.incidents import (
     mistake_loss_s,
     neutralisation_after,
 )
-from f1ar.simulation.lap_model import sample_lap_time_s, wear_per_lap_s
+from f1ar.simulation.lap_model import life_use_per_lap, sample_lap_time_s, wear_per_lap_s
 from f1ar.simulation.rng_streams import RngSpec, normal, uniform
 from f1ar.simulation.traffic import Ahead, resolve
 from f1ar.simulation.weather import (
@@ -80,7 +81,7 @@ from f1ar.simulation.weather import (
 )
 from f1ar.simulation.weather import penalty_s as weather_penalty_s
 
-ENGINE_VERSION = "lightweight_engine_v0.9.0"
+ENGINE_VERSION = "lightweight_engine_v0.10.0"
 """v0.9.0: launch spread on lap 1; overtaking and race-control rates from 2024 data (D-035).
 v0.8.0: weather: rain, track wetness, intermediate and wet tyres (D-034).
 v0.7.0: calibrated tyre/fuel model, curved wear, planner for it (D-033).
@@ -122,6 +123,8 @@ def _sample_next_lap(
     laps_completed: int,
     tyre_wear_s: float,
     wetness: float = 0.0,
+    tyre_life_used: float = 0.0,
+    fresh_lap: bool = False,
 ) -> float:
     entry = setup.driver(driver_id)
     weather = setup.weather
@@ -143,6 +146,8 @@ def _sample_next_lap(
         car_offset_s=entry.car_pace_offset_s,
         extra_s=extra,
         noise_scale=1.0 + weather.wet_noise_factor * wetness,
+        tyre_life_used=tyre_life_used,
+        fresh_lap=fresh_lap,
     )
 
 
@@ -382,6 +387,8 @@ def _set_pace_mode(
 ) -> CarState:
     if car.controller is StrategyController.AGENT and not action.actor_id.startswith("AGENT"):
         car = _take_over(car, emit)  # a human decision on an AI car: the human has it now
+    if not action.actor_id.startswith("AGENT") and not car.pace_by_user:
+        car = car.model_copy(update={"pace_by_user": True})  # W1: no automatic management now
     if car.pace_mode is action.pace_mode:
         return car
     emit(
@@ -451,12 +458,18 @@ def _set_controller(
     state: WorldState, car: CarState, controller: StrategyController, emit: _ActionEmit
 ) -> CarState:
     if car.controller is controller:
+        if controller is StrategyController.BASELINE and car.pace_by_user:
+            # W1: the pace (tyre management) is handed back to the baseline as well
+            emit("CONTROLLER_CHANGED", {"from": "BASELINE", "to": "BASELINE", "pace": "automatic"})
+            return car.model_copy(update={"pace_by_user": False})
         return car
     if controller is not StrategyController.BASELINE:
         return _take_over(car, emit, controller)
     emit("CONTROLLER_CHANGED", {"from": car.controller.value, "to": controller.value})
     # The baseline decides from here on; a pending user request is replaced by its plan.
-    new = car.model_copy(update={"controller": controller, "pit_request": None})
+    new = car.model_copy(
+        update={"controller": controller, "pit_request": None, "pace_by_user": False}
+    )
     return _replan(state, new, emit)
 
 
@@ -1156,6 +1169,10 @@ def _complete_lap(
         pace_mode=car.lap_pace_mode,
         tyre_age_laps=car.tyre_age_laps,
     )
+    # W1: the tyre life it used (less when the lap ends behind the SC / under VSC)
+    life_used = car.tyre_life_used + life_use_per_lap(
+        setup.lap_model, driver, compound=car.compound, pace_mode=car.lap_pace_mode
+    ) * (setup.lap_model.neutralised_life_factor if neutralised else 1.0)
     emit(
         "LAP_COMPLETED",
         car.driver_id,
@@ -1165,6 +1182,7 @@ def _complete_lap(
         "laps_completed": laps,
         "tyre_age_laps": car.tyre_age_laps + 1,
         "tyre_wear_s": wear,
+        "tyre_life_used": life_used,
         "last_lap_time_s": lap_time,
         "last_lap_traffic_loss_s": car.traffic_loss_s,
         "lap_started_at_s": crossing_time,
@@ -1202,6 +1220,10 @@ def _complete_lap(
     if stop is not None:
         car, hold = _pit(state, car, stop, emit, neutralised=neutralised)
 
+    if car.controller is StrategyController.BASELINE and not car.pace_by_user:
+        mode = baseline_pace_mode(setup, car)  # W1: manage or push to make the plan work
+        if mode is not car.pace_mode:
+            car = car.model_copy(update={"pace_mode": mode})
     lap_mode = car.pace_mode  # the driver's current intent is locked in for the new lap
     # Time lost defending or yielding on the previous lap is paid on this one.
     target = (
@@ -1216,6 +1238,8 @@ def _complete_lap(
             laps_completed=laps,
             tyre_wear_s=car.tyre_wear_s,
             wetness=state.weather.wetness,
+            tyre_life_used=car.tyre_life_used,
+            fresh_lap=car.tyre_age_laps == 1 and car.pit_stops > 0,
         )
     )
     car = car.model_copy(
@@ -1279,6 +1303,7 @@ def _pit(
             "compound": compound,
             "tyre_age_laps": 0,
             "tyre_wear_s": 0.0,
+            "tyre_life_used": 0.0,
             "pit_stops": car.pit_stops + 1,
             "compounds_used": used,
             "pit_request": None,

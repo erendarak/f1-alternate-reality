@@ -18,7 +18,7 @@ from typing import Any
 
 import yaml
 
-from f1ar.calibration.lap_model_fit import SHAPE_FILE
+from f1ar.calibration.lap_model_fit import LIFE_FILE, SHAPE_FILE
 from f1ar.calibration.race_control_fit import RACE_CONTROL_FILE
 from f1ar.calibration.traffic_fit import TRAFFIC_FILE
 from f1ar.calibration.weather_fit import WEATHER_FILE
@@ -27,7 +27,8 @@ DATASET_MANIFEST = Path("data") / "manifests" / "dataset_laps_2024_v1.yaml"
 ENGINE_ARTIFACTS = {
     (Path("configs") / f).as_posix(): what
     for f, what in (
-        (SHAPE_FILE, "tyre/fuel lap model (D-033)"),
+        (SHAPE_FILE, "fuel (D-033; tyres before W1)"),
+        (LIFE_FILE, "tyre life, wear, management (W1, D-041)"),
         (WEATHER_FILE, "weather (D-034)"),
         (TRAFFIC_FILE, "overtaking + launch spread (D-035)"),
         (RACE_CONTROL_FILE, "race control rates (D-035)"),

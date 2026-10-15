@@ -702,6 +702,101 @@ Decision / next:      Proposed (owner's call): observation rl_obs_v2 with each c
                       held-out tracks" is NOT met yet.
 ```
 
+## EXP-010 — The tyre-life world (W1) against the 2024 races (2026-10-15)
+
+```text
+Experiment ID:        EXP-010
+Research question:    Does the W1 tyre model (life, management vs push, cliff, fresh-tyre peak,
+                      a planner that manages and needs 6.5 s per stop) make the rule field race
+                      like 2024: stops, strategy sequences, passes, without breaking pace/order?
+Hypothesis:           Stops per finisher move from 1.00 everywhere to the real per-track pattern
+                      (1.06 Baku ... 2.1 Bahrain/Spain/Hungary ... 3.4 Qatar), on held-out races too.
+Data:                 laps_2024_v1 (21 dry races: 16 dry_train, 5 dry_test)
+Engine:               lightweight_engine_v0.10.0 (life) vs the same engine without the tyre-life
+                      file (the M4 tyre model = v0.9.0 behaviour), identical seeds 1-10 per race
+Fit:                  globals kappa 1.2, delta 0.0 by grid search on dry_train only
+                      (docs/experiments/fit_tyre_life.json; kappa 0.8-1.45, delta 0-0.5);
+                      per-race life/wear inputs are in-sample (like car pace offsets)
+Code:                 scripts/fit_tyre_life.py; scripts/experiments/exp010_tyre_life.py
+                      -> docs/experiments/exp010.json (420 races, 2 min on 14 processes)
+```
+
+| | Real | W1 (life) | v0.9 |
+|---|---|---|---|
+| Stops per finisher, train (16) | 1.77 | **1.49** | 1.12 |
+| Error per race, train (MAE) / correlation | | **0.34 / 0.40** | 0.66 / 0.25 |
+| Stops per finisher, test (5, not fitted) | 1.34 | **1.28** | 1.00 |
+| Error per race, test (MAE) / correlation | | **0.28 / 0.75** | 0.56 / n.a. (all 1.0) |
+| Passes per race, train / test | 52.7 / 56.6 | **47.5 / 50.1** | 43.9 / 44.3 |
+| Retirements per race, train / test | 1.62 / 3.0 | 2.38 / 2.44 | 2.12 / 2.20 |
+| Finishing order vs real (Spearman), train / test | | 0.631 / 0.599 | 0.653 / 0.618 |
+| Winner time error (min), train / test | | +0.49 / -12.9 | +0.33 / -12.95 |
+
+Per race, stops per finisher (real / W1 / v0.9) and the most common sequences:
+
+| Race | Real | W1 | v0.9 | Real sequences | W1 sequences |
+|---|---|---|---|---|---|
+| Saudi Arabia | 1.06 | 1.00 | 1.00 | M-H, M-S | M-H, S-H |
+| Azerbaijan | 1.06 | 1.02 | 1.00 | M-H, H-M | M-H, H-M |
+| Singapore | 1.11 | 1.02 | 1.00 | M-H, H-M | M-H, H-M |
+| Imola | 1.21 | 1.09 | 1.00 | M-H, H-M | M-H, H-M |
+| USA | 1.21 | 1.00 | 1.00 | M-H, H-M, M-M-H | M-H, H-M |
+| Zandvoort | 1.30 | 1.56 | 1.00 | M-H, M-H-S | M-H, M-H-H |
+| Miami | 1.42 | 1.06 | 1.00 | M-H, M-H-M | M-H, H-M |
+| Belgium | 1.79 | 1.87 | 1.00 | M-H-H, M-H-M | M-H-H, M-H |
+| Hungary | 2.05 | 2.02 | 1.95 | M-H-M, M-H-H | M-H-H, S-H-H |
+| Australia | 2.06 | 2.00 | 1.00 | M-H-H, S-H-H, H-M-H | M-H-H, S-H-H, H-M-H |
+| Las Vegas | 2.06 | **1.05** | 1.00 | M-H-H, H-M-H | M-H, H-M |
+| Spain | 2.10 | 1.95 | 1.00 | S-M-H, S-M-S | S-H-H, M-H |
+| China | 2.12 | 2.21 | 1.00 | M-H-H, M-H | M-H-H, M-H-H-H |
+| Bahrain | 2.15 | 2.00 | 1.00 | S-H-H, S-H-S | S-H-H |
+| Austria | 2.30 | 2.00 | 1.95 | M-H-M, M-H-H | M-H-H, H-M-H |
+| Qatar | 3.40 | **1.00** | 1.00 | M-H-H-H | M-H, H-M |
+| *test:* Monaco | 0.44* | 1.00 | 1.00 | M-H, H-M | H-M, M-H |
+| *test:* Mexico | 1.24 | 1.02 | 1.00 | M-H, H-M | M-H, H-M |
+| *test:* Abu Dhabi | 1.44 | 1.00 | 1.00 | M-H, M-H-H | M-H, H-M |
+| *test:* Monza | 1.58 | 1.39 | 1.00 | M-H, M-H-H (47 % / 47 %) | M-H, M-H-H (61 % / 39 %) |
+| *test:* Japan | 2.00 | 2.00 | 1.00 | M-M-H, S-S-H-H | M-H-H, S-H-H |
+
+\* Monaco and Japan: tyres changed under a lap-1 red flag (not simulated).
+
+Same-lap regression on race laps (all 21 races; simulated: 3 seeds per race):
+
+| | Soft vs medium | Hard vs medium | Wear S / M / H (s per lap of age) | Fresh-tyre peak |
+|---|---|---|---|---|
+| Real | -0.28 s | -0.03 s | 0.067 / 0.038 / 0.037 | -0.13 s |
+| W1 simulated | +0.01 s | -0.14 s | 0.131 / 0.063 / 0.057 | -0.07 s |
+
+```text
+Findings:
+  1. STRATEGY NOW DEPENDS ON THE TRACK, AS IN 2024. Stops per finisher error halves (train
+     0.66 -> 0.34, test 0.56 -> 0.28) and follows the real races (test correlation 0.75; v0.9
+     had none: always one stop). Several races reproduce the real sequences exactly (Australia,
+     Belgium, Bahrain, Monza's one/two-stop split).
+  2. MISSES: Las Vegas (real 2.06, W1 1.05: graining/cold track not modelled), Qatar (3.40 vs
+     1.00: extreme wear and kerb damage beyond what stint lengths show), Miami/Abu Dhabi/USA
+     (real some two-stops, W1 one); stop counts overall a little low (1.49 vs 1.77 train).
+  3. LESS VARIETY INSIDE A RACE than real: every rule car runs the same planner, so most of a
+     race's field picks the same plan (Bahrain 100 % two-stop vs real 85 %). Variety is the job
+     of characters / the AI field (M5 slices 4-5).
+  4. SIDE EFFECTS: cars push more (PUSH 63 % of laps in the fit), so retirements rose (2.40 vs
+     2.14 per race; real 1.95 over the 21 races): PUSH's editorial x1.6 risk. Order vs real
+     slightly lower (Spearman -0.02). Winner times unchanged (Japan -13 min is the real race's
+     red-flag stoppage, as before).
+  5. RACE-LAP PACE BY COMPOUND IS NOT REPRODUCED: real softs are 0.28 s faster than mediums on
+     the same lap, simulated ones aren't (they manage their short life), and simulated wear on
+     race laps is ~2x the real one (pushing at x1.4). The behaviour fit preferred delta = 0;
+     the pace-mode trade-offs are editorial. A joint fit of stops, shares AND same-lap pace is
+     the next improvement.
+Negative results:     Las Vegas, Qatar; same-lap compound pace; retirements up.
+Reproduce:            uv run python scripts/fit_tyre_life.py --report docs/experiments/fit_tyre_life.json
+                      uv run python scripts/experiments/exp010_tyre_life.py --seeds 10 \
+                        --json docs/experiments/exp010.json
+Decision / next:      Keep W1 (engine v0.10.0). Next in the research plan: W4 (race control and
+                      random events; refit retirements with the new pace-mode mix) or a W1b
+                      joint fit; the AI comes back after the world is closer to 2024.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

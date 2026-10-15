@@ -20,6 +20,13 @@ old linear model). Changing pace mode therefore changes how
 fast the tyres wear from now on. It never rewrites the wear already accumulated (engine
 v0.1.0 got this wrong: it scaled the whole stint's wear by the current mode).
 
+**Tyre life (W1, engine v0.10.0, D-041)**, when a compound has ``life_laps``: each lap also
+uses ``wear_factor x pace_mode_wear_multiplier / life_laps`` of the set's life (less under
+SC/VSC). Past a life of 1 the cliff adds ``cliff_s_per_lap`` per BALANCED-lap of overrun to
+every lap (growing). This is what makes managing (CONSERVE: slower, the set lasts longer) and
+pushing (faster, it doesn't) a real trade-off, and what limits how long a set can run. The
+first flying lap on a new set after a stop gets ``fresh_tyre_bonus_s`` (the fresh-tyre peak).
+
 Each profile field gets its own causal channel: ``risk_appetite`` is a *preference* and
 does not enter the transition model here. It will shape strategy choices instead.
 Coefficients: placeholders (D-010) for synthetic setups; for data-backed races the tyre/fuel
@@ -61,6 +68,24 @@ def wear_per_lap_s(
     )
 
 
+def life_use_per_lap(
+    params: LapModelParams, driver: DriverArchetype, *, compound: Compound, pace_mode: PaceMode
+) -> float:
+    """Share of a set's life one lap in ``pace_mode`` uses (0 without a life model)."""
+    life = params.compounds[compound].life_laps
+    if life is None:
+        return 0.0
+    return tyre_wear_factor(params, driver) * params.pace_modes[pace_mode].wear_multiplier / life
+
+
+def cliff_s(params: LapModelParams, compound: Compound, tyre_life_used: float) -> float:
+    """Lap time the cliff adds at ``tyre_life_used`` (0 until the life is used up)."""
+    life = params.compounds[compound].life_laps
+    if life is None or tyre_life_used <= 1.0:
+        return 0.0
+    return params.cliff_s_per_lap * (tyre_life_used - 1.0) * life
+
+
 def degradation_s(
     params: LapModelParams,
     driver: DriverArchetype,
@@ -85,9 +110,14 @@ def expected_lap_time_s(
     pace_mode: PaceMode,
     laps_remaining: int,
     car_offset_s: float = 0.0,
+    tyre_life_used: float = 0.0,
+    fresh_lap: bool = False,
 ) -> float:
+    """``fresh_lap``: the first flying lap of a new set after a stop (W1 fresh-tyre peak)."""
     return (
         params.base_lap_s
+        + cliff_s(params, compound, tyre_life_used)
+        + (params.fresh_tyre_bonus_s if fresh_lap else 0.0)
         + params.skill_gap_s * (1.0 - driver.race_pace_skill)
         + car_offset_s
         + params.compounds[compound].offset_s
@@ -115,6 +145,8 @@ def sample_lap_time_s(
     car_offset_s: float = 0.0,
     extra_s: float = 0.0,
     noise_scale: float = 1.0,
+    tyre_life_used: float = 0.0,
+    fresh_lap: bool = False,
 ) -> float:
     """Lap time for ``lap_number``. The noise is keyed by (driver, lap): common across forks.
 
@@ -128,6 +160,8 @@ def sample_lap_time_s(
         pace_mode=pace_mode,
         laps_remaining=laps_remaining,
         car_offset_s=car_offset_s,
+        tyre_life_used=tyre_life_used,
+        fresh_lap=fresh_lap,
     )
     z = normal(seed, "lap_noise", driver_id, lap_number)
     noisy = mean + extra_s + noise_sd_s(params, driver) * noise_scale * z

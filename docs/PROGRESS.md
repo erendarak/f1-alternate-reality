@@ -1,5 +1,21 @@
 # Progress
 
+## World realism before more AI (research-driven, `docs/RESEARCH_REAL_F1.md`)
+
+Why: EXP-009 showed the world gave strategy almost nothing to win. The owner asked for research
+into what makes the difference in real F1 and for the world to be adapted to it; the AI work
+(M5) resumes once the world is closer to 2024. Plan (2026-10-15, one slice per commit):
+
+- [x] **W1: tyres v2 (engine v0.10.0, D-041, EXP-010)**: tyre life, management vs push, cliff,
+  fresh-tyre peak, a planner that manages and needs 6.5 s per stop; stops per finisher now
+  follow the real races (test error 0.56 -> 0.28). Tyre allocation deferred.
+- [ ] W4: race control and random events (debris SCs per track, red flags with tyre changes,
+  pit crews and reliability per team, penalties; refit retirements for the new pace mix).
+- [ ] W2: race pace realism (lap noise ~0.5 s, driver race pace vs teammate, development).
+- [ ] W3: racecraft (DRS, dirty air by gap, attack/defend skills, starts, lap-1 incidents).
+- [ ] W5: drivers' character measured where possible.
+- [ ] W6: weather extensions.
+
 ## Current milestone: M5 — Stage 1: a field of AI strategists (plan §9, §16; design `docs/M5_DESIGN.md`, D-037)
 
 Why: the project exists to train AI for a live F1 world. M5 trains the first real AI: one shared
@@ -1127,3 +1143,28 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
   not reproduced.
 - Next (owner's call): `rl_obs_v2` (per-compound offsets and wear, tyre wear in seconds) +
   retrain + EXP-009 again; then slice 4.
+
+### 2026-10-15 — Research: what makes the difference in real F1 (`docs/RESEARCH_REAL_F1.md`)
+
+- Four web research passes (cars, tyres/weather, drivers, race dynamics; sourced numbers) plus
+  our own measurements on the 2024 laps; a factor-by-factor comparison with the engine and a
+  sliced adaptation plan (W1-W6). Biggest gap: tyres (real 1.74 stops per finisher, ours 1.00);
+  also lap noise 3x too small, SCs only after retirements, no red flags / DRS / penalties.
+
+### 2026-10-15 — W1: tyre life (engine v0.10.0, D-041, EXP-010)
+
+- Finding first: on the same lap of a 2024 race, compounds are about equally fast; the softer
+  tyre's advantage shows as shorter life. So W1 models **tyre life** with management (CONSERVE)
+  vs PUSH, a cliff and the fresh-tyre peak, instead of bigger compound pace gaps.
+- Engine v0.10.0, world schema 11, `baseline_strategy_v2` (manages to its plan, 6.5 s per-stop
+  margin from McLaren's 2024 review); `calibration/tyre_life_fit.py`, `scripts/fit_tyre_life.py`,
+  `configs/calibration/tyre_life_2024_v1.json` + registry manifest; globals kappa 1.2 / delta 0.0
+  fitted on the dry_train races only.
+- EXP-010 on all 21 dry races (W1 vs v0.9, same seeds): stops per finisher error 0.66 -> 0.34
+  (train) and 0.56 -> 0.28 (test); test correlation 0.75; many real sequences reproduced.
+  Misses: Las Vegas, Qatar, less variety inside a race, same-lap compound pace, retirements up.
+- Bugs found and fixed: an inverted managed-share formula in the planner, lost convexity beyond
+  full management, a hand-back to the baseline silently dropped.
+- Tests: 411 offline (+10 in `tests/unit/test_tyre_life.py`, +1 registry fallback; registry and two calibrated-engine
+  tests updated for W1).
+- Next (owner's call): W4 (race control and random events) per the plan, or a W1b joint fit.

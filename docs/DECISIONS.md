@@ -897,3 +897,50 @@ judged by "did it really learn" **and** "does the world feel more alive".
   cloned policy already fails on unseen tracks: `rl_obs_v1` lacks each compound's pace and wear
   on the track, so compound choice doesn't generalise. It stays registered as the first,
   measured version (lineage starts here); no world uses it. Proposed next: `rl_obs_v2`.
+
+## D-041 — W1: tyre life, management vs push, the cliff, and a planner that manages (2026-10-15)
+
+Context: EXP-009 showed our world gave strategy almost nothing to win; the research
+(`docs/RESEARCH_REAL_F1.md`) found real 2024 dry races averaged 1.74 stops per finisher (ours:
+1.00) and that, measured on the same lap, compounds are about equally fast in a *race* (drivers
+drive to a target pace; the softer tyre's advantage shows up as shorter life, not faster laps).
+The owner chose to adapt the world first (W1 of the research plan), before more AI training.
+
+- **Tyre model v2 (engine v0.10.0, world schema 11):** each dry compound gets a **life** in
+  laps (`CompoundParams.life_laps`); every lap uses `wear_factor x pace-mode multiplier / life`
+  of it (x0.35 on a lap ending under SC/VSC, TUM's values). Past the life the **cliff** adds
+  0.5 s per BALANCED-lap of overrun to every lap (editorial shape). Pace modes become the
+  management trade-off: CONSERVE +0.35 s and x0.75 life use, PUSH -0.30 s and x1.4 (editorial,
+  research ranges). The first flying lap of a new set after a stop gets the **fresh-tyre peak**
+  (season fit, -0.09 s). `life_laps = None` keeps the pre-W1 model exactly (synthetic setups,
+  wet tyres; every existing test passed unchanged).
+- **Fitted on 2024** (`calibration/tyre_life_fit.py`, `scripts/fit_tyre_life.py`,
+  `configs/calibration/tyre_life_2024_v1.json`, registry manifest `tyre_life v1`):
+  - *wear on race laps* by a same-lap regression (a term per lap of the race absorbs fuel and
+    track evolution; driver terms; compound curves; fresh-tyre dummy), pooled over dry_train,
+    times a per-race multiplier (shrunk);
+  - *raw life per compound and race* = q75 of the set's age when cars pitted under green
+    (stints >= 5 laps), shrunk toward the race's other compounds x season life ratios (soft
+    0.55, hard 1.28 of a medium); compounds a race didn't use are filled that way;
+  - *globals by behaviour* on the 16 dry_train races only (grid search, rule field simulated,
+    loss = stops per finisher + compound shares): **kappa 1.2** (life = 1.2 x raw) and **delta
+    0.0** (no built-in pace step between compounds: on race laps they don't differ, matching
+    the same-lap measurement; Pirelli's ~0.5 s/step is one-lap potential, not race pace).
+- **Rule planner (baseline_strategy_v2):** stint costs include management in closed form
+  (spare life spent pushing, longer stints managed, the cliff beyond), convex in the stint
+  length so the exact split still holds; **a stop must save 6.5 s on an empty track**
+  (McLaren's 2024 review: an extra stop must be "at least six or seven seconds quicker" on
+  paper; sourced, not fitted; only with tyre life). `baseline_pace_mode` drives the plan lap by
+  lap: manage if the set wouldn't reach the planned stop at BALANCED, push if there's life to
+  spare. A human pace command on a BASELINE car sets `pace_by_user` and the automatic
+  management stops until the car is handed back to the baseline (an event announces it).
+- **Car pace and base lap** are read off real laps with the *observed* same-lap compound offsets
+  (the model's estimation variant); the simulation runs the potential offsets (here equal).
+- **Bugs found while building:** the managed-share formula was inverted (fixed before EXP-010's
+  final run); the stint cost lost convexity beyond full management (fixed, tested); handing a
+  car back to the baseline was silently dropped (actions without events don't change state;
+  now announced).
+- **Result (EXP-010):** stops per finisher error per race 0.34 (train) / **0.28 (test)** vs
+  0.66 / 0.56 for v0.9, correlation with the real races 0.40 / **0.75**; many races reproduce
+  the real sequences. Misses and side effects are in KNOWN_LIMITATIONS. `strategist_m5s3_v1`
+  is pinned to v0.9.0 and is refused by worlds on v0.10.0 (as designed).

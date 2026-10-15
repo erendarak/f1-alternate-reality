@@ -82,14 +82,17 @@ def setup_from_codes(
     data_dir: Path | None = None,
     configs_dir: Path | None = None,
     random_rain: bool = False,
+    tyre_life_overrides: dict[str, float] | None = None,
 ) -> RaceSetup:
     """Setup from 3-letter driver codes (e.g. ``["VER", "HAM"]``); ``None`` = full grid.
 
     With ``data_dir`` (a fetched ``data/processed/<event>/``) the setup uses the real start tyres,
     the calibrated tyre/fuel model (season shape + this race's adjustment, M4/D-033), and the
     data-estimated car offsets, base lap and pit loss; without it, the editorial placeholders
-    (Monza and Spa only).
+    (Monza and Spa only). ``tyre_life_overrides`` (``kappa``, ``delta``) replace the tyre-life
+    globals: only for fitting them (W1).
     """
+    tyre_life_overrides = tyre_life_overrides or {}
     by_code = {e.code: e.driver_id for e in roster.entries}
     wanted = [e.code for e in roster.entries] if codes is None else [c.upper() for c in codes]
     unknown = [c for c in wanted if c not in by_code]
@@ -109,7 +112,13 @@ def setup_from_codes(
         )
 
     from f1ar.calibration.lap_dataset import race_laps
-    from f1ar.calibration.lap_model_fit import SHAPE_FILE, calibrated_lap_model, load_shape
+    from f1ar.calibration.lap_model_fit import (
+        SHAPE_FILE,
+        calibrated_lap_model,
+        life_lap_model,
+        load_life,
+        load_shape,
+    )
     from f1ar.calibration.race_inputs import (
         estimate_base_lap,
         estimate_car_offsets,
@@ -157,7 +166,21 @@ def setup_from_codes(
         )
     editorial = default_lap_model(_NOMINAL_BASE_LAP_S.get(roster.event_id, 90.0))
     field = [profiles.get(d).archetype for d in roster.driver_ids()]
-    if (configs / SHAPE_FILE).exists():
+    life = load_life(configs)
+    estimation_params = None
+    if life is not None and (configs / SHAPE_FILE).exists():  # W1: tyre life (D-041)
+        shape, _ = load_shape(configs)
+        model = life_lap_model(
+            editorial,
+            *life,
+            roster.event_id,
+            field,
+            shape.fuel_s_per_lap,
+            kappa=tyre_life_overrides.get("kappa"),
+            delta=tyre_life_overrides.get("delta"),
+        )
+        lap_params, estimation_params, tyre_note = model.params, model.estimation_params, model.note
+    elif (configs / SHAPE_FILE).exists():
         calibrated = calibrated_lap_model(editorial, *load_shape(configs), race, field)
         lap_params, tyre_note = calibrated.params, calibrated.note
     else:  # no fitted model: the deterministic editorial model still runs (plan §16 M4)
@@ -166,8 +189,11 @@ def setup_from_codes(
             f"editorial_assumption: no fitted tyre shape ({SHAPE_FILE.as_posix()} missing); "
             "placeholder tyre/fuel model (D-010)"
         )
-    estimate = estimate_car_offsets(laps, roster, profiles, lap_params)
-    base = estimate_base_lap(laps, roster, profiles, lap_params, estimate, track.total_laps)
+    # W1: car pace and the base lap are read off real (managed) race laps with the offsets seen
+    # on race laps; the simulation then runs the tyres' potential pace
+    seen = estimation_params or lap_params
+    estimate = estimate_car_offsets(laps, roster, profiles, seen)
+    base = estimate_base_lap(laps, roster, profiles, seen, estimate, track.total_laps)
     lap_model = lap_params.model_copy(update={"base_lap_s": base.base_lap_s})
     try:
         pit_loss = estimate_pit_loss(laps)  # weather-adjusted: a stop in the rain isn't slower

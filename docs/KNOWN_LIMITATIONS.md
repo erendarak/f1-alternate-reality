@@ -2,6 +2,29 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## W1 (tyre life, engine v0.10.0, EXP-010)
+
+- **Some races still miss their stop count:** Las Vegas (real 2.06, sim 1.05; graining on a cold,
+  new surface isn't modelled), Qatar (3.40 vs 1.00), and Miami/Abu Dhabi/USA (sim one-stops
+  where part of the real field two-stopped). Overall slightly too few stops (train 1.49 vs 1.77).
+- **Little strategy variety inside a race:** every rule car runs the same planner, so a race's
+  field mostly picks one plan. Characters and the AI field (M5) are meant to add variety.
+- **Race-lap pace by compound isn't reproduced:** real softs run 0.28 s faster than mediums on
+  the same lap; simulated softs don't, and simulated race-lap wear is about 2x the real one.
+  The behaviour fit chose no built-in compound pace step (delta 0).
+- **Editorial pieces:** the pace-mode trade-offs (CONSERVE +0.35 s / x0.75 life, PUSH -0.30 s /
+  x1.4), the cliff (0.5 s per lap of overrun), life used under SC/VSC (x0.35; TUM), and the 6.5 s
+  per-stop margin (sourced from McLaren's 2024 review, not fitted).
+- **Per-race inputs are in-sample:** each race's tyre life comes from that race's own stints
+  (like the car pace offsets). Only the two globals were held out from the test races.
+- **More retirements:** cars push more (63 % of laps in the fit), so the editorial x1.6 PUSH
+  risk raised retirements to 2.40 per race (v0.9 2.14, real 1.95). They need refitting with the
+  new pace mix (W4).
+- **No tyre allocation yet:** sets are unlimited and new (the 13-set rule and used qualifying
+  sets were in the plan for W1 and are deferred).
+- **The AI's observation (`rl_obs_v1`) doesn't contain tyre life;** `strategist_m5s3_v1` is
+  pinned to engine v0.9.0 and is refused on v0.10.0.
+
 ## M5 slice 3 (training stack, first learned policy)
 
 - **The first learned policy is slightly worse than the rule planner on held-out tracks**
