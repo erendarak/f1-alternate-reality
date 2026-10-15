@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+from f1ar.calibration.driver_pace_fit import PACE_FILE
 from f1ar.calibration.lap_model_fit import LIFE_FILE, SHAPE_FILE
 from f1ar.calibration.race_control_fit import RACE_CONTROL_FILE
 from f1ar.calibration.race_events_fit import EVENTS_FILE
@@ -20,7 +21,15 @@ from f1ar.simulation.scenarios import setup_from_codes
 from tests.conftest import CONFIGS, REPO_ROOT, run_ticks
 from tests.unit.test_race_inputs import synthetic_laps
 
-CALIBRATION = (SHAPE_FILE, LIFE_FILE, WEATHER_FILE, TRAFFIC_FILE, RACE_CONTROL_FILE, EVENTS_FILE)
+CALIBRATION = (
+    SHAPE_FILE,
+    LIFE_FILE,
+    WEATHER_FILE,
+    TRAFFIC_FILE,
+    RACE_CONTROL_FILE,
+    EVENTS_FILE,
+    PACE_FILE,
+)
 
 
 def test_every_model_is_registered_and_matches_its_artifact() -> None:
@@ -29,7 +38,15 @@ def test_every_model_is_registered_and_matches_its_artifact() -> None:
     registered = {e.artifact for e in entries}
     assert set(ENGINE_ARTIFACTS) <= registered  # every file the engine loads has a manifest
     used = {e.model_name for e in entries if e.used_by_engine}
-    assert used == {"tyre_shape", "tyre_life", "weather", "traffic", "race_control", "race_events"}
+    assert used == {
+        "tyre_shape",
+        "tyre_life",
+        "weather",
+        "traffic",
+        "race_control",
+        "race_events",
+        "driver_pace",
+    }
     lgbm = next(e for e in entries if e.model_name == "pace_predictor_online")
     assert not lgbm.artifact_tracked and lgbm.used_by_engine is None
     assert "pace_predictor_online" in registry_markdown(entries)
@@ -69,6 +86,7 @@ def test_a_race_builds_and_runs_without_fitted_models(
         RACE_CONTROL_FILE: ("race_control", setup.race_control.source_type),
     }
     assert setup.inputs["race_events"].startswith("editorial") == (EVENTS_FILE in missing)
+    assert setup.inputs["driver_pace"].startswith("editorial") == (PACE_FILE in missing)
     for f, (key, source) in parts.items():
         editorial = f in missing
         assert setup.inputs[key].startswith("editorial") == editorial, key

@@ -1,0 +1,274 @@
+{
+ "seeds": 10,
+ "laps": {
+  "train": {
+   "noise_drivers": 23,
+   "noise_real_median": 0.444,
+   "noise_sim_median": 0.476,
+   "noise_corr": 0.9,
+   "gap_pairs": 146,
+   "gap_real_abs_median": 0.248,
+   "gap_sim_abs_median": 0.212,
+   "gap_corr": 0.32,
+   "gap_sign_agreement": 0.64,
+   "per_driver_noise": {
+    "ALB": [
+     0.488,
+     0.531
+    ],
+    "ALO": [
+     0.482,
+     0.496
+    ],
+    "BEA": [
+     0.457,
+     0.423
+    ],
+    "BOT": [
+     0.606,
+     0.574
+    ],
+    "COL": [
+     0.444,
+     0.476
+    ],
+    "GAS": [
+     0.46,
+     0.5
+    ],
+    "HAM": [
+     0.404,
+     0.432
+    ],
+    "HUL": [
+     0.426,
+     0.494
+    ],
+    "LAW": [
+     0.329,
+     0.454
+    ],
+    "LEC": [
+     0.344,
+     0.429
+    ],
+    "MAG": [
+     0.536,
+     0.537
+    ],
+    "NOR": [
+     0.339,
+     0.436
+    ],
+    "OCO": [
+     0.5,
+     0.53
+    ],
+    "PER": [
+     0.395,
+     0.434
+    ],
+    "PIA": [
+     0.381,
+     0.418
+    ],
+    "RIC": [
+     0.544,
+     0.528
+    ],
+    "RUS": [
+     0.368,
+     0.416
+    ],
+    "SAI": [
+     0.319,
+     0.431
+    ],
+    "SAR": [
+     0.581,
+     0.549
+    ],
+    "STR": [
+     0.433,
+     0.458
+    ],
+    "TSU": [
+     0.533,
+     0.522
+    ],
+    "VER": [
+     0.323,
+     0.386
+    ],
+    "ZHO": [
+     0.484,
+     0.513
+    ]
+   }
+  },
+  "test": {
+   "noise_drivers": 22,
+   "noise_real_median": 0.48,
+   "noise_sim_median": 0.486,
+   "noise_corr": 0.56,
+   "gap_pairs": 39,
+   "gap_real_abs_median": 0.217,
+   "gap_sim_abs_median": 0.183,
+   "gap_corr": 0.27,
+   "gap_sign_agreement": 0.56,
+   "per_driver_noise": {
+    "ALB": [
+     0.493,
+     0.484
+    ],
+    "ALO": [
+     0.442,
+     0.493
+    ],
+    "BOT": [
+     0.589,
+     0.592
+    ],
+    "COL": [
+     0.31,
+     0.485
+    ],
+    "GAS": [
+     0.598,
+     0.505
+    ],
+    "HAM": [
+     0.495,
+     0.457
+    ],
+    "HUL": [
+     0.346,
+     0.473
+    ],
+    "LAW": [
+     0.561,
+     0.429
+    ],
+    "LEC": [
+     0.351,
+     0.432
+    ],
+    "MAG": [
+     0.587,
+     0.513
+    ],
+    "NOR": [
+     0.372,
+     0.435
+    ],
+    "OCO": [
+     0.506,
+     0.486
+    ],
+    "PER": [
+     0.446,
+     0.423
+    ],
+    "PIA": [
+     0.39,
+     0.496
+    ],
+    "RIC": [
+     0.376,
+     0.529
+    ],
+    "RUS": [
+     0.413,
+     0.435
+    ],
+    "SAI": [
+     0.467,
+     0.428
+    ],
+    "SAR": [
+     0.728,
+     0.569
+    ],
+    "STR": [
+     0.538,
+     0.491
+    ],
+    "TSU": [
+     0.579,
+     0.518
+    ],
+    "VER": [
+     0.357,
+     0.418
+    ],
+    "ZHO": [
+     0.58,
+     0.493
+    ]
+   }
+  }
+ },
+ "races": {
+  "train": {
+   "real": {
+    "passes": 52.7,
+    "retirements": 1.62
+   },
+   "w2": {
+    "passes": 53.1,
+    "stops": 1.44,
+    "retirements": 1.51,
+    "spearman": 0.662,
+    "winner_time_error_min": -0.25
+   },
+   "v0.11": {
+    "passes": 52.3,
+    "stops": 1.44,
+    "retirements": 1.51,
+    "spearman": 0.679,
+    "winner_time_error_min": -0.16
+   }
+  },
+  "test": {
+   "real": {
+    "passes": 56.6,
+    "retirements": 3.0
+   },
+   "w2": {
+    "passes": 57.5,
+    "stops": 1.26,
+    "retirements": 1.44,
+    "spearman": 0.646,
+    "winner_time_error_min": -13.85
+   },
+   "v0.11": {
+    "passes": 54.7,
+    "stops": 1.26,
+    "retirements": 1.44,
+    "spearman": 0.662,
+    "winner_time_error_min": -13.72
+   }
+  },
+  "all_dry": {
+   "real": {
+    "passes": 53.6,
+    "retirements": 1.95
+   },
+   "w2": {
+    "passes": 54.2,
+    "stops": 1.4,
+    "retirements": 1.49,
+    "spearman": 0.658,
+    "winner_time_error_min": -3.49
+   },
+   "v0.11": {
+    "passes": 52.9,
+    "stops": 1.4,
+    "retirements": 1.49,
+    "spearman": 0.675,
+    "winner_time_error_min": -3.39
+   }
+  }
+ },
+ "seconds": 79.3
+}

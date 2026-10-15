@@ -16,7 +16,7 @@ from f1ar.domain.provenance import SourceType
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 12
+WORLD_SCHEMA_VERSION = 13
 
 
 class _Frozen(BaseModel):
@@ -135,6 +135,8 @@ class LapModelParams(_Frozen):
     cliff_s_per_lap: float = Field(default=0.0, ge=0)
     """W1: lap time added per BALANCED-lap of use beyond a set's life, growing with every lap
     past it (editorial shape)."""
+    form_sd_s: float = Field(default=0.0, ge=0)
+    """W2: SD of a driver's race form (a pace offset drawn once per driver and race)."""
     neutralised_life_factor: float = Field(default=1.0, gt=0)
     """W1: tyre life used on a lap that ends under SC/VSC, relative to a racing lap."""
 
@@ -354,6 +356,11 @@ class DriverEntry(_Frozen):
     """W4: the team's slow-stop rate vs. the field's."""
     failure_multiplier: float = Field(default=1.0, ge=0)
     """W4: the team's mechanical failure rate vs. the field's."""
+    driver_pace_offset_s: float = Field(default=0.0, ge=-3.0, le=3.0)
+    """W2: the driver's race pace vs. his teammate (season fit; negative = faster). When a race
+    uses it, the lap model's persona skill term is off (``LapModelParams.skill_gap_s`` = 0)."""
+    lap_noise_s: float | None = Field(default=None, gt=0)
+    """W2: the driver's lap-to-lap spread (season fit); ``None`` = the persona formula."""
     profile: DriverProfile
 
 
@@ -584,7 +591,7 @@ DriverAction = SetPaceMode | RequestPitStop | CancelPitStop | SetStrategyControl
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[12]
+    schema_version: Literal[13]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None

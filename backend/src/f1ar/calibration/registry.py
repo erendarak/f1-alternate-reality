@@ -18,6 +18,7 @@ from typing import Any
 
 import yaml
 
+from f1ar.calibration.driver_pace_fit import PACE_FILE
 from f1ar.calibration.lap_model_fit import LIFE_FILE, SHAPE_FILE
 from f1ar.calibration.race_control_fit import RACE_CONTROL_FILE
 from f1ar.calibration.race_events_fit import EVENTS_FILE
@@ -34,6 +35,7 @@ ENGINE_ARTIFACTS = {
         (TRAFFIC_FILE, "overtaking + launch spread (D-035)"),
         (RACE_CONTROL_FILE, "race control rates (D-035)"),
         (EVENTS_FILE, "race events: crews, reliability, debris, red flags, penalties (D-042)"),
+        (PACE_FILE, "driver race pace vs teammate, form, lap noise (D-043)"),
     )
 }
 """Artifacts the engine's setup loads (repo-relative path -> what it drives)."""

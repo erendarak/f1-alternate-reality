@@ -17,6 +17,7 @@ is M4.
 """
 
 from collections import defaultdict
+from collections.abc import Mapping
 from dataclasses import dataclass
 from statistics import fmean
 
@@ -68,6 +69,7 @@ def estimate_base_lap(
     lap_model: LapModelParams,
     car_estimate: "CarPaceEstimate",
     total_laps: int,
+    driver_offsets: Mapping[str, float] | None = None,
 ) -> BaseLapEstimate:
     """``base_lap_s`` such that the lap model's mean prediction for the fastest team's real
     representative laps matches them (median residual).
@@ -91,7 +93,11 @@ def estimate_base_lap(
             continue
         driver = profiles.get(entry.driver_id).archetype
         c = Compound(compound)
-        skill = lap_model.skill_gap_s * (1.0 - driver.race_pace_skill)
+        skill = (
+            driver_offsets.get(entry.driver_id, 0.0)
+            if driver_offsets is not None  # W2: the fitted driver pace
+            else lap_model.skill_gap_s * (1.0 - driver.race_pace_skill)
+        )
         life = row.get("tyre_life_laps")  # missing -> treat as a fresh tyre (no wear term)
         tyre_life = 1 if life is None or pd.isna(life) else int(life)
         wear = degradation_s(
@@ -175,7 +181,10 @@ def estimate_car_offsets(
     roster: RaceRoster,
     profiles: ProfileSet,
     lap_model: LapModelParams,
+    driver_offsets: Mapping[str, float] | None = None,
 ) -> CarPaceEstimate:
+    """Car pace per team: driver medians minus the driver's own part (the fitted driver offset
+    when given, W2; else the persona skill term), averaged per team, vs the fastest car."""
     reps = representative_laps(laps)
     by_number = {e.car_number: e for e in roster.entries}
     team_values: dict[str, list[float]] = defaultdict(list)
@@ -191,7 +200,12 @@ def estimate_car_offsets(
         median = float(group["lap_time_s"].median())
         skill = profiles.get(entry.driver_id).archetype.race_pace_skill
         medians[entry.driver_id] = median
-        team_values[entry.team_id].append(median - lap_model.skill_gap_s * (1.0 - skill))
+        own = (
+            driver_offsets.get(entry.driver_id, 0.0)
+            if driver_offsets is not None
+            else lap_model.skill_gap_s * (1.0 - skill)
+        )
+        team_values[entry.team_id].append(median - own)
     if not team_values:
         raise ValueError("no driver has enough representative laps")
     car_pace = {team: fmean(values) for team, values in team_values.items()}

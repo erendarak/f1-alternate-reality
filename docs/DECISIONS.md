@@ -978,3 +978,34 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   correlated than they look (EXP-010's pass counts: 47.5 with shared seeds, 52.9 with per-race
   seeds, real 53.6).
 - New events `RED_FLAG` and `TIME_PENALTY` (frontend log texts added).
+
+## D-043 — W2: driver race pace vs teammate, race form, lap noise (engine v0.12.0, 2026-10-15)
+
+- **Engine v0.12.0, world schema 13.** Data-backed races only (synthetic setups keep the
+  persona model); `configs/calibration/driver_pace_2024_v1.json` (registry `driver_pace v1`;
+  `calibration/driver_pace_fit.py`, `scripts/fit_driver_pace.py`), fitted on the 16 dry_train
+  races.
+- **Driver race pace vs teammate** (`DriverEntry.driver_pace_offset_s`): a same-lap regression
+  per race (lap terms, driver terms, tyre curves); each driver's term minus his pair's mean,
+  summed over races and divided by races + 3 (shrunk toward 0). E.g. VER -0.21 / PER +0.21, NOR
+  -0.10 / PIA +0.10, ALB -0.11 / SAR +0.17. It replaces the persona term `skill_gap x (1 -
+  race_pace_skill)` (skill gap 0 in these races); car pace per team and race is now the race's
+  team mean net of the fitted offsets. A driver keeps his offset in another car (alternate
+  worlds).
+- **Race form** (`LapModelParams.form_sd_s` = 0.236 s): a pace offset drawn once per driver and
+  race (keyed by seed and driver: forks share it). Its size is the within-pair variance of the
+  per-race teammate gap (SD 0.354 s) minus the laps' sampling variance (SD 0.119 s), halved;
+  the reasons for good and bad days aren't in the data.
+- **Lap noise per driver** (`DriverEntry.lap_noise_s`): the clean-air residual SD of the same
+  regression, shrunk toward the field median (0.45 s) with 150 laps. VER 0.34 s ... BOT/SAR
+  ~0.53-0.56 s; it replaces the persona noise (~0.14 s, 3x too small).
+- **Overtaking threshold shift +0.34 s** on every track: realistic noise and form create many
+  more passing chances (72 instead of 53 passes per race); one global shift, fitted by bisection
+  on the simulated dry_train field, brings passes back to 2024's level.
+- **Trade-off (owner to know):** with race form, each simulated race draws its own good and bad
+  days, so the finishing order follows the specific real race a little less (Spearman 0.675 ->
+  0.658) while the spread of outcomes is more realistic. Persona `race_pace_skill` and
+  `consistency` stay in profiles (editorial; incidents, AI observation) but no longer set lap
+  times in data-backed races.
+- In-season car development is not modelled: per-race car pace follows each real race; trends
+  matter once worlds run seasons (M9).

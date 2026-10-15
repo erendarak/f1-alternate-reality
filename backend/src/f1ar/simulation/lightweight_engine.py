@@ -84,8 +84,10 @@ from f1ar.simulation.weather import (
 )
 from f1ar.simulation.weather import penalty_s as weather_penalty_s
 
-ENGINE_VERSION = "lightweight_engine_v0.11.0"
-"""v0.11.0: debris SC/VSC, red flags (free tyre change), pit crews and reliability per team,
+ENGINE_VERSION = "lightweight_engine_v0.12.0"
+"""v0.12.0: driver race pace vs teammate, race form and lap noise per driver, fitted on 2024
+(D-043).
+v0.11.0: debris SC/VSC, red flags (free tyre change), pit crews and reliability per team,
 time penalties, crash/mistake rates renormalised for the W1 pace mix (D-042).
 v0.10.0: tyre life (management vs push, cliff), fresh-tyre peak, baseline manages (D-041).
 v0.9.0: launch spread on lap 1; overtaking and race-control rates from 2024 data (D-035).
@@ -149,11 +151,14 @@ def _sample_next_lap(
         tyre_wear_s=tyre_wear_s,
         pace_mode=pace_mode,
         laps_remaining=setup.track.total_laps - laps_completed,
-        car_offset_s=entry.car_pace_offset_s,
+        car_offset_s=entry.car_pace_offset_s
+        + entry.driver_pace_offset_s  # W2: the driver vs his teammate
+        + setup.lap_model.form_sd_s * normal(seed, "race_form", driver_id),  # and today's form
         extra_s=extra,
         noise_scale=1.0 + weather.wet_noise_factor * wetness,
         tyre_life_used=tyre_life_used,
         fresh_lap=fresh_lap,
+        noise_sd=entry.lap_noise_s,
     )
 
 

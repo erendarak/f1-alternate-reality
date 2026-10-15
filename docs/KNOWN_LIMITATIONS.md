@@ -2,6 +2,22 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## W2 (driver pace, engine v0.12.0, EXP-012)
+
+- **Race form is random:** a driver's good or bad day is drawn per race; its causes (setup,
+  track type, confidence) aren't modelled, so the order follows a specific real race a little
+  less than before.
+- **Driver offsets are season averages from 2024 only**; rookies with few races (BEA, COL, DOO,
+  LAW) are shrunk toward their teammate; one-lap (qualifying) pace isn't separate (the grid is
+  real).
+- **The pass threshold is shifted globally** (+0.34 s) to absorb the extra noise; per-track
+  overtaking hasn't been refit for W2 (W3).
+- **Lap noise is independent per lap** (no correlated stretches, no driver-specific mistakes
+  from it); the measurement of simulated noise is ~7 % high on the fitted races.
+- No in-season car development (per-race car pace follows the real race).
+- Personas `race_pace_skill` / `consistency` remain editorial and still drive the incident model
+  and the AI's observation, while lap times in data-backed races use the fitted values.
+
 ## W4 (race events, engine v0.11.0, EXP-011)
 
 - **Retirement causes are unknown in the data:** team reliability uses all-cause retirements as a

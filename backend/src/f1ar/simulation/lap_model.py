@@ -147,6 +147,7 @@ def sample_lap_time_s(
     noise_scale: float = 1.0,
     tyre_life_used: float = 0.0,
     fresh_lap: bool = False,
+    noise_sd: float | None = None,
 ) -> float:
     """Lap time for ``lap_number``. The noise is keyed by (driver, lap): common across forks.
 
@@ -164,5 +165,6 @@ def sample_lap_time_s(
         fresh_lap=fresh_lap,
     )
     z = normal(seed, "lap_noise", driver_id, lap_number)
-    noisy = mean + extra_s + noise_sd_s(params, driver) * noise_scale * z
+    sd = noise_sd_s(params, driver) if noise_sd is None else noise_sd  # W2: fitted per driver
+    noisy = mean + extra_s + sd * noise_scale * z
     return max(noisy, params.min_lap_fraction * params.base_lap_s)

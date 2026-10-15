@@ -12,7 +12,9 @@ into what makes the difference in real F1 and for the world to be adapted to it;
 - [x] **W4: race control and random events (engine v0.11.0, D-042, EXP-011)**: debris SC/VSC,
   red flags with free tyre changes, pit crews and reliability per team, time penalties,
   retirements refit for W1's pace mix; event rates at 2024's level, order vs real 0.62 -> 0.68.
-- [ ] W2: race pace realism (lap noise ~0.5 s, driver race pace vs teammate, development).
+- [x] **W2: race pace (engine v0.12.0, D-043, EXP-012)**: driver pace vs teammate, race form,
+  lap noise per driver from 2024 (noise 0.14 -> ~0.45 s); passes kept at 2024's level.
+  In-season development deferred to seasons (M9).
 - [ ] W3: racecraft (DRS, dirty air by gap, attack/defend skills, starts, lap-1 incidents).
 - [ ] W5: drivers' character measured where possible.
 - [ ] W6: weather extensions.
@@ -1190,3 +1192,18 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Tests: 421 offline (+9 in `tests/unit/test_race_events.py`; registry and inputs tests
   updated); frontend 17 (penalty and red-flag texts).
 - Next (per the plan): W2 race pace realism.
+
+### 2026-10-15 — W2: driver race pace, race form, lap noise (engine v0.12.0, D-043, EXP-012)
+
+- Fitted on the 16 dry_train races (same-lap regression per race): each driver's pace vs his
+  teammate (shrunk), race form SD 0.236 s, lap noise per driver (0.34-0.56 s, field 0.45 s);
+  they replace the persona skill term and the persona noise in data-backed races. Overtaking
+  threshold shifted +0.34 s (fitted) to keep passes at 2024's level.
+- Engine v0.12.0 / world schema 13; `calibration/driver_pace_fit.py`, `scripts/fit_driver_pace.py`,
+  `configs/calibration/driver_pace_2024_v1.json` + registry manifest.
+- EXP-012: lap noise 0.48 vs 0.44 s (driver correlation 0.90), teammate gaps 0.21 vs 0.25 s,
+  passes 54.2 vs 53.6 (72.5 before the shift); order vs the specific real race 0.675 -> 0.658
+  (random race form: a trade-off, documented).
+- Checked in the viewer: Spa lap times now vary realistically.
+- Tests: 425 offline (+3 in `tests/unit/test_driver_pace.py`, registry updated).
+- Next (per the plan): W3 racecraft.

@@ -848,6 +848,61 @@ Decision / next:      Keep W4 (engine v0.11.0). Next per the plan: W2 (race pace
                       noise, driver race pace vs teammate, development).
 ```
 
+## EXP-012 — Driver race pace, race form and lap noise (W2) against the 2024 races (2026-10-15)
+
+```text
+Experiment ID:        EXP-012
+Research question:    Do fitted driver pace (vs teammate), race form and lap noise give lap times
+                      that spread like the real ones, teammate gaps of the real size, and passes,
+                      stops, retirements and order still at 2024's level?
+Fit:                  driver_pace_2024_v1 on the 16 dry_train races; overtake shift fitted by
+                      simulation on dry_train; dry_test races only checked
+Engine:               v0.12.0 (W2) vs the same engine without the driver-pace file (v0.11)
+Method:               simulated laps (3 per-race seeds per race) through the SAME same-lap
+                      regression as the real laps; race level: 10 per-race seeds, 21 dry races
+Code:                 scripts/fit_driver_pace.py; scripts/experiments/exp012_driver_pace.py
+                      -> docs/experiments/exp012.json
+```
+
+| Lap level | Real (train / test) | Simulated W2 (train / test) |
+|---|---|---|
+| Lap noise, median per driver (clean air) | 0.44 / 0.48 s | 0.48 / 0.49 s |
+| Lap noise, correlation across drivers | | 0.90 / 0.56 |
+| Teammate gap per race, median size | 0.25 / 0.22 s | 0.21 / 0.18 s |
+| Teammate gap, correlation with the real race / same faster driver | | 0.32 / 0.27; 64 % / 56 % |
+
+Without race form (first run): gap size 0.15 / 0.07 s, correlation 0.47 / 0.48, same faster
+driver 70 % / 67 %; v0.11 persona noise ~0.14 s.
+
+| Race level, per race (21 dry) | Real | W2 | v0.11 |
+|---|---|---|---|
+| Passes (train / test) | 52.7 / 56.6 | 53.1 / 57.5 | 52.3 / 54.7 |
+| Passes before the threshold shift | | 72.5 | |
+| Stops per finisher | 1.67 | 1.40 | 1.40 |
+| Retirements | 1.95 | 1.49 | 1.49 |
+| Finishing order vs real (Spearman, train / test) | | 0.662 / 0.646 | 0.679 / 0.662 |
+
+```text
+Findings:
+  1. Lap times now spread like the real ones: ~0.45 s per lap (was ~0.14 s), and the drivers'
+     consistency ranks match the real ones (correlation 0.90 on the fitted races, 0.56 held out).
+  2. Teammate gaps have the real size once race form is in (0.21 vs 0.25 s); the driver who is
+     faster on average is faster in the simulation as in reality (VER/PER, NOR/PIA, ALB/SAR).
+  3. More lap noise made many more passes (72.5 vs 53.6): one global threshold shift (+0.34 s,
+     fitted on train) brings them back; test races 57.5 vs 56.6.
+  4. TRADE-OFF: race form is random per simulated race, so the finishing order matches the
+     specific real race less (0.675 -> 0.658) and per-race teammate gaps correlate less with
+     the real race (0.47 -> 0.32); the variety of outcomes is the realistic part.
+  5. Simulated lap noise ~7 % above real on the fitted races (traffic/held-up laps leak into the
+     clean-air filter of the simulated laps); held-out races match.
+Negative results:     order vs the specific real race slightly lower (by design of race form).
+Reproduce:            uv run python scripts/fit_driver_pace.py
+                      uv run python scripts/experiments/exp012_driver_pace.py --seeds 10 \
+                        --json docs/experiments/exp012.json
+Decision / next:      Keep W2 (engine v0.12.0). Next per the plan: W3 racecraft (DRS, dirty air
+                      by gap, attack/defend skills, starts, lap-1 incidents).
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

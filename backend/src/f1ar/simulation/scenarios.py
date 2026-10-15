@@ -190,11 +190,45 @@ def setup_from_codes(
             f"editorial_assumption: no fitted tyre shape ({SHAPE_FILE.as_posix()} missing); "
             "placeholder tyre/fuel model (D-010)"
         )
+    # W2 (D-043): the driver's pace vs his teammate and his lap noise, fitted on the season;
+    # they replace the persona skill term (skill gap 0) and the persona noise
+    from f1ar.calibration.driver_pace_fit import PACE_FILE, load_pace
+
+    pace = load_pace(configs)
+    driver_offsets: dict[str, float] | None = None
+    noise: dict[str, float] = {}
+    pace_note = (
+        f"editorial_assumption: persona race pace and noise ({PACE_FILE.as_posix()} missing)"
+    )
+    if pace is not None:
+        fitted_drivers = pace["drivers"]
+        driver_offsets = {
+            e.driver_id: float(fitted_drivers.get(e.code, {}).get("pace_vs_teammate_s", 0.0))
+            for e in roster.entries
+        }
+        noise = {
+            e.driver_id: float(
+                fitted_drivers.get(e.code, {}).get("lap_noise_s", pace["field_noise_s"])
+            )
+            for e in roster.entries
+        }
+        lap_params = lap_params.model_copy(
+            update={"skill_gap_s": 0.0, "form_sd_s": float(pace.get("form_sd_s", 0.0))}
+        )
+        if estimation_params is not None:
+            estimation_params = estimation_params.model_copy(update={"skill_gap_s": 0.0})
+        pace_note = (
+            f"estimated_from_data: driver race pace vs teammate and lap noise "
+            f"{PACE_FILE.as_posix()} (2024 season, same-lap fit, shrunk; field noise "
+            f"{pace['field_noise_s']} s); persona race_pace_skill / consistency not used here"
+        )
     # W1: car pace and the base lap are read off real (managed) race laps with the offsets seen
     # on race laps; the simulation then runs the tyres' potential pace
     seen = estimation_params or lap_params
-    estimate = estimate_car_offsets(laps, roster, profiles, seen)
-    base = estimate_base_lap(laps, roster, profiles, seen, estimate, track.total_laps)
+    estimate = estimate_car_offsets(laps, roster, profiles, seen, driver_offsets)
+    base = estimate_base_lap(
+        laps, roster, profiles, seen, estimate, track.total_laps, driver_offsets
+    )
     lap_model = lap_params.model_copy(update={"base_lap_s": base.base_lap_s})
     try:
         pit_loss = estimate_pit_loss(laps)  # weather-adjusted: a stop in the rain isn't slower
@@ -208,6 +242,14 @@ def setup_from_codes(
         weather = with_random_rain(weather)
         weather_note = weather.note
     traffic, traffic_note = _fitted_traffic(configs, roster.event_id)
+    if pace is not None and pace.get("overtake_threshold_shift_s"):
+        # W2: realistic lap noise makes more passing chances; the pass threshold is shifted
+        # (fitted on the simulated dry_train field) so passes stay at 2024's level
+        shift = float(pace["overtake_threshold_shift_s"])
+        traffic = traffic.model_copy(
+            update={"overtake_threshold_s": traffic.overtake_threshold_s + shift}
+        )
+        traffic_note = f"{traffic_note}; threshold +{shift:.3f} s for W2 lap noise"
     race_control, race_control_note = _fitted_race_control(configs, field)
     setup = build_setup(
         roster,
@@ -235,6 +277,21 @@ def setup_from_codes(
             "dataset_sha256": "sha256:" + hashlib.sha256(laps_file.read_bytes()).hexdigest(),
         },
     )
+    if driver_offsets is not None:
+        setup = setup.model_copy(
+            update={
+                "drivers": tuple(
+                    d.model_copy(
+                        update={
+                            "driver_pace_offset_s": driver_offsets.get(d.driver_id, 0.0),
+                            "lap_noise_s": noise.get(d.driver_id),
+                        }
+                    )
+                    for d in setup.drivers
+                )
+            }
+        )
+    setup = setup.model_copy(update={"inputs": {**setup.inputs, "driver_pace": pace_note}})
     return with_race_events(setup, configs, race_events_overrides or {})
 
 

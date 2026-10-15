@@ -5,6 +5,7 @@ model is a fit on the 2024 lap dataset; none is a trained agent (that starts in 
 
 | Model | Kind | Source | Status | Used by the engine | Artifact | Check |
 |---|---|---|---|---|---|---|
+| driver_pace v1 | same-lap regression per race; driver vs teammate and residual SD, shrunk | estimated_from_data | validated_for_engine_use (W2, engine v0.12.0, D-043) | driver race pace vs teammate, form, lap noise (D-043) | `configs/calibration/driver_pace_2024_v1.json` (tracked) | ok |
 | pace_predictor_online v1 | LightGBM residual on the driver's recent median | learned_parameter | experimental | no (analysis / M5) | `artifacts/models/pace_lgbm_2024_v1.txt` (local, gitignored) | ok |
 | race_control v1 | method of moments: retirement hazard, SC/VSC per retirement, SC length | estimated_from_data (crash/failure split editorial) | experimental (21 races, small counts) | race control rates (D-035) | `configs/calibration/race_control_2024_v1.json` (tracked) | ok |
 | race_events v1 | rates and shrunk team multipliers from 2024 timing; 2 values fitted by simulation | estimated_from_data | validated_for_engine_use (W4, engine v0.11.0, D-042) | race events: crews, reliability, debris, red flags, penalties (D-042) | `configs/calibration/race_events_2024_v1.json` (tracked) | ok |

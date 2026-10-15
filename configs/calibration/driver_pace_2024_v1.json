@@ -1,0 +1,275 @@
+{
+ "label": "2024 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2024_bahrain_gp",
+  "2024_saudi_arabian_gp",
+  "2024_australian_gp",
+  "2024_chinese_gp",
+  "2024_miami_gp",
+  "2024_emilia_romagna_gp",
+  "2024_spanish_gp",
+  "2024_austrian_gp",
+  "2024_hungarian_gp",
+  "2024_belgian_gp",
+  "2024_dutch_gp",
+  "2024_azerbaijan_gp",
+  "2024_singapore_gp",
+  "2024_united_states_gp",
+  "2024_las_vegas_gp",
+  "2024_qatar_gp"
+ ],
+ "field_noise_s": 0.4465,
+ "form_sd_s": 0.236,
+ "form_note": "within-pair gap SD 0.354 s, sampling SD 0.119 s over 146 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "ALB": {
+   "team_id": "williams_2024",
+   "pace_vs_teammate_s": -0.1112,
+   "raw_mean_gap_s": -0.1369,
+   "races": 13,
+   "lap_noise_s": 0.4736,
+   "raw_noise_s": 0.4885,
+   "clean_laps": 271
+  },
+  "ALO": {
+   "team_id": "aston_martin_2024",
+   "pace_vs_teammate_s": -0.0704,
+   "raw_mean_gap_s": -0.0855,
+   "races": 14,
+   "lap_noise_s": 0.4732,
+   "raw_noise_s": 0.4826,
+   "clean_laps": 422
+  },
+  "BEA": {
+   "team_id": "ferrari_2024",
+   "pace_vs_teammate_s": 0.0376,
+   "raw_mean_gap_s": 0.094,
+   "races": 2,
+   "lap_noise_s": 0.4503,
+   "raw_noise_s": 0.462,
+   "clean_laps": 48
+  },
+  "BOT": {
+   "team_id": "sauber_2024",
+   "pace_vs_teammate_s": 0.0293,
+   "raw_mean_gap_s": 0.0352,
+   "races": 15,
+   "lap_noise_s": 0.5616,
+   "raw_noise_s": 0.607,
+   "clean_laps": 380
+  },
+  "COL": {
+   "team_id": "williams_2024",
+   "pace_vs_teammate_s": -0.0621,
+   "raw_mean_gap_s": -0.1241,
+   "races": 3,
+   "lap_noise_s": 0.4465,
+   "raw_noise_s": 0.4465,
+   "clean_laps": 75
+  },
+  "GAS": {
+   "team_id": "alpine_2024",
+   "pace_vs_teammate_s": -0.0678,
+   "raw_mean_gap_s": -0.0835,
+   "races": 13,
+   "lap_noise_s": 0.4565,
+   "raw_noise_s": 0.461,
+   "clean_laps": 330
+  },
+  "HAM": {
+   "team_id": "mercedes_2024",
+   "pace_vs_teammate_s": 0.0626,
+   "raw_mean_gap_s": 0.076,
+   "races": 14,
+   "lap_noise_s": 0.4131,
+   "raw_noise_s": 0.3985,
+   "clean_laps": 342
+  },
+  "HUL": {
+   "team_id": "haas_2024",
+   "pace_vs_teammate_s": -0.0539,
+   "raw_mean_gap_s": -0.064,
+   "races": 16,
+   "lap_noise_s": 0.4319,
+   "raw_noise_s": 0.4268,
+   "clean_laps": 429
+  },
+  "LAW": {
+   "team_id": "rb_2024",
+   "pace_vs_teammate_s": -0.0119,
+   "raw_mean_gap_s": -0.0237,
+   "races": 3,
+   "lap_noise_s": 0.4092,
+   "raw_noise_s": 0.3315,
+   "clean_laps": 72
+  },
+  "LEC": {
+   "team_id": "ferrari_2024",
+   "pace_vs_teammate_s": -0.0423,
+   "raw_mean_gap_s": -0.0502,
+   "races": 16,
+   "lap_noise_s": 0.3964,
+   "raw_noise_s": 0.3783,
+   "clean_laps": 414
+  },
+  "MAG": {
+   "team_id": "haas_2024",
+   "pace_vs_teammate_s": 0.0558,
+   "raw_mean_gap_s": 0.067,
+   "races": 15,
+   "lap_noise_s": 0.508,
+   "raw_noise_s": 0.5367,
+   "clean_laps": 322
+  },
+  "NOR": {
+   "team_id": "mclaren_2024",
+   "pace_vs_teammate_s": -0.1025,
+   "raw_mean_gap_s": -0.1217,
+   "races": 16,
+   "lap_noise_s": 0.375,
+   "raw_noise_s": 0.3542,
+   "clean_laps": 515
+  },
+  "OCO": {
+   "team_id": "alpine_2024",
+   "pace_vs_teammate_s": 0.0678,
+   "raw_mean_gap_s": 0.0835,
+   "races": 13,
+   "lap_noise_s": 0.4826,
+   "raw_noise_s": 0.5009,
+   "clean_laps": 296
+  },
+  "PER": {
+   "team_id": "red_bull_2024",
+   "pace_vs_teammate_s": 0.2056,
+   "raw_mean_gap_s": 0.2468,
+   "races": 15,
+   "lap_noise_s": 0.4092,
+   "raw_noise_s": 0.3957,
+   "clean_laps": 415
+  },
+  "PIA": {
+   "team_id": "mclaren_2024",
+   "pace_vs_teammate_s": 0.1025,
+   "raw_mean_gap_s": 0.1217,
+   "races": 16,
+   "lap_noise_s": 0.4002,
+   "raw_noise_s": 0.384,
+   "clean_laps": 430
+  },
+  "RIC": {
+   "team_id": "rb_2024",
+   "pace_vs_teammate_s": -0.0179,
+   "raw_mean_gap_s": -0.0228,
+   "races": 11,
+   "lap_noise_s": 0.51,
+   "raw_noise_s": 0.5453,
+   "clean_laps": 269
+  },
+  "RUS": {
+   "team_id": "mercedes_2024",
+   "pace_vs_teammate_s": -0.0626,
+   "raw_mean_gap_s": -0.076,
+   "races": 14,
+   "lap_noise_s": 0.3904,
+   "raw_noise_s": 0.3723,
+   "clean_laps": 465
+  },
+  "SAI": {
+   "team_id": "ferrari_2024",
+   "pace_vs_teammate_s": 0.0353,
+   "raw_mean_gap_s": 0.0423,
+   "races": 15,
+   "lap_noise_s": 0.3569,
+   "raw_noise_s": 0.3285,
+   "clean_laps": 473
+  },
+  "SAR": {
+   "team_id": "williams_2024",
+   "pace_vs_teammate_s": 0.1655,
+   "raw_mean_gap_s": 0.2152,
+   "races": 10,
+   "lap_noise_s": 0.5323,
+   "raw_noise_s": 0.5823,
+   "clean_laps": 257
+  },
+  "STR": {
+   "team_id": "aston_martin_2024",
+   "pace_vs_teammate_s": 0.0704,
+   "raw_mean_gap_s": 0.0855,
+   "races": 14,
+   "lap_noise_s": 0.4375,
+   "raw_noise_s": 0.4335,
+   "clean_laps": 341
+  },
+  "TSU": {
+   "team_id": "rb_2024",
+   "pace_vs_teammate_s": 0.019,
+   "raw_mean_gap_s": 0.023,
+   "races": 14,
+   "lap_noise_s": 0.506,
+   "raw_noise_s": 0.5333,
+   "clean_laps": 327
+  },
+  "VER": {
+   "team_id": "red_bull_2024",
+   "pace_vs_teammate_s": -0.2056,
+   "raw_mean_gap_s": -0.2468,
+   "races": 15,
+   "lap_noise_s": 0.3379,
+   "raw_noise_s": 0.3117,
+   "clean_laps": 621
+  },
+  "ZHO": {
+   "team_id": "sauber_2024",
+   "pace_vs_teammate_s": -0.0293,
+   "raw_mean_gap_s": -0.0352,
+   "races": 15,
+   "lap_noise_s": 0.4753,
+   "raw_noise_s": 0.4843,
+   "clean_laps": 482
+  }
+ },
+ "overtake_threshold_shift_s": 0.3359,
+ "overtake_shift_fit": {
+  "real_passes_per_race": 52.69,
+  "seeds_per_race": 4,
+  "history": [
+   {
+    "shift_s": 1.0,
+    "sim_passes": 25.48
+   },
+   {
+    "shift_s": 0.5,
+    "sim_passes": 44.05
+   },
+   {
+    "shift_s": 0.25,
+    "sim_passes": 56.52
+   },
+   {
+    "shift_s": 0.375,
+    "sim_passes": 50.62
+   },
+   {
+    "shift_s": 0.3125,
+    "sim_passes": 53.67
+   },
+   {
+    "shift_s": 0.3438,
+    "sim_passes": 52.41
+   },
+   {
+    "shift_s": 0.3281,
+    "sim_passes": 53.14
+   }
+  ]
+ }
+}
