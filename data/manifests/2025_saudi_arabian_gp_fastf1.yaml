@@ -1,0 +1,115 @@
+dataset_id: 2025_saudi_arabian_gp_fastf1_v1
+event: 2025_saudi_arabian_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T21:49:39Z'
+session_key: 2025/round 5/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2025_saudi_arabian_gp/laps.parquet
+  sha256: sha256:86bf8b876f67a0a6b8245cea36b015d3604dd014cf72ea8ec8cfd2f3fea29d04
+  rows: 898
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2025_saudi_arabian_gp/results.parquet
+  sha256: sha256:641618207b017a436d40937fae55dc4918a3731bf0c2345786fe600297c2570a
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2025_saudi_arabian_gp/weather.parquet
+  sha256: sha256:b7b01dab63b16c6e47a4d1086a512eebf2fe1a7372b568cc85810f24307f0f71
+  rows: 142
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2025_saudi_arabian_gp/track_status.parquet
+  sha256: sha256:2d89377c4aa476cba03c9b3d110555bd4bd77334101db114086d07f504b898ad
+  rows: 4
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2025_saudi_arabian_gp/race_control.parquet
+  sha256: sha256:f31a15c3189521681a43166f89a981d97d05b5ef3df7c40206cbfa66625ed171
+  rows: 65
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2025_saudi_arabian_gp/corners.parquet
+  sha256: sha256:c12cad5cdc25d41bd2e0340487fd1f3e36e3f3cab8e9a6979fcaa99830a63626
+  rows: 27
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 37 rows
+- lap table `sector1_s` missing in 20 rows
+- lap table `sector2_s` missing in 1 rows
+- lap table `sector3_s` missing in 1 rows
+- lap table `pit_in_time_s` missing in 878 rows
+- lap table `pit_out_time_s` missing in 879 rows
+- lap table `position` missing in 1 rows
+- lap table `speed_trap_kph` missing in 1 rows

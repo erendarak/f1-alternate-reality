@@ -1,0 +1,115 @@
+dataset_id: 2022_miami_gp_fastf1_v1
+event: 2022_miami_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:00:29Z'
+session_key: 2022/round 5/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2022_miami_gp/laps.parquet
+  sha256: sha256:3892208ffe93fbfceca60c345b059690367fdb218c76721cb105a7e64135f0d0
+  rows: 1057
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2022_miami_gp/results.parquet
+  sha256: sha256:bdfa85998b0cca7b962daf7b9b5fd297d42620a6ed34754a697cc83c10b789d7
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2022_miami_gp/weather.parquet
+  sha256: sha256:24c46022c61f46bd1cbca4641a1dc9db9a301d2b9c7a16ec31dfeb47660c09b0
+  rows: 162
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2022_miami_gp/track_status.parquet
+  sha256: sha256:01111523e4e2252109ef5a22e22c40360a1f99b45d8bcb0d3f1f1f8edaae0df2
+  rows: 13
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2022_miami_gp/race_control.parquet
+  sha256: sha256:9a0ddc85850635d12da7609e063192ff34ecb323e5af87c0f78dd5847f3a4422
+  rows: 76
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2022_miami_gp/corners.parquet
+  sha256: sha256:134be5377f3ec4521cc50be02c14973bcdd0867f8ea67a08d324f0fc265b1575
+  rows: 19
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 35 rows
+- lap table `sector1_s` missing in 21 rows
+- lap table `sector2_s` missing in 1 rows
+- lap table `sector3_s` missing in 2 rows
+- lap table `pit_in_time_s` missing in 1028 rows
+- lap table `pit_out_time_s` missing in 1030 rows
+- lap table `position` missing in 1 rows
+- lap table `speed_trap_kph` missing in 1 rows

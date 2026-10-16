@@ -1,0 +1,115 @@
+dataset_id: 2023_azerbaijan_gp_fastf1_v1
+event: 2023_azerbaijan_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T21:55:02Z'
+session_key: 2023/round 4/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2023_azerbaijan_gp/laps.parquet
+  sha256: sha256:f49676c7e981c6cc0b901d9852d40dd062dd49c1d5857c8a660abc635d56f81f
+  rows: 962
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2023_azerbaijan_gp/results.parquet
+  sha256: sha256:61c8e2d7e76140f910ac765f663df153299dd460fb3561cf20b7c81d5fa18229
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2023_azerbaijan_gp/weather.parquet
+  sha256: sha256:eb24d1ae24b3f2f9720c513ada7b113949e92aa7ea2e13134b5b263079ad8110
+  rows: 160
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2023_azerbaijan_gp/track_status.parquet
+  sha256: sha256:1299a5fca22de197af31cdc6f5cdc909b54b4decc79444406a5918e2cb881b37
+  rows: 18
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2023_azerbaijan_gp/race_control.parquet
+  sha256: sha256:897e24817404df84145baf2399680e7ceaa0d1dde787300f11cf89e02d2f1f47
+  rows: 52
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2023_azerbaijan_gp/corners.parquet
+  sha256: sha256:41839315d9d060bf0f6aa341a8b25caef57bc53936932ca91d8a91becf2b5282
+  rows: 20
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 32 rows
+- lap table `sector1_s` missing in 21 rows
+- lap table `sector2_s` missing in 1 rows
+- lap table `sector3_s` missing in 1 rows
+- lap table `pit_in_time_s` missing in 938 rows
+- lap table `pit_out_time_s` missing in 937 rows
+- lap table `position` missing in 1 rows
+- lap table `speed_trap_kph` missing in 1 rows

@@ -1,0 +1,118 @@
+dataset_id: 2018_azerbaijan_gp_fastf1_v1
+event: 2018_azerbaijan_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:17:08Z'
+session_key: 2018/round 4/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2018_azerbaijan_gp/laps.parquet
+  sha256: sha256:bd4839653b2e8a5c79ae2ac46f17f5b7020f5df637549fda6f0d032390de48b6
+  rows: 848
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2018_azerbaijan_gp/results.parquet
+  sha256: sha256:60ab151de86a065572ece9de155438e6a01c826789aa7348448a38b0b7eae189
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2018_azerbaijan_gp/weather.parquet
+  sha256: sha256:d7451a56bb7de6a223ff128597d73fceecf0301f486459b958eadc84dae6d0d2
+  rows: 114
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2018_azerbaijan_gp/track_status.parquet
+  sha256: sha256:88a5ba2ab546ad3ef7a635f17e80faee60299455a6d3ea4eb7701057d2563f04
+  rows: 22
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2018_azerbaijan_gp/race_control.parquet
+  sha256: sha256:75229e3c0ab4a96af6b57a62906faf39ec6c7476173f5d6d9250425f16eb425d
+  rows: 109
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2018_azerbaijan_gp/corners.parquet
+  sha256: sha256:41839315d9d060bf0f6aa341a8b25caef57bc53936932ca91d8a91becf2b5282
+  rows: 20
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 156 rows
+- lap table `sector1_s` missing in 28 rows
+- lap table `sector2_s` missing in 7 rows
+- lap table `sector3_s` missing in 7 rows
+- lap table `pit_in_time_s` missing in 812 rows
+- lap table `pit_out_time_s` missing in 812 rows
+- lap table `stint` missing in 14 rows
+- lap table `compound` missing in 14 rows
+- lap table `tyre_life_laps` missing in 25 rows
+- lap table `position` missing in 7 rows
+- lap table `speed_trap_kph` missing in 7 rows

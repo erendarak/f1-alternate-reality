@@ -1,0 +1,115 @@
+dataset_id: 2023_dutch_gp_fastf1_v1
+event: 2023_dutch_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T21:57:08Z'
+session_key: 2023/round 13/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2023_dutch_gp/laps.parquet
+  sha256: sha256:78be6f5dcdadb61eda53b425a7459d158783de19e44bb81832ad5a382c17ad69
+  rows: 1343
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2023_dutch_gp/results.parquet
+  sha256: sha256:b056479217badb753968a98bf894a4b2206a36997186af304c22e62be2e6233f
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2023_dutch_gp/weather.parquet
+  sha256: sha256:c0a1ee3dce7917d83b80f9296fb0b0b81eed0be0aeca8c0f31c59487bfb920d6
+  rows: 209
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2023_dutch_gp/track_status.parquet
+  sha256: sha256:7a1df476674275a4654a80f317551375661c4a8db970b3602277f441c168461a
+  rows: 16
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2023_dutch_gp/race_control.parquet
+  sha256: sha256:98f344c399d87ce101aca70a47eda4d9a8516c69a7325442490e40e0ad83264b
+  rows: 74
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2023_dutch_gp/corners.parquet
+  sha256: sha256:e56a19331f57c41ea5e24a5eb70af23ad19612fd546f2696732e05d797d68e2c
+  rows: 14
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 33 rows
+- lap table `sector1_s` missing in 39 rows
+- lap table `sector2_s` missing in 2 rows
+- lap table `sector3_s` missing in 2 rows
+- lap table `pit_in_time_s` missing in 1241 rows
+- lap table `pit_out_time_s` missing in 1241 rows
+- lap table `position` missing in 2 rows
+- lap table `speed_trap_kph` missing in 17 rows

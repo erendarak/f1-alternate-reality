@@ -2,6 +2,16 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## H0 (history data 2000-2025, D-052; in progress)
+
+- **The Jolpica fetch takes ~18 h** (server limit 500 requests/hour); it is resumable and runs
+  across sessions. Until it completes, 2000-2017 is partial.
+- **F1's archive needs the owner's signed-in F1 account** (token expires; re-sign-in with
+  `python -m fastf1 auth f1tv --authenticate`). 2018 and 2021 still have missing races.
+- **Inferred pit stops miss ~1 in 4 real stops** (mostly under a safety car) and ~1 in 8 inferred
+  stops is wrong; inferred SC laps miss ~1 in 6 and add ~1.4 false laps per race.
+- **No tyre compounds before 2018**, no weather or track status before 2018 (inferred only).
+
 ## M5 slice 4b (counterfactual decision learning, EXP-019)
 
 - **No learned decision policy beats the rules**: per-decision values are ~0.001, the noise at

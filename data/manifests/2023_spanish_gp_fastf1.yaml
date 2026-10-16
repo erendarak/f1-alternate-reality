@@ -1,0 +1,110 @@
+dataset_id: 2023_spanish_gp_fastf1_v1
+event: 2023_spanish_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T21:55:45Z'
+session_key: 2023/round 7/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2023_spanish_gp/laps.parquet
+  sha256: sha256:82bcf814d9ae6c328386ef0928d5ddc7e7e738047fef61ac38b4c90d6de4b340
+  rows: 1312
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2023_spanish_gp/results.parquet
+  sha256: sha256:5044582ae9981fc7795bc7f3b4cfd2c0d5e9c9e957fa926f72d4d7f8b9640d4e
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2023_spanish_gp/weather.parquet
+  sha256: sha256:ff18e467e0f47e431572c286fa0a8ad8cf92c646417dfe6333387cf4f9abde02
+  rows: 154
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2023_spanish_gp/track_status.parquet
+  sha256: sha256:51953e6b35637cc355c68af7d42a69ec3371f2363ebde8546dbef25130e85150
+  rows: 1
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2023_spanish_gp/race_control.parquet
+  sha256: sha256:15ade417520f50451dbe769651d25b3e0da8d9f3f3080f9b0f84728a55292148
+  rows: 47
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2023_spanish_gp/corners.parquet
+  sha256: sha256:d2300416dcb328f91965205367e8731e75319e5b25a35cf332f5696277efef5f
+  rows: 14
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `sector1_s` missing in 20 rows
+- lap table `pit_in_time_s` missing in 1269 rows
+- lap table `pit_out_time_s` missing in 1267 rows

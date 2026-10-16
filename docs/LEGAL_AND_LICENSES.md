@@ -26,6 +26,22 @@ local and are not redistributed.
 The debug viewer's track outline, corner markers, display rotation and team colours are all derived
 from that FastF1/F1-timing data and follow the same rules (generated locally, not committed).
 
+## H0 (2026-10-16): history 2000-2025
+
+- **Jolpica-F1** now also supplies lap times (1996+), pit stops (2011+), qualifying and results for
+  every race 2000-2025 (`scripts/fetch_history.py`). Raw pages in `data/raw/jolpica/` and tables in
+  `data/processed/history/` stay local (gitignored); same CC BY-NC-SA 4.0 terms and limits as above
+  (fetching throttled to ~400 requests/hour).
+- **OpenF1** (`api.openf1.org`) is **in use** for 2023-2025 races: tyre stints, pit, race control,
+  weather, laps (`scripts/fetch_openf1.py`). Terms as listed under "Planned" below (education /
+  non-commercial research, CC BY-NC-SA 4.0; 30 requests/minute). Raw and processed data local only.
+- **F1 live-timing archive (FastF1's source):** since 2026-10 it answers HTTP 401 unless the request
+  carries a signed-in F1 account token. A **free F1 account is enough** (tested 2026-10-16: an
+  account without a subscription gets 200). The owner signs FastF1 in themselves
+  (`python -m fastf1 auth f1tv --authenticate`); `fastf1_adapter._archive_auth` attaches the stored
+  token **only to `livetiming.formula1.com`** requests (never to Jolpica or other hosts) and never
+  logs it. Data use unchanged: research only, not redistributed.
+
 ## Software dependencies (ML, M4)
 
 LightGBM 4.7 (MIT) and scikit-learn 1.9 (BSD-3-Clause), Python, local training only. Learned

@@ -1,0 +1,115 @@
+dataset_id: 2021_portuguese_gp_fastf1_v1
+event: 2021_portuguese_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:05:38Z'
+session_key: 2021/round 3/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2021_portuguese_gp/laps.parquet
+  sha256: sha256:aa04678517fc8a272a8c7f4540407ad7e05ad21d9a925828ff03ec8f427ea367
+  rows: 1245
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2021_portuguese_gp/results.parquet
+  sha256: sha256:caefcb2cb7fe952059f61b8c07a708f1d5b151e77414c3d54f39d4f12f907a8b
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2021_portuguese_gp/weather.parquet
+  sha256: sha256:7db3013b2445db44c14cea8bb22e6bcb72c2acc028f9e2e532bf1a543899e6e1
+  rows: 134
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2021_portuguese_gp/track_status.parquet
+  sha256: sha256:4dd18f017262c6d20f15944046c339c01261e81134cc93670b59ff514b2febe6
+  rows: 3
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2021_portuguese_gp/race_control.parquet
+  sha256: sha256:a4de7d216fe3959e10c253d7c87f02dc9dea612da40e7f85492e2c06342097cf
+  rows: 91
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2021_portuguese_gp/corners.parquet
+  sha256: sha256:e22dbd5f33f00bf68d674b7d1a3aa82bea28f95f310edde1da8312bcd9ca3b36
+  rows: 15
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 1 rows
+- lap table `sector1_s` missing in 21 rows
+- lap table `sector2_s` missing in 1 rows
+- lap table `sector3_s` missing in 1 rows
+- lap table `pit_in_time_s` missing in 1185 rows
+- lap table `pit_out_time_s` missing in 1185 rows
+- lap table `position` missing in 1 rows
+- lap table `speed_trap_kph` missing in 1 rows

@@ -1,0 +1,115 @@
+dataset_id: 2023_australian_gp_fastf1_v1
+event: 2023_australian_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T21:54:48Z'
+session_key: 2023/round 3/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2023_australian_gp/laps.parquet
+  sha256: sha256:d3d31f0bfd1fcfa64ad8055f7c50d8fb441c6dd1c9592c028d9be85e93e12b7c
+  rows: 1003
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2023_australian_gp/results.parquet
+  sha256: sha256:5c3c22fbdb5ba919e805a52d76362450d804b8a039f421dbd3e1e7b2c0fe38ad
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2023_australian_gp/weather.parquet
+  sha256: sha256:a0f2bbdd83033a591eb103dce65b6f73f0d6f9856852d77227cf69283aa88ed6
+  rows: 222
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2023_australian_gp/track_status.parquet
+  sha256: sha256:4e686dadaf2f5166266bbfb895be439b0f2c2c88bbc89868bbf5fd0e1e66aac7
+  rows: 23
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2023_australian_gp/race_control.parquet
+  sha256: sha256:6bd7a68468ac1996c6489bb3ad87d473b97f184a3a82ed790074b221dc9331c4
+  rows: 103
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2023_australian_gp/corners.parquet
+  sha256: sha256:e7a1f191c73848199bd9fc5ed3b14be34f2e4e010692a2f6fdc85203f4bc79be
+  rows: 14
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 102 rows
+- lap table `sector1_s` missing in 35 rows
+- lap table `sector2_s` missing in 8 rows
+- lap table `sector3_s` missing in 71 rows
+- lap table `pit_in_time_s` missing in 938 rows
+- lap table `pit_out_time_s` missing in 936 rows
+- lap table `position` missing in 8 rows
+- lap table `speed_trap_kph` missing in 8 rows

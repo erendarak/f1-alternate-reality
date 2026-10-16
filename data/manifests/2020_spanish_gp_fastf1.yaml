@@ -1,0 +1,110 @@
+dataset_id: 2020_spanish_gp_fastf1_v1
+event: 2020_spanish_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:08:57Z'
+session_key: 2020/round 6/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2020_spanish_gp/laps.parquet
+  sha256: sha256:db08212f515efc8040f9abaccb4f70d60d339d3af1c73264d70a5b277b3a4219
+  rows: 1274
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2020_spanish_gp/results.parquet
+  sha256: sha256:3dcd24e99a84fab4dd4b79492b131b22dc14fb4ff59d61ee632bda25939f11f9
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2020_spanish_gp/weather.parquet
+  sha256: sha256:79e9d908acd00628d01f9adeb9cc854652ecbbae4b0011b1510e76108a787743
+  rows: 129
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2020_spanish_gp/track_status.parquet
+  sha256: sha256:9ccf05afc461870854ad0ca4ca50ba66ecb11adaf5beb90ba72eebcc258415f0
+  rows: 3
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2020_spanish_gp/race_control.parquet
+  sha256: sha256:c1cf51e19c8bad00f77035d3f2d6356d314de99d340d2bba119ddf1cbefebea3
+  rows: 72
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2020_spanish_gp/corners.parquet
+  sha256: sha256:8e4002a958f82c25419866462f8add3795d8ad67e5fdaecd6fb872b1f4e6a44d
+  rows: 16
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `sector1_s` missing in 20 rows
+- lap table `pit_in_time_s` missing in 1238 rows
+- lap table `pit_out_time_s` missing in 1239 rows

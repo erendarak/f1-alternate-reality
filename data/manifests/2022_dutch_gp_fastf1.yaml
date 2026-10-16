@@ -1,0 +1,115 @@
+dataset_id: 2022_dutch_gp_fastf1_v1
+event: 2022_dutch_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:03:12Z'
+session_key: 2022/round 15/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2022_dutch_gp/laps.parquet
+  sha256: sha256:8f261caa0208fa8bab352e26ff4cb2b5f406b5ae1d22d9374a406421349d36f1
+  rows: 1392
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2022_dutch_gp/results.parquet
+  sha256: sha256:27a3e9a776a031772a70d92adef22d53ecd1675a801cc0c42f4bf7242ae3a8d4
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2022_dutch_gp/weather.parquet
+  sha256: sha256:bd6c96f8db54e66c8c32b939265fe7d07c53f5d838001a869aaa4d83c683bd21
+  rows: 163
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2022_dutch_gp/track_status.parquet
+  sha256: sha256:ec85abbe34799e42a989b7862bddf40c3e4a9313e1439544fde11aa0202e270c
+  rows: 14
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2022_dutch_gp/race_control.parquet
+  sha256: sha256:c3a876f892b5251e62ab3afa2cb1450446a2e08e45d0cef4ed6d92f543bdcd2f
+  rows: 105
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2022_dutch_gp/corners.parquet
+  sha256: sha256:e56a19331f57c41ea5e24a5eb70af23ad19612fd546f2696732e05d797d68e2c
+  rows: 14
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 4 rows
+- lap table `sector1_s` missing in 22 rows
+- lap table `sector2_s` missing in 1 rows
+- lap table `sector3_s` missing in 1 rows
+- lap table `pit_in_time_s` missing in 1320 rows
+- lap table `pit_out_time_s` missing in 1321 rows
+- lap table `position` missing in 1 rows
+- lap table `speed_trap_kph` missing in 1 rows

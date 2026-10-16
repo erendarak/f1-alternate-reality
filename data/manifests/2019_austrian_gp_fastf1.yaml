@@ -1,0 +1,111 @@
+dataset_id: 2019_austrian_gp_fastf1_v1
+event: 2019_austrian_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:13:32Z'
+session_key: 2019/round 9/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2019_austrian_gp/laps.parquet
+  sha256: sha256:f8fa1e0251e16104a62a4fb633271e833e5e9231bae10aca45606bb009195065
+  rows: 1401
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2019_austrian_gp/results.parquet
+  sha256: sha256:3b6c61dd963d0ca967f40a139570101de7f5b6c93d3dcc4e4030aabefcb53d32
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2019_austrian_gp/weather.parquet
+  sha256: sha256:741a0f676f107cb74d1b776a86c06aa14a7b5f4bcb0410082ac157f258ab15fc
+  rows: 118
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2019_austrian_gp/track_status.parquet
+  sha256: sha256:2955e0d453f0060f62d18ae228516d23be3bebdb19e6760d5130ff60ccd0b6dd
+  rows: 1
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2019_austrian_gp/race_control.parquet
+  sha256: sha256:09013fe55366b488c2aa541ea73aa4bd78c67b0401df31ebef27cd6e37b91457
+  rows: 103
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2019_austrian_gp/corners.parquet
+  sha256: sha256:55060c770dfdf938f61828612afc8caceeb7a1263b9bec072a94057b101ad4d2
+  rows: 10
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `sector1_s` missing in 21 rows
+- lap table `sector2_s` missing in 1 rows
+- lap table `pit_in_time_s` missing in 1378 rows
+- lap table `pit_out_time_s` missing in 1377 rows

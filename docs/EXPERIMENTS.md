@@ -1265,6 +1265,57 @@ Decision / next:      Owner's call (see PROGRESS). The rule planner is near-opti
                       decisions in this world; the lever sizes are editorial.
 ```
 
+## EXP-020 — Undercuts: real 2024 vs simulation (2026-10-16)
+
+```text
+Experiment ID:        EXP-020
+Research question:    Is our undercut weaker than real F1's (the W7 premise)?
+Method:               one detector (calibration/undercut.py) on the 21 dry 2024 races and on
+                      simulated races of the same tracks (rule field, 6 per-race seeds): car A
+                      at most 3 s behind B pits first, B 1-3 laps later, all green; gain = gap
+                      before - gap after both stopped
+Code:                 scripts/experiments/exp020_undercut.py -> docs/experiments/exp020.json
+```
+
+| | Real 2024 | Simulation (v0.15) |
+|---|---|---|
+| attempts per race | 4.6 | 1.5 |
+| median gain | +1.54 s | +1.68 s |
+| attacker ends ahead | 46 % | 54 % |
+| median gain, offset 1 / 2 / 3 laps | +0.9 / +2.0 / +4.0 s | +1.2 / +2.1 / +4.3 s |
+
+```text
+Findings:             the undercut's size matches 2024; our rules try it 3x less often than real
+                      teams (they know the tyre model, real teams don't).
+Negative results:     the W7 premise (undercut too weak) is refuted.
+Decision / next:      D-051: hidden race-day truth (docs/PLAN_HIDDEN_INFO_ERAS.md).
+```
+
+## EXP-021 — History data 2000-2025: coverage and inference (2026-10-16, partial)
+
+```text
+Experiment ID:        EXP-021
+Research question:    Can pit stops and SC/VSC laps be inferred from lap times (all that
+                      2000-2010 / 2000-2017 have), and how well?
+Data:                 FastF1 2018-2025 (real pit-in laps, track status), Jolpica 2025 (real pit
+                      stops), OpenF1 2023-2025 race control
+Code:                 scripts/experiments/exp021_history_data.py -> docs/experiments/exp021.json
+```
+
+| Inference | tuned on FastF1 2018-21 (66 races) | test FastF1 2022-25 (92) | Jolpica 2025 (22) | OpenF1 race control |
+|---|---|---|---|---|
+| pit stops: precision | 0.86 | **0.88** | 0.86 | |
+| pit stops: recall | 0.74 | **0.73** | 0.73 | |
+| neutralised laps found | 0.76 | **0.83** | | 0.89 |
+| false neutralised laps per race | 0.8 | 1.4 | | ~1.1 |
+
+```text
+Findings:             about 9 of 10 inferred stops are real and 3 of 4 real stops are found;
+                      the misses are mostly stops under a safety car. Good enough to estimate
+                      stop counts and stint lengths for 2000-2010, labelled estimated_from_data.
+Status:               coverage part to be rerun when the Jolpica fetch completes.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

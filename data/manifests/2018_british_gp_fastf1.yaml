@@ -1,0 +1,118 @@
+dataset_id: 2018_british_gp_fastf1_v1
+event: 2018_british_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:18:26Z'
+session_key: 2018/round 10/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2018_british_gp/laps.parquet
+  sha256: sha256:b9bf2d7b1fd782345fb1c367f8dfc73aea6b817c026589053a8a14ac4d76315e
+  rows: 902
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2018_british_gp/results.parquet
+  sha256: sha256:2360a85cb931ce27f6c9a5ca5bda0981078d10bd4827a63e863eadf6d3858246
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2018_british_gp/weather.parquet
+  sha256: sha256:438644f1cb12140355946aa76ea860a3b404cfbac8ad45e9f729acd87d042fb9
+  rows: 98
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2018_british_gp/track_status.parquet
+  sha256: sha256:c4f23061db0df33e211fcedc923328cc05fff21f178e6bf2c44d3eea7479107a
+  rows: 22
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2018_british_gp/race_control.parquet
+  sha256: sha256:7c226faea63374a1efd00bbbc507b473e1b03c5df29dcf247be1e84b35464126
+  rows: 64
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2018_british_gp/corners.parquet
+  sha256: sha256:d933e91c9acd56745e77c53a9a891cc6cc66512aacb6400bb1aae4cb2aa2e9de
+  rows: 18
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 8 rows
+- lap table `sector1_s` missing in 25 rows
+- lap table `sector2_s` missing in 5 rows
+- lap table `sector3_s` missing in 4 rows
+- lap table `pit_in_time_s` missing in 873 rows
+- lap table `pit_out_time_s` missing in 872 rows
+- lap table `stint` missing in 21 rows
+- lap table `compound` missing in 21 rows
+- lap table `tyre_life_laps` missing in 21 rows
+- lap table `position` missing in 4 rows
+- lap table `speed_trap_kph` missing in 4 rows

@@ -1,0 +1,115 @@
+dataset_id: 2025_canadian_gp_fastf1_v1
+event: 2025_canadian_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T21:50:49Z'
+session_key: 2025/round 10/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2025_canadian_gp/laps.parquet
+  sha256: sha256:39f69797f594ba5f68939666bb34fa70aba353e86f383b56192172e67a5a0f4a
+  rows: 1349
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2025_canadian_gp/results.parquet
+  sha256: sha256:1181647f306c08a12bea4166f3f5f17a9d8f5a22ca2a899ae3632b7c4f12022d
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2025_canadian_gp/weather.parquet
+  sha256: sha256:20aee79a960a986e9f72a09d5cf672eb077c091b2caabe207f4062e260cfeb38
+  rows: 167
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2025_canadian_gp/track_status.parquet
+  sha256: sha256:5e2b3ead5acdcec13fb040633446a1dab173a6ea62cba4e62829ab0c2dddedd5
+  rows: 10
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2025_canadian_gp/race_control.parquet
+  sha256: sha256:378ccad387a6687fdfc97edff14b43086ba4a20acd9d27470e54d2a74eb24730
+  rows: 97
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2025_canadian_gp/corners.parquet
+  sha256: sha256:b37667cf34632653d10515159afc25d10c4a365def2552fad1917f85ebd92c12
+  rows: 14
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 3 rows
+- lap table `sector1_s` missing in 22 rows
+- lap table `sector2_s` missing in 2 rows
+- lap table `sector3_s` missing in 3 rows
+- lap table `pit_in_time_s` missing in 1266 rows
+- lap table `pit_out_time_s` missing in 1265 rows
+- lap table `position` missing in 2 rows
+- lap table `speed_trap_kph` missing in 2 rows

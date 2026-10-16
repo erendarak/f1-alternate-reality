@@ -1,0 +1,115 @@
+dataset_id: 2019_japanese_gp_fastf1_v1
+event: 2019_japanese_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:15:19Z'
+session_key: 2019/round 17/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2019_japanese_gp/laps.parquet
+  sha256: sha256:a29d0d26def3f39200e48068e4f5460f1114c7c0e4dfca22b765a4d6b15ca229
+  rows: 1005
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2019_japanese_gp/results.parquet
+  sha256: sha256:1289ba33987ae68d8e43557a4dcada4849047233c231e187f54b8b903c70299a
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2019_japanese_gp/weather.parquet
+  sha256: sha256:fa0aefcf07311f33a89bc45eac64c115e6ed0a3ec7687ef7781ba98334878711
+  rows: 124
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2019_japanese_gp/track_status.parquet
+  sha256: sha256:95fa2fb363c170579c628bd58d994ea6b0be3e3fd7ecba1e6834916d72ad2836
+  rows: 5
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2019_japanese_gp/race_control.parquet
+  sha256: sha256:ebbae2b16d893755ece2c5ffc630dfc2fe0f1e04ffad0ed67c6abc24461d0eb1
+  rows: 90
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2019_japanese_gp/corners.parquet
+  sha256: sha256:c197b025dea068e80acbf1269aa96b9f6bfe824c12c1f71435d1fa83e00fa0e4
+  rows: 18
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 1 rows
+- lap table `sector1_s` missing in 21 rows
+- lap table `sector2_s` missing in 1 rows
+- lap table `sector3_s` missing in 1 rows
+- lap table `pit_in_time_s` missing in 973 rows
+- lap table `pit_out_time_s` missing in 973 rows
+- lap table `position` missing in 1 rows
+- lap table `speed_trap_kph` missing in 1 rows

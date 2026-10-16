@@ -1,0 +1,110 @@
+dataset_id: 2019_hungarian_gp_fastf1_v1
+event: 2019_hungarian_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:14:12Z'
+session_key: 2019/round 12/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2019_hungarian_gp/laps.parquet
+  sha256: sha256:4d211356524cc5a338a532b8a321ec7d8e2831574a21f29e4ae1239762309633
+  rows: 1358
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2019_hungarian_gp/results.parquet
+  sha256: sha256:272730a1cadd900c14b6fe0e44cc2fd7cd30d3ab591eb0b3015914a054c6454c
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2019_hungarian_gp/weather.parquet
+  sha256: sha256:4963e558a5e6e9112fe1bb5a5cde441c6f1c2b34a449d61f2df867792aa2f131
+  rows: 130
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2019_hungarian_gp/track_status.parquet
+  sha256: sha256:3d838d1cc18e1a5d6e4d55676a6700ee08405ecf06d797616e1f3aaf124e331c
+  rows: 3
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2019_hungarian_gp/race_control.parquet
+  sha256: sha256:20b786b878c2aff11e53e5b5e1c7e8071c417dc35a6b9ebb489cdcfc0e53c327
+  rows: 96
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2019_hungarian_gp/corners.parquet
+  sha256: sha256:d4a4553603e1437f1291353c01794c0a8223799fe448b779eb8baaba79ad1c28
+  rows: 16
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `sector1_s` missing in 20 rows
+- lap table `pit_in_time_s` missing in 1333 rows
+- lap table `pit_out_time_s` missing in 1334 rows

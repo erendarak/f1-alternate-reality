@@ -1,0 +1,116 @@
+dataset_id: 2020_eifel_gp_fastf1_v1
+event: 2020_eifel_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:10:05Z'
+session_key: 2020/round 11/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2020_eifel_gp/laps.parquet
+  sha256: sha256:8bbab753bea26a3c98176a5d281d330143801410eb8a2f2596ac5fc5fdcbdb97
+  rows: 1019
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2020_eifel_gp/results.parquet
+  sha256: sha256:2765462a4be926379238d5352c63925d8de26c8474696a8b42d0f541e2f75584
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2020_eifel_gp/weather.parquet
+  sha256: sha256:d5924032c67da0744051c778f54b2f5b129e1281e9eaea00a15eb2deb210296a
+  rows: 98
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2020_eifel_gp/track_status.parquet
+  sha256: sha256:ca3f256bd62b1a03471444a0de35452a0d2dd56247134eadb59dd8ff79aec8c6
+  rows: 13
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2020_eifel_gp/race_control.parquet
+  sha256: sha256:51ab6629532f52b44e1fe66added626f699c608331d0eaaa16943e10714fbb7b
+  rows: 77
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2020_eifel_gp/corners.parquet
+  sha256: sha256:cf032295c7c79125e2dd348e28158e6ed267a3693f7beb89b7058472bcb60fff
+  rows: 15
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 8 rows
+- lap table `sector1_s` missing in 22 rows
+- lap table `sector2_s` missing in 2 rows
+- lap table `sector3_s` missing in 2 rows
+- lap table `pit_in_time_s` missing in 983 rows
+- lap table `pit_out_time_s` missing in 986 rows
+- lap table `position` missing in 2 rows
+- lap table `track_status` missing in 23 rows
+- lap table `speed_trap_kph` missing in 2 rows

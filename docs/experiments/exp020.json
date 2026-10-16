@@ -1,0 +1,54 @@
+{
+ "real": {
+  "attempts": 96,
+  "gain_median_s": 1.535,
+  "gain_mean_s": 5.038,
+  "passed_share": 0.458,
+  "gain_median_offset1_s": 0.942,
+  "n_offset1": 67,
+  "gain_median_offset2_s": 2.023,
+  "n_offset2": 14,
+  "gain_median_offset3_s": 3.994,
+  "n_offset3": 15,
+  "attempts_per_race": 4.57
+ },
+ "real_test": {
+  "attempts": 11,
+  "gain_median_s": 0.593,
+  "gain_mean_s": 0.749,
+  "passed_share": 0.455,
+  "gain_median_offset1_s": 0.593,
+  "n_offset1": 7,
+  "gain_median_offset2_s": 3.87,
+  "n_offset2": 2,
+  "gain_median_offset3_s": 1.089,
+  "n_offset3": 2
+ },
+ "current": {
+  "all": {
+   "attempts": 190,
+   "gain_median_s": 1.678,
+   "gain_mean_s": 1.918,
+   "passed_share": 0.542,
+   "gain_median_offset1_s": 1.188,
+   "n_offset1": 106,
+   "gain_median_offset2_s": 2.123,
+   "n_offset2": 59,
+   "gain_median_offset3_s": 4.316,
+   "n_offset3": 25,
+   "attempts_per_race": 1.51
+  },
+  "test": {
+   "attempts": 56,
+   "gain_median_s": 3.14,
+   "gain_mean_s": 2.81,
+   "passed_share": 0.661,
+   "gain_median_offset1_s": 1.514,
+   "n_offset1": 21,
+   "gain_median_offset2_s": 3.451,
+   "n_offset2": 29,
+   "gain_median_offset3_s": 4.016,
+   "n_offset3": 6
+  }
+ }
+}

@@ -1,0 +1,115 @@
+dataset_id: 2019_italian_gp_fastf1_v1
+event: 2019_italian_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:14:38Z'
+session_key: 2019/round 14/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2019_italian_gp/laps.parquet
+  sha256: sha256:1676c04238ad8d692555568752ecfc467f5273daf63d7ef63bb8a64cfcf3e03d
+  rows: 991
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2019_italian_gp/results.parquet
+  sha256: sha256:a7b12cc38a60781bee2ca828772fc968be6b389e1c3058e2cc216cb954d9ef9c
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2019_italian_gp/weather.parquet
+  sha256: sha256:555a8a89b30d4a307c5b298438bdd9ec91eb77c359d759c232500aafcc09416d
+  rows: 111
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2019_italian_gp/track_status.parquet
+  sha256: sha256:333bf1bee436cf9b2e020e1ad101521707e387b5c53df31d17b7a0a96fa5e3dc
+  rows: 15
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2019_italian_gp/race_control.parquet
+  sha256: sha256:f2f13653482008367adb967150dbbbdc816c01f39e1728f83f9a100f24ce8d59
+  rows: 83
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2019_italian_gp/corners.parquet
+  sha256: sha256:6f4b1cb56bf6318970705cb14caac8e20e08357f0467ebc70ee300f76aa1b4df
+  rows: 11
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 1 rows
+- lap table `sector1_s` missing in 21 rows
+- lap table `sector2_s` missing in 1 rows
+- lap table `sector3_s` missing in 1 rows
+- lap table `pit_in_time_s` missing in 961 rows
+- lap table `pit_out_time_s` missing in 962 rows
+- lap table `position` missing in 1 rows
+- lap table `speed_trap_kph` missing in 1 rows

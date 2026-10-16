@@ -1,0 +1,115 @@
+dataset_id: 2022_sao_paulo_gp_fastf1_v1
+event: 2022_sao_paulo_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:04:49Z'
+session_key: 2022/round 21/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2022_sao_paulo_gp/laps.parquet
+  sha256: sha256:e35bff4915475cab82bbff4de7970acf0f54e403c5fc46cb24f7a20039c28561
+  rows: 1259
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2022_sao_paulo_gp/results.parquet
+  sha256: sha256:1e1f6d776e7bc5c7d522b091a4c2399fcbc209e6d304686dcb7f612746cba0c4
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2022_sao_paulo_gp/weather.parquet
+  sha256: sha256:aad7fa7b816bfa7b0ca89ad6f0a7eb6908288ed03659bcd697b3c095fa03d86f
+  rows: 167
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2022_sao_paulo_gp/track_status.parquet
+  sha256: sha256:f55313674ffef4876e2561648d8204976937080c1f0a2ea1031db65e719c28a8
+  rows: 10
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2022_sao_paulo_gp/race_control.parquet
+  sha256: sha256:0ebaf0b41c7bec3dad46719349f3cb5fdd774e8983fee28a7caea6e31ccb6236
+  rows: 59
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2022_sao_paulo_gp/corners.parquet
+  sha256: sha256:fc53dd77925b414b6d7af3c925ebbb4dff7cbe70c12af1a7fb7715e74e51dbdb
+  rows: 15
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 3 rows
+- lap table `sector1_s` missing in 21 rows
+- lap table `sector2_s` missing in 3 rows
+- lap table `sector3_s` missing in 3 rows
+- lap table `pit_in_time_s` missing in 1215 rows
+- lap table `pit_out_time_s` missing in 1214 rows
+- lap table `position` missing in 3 rows
+- lap table `speed_trap_kph` missing in 4 rows

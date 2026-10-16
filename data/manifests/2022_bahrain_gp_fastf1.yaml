@@ -1,0 +1,115 @@
+dataset_id: 2022_bahrain_gp_fastf1_v1
+event: 2022_bahrain_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T21:59:28Z'
+session_key: 2022/round 1/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2022_bahrain_gp/laps.parquet
+  sha256: sha256:630bd21ecf1a09641bc95df6bf486383900fd53ca08653a71791fc71eb3f43c3
+  rows: 1125
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2022_bahrain_gp/results.parquet
+  sha256: sha256:3364e455b6f2e5bf27bc982e91867c451813dde3f572e7c02a89c45700664887
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2022_bahrain_gp/weather.parquet
+  sha256: sha256:9bb8131629ae07fcdb417447dbfcfe4d73e975074081aa41a18da73ce4a66e73
+  rows: 163
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2022_bahrain_gp/track_status.parquet
+  sha256: sha256:5b375f025a2eed7dd5562bc316ac4dd233d82cbeb1416027162701b8bb358a32
+  rows: 7
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2022_bahrain_gp/race_control.parquet
+  sha256: sha256:817a01699d818c68426a567c65b192caee8b67203fbbe5a5c6ac1399ecfed646
+  rows: 60
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2022_bahrain_gp/corners.parquet
+  sha256: sha256:1b411b856584f408a900cbb55ba301cc427277e8ae5eff484ce529cc035e3d58
+  rows: 15
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 7 rows
+- lap table `sector1_s` missing in 22 rows
+- lap table `sector2_s` missing in 2 rows
+- lap table `sector3_s` missing in 2 rows
+- lap table `pit_in_time_s` missing in 1066 rows
+- lap table `pit_out_time_s` missing in 1067 rows
+- lap table `position` missing in 2 rows
+- lap table `speed_trap_kph` missing in 2 rows

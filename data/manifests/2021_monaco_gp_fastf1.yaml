@@ -1,0 +1,112 @@
+dataset_id: 2021_monaco_gp_fastf1_v1
+event: 2021_monaco_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:06:05Z'
+session_key: 2021/round 5/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2021_monaco_gp/laps.parquet
+  sha256: sha256:ce71bd6a150e66687b1848668ea88a08ea340e31376f82eea1d6b610cb54e029
+  rows: 1419
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2021_monaco_gp/results.parquet
+  sha256: sha256:7217db07a85db5227c77724efa148536cbc051c9049a3d15e94262ab8bb0bf03
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2021_monaco_gp/weather.parquet
+  sha256: sha256:f4995e887781922e3c46e03952c1132b8def29a0be52487a47985ac832cc2cf7
+  rows: 135
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2021_monaco_gp/track_status.parquet
+  sha256: sha256:51953e6b35637cc355c68af7d42a69ec3371f2363ebde8546dbef25130e85150
+  rows: 1
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2021_monaco_gp/race_control.parquet
+  sha256: sha256:133b6371fad2c19b06e7bb754b3f962d3423c50c7f28f4a6fd291cdeb519898e
+  rows: 121
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2021_monaco_gp/corners.parquet
+  sha256: sha256:94994c86e7f9f1d4f6d1d18140f4d8a662cbeeb622296fab8f06ed1b9b41a7e7
+  rows: 19
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 1 rows
+- lap table `sector1_s` missing in 20 rows
+- lap table `sector3_s` missing in 2 rows
+- lap table `pit_in_time_s` missing in 1399 rows
+- lap table `pit_out_time_s` missing in 1400 rows

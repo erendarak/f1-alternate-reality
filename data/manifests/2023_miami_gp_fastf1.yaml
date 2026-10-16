@@ -1,0 +1,110 @@
+dataset_id: 2023_miami_gp_fastf1_v1
+event: 2023_miami_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T21:55:16Z'
+session_key: 2023/round 5/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2023_miami_gp/laps.parquet
+  sha256: sha256:7790431dcbcc9c092112cb7e5e45205d9d7b34b872b6df521679a4bbb8639d9d
+  rows: 1138
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2023_miami_gp/results.parquet
+  sha256: sha256:ae64bb3fe80064669946f850a47348959dd6ec4daf012d350bb65e0667044ea0
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2023_miami_gp/weather.parquet
+  sha256: sha256:c3622b0e9ff510e7ec09f19922ddd59864211cfa9ab0590300fea46bdaa322e2
+  rows: 155
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2023_miami_gp/track_status.parquet
+  sha256: sha256:26c9b6476a8cfc20198dc2876081b32ac09184fe74c60e20c41d6faceaf0bf55
+  rows: 5
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2023_miami_gp/race_control.parquet
+  sha256: sha256:306e2e1db7b634db6e2a720a40f8be21dd65b7915fbad5adbcef7d3e0e0d561b
+  rows: 38
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2023_miami_gp/corners.parquet
+  sha256: sha256:134be5377f3ec4521cc50be02c14973bcdd0867f8ea67a08d324f0fc265b1575
+  rows: 19
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `sector1_s` missing in 20 rows
+- lap table `pit_in_time_s` missing in 1118 rows
+- lap table `pit_out_time_s` missing in 1118 rows

@@ -1,0 +1,115 @@
+dataset_id: 2022_canadian_gp_fastf1_v1
+event: 2022_canadian_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:01:35Z'
+session_key: 2022/round 9/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2022_canadian_gp/laps.parquet
+  sha256: sha256:7950aa8a2faf56700eb10e3d5f23718b5e2ff8a4db416b78a2e58b49465fbf2b
+  rows: 1264
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2022_canadian_gp/results.parquet
+  sha256: sha256:b100db5812023fa5d53f8d0bbc3f5df1def91a8a8ee017b315fd2f2c060f7183
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2022_canadian_gp/weather.parquet
+  sha256: sha256:f4d3df6d482e7ad80d003cf756055667ccf8dd58a6656283b348c38e9f0dff5d
+  rows: 162
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2022_canadian_gp/track_status.parquet
+  sha256: sha256:2bcd439d0e2c80523a141d8d7ed98d32c969b2d199293315d40fca78149d874c
+  rows: 13
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2022_canadian_gp/race_control.parquet
+  sha256: sha256:113e9c0e3cd77b6968f6b768e37cbce70a2606e79fabd6bf0a94eca8edd768be
+  rows: 78
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2022_canadian_gp/corners.parquet
+  sha256: sha256:b37667cf34632653d10515159afc25d10c4a365def2552fad1917f85ebd92c12
+  rows: 14
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 2 rows
+- lap table `sector1_s` missing in 22 rows
+- lap table `sector2_s` missing in 2 rows
+- lap table `sector3_s` missing in 2 rows
+- lap table `pit_in_time_s` missing in 1232 rows
+- lap table `pit_out_time_s` missing in 1233 rows
+- lap table `position` missing in 2 rows
+- lap table `speed_trap_kph` missing in 2 rows

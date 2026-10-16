@@ -1,0 +1,110 @@
+dataset_id: 2025_italian_gp_fastf1_v1
+event: 2025_italian_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T21:52:12Z'
+session_key: 2025/round 16/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2025_italian_gp/laps.parquet
+  sha256: sha256:ec3101d1c289fe835779cda39e4510963ba709a32fe8b07ce77d144784a2a1f4
+  rows: 974
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2025_italian_gp/results.parquet
+  sha256: sha256:637fa2a0d043ab9fc747dd1e3fc57bc987d0065cdb688c92182154001f24b15d
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2025_italian_gp/weather.parquet
+  sha256: sha256:46b99f150020ce044e7b8211df440609e255497c4c4789c3159951767d8eeadf
+  rows: 144
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2025_italian_gp/track_status.parquet
+  sha256: sha256:8d9715ed79289f73e5afb293f3425b44f0f456ceff5214a8d8032ce62933babc
+  rows: 6
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2025_italian_gp/race_control.parquet
+  sha256: sha256:d05d939bc74001c1567f04fbc495271d43d5bf51f0e953cda861ab325af642ee
+  rows: 71
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2025_italian_gp/corners.parquet
+  sha256: sha256:6f4b1cb56bf6318970705cb14caac8e20e08357f0467ebc70ee300f76aa1b4df
+  rows: 11
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `sector1_s` missing in 19 rows
+- lap table `pit_in_time_s` missing in 954 rows
+- lap table `pit_out_time_s` missing in 953 rows

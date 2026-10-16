@@ -1175,3 +1175,41 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
 - Measured with exact counterfactuals afterwards: in battles, ATTACK vs NORMAL averages +0.0006
   in title fights vs -0.0006 in points races, +0.0002 for daring vs -0.0008 for careful drivers:
   the human-like pattern exists in the world, but it's small.
+
+## D-051 — W7 premise refuted: our undercut already matches 2024; pivot to hidden information (2026-10-16)
+
+- The W7 plan assumed our undercut was too weak (fitted fresh-tyre bonus ~0.1 s vs a real
+  +0.5..+2.5 s). Measured with one detector on real and simulated races (`calibration/undercut.py`,
+  EXP-020): median gain **+1.54 s real vs +1.68 s simulated**, attacker ends ahead 46 % vs 54 %,
+  gains by stop offset 1/2/3 laps +0.9/+2.0/+4.0 s vs +1.2/+2.1/+4.3 s. Tyre wear accumulated with
+  age (W1) already produces it. Strengthening it would make the world less realistic: not done.
+- The clear gap is behaviour: real teams try 4.6 undercuts per race, our rules 1.5, because real
+  teams don't know the tyre model and react to what they see. With slice 4b this explains why no
+  AI beats the rules: the rule planner reads the true tyre model. Owner's direction (2026-10-16):
+  hidden race-day truth that the AI must infer from the laps, over 2000-2025
+  (`docs/PLAN_HIDDEN_INFO_ERAS.md`, H0-H6).
+
+## D-052 — H0: history data 2000-2025 (2026-10-16, in progress)
+
+- **Jolpica-F1** for every race 2000-2025 (`data/jolpica_history.py`, `scripts/fetch_history.py`):
+  results, qualifying, lap times and positions (1996+), pit stops (2011+); cached page by page in
+  `data/raw/jolpica/` (resumable), tables in `data/processed/history/`. Throttled to 400
+  requests/hour (limit 500): ~18 h for all 503 races; order 2017 -> 2010, 2009 -> 2000, then
+  2018-2025 (already in full detail from FastF1).
+- **F1's timing archive (FastF1's source) now answers HTTP 401** without a signed-in F1 account,
+  for every season (even 2024, fetched before). A **free account is enough** (tested). The owner
+  signed FastF1 in; `fastf1_adapter._archive_auth` attaches the token to archive requests only
+  (never to Jolpica or other hosts) and never logs it. With it: **2018-2025 fetched from FastF1**
+  (compounds, track status, weather): 2018 16/21, 2019 21, 2020 17, 2021 11/22, 2022 22, 2023 22,
+  2024 24, 2025 24 (the gaps hit Jolpica's rate limit; 2021 also raised a TypeError to debug).
+  `fetch_season.py` now takes any season (rounds from the Jolpica schedule).
+- **OpenF1** for 2023-2025 (`data/openf1_history.py`, `scripts/fetch_openf1.py`): stints with
+  compounds, pit, race control, weather, laps: 70 races, an independent cross-check.
+- **What older races lack, inferred from lap times** (`data/history_inference.py`): pit stops
+  (lap > 10 s slower than the field median; 8 s under SC/VSC) and neutralised laps (field median >
+  1.08 x the typical lap). Tuned on 2018-2021 FastF1 races, tested on 2022-2025: pit stops
+  precision 0.88, recall 0.73 (misses are mostly stops under a safety car); neutralised laps 83 %
+  found, 1.4 false laps per race. On Jolpica 2025 races: 0.86 / 0.73; vs OpenF1 race control 89 %
+  of neutralised laps found. `estimated_from_data`.
+- Quality reports for 2018-2025 races flag ~10 small feed quirks (a lapped car with one lap row
+  too many, laps missing in 2020 Austria, our date check vs Las Vegas's Saturday race).

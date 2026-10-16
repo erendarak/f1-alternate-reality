@@ -1,0 +1,116 @@
+dataset_id: 2018_russian_gp_fastf1_v1
+event: 2018_russian_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:19:36Z'
+session_key: 2018/round 16/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2018_russian_gp/laps.parquet
+  sha256: sha256:5ffba993af3ecd9bc39f17fa8c45ae8731ac2e499671d4123cb57bdd13745fa6
+  rows: 948
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2018_russian_gp/results.parquet
+  sha256: sha256:86c57c572acbd5035582e39a228f94068e85db68ac29f2bc499604a2b3dcbe97
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2018_russian_gp/weather.parquet
+  sha256: sha256:37ff7ad93a7e8bc59145144ea80b4332408aaa3bbf97914bcf42dc965f3f08d2
+  rows: 110
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2018_russian_gp/track_status.parquet
+  sha256: sha256:4b98902ae3addcb3ad29f2a7f47b0de0352897f44d95dec68d4443aee59f99cc
+  rows: 9
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2018_russian_gp/race_control.parquet
+  sha256: sha256:a5a3fb1cee02bef467f5f8312a7b3f570302a704548f216e33e5009e981801fe
+  rows: 79
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2018_russian_gp/corners.parquet
+  sha256: sha256:459149bf1c90edcb3339f3a08b00765a24656eda3ed61be0ce2ee1412e471c98
+  rows: 18
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 1 rows
+- lap table `sector1_s` missing in 20 rows
+- lap table `sector2_s` missing in 1 rows
+- lap table `sector3_s` missing in 1 rows
+- lap table `pit_in_time_s` missing in 926 rows
+- lap table `pit_out_time_s` missing in 928 rows
+- lap table `stint` missing in 21 rows
+- lap table `compound` missing in 21 rows
+- lap table `tyre_life_laps` missing in 21 rows

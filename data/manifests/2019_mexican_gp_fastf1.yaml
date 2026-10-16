@@ -1,0 +1,113 @@
+dataset_id: 2019_mexican_gp_fastf1_v1
+event: 2019_mexican_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:15:32Z'
+session_key: 2019/round 18/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2019_mexican_gp/laps.parquet
+  sha256: sha256:c11ec45041aaf227a3a97c8525d467babcd15a56c63b027c2ba6421e4aecf88d
+  rows: 1370
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2019_mexican_gp/results.parquet
+  sha256: sha256:22788e52238febc8de39c2e351fe04499d54ab35cda0ea5179d1aba0379d618c
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2019_mexican_gp/weather.parquet
+  sha256: sha256:e842914c16288fd8a0ff43b21b8dafc17a8abb54f334fda7a5b637c2fd82380e
+  rows: 132
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2019_mexican_gp/track_status.parquet
+  sha256: sha256:0f54cb58a20b6c7c00e4181480e49d12169a5a4ef1cc712fa86d74b937b755de
+  rows: 8
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2019_mexican_gp/race_control.parquet
+  sha256: sha256:88b08d840bd1a563519f1f580f8b004188f23d614174febb4939538e4031f240
+  rows: 122
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2019_mexican_gp/corners.parquet
+  sha256: sha256:a08e6785a3e6a263098bbc9fdf3fec7f8d3b5e397596b4bb7fba2e4a3290ea2e
+  rows: 17
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 1 rows
+- lap table `sector1_s` missing in 21 rows
+- lap table `sector2_s` missing in 1 rows
+- lap table `sector3_s` missing in 1 rows
+- lap table `pit_in_time_s` missing in 1341 rows
+- lap table `pit_out_time_s` missing in 1343 rows

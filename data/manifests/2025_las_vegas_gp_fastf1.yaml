@@ -1,0 +1,115 @@
+dataset_id: 2025_las_vegas_gp_fastf1_v1
+event: 2025_las_vegas_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T21:53:37Z'
+session_key: 2025/round 22/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2025_las_vegas_gp/laps.parquet
+  sha256: sha256:1ab14d0f40961b21691c911ac8028d3bde7584905d9c13c1e5a4f6b3e63d4e6f
+  rows: 886
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2025_las_vegas_gp/results.parquet
+  sha256: sha256:1bc90961c93e584e7698886b72ad30bfa9143e9a034cc9d796e8303d4f94b1a5
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2025_las_vegas_gp/weather.parquet
+  sha256: sha256:3883303d9a77ba2fa6b4aab9f3aff2d5a98db4703e473fd2bd64d17fc4190c61
+  rows: 141
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2025_las_vegas_gp/track_status.parquet
+  sha256: sha256:00dabe18210026a2960af15025c289f38e19cea503e06b026a7a220c6c8502e2
+  rows: 16
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2025_las_vegas_gp/race_control.parquet
+  sha256: sha256:c75aa63557bc84ad164ec449e54ef64847ea16bd5ea431cfd161162f2ccada38
+  rows: 61
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2025_las_vegas_gp/corners.parquet
+  sha256: sha256:a67a2acd2b7bc50dfaabeb1898ecfa6013052576808c1dddb7b2eb0e9e6b3b9f
+  rows: 17
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 2 rows
+- lap table `sector1_s` missing in 20 rows
+- lap table `sector2_s` missing in 1 rows
+- lap table `sector3_s` missing in 1 rows
+- lap table `pit_in_time_s` missing in 861 rows
+- lap table `pit_out_time_s` missing in 862 rows
+- lap table `position` missing in 1 rows
+- lap table `speed_trap_kph` missing in 1 rows

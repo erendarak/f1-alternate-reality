@@ -1,0 +1,115 @@
+dataset_id: 2022_singapore_gp_fastf1_v1
+event: 2022_singapore_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:03:45Z'
+session_key: 2022/round 17/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2022_singapore_gp/laps.parquet
+  sha256: sha256:f49a650f155a3b10fed001a633cd938efdc62e26ea748d643aaf5a56559668f6
+  rows: 945
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2022_singapore_gp/results.parquet
+  sha256: sha256:1e0267839ab83da67e0e6f7fffb0f52f7fc436b9bcc5dad89a165c5d40f234ad
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2022_singapore_gp/weather.parquet
+  sha256: sha256:63e895ac64fdab59a302ca2d39cdd6c5af02c53738322cbebd1bf4723b81b10f
+  rows: 255
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2022_singapore_gp/track_status.parquet
+  sha256: sha256:062043a417f9b5333023c3a7c9d2979efa72d4b318f14fab06c1d82966084a6e
+  rows: 31
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2022_singapore_gp/race_control.parquet
+  sha256: sha256:d8deacf6686bcc2ed60a0f6f044d151e46c75287b02c5f7d8748700a6806a159
+  rows: 134
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2022_singapore_gp/corners.parquet
+  sha256: sha256:24fca7ae29d5f1fb92c65a30a144a35bc504f30ea360cf7b72baec10bfb0d292
+  rows: 19
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 108 rows
+- lap table `sector1_s` missing in 24 rows
+- lap table `sector2_s` missing in 4 rows
+- lap table `sector3_s` missing in 4 rows
+- lap table `pit_in_time_s` missing in 922 rows
+- lap table `pit_out_time_s` missing in 923 rows
+- lap table `position` missing in 4 rows
+- lap table `speed_trap_kph` missing in 5 rows

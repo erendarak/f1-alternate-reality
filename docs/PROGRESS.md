@@ -1316,3 +1316,15 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
   hunters lose, but the effect (~0.001 per decision) is within the noise.
 - Tests: 462 offline (+5 counterfactual, +3 title objective).
 - Next (owner's call): options in the slice 4b summary.
+
+### 2026-10-16 — W7 premise refuted; plan for hidden information; H0 started (D-051, D-052)
+
+- EXP-020: our undercut matches 2024 (median +1.7 s vs +1.5 s); real teams try 3x more undercuts.
+  Owner's direction: a world where nobody knows the answers, 2000-2025
+  (`docs/PLAN_HIDDEN_INFO_ERAS.md`).
+- H0: Jolpica history fetcher (2000-2025, resumable, ~18 h), OpenF1 2023-2025 (70 races), FastF1
+  2018-2025 (157 races) with the owner's F1 sign-in (the archive now answers 401 without one; a
+  free account works). Pit stop / SC lap inference tested on held-out seasons (EXP-021).
+- Tests: 465 offline (+3 history data).
+- Next: finish the fetch (next sessions), fetch the remaining 2018/2021 races, EXP-021 coverage,
+  then H1 (eras and regulations).

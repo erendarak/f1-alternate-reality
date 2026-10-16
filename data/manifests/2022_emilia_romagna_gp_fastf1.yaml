@@ -1,0 +1,115 @@
+dataset_id: 2022_emilia_romagna_gp_fastf1_v1
+event: 2022_emilia_romagna_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:00:12Z'
+session_key: 2022/round 4/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2022_emilia_romagna_gp/laps.parquet
+  sha256: sha256:0c6854159353555a2d7b78e2265129bab84790ba00eb20092b043caf0e24e98b
+  rows: 1132
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2022_emilia_romagna_gp/results.parquet
+  sha256: sha256:e2bd806a705ae78550cdf79cc2255fb6106fc6df0a872c52a63fcb92c769f4cc
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2022_emilia_romagna_gp/weather.parquet
+  sha256: sha256:5fa9b2633ae382f9fc0e8b9fa22c2aeac98fa9eef13589df698dc3568bd0a973
+  rows: 158
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2022_emilia_romagna_gp/track_status.parquet
+  sha256: sha256:387de153f9393ad2085f2458c3365e409356f82ec65b18b953d936d8c528c449
+  rows: 8
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2022_emilia_romagna_gp/race_control.parquet
+  sha256: sha256:aea948b6ba4960fc7d4ea9892efcd6234d5ddf9a434d3b66bf81b9222f02f478
+  rows: 71
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2022_emilia_romagna_gp/corners.parquet
+  sha256: sha256:745e9f257cdd3906107f6cf59fdf93439180d0c72c8fc26659d24e1c33d842a5
+  rows: 19
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 6 rows
+- lap table `sector1_s` missing in 20 rows
+- lap table `sector2_s` missing in 1 rows
+- lap table `sector3_s` missing in 1 rows
+- lap table `pit_in_time_s` missing in 1106 rows
+- lap table `pit_out_time_s` missing in 1106 rows
+- lap table `position` missing in 1 rows
+- lap table `speed_trap_kph` missing in 1 rows

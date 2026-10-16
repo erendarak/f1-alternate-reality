@@ -1,0 +1,119 @@
+dataset_id: 2018_german_gp_fastf1_v1
+event: 2018_german_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:18:39Z'
+session_key: 2018/round 11/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2018_german_gp/laps.parquet
+  sha256: sha256:9b0dee9a32cac1ad8a885c5f8b13879cd50f8113d656432b22faa597a440f1ca
+  rows: 1252
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2018_german_gp/results.parquet
+  sha256: sha256:7d0f2f1a04c3d984c503b37ceb79e0ca35b32836955b9b102969b4de3e057d18
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2018_german_gp/weather.parquet
+  sha256: sha256:14458ba29382b2c670d3d9b1e26cab8ec626f31ded1775a72d158a9c8f6dc064
+  rows: 104
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2018_german_gp/track_status.parquet
+  sha256: sha256:6aae20e7514f524fc5fbd4c13a837d8cb5c37e8bdd61705b1105275ad68fbcdd
+  rows: 13
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2018_german_gp/race_control.parquet
+  sha256: sha256:6258103f3b056e19e52bfc8559cbee24aab1748842ef24bc530776a5d13472fb
+  rows: 97
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2018_german_gp/corners.parquet
+  sha256: sha256:23ae04b5a8b32a55df8778519ad7b8a8ff0be0207da137d87b8ed62b9969e2bc
+  rows: 17
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 2 rows
+- lap table `sector1_s` missing in 23 rows
+- lap table `sector2_s` missing in 3 rows
+- lap table `sector3_s` missing in 2 rows
+- lap table `pit_in_time_s` missing in 1210 rows
+- lap table `pit_out_time_s` missing in 1213 rows
+- lap table `stint` missing in 21 rows
+- lap table `compound` missing in 21 rows
+- lap table `tyre_life_laps` missing in 21 rows
+- lap table `position` missing in 2 rows
+- lap table `track_status` missing in 545 rows
+- lap table `speed_trap_kph` missing in 2 rows

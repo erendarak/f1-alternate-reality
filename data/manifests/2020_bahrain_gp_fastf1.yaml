@@ -1,0 +1,115 @@
+dataset_id: 2020_bahrain_gp_fastf1_v1
+event: 2020_bahrain_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:11:01Z'
+session_key: 2020/round 15/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2020_bahrain_gp/laps.parquet
+  sha256: sha256:4f76e33f6e6d9cc3759d5dd69b5e0e74c392f0f69617a263e26e16c55e4cb3b2
+  rows: 1019
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2020_bahrain_gp/results.parquet
+  sha256: sha256:5ee12d01638d24230e17277c25b013fd5f729400c5930b6ee2876365535328df
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2020_bahrain_gp/weather.parquet
+  sha256: sha256:618b073580ffc5a2c5257c64a4b7731879f86ecd6e8e617cfb8f140684f04113
+  rows: 216
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2020_bahrain_gp/track_status.parquet
+  sha256: sha256:b95090c72a47dca8dd8bf81b53a8a75a49813686045cebd1a5686d444369c9ba
+  rows: 11
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2020_bahrain_gp/race_control.parquet
+  sha256: sha256:3d71adf886e7d7307acad66e9fc97685c85662a84353145b99e3bcec053b7ae2
+  rows: 56
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2020_bahrain_gp/corners.parquet
+  sha256: sha256:1b411b856584f408a900cbb55ba301cc427277e8ae5eff484ce529cc035e3d58
+  rows: 15
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 61 rows
+- lap table `sector1_s` missing in 41 rows
+- lap table `sector2_s` missing in 4 rows
+- lap table `sector3_s` missing in 3 rows
+- lap table `pit_in_time_s` missing in 962 rows
+- lap table `pit_out_time_s` missing in 962 rows
+- lap table `position` missing in 3 rows
+- lap table `speed_trap_kph` missing in 3 rows

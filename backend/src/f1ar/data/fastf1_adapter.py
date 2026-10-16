@@ -49,6 +49,33 @@ class DataSourceError(RuntimeError):
     """The source returned without the data we asked for (FastF1 logs and swallows failures)."""
 
 
+ARCHIVE_HOST = "livetiming.formula1.com"
+
+
+def _archive_auth() -> Any:
+    """Since 2026-10 F1's timing archive answers HTTP 401 without a signed-in F1 account (a free
+    account is enough; checked 2026-10-16). If the owner signed FastF1 in
+    (``python -m fastf1 auth f1tv --authenticate``), the stored token is attached to requests to
+    the archive host **only** (never to Jolpica or anything else); ``None`` if not signed in."""
+    import requests
+    from fastf1.internals import f1auth
+
+    path = Path(f1auth.AUTH_DATA_FILE)
+    if not path.exists():
+        return None
+    token = path.read_text(encoding="utf-8").strip()
+    if not token:
+        return None
+
+    class ArchiveAuth(requests.auth.AuthBase):
+        def __call__(self, r: Any) -> Any:
+            if ARCHIVE_HOST in str(r.url).split("/")[2]:
+                r.headers["Authorization"] = f"Bearer {token}"
+            return r
+
+    return ArchiveAuth()
+
+
 def load_race_session(year: int, gp: str | int, cache_dir: Path, *, telemetry: bool = True) -> Any:
     """Download (or read from cache) a race session. Returns a loaded ``fastf1.core.Session``.
 
@@ -60,6 +87,11 @@ def load_race_session(year: int, gp: str | int, cache_dir: Path, *, telemetry: b
 
     cache_dir.mkdir(parents=True, exist_ok=True)
     fastf1.Cache.enable_cache(str(cache_dir))
+    auth = _archive_auth()
+    if auth is not None:
+        for http in (fastf1.Cache._requests_session, fastf1.Cache._requests_session_cached):
+            if http is not None:
+                http.auth = auth
     session = fastf1.get_session(year, gp, "R")
     session.load(laps=True, telemetry=telemetry, weather=True, messages=True)
     try:

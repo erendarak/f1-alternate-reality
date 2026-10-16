@@ -1,0 +1,118 @@
+dataset_id: 2018_french_gp_fastf1_v1
+event: 2018_french_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:18:00Z'
+session_key: 2018/round 8/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2018_french_gp/laps.parquet
+  sha256: sha256:8216ebcfc7b41f98625a71a5475cc6c1653edb7d8dde609aefd7dde47c2a5f0c
+  rows: 920
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2018_french_gp/results.parquet
+  sha256: sha256:031c766d5402fe98e328c4c2da571b7ffff2eb71be1a99600f2a63cfacd0fa6f
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2018_french_gp/weather.parquet
+  sha256: sha256:3da838b28701cd594d8d1c3ed710aa058b72bec2c7166a62e99f7faf82ec64f8
+  rows: 102
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2018_french_gp/track_status.parquet
+  sha256: sha256:50dbdef30e7de04e305dbca3d4c0cafb804048f8951df5cc1bc8ed6622160097
+  rows: 13
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2018_french_gp/race_control.parquet
+  sha256: sha256:622b9b6093c523aa5742f87cf237101f9890dbf71aaef0c189426a27d45893d9
+  rows: 75
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2018_french_gp/corners.parquet
+  sha256: sha256:cd381b1e300972d23a882b4217332daf15d77ad530070a60da6165d3502a133e
+  rows: 15
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 25 rows
+- lap table `sector1_s` missing in 21 rows
+- lap table `sector2_s` missing in 3 rows
+- lap table `sector3_s` missing in 6 rows
+- lap table `pit_in_time_s` missing in 898 rows
+- lap table `pit_out_time_s` missing in 900 rows
+- lap table `stint` missing in 14 rows
+- lap table `compound` missing in 14 rows
+- lap table `tyre_life_laps` missing in 14 rows
+- lap table `position` missing in 3 rows
+- lap table `speed_trap_kph` missing in 3 rows

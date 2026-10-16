@@ -1,0 +1,37 @@
+{
+ "coverage": {
+  "2025": {
+   "races": 22,
+   "laps_per_race": 1111,
+   "real_stops_per_race": 34.2
+  }
+ },
+ "pit_inference": {
+  "2025": {
+   "races": 22,
+   "precision": 0.864,
+   "recall": 0.733
+  }
+ },
+ "neutral_inference": {
+  "real_neutral_laps": 104,
+  "found_share": 0.894,
+  "false_alarm_laps": 24
+ },
+ "fastf1_validation": {
+  "tuned_on_2018_2021": {
+   "races": 66,
+   "pit_precision": 0.859,
+   "pit_recall": 0.736,
+   "neutral_found_share": 0.76,
+   "neutral_false_laps_per_race": 0.83
+  },
+  "test_2022_2025": {
+   "races": 92,
+   "pit_precision": 0.881,
+   "pit_recall": 0.725,
+   "neutral_found_share": 0.829,
+   "neutral_false_laps_per_race": 1.45
+  }
+ }
+}

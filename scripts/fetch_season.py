@@ -2,6 +2,7 @@
 
 Usage:
     uv run python scripts/fetch_season.py --season 2024                 # timing only (~9 MB/race)
+    uv run python scripts/fetch_season.py --season 2019                 # any season from 2018 (H0)
     uv run python scripts/fetch_season.py --season 2024 --rounds 9 12 21
     uv run python scripts/fetch_season.py --season 2024 --telemetry     # + position samples
 
@@ -18,8 +19,7 @@ from f1ar.data.fastf1_adapter import DataSourceError
 from f1ar.data.pipeline import fetch_event
 
 ROOT = Path(__file__).resolve().parents[1]
-ROUNDS_2024 = 24
-PAUSE_S = 2.0
+PAUSE_S = 8.0
 
 
 def fetched_rounds(season: int) -> set[int]:
@@ -41,10 +41,13 @@ def main() -> None:
     parser.add_argument("--telemetry", action="store_true", help="also fetch position samples")
     parser.add_argument("--refresh", action="store_true", help="fetch already-fetched races again")
     args = parser.parse_args()
-    if args.season != 2024 and not args.rounds:
-        parser.error("only the 2024 round count is known; pass --rounds")
+    if args.rounds:
+        rounds = args.rounds
+    else:  # H0: any season, from the Jolpica schedule (cached by fetch_history.py)
+        from f1ar.data.jolpica_history import Throttle, season_schedule
 
-    rounds = args.rounds or list(range(1, ROUNDS_2024 + 1))
+        schedule = season_schedule(args.season, ROOT / "data" / "raw" / "jolpica", Throttle(9.0))
+        rounds = [int(r["round"]) for r in schedule]
     done = set() if args.refresh else fetched_rounds(args.season)
     summary: list[str] = []
     for round_ in rounds:

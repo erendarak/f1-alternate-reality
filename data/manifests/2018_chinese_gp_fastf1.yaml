@@ -1,0 +1,115 @@
+dataset_id: 2018_chinese_gp_fastf1_v1
+event: 2018_chinese_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:16:55Z'
+session_key: 2018/round 3/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2018_chinese_gp/laps.parquet
+  sha256: sha256:5e8203c7196750474b7eaae71810a957f6d2854817fc91a733f02366db37ef24
+  rows: 1115
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2018_chinese_gp/results.parquet
+  sha256: sha256:6b382ba2ca82953e5901015ce2da46ab35b61c35172ce682248ff2de8f9b44c2
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2018_chinese_gp/weather.parquet
+  sha256: sha256:07035a8ffdba1abfe36a033c2ededf27e1e23a09f195b10691b71570ea3390ec
+  rows: 112
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2018_chinese_gp/track_status.parquet
+  sha256: sha256:9ddf87eb89f31153d3693b5a14fee716b754a6f2cb4e9c5f979c5dce42ced350
+  rows: 8
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2018_chinese_gp/race_control.parquet
+  sha256: sha256:e00e0d20dadabf614c4d232b85abd37a9183ef0be954bef7fa6c5d135eac3ad2
+  rows: 37
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2018_chinese_gp/corners.parquet
+  sha256: sha256:ad664b42cf2898e3dc0a982e5bd5b387bedb56a9a04cd73373573acd5a58bfda
+  rows: 16
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 20 rows
+- lap table `sector1_s` missing in 20 rows
+- lap table `pit_in_time_s` missing in 1084 rows
+- lap table `pit_out_time_s` missing in 1085 rows
+- lap table `stint` missing in 21 rows
+- lap table `compound` missing in 21 rows
+- lap table `tyre_life_laps` missing in 21 rows
+- lap table `track_status` missing in 573 rows

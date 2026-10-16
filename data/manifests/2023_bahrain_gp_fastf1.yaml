@@ -1,0 +1,115 @@
+dataset_id: 2023_bahrain_gp_fastf1_v1
+event: 2023_bahrain_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T21:54:20Z'
+session_key: 2023/round 1/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2023_bahrain_gp/laps.parquet
+  sha256: sha256:a0e0e88a247fc7412cc7a09bcf0c2e0e0a4a580629896e7ba79e1848833049f8
+  rows: 1056
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2023_bahrain_gp/results.parquet
+  sha256: sha256:51e9d9d28cc8e227317f823d6ed2a13b9249d0f402826ec12fb10090eb62f540
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2023_bahrain_gp/weather.parquet
+  sha256: sha256:3993a8ccc0ee00f4e0276f0958c5bf541fadb4af8ef189d1328837e19a0eaf47
+  rows: 161
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2023_bahrain_gp/track_status.parquet
+  sha256: sha256:1fe7b6fbf79e34810c36dc37b23a57c898e2733ad38244cd66809dfc8d78191c
+  rows: 11
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2023_bahrain_gp/race_control.parquet
+  sha256: sha256:ccc7adf0b1f68eae889d89aa1e2a5840bef155b3cca475e14cd413be7196342f
+  rows: 73
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2023_bahrain_gp/corners.parquet
+  sha256: sha256:1b411b856584f408a900cbb55ba301cc427277e8ae5eff484ce529cc035e3d58
+  rows: 15
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 1 rows
+- lap table `sector1_s` missing in 21 rows
+- lap table `sector2_s` missing in 1 rows
+- lap table `sector3_s` missing in 1 rows
+- lap table `pit_in_time_s` missing in 1004 rows
+- lap table `pit_out_time_s` missing in 1006 rows
+- lap table `position` missing in 1 rows
+- lap table `speed_trap_kph` missing in 1 rows

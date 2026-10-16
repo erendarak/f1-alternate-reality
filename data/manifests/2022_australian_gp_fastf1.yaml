@@ -1,0 +1,115 @@
+dataset_id: 2022_australian_gp_fastf1_v1
+event: 2022_australian_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T21:59:55Z'
+session_key: 2022/round 3/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2022_australian_gp/laps.parquet
+  sha256: sha256:c468f6fdf24ae8283a3b0c88b40915457cefbaae32c47eefe72c5bd358e81b41
+  rows: 1045
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2022_australian_gp/results.parquet
+  sha256: sha256:5af3b31b605ba2de83b1265924d225b050011b7aa615b30fc861753bf5aa8b88
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2022_australian_gp/weather.parquet
+  sha256: sha256:6979f767127ca2b33fe5a65fc9b6abc41a3b114c5a20310c4e2e69a36edef61f
+  rows: 156
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2022_australian_gp/track_status.parquet
+  sha256: sha256:0c87cbef9c933d08a4b648e015d339f8159310bdb3c7bab1e2d98cdd12201a4d
+  rows: 17
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2022_australian_gp/race_control.parquet
+  sha256: sha256:408de141148d0a3ff56f5605ca374846ade042ca49d318988bce69348fcfe3a8
+  rows: 63
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2022_australian_gp/corners.parquet
+  sha256: sha256:e7a1f191c73848199bd9fc5ed3b14be34f2e4e010692a2f6fdc85203f4bc79be
+  rows: 14
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 19 rows
+- lap table `sector1_s` missing in 23 rows
+- lap table `sector2_s` missing in 3 rows
+- lap table `sector3_s` missing in 3 rows
+- lap table `pit_in_time_s` missing in 1023 rows
+- lap table `pit_out_time_s` missing in 1023 rows
+- lap table `position` missing in 3 rows
+- lap table `speed_trap_kph` missing in 3 rows

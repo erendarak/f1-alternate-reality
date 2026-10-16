@@ -1,0 +1,110 @@
+dataset_id: 2020_70th_anniversary_gp_fastf1_v1
+event: 2020_70th_anniversary_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:08:43Z'
+session_key: 2020/round 5/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2020_70th_anniversary_gp/laps.parquet
+  sha256: sha256:022d6d42523bbb22d2a28349d9f0ff717a642227f6fdf724d2a6c6eb9cd2e7e2
+  rows: 1025
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2020_70th_anniversary_gp/results.parquet
+  sha256: sha256:f855fae3572e9eaa817c6a92b3407dac5721b3eed8cbee47f5a86842cf77faff
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2020_70th_anniversary_gp/weather.parquet
+  sha256: sha256:c57d7281f5bb343d6a5aaa125ed245494086721bfb3ed3f72be3a7684419fedc
+  rows: 116
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2020_70th_anniversary_gp/track_status.parquet
+  sha256: sha256:3d001117a7446312e8ce948b99a83a07f2fd1479c7b76f59fdee2348a95d10aa
+  rows: 5
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2020_70th_anniversary_gp/race_control.parquet
+  sha256: sha256:6a87ae6d7b05e90d35ca3f6b69ca24087891459e994f6651df9a98df3ac063f6
+  rows: 53
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2020_70th_anniversary_gp/corners.parquet
+  sha256: sha256:d933e91c9acd56745e77c53a9a891cc6cc66512aacb6400bb1aae4cb2aa2e9de
+  rows: 18
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `sector1_s` missing in 20 rows
+- lap table `pit_in_time_s` missing in 983 rows
+- lap table `pit_out_time_s` missing in 984 rows

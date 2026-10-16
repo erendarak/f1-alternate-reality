@@ -1,0 +1,110 @@
+dataset_id: 2021_french_gp_fastf1_v1
+event: 2021_french_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:06:34Z'
+session_key: 2021/round 7/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2021_french_gp/laps.parquet
+  sha256: sha256:44a559926ad2ad3faf49ac18382132d24d64dea54255cd71cf3e0eb69f26e61e
+  rows: 1051
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2021_french_gp/results.parquet
+  sha256: sha256:4a3aab73e900ce329358ff0e9c87226107e0687ae9c38be026f4325abf839d3e
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2021_french_gp/weather.parquet
+  sha256: sha256:445d5d124cffda5d42f9e4582273ef94e7e3d80770fcf3c1ee3f8c7a993d98c8
+  rows: 125
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2021_french_gp/track_status.parquet
+  sha256: sha256:1e4231a1f7874d708fc66e56f721a9830b5b93594412b3b6432776645c25f958
+  rows: 1
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2021_french_gp/race_control.parquet
+  sha256: sha256:f5625f4eb5f0016638b488b72201c6a571541774950090cb9e122bb4fbf88c61
+  rows: 46
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2021_french_gp/corners.parquet
+  sha256: sha256:cd381b1e300972d23a882b4217332daf15d77ad530070a60da6165d3502a133e
+  rows: 15
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `sector1_s` missing in 20 rows
+- lap table `pit_in_time_s` missing in 1029 rows
+- lap table `pit_out_time_s` missing in 1028 rows

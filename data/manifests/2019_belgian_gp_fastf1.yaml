@@ -1,0 +1,115 @@
+dataset_id: 2019_belgian_gp_fastf1_v1
+event: 2019_belgian_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:14:25Z'
+session_key: 2019/round 13/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2019_belgian_gp/laps.parquet
+  sha256: sha256:9c209fad7c57b7280a19394c4b101fc6c4b4590adf6d587868489b9cb3acd6ee
+  rows: 787
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2019_belgian_gp/results.parquet
+  sha256: sha256:bf51c0ec23630c6557999ae29c66d1db713949fb6d7a9cab79bb47f2ee055a85
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2019_belgian_gp/weather.parquet
+  sha256: sha256:f8e30b572b4fcbbdaf2a681df75c9cf556332ecc0097f5230e86c3f08417f067
+  rows: 120
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2019_belgian_gp/track_status.parquet
+  sha256: sha256:58ec94075c3902be55e9ca44850c8cabd28f37f489bb8f1c29471d5b55f01537
+  rows: 11
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2019_belgian_gp/race_control.parquet
+  sha256: sha256:eb3358b21d0768b1559d699a5d229108863ec387e8844abe448375debdd2a800
+  rows: 61
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2019_belgian_gp/corners.parquet
+  sha256: sha256:74effe1c46c56f5de1ea76feebc0b06a31064ea5504ca9218bc11e1733c84ef7
+  rows: 19
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 57 rows
+- lap table `sector1_s` missing in 23 rows
+- lap table `sector2_s` missing in 4 rows
+- lap table `sector3_s` missing in 3 rows
+- lap table `pit_in_time_s` missing in 763 rows
+- lap table `pit_out_time_s` missing in 763 rows
+- lap table `position` missing in 3 rows
+- lap table `speed_trap_kph` missing in 4 rows

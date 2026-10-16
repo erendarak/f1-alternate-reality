@@ -1,0 +1,113 @@
+dataset_id: 2019_abu_dhabi_gp_fastf1_v1
+event: 2019_abu_dhabi_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T22:16:13Z'
+session_key: 2019/round 21/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2019_abu_dhabi_gp/laps.parquet
+  sha256: sha256:1a429cec561cef4ab29e0fdfba9909346ba08ef2ec7a8e84f148ff5dda3ff1b7
+  rows: 1075
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2019_abu_dhabi_gp/results.parquet
+  sha256: sha256:aae6ec8cc09416986d69265eb3cc48d1212bb84f88477516f2780473497a6fd8
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2019_abu_dhabi_gp/weather.parquet
+  sha256: sha256:2a1fa9cc04dea81fc1b4fb393fe464d801abb49755d476e0d05dc81a5111a62b
+  rows: 133
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2019_abu_dhabi_gp/track_status.parquet
+  sha256: sha256:e8db4c26c9db639d6e3bf0de10b5f3bba4e705fd86a6920922d4a1bc4b687e7e
+  rows: 3
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2019_abu_dhabi_gp/race_control.parquet
+  sha256: sha256:c1a95e543bc0c89900b513f71ff227972078709e1952e569896880fe55caadb7
+  rows: 82
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2019_abu_dhabi_gp/corners.parquet
+  sha256: sha256:af82317faca0167e401b1e5617eae38804cee5e5e28d100683a6479f2a8278d2
+  rows: 21
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 1 rows
+- lap table `sector1_s` missing in 20 rows
+- lap table `sector2_s` missing in 4 rows
+- lap table `sector3_s` missing in 4 rows
+- lap table `pit_in_time_s` missing in 1048 rows
+- lap table `pit_out_time_s` missing in 1049 rows

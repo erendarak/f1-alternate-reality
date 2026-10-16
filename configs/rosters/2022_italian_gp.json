@@ -1,0 +1,317 @@
+{
+  "schema_version": 1,
+  "event_id": "2022_italian_gp",
+  "season": 2022,
+  "round": 16,
+  "circuit_id": "monza",
+  "race_date": "2022-09-11",
+  "source_type": "historical_verified",
+  "source": {
+    "name": "jolpica-f1",
+    "url": "https://api.jolpi.ca/ergast/f1/2022/16/results.json",
+    "retrieved_utc": "2026-10-16T22:03:29Z",
+    "license_review_status": "research_only"
+  },
+  "entries": [
+    {
+      "driver_id": "charles_leclerc_2022",
+      "person_id": "charles_leclerc",
+      "code": "LEC",
+      "car_number": 16,
+      "given_name": "Charles",
+      "family_name": "Leclerc",
+      "team_id": "ferrari_2022",
+      "team_name": "Ferrari",
+      "grid_position": 1,
+      "external_ids": {
+        "jolpica_driver_id": "leclerc",
+        "jolpica_constructor_id": "ferrari"
+      }
+    },
+    {
+      "driver_id": "george_russell_2022",
+      "person_id": "george_russell",
+      "code": "RUS",
+      "car_number": 63,
+      "given_name": "George",
+      "family_name": "Russell",
+      "team_id": "mercedes_2022",
+      "team_name": "Mercedes",
+      "grid_position": 2,
+      "external_ids": {
+        "jolpica_driver_id": "russell",
+        "jolpica_constructor_id": "mercedes"
+      }
+    },
+    {
+      "driver_id": "lando_norris_2022",
+      "person_id": "lando_norris",
+      "code": "NOR",
+      "car_number": 4,
+      "given_name": "Lando",
+      "family_name": "Norris",
+      "team_id": "mclaren_2022",
+      "team_name": "McLaren",
+      "grid_position": 3,
+      "external_ids": {
+        "jolpica_driver_id": "norris",
+        "jolpica_constructor_id": "mclaren"
+      }
+    },
+    {
+      "driver_id": "daniel_ricciardo_2022",
+      "person_id": "daniel_ricciardo",
+      "code": "RIC",
+      "car_number": 3,
+      "given_name": "Daniel",
+      "family_name": "Ricciardo",
+      "team_id": "mclaren_2022",
+      "team_name": "McLaren",
+      "grid_position": 4,
+      "external_ids": {
+        "jolpica_driver_id": "ricciardo",
+        "jolpica_constructor_id": "mclaren"
+      }
+    },
+    {
+      "driver_id": "pierre_gasly_2022",
+      "person_id": "pierre_gasly",
+      "code": "GAS",
+      "car_number": 10,
+      "given_name": "Pierre",
+      "family_name": "Gasly",
+      "team_id": "alphatauri_2022",
+      "team_name": "AlphaTauri",
+      "grid_position": 5,
+      "external_ids": {
+        "jolpica_driver_id": "gasly",
+        "jolpica_constructor_id": "alphatauri"
+      }
+    },
+    {
+      "driver_id": "fernando_alonso_2022",
+      "person_id": "fernando_alonso",
+      "code": "ALO",
+      "car_number": 14,
+      "given_name": "Fernando",
+      "family_name": "Alonso",
+      "team_id": "alpine_2022",
+      "team_name": "Alpine F1 Team",
+      "grid_position": 6,
+      "external_ids": {
+        "jolpica_driver_id": "alonso",
+        "jolpica_constructor_id": "alpine"
+      }
+    },
+    {
+      "driver_id": "max_verstappen_2022",
+      "person_id": "max_verstappen",
+      "code": "VER",
+      "car_number": 1,
+      "given_name": "Max",
+      "family_name": "Verstappen",
+      "team_id": "red_bull_2022",
+      "team_name": "Red Bull",
+      "grid_position": 7,
+      "external_ids": {
+        "jolpica_driver_id": "max_verstappen",
+        "jolpica_constructor_id": "red_bull"
+      }
+    },
+    {
+      "driver_id": "nyck_de_vries_2022",
+      "person_id": "nyck_de_vries",
+      "code": "DEV",
+      "car_number": 45,
+      "given_name": "Nyck",
+      "family_name": "de Vries",
+      "team_id": "williams_2022",
+      "team_name": "Williams",
+      "grid_position": 8,
+      "external_ids": {
+        "jolpica_driver_id": "de_vries",
+        "jolpica_constructor_id": "williams"
+      }
+    },
+    {
+      "driver_id": "guanyu_zhou_2022",
+      "person_id": "guanyu_zhou",
+      "code": "ZHO",
+      "car_number": 24,
+      "given_name": "Guanyu",
+      "family_name": "Zhou",
+      "team_id": "alfa_2022",
+      "team_name": "Alfa Romeo",
+      "grid_position": 9,
+      "external_ids": {
+        "jolpica_driver_id": "zhou",
+        "jolpica_constructor_id": "alfa"
+      }
+    },
+    {
+      "driver_id": "nicholas_latifi_2022",
+      "person_id": "nicholas_latifi",
+      "code": "LAT",
+      "car_number": 6,
+      "given_name": "Nicholas",
+      "family_name": "Latifi",
+      "team_id": "williams_2022",
+      "team_name": "Williams",
+      "grid_position": 10,
+      "external_ids": {
+        "jolpica_driver_id": "latifi",
+        "jolpica_constructor_id": "williams"
+      }
+    },
+    {
+      "driver_id": "sebastian_vettel_2022",
+      "person_id": "sebastian_vettel",
+      "code": "VET",
+      "car_number": 5,
+      "given_name": "Sebastian",
+      "family_name": "Vettel",
+      "team_id": "aston_martin_2022",
+      "team_name": "Aston Martin",
+      "grid_position": 11,
+      "external_ids": {
+        "jolpica_driver_id": "vettel",
+        "jolpica_constructor_id": "aston_martin"
+      }
+    },
+    {
+      "driver_id": "lance_stroll_2022",
+      "person_id": "lance_stroll",
+      "code": "STR",
+      "car_number": 18,
+      "given_name": "Lance",
+      "family_name": "Stroll",
+      "team_id": "aston_martin_2022",
+      "team_name": "Aston Martin",
+      "grid_position": 12,
+      "external_ids": {
+        "jolpica_driver_id": "stroll",
+        "jolpica_constructor_id": "aston_martin"
+      }
+    },
+    {
+      "driver_id": "sergio_perez_2022",
+      "person_id": "sergio_perez",
+      "code": "PER",
+      "car_number": 11,
+      "given_name": "Sergio",
+      "family_name": "Pérez",
+      "team_id": "red_bull_2022",
+      "team_name": "Red Bull",
+      "grid_position": 13,
+      "external_ids": {
+        "jolpica_driver_id": "perez",
+        "jolpica_constructor_id": "red_bull"
+      }
+    },
+    {
+      "driver_id": "esteban_ocon_2022",
+      "person_id": "esteban_ocon",
+      "code": "OCO",
+      "car_number": 31,
+      "given_name": "Esteban",
+      "family_name": "Ocon",
+      "team_id": "alpine_2022",
+      "team_name": "Alpine F1 Team",
+      "grid_position": 14,
+      "external_ids": {
+        "jolpica_driver_id": "ocon",
+        "jolpica_constructor_id": "alpine"
+      }
+    },
+    {
+      "driver_id": "valtteri_bottas_2022",
+      "person_id": "valtteri_bottas",
+      "code": "BOT",
+      "car_number": 77,
+      "given_name": "Valtteri",
+      "family_name": "Bottas",
+      "team_id": "alfa_2022",
+      "team_name": "Alfa Romeo",
+      "grid_position": 15,
+      "external_ids": {
+        "jolpica_driver_id": "bottas",
+        "jolpica_constructor_id": "alfa"
+      }
+    },
+    {
+      "driver_id": "kevin_magnussen_2022",
+      "person_id": "kevin_magnussen",
+      "code": "MAG",
+      "car_number": 20,
+      "given_name": "Kevin",
+      "family_name": "Magnussen",
+      "team_id": "haas_2022",
+      "team_name": "Haas F1 Team",
+      "grid_position": 16,
+      "external_ids": {
+        "jolpica_driver_id": "kevin_magnussen",
+        "jolpica_constructor_id": "haas"
+      }
+    },
+    {
+      "driver_id": "mick_schumacher_2022",
+      "person_id": "mick_schumacher",
+      "code": "MSC",
+      "car_number": 47,
+      "given_name": "Mick",
+      "family_name": "Schumacher",
+      "team_id": "haas_2022",
+      "team_name": "Haas F1 Team",
+      "grid_position": 17,
+      "external_ids": {
+        "jolpica_driver_id": "mick_schumacher",
+        "jolpica_constructor_id": "haas"
+      }
+    },
+    {
+      "driver_id": "carlos_sainz_2022",
+      "person_id": "carlos_sainz",
+      "code": "SAI",
+      "car_number": 55,
+      "given_name": "Carlos",
+      "family_name": "Sainz",
+      "team_id": "ferrari_2022",
+      "team_name": "Ferrari",
+      "grid_position": 18,
+      "external_ids": {
+        "jolpica_driver_id": "sainz",
+        "jolpica_constructor_id": "ferrari"
+      }
+    },
+    {
+      "driver_id": "lewis_hamilton_2022",
+      "person_id": "lewis_hamilton",
+      "code": "HAM",
+      "car_number": 44,
+      "given_name": "Lewis",
+      "family_name": "Hamilton",
+      "team_id": "mercedes_2022",
+      "team_name": "Mercedes",
+      "grid_position": 19,
+      "external_ids": {
+        "jolpica_driver_id": "hamilton",
+        "jolpica_constructor_id": "mercedes"
+      }
+    },
+    {
+      "driver_id": "yuki_tsunoda_2022",
+      "person_id": "yuki_tsunoda",
+      "code": "TSU",
+      "car_number": 22,
+      "given_name": "Yuki",
+      "family_name": "Tsunoda",
+      "team_id": "alphatauri_2022",
+      "team_name": "AlphaTauri",
+      "grid_position": 20,
+      "external_ids": {
+        "jolpica_driver_id": "tsunoda",
+        "jolpica_constructor_id": "alphatauri"
+      }
+    }
+  ]
+}

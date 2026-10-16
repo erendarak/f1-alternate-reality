@@ -1,0 +1,115 @@
+dataset_id: 2025_united_states_gp_fastf1_v1
+event: 2025_united_states_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-16T21:52:54Z'
+session_key: 2025/round 19/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2025_united_states_gp/laps.parquet
+  sha256: sha256:682adbf350bcf2438b5f8156a891f6badb32cc32e3fde67d4a36895faddcc04b
+  rows: 1067
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2025_united_states_gp/results.parquet
+  sha256: sha256:24071425949b4b39fa9d65a568945834e3b447effe540aeb1eb5c6e4157d0289
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2025_united_states_gp/weather.parquet
+  sha256: sha256:d103ce5a8b6ff69a0d2d9df6484e63086dcfae5835f241383790357e6152e3eb
+  rows: 154
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2025_united_states_gp/track_status.parquet
+  sha256: sha256:e9e158899f6ec31e5848ba53d4e7bfa522ca7149bf53ba521a60059a28fd1961
+  rows: 19
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2025_united_states_gp/race_control.parquet
+  sha256: sha256:c6c0241c8be1db1ebc6dedadb3fb684f7760ed862e0b185592d2573f8a582ecd
+  rows: 79
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2025_united_states_gp/corners.parquet
+  sha256: sha256:96f1f548dc077ec72f6f27901dbe63157a248b7bb3de586bee5504512f4d7f63
+  rows: 20
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 1 rows
+- lap table `sector1_s` missing in 21 rows
+- lap table `sector2_s` missing in 1 rows
+- lap table `sector3_s` missing in 1 rows
+- lap table `pit_in_time_s` missing in 1046 rows
+- lap table `pit_out_time_s` missing in 1046 rows
+- lap table `position` missing in 1 rows
+- lap table `speed_trap_kph` missing in 1 rows
