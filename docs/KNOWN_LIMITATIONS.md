@@ -2,6 +2,18 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## M5 slice 4b (counterfactual decision learning, EXP-019)
+
+- **No learned decision policy beats the rules**: per-decision values are ~0.001, the noise at
+  50k decisions; models default to the rules' choice. Learned-model files aren't in the repo.
+- **Counterfactual targets use the real seed** (hindsight, training only): the policy never sees
+  the future, but the targets assume the rules drive after the decision (one step of policy
+  improvement, not a full optimum).
+- **Racecraft sizes are editorial**; their small effect may be our pass model (lap-level,
+  threshold-based), not real F1.
+- **The title objective (D-050) is a two-car approximation** (one rival, normal points swing,
+  10.9 pts sd from 2024); no constructors' title.
+
 ## M5 slice 4 (goals, character, racecraft intent; engine v0.15.0, EXP-018)
 
 - **The AI does not learn when to attack/defend, nor goal- or character-dependent behaviour**

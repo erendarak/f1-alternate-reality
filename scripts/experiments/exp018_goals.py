@@ -35,7 +35,13 @@ from typing import Any
 import numpy as np
 
 from f1ar.domain.race_state import RaceSetup
-from f1ar.policy.strategists import LearnedStrategist, RacecraftRule, Strategist
+from f1ar.policy.strategists import (
+    LearnedStrategist,
+    PitLearned,
+    RacecraftLearned,
+    RacecraftRule,
+    Strategist,
+)
 from f1ar.simulation.lightweight_engine import ENGINE_VERSION
 from f1ar.training.actions import intent_of
 from f1ar.training.evaluate import evaluate
@@ -108,7 +114,12 @@ def scenario(
         base[driver_id], base[neighbour] = 200.0 + lead, 200.0
         context = ChampionshipContext(base, races_left=3)
         order = TeamOrder(
-            Objective.CHAMPIONSHIP, rival=neighbour, rival_weight=1.0, reason=f"EXP-018 {name}"
+            Objective.CHAMPIONSHIP,
+            rival=neighbour,
+            rival_weight=1.0,
+            reason=f"EXP-018 {name}",
+            gap_before=base[driver_id] - base[neighbour],
+            races_after=context.races_left - 1,
         )
         return setup, Scoring(order, risk), context, neighbour
     appetite = 0.1 if name == "careful" else 0.9
@@ -153,8 +164,8 @@ class Logged:
         return action
 
 
-def run(job: tuple[str, int, int, str, str, str]) -> dict[str, Any]:
-    event_id, slot, seed, name, method, policy_id = job
+def run(job: tuple[str, int, int, str, str, str, str, str]) -> dict[str, Any]:
+    event_id, slot, seed, name, method, policy_id, racecraft_model, pit_model = job
     base = _setup(event_id)
     driver_id = next(d.driver_id for d in base.drivers if d.grid_position == slot)
     setup, scoring, context, rival = scenario(base, driver_id, seed, name)
@@ -165,6 +176,17 @@ def run(job: tuple[str, int, int, str, str, str]) -> dict[str, Any]:
         inner = LearnedStrategist(_policy(policy_id), "learned_sampled", sample_seed=18)
     elif method == "racecraft_rule":
         inner = RacecraftRule()
+    elif method == "racecraft_learned":
+        rc_path, _, rc_margin = racecraft_model.partition("@")
+        inner = RacecraftLearned(NumpyPolicy.load(Path(rc_path)), float(rc_margin or 0.002))
+    elif method == "pit_learned":
+        path, margin = pit_model.split("@")
+        inner = PitLearned(NumpyPolicy.load(Path(path)), float(margin))
+    elif method == "learned_both":  # pit timing + racecraft, both from counterfactuals
+        path, margin = pit_model.split("@")
+        rc_path, rc_margin = racecraft_model.split("@")
+        racecraft = RacecraftLearned(NumpyPolicy.load(Path(rc_path)), float(rc_margin))
+        inner = PitLearned(NumpyPolicy.load(Path(path)), float(margin), racecraft=racecraft)
     s = Logged(inner, rival) if inner is not None else None
     row = asdict(evaluate(setup, driver_id, seed, scoring, s, context=context))
     row.update(
@@ -174,6 +196,7 @@ def run(job: tuple[str, int, int, str, str, str]) -> dict[str, Any]:
         objective=scoring.order.objective.value,
         risk_appetite=scoring.risk_appetite,
         log=dict(s.log) if s is not None else {},
+        deviations=getattr(inner, "deviations", 0),
     )
     return row
 
@@ -193,7 +216,9 @@ def share(logs: list[dict[str, int]], situation: str, intent: str) -> float | No
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--policy", required=True)
+    parser.add_argument("--policy", help="a PPO policy (methods learned / learned_sampled)")
+    parser.add_argument("--racecraft-model", help="slice 4b advantage model (racecraft_learned)")
+    parser.add_argument("--pit-model", help="slice 4b pit model as PATH@MARGIN (pit_learned)")
     parser.add_argument("--seeds", type=int, default=6)
     parser.add_argument("--workers", type=int, default=14)
     parser.add_argument("--json", type=Path)
@@ -205,10 +230,30 @@ def main() -> None:
         for slot in (1, 5, 10, 15):
             for seed in range(1, args.seeds + 1):
                 for name in SCENARIOS:
-                    methods = ["rules", "learned", "learned_sampled"] + (
-                        ["racecraft_rule"] if name == "assigned" else []
-                    )
-                    jobs += [(e, slot, seed, name, m, args.policy) for m in methods]
+                    methods = ["rules"]
+                    if args.policy:
+                        methods += ["learned", "learned_sampled"]
+                    if args.racecraft_model:
+                        methods.append("racecraft_learned")
+                    if args.pit_model:
+                        methods.append("pit_learned")
+                    if args.pit_model and args.racecraft_model:
+                        methods.append("learned_both")
+                    if name == "assigned":
+                        methods.append("racecraft_rule")
+                    jobs += [
+                        (
+                            e,
+                            slot,
+                            seed,
+                            name,
+                            m,
+                            args.policy or "",
+                            args.racecraft_model or "",
+                            args.pit_model or "",
+                        )
+                        for m in methods
+                    ]
     rows = []
     with ProcessPoolExecutor(max_workers=args.workers) as pool:
         for i, row in enumerate(pool.map(run, jobs, chunksize=2), 1):
@@ -216,7 +261,13 @@ def main() -> None:
             if i % 100 == 0 or i == len(jobs):
                 print(f"{i}/{len(jobs)} races, {(time.perf_counter() - t0) / 60:.1f} min")
     by = {(r["event_id"], r["slot"], r["seed"], r["scenario"], r["method"]): r for r in rows}
-    result: dict[str, Any] = {"policy": args.policy, "engine": ENGINE_VERSION, "scenarios": {}}
+    result: dict[str, Any] = {
+        "policy": args.policy,
+        "racecraft_model": args.racecraft_model,
+        "pit_model": args.pit_model,
+        "engine": ENGINE_VERSION,
+        "scenarios": {},
+    }
     for name in SCENARIOS:
         keys = sorted(
             {(r["event_id"], r["slot"], r["seed"]) for r in rows if r["scenario"] == name}
@@ -233,6 +284,9 @@ def main() -> None:
                 "dnf": sum(not r["finished"] for r in mine),
                 "stops": dict(sorted(Counter(r["stops"] for r in mine).items())),
                 "objectives": dict(Counter(r["objective"] for r in mine)),
+                "pit_deviations_per_race": round(
+                    statistics.fmean(r.get("deviations", 0) for r in mine), 3
+                ),
             }
             if m != "rules":
                 diffs = [

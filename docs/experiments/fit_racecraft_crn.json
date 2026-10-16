@@ -1,0 +1,72 @@
+{
+ "decisions": 49459,
+ "races": 3743,
+ "validation_decisions": 10162,
+ "margin": 0.002,
+ "validation_loss": 0.000125,
+ "groups": {
+  "all": {
+   "decisions": 10162,
+   "model": 0.0,
+   "model_attack_share": 0.0,
+   "model_defend_share": 0.0,
+   "always_defend": -0.0015,
+   "always_attack": -0.00068,
+   "oracle": 0.002
+  },
+  "battle": {
+   "decisions": 9542,
+   "model": 0.0,
+   "model_attack_share": 0.0,
+   "model_defend_share": 0.0,
+   "always_defend": -0.00162,
+   "always_attack": -0.00085,
+   "oracle": 0.00196
+  },
+  "clear": {
+   "decisions": 620,
+   "model": 0.0,
+   "model_attack_share": 0.0,
+   "model_defend_share": 0.0,
+   "always_defend": 0.00023,
+   "always_attack": 0.00189,
+   "oracle": 0.00262
+  },
+  "objective=CHAMPIONSHIP": {
+   "decisions": 3207,
+   "model": 0.0,
+   "model_attack_share": 0.0,
+   "model_defend_share": 0.0,
+   "always_defend": -0.00224,
+   "always_attack": -0.00094,
+   "oracle": 0.00343
+  },
+  "objective=POINTS": {
+   "decisions": 6955,
+   "model": 0.0,
+   "model_attack_share": 0.0,
+   "model_defend_share": 0.0,
+   "always_defend": -0.00116,
+   "always_attack": -0.00057,
+   "oracle": 0.00133
+  },
+  "risk<0.35": {
+   "decisions": 3179,
+   "model": 0.0,
+   "model_attack_share": 0.0,
+   "model_defend_share": 0.0,
+   "always_defend": -0.0012,
+   "always_attack": -0.00086,
+   "oracle": 0.00127
+  },
+  "risk>0.65": {
+   "decisions": 3491,
+   "model": 0.0,
+   "model_attack_share": 0.0,
+   "model_defend_share": 0.0,
+   "always_defend": -0.00098,
+   "always_attack": -0.00115,
+   "oracle": 0.00299
+  }
+ }
+}

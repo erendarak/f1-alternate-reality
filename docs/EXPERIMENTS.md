@@ -1214,6 +1214,57 @@ Decision / next:      Owner's call. Proposed: decision-level credit with common 
                       same randomness, learn from the exact difference.
 ```
 
+## EXP-019 — Decision learning on identical luck: racecraft and pit timing (2026-10-16)
+
+```text
+Experiment ID:        EXP-019
+Research question:    With exact decision-level targets (counterfactual races on the same luck),
+                      can a strategist learn racecraft (ATTACK/NORMAL/DEFEND) and pit timing that
+                      beat the rules, and differ by goal and character?
+Engine / rules:       lightweight_engine_v0.15.0, fia_2024_v1, rl_obs_v3; D-049, D-050
+Data:                 racecraft 50k decisions (3,000 + 840 title races), pit 23k (3,000 races);
+                      after D-050: + 1,000 title-fight races each (old title rows dropped)
+Cases (held out):     EXP-018's: 5 dry test races x P1/P5/P10/P15 x seeds 1-6 = 120 per
+                      scenario (assigned, chaser, leader, careful, daring)
+Code:                 scripts/collect_counterfactuals.py, scripts/fit_racecraft_model.py,
+                      scripts/experiments/exp018_goals.py -> docs/experiments/exp019*.json,
+                      fit_*_crn*.json
+```
+
+What a decision is worth (exact targets, held-out races of the data):
+
+| | Racecraft | Pit timing |
+|---|---|---|
+| decisions where the choice changes the result | 3 % | 35 % |
+| oracle (perfect hindsight) per decision | +0.0017 to +0.002 | +0.008 to +0.011 |
+| "always deviate" per decision | attack -0.0003 to -0.0009, defend -0.0013 to -0.0016 | -0.011 to -0.021 |
+| learned model per decision | ~0 (v1: top-5 % picks +0.004 ± 0.003, not stable across models) | v1 +0.0007 ± 0.0009, v2 ~0 |
+
+| Held out vs rules (score) | assigned | chaser | leader | careful | daring |
+|---|---|---|---|---|---|
+| racecraft v1 (never left NORMAL) | +0.004 | +0.005 | +0.005 | +0.002 | +0.001 |
+| pit v1, chained deviations | **-0.056** (17 DSQ) | -0.020 | -0.020 | **-0.032** | -0.075 |
+| pit v1, one deviation per stop | +0.009 [-0.013, +0.030] | +0.007 | +0.007 | -0.005 | +0.010 |
+| v2 (D-050 objective; pit + racecraft) | +0.006 [-0.005, +0.017] | +0.000 | +0.006 | +0.001 | +0.001 |
+
+Racecraft advantage by situation (exact, training races; ATTACK vs NORMAL in battles):
+title fight +0.0006, points -0.0006; daring +0.0002, careful -0.0008; daring title chasers
++0.0011 ± 0.0015. No bucket is significant.
+
+```text
+Findings:
+  1. The tool works: forking is exact and the targets are noise-free per race.
+  2. The world has goal- and character-dependent right answers (title fighters and daring
+     drivers gain from attacking where careful points hunters lose), but they are worth ~0.001
+     per decision: within the noise of 50k decisions.
+  3. NEGATIVE: no learned racecraft or pit policy beats the rules held out (all CIs straddle 0).
+  4. Bug found (D-050): the linear title objective gave leader and chaser the same goal.
+  5. Bug found: chained pit deviations (outside the training data) disqualified 17/120 cars.
+Negative results:     3; the fixed v2 models choose (almost) exactly what the rules choose.
+Decision / next:      Owner's call (see PROGRESS). The rule planner is near-optimal for single
+                      decisions in this world; the lever sizes are editorial.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

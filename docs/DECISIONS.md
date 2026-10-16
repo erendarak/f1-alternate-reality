@@ -1137,3 +1137,41 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   changes the crash chance by 0.05 % (Monza), the race result has an sd of ~0.15: per-decision
   credit from a terminal reward is hopeless for this lever. Registered for lineage:
   `strategist_m5s4b_v1` (attempt 2, verdict in its manifest).
+
+## D-049 — M5 slice 4b: decision learning on identical luck (counterfactual races) (2026-10-16)
+
+- **Why:** EXP-018 showed a terminal race reward can't credit one decision (an ATTACK lap moves
+  the crash chance by 0.05 %, the race result has an sd of 0.15).
+- **Counterfactual races** (`training/counterfactual.py`): the engine's randomness is keyed, so a
+  race is forked at a decision and every branch replays the same luck; the difference between
+  branches is the exact effect of that decision for the car's own objective and risk utility.
+  Verified exactly (a NORMAL branch reproduces the race; two forks finish identically).
+  - racecraft: DEFEND / NORMAL / ATTACK held for 5 laps (a commitment; 1 lap changed nothing),
+    then the rules; pit timing: the rules' choice vs the one-lap alternative (box now / stay out
+    one more lap) within 4 laps of the planned stop or under SC/VSC.
+- **Data** (`scripts/collect_counterfactuals.py`, training tracks only, objectives, randomised
+  character and tyres): racecraft 50k decisions (3,840 races), pit 23k (3,000 races), plus
+  title-fight sets (840 / 1,000 / 1,000 races).
+- **Models** (`scripts/fit_racecraft_model.py`): MLP advantage regression, races split 70/10/20
+  (train / calibration for the epoch and the decision margin / report); LightGBM tried too.
+- **Strategists:** `RacecraftLearned` (rules' pit/pace + learned intent), `PitLearned` (rules +
+  learned one-lap deviation; **at most one deviation per stop**: chaining them made 17/120 cars
+  never stop in the first run), both combinable.
+- **Result (EXP-019): no learned policy beats the rules.** The exact data show the right call
+  depends on goal and character (below), but its expected value is ~0.001 per decision, the
+  size of the noise at this data volume; the models end up choosing what the rules choose.
+- Learned-model artifacts are kept out of the repo (negative; `artifacts/training/crn_models/`).
+
+## D-050 — The title objective is the chance of winning the title (2026-10-16)
+
+- **Bug found by EXP-019 (leader = chaser to the last digit):** CHAMPIONSHIP scored this race's
+  points plus points vs the rival, linearly, so a leader and a chaser had the same goal; the M5
+  design (§3) asks "avoid big risks when leading, take them when behind".
+- **Now:** with standings (`TeamOrder.gap_before`, `races_after`, set by the team principal),
+  the value is `2P - 1` with `P = Phi(gap_after / (10.9 sqrt(races_after)))` (a step when no race
+  is left); 10.9 points = the per-race sd of the points swing between 2024's title contenders
+  (VER/NOR/LEC/PIA pairs, estimated_from_data). Flat when ahead (a leader protects), steep when
+  behind (a chaser gambles). Without standings the linear scoring stays.
+- Measured with exact counterfactuals afterwards: in battles, ATTACK vs NORMAL averages +0.0006
+  in title fights vs -0.0006 in points races, +0.0002 for daring vs -0.0008 for careful drivers:
+  the human-like pattern exists in the world, but it's small.

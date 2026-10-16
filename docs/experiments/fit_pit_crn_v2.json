@@ -1,0 +1,101 @@
+{
+ "decisions": 22811,
+ "races": 2814,
+ "kind": "pit",
+ "report_decisions": 4675,
+ "margin": 0.02,
+ "calibration_gain_by_margin": {
+  "0.0": -0.001399,
+  "0.0005": -0.001377,
+  "0.001": -0.001088,
+  "0.002": -0.000766,
+  "0.005": -0.000255,
+  "0.01": -1.5e-05,
+  "0.02": 7.4e-05,
+  "0.05": 0.0,
+  "1000000000.0": 0.0
+ },
+ "calibration_loss": 0.002681,
+ "groups": {
+  "all": {
+   "decisions": 4675,
+   "model": 1e-05,
+   "model_ci95": 7e-05,
+   "oracle": 0.00842,
+   "model_deviate_share": 0.0098,
+   "always_deviate": -0.01144
+  },
+  "battle": {
+   "decisions": 3458,
+   "model": 4e-05,
+   "model_ci95": 8e-05,
+   "oracle": 0.00814,
+   "model_deviate_share": 0.011,
+   "always_deviate": -0.01222
+  },
+  "clear": {
+   "decisions": 1217,
+   "model": -5e-05,
+   "model_ci95": 0.00011,
+   "oracle": 0.0092,
+   "model_deviate_share": 0.0066,
+   "always_deviate": -0.00921
+  },
+  "objective=CHAMPIONSHIP": {
+   "decisions": 1780,
+   "model": -4e-05,
+   "model_ci95": 7e-05,
+   "oracle": 0.00625,
+   "model_deviate_share": 0.0112,
+   "always_deviate": -0.00912
+  },
+  "objective=POINTS": {
+   "decisions": 2895,
+   "model": 5e-05,
+   "model_ci95": 0.0001,
+   "oracle": 0.00975,
+   "model_deviate_share": 0.009,
+   "always_deviate": -0.01287
+  },
+  "risk<0.35": {
+   "decisions": 1444,
+   "model": -1e-05,
+   "model_ci95": 1e-05,
+   "oracle": 0.00625,
+   "model_deviate_share": 0.0104,
+   "always_deviate": -0.01139
+  },
+  "risk>0.65": {
+   "decisions": 1668,
+   "model": 5e-05,
+   "model_ci95": 0.00019,
+   "oracle": 0.01187,
+   "model_deviate_share": 0.0126,
+   "always_deviate": -0.01501
+  },
+  "rules_box": {
+   "decisions": 860,
+   "model": 0.0,
+   "model_ci95": 0.0,
+   "oracle": 0.00149,
+   "model_deviate_share": 0.0256,
+   "always_deviate": -0.00044
+  },
+  "rules_stay": {
+   "decisions": 3815,
+   "model": 2e-05,
+   "model_ci95": 8e-05,
+   "oracle": 0.00998,
+   "model_deviate_share": 0.0063,
+   "always_deviate": -0.01392
+  },
+  "under_sc_vsc": {
+   "decisions": 987,
+   "model": -8e-05,
+   "model_ci95": 0.00013,
+   "oracle": 0.00473,
+   "model_deviate_share": 0.0365,
+   "always_deviate": -0.05028
+  }
+ }
+}

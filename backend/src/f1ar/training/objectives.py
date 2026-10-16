@@ -4,8 +4,13 @@
 the **team principal's** decision. In M5 the team principal is a small rule set (editorial,
 labelled; a learned principal comes later):
 
-- ``CHAMPIONSHIP``: a title contender in a competitive car; scores points *and* points relative to
-  its title rival in this race.
+- ``CHAMPIONSHIP``: a title contender in a competitive car. With the standings known (slice 4b,
+  D-050) it scores its **chance of winning the title** after this race against its rival:
+  ``P = Phi(gap_after / (TITLE_SWING_SD * sqrt(races_after)))`` (a step function when no race is
+  left), mapped to ``2P - 1``. The S-shape is what makes a leader protect (flat when ahead) and a
+  chaser gamble (steep when behind), as the M5 design asks (``docs/M5_DESIGN.md`` §3); the slice
+  1-4 scoring (points + points vs the rival, linear) gave both the same goal. Without standings
+  (``gap_before`` unset) the linear scoring is kept.
 - ``POINTS``: everyone else; scores championship points, with a small tie-breaker for finishing
   position so that a car outside the points still has something to gain.
 - ``RESULT`` (finishing position) and ``TIME`` (race time) are for curricula and tests.
@@ -38,6 +43,9 @@ RISK_CURVATURE = 4.0
 """``a = RISK_CURVATURE x (0.5 - risk_appetite)`` in the risk utility (editorial)."""
 TIME_SCALE_S = 60.0
 """TIME objective: one minute behind the winner = -1."""
+TITLE_SWING_SD = 10.9
+"""Per-race sd of the points swing between two title contenders (estimated_from_data: 2024 GP
+results, VER/NOR/LEC/PIA pairs pooled; D-050)."""
 
 
 class Objective(StrEnum):
@@ -81,6 +89,11 @@ class TeamOrder:
     """CHAMPIONSHIP: the title rival whose result counts against this car's."""
     rival_weight: float = 0.0
     reason: str = ""
+    gap_before: float | None = None
+    """CHAMPIONSHIP (D-050): this car's points minus the rival's before the race; set = score
+    the title probability."""
+    races_after: int = 0
+    """Races left after this one."""
 
 
 def car_ranks(setup: RaceSetup) -> dict[str, int]:
@@ -110,6 +123,8 @@ def team_principal(
             rival=rival,
             rival_weight=1.0,
             reason=f"P{position} in the championship, {gap:.0f} pts behind, top-3 car",
+            gap_before=context.points[driver_id] - context.points[rival],
+            races_after=context.races_left - 1,
         )
     return TeamOrder(
         Objective.POINTS,
@@ -189,9 +204,24 @@ def objective_value(
                 if order.rival is not None and order.rival in results
                 else 0
             )
+            if order.gap_before is not None:
+                return (
+                    2.0 * title_probability(order.gap_before + me.points - rival, order.races_after)
+                    - 1.0
+                    + POSITION_TIEBREAK * place
+                )
             w = order.rival_weight
             value = (me.points + w * (me.points - rival)) / (POINTS_2024[0] * (1 + w))
             return value + POSITION_TIEBREAK * place
+
+
+def title_probability(gap_after: float, races_after: int) -> float:
+    """P(winning the title vs the rival) with ``gap_after`` points in hand and ``races_after``
+    races to go: the gap then moves by ``N(0, TITLE_SWING_SD^2)`` per race (D-050)."""
+    if races_after <= 0:
+        return 1.0 if gap_after > 0 else 0.5 if gap_after == 0 else 0.0
+    z = gap_after / (TITLE_SWING_SD * math.sqrt(races_after))
+    return 0.5 * (1.0 + math.erf(z / math.sqrt(2.0)))
 
 
 def risk_utility(x: float, risk_appetite: float) -> float:

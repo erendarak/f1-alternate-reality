@@ -47,6 +47,9 @@ Plan (agreed 2026-10-13, one slice per commit; nothing started):
 - [x] **Slice 4: goals, character, racecraft intent (engine v0.15.0, D-048, EXP-018)**: the
   lever and the conditioning are built; **the AI doesn't learn them** (ties the rules, intent
   not situational, no goal/character effect): credit assignment is the blocker.
+- [x] **Slice 4b: decision learning on identical luck (D-049, D-050, EXP-019)**: exact
+  counterfactual targets; title objective = chance of winning the title; **no learned policy
+  beats the rules** (per-decision value ~0.001, within the noise).
 - [ ] Slice 5: all 20 cars AI (shared policy, frozen-opponent pool); realism vs 2024; exploit
   audit; FIA ban mechanism; EXP-011.
 - [ ] Slice 6: weather generalisation, UI (thinking panel, behaviour cards, fork-and-try model,
@@ -1300,3 +1303,16 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
   randomisation; cloning made intents collapse (rich get richer); tests on the 18-action layout.
 - Tests: 454 offline (+8 `test_racecraft_intent.py`, +1 world runner), frontend 17.
 - Next (owner's call): decision-level credit with common random numbers.
+
+### 2026-10-16 — M5 slice 4b: decision learning on identical luck (D-049, D-050, EXP-019)
+
+- Counterfactual races (fork at a decision, same luck) for racecraft and pit timing; exact.
+- 73k racecraft + 25k pit counterfactual decisions on training tracks (about 7 h of collection).
+- Racecraft and pit models don't beat the rules held out; pit's first run chained deviations and
+  disqualified 17/120 cars (fixed: one deviation per stop).
+- D-050: the title objective is now the chance of winning the title (2024 swing 10.9 pts/race);
+  the linear version gave leader and chaser the same goal (found by EXP-019).
+- The exact data show title fighters and daring drivers gain from attacking where careful points
+  hunters lose, but the effect (~0.001 per decision) is within the noise.
+- Tests: 462 offline (+5 counterfactual, +3 title objective).
+- Next (owner's call): options in the slice 4b summary.

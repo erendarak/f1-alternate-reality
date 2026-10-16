@@ -472,3 +472,128 @@ class RacecraftRule(RulesTeacher):
             intent = RacecraftIntent.DEFEND
         action = encode(pit, pace, intent)
         return action if decision.mask[action] else encode(pit, pace)
+
+
+class RacecraftLearned(RulesTeacher):
+    """Slice 4b (D-049): the rules teacher's pit stops and pace, and a **learned** racecraft
+    choice: the advantage model (``scripts/fit_racecraft_model.py``, trained on counterfactual
+    races on identical luck) predicts how much better DEFEND / ATTACK would be than NORMAL over
+    the next laps for this car's objective and risk appetite; it takes the best option if that
+    beats NORMAL by ``margin``. The car's current intent is shown to the model as NORMAL (the
+    data was collected racing NORMAL)."""
+
+    name = "racecraft_learned"
+
+    def __init__(self, model: NumpyPolicy, margin: float = 0.002) -> None:
+        from f1ar.training.features import RL_V3_NAMES
+
+        if model.n_inputs != len(RL_V3_NAMES):
+            raise ValueError("the racecraft model is built for rl_obs_v3")
+        self.model = model
+        self.margin = margin
+        self.observation_schema = "rl_obs_v3"
+        self._intent_idx = [
+            RL_V3_NAMES.index(f"car.intent.{i}") for i in ("defend", "normal", "attack")
+        ]
+
+    def advantages(self, observation: np.ndarray) -> np.ndarray:
+        x = np.array(observation, dtype=np.float64)
+        x[self._intent_idx] = (0.0, 1.0, 0.0)
+        return self.model.logits(x)
+
+    def intent(self, observation: np.ndarray) -> RacecraftIntent:
+        adv = self.advantages(observation)
+        if adv.max() <= self.margin:
+            return RacecraftIntent.NORMAL
+        return RacecraftIntent.DEFEND if adv[0] >= adv[1] else RacecraftIntent.ATTACK
+
+    def decide(self, session: RaceSession, decision: Decision) -> int:
+        from f1ar.training.actions import decode
+
+        pit, pace, _ = decode(super().decide(session, decision))
+        intent = self.intent(decision.observation)
+        action = encode(pit, pace, intent)
+        return action if decision.mask[action] else encode(pit, pace)
+
+
+class PitLearned(RulesTeacher):
+    """Slice 4b (D-049): the rules teacher, plus a **learned** pit-timing deviation: within
+    ``window`` laps of the planned stop or under SC/VSC, the advantage model (trained on
+    counterfactual races on identical luck) predicts how much better the one-lap alternative is
+    (box now when the rules stay out, stay out when they box) for this car's objective and risk
+    appetite; it deviates when that beats ``margin``. Racecraft NORMAL.
+
+    **At most one deviation per stop** (then the rules until the car has stopped): the training
+    data are single deviations followed by the rules. EXP-019's first run deviated lap after lap
+    ("stay out one more lap" chained) and 17 of 120 cars never stopped (disqualified)."""
+
+    name = "pit_learned"
+
+    def __init__(
+        self,
+        model: NumpyPolicy,
+        margin: float,
+        window: int = 4,
+        racecraft: "RacecraftLearned | None" = None,
+    ) -> None:
+        from f1ar.training.features import RL_V3_NAMES
+
+        if model.n_inputs != len(RL_V3_NAMES):
+            raise ValueError("the pit model is built for rl_obs_v3")
+        self.model = model
+        self.racecraft = racecraft
+        """Optional: the learned racecraft for the intent (else NORMAL)."""
+        self.margin = margin
+        self.window = window
+        self.observation_schema = "rl_obs_v3"
+        self.deviations = 0
+        self._deviated_at: dict[str, tuple[int, int, int]] = {}
+        """Per car: (pit-stop count, lap, action) of its last deviation."""
+        self._intent_idx = [
+            RL_V3_NAMES.index(f"car.intent.{i}") for i in ("defend", "normal", "attack")
+        ]
+
+    def advantage(self, observation: np.ndarray) -> float:
+        x = np.array(observation, dtype=np.float64)
+        x[self._intent_idx] = (0.0, 1.0, 0.0)
+        return float(self.model.logits(x)[0])
+
+    def decide(self, session: RaceSession, decision: Decision) -> int:
+        from f1ar.training.actions import decode
+
+        rules = super().decide(session, decision)
+        pit, pace, _ = decode(rules)
+        intent = (
+            self.racecraft.intent(decision.observation)
+            if self.racecraft is not None
+            else RacecraftIntent.NORMAL
+        )
+        state = session.state
+        car = state.car(decision.driver_id)
+        plan = plan_for_car(state.setup, car)
+        near = bool(plan) and abs(plan[0].lap - car.laps_completed - 1) <= self.window
+        neutral = state.race_control.phase is not RacePhase.GREEN
+        normal = encode(pit, pace, intent)
+        if not decision.mask[normal]:
+            normal = encode(pit, pace)
+        last = self._deviated_at.get(decision.driver_id)
+        if (
+            last is not None
+            and last[:2] == (car.pit_stops, decision.lap)
+            and decision.mask[last[2]]
+        ):
+            return last[2]  # a second decision in the same lap: keep the deviation
+        already = last is not None and last[0] == car.pit_stops
+        if already or not (near or neutral) or self.advantage(decision.observation) <= self.margin:
+            return normal if decision.mask[normal] else rules
+        if pit is None:
+            if not plan:
+                return normal
+            alt = encode(plan[0].compound, pace, intent)
+        else:
+            alt = encode(None, pace, intent)
+        if not decision.mask[alt]:
+            return normal
+        self.deviations += 1
+        self._deviated_at[decision.driver_id] = (car.pit_stops, decision.lap, alt)
+        return alt
