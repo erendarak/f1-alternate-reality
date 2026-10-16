@@ -34,10 +34,10 @@ from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.logger import configure
 from stable_baselines3.common.vec_env import DummyVecEnv, VecEnv, VecNormalize
 
-from f1ar.domain.race_state import PaceMode
+from f1ar.domain.race_state import PaceMode, RacecraftIntent
 from f1ar.policy.strategists import LearnedStrategist
 from f1ar.simulation import lightweight_engine as engine
-from f1ar.training.actions import PACE_OPTIONS, PIT_OPTIONS, decode
+from f1ar.training.actions import PER_PIT, PIT_OPTIONS, intent_of, pace_of
 from f1ar.training.evaluate import evaluate
 from f1ar.training.gym_env import RaceStrategyEnv
 from f1ar.training.objectives import race_results, scoring_for
@@ -87,6 +87,10 @@ class TrainConfig:
     championship_probability: float = 0.0
     """Slice 3 trains for points (no championship context); objectives come in slice 4."""
     rain_probability: float = 0.0
+    tyre_randomisation: float = 0.0
+    character_randomisation: bool = False
+    """Redraw the learning car's risk appetite per race (``randomise_character``, slice 4)."""
+    """Sd of the per-race tyre/pit-loss perturbation (``training.scenarios.randomise_tyres``)."""
     device: str = "cuda"
     eval_every: int = 100_000
     eval_events: tuple[str, ...] = ()
@@ -136,12 +140,14 @@ class TrainingEnv(RaceStrategyEnv):
         super().__init__(sampler, policy_id="training")
         self.reward_baseline = reward_baseline
         self._pace: list[PaceMode] = []
+        self._intent: list[RacecraftIntent] = []
         self._rules: RaceSession | None = None
 
     def reset(
         self, *, seed: int | None = None, options: dict[str, Any] | None = None
     ) -> tuple[np.ndarray, dict[str, Any]]:
         self._pace = []
+        self._intent = []
         obs, info = super().reset(seed=seed, options=options)
         if self.reward_baseline == "rules":
             assert self.session is not None
@@ -150,7 +156,8 @@ class TrainingEnv(RaceStrategyEnv):
         return obs, info
 
     def step(self, action: np.int64 | int) -> tuple[np.ndarray, float, bool, bool, dict[str, Any]]:
-        self._pace.append(decode(int(action))[1])
+        self._pace.append(pace_of(int(action)))
+        self._intent.append(intent_of(int(action)))
         obs, reward, done, truncated, info = super().step(action)
         assert self.session is not None
         if self._rules is not None and not done:
@@ -161,6 +168,8 @@ class TrainingEnv(RaceStrategyEnv):
             info["decisions"] = len(self._pace)
             info["push_share"] = self._pace.count(PaceMode.PUSH) / len(self._pace)
             info["conserve_share"] = self._pace.count(PaceMode.CONSERVE) / len(self._pace)
+            info["attack_share"] = self._intent.count(RacecraftIntent.ATTACK) / len(self._intent)
+            info["defend_share"] = self._intent.count(RacecraftIntent.DEFEND) / len(self._intent)
             if self.reward_baseline == "rules":
                 base = rules_reward(self.session, self.me, self._rules)
                 info["rules_score"] = base
@@ -175,6 +184,8 @@ def make_env(root: Path, cfg: TrainConfig) -> TrainingEnv:
         agents=1,
         rain_probability=cfg.rain_probability,
         championship_probability=cfg.championship_probability,
+        tyre_randomisation=cfg.tyre_randomisation,
+        character_randomisation=cfg.character_randomisation,
     )
     return TrainingEnv(sampler, reward_baseline=cfg.reward_baseline)
 
@@ -227,13 +238,13 @@ def set_stay_prior(model: MaskablePPO, p_stay: float) -> None:
     whatever it does, and gets no gradient)."""
     if not 0.0 < p_stay < 1.0:
         raise ValueError("p_stay must be in (0, 1)")
-    n_pace = len(PACE_OPTIONS)
-    n_stop = (len(PIT_OPTIONS) - 1) * n_pace
-    stop_logit = float(np.log(((1.0 - p_stay) / n_stop) / (p_stay / n_pace)))
+    n_stay = PER_PIT
+    n_stop = (len(PIT_OPTIONS) - 1) * PER_PIT
+    stop_logit = float(np.log(((1.0 - p_stay) / n_stop) / (p_stay / n_stay)))
     head = model.policy.action_net
     assert isinstance(head, torch.nn.Linear)
     with torch.no_grad():
-        head.bias.copy_(torch.tensor([0.0] * n_pace + [stop_logit] * n_stop, dtype=head.bias.dtype))
+        head.bias.copy_(torch.tensor([0.0] * n_stay + [stop_logit] * n_stop, dtype=head.bias.dtype))
 
 
 def export_actor(model: MaskablePPO) -> NumpyPolicy:
@@ -372,6 +383,8 @@ class ProgressCallback(BaseCallback):
                 "stops": mean("stops"),
                 "push": mean("push_share"),
                 "conserve": mean("conserve_share"),
+                "attack": mean("attack_share"),
+                "defend": mean("defend_share"),
                 "dsq": mean("disqualified"),
             }
             if "rules_score" in recent[0]:
@@ -450,6 +463,7 @@ def train(root: Path, cfg: TrainConfig, run_dir: Path) -> tuple[MaskablePPO, Pro
                 from f1ar.training.warm_start import soften
 
                 stats["temperature"] = round(soften(model, demos, cfg.bc_target_entropy), 3)
+            export_actor(model).save(run_dir / "clone.npz")  # the softened clone, before PPO
             if cases:
                 stats["check_before_ppo"] = paired_check(root, export_actor(model), cases)
                 stats["sampled_before_ppo"] = paired_check(

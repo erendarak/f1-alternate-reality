@@ -32,7 +32,9 @@ from f1ar.policy.strategists import (
     Enumerator,
     FixedPlan,
     MonteCarlo,
+    RacecraftRule,
     RandomStrategist,
+    RulesTeacher,
     Strategist,
     historical_plan,
 )
@@ -67,6 +69,10 @@ def strategist(method: str, event_id: str, code: str, seed: int) -> Strategist |
             return Enumerator()
         case "mpc":
             return MonteCarlo()
+        case "teacher":
+            return RulesTeacher()
+        case "racecraft_rule":
+            return RacecraftRule()
         case "random":
             return RandomStrategist(seed)
     raise ValueError(method)
@@ -79,6 +85,7 @@ def run_case(case: tuple[str, str, int, str]) -> dict[str, Any]:
     scoring = scoring_for(setup, [driver.driver_id], None)[driver.driver_id]
     s = strategist(method, event_id, code, seed)
     result = asdict(evaluate(setup, driver.driver_id, seed, scoring, s))
+    result["method"] = method
     result["code"] = code
     result["grid"] = driver.grid_position
     if isinstance(s, MonteCarlo):

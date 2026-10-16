@@ -12,7 +12,7 @@ from stable_baselines3.common.vec_env import DummyVecEnv
 from f1ar.domain.race_state import PaceMode, RaceSetup
 from f1ar.policy.strategists import LearnedStrategist
 from f1ar.simulation.lightweight_engine import ENGINE_VERSION
-from f1ar.training.actions import N_ACTIONS, PIT_OPTIONS, decode, encode
+from f1ar.training.actions import N_ACTIONS, PER_PIT, PIT_OPTIONS, decode, encode
 from f1ar.training.evaluate import evaluate
 from f1ar.training.features import RL_FEATURE_NAMES, RL_OBSERVATION_SCHEMA
 from f1ar.training.objectives import scoring_for
@@ -163,9 +163,9 @@ def test_forced_pace_only_changes_the_pace(isolated_setup: RaceSetup) -> None:
     mask = np.ones(N_ACTIONS, dtype=bool)
     d = Decision(VER, obs, mask, "LAP_END", 3)
     action = forced.decide(None, d)  # type: ignore[arg-type]
-    pit, pace = decode(action)
+    pit, pace, _ = decode(action)
     assert pace is PaceMode.BALANCED
-    by_pit = policy.probabilities(obs, mask).reshape(6, 3).sum(axis=1)
+    by_pit = policy.probabilities(obs, mask).reshape(6, 9).sum(axis=1)
     assert action == encode(pit, PaceMode.BALANCED)
     assert pit is PIT_OPTIONS[int(by_pit.argmax())]
 
@@ -291,9 +291,9 @@ def test_stay_prior_sets_the_untrained_stop_rate(isolated_setup: RaceSetup) -> N
     policy = export_actor(model)
     obs = np.random.default_rng(0).normal(0, 0.5, size=(50, N_FEATURES))
     p = policy.probabilities(obs, np.ones((50, N_ACTIONS), dtype=bool))
-    stay = p[:, :3].sum(axis=1)  # actions 0-2: stay out (any pace)
+    stay = p[:, :PER_PIT].sum(axis=1)  # the stay-out block (any pace, any intent)
     assert np.allclose(stay, 0.97, atol=0.01)
-    assert np.allclose(p[:, :3], stay[:, None] / 3, atol=0.01)  # pace modes uniform
+    assert np.allclose(p[:, :PER_PIT], stay[:, None] / PER_PIT, atol=0.01)  # uniform inside
     with pytest.raises(ValueError):
         build_model(_cfg(stay_prior=1.0), env)
     env.close()
@@ -318,7 +318,7 @@ def test_behaviour_cloning_learns_a_rare_stop_rule(
     from f1ar.training.warm_start import Demonstrations, behaviour_clone
 
     rng = np.random.default_rng(0)
-    n = 4000
+    n = 8000  # rl_obs_v2 is 86 wide: with 4,000 noisy rows the rare rule is seed-dependent
     obs = rng.uniform(0, 1, size=(n, N_FEATURES)).astype(np.float32)
     stop = obs[:, 0] > 0.97  # a sharp, rare rule
     stop_action = encode(PIT_OPTIONS[3], PaceMode.BALANCED)
@@ -332,13 +332,17 @@ def test_behaviour_cloning_learns_a_rare_stop_rule(
     )
     demos.save(tmp_path / "d.npz")
     again = Demonstrations.load(tmp_path / "d.npz")
-    assert np.array_equal(again.actions, demos.actions) and again.episodes == 100
+    assert np.array_equal(again.actions, demos.actions) and again.episodes == 200
     sampler = ScenarioSampler(["x"], lambda _e, _r: isolated_setup, championship_probability=0)
     env = DummyVecEnv([lambda: TrainingEnv(sampler)])
     model = build_model(_cfg(net_arch=(64, 64)), env)
     stats = behaviour_clone(model, demos, epochs=150, batch_size=512, stop_weight=5.0)
     assert stats["train"]["stop_recall"] > 0.8
-    assert stats["train"]["accuracy"] > 0.97
+    # with ~3 % stops "never stop" alone scores 0.97: recall is the real test, accuracy a bound
+    assert stats["train"]["pit_pace_accuracy"] > 0.95
+    # slice 4: the intent isn't imitated (the rules can't attack): it stays about uniform
+    shares = stats["train"]["intent_mean_probability"]
+    assert min(shares.values()) > 0.2
     assert set(stats) >= {"train", "validation", "stop_share"}
     env.close()
 
@@ -352,7 +356,7 @@ def test_soften_keeps_the_choices_and_raises_entropy(isolated_setup: RaceSetup) 
     head = model.policy.action_net
     assert isinstance(head, torch.nn.Linear)
     with torch.no_grad():  # a confident policy, like a cloned one
-        head.weight.mul_(5000.0)
+        head.weight.mul_(50000.0)  # 54 actions: needs a sharper head than 18 did
     rng = np.random.default_rng(1)
     obs = rng.normal(0, 1, size=(500, N_FEATURES)).astype(np.float32)
     masks = np.ones((500, N_ACTIONS), dtype=bool)
@@ -363,7 +367,7 @@ def test_soften_keeps_the_choices_and_raises_entropy(isolated_setup: RaceSetup) 
     assert t > 1.0
     o = obs.astype(np.float64)
     assert np.array_equal(before.logits(o).argmax(axis=1), after.logits(o).argmax(axis=1))
-    p = after.probabilities(o, masks)
+    p = after.probabilities(o, masks).reshape(len(o), -1, 3).sum(axis=2)  # (pit, pace) marginal
     entropy = float(-(p * np.log(np.clip(p, 1e-12, None))).sum(axis=1).mean())
     assert entropy == pytest.approx(0.25, abs=0.01)
     env.close()

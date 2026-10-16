@@ -2,6 +2,28 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## M5 slice 4 (goals, character, racecraft intent; engine v0.15.0, EXP-018)
+
+- **The AI does not learn when to attack/defend, nor goal- or character-dependent behaviour**
+  (EXP-018); `strategist_m5s4b_v1` ties the rules. Its sampled play attacks ~24 % of laps
+  everywhere: don't read it as a learned driving style.
+- **Racecraft sizes are editorial** (anchored on W3/W4 spreads and rates); there is no 2024 data
+  on when drivers attacked or defended.
+- **Risk appetite in training is redrawn uniformly** (editorial device); personas stay editorial.
+- The terminal race reward can't credit single decisions with small effects (diagnosis D-048).
+- Most-likely-action play and sampled play differ; worlds use the most likely action.
+
+## M5 slice 3b (rl_obs_v2, strategist_m5s4_v1, EXP-017)
+
+- **The learned policy is the rules plus ~1 % different pit timing**; it doesn't beat them
+  held out. Its pace management is copied from the rules (not discovered).
+- **No baseline beats the rule planner** (enumerator and MPC are worse): the headroom for a
+  single car optimising points is unknown and may be small.
+- **The observation includes the rule planner's advice**: a policy can lean on it (good for
+  generalising, but its decisions aren't independent of the planner).
+- **Tyre randomisation is an editorial training device** (sd 0.25); it was not ablated.
+- MPC's look-ahead uses 3 imagined futures (too few for the noise); not tuned.
+
 ## W6 (wet races, engine v0.14.0, EXP-015)
 
 - **Fitted on 3 wet races, checked in-sample** (no other wet 2024 races): the wet incident factor

@@ -29,7 +29,7 @@ first-lap risk, FCY phases); all rates are editorial (D-024).
 from dataclasses import dataclass
 from enum import StrEnum
 
-from f1ar.domain.race_state import CarState, PaceMode, RacePhase, RaceSetup
+from f1ar.domain.race_state import CarState, PaceMode, RacecraftIntent, RacePhase, RaceSetup
 from f1ar.simulation.rng_streams import uniform
 
 
@@ -67,6 +67,15 @@ def _mode_factor(setup: RaceSetup, mode: PaceMode) -> float:
     return 1.0
 
 
+def _intent_factor(setup: RaceSetup, intent: RacecraftIntent) -> float:
+    p = setup.race_control
+    if intent is RacecraftIntent.ATTACK:
+        return p.intent_attack_risk
+    if intent is RacecraftIntent.DEFEND:
+        return p.intent_defend_risk
+    return 1.0
+
+
 def skill_factor(setup: RaceSetup, driver_id: str) -> float:
     a = setup.driver(driver_id).profile.archetype
     return (1.5 - a.consistency) * (1.5 - a.composure)
@@ -81,6 +90,7 @@ def lap_incident(
     if not p.enabled:
         return None
     risk = skill_factor(setup, car.driver_id) * _mode_factor(setup, car.lap_pace_mode)
+    risk *= _intent_factor(setup, car.lap_intent)
     risk *= p.risk_scale
     risk *= 1.0 + setup.weather.wet_incident_factor * wetness
     first = p.first_lap_crash_multiplier if lap == 1 else 1.0

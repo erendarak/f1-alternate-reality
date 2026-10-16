@@ -50,6 +50,7 @@ export const LOGGED = new Set([
   "RAIN_STOPPED",
   "RED_FLAG",
   "TIME_PENALTY",
+  "INTENT_CHANGED",
 ]);
 
 type CodeOf = (driverId: string | null | undefined) => string;
@@ -73,6 +74,8 @@ export function eventText(e: RaceEvent, code: CodeOf): string {
       return `${who} stays out (lap ${p.in_lap})`;
     case "PACE_MODE_CHANGED":
       return `${who} ${p.from} → ${p.to} from lap ${p.effective_from_lap}`;
+    case "INTENT_CHANGED":
+      return `${who} racecraft ${p.from} → ${p.to} from lap ${p.effective_from_lap}`;
     case "CONTROLLER_CHANGED":
       return `${who} strategy: ${p.from} → ${p.to}`;
     case "OVERTAKE":

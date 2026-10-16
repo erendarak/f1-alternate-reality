@@ -1062,6 +1062,158 @@ Decision / next:      Keep W6 (engine v0.14.0). The world realism plan (W1-W6) i
                       M5 AI resumes (rl_obs_v2 with the new world).
 ```
 
+## EXP-016 — The baselines on the W1-W6 world (engine v0.14.0) (2026-10-16)
+
+```text
+Experiment ID:        EXP-016
+Research question:    After W1-W6 (tyre life, race events, driver pace, racecraft, wet races) is
+                      there anything to gain over the rule planner? EXP-008 repeated on v0.14.0.
+Engine / rules:       lightweight_engine_v0.14.0, fia_2024_v1; strategists follow the rule pace
+                      (D-047)
+Cases:                EXP-008's: 5 dry test races x grid P1/P5/P10/P15 x seeds 1-5 = 100 (MPC:
+                      seeds 1-2 = 40, ~10 min per race); paired; one AI car, 19 rule cars
+Code:                 scripts/experiments/exp008_baselines.py -> docs/experiments/exp016_baselines.json,
+                      exp016_mpc.json
+```
+
+| Method | Score | vs B1 [95 % CI] | Better / worse | Stops |
+|---|---|---|---|---|
+| B1 rules | 0.416 | | | 1: 72, 2: 24, 0: 4 (EXP-008: 1: 94) |
+| B0 real 2024 stops | 0.275 | -0.141 [-0.213, -0.082] | 5 / 51 | 0: 23, 1: 44, 2: 33 |
+| B2 enumerator | 0.391 | **-0.025 [-0.045, -0.009]** | 8 / 16 | 1: 76, 2: 21 |
+| B3 MPC (40 cases) | 0.286 (B1 0.371) | **-0.085 [-0.152, -0.032]** | 0 / 22 | 2-6 stops in 28 of 40 |
+| random | 0.002 | -0.415 | 0 / 90 | 31-54 |
+
+```text
+Findings:
+  1. The rule planner now varies its stop count (24 two-stop races of 100; EXP-008: 0).
+  2. A plan fixed at the start (B2) is now significantly worse than the rules, which replan
+     every lap and take cheap stops (EXP-008: a tie): reacting during the race has value.
+  3. MPC is worse than in EXP-008 (-0.085 vs -0.037): it picks the best of 3 noisy imagined
+     futures and over-stops; W2/W4 made races noisier, so the winner's curse is stronger.
+  4. No baseline beats B1: it stays the bar.
+Negative results:     3 (MPC), and no measured headroom over B1.
+Decision / next:      Judge the retrained policy against B1 (EXP-017).
+```
+
+## EXP-017 — The strategist on rl_obs_v2 vs the rule planner, held out (2026-10-16)
+
+```text
+Experiment ID:        EXP-017
+Research question:    With rl_obs_v2, a rule-pace teacher and tyre randomisation, does (a) the
+                      clone of the rules generalise to unseen tracks and (b) PPO improve on it?
+Hypothesis:           (a) the clone ties B1 held out; (b) a small gain (+0.01-0.03), mainly from
+                      pace and safety-car timing.
+Engine / rules:       lightweight_engine_v0.14.0, fia_2024_v1, rl_obs_v2 (86 features), D-047
+Training:             run m5s4_main: behaviour cloning of the rules teacher (1,500 randomised
+                      races, 83,723 decisions; validation accuracy 0.9998, stop recall 0.996),
+                      softened (T 2.9), then MaskablePPO with the paired rules reward, ent 0.005,
+                      tyre randomisation 0.25, 800k decisions in 99 min (~130/s). Selected:
+                      step 501,760 (best paired check on 24 training-track cases: -0.016).
+Cases (held out):     Monza, Japan, Monaco, Mexico, Abu Dhabi x P1/P5/P10/P15; set A seeds 1-5
+                      (100), set B seeds 6-15 (200); B1 rows identical to EXP-016's
+Code:                 scripts/train_policy.py; scripts/experiments/exp009_learned_vs_rules.py
+                      --reference exp016 -> docs/experiments/exp017.json
+```
+
+| Policy (vs B1, score) | Set A [95 % CI] | Set B [95 % CI] |
+|---|---|---|
+| Clone, before PPO | -0.001 [-0.028, +0.018] | +0.004 [-0.020, +0.031] |
+| **strategist_m5s4_v1** (500k) | -0.004 [-0.029, +0.014], 12 / 9 | -0.006 [-0.028, +0.019], 23 / 28 |
+| final (800k) | -0.006 [-0.032, +0.012] | -0.009 [-0.034, +0.019] |
+| m5s4_v1 forced BALANCED | -0.008 [-0.029, +0.009] | **-0.029 [-0.052, -0.007]** |
+| m5s4_v1 vs B2 enumerator (set A) | +0.024 [-0.005, +0.049] | |
+| m5s4_v1 vs B3 MPC (40 cases) | +0.064 [+0.028, +0.109], 22 / 0 | |
+
+Monaco (EXP-009's big loss, -0.094): clone 0.483 vs B1 0.472 (A), 0.500 vs 0.481 (B).
+How far PPO moved: on 30,000 teacher decisions the clone repeats the teacher's action 100 %, the
+selected policy 98.9 % (pit choice 99.1 %, pace 99.8 %), the final one 99.5 %.
+
+```text
+Findings:
+  1. THE CLONE GENERALISES: with the tyre data and the planner's advice in its observation it
+     ties the rules on unseen tracks (EXP-009's clone: -0.039, Monaco -0.09). rl_obs_v2 fixed
+     the diagnosed cause.
+  2. NEGATIVE: PPO DOESN'T IMPROVE ON THE RULES. It changes ~1 % of decisions (pit timing),
+     no significant difference held out (both sets' CIs straddle 0, point estimates slightly
+     below the clone). The training check moved only after 400k decisions.
+  3. Pace management is worth ~0.03 score here: forcing BALANCED is significantly worse on set B.
+     That pace is the RULES' (copied, not discovered): not a learned behaviour.
+  4. Diagnosis: the paired score difference per race has sd ~0.15, so a real gain of +0.01 needs
+     ~900 paired races to see; per-decision credit is far noisier. With every baseline below B1
+     (EXP-016), the headroom for a single car optimising points may simply be small in this
+     world: the rule planner optimises exactly that.
+Negative results:     2 (no learned gain). Positive: 1 (generalising clone), 3 (pace value).
+Reproduce:            uv run python scripts/train_policy.py --name m5s4_main --steps 800000 \
+                        --warm-start 1500 --bc-entropy 0.25 --ent-coef 0.005 \
+                        --reward-baseline rules --tyre-randomisation 0.25 --register strategist_m5s4_v1
+                      uv run python scripts/experiments/exp009_learned_vs_rules.py \
+                        --policy strategist_m5s4_v1 --reference docs/experiments/exp016_baselines.json \
+                        docs/experiments/exp016_mpc.json --json docs/experiments/exp017.json
+Decision / next:      Owner's call. Proposed: slice 4 (objectives and character) where the rule
+                      planner is NOT optimal by construction (it ignores the team principal's
+                      objective, rivals and risk), so a learned policy has real headroom.
+```
+
+## EXP-018 — Goals, character and racecraft: learned or not? (2026-10-16)
+
+```text
+Experiment ID:        EXP-018
+Research question:    With a risk lever (ATTACK/NORMAL/DEFEND), objectives and randomised risk
+                      appetite in training, does the strategist (a) beat the rules at its own goal
+                      and (b) race differently by goal and character, for learned reasons?
+Hypothesis:           Small gains; more attacking when chasing / daring, less when leading /
+                      careful; attacks concentrated where a car is within 1 s.
+Engine / rules:       lightweight_engine_v0.15.0, fia_2024_v1, rl_obs_v3 (103), 54 actions (D-048)
+Training:             attempt 1 m5s4b_goals (clone incl. intent): 1.5M decisions, 173 min;
+                      attempt 2 m5s4c_goals (clone pit/pace only, intent uniform): 1.5M decisions,
+                      175 min; selected step 602,112 (training check -0.018). Both: championship
+                      context 80 %, risk appetite redrawn per race, tyre randomisation 0.25.
+Cases (held out):     5 dry test races x P1/P5/P10/P15 x seeds 1-6 = 120 per scenario; scenarios
+                      assigned (team principal, persona), chaser / leader (title fight vs the grid
+                      neighbour, -/+15 pts, 3 races left), careful / daring (points, risk 0.1 / 0.9)
+Code:                 scripts/experiments/exp018_goals.py -> docs/experiments/exp018.json
+```
+
+| Scenario (attempt 2, vs B1) | Most likely action [95 % CI] | Sampled (seeded) [95 % CI] |
+|---|---|---|
+| assigned | -0.003 [-0.023, +0.013], 18 / 16 | -0.005 [-0.023, +0.009] |
+| chaser | -0.004 [-0.024, +0.011] | -0.001 [-0.022, +0.017] |
+| leader | -0.004 [-0.024, +0.011] | -0.003 [-0.024, +0.015] |
+| careful | +0.002 [-0.006, +0.008] | +0.000 [-0.006, +0.006] |
+| daring | -0.013 [-0.053, +0.017] | -0.001 [-0.028, +0.023] |
+| hand-written racecraft rule (assigned) | +0.004 [-0.015, +0.023] | |
+
+| Attack share of laps (attempt 2, sampled) | car within 1 s ahead | clear track | rival ahead |
+|---|---|---|---|
+| assigned | 0.27 | 0.22 | 0.18 |
+| chaser / leader | 0.27 / 0.27 | 0.22 / 0.22 | 0.27 / 0.27 |
+| careful / daring | 0.28 / 0.29 | 0.22 / 0.22 | |
+
+Most likely action: attack 0.6 %, defend 0.4 % of laps in every scenario. Attempt 1: 0 % / 0 %
+(a copy of the rules: identical stops in every scenario, +0.002 to +0.014 vs B1, all n.s.).
+
+```text
+Findings:
+  1. NEGATIVE: no gain over the rules at the car's own goal in any scenario (all CIs straddle 0).
+  2. NEGATIVE: the racecraft intent is NOT learned as a situational decision: sampled play
+     attacks ~24 % of laps whether a car is close or the track is clear; the most likely action
+     is NORMAL almost always.
+  3. NEGATIVE: NO conditioning on goal or character: careful = daring, chaser = leader (the same
+     shares to 2 digits). The network ignores those inputs.
+  4. Diagnosis (measured): one ATTACK lap adds 0.05 % crash chance at Monza (~0.0002 score); a
+     whole race of attacking ~2.5 % retirement chance (~-0.01 score). The race result's sd is
+     ~0.15, and ~50 decisions share one terminal reward: the effect of a single decision is
+     hundreds of times smaller than the noise, so PPO can't assign credit. The same holds for
+     goal/character effects on that decision.
+  5. The engine lever itself works (tests; the hand-written rule changes 26 of 100 results), and
+     a human can use it from the app.
+Negative results:     1, 2, 3.
+Decision / next:      Owner's call. Proposed: decision-level credit with common random numbers
+                      (the engine's keyed RNG): fork at a decision, race the alternatives on the
+                      same randomness, learn from the exact difference.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

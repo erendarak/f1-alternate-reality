@@ -32,12 +32,13 @@ from f1ar.domain.race_state import (
 )
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.training.actions import (
+    INTENT_OPTIONS,
     PACE_OPTIONS,
     PIT_OPTIONS,
     agent_commands,
     decode,
 )
-from f1ar.training.features import rl_observation
+from f1ar.training.features import RL_OBSERVATION_SCHEMA, rl_observation
 from f1ar.training.objectives import (
     CarResult,
     ChampionshipContext,
@@ -75,6 +76,7 @@ class RaceSession:
         regulations: RegulationSet = REGULATIONS_2024,
         policy_id: str = "untrained",
         world_id: str = "training",
+        observation_schema: str = RL_OBSERVATION_SCHEMA,
     ) -> None:
         missing = [d for d in agents if d not in scoring]
         if missing:
@@ -84,6 +86,7 @@ class RaceSession:
         self.scoring = dict(scoring)
         self.context = context
         self.regulations = regulations
+        self.observation_schema = observation_schema
         self.actor_id = f"AGENT:{policy_id}"
         state = engine.create_world(setup, seed=seed, world_id=world_id)
         for d in self.agents:
@@ -148,7 +151,11 @@ class RaceSession:
         return Decision(
             driver_id=driver_id,
             observation=rl_observation(
-                self.state, driver_id, self.scoring[driver_id].order, self.context
+                self.state,
+                driver_id,
+                self.scoring[driver_id].order,
+                self.context,
+                self.observation_schema,
             ),
             mask=self.action_mask(driver_id),
             reason=reason,
@@ -162,7 +169,10 @@ class RaceSession:
             for c in PIT_OPTIONS
         ]
         pace_ok = [m in valid.pace_modes and self.regulations.allows_pace(m) for m in PACE_OPTIONS]
-        return np.array([p and q for p in pit_ok for q in pace_ok], dtype=bool)
+        intent_ok = [i in valid.intents for i in INTENT_OPTIONS]
+        return np.array(
+            [p and q and r for p in pit_ok for q in pace_ok for r in intent_ok], dtype=bool
+        )
 
     def act(self, driver_id: str, action: int) -> None:
         """Apply one decision for ``driver_id`` (must be legal under its mask)."""

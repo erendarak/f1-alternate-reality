@@ -64,7 +64,9 @@ class Counting:
     def __init__(self, inner: LearnedStrategist) -> None:
         self.inner = inner
         self.name = inner.name
+        self.observation_schema = inner.observation_schema
         self.pace: Counter[str] = Counter()
+        self.intent: Counter[str] = Counter()
 
     def start(self, session: RaceSession, driver_id: str) -> None:
         self.inner.start(session, driver_id)
@@ -72,6 +74,7 @@ class Counting:
     def decide(self, session: RaceSession, decision: Decision) -> int:
         action = self.inner.decide(session, decision)
         self.pace[decode(action)[1].value] += 1
+        self.intent[decode(action)[2].value] += 1
         return action
 
 
@@ -155,6 +158,13 @@ def main() -> None:
     parser.add_argument("--workers", type=int, default=14)
     parser.add_argument("--methods", nargs="+", default=["rules", "learned", "learned+balanced"])
     parser.add_argument("--json", type=Path)
+    parser.add_argument(
+        "--reference",
+        type=Path,
+        nargs="+",
+        default=[EXP008],
+        help="baseline result files (rows) for set A: B1 must match, B2/B3 gaps (slice 3b: exp016)",
+    )
     args = parser.parse_args()
     t0 = time.perf_counter()
     if args.policy.endswith(".npz"):
@@ -209,8 +219,13 @@ def main() -> None:
         result["sets"][name] = entry
 
     # set A against EXP-008's stored rows: B1 must match exactly; B2/B3 gaps
-    if EXP008.exists():
-        old = json.loads(EXP008.read_text(encoding="utf-8"))["rows"]
+    old = [
+        r
+        for ref in args.reference
+        if ref.exists()
+        for r in json.loads(ref.read_text(encoding="utf-8"))["rows"]
+    ]
+    if old:
         old_by = {(r["event_id"], r["code"], r["seed"], r["method"]): r for r in old}
         keys = sorted({(r["event_id"], r["code"], r["seed"]) for r in rows if r["seed"] in seeds_a})
         mismatched = [
@@ -225,8 +240,13 @@ def main() -> None:
         result["exp008_check"] = {
             "rules_rows_identical": not mismatched,
             "mismatched": [list(k) for k in mismatched],
-            "learned_vs_enumerator": compare(merged, keys, "learned", "enumerator"),
-            "learned_vs_mpc": compare(merged, keys, "learned", "mpc"),
+            **{
+                f"learned_vs_{m}": compare(
+                    merged, [k for k in keys if (*k, m) in merged], "learned", m
+                )
+                for m in ("enumerator", "mpc")
+                if any((*k, m) in merged for k in keys)
+            },
         }
     result["seconds"] = round(time.perf_counter() - t0, 1)
     print(json.dumps(result, indent=1))

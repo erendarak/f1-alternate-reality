@@ -107,6 +107,11 @@ export function DriverPanel({ worldId, car, timelineId }: Props) {
         </dd>
         <dt>Pace</dt>
         <dd>{car.pace_mode.toLowerCase()}</dd>
+        <dt>Racecraft</dt>
+        <dd>
+          {(car.lap_intent ?? "NORMAL").toLowerCase()}
+          {car.intent && car.intent !== car.lap_intent ? ` → ${car.intent.toLowerCase()} next lap` : ""}
+        </dd>
         <dt>Strategy</dt>
         <dd>
           {car.controller === "USER"
@@ -148,6 +153,28 @@ export function DriverPanel({ worldId, car, timelineId }: Props) {
               }
             >
               {m[0] + m.slice(1).toLowerCase()}
+            </button>
+          ))}
+        </div>
+        <div className="group" role="group" aria-label="Racecraft">
+          {(["ATTACK", "NORMAL", "DEFEND"] as const).map((i) => (
+            <button
+              key={i}
+              className={(car.intent ?? "NORMAL") === i ? "active" : ""}
+              aria-pressed={(car.intent ?? "NORMAL") === i}
+              disabled={busy}
+              title={
+                i === "ATTACK"
+                  ? "Commit to passes: easier to pass, more risk of a crash, a mistake or a collision penalty"
+                  : i === "DEFEND"
+                    ? "Hard to pass: costs lap time when attacked, more risk"
+                    : "Race as usual"
+              }
+              onClick={() =>
+                act("intent", { action_type: "SET_INTENT", intent: i }, `${car.code}: ${i.toLowerCase()} from next lap`)
+              }
+            >
+              {i[0] + i.slice(1).toLowerCase()}
             </button>
           ))}
         </div>

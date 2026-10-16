@@ -22,7 +22,7 @@ from f1ar.domain.race_state import (
 )
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.scenarios import build_setup
-from f1ar.training.actions import N_ACTIONS, PIT_OPTIONS, decode, encode
+from f1ar.training.actions import N_ACTIONS, PER_PIT, PIT_OPTIONS, decode, encode
 from f1ar.training.features import RL_FEATURE_NAMES, rl_observation
 from f1ar.training.gym_env import RaceStrategyEnv, random_policy, run_race
 from f1ar.training.objectives import (
@@ -63,7 +63,7 @@ def _full_field(roster: RaceRoster, profiles: ProfileSet) -> RaceSetup:
 
 def test_action_encoding_round_trips() -> None:
     seen = {decode(a) for a in range(N_ACTIONS)}
-    assert len(seen) == N_ACTIONS == 18
+    assert len(seen) == N_ACTIONS == 54
     for a in range(N_ACTIONS):
         assert encode(*decode(a)) == a
 
@@ -77,15 +77,15 @@ def test_masks_follow_the_engine_and_the_regulations(isolated_setup: RaceSetup) 
     d2 = s2.next_decision()
     assert d2 is not None
     soft = [a for a in range(N_ACTIONS) if decode(a)[0] is Compound.SOFT]
-    assert not d2.mask[soft].any() and d2.mask.sum() == N_ACTIONS - 3
+    assert not d2.mask[soft].any() and d2.mask.sum() == N_ACTIONS - PER_PIT
     with pytest.raises(ValueError, match="not legal"):
         s2.act(VER, soft[0])
-    # the final lap: no stop is legal any more, only "stay out" with a pace mode
+    # the final lap: no stop is legal any more, only "stay out" with a pace mode and intent
     while (d := s.next_decision()) is not None:
         last = d
         s.act(VER, STAY)
     assert last.lap == isolated_setup.track.total_laps
-    assert [decode(int(a))[0] for a in np.flatnonzero(last.mask)] == [None, None, None]
+    assert [decode(int(a))[0] for a in np.flatnonzero(last.mask)] == [None] * PER_PIT
 
 
 # --- the session ---------------------------------------------------------------------------
@@ -285,7 +285,7 @@ def test_gym_env_passes_the_checker_and_is_reproducible(isolated_setup: RaceSetu
     check_env(env, skip_render_check=True)
     first, info = env.reset(seed=4)
     again, _ = env.reset(seed=4)
-    assert (first == again).all() and info["observation_schema"] == "rl_obs_v1"
+    assert (first == again).all() and info["observation_schema"] == "rl_obs_v3"
     done, steps, reward = False, 0, 0.0
     while not done:
         _, reward, done, _, info = env.step(STAY)

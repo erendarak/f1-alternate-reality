@@ -40,10 +40,12 @@ from f1ar.domain.race_state import (
     Compound,
     DriverAction,
     PaceMode,
+    RacecraftIntent,
     RaceEvent,
     RacePhase,
     RequestPitStop,
     SetPaceMode,
+    SetRacecraftIntent,
     SetStrategyController,
     StrategyController,
     WorldState,
@@ -74,6 +76,8 @@ class CommandType(StrEnum):
     """Team action: stay out this lap (takes strategy over if a stop was pending)."""
     SET_CONTROLLER = "SET_CONTROLLER"
     """Hand a car's pit decisions to ``BASELINE`` (replans) or ``USER``."""
+    SET_INTENT = "SET_INTENT"
+    """Driver action: ATTACK / NORMAL / DEFEND from the next lap (slice 4, D-048)."""
     DEPLOY_SC = "DEPLOY_SC"
     """Race director: send out the safety car now (``laps``, default 4)."""
     DEPLOY_VSC = "DEPLOY_VSC"
@@ -94,6 +98,7 @@ class Command(BaseModel):
     pace_mode: PaceMode | None = None
     compound: Compound | None = None
     controller: StrategyController | None = None
+    intent: RacecraftIntent | None = None
     laps: int = Field(default=4, ge=1, le=20)
     duration_s: float = Field(default=90.0, gt=0, le=600)
 
@@ -130,6 +135,7 @@ CRITICAL_COMMANDS = frozenset(
         CommandType.PIT_REQUEST,
         CommandType.PIT_CANCEL,
         CommandType.SET_CONTROLLER,
+        CommandType.SET_INTENT,
         CommandType.DEPLOY_SC,
         CommandType.DEPLOY_VSC,
     }
@@ -171,10 +177,13 @@ def _action(command: Command) -> DriverAction:
             return SetStrategyController(
                 driver_id=driver, controller=command.controller, actor_id=actor
             )
+        case CommandType.SET_INTENT if command.intent is not None:
+            return SetRacecraftIntent(driver_id=driver, intent=command.intent, actor_id=actor)
     field = {
         CommandType.SET_PACE_MODE: "pace_mode",
         CommandType.PIT_REQUEST: "compound",
         CommandType.SET_CONTROLLER: "controller",
+        CommandType.SET_INTENT: "intent",
     }.get(command.type, "a valid type")
     raise _Rejected(f"{command.type} needs {field}")
 
@@ -514,6 +523,7 @@ class WorldRunner:
                 | CommandType.PIT_REQUEST
                 | CommandType.PIT_CANCEL
                 | CommandType.SET_CONTROLLER
+                | CommandType.SET_INTENT
             ):
                 self._commit(engine.apply_action(self._state, _action(command)))
             case CommandType.DEPLOY_SC | CommandType.DEPLOY_VSC:

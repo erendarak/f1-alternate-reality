@@ -1,0 +1,126 @@
+registry_schema: 1
+policy_id: strategist_m5s4_v1
+source_type: learned_parameter
+algorithm: MaskablePPO (sb3-contrib 2.9.0, torch 2.11.0+cu128)
+architecture: MLP 86-128-128-18, tanh; actor only (value net not exported)
+artifact: models/policies/strategist_m5s4_v1.npz
+artifact_sha256: sha256:34ce4d32e0509a7feab6872688f04a2bfc32446719e45fabd7c2232dea720e89
+pinned_to:
+  observation_schema: rl_obs_v2
+  feature_names_sha256: sha256:d2befea7d9613752af02f0825fd0a83e18be87e66fa430987faf6ba85385daaf
+  n_features: 86
+  n_actions: 18
+  regulations: fia_2024_v1
+  engine_version: lightweight_engine_v0.14.0
+training:
+  run: m5s4_main
+  config:
+    events:
+    - 2024_bahrain_gp
+    - 2024_saudi_arabian_gp
+    - 2024_australian_gp
+    - 2024_chinese_gp
+    - 2024_miami_gp
+    - 2024_emilia_romagna_gp
+    - 2024_spanish_gp
+    - 2024_austrian_gp
+    - 2024_hungarian_gp
+    - 2024_belgian_gp
+    - 2024_dutch_gp
+    - 2024_azerbaijan_gp
+    - 2024_singapore_gp
+    - 2024_united_states_gp
+    - 2024_las_vegas_gp
+    - 2024_qatar_gp
+    total_steps: 800000
+    seed: 0
+    n_envs: 14
+    envs_per_worker: 4
+    n_steps: 128
+    batch_size: 1792
+    n_epochs: 5
+    learning_rate: 0.0003
+    gamma: 1.0
+    gae_lambda: 0.95
+    clip_range: 0.2
+    ent_coef: 0.005
+    vf_coef: 0.5
+    max_grad_norm: 0.5
+    net_arch:
+    - 128
+    - 128
+    reward_baseline: rules
+    stay_prior: 0.0
+    warm_start_episodes: 1500
+    bc_epochs: 150
+    bc_stop_weight: 5.0
+    bc_target_entropy: 0.25
+    normalize_reward: false
+    championship_probability: 0.0
+    rain_probability: 0.0
+    tyre_randomisation: 0.25
+    device: cuda
+    eval_every: 100000
+    eval_events:
+    - 2024_bahrain_gp
+    - 2024_spanish_gp
+    - 2024_hungarian_gp
+    - 2024_singapore_gp
+    eval_slots:
+    - 1
+    - 8
+    - 15
+    eval_seeds:
+    - 1001
+    - 1002
+  selected: 'best paired check vs rules on training cases at step 501760 (check: {''steps'': 501760, ''vs_rules'':
+    -0.0162, ''better'': 8, ''worse'': 3, ''stops'': 1.75, ''points'': 8.79})'
+  git_commit: 344a599f4679e97326427edddd1435cb2dc47cf2+dirty
+  started: '2026-10-15T22:11:46+00:00'
+  finished: '2026-10-15T23:52:42+00:00'
+  note: ''
+  torch_checkpoint: artifacts/training/m5s4_main/best.zip (not tracked)
+  torch_checkpoint_sha256: sha256:09702799d06c7b89eca94ae4a256ebae7dc5a72ca9c800f698791d8a006447e1
+  setup: one learning car vs the rule field, dry, points objective
+lineage:
+  parent_policy: null
+  season: 2024
+  profiles_revision: sha256:70b5bfc5e1acac19874327b7f3db22f6e0f0de498e14d655013524533d8a872c
+  trained_from: behaviour cloning of the rules teacher (1500 races), then PPO
+evaluation:
+  EXP-017:
+    held_out: 5 dry test races x grid P1/P5/P10/P15; set A seeds 1-5, set B seeds 6-15; engine v0.14.0
+    vs_rules_reward_set_A:
+      mean: -0.0036
+      ci95:
+      - -0.0291
+      - 0.0135
+      better: 12
+      worse: 9
+    vs_rules_reward_set_B:
+      mean: -0.0058
+      ci95:
+      - -0.0278
+      - 0.0187
+      better: 23
+      worse: 28
+    clone_before_ppo_vs_rules_set_B:
+      mean: 0.0043
+      ci95:
+      - -0.0199
+      - 0.0306
+      better: 29
+      worse: 22
+    vs_mpc_reward_set_A:
+      mean: 0.0634
+      ci95:
+      - 0.0267
+      - 0.107
+      better: 21
+      worse: 0
+    verdict: ties the rule planner on held-out tracks (no significant difference either way); PPO changed
+      ~1 % of the cloned decisions (pit timing only); the clone itself already generalises (Monaco fixed)
+      (docs/EXPERIMENTS.md EXP-017)
+notes:
+- Weights are learned_parameter; personas, risk utilities, the team principal's rules and the PUSH/CONSERVE
+  effects they were trained against are editorial_assumption.

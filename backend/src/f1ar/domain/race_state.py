@@ -16,7 +16,7 @@ from f1ar.domain.provenance import SourceType
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 16
+WORLD_SCHEMA_VERSION = 17
 
 
 class _Frozen(BaseModel):
@@ -62,6 +62,18 @@ class PaceMode(StrEnum):
     CONSERVE = "CONSERVE"
     BALANCED = "BALANCED"
     PUSH = "PUSH"
+
+
+class RacecraftIntent(StrEnum):
+    """How hard a driver races the cars around them this lap (M5 slice 4, D-048).
+
+    ATTACK: commit to passes (easier pass, more risk of a crash, a mistake or a collision
+    penalty); DEFEND: make yourself hard to pass (costs lap time when attacked, more risk);
+    NORMAL: the 2024-calibrated behaviour."""
+
+    DEFEND = "DEFEND"
+    NORMAL = "NORMAL"
+    ATTACK = "ATTACK"
 
 
 class StrategyController(StrEnum):
@@ -197,6 +209,14 @@ class TrafficParams(_Frozen):
     blue_flag_attacker_loss_s: float = Field(ge=0)
     blue_flag_defender_loss_s: float = Field(ge=0)
     """A lapped car always yields; it loses this on its next lap."""
+    intent_attack_boost_s: float = Field(default=0.2, ge=0)
+    """Slice 4 (D-048, editorial size anchored on W3): an ATTACKING car's pass threshold drops by
+    this much, about the spread between 2024's best and worst attackers (W3 attack terms)."""
+    intent_defend_boost_s: float = Field(default=0.2, ge=0)
+    """A DEFENDING car raises its attackers' threshold by this much (W3 defend-term spread)."""
+    intent_defend_loss_s: float = Field(default=0.3, ge=0)
+    """Extra time a DEFENDING car loses on its next lap for each attempt it fends off or
+    suffers (a defensive line is slower; editorial)."""
     start_spread_s: float = Field(default=0.0, ge=0)
     """Launch and first-corner spread: each car's lap 1 gets ``N(0, spread)`` seconds (keyed per
     car), resolved in grid order like any other lap. 0 = everyone launches identically
@@ -261,6 +281,12 @@ class RaceControlParams(_Frozen):
     red_flag_sc_laps: int = Field(default=3, ge=1)
     penalty_collision_per_pass: float = Field(default=0.0, ge=0, le=1)
     """10 s for the attacker of a pass (causing a collision / forcing a driver off)."""
+    intent_attack_risk: float = Field(default=2.0, ge=1)
+    """Slice 4 (D-048, editorial): crash and mistake rates x this on a lap raced ATTACKING."""
+    intent_defend_risk: float = Field(default=1.5, ge=1)
+    """... and x this on a lap raced DEFENDING."""
+    intent_attack_collision: float = Field(default=3.0, ge=1)
+    """The 2024 collision-penalty rate per pass (W4) x this for a pass made ATTACKING."""
     penalty_false_start: float = Field(default=0.0, ge=0, le=1)
     """5 s per car at the start."""
     penalty_pit_speeding_per_stop: float = Field(default=0.0, ge=0, le=1)
@@ -461,6 +487,10 @@ class CarState(_Frozen):
     """Driver's intended mode; applies from the next lap start."""
     lap_pace_mode: PaceMode
     """Mode the lap in progress is being driven in (locked when the lap started)."""
+    intent: RacecraftIntent = RacecraftIntent.NORMAL
+    """Slice 4: the driver's racecraft intent; applies from the next lap start (like pace)."""
+    lap_intent: RacecraftIntent = RacecraftIntent.NORMAL
+    """The intent the lap in progress is raced with (locked when the lap started)."""
     pit_request: Compound | None
     """Pending stop: the car pits for this compound at its next line crossing."""
     pit_stops: int = Field(ge=0)
@@ -546,6 +576,7 @@ EventType = Literal[
     "RAIN_STOPPED",
     "RED_FLAG",
     "TIME_PENALTY",
+    "INTENT_CHANGED",
 ]
 
 
@@ -602,12 +633,23 @@ class SetStrategyController(_Frozen):
     actor_id: str = "USER"
 
 
-DriverAction = SetPaceMode | RequestPitStop | CancelPitStop | SetStrategyController
+class SetRacecraftIntent(_Frozen):
+    """How hard to race the cars around (slice 4, D-048). Takes effect from the NEXT lap."""
+
+    type: Literal["SET_RACECRAFT_INTENT"] = "SET_RACECRAFT_INTENT"
+    driver_id: str
+    intent: RacecraftIntent
+    actor_id: str = "USER"
+
+
+DriverAction = (
+    SetPaceMode | RequestPitStop | CancelPitStop | SetStrategyController | SetRacecraftIntent
+)
 """Union of all driver/team actions."""
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[16]
+    schema_version: Literal[17]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None

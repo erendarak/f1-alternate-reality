@@ -29,8 +29,8 @@ import numpy as np
 import yaml
 
 from f1ar.domain.provenance import SourceType
-from f1ar.training.actions import N_ACTIONS
-from f1ar.training.features import RL_FEATURE_NAMES, RL_OBSERVATION_SCHEMA
+from f1ar.training.actions import LEGACY_N_ACTIONS, N_ACTIONS, legacy_to_current
+from f1ar.training.features import RL_FEATURE_NAMES, RL_FEATURE_SETS
 
 MANIFEST_DIR = Path("configs") / "policies"
 ARTIFACT_DIR = Path("models") / "policies"
@@ -79,6 +79,10 @@ class NumpyPolicy:
             h = h @ w.T + b
             h = np.tanh(h) if self.activation == "tanh" else np.maximum(h, 0.0)
         out: np.ndarray = h @ self.weights[-1].T + self.biases[-1]
+        if out.shape[-1] == LEGACY_N_ACTIONS:  # slices 1-3b: no intent output; it raced NORMAL
+            full = np.full((*out.shape[:-1], N_ACTIONS), -np.inf)
+            full[..., [legacy_to_current(a) for a in range(LEGACY_N_ACTIONS)]] = out
+            return full
         return out
 
     def probabilities(self, obs: np.ndarray, mask: np.ndarray) -> np.ndarray:
@@ -250,13 +254,13 @@ def load_policy(
         raise PolicyLoadError(f"{policy_id}: artifact {m.artifact} is missing")
     if file_sha256(artifact) != m.artifact_sha256:
         problems.append("artifact hash doesn't match the manifest")
-    if m.observation_schema != RL_OBSERVATION_SCHEMA:
+    if m.observation_schema not in RL_FEATURE_SETS:
         problems.append(
-            f"observation {m.observation_schema}, this code builds {RL_OBSERVATION_SCHEMA}"
+            f"observation {m.observation_schema}, this code builds {sorted(RL_FEATURE_SETS)}"
         )
-    if m.feature_names_sha256 != feature_names_hash():
+    elif m.feature_names_sha256 != feature_names_hash(RL_FEATURE_SETS[m.observation_schema]):
         problems.append("feature list differs from this code's")
-    if m.n_actions != N_ACTIONS:
+    if m.n_actions not in (N_ACTIONS, LEGACY_N_ACTIONS):
         problems.append(f"{m.n_actions} actions, this code has {N_ACTIONS}")
     if regulations is not None and m.regulations != regulations:
         problems.append(f"trained under {m.regulations}, the world runs {regulations}")

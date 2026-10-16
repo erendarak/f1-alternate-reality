@@ -41,8 +41,12 @@ Plan (agreed 2026-10-13, one slice per commit; nothing started):
   MaskablePPO, CPU workers, policy registry + pinning, rules warm start + paired reward.
   **Result negative**: the policy doesn't beat the rules on held-out tracks (-0.029; the
   observation lacks per-compound track data). Proposed fix before slice 4: `rl_obs_v2` + retrain.
-- [ ] Slice 4: character and goals (profile + objective conditioning, risk utilities, rule-based
-  team principal); EXP-010.
+- [x] **Slice 3b: the strategist again on the W1-W6 world (D-047, EXP-016, EXP-017)**:
+  `rl_obs_v2`, rule-pace teacher, tyre randomisation. The clone now generalises (ties the
+  rules held out); **PPO gains nothing measurable** (~1 % of decisions changed).
+- [x] **Slice 4: goals, character, racecraft intent (engine v0.15.0, D-048, EXP-018)**: the
+  lever and the conditioning are built; **the AI doesn't learn them** (ties the rules, intent
+  not situational, no goal/character effect): credit assignment is the blocker.
 - [ ] Slice 5: all 20 cars AI (shared policy, frozen-opponent pool); realism vs 2024; exploit
   audit; FIA ban mechanism; EXP-011.
 - [ ] Slice 6: weather generalisation, UI (thinking panel, behaviour cards, fork-and-try model,
@@ -1263,3 +1267,36 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Checked in the app: Canada, SC at lap 17, most cars took new inters, VER stayed out.
 - Tests: 441 offline (+5 in `tests/unit/test_wet_race.py`, +1 registry case).
 - World realism plan W1-W6 complete. Next: M5 AI resumes.
+
+### 2026-10-16 — M5 slice 3b: the strategist on the W1-W6 world (D-047, EXP-016, EXP-017)
+
+- Env speed on v0.14: 69 decisions/s per core (BENCH-002: 81).
+- Found and fixed before training: teacher, enumerator and MPC drove BALANCED although the rule
+  planner manages its tyres since W1 (`rule_pace`); teacher demos were cached by size and seed
+  only (would have reused v1 demos).
+- EXP-016: on v0.14 the rules vary stops (24 % two-stops); a plan fixed at the start loses to them
+  (-0.025, significant); MPC loses more (-0.085). B1 stays the bar.
+- `rl_obs_v2` (86 features: per-compound tyres, own tyre life, the planner's advice, neighbours'
+  tyres) + tyre randomisation; clone on held-out tracks ties B1 (EXP-009's lost -0.039).
+- PPO 800k decisions (99 min): ~1 % of decisions changed, no held-out gain (-0.004 / -0.006, CIs
+  straddle 0). `strategist_m5s4_v1` registered (negative verdict in its manifest).
+- Machine: a run launched with a shell `&` survived and a relaunch hit WinError 1455 (paging file):
+  one 14-worker torch job at a time.
+- Tests: 445 offline (+4 `tests/unit/test_obs_v2.py`; cloning test made width-robust).
+- Next (owner's call): slice 4, objectives and character, where the rules aren't optimal.
+
+### 2026-10-16 — M5 slice 4: goals, character, racecraft intent (D-048, EXP-018)
+
+- Engine v0.15.0 / world schema 17: ATTACK / NORMAL / DEFEND per lap (editorial sizes on W3/W4);
+  54 actions; `rl_obs_v3` (rival, points at stake, neighbours' racecraft); user command, API and
+  driver-panel buttons (checked in the app: "VER racecraft NORMAL -> ATTACK from lap 2").
+- Hand-written racecraft rule: -0.007 vs rules (n.s.), changes 26 of 100 results.
+- Attempt 1 (clone incl. intent): never attacks; ties the rules. Attempt 2 (clone pit/pace only,
+  intent kept uniform): explores (attack 40 % early), but ends tying the rules with intent not
+  situational and no goal/character conditioning (EXP-018). Registered `strategist_m5s4b_v1`.
+- Diagnosis: a decision's effect (0.05 % crash chance per ATTACK lap) is hundreds of times below
+  the race noise (sd 0.15) with a terminal reward.
+- Bugs found: handing a BASELINE car back kept ATTACK; demos cache key missing character
+  randomisation; cloning made intents collapse (rich get richer); tests on the 18-action layout.
+- Tests: 454 offline (+8 `test_racecraft_intent.py`, +1 world runner), frontend 17.
+- Next (owner's call): decision-level credit with common random numbers.

@@ -41,11 +41,13 @@ from f1ar.domain.race_state import (
     PendingOvertake,
     PlannedStop,
     RaceControl,
+    RacecraftIntent,
     RaceEvent,
     RacePhase,
     RaceSetup,
     RequestPitStop,
     SetPaceMode,
+    SetRacecraftIntent,
     SetStrategyController,
     StrategyController,
     WeatherMode,
@@ -85,8 +87,9 @@ from f1ar.simulation.weather import (
 )
 from f1ar.simulation.weather import penalty_s as weather_penalty_s
 
-ENGINE_VERSION = "lightweight_engine_v0.14.0"
-"""v0.14.0: fresh wet-weather tyres under SC/VSC and the wet incident factor, fitted on the 2024
+ENGINE_VERSION = "lightweight_engine_v0.15.0"
+"""v0.15.0: racecraft intent ATTACK / NORMAL / DEFEND per lap (risk for track position, D-048).
+v0.14.0: fresh wet-weather tyres under SC/VSC and the wet incident factor, fitted on the 2024
 wet races (D-046).
 v0.13.0: overtaking refit with W2 noise + driver attack/defend skills, launch skill, lap-1
 risk by grid position (D-044).
@@ -321,6 +324,7 @@ class ValidActions:
     pit_compounds: tuple[Compound, ...]
     cancel_pit: bool
     controllers: tuple[StrategyController, ...]
+    intents: tuple[RacecraftIntent, ...] = ()
 
     @property
     def any(self) -> bool:
@@ -331,7 +335,7 @@ def valid_actions(state: WorldState, driver_id: str) -> ValidActions:
     """Legal actions for ``driver_id`` (same rules as ``apply_action``, without trying them)."""
     car = state.car(driver_id)
     if state.world_status is WorldStatus.COMPLETED or car.status is not CarStatus.RUNNING:
-        return ValidActions(driver_id, (), (), False, ())
+        return ValidActions(driver_id, (), (), False, (), ())
     can_pit = (
         state.chequered_flag_s is None and car.laps_completed + 1 < state.setup.track.total_laps
     )
@@ -341,6 +345,7 @@ def valid_actions(state: WorldState, driver_id: str) -> ValidActions:
         pit_compounds=tuple(Compound) if can_pit else (),
         cancel_pit=pending_stop(car) is not None,
         controllers=tuple(StrategyController),
+        intents=tuple(RacecraftIntent),
     )
 
 
@@ -372,6 +377,8 @@ def apply_action(state: WorldState, action: DriverAction) -> StepResult:
             new = _cancel_pit(car, action.actor_id, emit)
         case SetStrategyController():
             new = _set_controller(state, car, action.controller, emit)
+        case SetRacecraftIntent():
+            new = _set_intent(car, action, emit)
         case _:
             assert_never(action)
 
@@ -429,6 +436,22 @@ def _set_pace_mode(
     return new
 
 
+def _set_intent(car: CarState, action: SetRacecraftIntent, emit: _ActionEmit) -> CarState:
+    if car.controller is StrategyController.AGENT and not action.actor_id.startswith("AGENT"):
+        car = _take_over(car, emit)  # a human decision on an AI car: the human has it now
+    if car.intent is action.intent:
+        return car
+    emit(
+        "INTENT_CHANGED",
+        {
+            "from": car.intent.value,
+            "to": action.intent.value,
+            "effective_from_lap": car.laps_completed + 2,
+        },
+    )
+    return car.model_copy(update={"intent": action.intent})
+
+
 def _controller_of(actor_id: str) -> StrategyController:
     """Who takes a car over by acting on it: an agent runner, or else a human."""
     return StrategyController.AGENT if actor_id.startswith("AGENT") else StrategyController.USER
@@ -482,17 +505,25 @@ def _set_controller(
     state: WorldState, car: CarState, controller: StrategyController, emit: _ActionEmit
 ) -> CarState:
     if car.controller is controller:
-        if controller is StrategyController.BASELINE and car.pace_by_user:
-            # W1: the pace (tyre management) is handed back to the baseline as well
+        if controller is StrategyController.BASELINE and (
+            car.pace_by_user or car.intent is not RacecraftIntent.NORMAL
+        ):
+            # W1: the pace (tyre management) is handed back to the baseline as well; slice 4:
+            # and the racecraft (the baseline races NORMAL)
             emit("CONTROLLER_CHANGED", {"from": "BASELINE", "to": "BASELINE", "pace": "automatic"})
-            return car.model_copy(update={"pace_by_user": False})
+            return car.model_copy(update={"pace_by_user": False, "intent": RacecraftIntent.NORMAL})
         return car
     if controller is not StrategyController.BASELINE:
         return _take_over(car, emit, controller)
     emit("CONTROLLER_CHANGED", {"from": car.controller.value, "to": controller.value})
     # The baseline decides from here on; a pending user request is replaced by its plan.
     new = car.model_copy(
-        update={"controller": controller, "pit_request": None, "pace_by_user": False}
+        update={
+            "controller": controller,
+            "pit_request": None,
+            "pace_by_user": False,
+            "intent": RacecraftIntent.NORMAL,  # the baseline races NORMAL (slice 4)
+        }
     )
     return _replan(state, new, emit)
 
@@ -1201,7 +1232,12 @@ def _announce_overtakes(
                     c.driver_id,
                     p.lap,
                     p.rival,
-                    rate=setup.race_control.penalty_collision_per_pass,
+                    rate=setup.race_control.penalty_collision_per_pass
+                    * (
+                        setup.race_control.intent_attack_collision
+                        if c.lap_intent is RacecraftIntent.ATTACK
+                        else 1.0
+                    ),
                 ):
                     c = _penalise(c, 10.0, "collision", p.lap, emit)
                     out[i] = c
@@ -1362,6 +1398,7 @@ def _complete_lap(
             "lap_target_s": target,
             "pit_hold_s": hold,
             "lap_pace_mode": lap_mode,
+            "lap_intent": car.intent,
             "traffic_loss_s": car.carried_loss_s,
             "carried_loss_s": 0.0,
         }

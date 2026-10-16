@@ -10,6 +10,7 @@ from dataclasses import dataclass
 
 from f1ar.domain.race_state import RaceSetup
 from f1ar.policy.strategists import Strategist
+from f1ar.training.features import RL_OBSERVATION_SCHEMA
 from f1ar.training.objectives import ChampionshipContext, Scoring, race_results
 from f1ar.training.regulations import REGULATIONS_2024, RegulationSet
 from f1ar.training.session import RaceSession
@@ -52,6 +53,7 @@ def evaluate(
         context=context,
         regulations=regulations,
         policy_id=strategist.name if strategist is not None else "none",
+        observation_schema=getattr(strategist, "observation_schema", RL_OBSERVATION_SCHEMA),
     )
     if strategist is not None:
         strategist.start(session, driver_id)

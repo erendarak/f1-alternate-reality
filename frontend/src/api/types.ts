@@ -22,6 +22,9 @@ export interface Car {
   tyre_age_laps: number;
   pace_mode: string;
   lap_pace_mode: string;
+  /** slice 4: ATTACK / NORMAL / DEFEND (intent applies from the next lap; lap_intent = now) */
+  intent?: "ATTACK" | "NORMAL" | "DEFEND";
+  lap_intent?: "ATTACK" | "NORMAL" | "DEFEND";
   last_lap_time_s: number | null;
   gap_to_leader_s: number | null;
   laps_down: number | null;
@@ -258,6 +261,7 @@ export type ActionType =
   | "PIT_CANCEL"
   | "SET_PACE_MODE"
   | "SET_CONTROLLER"
+  | "SET_INTENT"
   | "DEPLOY_SC"
   | "DEPLOY_VSC";
 
@@ -267,6 +271,7 @@ export interface Action {
   compound?: Compound;
   pace_mode?: "PUSH" | "BALANCED" | "CONSERVE";
   controller?: "BASELINE" | "USER";
+  intent?: "ATTACK" | "NORMAL" | "DEFEND";
   laps?: number;
   duration_s?: number;
 }

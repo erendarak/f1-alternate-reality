@@ -12,7 +12,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from f1ar.domain.race_state import Compound, PaceMode, StrategyController
+from f1ar.domain.race_state import Compound, PaceMode, RacecraftIntent, StrategyController
 from f1ar.simulation.timeline import SeedMode
 from f1ar.simulation.world_runner import MAX_STEP_TICKS, Command, CommandType
 
@@ -67,6 +67,7 @@ class ActionType(StrEnum):
     PIT_CANCEL = "PIT_CANCEL"
     SET_PACE_MODE = "SET_PACE_MODE"
     SET_CONTROLLER = "SET_CONTROLLER"
+    SET_INTENT = "SET_INTENT"
     DEPLOY_SC = "DEPLOY_SC"
     DEPLOY_VSC = "DEPLOY_VSC"
 
@@ -80,6 +81,8 @@ class ActionRequest(_Request):
     pace_mode: PaceMode | None = None
     controller: Literal[StrategyController.BASELINE, StrategyController.USER] | None = None
     """AGENT is set by an AI runner only, never through the API."""
+    intent: RacecraftIntent | None = None
+    """SET_INTENT: ATTACK / NORMAL / DEFEND from the next lap."""
     laps: int = Field(default=4, ge=1, le=20)
     """DEPLOY_SC: safety-car laps."""
     duration_s: float = Field(default=90.0, gt=0, le=600)
@@ -104,6 +107,7 @@ class ActionRequest(_Request):
             compound=self.compound,
             pace_mode=self.pace_mode,
             controller=self.controller,
+            intent=self.intent,
             laps=self.laps,
             duration_s=self.duration_s,
         )

@@ -13,12 +13,17 @@ Every strategist decides for one AI car at its decision points (``training.sessi
   the best mean score. Fixed after the start, except that it keeps the plan.
 - **B3 ``MonteCarlo``** (MPC): at each decision, every legal option (stay out, or stop for each
   compound) is played out in a few imagined futures with the rule planner driving afterwards;
-  the best mean score wins. Pace stays BALANCED (B3 doesn't optimise pace). Pruned for speed:
-  on a normal lap end it doesn't deliberate while the tyres are younger than
+  the best mean score wins. Pace follows the rules (``rule_pace``; B3 doesn't optimise pace).
+  Pruned for speed: on a normal lap end it doesn't deliberate while the tyres are younger than
   ``min_tyre_age`` laps, and on a dry track it doesn't consider wet tyres.
 - **``RandomStrategist``**: uniformly random legal actions (lower bound).
 
 Look-ahead uses the engine but never the real future (``training.rollouts``).
+
+**Pace (M5 slice 3b):** since W1 the rule planner manages its tyres lap by lap
+(``baseline_pace_mode``: CONSERVE when the set wouldn't reach its planned stop, PUSH when it
+would anyway). Every strategist here that follows a plan drives the same way (``rule_pace``),
+so plans are compared as the rules would drive them, not at a constant BALANCED pace.
 """
 
 import statistics
@@ -32,20 +37,24 @@ import pandas as pd
 
 from f1ar.domain.race_state import (
     DRY_COMPOUNDS,
+    CarState,
     Compound,
     PaceMode,
     PlannedStop,
+    RacecraftIntent,
     RacePhase,
     RaceSetup,
 )
 from f1ar.policy.baseline_strategy import (
+    baseline_pace_mode,
     dry_compounds_required,
-    fresh_stint_costs,
     plan_for_car,
-    wear_table,
+    stint_costs,
 )
 from f1ar.simulation import lightweight_engine as engine
-from f1ar.training.actions import PACE_OPTIONS, PIT_OPTIONS, encode
+from f1ar.simulation.lap_model import life_use_per_lap
+from f1ar.training.actions import PER_PIT, PIT_OPTIONS, encode
+from f1ar.training.features import schema_for_inputs
 from f1ar.training.policy_registry import NumpyPolicy
 from f1ar.training.rollouts import imagined_seed, imagined_world, rollout_reward
 from f1ar.training.session import Decision, RaceSession
@@ -65,12 +74,63 @@ class Strategist(Protocol):
     def decide(self, session: RaceSession, decision: Decision) -> int: ...
 
 
-def _stop_or_stay(decision: Decision, plan: Sequence[PlannedStop]) -> int:
+def rule_pace(
+    setup: RaceSetup, car: CarState, plan: Sequence[PlannedStop], stop: Compound | None
+) -> PaceMode:
+    """The pace the rule planner would drive on the lap after this decision (W1).
+
+    A decision comes right after the car crossed the line; a pace chosen now applies from the
+    next lap. So the car is projected to the start of that lap (one more lap on this set, or a
+    new set if it stops at the end of this one) with the rest of ``plan`` ahead, and the
+    baseline's rule is asked (``baseline_pace_mode``)."""
+    if car.compound not in DRY_COMPOUNDS or (stop is not None and stop not in DRY_COMPOUNDS):
+        return PaceMode.BALANCED
+    lap = car.laps_completed + 1
+    rest = tuple(p for p in plan if p.lap > lap)
+    if stop is not None:
+        nxt = car.model_copy(
+            update={
+                "compound": stop,
+                "tyre_age_laps": 0,
+                "tyre_life_used": 0.0,
+                "tyre_wear_s": 0.0,
+                "laps_completed": lap,
+                "planned_stops": rest,
+            }
+        )
+    else:
+        driver = setup.driver(car.driver_id).profile.archetype
+        used = car.tyre_life_used + life_use_per_lap(
+            setup.lap_model, driver, compound=car.compound, pace_mode=car.lap_pace_mode
+        )
+        nxt = car.model_copy(
+            update={
+                "tyre_life_used": used,
+                "tyre_age_laps": car.tyre_age_laps + 1,
+                "laps_completed": lap,
+                "planned_stops": rest,
+            }
+        )
+    return baseline_pace_mode(setup, nxt)
+
+
+def _with_pace(
+    session: RaceSession, decision: Decision, plan: Sequence[PlannedStop], stop: Compound | None
+) -> int:
+    """The action (stop or stay) at the rule pace; BALANCED if that pace isn't legal."""
+    car = session.state.car(decision.driver_id)
+    action = encode(stop, rule_pace(session.state.setup, car, plan, stop))
+    if decision.mask[action]:
+        return action
+    fallback = encode(stop, PaceMode.BALANCED)
+    return fallback if decision.mask[fallback] else STAY
+
+
+def _stop_or_stay(session: RaceSession, decision: Decision, plan: Sequence[PlannedStop]) -> int:
     for stop in plan:
         if stop.lap == decision.lap:
-            action = encode(stop.compound, PaceMode.BALANCED)
-            return action if decision.mask[action] else STAY
-    return STAY
+            return _with_pace(session, decision, plan, stop.compound)
+    return _with_pace(session, decision, plan, None)
 
 
 class FixedPlan:
@@ -84,7 +144,7 @@ class FixedPlan:
         pass
 
     def decide(self, session: RaceSession, decision: Decision) -> int:
-        return _stop_or_stay(decision, self.plan)
+        return _stop_or_stay(session, decision, self.plan)
 
 
 def historical_plan(data_dir: Path, driver_code: str) -> tuple[PlannedStop, ...]:
@@ -124,12 +184,9 @@ def candidate_plans(
     driver = entry.profile.archetype
     laps = setup.track.total_laps
     pit = setup.pit.lane_loss_s + setup.pit.standstill_median_s
-    params = setup.lap_model
+    # W1-aware stint costs (tyre life, management, cliff), as the rule planner sees them
     fresh = {
-        c: fresh_stint_costs(
-            params.compounds[c].offset_s, wear_table(setup, driver, c, PaceMode.BALANCED, laps)
-        )
-        for c in DRY_COMPOUNDS
+        c: stint_costs(setup, driver, c, laps, pace_mode=PaceMode.BALANCED) for c in DRY_COMPOUNDS
     }
     start = entry.start_compound
     if start not in DRY_COMPOUNDS:
@@ -211,7 +268,7 @@ class Enumerator:
         self.plan = scored[0][1]
 
     def decide(self, session: RaceSession, decision: Decision) -> int:
-        return _stop_or_stay(decision, self.plan)
+        return _stop_or_stay(session, decision, self.plan)
 
 
 def _simulate_plan(
@@ -256,23 +313,26 @@ class MonteCarlo:
         state = session.state
         car = state.car(decision.driver_id)
         dry = state.weather.wetness < DRY_TRACK and not state.weather.raining
+        plan = plan_for_car(state.setup, car)
+        stay = _with_pace(session, decision, plan, None)
         pits = [
-            encode(c, PaceMode.BALANCED)
+            _with_pace(session, decision, plan, c)
             for c in PIT_OPTIONS[1:]
             if decision.mask[encode(c, PaceMode.BALANCED)]
             and not (dry and c in (Compound.INTERMEDIATE, Compound.WET))
         ]
+        pits = [a for a in pits if a != STAY]
         if not pits:
-            return STAY
+            return stay
         if decision.reason == "LAP_END" and car.tyre_age_laps < self.min_tyre_age:
-            return STAY
+            return stay
         self.deliberations += 1
         seeds = [
             imagined_seed(state.rng.seed, decision.driver_id, decision.lap, k)
             for k in range(self.futures)
         ]
-        best, best_value = STAY, -float("inf")
-        for option in (STAY, *pits):  # stay out first: it wins ties
+        best, best_value = stay, -float("inf")
+        for option in (stay, *pits):  # stay out first: it wins ties
             value = statistics.fmean(
                 rollout_reward(
                     state, decision.driver_id, option, s, session.scoring, session.actor_id
@@ -317,6 +377,7 @@ class LearnedStrategist:
         sample_seed: int | None = None,
     ) -> None:
         self.policy = policy
+        self.observation_schema = schema_for_inputs(policy.n_inputs)
         self.name = name if pace is None else f"{name}+{pace.value.lower()}"
         if sample_seed is not None:
             self.name += "~sampled"
@@ -339,7 +400,7 @@ class LearnedStrategist:
         legal = [(a, pit) for a, pit in options if decision.mask[a]]
         if not legal:
             return self.policy.act(decision.observation, decision.mask)
-        by_pit = p.reshape(len(PIT_OPTIONS), len(PACE_OPTIONS)).sum(axis=1)
+        by_pit = p.reshape(len(PIT_OPTIONS), PER_PIT).sum(axis=1)
         return max(legal, key=lambda o: by_pit[PIT_OPTIONS.index(o[1])])[0]
 
 
@@ -348,9 +409,10 @@ class RulesTeacher:
 
     At each decision it replans like the engine's baseline (``plan_for_car``) and asks for a stop
     when the plan stops at the end of this lap, or, under SC/VSC, when the next planned stop is
-    within the neutralised pit window (the baseline's cheap stop). Pace stays BALANCED. Dry races
-    only: the baseline's weather rule isn't reproduced. Not identical to B1 (the baseline
-    replans at its own moments); how close it gets is measured (EXP-009 notes, tests)."""
+    within the neutralised pit window (the baseline's cheap stop). Pace follows the baseline's
+    management rule (``rule_pace``, W1). Dry races only: the baseline's weather rule isn't
+    reproduced. Not identical to B1 (the baseline replans at its own moments); how close it gets is
+    measured (EXP-009 notes, tests)."""
 
     name = "rules_teacher"
 
@@ -368,7 +430,45 @@ class RulesTeacher:
             if nxt.lap == car.laps_completed + 1 or (
                 neutralised and nxt.lap - car.laps_completed <= window
             ):
-                action = encode(nxt.compound, PaceMode.BALANCED)
-                if decision.mask[action]:
+                action = _with_pace(session, decision, plan, nxt.compound)
+                if action != STAY:
                     return action
-        return STAY
+        return _with_pace(session, decision, plan, None)
+
+
+class RacecraftRule(RulesTeacher):
+    """The rules teacher plus a hand-written racecraft rule (slice 4, D-048), a baseline for the
+    new ATTACK / DEFEND lever: attack when the car ahead is within ``window_s`` and not faster
+    (car pace), defend when a faster car is within ``window_s`` behind; else NORMAL."""
+
+    name = "racecraft_rule"
+
+    def __init__(self, window_s: float = 1.0) -> None:
+        self.window_s = window_s
+
+    def decide(self, session: RaceSession, decision: Decision) -> int:
+        from f1ar.training.actions import decode
+        from f1ar.training.features import _gaps, _neighbours
+
+        pit, pace, _ = decode(super().decide(session, decision))
+        state = session.state
+        me = state.setup.driver(decision.driver_id)
+        ahead_id, behind_id = _neighbours(state, decision.driver_id)
+        ahead_s, behind_s = _gaps(state, decision.driver_id)
+        intent = RacecraftIntent.NORMAL
+        if (
+            ahead_id is not None
+            and ahead_s is not None
+            and ahead_s < self.window_s
+            and state.setup.driver(ahead_id).car_pace_offset_s >= me.car_pace_offset_s
+        ):
+            intent = RacecraftIntent.ATTACK
+        elif (
+            behind_id is not None
+            and behind_s is not None
+            and behind_s < self.window_s
+            and state.setup.driver(behind_id).car_pace_offset_s < me.car_pace_offset_s
+        ):
+            intent = RacecraftIntent.DEFEND
+        action = encode(pit, pace, intent)
+        return action if decision.mask[action] else encode(pit, pace)

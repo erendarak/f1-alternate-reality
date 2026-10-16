@@ -8,6 +8,7 @@ import pytest
 from f1ar.domain.race_state import (
     Compound,
     PaceMode,
+    RacecraftIntent,
     RaceEvent,
     RaceSetup,
     StrategyController,
@@ -286,6 +287,21 @@ def test_set_pace_mode_command(runner: WorldRunner) -> None:
     assert runner.state.car("lewis_hamilton_2024").pace_mode is PaceMode.PUSH
     assert "PACE_MODE_CHANGED" in [e.type for e in runner.events[-2:]]
     assert runner.state.event_seq == len(runner.events)
+
+
+def test_set_intent_command(runner: WorldRunner) -> None:
+    """Slice 4 (D-048): a human orders ATTACK; a missing intent is a rejection."""
+    started(runner)
+    runner.pump(3.0)
+    ham = "lewis_hamilton_2024"
+    ack = send(
+        runner, cmd(CommandType.SET_INTENT, driver_id=ham, intent=RacecraftIntent.ATTACK), 3.0
+    )
+    assert ack.accepted
+    assert runner.state.car(ham).intent is RacecraftIntent.ATTACK
+    assert "INTENT_CHANGED" in [e.type for e in runner.events[-2:]]
+    missing = send(runner, cmd(CommandType.SET_INTENT, driver_id=ham), 3.0)
+    assert not missing.accepted and "needs intent" in (missing.reason or "")
 
 
 def test_bad_pace_mode_commands_are_rejected(runner: WorldRunner) -> None:

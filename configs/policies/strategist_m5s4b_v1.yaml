@@ -1,0 +1,137 @@
+registry_schema: 1
+policy_id: strategist_m5s4b_v1
+source_type: learned_parameter
+algorithm: MaskablePPO (sb3-contrib 2.9.0, torch 2.11.0+cu128)
+architecture: MLP 103-128-128-54, tanh; actor only (value net not exported)
+artifact: models/policies/strategist_m5s4b_v1.npz
+artifact_sha256: sha256:f8f39f04fd9e222dbf72c6b72a1a523a1026b945f91ac274feae69ac4c666a45
+pinned_to:
+  observation_schema: rl_obs_v3
+  feature_names_sha256: sha256:d07c1e00aa470ad7cc806a59f83e16dea9851c92ca55eb07639845666515657f
+  n_features: 103
+  n_actions: 54
+  regulations: fia_2024_v1
+  engine_version: lightweight_engine_v0.15.0
+training:
+  run: m5s4c_goals
+  config:
+    events:
+    - 2024_bahrain_gp
+    - 2024_saudi_arabian_gp
+    - 2024_australian_gp
+    - 2024_chinese_gp
+    - 2024_miami_gp
+    - 2024_emilia_romagna_gp
+    - 2024_spanish_gp
+    - 2024_austrian_gp
+    - 2024_hungarian_gp
+    - 2024_belgian_gp
+    - 2024_dutch_gp
+    - 2024_azerbaijan_gp
+    - 2024_singapore_gp
+    - 2024_united_states_gp
+    - 2024_las_vegas_gp
+    - 2024_qatar_gp
+    total_steps: 1500000
+    seed: 0
+    n_envs: 14
+    envs_per_worker: 4
+    n_steps: 128
+    batch_size: 1792
+    n_epochs: 5
+    learning_rate: 0.0003
+    gamma: 1.0
+    gae_lambda: 0.95
+    clip_range: 0.2
+    ent_coef: 0.005
+    vf_coef: 0.5
+    max_grad_norm: 0.5
+    net_arch:
+    - 128
+    - 128
+    reward_baseline: rules
+    stay_prior: 0.0
+    warm_start_episodes: 1500
+    bc_epochs: 150
+    bc_stop_weight: 5.0
+    bc_target_entropy: 0.25
+    normalize_reward: false
+    championship_probability: 0.8
+    rain_probability: 0.0
+    tyre_randomisation: 0.25
+    character_randomisation: true
+    device: cuda
+    eval_every: 150000
+    eval_events:
+    - 2024_bahrain_gp
+    - 2024_spanish_gp
+    - 2024_hungarian_gp
+    - 2024_singapore_gp
+    eval_slots:
+    - 1
+    - 8
+    - 15
+    eval_seeds:
+    - 1001
+    - 1002
+  selected: 'best paired check vs rules on training cases at step 602112 (check: {''steps'': 602112, ''vs_rules'':
+    -0.0184, ''better'': 6, ''worse'': 4, ''stops'': 1.75, ''points'': 8.75})'
+  git_commit: 344a599f4679e97326427edddd1435cb2dc47cf2+dirty
+  started: '2026-10-16T03:37:57+00:00'
+  finished: '2026-10-16T06:34:43+00:00'
+  note: ''
+  torch_checkpoint: artifacts/training/m5s4c_goals/best.zip (not tracked)
+  torch_checkpoint_sha256: sha256:bc5a7135a4a75cf078dba380614c103032fc99ff3667685ba52d3818714118f1
+  setup: one learning car vs the rule field, dry; championship context in 80% of races (team principal
+    objectives), risk appetite redrawn per race
+lineage:
+  parent_policy: null
+  season: 2024
+  profiles_revision: sha256:70b5bfc5e1acac19874327b7f3db22f6e0f0de498e14d655013524533d8a872c
+  trained_from: behaviour cloning of the rules teacher (1500 races), then PPO
+evaluation:
+  EXP-018:
+    held_out: 5 dry test races x P1/P5/P10/P15 x seeds 1-6 = 120 cases per scenario; engine v0.15.0
+    vs_rules_assigned:
+      mean: -0.0033
+      ci95:
+      - -0.0229
+      - 0.0127
+      better: 18
+      worse: 16
+    vs_rules_chaser:
+      mean: -0.0044
+      ci95:
+      - -0.0243
+      - 0.0112
+      better: 19
+      worse: 19
+    vs_rules_leader:
+      mean: -0.0044
+      ci95:
+      - -0.0243
+      - 0.0112
+      better: 19
+      worse: 19
+    vs_rules_careful:
+      mean: 0.0016
+      ci95:
+      - -0.0058
+      - 0.0077
+      better: 18
+      worse: 15
+    vs_rules_daring:
+      mean: -0.0132
+      ci95:
+      - -0.0525
+      - 0.017
+      better: 16
+      worse: 14
+    attack_share_argmax: 0.0064
+    attack_share_sampled: 0.2365
+    verdict: ties the rules in every scenario; racecraft intent not situational (sampled attack ~24 %
+      everywhere, clear track included) and not conditioned on goal or character (careful = daring, chaser
+      = leader); docs/EXPERIMENTS.md EXP-018
+notes:
+- Weights are learned_parameter; personas, risk utilities, the team principal's rules and the PUSH/CONSERVE
+  effects they were trained against are editorial_assumption.

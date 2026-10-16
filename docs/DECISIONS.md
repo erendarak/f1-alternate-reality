@@ -1078,3 +1078,62 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   within races the sign flips, median ~0; across tracks Spearman 0.00 with tyre life);
   graining/blistering (no numbers); visibility red flags and the SC/VSC choice in rain (rain is
   on/off in the data, no intensity).
+
+## D-047 — M5 slice 3b: the strategist again, on the W1-W6 world (2026-10-16)
+
+- **Why:** EXP-009's policy lost to the rules on held-out tracks because `rl_obs_v1` couldn't tell
+  which compound suits an unseen track, and the v0.9 world made strategy nearly free. W1-W6
+  changed the world; this slice retrains with what that world makes decisive.
+- **Strategists follow the rule pace.** Since W1 the rule planner manages its tyres lap by lap
+  (`baseline_pace_mode`), but `RulesTeacher`, `FixedPlan`/`Enumerator` and MPC still drove
+  BALANCED all race. New `strategists.rule_pace` projects the car to the start of the next lap
+  (a decision comes right after the line; a pace chosen now applies from the next lap) and asks
+  the baseline's rule. The teacher now matches B1's compound sequence in every mismatched case
+  (positions +-1, chaotic divergences only); before, it lost 7 more positions out of 60.
+- **`rl_obs_v2`** (86 features = v1's 58 + 28): per dry compound the track's tyre life, pace
+  offset and wear (as the rule planner reads them from the setup), fresh-tyre bonus and cliff;
+  the car's life used, laps left at BALANCED and wear; the rule planner's advice (laps to its
+  next stop, its compound, stops planned, its pace, cheap stop now); tyre age and stops of the
+  cars directly ahead and behind. `rl_obs_v1` is still built (`RL_FEATURE_SETS`); a policy's
+  schema is read from its input size (`schema_for_inputs`), so `strategist_m5s3_v1` still loads
+  (and is refused on engine v0.14 by its engine pin, by design).
+- **Tyre randomisation** (`training.scenarios.randomise_tyres`, `--tyre-randomisation 0.25`):
+  each training race gets log-normal factors (sd 0.25) on life, wear and the cliff per dry
+  compound, soft/hard offsets +- 0.25 s and pit lane loss; opponents and the paired baseline see
+  the same setup. Labelled `editorial_assumption` (a training device).
+- **Bug fixed:** teacher demonstrations were cached by race count and seed only, so a new run
+  would have silently reused v1 / BALANCED-teacher / engine-v0.9 demos. The key now hashes
+  schema, features, engine version, teacher version and the scenario settings (`demos_key`).
+- **Results:** EXP-016 (baselines on v0.14) and EXP-017 (clone and trained policy vs rules):
+  the clone generalises (ties the rules held out, Monaco fixed); PPO changes ~1 % of decisions
+  and gains nothing measurable. `strategist_m5s4_v1` registered for lineage (verdict in its
+  manifest).
+- **Naming:** the PROGRESS plan's slice 4 (character and goals) is still to do; this is 3b.
+
+## D-048 — M5 slice 4: goals, character and a risk lever (engine v0.15.0, 2026-10-16)
+
+- **Racecraft intent** (engine v0.15.0, world schema 17): each lap a driver races ATTACK, NORMAL or
+  DEFEND (`RacecraftIntent`, `SetRacecraftIntent`, `CarState.intent/lap_intent`, locked at the
+  line like pace). ATTACK: pass threshold -0.2 s (the spread of W3's attack terms), crash and
+  mistake risk x2, collision-penalty rate per pass x3 (base 2024 rate from W4). DEFEND: attackers'
+  threshold +0.2 s, +0.3 s carried to the defender's next lap per encounter, risk x1.5. NORMAL =
+  the 2024-calibrated behaviour; the rule field always races NORMAL (handing a car back to the
+  baseline resets it). Sizes are **editorial, anchored on W3/W4**. Users can order it (world
+  runner `SET_INTENT`, API, driver panel "Racecraft"; event `INTENT_CHANGED`).
+- **54 actions** = pit x pace x intent; layout helpers in `training.actions` (`pit_of`,
+  `intent_of`, `is_stop`, `PER_PIT`); 18-action policies (slices 1-3b) load as "always NORMAL".
+- **`rl_obs_v3`** (103 features): current intent, own and neighbours' W3 racecraft terms and car
+  pace gaps, whether neighbours attack/defend, points now / one place up / down, the title rival's
+  places and gap. v1/v2 still built.
+- **Training for goals and character:** championship context in 80 % of races (the team
+  principal's objectives), the learning car's risk appetite redrawn per race
+  (`randomise_character`, editorial training device), tyre randomisation as in 3b.
+- **Warm start without copying what the teacher can't do:** attempt 1 cloned the rules' NORMAL
+  and never explored the lever (attack share 0.05 %). Attempt 2 imitates only the (pit, pace)
+  choice (likelihood summed over intents) plus a cross-entropy keeping the intent uniform inside
+  the teacher's choice (without it the intents collapsed to DEFEND 0.91 during cloning).
+- **Result (EXP-018): NEGATIVE.** Both attempts tie the rules in every scenario; attempt 2's
+  intent is neither situational nor conditioned on goal or character. Diagnosis: one ATTACK lap
+  changes the crash chance by 0.05 % (Monza), the race result has an sd of ~0.15: per-decision
+  credit from a terminal reward is hopeless for this lever. Registered for lineage:
+  `strategist_m5s4b_v1` (attempt 2, verdict in its manifest).

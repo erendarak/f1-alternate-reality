@@ -33,7 +33,7 @@ import math
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 
-from f1ar.domain.race_state import CarState, RaceSetup
+from f1ar.domain.race_state import CarState, RacecraftIntent, RaceSetup
 from f1ar.simulation.rng_streams import uniform
 
 PASS_MARGIN_S = 0.1
@@ -97,11 +97,19 @@ def resolve(
             - setup.driver(me.driver_id).attack_s
             + setup.driver(rival).defend_s
         )
+        # slice 4 (D-048): this lap's racecraft intents
+        attacking = me.lap_intent is RacecraftIntent.ATTACK
+        defending = other.car.lap_intent is RacecraftIntent.DEFEND
+        threshold += (p.intent_defend_boost_s if defending else 0.0) - (
+            p.intent_attack_boost_s if attacking else 0.0
+        )
         chance = (
             1.0 - math.exp(-(margin - threshold) / p.overtake_scale_s)
             if margin > threshold
             else 0.0
         )
+        if defending and margin > 0.0 and other.car.laps_completed >= me.laps_completed:
+            _carry(out, rival, p.intent_defend_loss_s)  # a defensive line costs time
         if other.car.laps_completed < me.laps_completed:
             out.lap_target_s += p.blue_flag_attacker_loss_s
             _carry(out, rival, p.blue_flag_defender_loss_s)

@@ -86,6 +86,25 @@ def main() -> None:
     parser.add_argument("--lr", type=float, default=3e-4)
     parser.add_argument("--eval-every", type=int, default=100_000)
     parser.add_argument("--device", default="cuda")
+    parser.add_argument(
+        "--championship",
+        type=float,
+        default=0.0,
+        metavar="P",
+        help="share of races with a championship context (team principal objectives; slice 4)",
+    )
+    parser.add_argument(
+        "--character-randomisation",
+        action="store_true",
+        help="redraw the learning car's risk appetite per race (slice 4)",
+    )
+    parser.add_argument(
+        "--tyre-randomisation",
+        type=float,
+        default=0.0,
+        metavar="SD",
+        help="per-race tyre/pit-loss perturbation (training only; D-047)",
+    )
     parser.add_argument("--register", metavar="POLICY_ID", help="register best.npz under this id")
     parser.add_argument(
         "--register-only", action="store_true", help="don't train; register an existing run"
@@ -107,6 +126,9 @@ def main() -> None:
         learning_rate=args.lr,
         eval_every=args.eval_every,
         eval_events=CHECK_EVENTS,
+        tyre_randomisation=args.tyre_randomisation,
+        championship_probability=args.championship,
+        character_randomisation=args.character_randomisation,
         device=args.device,
     )
     if not args.register_only:
@@ -151,7 +173,16 @@ def main() -> None:
                     "note": meta.get("note", ""),
                     "torch_checkpoint": f"artifacts/training/{args.name}/best.zip (not tracked)",
                     "torch_checkpoint_sha256": file_sha256(run_dir / "best.zip"),
-                    "setup": "one learning car vs the rule field, dry, points objective",
+                    "setup": (
+                        "one learning car vs the rule field, dry; championship context in "
+                        f"{saved.get('championship_probability', 0.0):.0%} of races (team "
+                        "principal objectives), risk appetite "
+                        + (
+                            "redrawn per race"
+                            if saved.get("character_randomisation")
+                            else "persona"
+                        )
+                    ),
                 },
                 "lineage": {
                     "parent_policy": None,

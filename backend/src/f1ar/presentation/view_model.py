@@ -93,6 +93,8 @@ def state_view(
                 "tyre_age_laps": car.tyre_age_laps,
                 "pace_mode": car.pace_mode.value,
                 "lap_pace_mode": car.lap_pace_mode.value,
+                "intent": car.intent.value,
+                "lap_intent": car.lap_intent.value,
                 "last_lap_time_s": car.last_lap_time_s,
                 "gap_to_leader_s": None if gap is None else round(gap, 3),
                 "laps_down": laps_down,
