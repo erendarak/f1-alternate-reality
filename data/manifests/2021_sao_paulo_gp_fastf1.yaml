@@ -1,0 +1,111 @@
+dataset_id: 2021_sao_paulo_gp_fastf1_v1
+event: 2021_sao_paulo_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-17T15:14:55Z'
+session_key: 2021/round 19/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2021_sao_paulo_gp/laps.parquet
+  sha256: sha256:a6be2c4405d02c6882dcd612abef991aed5013a81804f38e1a094aecf9a8a0b9
+  rows: 1360
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2021_sao_paulo_gp/results.parquet
+  sha256: sha256:a3051fd6a56eb8e51db8199a66fee324226cae5042bef4379dc0040245970678
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2021_sao_paulo_gp/weather.parquet
+  sha256: sha256:d898c686948d21ca85e10c9475645916cfa9639485126b082f834c9514a67e2a
+  rows: 158
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2021_sao_paulo_gp/track_status.parquet
+  sha256: sha256:341274f812c922e6b231706826abce2b6345a2984487c1fcbe094b49befb22eb
+  rows: 9
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2021_sao_paulo_gp/race_control.parquet
+  sha256: sha256:86086a1cc7d43e02aea00931147d335273d89af496651af446f0c81f1c652ed0
+  rows: 126
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2021_sao_paulo_gp/corners.parquet
+  sha256: sha256:b63f5b618bfffef85545abe0746f6a5d5aa5064e1e1c33c09c9b5e0853f74b1b
+  rows: 15
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `sector1_s` missing in 20 rows
+- lap table `pit_in_time_s` missing in 1279 rows
+- lap table `pit_out_time_s` missing in 1280 rows
+- lap table `speed_trap_kph` missing in 1 rows

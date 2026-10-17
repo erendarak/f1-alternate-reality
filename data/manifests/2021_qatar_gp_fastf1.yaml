@@ -1,0 +1,115 @@
+dataset_id: 2021_qatar_gp_fastf1_v1
+event: 2021_qatar_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-17T15:15:08Z'
+session_key: 2021/round 20/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2021_qatar_gp/laps.parquet
+  sha256: sha256:0f10c7bae7a166e368eaa972efa24f84c02ae7bc7d3a49c3b6a17d693a445ecb
+  rows: 1114
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2021_qatar_gp/results.parquet
+  sha256: sha256:b2c3f4de3442e9ac02b4c3b8a3c2b9d03cf872a1d07af9fe4927ab57a0e8bff6
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2021_qatar_gp/weather.parquet
+  sha256: sha256:1c176d7dacc0a9012e2b374a3ac99742623deac3c8249098a28f32d22f325b52
+  rows: 152
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2021_qatar_gp/track_status.parquet
+  sha256: sha256:faea312ba2570b56f341ee987896acd685e882a2cf0d707f14f6550c43bfd5ba
+  rows: 27
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2021_qatar_gp/race_control.parquet
+  sha256: sha256:8f935743cb603faf1763d4631dd0834365fcf1e337740f574250b26f0d3c90f2
+  rows: 85
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2021_qatar_gp/corners.parquet
+  sha256: sha256:125eb370c6bfa66d4465a12537d6b2f99099bf82f7e8bbb8d03e0aea7b5109ed
+  rows: 16
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 3 rows
+- lap table `sector1_s` missing in 21 rows
+- lap table `sector2_s` missing in 1 rows
+- lap table `sector3_s` missing in 2 rows
+- lap table `pit_in_time_s` missing in 1083 rows
+- lap table `pit_out_time_s` missing in 1084 rows
+- lap table `position` missing in 1 rows
+- lap table `speed_trap_kph` missing in 1 rows

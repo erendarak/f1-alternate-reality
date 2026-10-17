@@ -1,0 +1,111 @@
+dataset_id: 2021_turkish_gp_fastf1_v1
+event: 2021_turkish_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-17T15:14:14Z'
+session_key: 2021/round 16/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2021_turkish_gp/laps.parquet
+  sha256: sha256:b3cae751dfae6f4b7b4f977c609311d6d57b309a5c64e8194dd6fbf077dcc62e
+  rows: 1147
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2021_turkish_gp/results.parquet
+  sha256: sha256:c5b9e38e4a661af239b220ac19bde1b78be304d90cbb088016d031e3d50b60df
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2021_turkish_gp/weather.parquet
+  sha256: sha256:0f3517628ac6624e4ef997cf863207fc18aab82ec1f4ec4586b2d2b178ccd324
+  rows: 157
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2021_turkish_gp/track_status.parquet
+  sha256: sha256:d5ee0bbd8cb72b1dd851880ee7f57c0c8371b3eb2f0f595503ff093b82223697
+  rows: 16
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2021_turkish_gp/race_control.parquet
+  sha256: sha256:bf294b689f779daaf835fd2943826dd7ed0eee401905e0ffba4827b93cbed5ab
+  rows: 98
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2021_turkish_gp/corners.parquet
+  sha256: sha256:8f7d8ab8e6dd35e8ae17d28d6d97f3bd569da3b0e6af0e94d7272b211c955c05
+  rows: 14
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 1 rows
+- lap table `sector1_s` missing in 20 rows
+- lap table `pit_in_time_s` missing in 1127 rows
+- lap table `pit_out_time_s` missing in 1127 rows

@@ -7,7 +7,14 @@ Honest list of what does **not** work or is only approximate. Update whenever on
 - **The Jolpica fetch takes ~18 h** (server limit 500 requests/hour); it is resumable and runs
   across sessions. Until it completes, 2000-2017 is partial.
 - **F1's archive needs the owner's signed-in F1 account** (token expires; re-sign-in with
-  `python -m fastf1 auth f1tv --authenticate`). 2018 and 2021 still have missing races.
+  `python -m fastf1 auth f1tv --authenticate`). FastF1 has 172 of 173 races 2018-2025.
+- **2018 Italian GP is not in FastF1 form**: FastF1 3.8.3 itself crashes on that race's tyre
+  stint data (`__fix_tyre_info` IndexError); Jolpica history covers it (no compounds).
+- **Two 2021 races fail quality on purpose**: Belgian GP (3 laps behind the SC, 1 lap
+  classified: no racing) and Abu Dhabi GP (Mazepin withdrew, no FastF1 grid slot). Fits over
+  2018-2025 (H1+) must skip races whose quality is FAIL; today's fits use 2024 only.
+- **FastF1's classification comes from Jolpica**: when that call is throttled the fetch now
+  stops with "retry later" (was a TypeError after the tables were written).
 - **Inferred pit stops miss ~1 in 4 real stops** (mostly under a safety car) and ~1 in 8 inferred
   stops is wrong; inferred SC laps miss ~1 in 6 and add ~1.4 false laps per race.
 - **No tyre compounds before 2018**, no weather or track status before 2018 (inferred only).

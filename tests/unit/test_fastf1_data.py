@@ -13,6 +13,7 @@ import pytest
 from f1ar.data import jolpica_adapter
 from f1ar.data.fastf1_adapter import (
     RaceTables,
+    missing_classification,
     normalize_laps,
     normalize_positions,
     normalize_results,
@@ -320,3 +321,15 @@ def test_jolpica_result_records() -> None:
     assert jolpica_adapter.result_records(payload) == [
         {"number": 16, "position": 1, "laps": 53, "status": "Finished", "grid": 4}
     ]
+
+
+def test_missing_classification_detects_blank_jolpica_columns() -> None:
+    # H0: a throttled Jolpica call leaves FastF1's classification blank (2021 Italian GP)
+    assert missing_classification(raw_results()) == []
+    blank = raw_results()
+    blank["Laps"] = float("nan")
+    blank["Status"] = ""
+    assert missing_classification(blank) == ["Status", "Laps"]
+    one_dns = raw_results()
+    one_dns.loc[1, "Laps"] = float("nan")  # one car without laps is a real result, not a gap
+    assert missing_classification(one_dns) == []

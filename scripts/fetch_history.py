@@ -66,10 +66,10 @@ def main() -> None:
         before = throttle.requests
         try:
             counts = fetch_race(season, round_, RAW, throttle)
+            write_tables(season, round_)
         except Exception as exc:  # noqa: BLE001 (one bad race must not stop the history)
             print(f"{season} R{round_:02d} {name}: ERROR {type(exc).__name__}: {exc}")
             continue
-        write_tables(season, round_)
         per_req = (time.monotonic() - t0) / max(1, throttle.requests)
         left = (len(todo) - i) * REQUESTS_PER_RACE * per_req / 3600
         print(
@@ -81,7 +81,10 @@ def main() -> None:
         for r in schedules[s]:
             rd = int(r["round"])
             if race_done(s, rd, RAW) and not (OUT / f"{s}_{rd:02d}" / "laps.parquet").exists():
-                write_tables(s, rd)
+                try:
+                    write_tables(s, rd)
+                except Exception as exc:  # noqa: BLE001
+                    print(f"{s} R{rd:02d}: tables ERROR {type(exc).__name__}: {exc}")
     print("done")
 
 

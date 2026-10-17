@@ -13,6 +13,7 @@ inside Jolpica's unauthenticated limits (docs/LEGAL_AND_LICENSES.md).
 
 import argparse
 import time
+import traceback
 from pathlib import Path
 
 from f1ar.data.fastf1_adapter import DataSourceError
@@ -58,6 +59,11 @@ def main() -> None:
         try:
             result = fetch_event(args.season, round_, ROOT, telemetry=args.telemetry)
         except (DataSourceError, OSError, ValueError) as exc:
+            summary.append(f"  round {round_:>2}: ERROR {type(exc).__name__}: {exc}")
+            continue
+        except Exception as exc:  # noqa: BLE001 (H0: one bad race must not stop the season)
+            print(f"  round {round_:>2}: unexpected {type(exc).__name__}", flush=True)
+            traceback.print_exc()
             summary.append(f"  round {round_:>2}: ERROR {type(exc).__name__}: {exc}")
             continue
         took = time.monotonic() - started

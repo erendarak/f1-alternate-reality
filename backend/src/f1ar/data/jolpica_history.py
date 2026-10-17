@@ -161,7 +161,7 @@ def race_tables(season: int, round_: int, raw: Path) -> dict[str, pd.DataFrame]:
         {
             "lap": int(lap["number"]),
             "driver": t["driverId"],
-            "position": int(t["position"]),
+            "position": int(t["position"]) if t.get("position") else None,
             "lap_time_s": _seconds(t.get("time")),
         }
         for race in _races(folder, "laps")

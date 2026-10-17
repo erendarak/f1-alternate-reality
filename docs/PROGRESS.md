@@ -1328,3 +1328,18 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Tests: 465 offline (+3 history data).
 - Next: finish the fetch (next sessions), fetch the remaining 2018/2021 races, EXP-021 coverage,
   then H1 (eras and regulations).
+
+### 2026-10-17 — H0 continued: FastF1 2018-2025 complete (D-052)
+
+- Jolpica history fetch resumed in the background (2014-2017 done before; ~13 h left, resumable).
+- 2021 Italian GP TypeError found: FastF1's classification comes from Jolpica; when throttled it
+  is blank and `quality.py` crashed (`None + 1`) after the tables were written. Reproduced from
+  the cache with blank columns; `load_race_session` now raises "retry later" instead.
+- Refetched the missing races (history fetch paused): FastF1 now has 172 of 173 races 2018-2025.
+  2018 Monza crashes inside FastF1 3.8.3 (tyre stint data): left to Jolpica. 2021 Spa (no green
+  lap; circuit info crashed, now handled) and 2021 Abu Dhabi (Mazepin withdrew) fail quality on
+  purpose.
+- `fetch_season.py` survives any per-race error.
+- Tests: 466 offline (+1 `missing_classification`); ruff, mypy clean.
+- Next: when the history fetch completes, EXP-021 coverage and the H0 write-up, then H1.
+

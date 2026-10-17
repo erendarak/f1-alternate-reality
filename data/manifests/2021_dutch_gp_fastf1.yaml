@@ -1,0 +1,111 @@
+dataset_id: 2021_dutch_gp_fastf1_v1
+event: 2021_dutch_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-17T15:13:47Z'
+session_key: 2021/round 13/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2021_dutch_gp/laps.parquet
+  sha256: sha256:1d7e703c2d8c58ba218583a26cd169a65cc4f8758f87fda3bed4738e677902c0
+  rows: 1361
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2021_dutch_gp/results.parquet
+  sha256: sha256:2cee25a48c4df3c2290ee79a3a47e162c1bb78a2d1b673b0c6cae9d780b5dfff
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2021_dutch_gp/weather.parquet
+  sha256: sha256:0caa3078f5279ea77f56b8e7729de0f826d38fe23b488cdd2ad15fda0c25d82a
+  rows: 158
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2021_dutch_gp/track_status.parquet
+  sha256: sha256:cd68b672cc5cc521775e3b9ad2e20e9a1e0cd5ad221e49c788959f9ed7837ca8
+  rows: 3
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2021_dutch_gp/race_control.parquet
+  sha256: sha256:c59a8d3c0e2e6ed0f055d36b3cc5fe10feb0de970262c783521aa5af1dcc05ad
+  rows: 130
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2021_dutch_gp/corners.parquet
+  sha256: sha256:e56a19331f57c41ea5e24a5eb70af23ad19612fd546f2696732e05d797d68e2c
+  rows: 14
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `sector1_s` missing in 20 rows
+- lap table `pit_in_time_s` missing in 1329 rows
+- lap table `pit_out_time_s` missing in 1330 rows
+- lap table `speed_trap_kph` missing in 2 rows

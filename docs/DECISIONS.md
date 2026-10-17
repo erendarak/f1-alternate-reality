@@ -1202,6 +1202,12 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   (never to Jolpica or other hosts) and never logs it. With it: **2018-2025 fetched from FastF1**
   (compounds, track status, weather): 2018 16/21, 2019 21, 2020 17, 2021 11/22, 2022 22, 2023 22,
   2024 24, 2025 24 (the gaps hit Jolpica's rate limit; 2021 also raised a TypeError to debug).
+  **2026-10-17: 172 of 173 races** (2018 20/21, 2021 22/22). The 2021 TypeError: FastF1 takes
+  the classification (position, status, laps) from Jolpica; a throttled call leaves it blank and
+  the quality report crashed after the tables were written. `load_race_session` now refuses such
+  a session ("retry later", `missing_classification`); FastF1's circuit info failing on a race
+  without a reference lap (2021 Spa) gives no corner markers instead of a crash; `fetch_season`
+  survives any per-race error. 2018 Monza: FastF1's own tyre-data bug, left to Jolpica.
   `fetch_season.py` now takes any season (rounds from the Jolpica schedule).
 - **OpenF1** for 2023-2025 (`data/openf1_history.py`, `scripts/fetch_openf1.py`): stints with
   compounds, pit, race control, weather, laps: 70 races, an independent cross-check.

@@ -102,7 +102,26 @@ def load_race_session(year: int, gp: str | int, cache_dir: Path, *, telemetry: b
         ) from exc
     if n_laps == 0 or n_results == 0:
         raise DataSourceError(f"FastF1 returned {n_laps} laps / {n_results} results")
+    missing = missing_classification(session.results)
+    if missing:
+        raise DataSourceError(
+            f"FastF1 results for {year} {gp} lack {missing} (FastF1 takes them from Jolpica, "
+            "which was probably rate-limited); retry later"
+        )
     return session
+
+
+CLASSIFICATION_COLUMNS = ("Position", "Status", "Laps")
+
+
+def missing_classification(results: pd.DataFrame) -> list[str]:
+    """Classification columns FastF1 left empty for every car (H0: a throttled Jolpica call
+    leaves them blank while timing loads fine; the quality report then failed mid-write)."""
+    return [
+        c
+        for c in CLASSIFICATION_COLUMNS
+        if c not in results or _str(results[c].astype("string")).isna().all()
+    ]
 
 
 def tables_from_session(session: Any) -> RaceTables:
@@ -121,6 +140,10 @@ def tables_from_session(session: Any) -> RaceTables:
         positions = normalize_positions(session.pos_data)
     except DataNotLoadedError:  # loaded with telemetry=False
         positions = _empty_positions()
+    try:
+        circuit_info = session.get_circuit_info()
+    except AttributeError:  # no usable reference lap (e.g. 2021 Belgian GP: SC laps only)
+        circuit_info = None
     return RaceTables(
         event=event,
         laps=normalize_laps(session.laps),
@@ -129,7 +152,7 @@ def tables_from_session(session: Any) -> RaceTables:
         track_status=normalize_track_status(session.track_status),
         race_control=normalize_race_control(session.race_control_messages),
         positions=positions,
-        corners=normalize_corners(session.get_circuit_info()),
+        corners=normalize_corners(circuit_info),
     )
 
 

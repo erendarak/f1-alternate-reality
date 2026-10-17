@@ -1,0 +1,114 @@
+dataset_id: 2021_belgian_gp_fastf1_v1
+event: 2021_belgian_gp
+source: fastf1
+source_api_version: 3.8.3
+retrieved_utc: '2026-10-17T15:13:38Z'
+session_key: 2021/round 12/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2021_belgian_gp/laps.parquet
+  sha256: sha256:11c0389802fac589b81b35351237abb7831e558c5b91ee765cccea68e6eb528e
+  rows: 60
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - lap_end_time_s
+  - lap_start_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - fresh_tyre
+  - position
+  - track_status
+  - speed_trap_kph
+  - is_accurate
+  - deleted
+  - fastf1_generated
+  source_type: historical_verified
+  description: 'one row per car per lap: times, sectors, tyres, stint, position'
+- relative_path: data/processed/2021_belgian_gp/results.parquet
+  sha256: sha256:363a56056d1733d1b88bc953d328c4ad1cee617ae758639c2b2314e9e86e1108
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification incl. grid, status, laps, team colour
+- relative_path: data/processed/2021_belgian_gp/weather.parquet
+  sha256: sha256:3148795aa079cc3df56b6f7d7e1716ed743e7be4e52e326823abf4cb4676d9a6
+  rows: 290
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: historical_verified
+  description: trackside weather samples (~1/min)
+- relative_path: data/processed/2021_belgian_gp/track_status.parquet
+  sha256: sha256:2d99ec72d0f1da60e80b58ae71342761fba8635cb13b5afa6b30dc23e8a9fc0d
+  rows: 6
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: historical_verified
+  description: track status changes (green/SC/VSC/red)
+- relative_path: data/processed/2021_belgian_gp/race_control.parquet
+  sha256: sha256:2373bb31054bdbd65f2fd3d8f0863f27e2896db19a8c585034d70291afc68935
+  rows: 33
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: historical_verified
+  description: race control messages
+- relative_path: data/processed/2021_belgian_gp/corners.parquet
+  sha256: sha256:c37aee02b9528f27c7476e6db0305185b4d82ce9e436ccc95977d4c5c92aad3f
+  rows: 0
+  columns:
+  - number
+  - letter
+  - x_m
+  - y_m
+  - angle_deg
+  - display_rotation_deg
+  source_type: historical_verified
+  description: corner numbers/positions (metres) + suggested display rotation
+unit_conventions:
+  time: seconds (float); *_time_s columns are session time
+  distance: metres (positions converted from FastF1 1/10 m)
+  temperature: celsius
+  speed: km/h (speed_trap_kph), m/s (wind_speed_ms)
+missingness_notes:
+- lap table `lap_time_s` missing in 40 rows
+- lap table `sector1_s` missing in 20 rows
+- lap table `sector3_s` missing in 2 rows
+- lap table `pit_in_time_s` missing in 40 rows
+- lap table `pit_out_time_s` missing in 40 rows
+- lap table `compound` missing in 60 rows
+- lap table `speed_trap_kph` missing in 1 rows
