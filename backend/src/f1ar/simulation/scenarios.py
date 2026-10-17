@@ -30,6 +30,7 @@ from f1ar.domain.race_state import (
     WeatherParams,
     default_weather_params,
 )
+from f1ar.domain.season_rules import SEASON_2024, SeasonRules, rules_for
 from f1ar.policy.baseline_strategy import POLICY_ID as STRATEGY_POLICY_ID
 
 DEFAULT_TICK_SECONDS = 0.5
@@ -330,6 +331,7 @@ def setup_from_codes(
         weather=weather,
         traffic=traffic,
         race_control=race_control,
+        rules=rules_for(configs, roster.season),
         car_offsets_s=estimate.offsets_s,
         inputs={
             "start_compounds": f"historical_verified: lap-1 compound, {data_dir.name}/laps.parquet",
@@ -341,6 +343,8 @@ def setup_from_codes(
             "wet_incidents": wet_note,
             "traffic": traffic_note,
             "race_control": race_control_note,
+            "season_rules": f"historical_verified: {roster.season} sporting rules, "
+            "configs/regulations/seasons.json",
             "dataset_sha256": "sha256:" + hashlib.sha256(laps_file.read_bytes()).hexdigest(),
         },
     )
@@ -764,6 +768,7 @@ def build_setup(
     traffic: TrafficParams | None = None,
     race_control: RaceControlParams | None = None,
     weather: WeatherParams | None = None,
+    rules: SeasonRules | None = None,
     tick_seconds: float = DEFAULT_TICK_SECONDS,
     start_compound: Compound = Compound.MEDIUM,
     start_compounds: Mapping[str, Compound] | None = None,
@@ -778,14 +783,20 @@ def build_setup(
     if roster.event_id != profiles.event_id:
         raise ValueError("roster and profiles belong to different events")
     entries = sorted((roster.entry(d) for d in driver_ids), key=lambda e: e.grid_position)
+    pit = pit or default_pit_params()
+    if rules is not None:  # H1: the season's dry-compound rule
+        pit = pit.model_copy(
+            update={"min_distinct_dry_compounds": rules.min_distinct_dry_compounds}
+        )
     return RaceSetup(
         event_id=roster.event_id,
         track=track or monza_2024_track(),
         lap_model=lap_model or default_lap_model(),
-        pit=pit or default_pit_params(),
+        pit=pit,
         traffic=traffic or default_traffic_params(),
         race_control=race_control or default_race_control_params(),
         weather=weather or default_weather_params(),
+        rules=rules or SEASON_2024,
         tick_seconds=tick_seconds,
         profile_set_manifest_hash=profiles.manifest_hash,
         drivers=tuple(

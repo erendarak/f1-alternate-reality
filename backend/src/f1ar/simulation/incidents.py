@@ -143,7 +143,7 @@ def neutralisation_after(
             int(length * (p.sc_max_laps - p.sc_min_laps + 1)), p.sc_max_laps - p.sc_min_laps
         )
         return Neutralisation(RacePhase.SC, sc_laps=laps)
-    if u < sc + (1.0 - sc) * vsc:
+    if u < sc + (1.0 - sc) * vsc and setup.rules.vsc:  # before 2015: double yellows (H1)
         return Neutralisation(
             RacePhase.VSC, vsc_s=p.vsc_min_s + (p.vsc_max_s - p.vsc_min_s) * length
         )
@@ -164,6 +164,8 @@ def debris_neutralisation(setup: RaceSetup, seed: int, lap: int) -> Neutralisati
             int(length * (p.sc_max_laps - p.sc_min_laps + 1)), p.sc_max_laps - p.sc_min_laps
         )
         return Neutralisation(RacePhase.SC, sc_laps=laps)
+    if not setup.rules.vsc:  # before 2015: double waved yellows, no neutralisation (H1)
+        return None
     return Neutralisation(RacePhase.VSC, vsc_s=p.vsc_min_s + (p.vsc_max_s - p.vsc_min_s) * length)
 
 

@@ -119,6 +119,7 @@ def test_setup_uses_data_when_given(
         "weather",
         "traffic",
         "race_control",
+        "season_rules",
         "race_events",
         "driver_pace",
         "racecraft",

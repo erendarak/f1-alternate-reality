@@ -1343,3 +1343,17 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Tests: 466 offline (+1 `missing_classification`); ruff, mypy clean.
 - Next: when the history fetch completes, EXP-021 coverage and the H0 write-up, then H1.
 
+### 2026-10-17 — H1: sporting rules per season 2010-2025 (engine v0.16.0, D-053, EXP-022)
+
+- Rules checked against sources (correction: top-10 start tyres were Q3 tyres 2010-2013, Q2
+  2014-2021, free from 2022); catalogue `configs/regulations/seasons.json`, `SeasonRules`.
+- Engine v0.16.0 / world schema 18: setups carry their season's rules; no VSC before 2015 (double
+  yellows; a director's VSC is refused); fastest lap tracked; scoring uses the season's points
+  (fixes 2024's missing fastest-lap point).
+- 2024 races identical to v0.15 (4 tracks x 3 seeds).
+- EXP-022 (partial: 2011-2017, 2025): catalogue reproduces 3,089/3,089 official results; stops per
+  finisher 2.7 (2011) -> 1.8 (2025), median stint 15 -> 21 laps.
+- History fetch still running (2011; ~13 h left); EXP-021 coverage and EXP-022 rerun after it.
+- Tests: 471 offline (+5 `tests/unit/test_season_rules.py`); frontend 17; ruff, mypy clean.
+- Next: H0 close-out when the fetch completes, then H2 (calibration across eras), or H1b.
+

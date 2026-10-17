@@ -1219,3 +1219,28 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   of neutralised laps found. `estimated_from_data`.
 - Quality reports for 2018-2025 races flag ~10 small feed quirks (a lapped car with one lap row
   too many, laps missing in 2020 Austria, our date check vs Las Vegas's Saturday race).
+
+## D-053 — H1: sporting rules per season 2010-2025 (2026-10-17; engine v0.16.0, world schema 18)
+
+- `domain/season_rules.py` `SeasonRules` + `configs/regulations/seasons.json` (2010-2025, every
+  rule with its source; `historical_verified`): points, fastest-lap point (2019-2024),
+  double points at the final round (2014), shortened-race points (half below 75 % until 2021,
+  sliding scale from 2022), refuelling (none from 2010), the dry-compound rule, top-10 start
+  tyres (Q3 2010-2013, Q2 2014-2021, free from 2022), tyre supplier (Bridgestone 2010, Pirelli
+  2011+), DRS (2011+), VSC (2015+). The top-10 rule was Q3 tyres before 2014, not Q2 as first
+  proposed (checked against the sources).
+- `RaceSetup.rules` (default: 2024's, so worlds and fits keep their behaviour); data-backed setups
+  take their season's rules; `build_setup(rules=...)` sets the dry-compound rule from them.
+- Engine v0.16.0: **no VSC before 2015**: a situation race control would answer with a VSC gets
+  local double waved yellows (no neutralisation), which is what the VSC replaced (FIA: the VSC is
+  for cases needing double yellows but not a safety car); the safety-car draws are unchanged
+  (H2 refits the rates per era); a race director's VSC is refused. `CarState.best_lap_time_s`.
+- Scoring (`training/objectives.race_results`) uses the season's points incl. the fastest-lap
+  point and double points. **This corrects 2024 scoring**: 2024 had the fastest-lap point and we
+  never awarded it (races unchanged; policies trained before score one point lower at most).
+- Stored, no effect yet: DRS (H2 fits overtaking per era), top-10 start tyres (real start tyres
+  where compounds are known), shortened-race points (the engine doesn't shorten races),
+  refuelling / tyre changes (H1b), tyre supplier (H2/H3 priors).
+- Regression: 2024 races are identical to v0.15 (Monza, Spa, Monaco, wet Canada x 3 seeds:
+  same order, times, SC/VSC). EXP-022 checks the catalogue against the official points.
+

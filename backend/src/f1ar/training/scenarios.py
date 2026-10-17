@@ -32,7 +32,6 @@ import numpy as np
 
 from f1ar.domain.race_state import DRY_COMPOUNDS, Compound, RaceSetup
 from f1ar.training.objectives import (
-    POINTS_2024,
     SEASON_RACES_2024,
     ChampionshipContext,
     Objective,
@@ -135,8 +134,8 @@ def synthetic_standings(
     points = np.zeros(len(drivers))
     for _ in range(races_done):
         order = np.argsort(-(strength + rng.normal(0.0, STANDINGS_NOISE, len(drivers))))
-        for pos, i in enumerate(order[: len(POINTS_2024)]):
-            points[i] += POINTS_2024[pos]
+        for pos, i in enumerate(order[: len(setup.rules.points)]):
+            points[i] += setup.rules.points[pos]
     return ChampionshipContext(
         points={d: float(p) for d, p in zip(drivers, points, strict=True)},
         races_left=SEASON_RACES_2024 - races_done,

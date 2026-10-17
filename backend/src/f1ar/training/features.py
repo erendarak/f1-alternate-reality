@@ -234,6 +234,7 @@ def _progress(state: WorldState, driver_id: str) -> float:
 
 
 def _points_at(position: int) -> float:
+    # the same table for every season 2010-2025 (H1); the refuelling era (H1b) will need the setup's
     return POINTS_2024[position - 1] / POINTS_2024[0] if 1 <= position <= len(POINTS_2024) else 0.0
 
 

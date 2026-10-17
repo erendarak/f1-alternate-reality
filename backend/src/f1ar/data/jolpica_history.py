@@ -180,6 +180,9 @@ def race_tables(season: int, round_: int, raw: Path) -> dict[str, pd.DataFrame]:
             "laps": int(r["laps"]),
             "status": r["status"],
             "points": float(r["points"]),
+            "fastest_lap_rank": (
+                int(r["FastestLap"]["rank"]) if r.get("FastestLap", {}).get("rank") else None
+            ),
             "time_s": (
                 _seconds(r["Time"]["time"]) if "Time" in r and ":" in r["Time"]["time"] else None
             ),

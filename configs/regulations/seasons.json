@@ -1,0 +1,46 @@
+{
+  "description": "Sporting rules per season that change race strategy (H1, D-053). source_type historical_verified: each rule is from the sources below. 2000-2009 (refuelling era) is added in H1b.",
+  "rule_sources": {
+    "points": "25-18-15-12-10-8-6-4-2-1 since 2010 (FIA sporting regulations; Motorsport Week on the 2025 return to the 2010-2018 structure)",
+    "fastest_lap_point": "2019-2024, only if the driver finishes in the top 10; scrapped for 2025 by the WMSC in October 2024 (formula1.com/en/latest/article/fastest-lap-point-to-be-scrapped-in-2025-after-latest-fia-world-motor-sport.4pUjDzWnGRN7KVWENLc1BY)",
+    "double_points_final_round": "2014 Abu Dhabi GP only (2014 FIA sporting regulations)",
+    "shortened_race_points": "half points below 75 % distance until 2021; sliding scale from 2022 after the 2021 Belgian GP (motorsportmagazine.com/articles/single-seaters/f1/f1-reveals-new-short-race-points-system-to-avoid-spa-repeat)",
+    "refuelling": "banned from 2010 (formulaonehistory.com/seasons/2010-f1-world-championship)",
+    "min_distinct_dry_compounds": "two dry compounds must be used unless a wet tyre is used, since 2007 (FIA sporting regulations)",
+    "top10_start_tyres": "2010-2013 Q3 tyres, 2014-2021 Q2 tyres, free from 2022 (auto123.com/en/news/f1-top-ten-must-use-qualifying-tyres-in-2010/6429; racefans.net/2022/02/18/f1s-q3-tyre-rule-which-drivers-claimed-helped-top-teams-is-dropped-for-2022)",
+    "tyre_supplier": "Bridgestone until 2010, Pirelli from 2011 (the-race.com, Bridgestone F1 history)",
+    "drs": "introduced 2011 (FIA technical regulations 2011)",
+    "vsc": "approved for 2015 after tests at the final 2014 events; first used at the 2015 Monaco GP (fia.com/news/world-motor-sport-council-2014-doha)"
+  },
+  "defaults": {
+    "points": [25, 18, 15, 12, 10, 8, 6, 4, 2, 1],
+    "fastest_lap_point": false,
+    "double_points_final_round": false,
+    "shortened_race_points": "half_below_75pct",
+    "refuelling": false,
+    "tyre_changes_allowed": true,
+    "min_distinct_dry_compounds": 2,
+    "top10_start_tyres": "q2_tyres",
+    "tyre_supplier": "Pirelli",
+    "drs": true,
+    "vsc": true
+  },
+  "seasons": {
+    "2010": {"tyre_supplier": "Bridgestone", "drs": false, "vsc": false, "top10_start_tyres": "q3_tyres"},
+    "2011": {"vsc": false, "top10_start_tyres": "q3_tyres"},
+    "2012": {"vsc": false, "top10_start_tyres": "q3_tyres"},
+    "2013": {"vsc": false, "top10_start_tyres": "q3_tyres"},
+    "2014": {"vsc": false, "double_points_final_round": true},
+    "2015": {},
+    "2016": {},
+    "2017": {},
+    "2018": {},
+    "2019": {"fastest_lap_point": true},
+    "2020": {"fastest_lap_point": true},
+    "2021": {"fastest_lap_point": true},
+    "2022": {"fastest_lap_point": true, "top10_start_tyres": "free", "shortened_race_points": "sliding_scale_2022"},
+    "2023": {"fastest_lap_point": true, "top10_start_tyres": "free", "shortened_race_points": "sliding_scale_2022"},
+    "2024": {"fastest_lap_point": true, "top10_start_tyres": "free", "shortened_race_points": "sliding_scale_2022"},
+    "2025": {"top10_start_tyres": "free", "shortened_race_points": "sliding_scale_2022"}
+  }
+}

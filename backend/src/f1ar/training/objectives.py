@@ -144,7 +144,7 @@ class CarResult:
     """Finished without the compounds the rules require (see ``race_results``)."""
 
 
-def race_results(state: WorldState) -> dict[str, CarResult]:
+def race_results(state: WorldState, *, final_round: bool = False) -> dict[str, CarResult]:
     """Results as the AI is scored. The engine only *reports* a broken two-dry-compounds rule
     (``TYRE_RULE_BREACHED``); here such a car is scored as disqualified (no points, classified
     last), an editorial stand-in for the regulation penalty. Without it, an AI would learn to
@@ -164,6 +164,9 @@ def race_results(state: WorldState) -> dict[str, CarResult]:
     winner_time = winner.finish_time_s or 0.0 if winner else 0.0
     winner_laps = winner.laps_completed if winner else 0
     avg_lap = winner_time / max(1, winner_laps)
+    # H1: the season's points, incl. the fastest-lap point (2019-2024, top 10 only)
+    timed = [(c.best_lap_time_s, c.driver_id) for c in state.cars if c.best_lap_time_s is not None]
+    fastest = min(timed)[1] if timed else None
     out = {}
     for i, driver_id in enumerate(order):
         car = state.car(driver_id)
@@ -172,7 +175,13 @@ def race_results(state: WorldState) -> dict[str, CarResult]:
         gap = math.nan
         if classified and car.finish_time_s is not None:
             gap = car.finish_time_s - winner_time + avg_lap * (winner_laps - car.laps_completed)
-        points = POINTS_2024[position - 1] if classified and position <= len(POINTS_2024) else 0
+        points = (
+            setup.rules.points_for(
+                position, fastest_lap=driver_id == fastest, final_round=final_round
+            )
+            if classified
+            else 0
+        )
         out[driver_id] = CarResult(
             position,
             car.status is CarStatus.FINISHED,

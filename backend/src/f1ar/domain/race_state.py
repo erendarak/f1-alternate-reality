@@ -13,10 +13,11 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from f1ar.domain.driver_profiles import DriverProfile
 from f1ar.domain.provenance import SourceType
+from f1ar.domain.season_rules import SEASON_2024, SeasonRules
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 17
+WORLD_SCHEMA_VERSION = 18
 
 
 class _Frozen(BaseModel):
@@ -414,6 +415,8 @@ class RaceSetup(_Frozen):
     traffic: TrafficParams
     race_control: RaceControlParams
     weather: WeatherParams = Field(default_factory=default_weather_params)
+    rules: SeasonRules = SEASON_2024
+    """The season's sporting rules (H1, D-053); 2024's unless the race is from another season."""
     tick_seconds: float = Field(gt=0)
     profile_set_manifest_hash: str
     """Hash of the full ProfileSet the embedded profiles were taken from."""
@@ -516,6 +519,8 @@ class CarState(_Frozen):
     lap_started_at_s: float = Field(ge=0)
     """Sim time the lap in progress started (line crossing); lap times are measured from it."""
     last_lap_time_s: float | None
+    best_lap_time_s: float | None = None
+    """Fastest lap so far (H1: the fastest-lap point of 2019-2024)."""
     finish_time_s: float | None
     retired_reason: str | None
     """``"CRASH"`` or ``"FAILURE"`` once RETIRED."""
@@ -649,7 +654,7 @@ DriverAction = (
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[17]
+    schema_version: Literal[18]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None

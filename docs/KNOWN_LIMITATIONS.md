@@ -2,6 +2,18 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## H1 (sporting rules per season, engine v0.16.0, D-053)
+
+- **Only 2024 races can be simulated**: persona seeds and fits exist for 2024 only (H2); the rules
+  for 2010-2025 are in place but no other season's race runs yet.
+- **Before 2015 the VSC cases become double yellows, the SC rate is 2024's**: H2 refits
+  neutralisation rates per era from the inferred neutralised laps.
+- **DRS, top-10 start tyres, shortened-race points, tyre supplier are stored, not modelled** yet.
+- **The AI's points feature (`rl_obs_v3`) uses the 2010-2025 table directly** (identical for every
+  season of H1); the refuelling era (H1b) has other tables.
+- **Policies trained before v0.16 were scored without 2024's fastest-lap point** (one point at
+  most per race; their evaluations stand, re-evaluations will differ slightly).
+
 ## H0 (history data 2000-2025, D-052; in progress)
 
 - **The Jolpica fetch takes ~18 h** (server limit 500 requests/hour); it is resumable and runs

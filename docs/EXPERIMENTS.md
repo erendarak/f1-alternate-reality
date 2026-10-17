@@ -1316,6 +1316,36 @@ Findings:             about 9 of 10 inferred stops are real and 3 of 4 real stop
 Status:               coverage part to be rerun when the Jolpica fetch completes.
 ```
 
+## EXP-022 — The strategy game per season 2010-2025 from real data (2026-10-17, partial)
+
+```text
+Experiment ID:        EXP-022
+Research question:    How does the strategy game change across 2010-2025 (the reference H2 must
+                      hit), and does the season rule catalogue reproduce the official points?
+Data:                 Jolpica history (results, laps, pit stops 2011+), FastF1 2018+ track status
+Code:                 scripts/experiments/exp022_eras.py -> docs/experiments/exp022.json
+```
+
+| Season | races | stops / finisher | median stint (laps) | retirements / race | neutralised laps / race (inferred) | points agree |
+|---|---|---|---|---|---|---|
+| 2011 | 2 of 19 (fetching) | 2.68 | 15 | 7.5 | 0.5 | 46/46 |
+| 2012 | 20 | 2.17 | 18 | 3.8 | 4.4 | 478/478 |
+| 2013 | 19 | 2.41 | 16 | 2.6 | 3.0 | 418/418 |
+| 2014 | 19 | 2.24 | 17 | 4.2 | 3.4 | 407/407 (incl. double points) |
+| 2015 | 19 | 2.16 | 18 | 4.0 | 5.2 | 378/378 |
+| 2016 | 21 | 2.33 | 17 | 3.8 | 6.0 | 462/462 |
+| 2017 | 20 | 1.93 | 20 | 4.3 | 4.9 | 400/400 |
+| 2025 | 22 of 24 | 1.81 | 21 | 2.4 | 5.3 (FastF1: SC 3.9, VSC 1.3) | 439/439 |
+
+```text
+Findings:             the catalogue reproduces every official result so far (3,089/3,089
+                      drivers, incl. 2014's double points and 2025 without the fastest-lap
+                      point). Stops fall from 2.7 (2011, Pirelli's high-degradation tyres) to 1.8
+                      (2025) and stints grow from 15 to 21 laps: each era plays a different game.
+                      Stop counts include drive-through / stop-go penalties (Jolpica lists them).
+Status:               2010 (inferred stops) and 2018-2024 when the Jolpica fetch completes.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

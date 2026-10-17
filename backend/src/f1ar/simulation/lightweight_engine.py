@@ -87,7 +87,7 @@ from f1ar.simulation.weather import (
 )
 from f1ar.simulation.weather import penalty_s as weather_penalty_s
 
-ENGINE_VERSION = "lightweight_engine_v0.15.0"
+ENGINE_VERSION = "lightweight_engine_v0.16.0"
 """v0.15.0: racecraft intent ATTACK / NORMAL / DEFEND per lap (risk for track position, D-048).
 v0.14.0: fresh wet-weather tyres under SC/VSC and the wet incident factor, fitted on the 2024
 wet races (D-046).
@@ -1158,6 +1158,9 @@ def deploy_neutralisation(
         raise ActionRejectedError("deploy SC or VSC, not GREEN")
     if state.race_control.phase is RacePhase.SC:
         raise ActionRejectedError("the safety car is already out")
+    if phase is RacePhase.VSC and not state.setup.rules.vsc:
+        season = state.setup.rules.season
+        raise ActionRejectedError(f"no virtual safety car in {season} (introduced 2015)")
     if sc_laps < 1 or vsc_s <= 0:
         raise ActionRejectedError("the safety car needs >= 1 lap and a VSC a positive duration")
     events: list[RaceEvent] = []
@@ -1321,6 +1324,9 @@ def _complete_lap(
         "tyre_wear_s": wear,
         "tyre_life_used": life_used,
         "last_lap_time_s": lap_time,
+        "best_lap_time_s": (
+            lap_time if car.best_lap_time_s is None else min(car.best_lap_time_s, lap_time)
+        ),
         "last_lap_traffic_loss_s": car.traffic_loss_s,
         "lap_started_at_s": crossing_time,
         "distance_m": 0.0,
