@@ -1,0 +1,254 @@
+{
+ "label": "2013 race events (W4, D-042)",
+ "events": [
+  "2013_australian_gp",
+  "2013_chinese_gp",
+  "2013_spanish_gp",
+  "2013_monaco_gp",
+  "2013_canadian_gp",
+  "2013_german_gp",
+  "2013_hungarian_gp",
+  "2013_belgian_gp",
+  "2013_singapore_gp",
+  "2013_korean_gp",
+  "2013_japanese_gp",
+  "2013_abu_dhabi_gp",
+  "2013_united_states_gp",
+  "2013_brazilian_gp",
+  "2013_bahrain_gp",
+  "2013_british_gp",
+  "2013_italian_gp",
+  "2013_indian_gp",
+  "2013_malaysian_gp"
+ ],
+ "dry_events": [
+  "2013_australian_gp",
+  "2013_chinese_gp",
+  "2013_spanish_gp",
+  "2013_monaco_gp",
+  "2013_canadian_gp",
+  "2013_german_gp",
+  "2013_hungarian_gp",
+  "2013_belgian_gp",
+  "2013_singapore_gp",
+  "2013_korean_gp",
+  "2013_japanese_gp",
+  "2013_abu_dhabi_gp",
+  "2013_united_states_gp",
+  "2013_brazilian_gp",
+  "2013_bahrain_gp",
+  "2013_british_gp",
+  "2013_italian_gp",
+  "2013_indian_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": 0.0869,
+  "slow_stop_scale_s": 7.61,
+  "stops": 898,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {
+  "caterham_2013": {
+   "pit_crew_offset_s": 0.737,
+   "pit_slow_multiplier": 1.152,
+   "stops": 86,
+   "raw_median_rel_s": 0.909,
+   "raw_slow_share": 0.105
+  },
+  "ferrari_2013": {
+   "pit_crew_offset_s": -0.541,
+   "pit_slow_multiplier": 0.556,
+   "stops": 86,
+   "raw_median_rel_s": -0.667,
+   "raw_slow_share": 0.035
+  },
+  "force_india_2013": {
+   "pit_crew_offset_s": 0.016,
+   "pit_slow_multiplier": 1.14,
+   "stops": 67,
+   "raw_median_rel_s": 0.02,
+   "raw_slow_share": 0.104
+  },
+  "lotus_f1_2013": {
+   "pit_crew_offset_s": -0.166,
+   "pit_slow_multiplier": 0.991,
+   "stops": 70,
+   "raw_median_rel_s": -0.214,
+   "raw_slow_share": 0.086
+  },
+  "marussia_2013": {
+   "pit_crew_offset_s": 0.462,
+   "pit_slow_multiplier": 1.295,
+   "stops": 91,
+   "raw_median_rel_s": 0.564,
+   "raw_slow_share": 0.121
+  },
+  "mclaren_2013": {
+   "pit_crew_offset_s": -0.431,
+   "pit_slow_multiplier": 0.698,
+   "stops": 79,
+   "raw_median_rel_s": -0.54,
+   "raw_slow_share": 0.051
+  },
+  "mercedes_2013": {
+   "pit_crew_offset_s": -0.446,
+   "pit_slow_multiplier": 0.453,
+   "stops": 87,
+   "raw_median_rel_s": -0.549,
+   "raw_slow_share": 0.023
+  },
+  "red_bull_2013": {
+   "pit_crew_offset_s": -0.578,
+   "pit_slow_multiplier": 0.576,
+   "stops": 82,
+   "raw_median_rel_s": -0.719,
+   "raw_slow_share": 0.037
+  },
+  "sauber_2013": {
+   "pit_crew_offset_s": 0.124,
+   "pit_slow_multiplier": 0.854,
+   "stops": 86,
+   "raw_median_rel_s": 0.152,
+   "raw_slow_share": 0.07
+  },
+  "toro_rosso_2013": {
+   "pit_crew_offset_s": 0.163,
+   "pit_slow_multiplier": 0.996,
+   "stops": 81,
+   "raw_median_rel_s": 0.203,
+   "raw_slow_share": 0.086
+  },
+  "williams_2013": {
+   "pit_crew_offset_s": 0.66,
+   "pit_slow_multiplier": 2.303,
+   "stops": 83,
+   "raw_median_rel_s": 0.819,
+   "raw_slow_share": 0.241
+  }
+ },
+ "reliability": {
+  "field_retirements_per_start": 0.1531,
+  "teams": {
+   "caterham_2013": {
+    "failure_multiplier": 1.23,
+    "retirements": 8,
+    "starts": 38
+   },
+   "ferrari_2013": {
+    "failure_multiplier": 0.703,
+    "retirements": 3,
+    "starts": 38
+   },
+   "force_india_2013": {
+    "failure_multiplier": 1.546,
+    "retirements": 11,
+    "starts": 38
+   },
+   "lotus_f1_2013": {
+    "failure_multiplier": 1.124,
+    "retirements": 7,
+    "starts": 38
+   },
+   "marussia_2013": {
+    "failure_multiplier": 0.703,
+    "retirements": 3,
+    "starts": 38
+   },
+   "mclaren_2013": {
+    "failure_multiplier": 0.703,
+    "retirements": 3,
+    "starts": 38
+   },
+   "mercedes_2013": {
+    "failure_multiplier": 0.808,
+    "retirements": 4,
+    "starts": 38
+   },
+   "red_bull_2013": {
+    "failure_multiplier": 0.914,
+    "retirements": 5,
+    "starts": 38
+   },
+   "sauber_2013": {
+    "failure_multiplier": 1.019,
+    "retirements": 6,
+    "starts": 38
+   },
+   "toro_rosso_2013": {
+    "failure_multiplier": 1.335,
+    "retirements": 9,
+    "starts": 38
+   },
+   "williams_2013": {
+    "failure_multiplier": 0.914,
+    "retirements": 5,
+    "starts": 38
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.0,
+  "sc_share": 0.4,
+  "count": 0,
+  "race_laps": 1075,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 0,
+  "races": 19,
+  "per_race": 0.0
+ },
+ "penalties": {
+  "counts": {},
+  "collision_per_pass": 0.0,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.0,
+  "other_per_car_lap": 0.0,
+  "passes": 1219,
+  "raw": {
+   "collision_per_pass": 0.0,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.0,
+   "other_per_car_lap": 0.0
+  },
+  "scale": 1.0,
+  "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
+ },
+ "fitted": {
+  "risk_scale": 1.9419,
+  "red_flag_per_crash": 0.0,
+  "fit": {
+   "races": [
+    "2013_australian_gp",
+    "2013_chinese_gp",
+    "2013_spanish_gp",
+    "2013_monaco_gp",
+    "2013_canadian_gp",
+    "2013_german_gp",
+    "2013_hungarian_gp",
+    "2013_belgian_gp",
+    "2013_singapore_gp",
+    "2013_korean_gp",
+    "2013_japanese_gp",
+    "2013_abu_dhabi_gp",
+    "2013_united_states_gp",
+    "2013_brazilian_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 1.229,
+   "sim_failures_per_race": 0.614,
+   "real_retirements_per_race": 3.0,
+   "target_red_flags_per_race": 0.0
+  },
+  "check": {
+   "retirements_per_race": 3.2,
+   "red_flags_per_race": 0.0,
+   "safety_cars_per_race": 0.671,
+   "vscs_per_race": 0.0,
+   "penalties_per_race": 0.0,
+   "penalties_per_race_after_scale": 0.0
+  }
+ }
+}

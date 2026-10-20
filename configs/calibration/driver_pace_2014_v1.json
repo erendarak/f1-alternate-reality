@@ -1,0 +1,242 @@
+{
+ "label": "2014 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2014_australian_gp",
+  "2014_malaysian_gp",
+  "2014_bahrain_gp",
+  "2014_spanish_gp",
+  "2014_monaco_gp",
+  "2014_canadian_gp",
+  "2014_british_gp",
+  "2014_german_gp",
+  "2014_italian_gp",
+  "2014_singapore_gp",
+  "2014_japanese_gp",
+  "2014_united_states_gp",
+  "2014_brazilian_gp",
+  "2014_abu_dhabi_gp"
+ ],
+ "field_noise_s": 0.5458,
+ "form_sd_s": 0.349,
+ "form_note": "within-pair gap SD 0.524 s, sampling SD 0.176 s over 120 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "ALO": {
+   "team_id": "ferrari_2014",
+   "pace_vs_teammate_s": -0.1494,
+   "raw_mean_gap_s": -0.1902,
+   "races": 11,
+   "lap_noise_s": 0.5295,
+   "raw_noise_s": 0.5214,
+   "clean_laps": 303
+  },
+  "BIA": {
+   "team_id": "marussia_2014",
+   "pace_vs_teammate_s": -0.1875,
+   "raw_mean_gap_s": -0.2578,
+   "races": 8,
+   "lap_noise_s": 0.6104,
+   "raw_noise_s": 0.6416,
+   "clean_laps": 311
+  },
+  "BOT": {
+   "team_id": "williams_2014",
+   "pace_vs_teammate_s": 0.0444,
+   "raw_mean_gap_s": 0.0566,
+   "races": 11,
+   "lap_noise_s": 0.5063,
+   "raw_noise_s": 0.4916,
+   "clean_laps": 402
+  },
+  "BUT": {
+   "team_id": "mclaren_2014",
+   "pace_vs_teammate_s": -0.1295,
+   "raw_mean_gap_s": -0.1594,
+   "races": 13,
+   "lap_noise_s": 0.4537,
+   "raw_noise_s": 0.414,
+   "clean_laps": 348
+  },
+  "CHI": {
+   "team_id": "marussia_2014",
+   "pace_vs_teammate_s": 0.1875,
+   "raw_mean_gap_s": 0.2578,
+   "races": 8,
+   "lap_noise_s": 0.6328,
+   "raw_noise_s": 0.68,
+   "clean_laps": 277
+  },
+  "ERI": {
+   "team_id": "caterham_2014",
+   "pace_vs_teammate_s": -0.0063,
+   "raw_mean_gap_s": -0.0091,
+   "races": 7,
+   "lap_noise_s": 0.6589,
+   "raw_noise_s": 0.714,
+   "clean_laps": 308
+  },
+  "GRO": {
+   "team_id": "lotus_f1_2014",
+   "pace_vs_teammate_s": -0.0436,
+   "raw_mean_gap_s": -0.0545,
+   "races": 12,
+   "lap_noise_s": 0.5458,
+   "raw_noise_s": 0.5458,
+   "clean_laps": 348
+  },
+  "GUT": {
+   "team_id": "sauber_2014",
+   "pace_vs_teammate_s": 0.0111,
+   "raw_mean_gap_s": 0.0145,
+   "races": 10,
+   "lap_noise_s": 0.5958,
+   "raw_noise_s": 0.619,
+   "clean_laps": 323
+  },
+  "HAM": {
+   "team_id": "mercedes_2014",
+   "pace_vs_teammate_s": -0.1135,
+   "raw_mean_gap_s": -0.1418,
+   "races": 12,
+   "lap_noise_s": 0.5793,
+   "raw_noise_s": 0.5914,
+   "clean_laps": 416
+  },
+  "HUL": {
+   "team_id": "force_india_2014",
+   "pace_vs_teammate_s": -0.0516,
+   "raw_mean_gap_s": -0.0657,
+   "races": 11,
+   "lap_noise_s": 0.4966,
+   "raw_noise_s": 0.4782,
+   "clean_laps": 401
+  },
+  "KOB": {
+   "team_id": "caterham_2014",
+   "pace_vs_teammate_s": -0.0126,
+   "raw_mean_gap_s": -0.0173,
+   "races": 8,
+   "lap_noise_s": 0.7148,
+   "raw_noise_s": 0.8007,
+   "clean_laps": 295
+  },
+  "KVY": {
+   "team_id": "toro_rosso_2014",
+   "pace_vs_teammate_s": -0.0101,
+   "raw_mean_gap_s": -0.0127,
+   "races": 12,
+   "lap_noise_s": 0.5567,
+   "raw_noise_s": 0.5627,
+   "clean_laps": 275
+  },
+  "MAG": {
+   "team_id": "mclaren_2014",
+   "pace_vs_teammate_s": 0.1295,
+   "raw_mean_gap_s": 0.1594,
+   "races": 13,
+   "lap_noise_s": 0.526,
+   "raw_noise_s": 0.5178,
+   "clean_laps": 360
+  },
+  "MAL": {
+   "team_id": "lotus_f1_2014",
+   "pace_vs_teammate_s": 0.0436,
+   "raw_mean_gap_s": 0.0545,
+   "races": 12,
+   "lap_noise_s": 0.5222,
+   "raw_noise_s": 0.507,
+   "clean_laps": 234
+  },
+  "MAS": {
+   "team_id": "williams_2014",
+   "pace_vs_teammate_s": -0.0444,
+   "raw_mean_gap_s": -0.0566,
+   "races": 11,
+   "lap_noise_s": 0.4942,
+   "raw_noise_s": 0.4688,
+   "clean_laps": 304
+  },
+  "PER": {
+   "team_id": "force_india_2014",
+   "pace_vs_teammate_s": 0.0516,
+   "raw_mean_gap_s": 0.0657,
+   "races": 11,
+   "lap_noise_s": 0.5506,
+   "raw_noise_s": 0.5538,
+   "clean_laps": 223
+  },
+  "RAI": {
+   "team_id": "ferrari_2014",
+   "pace_vs_teammate_s": 0.1494,
+   "raw_mean_gap_s": 0.1902,
+   "races": 11,
+   "lap_noise_s": 0.5013,
+   "raw_noise_s": 0.4773,
+   "clean_laps": 278
+  },
+  "RIC": {
+   "team_id": "red_bull_2014",
+   "pace_vs_teammate_s": -0.0497,
+   "raw_mean_gap_s": -0.0621,
+   "races": 12,
+   "lap_noise_s": 0.5053,
+   "raw_noise_s": 0.489,
+   "clean_laps": 375
+  },
+  "ROS": {
+   "team_id": "mercedes_2014",
+   "pace_vs_teammate_s": 0.1135,
+   "raw_mean_gap_s": 0.1418,
+   "races": 12,
+   "lap_noise_s": 0.5903,
+   "raw_noise_s": 0.6028,
+   "clean_laps": 537
+  },
+  "STE": {
+   "team_id": "caterham_2014",
+   "pace_vs_teammate_s": 0.0504,
+   "raw_mean_gap_s": 0.2016,
+   "races": 1,
+   "lap_noise_s": 0.5488,
+   "raw_noise_s": 0.5604,
+   "clean_laps": 38
+  },
+  "SUT": {
+   "team_id": "sauber_2014",
+   "pace_vs_teammate_s": -0.0111,
+   "raw_mean_gap_s": -0.0145,
+   "races": 10,
+   "lap_noise_s": 0.5759,
+   "raw_noise_s": 0.5901,
+   "clean_laps": 317
+  },
+  "VER": {
+   "team_id": "toro_rosso_2014",
+   "pace_vs_teammate_s": 0.0101,
+   "raw_mean_gap_s": 0.0127,
+   "races": 12,
+   "lap_noise_s": 0.5267,
+   "raw_noise_s": 0.5125,
+   "clean_laps": 202
+  },
+  "VET": {
+   "team_id": "red_bull_2014",
+   "pace_vs_teammate_s": 0.0497,
+   "raw_mean_gap_s": 0.0621,
+   "races": 12,
+   "lap_noise_s": 0.4742,
+   "raw_noise_s": 0.4313,
+   "clean_laps": 251
+  }
+ },
+ "overtake_threshold_shift_s": 0.0,
+ "overtake_shift_fit": {
+  "skipped": "superseded by the W3 racecraft refit (H2a)"
+ }
+}

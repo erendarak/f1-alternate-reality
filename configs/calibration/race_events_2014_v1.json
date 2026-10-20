@@ -1,0 +1,254 @@
+{
+ "label": "2014 race events (W4, D-042)",
+ "events": [
+  "2014_australian_gp",
+  "2014_malaysian_gp",
+  "2014_bahrain_gp",
+  "2014_spanish_gp",
+  "2014_monaco_gp",
+  "2014_canadian_gp",
+  "2014_british_gp",
+  "2014_german_gp",
+  "2014_italian_gp",
+  "2014_singapore_gp",
+  "2014_japanese_gp",
+  "2014_united_states_gp",
+  "2014_brazilian_gp",
+  "2014_abu_dhabi_gp",
+  "2014_chinese_gp",
+  "2014_austrian_gp",
+  "2014_belgian_gp",
+  "2014_russian_gp",
+  "2014_hungarian_gp"
+ ],
+ "dry_events": [
+  "2014_australian_gp",
+  "2014_malaysian_gp",
+  "2014_bahrain_gp",
+  "2014_spanish_gp",
+  "2014_monaco_gp",
+  "2014_canadian_gp",
+  "2014_british_gp",
+  "2014_german_gp",
+  "2014_italian_gp",
+  "2014_singapore_gp",
+  "2014_japanese_gp",
+  "2014_united_states_gp",
+  "2014_brazilian_gp",
+  "2014_abu_dhabi_gp",
+  "2014_chinese_gp",
+  "2014_austrian_gp",
+  "2014_belgian_gp",
+  "2014_russian_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": 0.0902,
+  "slow_stop_scale_s": 6.79,
+  "stops": 743,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {
+  "caterham_2014": {
+   "pit_crew_offset_s": 0.518,
+   "pit_slow_multiplier": 1.281,
+   "stops": 54,
+   "raw_median_rel_s": 0.71,
+   "raw_slow_share": 0.13
+  },
+  "ferrari_2014": {
+   "pit_crew_offset_s": -0.29,
+   "pit_slow_multiplier": 0.975,
+   "stops": 69,
+   "raw_median_rel_s": -0.374,
+   "raw_slow_share": 0.087
+  },
+  "force_india_2014": {
+   "pit_crew_offset_s": -0.028,
+   "pit_slow_multiplier": 0.817,
+   "stops": 61,
+   "raw_median_rel_s": -0.037,
+   "raw_slow_share": 0.066
+  },
+  "lotus_f1_2014": {
+   "pit_crew_offset_s": -0.194,
+   "pit_slow_multiplier": 0.975,
+   "stops": 69,
+   "raw_median_rel_s": -0.25,
+   "raw_slow_share": 0.087
+  },
+  "marussia_2014": {
+   "pit_crew_offset_s": 0.52,
+   "pit_slow_multiplier": 1.223,
+   "stops": 58,
+   "raw_median_rel_s": 0.699,
+   "raw_slow_share": 0.121
+  },
+  "mclaren_2014": {
+   "pit_crew_offset_s": -0.367,
+   "pit_slow_multiplier": 0.911,
+   "stops": 76,
+   "raw_median_rel_s": -0.463,
+   "raw_slow_share": 0.079
+  },
+  "mercedes_2014": {
+   "pit_crew_offset_s": -0.078,
+   "pit_slow_multiplier": 0.532,
+   "stops": 68,
+   "raw_median_rel_s": -0.1,
+   "raw_slow_share": 0.029
+  },
+  "red_bull_2014": {
+   "pit_crew_offset_s": -0.452,
+   "pit_slow_multiplier": 0.83,
+   "stops": 73,
+   "raw_median_rel_s": -0.576,
+   "raw_slow_share": 0.068
+  },
+  "sauber_2014": {
+   "pit_crew_offset_s": 0.335,
+   "pit_slow_multiplier": 1.615,
+   "stops": 71,
+   "raw_median_rel_s": 0.43,
+   "raw_slow_share": 0.169
+  },
+  "toro_rosso_2014": {
+   "pit_crew_offset_s": 0.28,
+   "pit_slow_multiplier": 0.814,
+   "stops": 75,
+   "raw_median_rel_s": 0.354,
+   "raw_slow_share": 0.067
+  },
+  "williams_2014": {
+   "pit_crew_offset_s": -0.087,
+   "pit_slow_multiplier": 1.087,
+   "stops": 69,
+   "raw_median_rel_s": -0.112,
+   "raw_slow_share": 0.101
+  }
+ },
+ "reliability": {
+  "field_retirements_per_start": 0.2088,
+  "teams": {
+   "caterham_2014": {
+    "failure_multiplier": 1.487,
+    "retirements": 13,
+    "starts": 34
+   },
+   "ferrari_2014": {
+    "failure_multiplier": 0.619,
+    "retirements": 3,
+    "starts": 38
+   },
+   "force_india_2014": {
+    "failure_multiplier": 0.928,
+    "retirements": 7,
+    "starts": 38
+   },
+   "lotus_f1_2014": {
+    "failure_multiplier": 1.314,
+    "retirements": 12,
+    "starts": 38
+   },
+   "marussia_2014": {
+    "failure_multiplier": 1.046,
+    "retirements": 7,
+    "starts": 31
+   },
+   "mclaren_2014": {
+    "failure_multiplier": 0.619,
+    "retirements": 3,
+    "starts": 38
+   },
+   "mercedes_2014": {
+    "failure_multiplier": 0.773,
+    "retirements": 5,
+    "starts": 38
+   },
+   "red_bull_2014": {
+    "failure_multiplier": 0.773,
+    "retirements": 5,
+    "starts": 38
+   },
+   "sauber_2014": {
+    "failure_multiplier": 1.546,
+    "retirements": 15,
+    "starts": 38
+   },
+   "toro_rosso_2014": {
+    "failure_multiplier": 1.159,
+    "retirements": 10,
+    "starts": 38
+   },
+   "williams_2014": {
+    "failure_multiplier": 0.773,
+    "retirements": 5,
+    "starts": 38
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.0,
+  "sc_share": 0.4,
+  "count": 0,
+  "race_laps": 1064,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 0,
+  "races": 19,
+  "per_race": 0.0
+ },
+ "penalties": {
+  "counts": {},
+  "collision_per_pass": 0.0,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.0,
+  "other_per_car_lap": 0.0,
+  "passes": 1115,
+  "raw": {
+   "collision_per_pass": 0.0,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.0,
+   "other_per_car_lap": 0.0
+  },
+  "scale": 1.0,
+  "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
+ },
+ "fitted": {
+  "risk_scale": 2.0973,
+  "red_flag_per_crash": 0.0,
+  "fit": {
+   "races": [
+    "2014_australian_gp",
+    "2014_malaysian_gp",
+    "2014_bahrain_gp",
+    "2014_spanish_gp",
+    "2014_monaco_gp",
+    "2014_canadian_gp",
+    "2014_british_gp",
+    "2014_german_gp",
+    "2014_italian_gp",
+    "2014_singapore_gp",
+    "2014_japanese_gp",
+    "2014_united_states_gp",
+    "2014_brazilian_gp",
+    "2014_abu_dhabi_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 1.614,
+   "sim_failures_per_race": 0.614,
+   "real_retirements_per_race": 4.0,
+   "target_red_flags_per_race": 0.0
+  },
+  "check": {
+   "retirements_per_race": 3.557,
+   "red_flags_per_race": 0.0,
+   "safety_cars_per_race": 0.686,
+   "vscs_per_race": 0.0,
+   "penalties_per_race": 0.0,
+   "penalties_per_race_after_scale": 0.0
+  }
+ }
+}

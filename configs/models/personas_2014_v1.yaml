@@ -1,0 +1,29 @@
+model_name: personas
+model_version: v1
+kind: tyre wear slopes vs teammate/team (shrunk by split-half reliability)
+source_type: estimated_from_data
+artifact: configs/calibration/personas_2014_v1.json
+artifact_sha256: sha256:c8f5397f68e7d28b44c8089d04b26e70ead8dee45d041108343f174152e54250
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2014_v1.yaml
+training_dataset_content_sha256: sha256:19b742042e53a0c75769f5416019c75afe966c3434f9afa39892d4ece688cfa6
+training_races:
+- 2014_abu_dhabi_gp
+- 2014_australian_gp
+- 2014_bahrain_gp
+- 2014_brazilian_gp
+- 2014_british_gp
+- 2014_canadian_gp
+- 2014_german_gp
+- 2014_italian_gp
+- 2014_japanese_gp
+- 2014_malaysian_gp
+- 2014_monaco_gp
+- 2014_singapore_gp
+- 2014_spanish_gp
+- 2014_united_states_gp
+metrics:
+  split_half_drivers: 0.304
+  split_half_teams: -0.346
+  held_out_check: EXP-014
+status: fitted for 2014 (H2a, D-054); held-out check EXP-023

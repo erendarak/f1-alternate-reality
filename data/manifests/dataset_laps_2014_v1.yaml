@@ -1,0 +1,257 @@
+dataset_id: laps_2014_v1
+dataset_version: 1
+feature_schema_version: 1
+season: 2014
+license_review_status: research_only (F1 timing data via FastF1; not redistributed)
+built_by: scripts/build_lap_dataset.py
+file:
+  relative_path: data/processed/datasets/laps_2014_v1.parquet
+  sha256: sha256:ce5cef665292710812631c3328b6d1dd8d7f44c6a141a4403bc133e8e71ade60
+  content_sha256: sha256:19b742042e53a0c75769f5416019c75afe966c3434f9afa39892d4ece688cfa6
+  rows: 21025
+  representative_rows: 18126
+target: lap_time_s
+features:
+- name: circuit_id
+  available: pre_race
+  source_type: historical_verified
+  description: Jolpica circuit id
+- name: driver_id
+  available: pre_race
+  source_type: historical_verified
+  description: season-specific driver id (roster)
+- name: team_id
+  available: pre_race
+  source_type: historical_verified
+  description: team id (roster)
+- name: grid_position
+  available: pre_race
+  source_type: historical_verified
+  description: official starting slot (0 = pit lane)
+- name: scheduled_laps
+  available: pre_race
+  source_type: historical_verified
+  description: race distance in laps (winner's laps)
+- name: lap_number
+  available: lap_start
+  source_type: historical_verified
+  description: 1-based lap number
+- name: laps_remaining
+  available: lap_start
+  source_type: estimated_from_data
+  description: scheduled_laps - lap_number + 1 (fuel proxy)
+- name: compound
+  available: lap_start
+  source_type: historical_verified
+  description: tyre compound on this lap
+- name: tyre_age_start
+  available: lap_start
+  source_type: estimated_from_data
+  description: laps already on the set when the lap starts
+- name: fresh_tyre
+  available: lap_start
+  source_type: historical_verified
+  description: the set was new when fitted (FastF1 FreshTyre)
+- name: stint
+  available: lap_start
+  source_type: historical_verified
+  description: stint number
+- name: stint_lap
+  available: lap_start
+  source_type: estimated_from_data
+  description: 1-based lap index within the stint
+- name: pit_out_lap
+  available: lap_start
+  source_type: historical_verified
+  description: the lap starts in the pit lane
+- name: pit_in_lap
+  available: decision
+  source_type: historical_verified
+  description: the car boxes at the end of this lap
+- name: position_start
+  available: lap_start
+  source_type: historical_verified
+  description: position when the lap starts (grid on lap 1)
+- name: gap_ahead_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds behind the car that crossed the line just before, same lap (NaN on lap 1)
+- name: gap_behind_prev_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds ahead of the next car at the PREVIOUS line crossing (the gap to the car behind
+    at this crossing isn't known yet when the lap starts; found by the leakage audit)
+- name: track_status_start
+  available: lap_start
+  source_type: historical_verified
+  description: track status code when the lap starts
+- name: air_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: track_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: humidity_pct
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: rainfall_start
+  available: lap_start
+  source_type: historical_verified
+  description: rain flag of the latest weather sample
+- name: wind_speed_ms
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+lap_facts_never_features:
+- lap_status
+- position_end
+- is_accurate
+- deleted
+- fastf1_generated
+- representative
+leakage_audit: tests/unit/test_lap_dataset.py::test_no_feature_uses_anything_after_the_lap_starts
+excluded_quality_fail: {}
+splits:
+  rule: wet = any intermediate/wet tyre lap or rain at >= 5% of lap starts; among dry races, rounds divisible
+    by 4 are held out (dry_test), the rest are dry_train; leave-one-race-out folds run over dry_train.
+    Rule fixed before any model was fitted.
+  wet:
+  - 2014_hungarian_gp
+  dry_test:
+  - 2014_chinese_gp
+  - 2014_austrian_gp
+  - 2014_belgian_gp
+  - 2014_russian_gp
+  dry_train:
+  - 2014_australian_gp
+  - 2014_malaysian_gp
+  - 2014_bahrain_gp
+  - 2014_spanish_gp
+  - 2014_monaco_gp
+  - 2014_canadian_gp
+  - 2014_british_gp
+  - 2014_german_gp
+  - 2014_italian_gp
+  - 2014_singapore_gp
+  - 2014_japanese_gp
+  - 2014_united_states_gp
+  - 2014_brazilian_gp
+  - 2014_abu_dhabi_gp
+events:
+  2014_abu_dhabi_gp:
+    round: 19
+    group: dry_train
+    rows: 1012
+    representative_rows: 911
+    source_manifest_sha256: sha256:5c146d4276f33d3b6c8af4915a16ea78ae6ceee41b4fef14fcd9e8ad27a26521
+  2014_australian_gp:
+    round: 1
+    group: dry_train
+    rows: 951
+    representative_rows: 812
+    source_manifest_sha256: sha256:20f9b6c6fd17b488d49a0dcfc6e3d36d38e138348f80afdd0b03098c059a435d
+  2014_austrian_gp:
+    round: 8
+    group: dry_test
+    rows: 1453
+    representative_rows: 1349
+    source_manifest_sha256: sha256:91b15bd4b6ded7bc45452af210550d934f693cbf59cd2d88d236ba399437b23f
+  2014_bahrain_gp:
+    round: 3
+    group: dry_train
+    rows: 1113
+    representative_rows: 889
+    source_manifest_sha256: sha256:1a13c5d32c296a31e14632f6a2ea95bc71ff879ea324523b321eac9416a63716
+  2014_belgian_gp:
+    round: 12
+    group: dry_test
+    rows: 858
+    representative_rows: 746
+    source_manifest_sha256: sha256:17b412018e1443fe9c9bc2e69c6d39b706fb9d0bd24be10794bcc15394d379ad
+  2014_brazilian_gp:
+    round: 18
+    group: dry_train
+    rows: 1231
+    representative_rows: 1109
+    source_manifest_sha256: sha256:f233513e758f5ce68d0e98a4120289c29e34def65eedea1fee576e961110ddaa
+  2014_british_gp:
+    round: 9
+    group: dry_train
+    rows: 920
+    representative_rows: 835
+    source_manifest_sha256: sha256:903f9760a2b0caa4568dbb36f441f340b5ed9928c9a2b663a7974c33fdab74f6
+  2014_canadian_gp:
+    round: 7
+    group: dry_train
+    rows: 1174
+    representative_rows: 962
+    source_manifest_sha256: sha256:2d05c445cccbd5c8caec53babbbbbff9d4027bb2ec17fd48b98dcad311b1087a
+  2014_chinese_gp:
+    round: 4
+    group: dry_test
+    rows: 1140
+    representative_rows: 1028
+    source_manifest_sha256: sha256:a4c1d89c11c7cbca72bddaf88b5c1207180972d33b734d65f6ec0a739e193b83
+  2014_german_gp:
+    round: 10
+    group: dry_train
+    rows: 1310
+    representative_rows: 1161
+    source_manifest_sha256: sha256:4bf8bd041c109d813896f755982862e8d9ce48be5beb4e08ff9be744cc427116
+  2014_hungarian_gp:
+    round: 11
+    group: wet
+    rows: 1226
+    representative_rows: 931
+    source_manifest_sha256: sha256:4f585ecc948dba97fe20f426f55767e067a806be41b9d5eeb036f92927621288
+  2014_italian_gp:
+    round: 13
+    group: dry_train
+    rows: 1084
+    representative_rows: 1016
+    source_manifest_sha256: sha256:b307d6a263f379835be0041fe6a1f6e29f6d4a5abce6767a8f1a1f01218e3df7
+  2014_japanese_gp:
+    round: 15
+    group: dry_train
+    rows: 909
+    representative_rows: 583
+    source_manifest_sha256: sha256:bcba3686fb11bad02a5ff00ef75b824372e08e5d0d5aed2fb5471b1a70e1e024
+  2014_malaysian_gp:
+    round: 2
+    group: dry_train
+    rows: 980
+    representative_rows: 850
+    source_manifest_sha256: sha256:f96e040b64fa19cc79e8b0162d6167e9e58a2cb829e7d1f1581db3b2e8efa126
+  2014_monaco_gp:
+    round: 6
+    group: dry_train
+    rows: 1280
+    representative_rows: 1112
+    source_manifest_sha256: sha256:9f6224e7b47ca84f895991a29e951dc249ba30fd023a896ad3ce882cb8b1e830
+  2014_russian_gp:
+    round: 16
+    group: dry_test
+    rows: 1030
+    representative_rows: 965
+    source_manifest_sha256: sha256:5441f8a8792b7a6ac72e10d21dd4d70139c80acbcb41ef771e97976c9510dcf1
+  2014_singapore_gp:
+    round: 14
+    group: dry_train
+    rows: 1141
+    representative_rows: 897
+    source_manifest_sha256: sha256:87df03a8a1c67ddd822e0262770f600524bc8c10de12fe00dce9cc5447a33f5d
+  2014_spanish_gp:
+    round: 5
+    group: dry_train
+    rows: 1361
+    representative_rows: 1243
+    source_manifest_sha256: sha256:f111cf6942b63bfd48f1a0994f028da33e9fafc2b279d1efec7b678974f3bdc6
+  2014_united_states_gp:
+    round: 17
+    group: dry_train
+    rows: 852
+    representative_rows: 727
+    source_manifest_sha256: sha256:7c33abb70e048471337a911cbace6b7aeb9ca65e5e9bd68c4a8161bcb0ead6e2

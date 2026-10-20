@@ -1,0 +1,35 @@
+model_name: racecraft
+model_version: v1
+kind: ML on lap-level encounters (W2 noise convolved) with ridge driver terms; lap-1 gains; launch spread
+  by simulation
+source_type: estimated_from_data (lap-1 grid profile editorial)
+artifact: configs/calibration/racecraft_2015_v1.json
+artifact_sha256: sha256:aee62363c0086803169b612537789953c96a53913df78dacabe6621af5681b1d
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2015_v1.yaml
+training_dataset_content_sha256: sha256:e1c38af794b353b7993adcc251ff822b5a38319c6c03d51f96a29565175a5ae0
+training_races:
+- 2015_abu_dhabi_gp
+- 2015_australian_gp
+- 2015_austrian_gp
+- 2015_bahrain_gp
+- 2015_belgian_gp
+- 2015_brazilian_gp
+- 2015_canadian_gp
+- 2015_chinese_gp
+- 2015_hungarian_gp
+- 2015_italian_gp
+- 2015_japanese_gp
+- 2015_malaysian_gp
+- 2015_mexican_gp
+- 2015_monaco_gp
+- 2015_russian_gp
+- 2015_singapore_gp
+- 2015_spanish_gp
+metrics:
+  check:
+    dry_train_passes_sim: 48.61
+    dry_train_passes_real: 49.64
+    dry_train_lap1_passes_real: 14.57
+  held_out_check: EXP-013
+status: fitted for 2015 (H2a, D-054); held-out check EXP-023

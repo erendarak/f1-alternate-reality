@@ -1377,3 +1377,22 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
   frontend 17; ruff, mypy clean; history fetch running (2009 -> 2000, then 2018-2025).
 - Next: close H0 when the fetch completes (EXP-021 coverage, EXP-022 rerun), then H2b
   (2010-2017 without compounds) or H2c (per-era rates).
+
+### 2026-10-20 — H2b: 2010-2017 from the Jolpica history (D-055, EXP-024)
+
+- `data/history_race.py`, `scripts/convert_history.py`: 156 races 2010-2017 in the common race
+  tables (rosters, laps with stints from pit stops, pit-lane times from Jolpica durations,
+  inferred SC laps and rain, MEDIUM placeholder compound; manifests say what is real).
+- Wet races from lap times (validated on 2018-2025: 14/25 found, no false alarm): 15 wet races
+  2010-2017, all genuinely wet. Track lengths: nearest same-layout outline (137) or a sourced
+  table (19: Sepang, Korea, India, Valencia, Bahrain 2010 endurance).
+- Compound-free tyre fit (2018's soft/hard ratios, stops-only); tyre grid widened (four seasons
+  hit kappa 0.8); car pace cap 10 -> 15 s (HRT 2010); Jolpica's shared grid slots resolved.
+- Persona seeds and season fits 2010-2017 (`scripts/fit_season.py`).
+- EXP-024 (32 held-out races): stops MAE 0.40 vs 0.71 borrowed (bias -0.02 vs -0.35); passes
+  19.1 vs 22.5; order rho 0.52 vs 0.59. 2010 passes likely inflated by inferred stops.
+- 2010-2017 run headless, not in the app yet (the app's map needs positions).
+- Tests: 481 offline (+3 `test_history_race.py`); ruff, mypy clean. History fetch at 2005
+  (~9 h left).
+- Next: H2c (per-era overtaking and race-control rates), then close H0 when the fetch is done.
+

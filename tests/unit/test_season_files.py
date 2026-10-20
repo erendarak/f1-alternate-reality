@@ -53,11 +53,17 @@ def test_driver_values_are_never_borrowed_tyre_life_is(tmp_path: Path) -> None:
 
 
 def test_other_season_inputs_are_labelled(
-    monza_roster: RaceRoster, monza_profiles: ProfileSet
+    monza_roster: RaceRoster, monza_profiles: ProfileSet, tmp_path: Path
 ) -> None:
+    import shutil
+
+    only_2024 = tmp_path / "configs"  # a season with no fits of its own (H2a/H2b fit 2010+)
+    (only_2024 / "calibration").mkdir(parents=True)
+    for f in (CONFIGS / "calibration").glob("*_2024_v1.json"):
+        shutil.copy(f, only_2024 / "calibration" / f.name)
     keys = ("tyre_model", "traffic", "race_control", "weather", "wet_incidents", "base_lap")
     inputs = {k: "fitted" for k in keys}
-    for season, labelled in ((2024, False), (2015, True)):  # 2015: no FastF1-era fit
+    for season, labelled in ((2024, False), (2015, True)):
         setup = build_setup(
             monza_roster,
             monza_profiles,
@@ -65,7 +71,7 @@ def test_other_season_inputs_are_labelled(
             rules=rules_for(CONFIGS, season),
             inputs=inputs,
         )
-        out = _label_other_seasons(setup, CONFIGS).inputs
+        out = _label_other_seasons(setup, only_2024).inputs
         assert out["base_lap"] == "fitted"  # measured on the race itself
         for key in ("traffic", "race_control", "weather", "wet_incidents"):
             assert (out[key] != "fitted") is labelled

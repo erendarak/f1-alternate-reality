@@ -1,0 +1,438 @@
+{
+ "label": "2011 tyre life + same-lap wear (W1, D-041)",
+ "compound_reference": "compounds unknown: soft/hard wear and life ratios to the medium from calibration/tyre_life_2018_v1.json (borrowed); stops-only fit",
+ "dataset_sha256": "sha256:03ea9a7ad664fd367f45cc620d719e7c48eb1932ea70c5c8b7f10352708fce73",
+ "fitted_on": [
+  "2011_abu_dhabi_gp",
+  "2011_australian_gp",
+  "2011_brazilian_gp",
+  "2011_chinese_gp",
+  "2011_german_gp",
+  "2011_indian_gp",
+  "2011_italian_gp",
+  "2011_japanese_gp",
+  "2011_malaysian_gp",
+  "2011_monaco_gp",
+  "2011_singapore_gp",
+  "2011_spanish_gp"
+ ],
+ "globals": {
+  "kappa": 0.8,
+  "kappa_note": "life_laps = kappa x life_raw; fitted on dry_train behaviour",
+  "delta_s": 0.2,
+  "delta_note": "potential pace step: SOFT -delta, MEDIUM 0, HARD +delta; fitted"
+ },
+ "season_wear": {
+  "lin": {
+   "MEDIUM": 0.041396265250476724,
+   "SOFT": 0.06009339858417879,
+   "HARD": 0.042876219180017154
+  },
+  "quad": {
+   "MEDIUM": -0.0002861270377675473,
+   "SOFT": -0.0003402026858897449,
+   "HARD": -0.00026585285908054863
+  },
+  "fresh_bonus_s": 0.17948188573809415,
+  "same_lap_offsets": {
+   "SOFT": 0.0,
+   "MEDIUM": 0.0,
+   "HARD": 0.0
+  },
+  "laps": 10717
+ },
+ "life_ratios_vs_medium": {
+  "MEDIUM": 1.0,
+  "SOFT": 1.0212765957446808,
+  "HARD": 1.0172413793103448
+ },
+ "editorial": {
+  "pace_modes": {
+   "CONSERVE": {
+    "offset_s": 0.35,
+    "wear_multiplier": 0.75
+   },
+   "BALANCED": {
+    "offset_s": 0.0,
+    "wear_multiplier": 1.0
+   },
+   "PUSH": {
+    "offset_s": -0.3,
+    "wear_multiplier": 1.4
+   }
+  },
+  "cliff_s_per_lap": 0.5,
+  "neutralised_life_factor": 0.35,
+  "note": "editorial_assumption: research ranges (docs/RESEARCH_REAL_F1.md)"
+ },
+ "events": {
+  "2011_australian_gp": {
+   "total_laps": 58,
+   "life_raw": {
+    "SOFT": 18.38,
+    "MEDIUM": 18.0,
+    "HARD": 18.31
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 39 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 39,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.276,
+   "wear_multiplier_raw": 1.411,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2011_malaysian_gp": {
+   "total_laps": 56,
+   "life_raw": {
+    "SOFT": 16.34,
+    "MEDIUM": 16.0,
+    "HARD": 16.28
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 57 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 57,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.51,
+   "wear_multiplier_raw": 0.276,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2011_chinese_gp": {
+   "total_laps": 56,
+   "life_raw": {
+    "SOFT": 17.36,
+    "MEDIUM": 17.0,
+    "HARD": 17.29
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 56 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 56,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.899,
+   "wear_multiplier_raw": 0.85,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2011_spanish_gp": {
+   "total_laps": 66,
+   "life_raw": {
+    "SOFT": 16.34,
+    "MEDIUM": 16.0,
+    "HARD": 16.28
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 76 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 76,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.803,
+   "wear_multiplier_raw": 0.727,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2011_monaco_gp": {
+   "total_laps": 78,
+   "life_raw": {
+    "SOFT": 28.6,
+    "MEDIUM": 28.0,
+    "HARD": 28.48
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 29 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 29,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.707,
+   "wear_multiplier_raw": 0.587,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2011_german_gp": {
+   "total_laps": 60,
+   "life_raw": {
+    "SOFT": 24.51,
+    "MEDIUM": 24.0,
+    "HARD": 24.41
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 50 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 50,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.383,
+   "wear_multiplier_raw": 0.118,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2011_italian_gp": {
+   "total_laps": 53,
+   "life_raw": {
+    "SOFT": 20.43,
+    "MEDIUM": 20.0,
+    "HARD": 20.34
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 31 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 31,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -0.471,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2011_singapore_gp": {
+   "total_laps": 61,
+   "life_raw": {
+    "SOFT": 18.38,
+    "MEDIUM": 18.0,
+    "HARD": 18.31
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 47 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 47,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.508,
+   "wear_multiplier_raw": 0.285,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2011_japanese_gp": {
+   "total_laps": 53,
+   "life_raw": {
+    "SOFT": 16.34,
+    "MEDIUM": 16.0,
+    "HARD": 16.28
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 57 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 57,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.532,
+   "wear_multiplier_raw": 1.832,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2011_indian_gp": {
+   "total_laps": 60,
+   "life_raw": {
+    "SOFT": 28.6,
+    "MEDIUM": 28.0,
+    "HARD": 28.48
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 40 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 40,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.314,
+   "wear_multiplier_raw": 0.027,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2011_abu_dhabi_gp": {
+   "total_laps": 55,
+   "life_raw": {
+    "SOFT": 24.77,
+    "MEDIUM": 24.25,
+    "HARD": 24.67
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 40 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 40,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -0.685,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2011_brazilian_gp": {
+   "total_laps": 71,
+   "life_raw": {
+    "SOFT": 21.45,
+    "MEDIUM": 21.0,
+    "HARD": 21.36
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 58 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 58,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.22,
+   "wear_multiplier_raw": -0.042,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2011_turkish_gp": {
+   "total_laps": 58,
+   "life_raw": {
+    "SOFT": 15.32,
+    "MEDIUM": 15.0,
+    "HARD": 15.26
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 77 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 77,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.746,
+   "wear_multiplier_raw": 0.625,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2011_european_gp": {
+   "total_laps": 57,
+   "life_raw": {
+    "SOFT": 17.36,
+    "MEDIUM": 17.0,
+    "HARD": 17.29
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 64 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 64,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.994,
+   "wear_multiplier_raw": 0.991,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2011_belgian_gp": {
+   "total_laps": 44,
+   "life_raw": {
+    "SOFT": 18.64,
+    "MEDIUM": 18.25,
+    "HARD": 18.56
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 32 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 32,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.727,
+   "wear_multiplier_raw": 0.508,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2011_korean_gp": {
+   "total_laps": 55,
+   "life_raw": {
+    "SOFT": 20.68,
+    "MEDIUM": 20.25,
+    "HARD": 20.6
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 40 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 40,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -0.788,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  }
+ }
+}

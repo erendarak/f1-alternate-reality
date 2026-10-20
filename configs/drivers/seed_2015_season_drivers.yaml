@@ -1,0 +1,142 @@
+# Driver persona seed for the 2015 season (H2a, D-054), written by
+# scripts/build_season_seeds.py. Identity comes from each race's roster (Jolpica).
+# THE NUMBERS ARE EDITORIAL ASSUMPTIONS: illustrative simulation personas, not verified
+# psychometrics. Drivers who raced in 2024 keep their 2024 seed persona (not refitted for
+# 2015); others are template-only (rookie = no start in an earlier season we have).
+schema_version: 1
+season: 2015
+event_id: 2015_season
+explanation: Illustrative simulation persona; not verified driver psychometrics.
+profile_revision: v1
+policy:
+  type: profile_conditioned_baseline
+  version: untrained
+drivers:
+  alexander_rossi_2015:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  carlos_sainz_2015:
+    template: generic_balanced
+    confidence: 0.15
+    origin: copied from the 2024 seed (master plan §3.3 (Stage 1 fields))
+    persona_label: analytical stabilizer
+    overrides:
+      race_pace_skill: 0.89
+      consistency: 0.9
+      risk_appetite: 0.6
+      tire_management: 0.88
+      wet_skill: 0.83
+      adaptability: 0.89
+  daniel_ricciardo_2015:
+    template: generic_veteran
+    confidence: 0.15
+    origin: copied from the 2024 seed (template only)
+  daniil_kvyat_2015:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  felipe_massa_2015:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  felipe_nasr_2015:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  fernando_alonso_2015:
+    template: generic_veteran
+    confidence: 0.15
+    origin: copied from the 2024 seed (master plan §3.3 (Stage 1 fields))
+    persona_label: tactical veteran
+    overrides:
+      race_pace_skill: 0.89
+      consistency: 0.92
+      risk_appetite: 0.7
+      tire_management: 0.91
+      wet_skill: 0.89
+      adaptability: 0.94
+  jenson_button_2015:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  kevin_magnussen_2015:
+    template: generic_veteran
+    confidence: 0.15
+    origin: copied from the 2024 seed (template only)
+  kimi_raikkonen_2015:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  lewis_hamilton_2015:
+    template: generic_veteran
+    confidence: 0.15
+    origin: copied from the 2024 seed (master plan §3.3 (Stage 1 fields))
+    persona_label: smooth veteran
+    overrides:
+      race_pace_skill: 0.93
+      consistency: 0.94
+      risk_appetite: 0.58
+      tire_management: 0.95
+      wet_skill: 0.93
+      adaptability: 0.88
+  marcus_ericsson_2015:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  max_verstappen_2015:
+    template: generic_veteran
+    confidence: 0.15
+    origin: copied from the 2024 seed (master plan §3.5 (all 14 fields))
+    persona_label: assertive competitor
+    overrides:
+      race_pace_skill: 0.96
+      consistency: 0.9
+      risk_appetite: 0.82
+      tire_management: 0.88
+      wet_skill: 0.94
+      adaptability: 0.9
+      qualifying_skill: 0.94
+      overtake_skill: 0.92
+      defense_skill: 0.92
+      team_orientation: 0.7
+      composure: 0.88
+      ambition: 0.96
+      sociability: 0.55
+      negotiation_skill: 0.5
+  nico_hulkenberg_2015:
+    template: generic_veteran
+    confidence: 0.15
+    origin: copied from the 2024 seed (template only)
+  nico_rosberg_2015:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  pastor_maldonado_2015:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  roberto_merhi_2015:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  romain_grosjean_2015:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  sebastian_vettel_2015:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  sergio_perez_2015:
+    template: generic_veteran
+    confidence: 0.15
+    origin: copied from the 2024 seed (template only)
+  valtteri_bottas_2015:
+    template: generic_veteran
+    confidence: 0.15
+    origin: copied from the 2024 seed (template only)
+  will_stevens_2015:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only

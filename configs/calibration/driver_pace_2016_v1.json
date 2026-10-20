@@ -1,0 +1,251 @@
+{
+ "label": "2016 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2016_australian_gp",
+  "2016_bahrain_gp",
+  "2016_chinese_gp",
+  "2016_spanish_gp",
+  "2016_canadian_gp",
+  "2016_austrian_gp",
+  "2016_hungarian_gp",
+  "2016_belgian_gp",
+  "2016_italian_gp",
+  "2016_singapore_gp",
+  "2016_japanese_gp",
+  "2016_united_states_gp",
+  "2016_mexican_gp",
+  "2016_abu_dhabi_gp"
+ ],
+ "field_noise_s": 0.5345,
+ "form_sd_s": 0.3173,
+ "form_note": "within-pair gap SD 0.475 s, sampling SD 0.155 s over 128 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "ALO": {
+   "team_id": "mclaren_2016",
+   "pace_vs_teammate_s": -0.0707,
+   "raw_mean_gap_s": -0.0919,
+   "races": 10,
+   "lap_noise_s": 0.5022,
+   "raw_noise_s": 0.488,
+   "clean_laps": 342
+  },
+  "BOT": {
+   "team_id": "williams_2016",
+   "pace_vs_teammate_s": -0.0196,
+   "raw_mean_gap_s": -0.0245,
+   "races": 12,
+   "lap_noise_s": 0.4842,
+   "raw_noise_s": 0.4645,
+   "clean_laps": 382
+  },
+  "BUT": {
+   "team_id": "mclaren_2016",
+   "pace_vs_teammate_s": 0.0707,
+   "raw_mean_gap_s": 0.0919,
+   "races": 10,
+   "lap_noise_s": 0.5232,
+   "raw_noise_s": 0.5165,
+   "clean_laps": 254
+  },
+  "ERI": {
+   "team_id": "sauber_2016",
+   "pace_vs_teammate_s": -0.0263,
+   "raw_mean_gap_s": -0.0329,
+   "races": 12,
+   "lap_noise_s": 0.542,
+   "raw_noise_s": 0.5454,
+   "clean_laps": 333
+  },
+  "GRO": {
+   "team_id": "haas_2016",
+   "pace_vs_teammate_s": -0.0567,
+   "raw_mean_gap_s": -0.0709,
+   "races": 12,
+   "lap_noise_s": 0.5771,
+   "raw_noise_s": 0.5964,
+   "clean_laps": 330
+  },
+  "GUT": {
+   "team_id": "haas_2016",
+   "pace_vs_teammate_s": 0.0567,
+   "raw_mean_gap_s": 0.0709,
+   "races": 12,
+   "lap_noise_s": 0.539,
+   "raw_noise_s": 0.541,
+   "clean_laps": 336
+  },
+  "HAM": {
+   "team_id": "mercedes_2016",
+   "pace_vs_teammate_s": 0.054,
+   "raw_mean_gap_s": 0.0664,
+   "races": 13,
+   "lap_noise_s": 0.5445,
+   "raw_noise_s": 0.5476,
+   "clean_laps": 490
+  },
+  "HAR": {
+   "team_id": "manor_2016",
+   "pace_vs_teammate_s": 0.1109,
+   "raw_mean_gap_s": 0.1585,
+   "races": 7,
+   "lap_noise_s": 0.6217,
+   "raw_noise_s": 0.6826,
+   "clean_laps": 215
+  },
+  "HUL": {
+   "team_id": "force_india_2016",
+   "pace_vs_teammate_s": -0.0027,
+   "raw_mean_gap_s": -0.0034,
+   "races": 11,
+   "lap_noise_s": 0.49,
+   "raw_noise_s": 0.4707,
+   "clean_laps": 346
+  },
+  "KVY": {
+   "team_id": "toro_rosso_2016",
+   "pace_vs_teammate_s": 0.1048,
+   "raw_mean_gap_s": 0.1363,
+   "races": 10,
+   "lap_noise_s": 0.5891,
+   "raw_noise_s": 0.6203,
+   "clean_laps": 263
+  },
+  "MAG": {
+   "team_id": "renault_2016",
+   "pace_vs_teammate_s": -0.0084,
+   "raw_mean_gap_s": -0.0112,
+   "races": 9,
+   "lap_noise_s": 0.5911,
+   "raw_noise_s": 0.6146,
+   "clean_laps": 361
+  },
+  "MAS": {
+   "team_id": "williams_2016",
+   "pace_vs_teammate_s": 0.0196,
+   "raw_mean_gap_s": 0.0245,
+   "races": 12,
+   "lap_noise_s": 0.4837,
+   "raw_noise_s": 0.4631,
+   "clean_laps": 370
+  },
+  "NAS": {
+   "team_id": "sauber_2016",
+   "pace_vs_teammate_s": 0.0263,
+   "raw_mean_gap_s": 0.0329,
+   "races": 12,
+   "lap_noise_s": 0.6061,
+   "raw_noise_s": 0.632,
+   "clean_laps": 415
+  },
+  "OCO": {
+   "team_id": "manor_2016",
+   "pace_vs_teammate_s": 0.1638,
+   "raw_mean_gap_s": 0.262,
+   "races": 5,
+   "lap_noise_s": 0.6438,
+   "raw_noise_s": 0.7089,
+   "clean_laps": 252
+  },
+  "PAL": {
+   "team_id": "renault_2016",
+   "pace_vs_teammate_s": 0.0084,
+   "raw_mean_gap_s": 0.0112,
+   "races": 9,
+   "lap_noise_s": 0.5879,
+   "raw_noise_s": 0.6149,
+   "clean_laps": 297
+  },
+  "PER": {
+   "team_id": "force_india_2016",
+   "pace_vs_teammate_s": 0.0027,
+   "raw_mean_gap_s": 0.0034,
+   "races": 11,
+   "lap_noise_s": 0.5369,
+   "raw_noise_s": 0.538,
+   "clean_laps": 340
+  },
+  "RAI": {
+   "team_id": "ferrari_2016",
+   "pace_vs_teammate_s": 0.0396,
+   "raw_mean_gap_s": 0.0488,
+   "races": 13,
+   "lap_noise_s": 0.4496,
+   "raw_noise_s": 0.4122,
+   "clean_laps": 341
+  },
+  "RIC": {
+   "team_id": "red_bull_2016",
+   "pace_vs_teammate_s": -0.0874,
+   "raw_mean_gap_s": -0.1076,
+   "races": 13,
+   "lap_noise_s": 0.4886,
+   "raw_noise_s": 0.4731,
+   "clean_laps": 446
+  },
+  "ROS": {
+   "team_id": "mercedes_2016",
+   "pace_vs_teammate_s": -0.054,
+   "raw_mean_gap_s": -0.0664,
+   "races": 13,
+   "lap_noise_s": 0.505,
+   "raw_noise_s": 0.4958,
+   "clean_laps": 480
+  },
+  "SAI": {
+   "team_id": "toro_rosso_2016",
+   "pace_vs_teammate_s": 0.0173,
+   "raw_mean_gap_s": 0.022,
+   "races": 11,
+   "lap_noise_s": 0.5321,
+   "raw_noise_s": 0.5309,
+   "clean_laps": 322
+  },
+  "VAN": {
+   "team_id": "mclaren_2016",
+   "pace_vs_teammate_s": 0.0,
+   "raw_mean_gap_s": null,
+   "races": 0,
+   "lap_noise_s": 0.5291,
+   "raw_noise_s": 0.5055,
+   "clean_laps": 34
+  },
+  "VER": {
+   "team_id": "red_bull_2016",
+   "pace_vs_teammate_s": -0.0121,
+   "raw_mean_gap_s": -0.0147,
+   "races": 14,
+   "lap_noise_s": 0.4356,
+   "raw_noise_s": 0.3984,
+   "clean_laps": 398
+  },
+  "VET": {
+   "team_id": "ferrari_2016",
+   "pace_vs_teammate_s": -0.0396,
+   "raw_mean_gap_s": -0.0488,
+   "races": 13,
+   "lap_noise_s": 0.5119,
+   "raw_noise_s": 0.5033,
+   "clean_laps": 396
+  },
+  "WEH": {
+   "team_id": "manor_2016",
+   "pace_vs_teammate_s": -0.1613,
+   "raw_mean_gap_s": -0.2016,
+   "races": 12,
+   "lap_noise_s": 0.6138,
+   "raw_noise_s": 0.6482,
+   "clean_laps": 345
+  }
+ },
+ "overtake_threshold_shift_s": 0.0,
+ "overtake_shift_fit": {
+  "skipped": "superseded by the W3 racecraft refit (H2a)"
+ }
+}

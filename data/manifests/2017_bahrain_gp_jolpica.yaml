@@ -1,0 +1,102 @@
+dataset_id: 2017_bahrain_gp_jolpica_v1
+event: 2017_bahrain_gp
+source: jolpica-f1 (history cache, H2b)
+source_api_version: ergast-compatible v1
+retrieved_utc: '2026-10-20T18:25:17Z'
+session_key: 2017/round 3/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2017_bahrain_gp/laps.parquet
+  sha256: sha256:6e2cfaf58088cdca26d603fc9bd7716f95f4a543aade817625908dd9e0ed2d7c
+  rows: 885
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - lap_start_time_s
+  - lap_end_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - position
+  - track_status
+  - is_accurate
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - speed_trap_kph
+  - fresh_tyre
+  - deleted
+  - fastf1_generated
+  - compound_name
+  source_type: historical_verified
+  description: lap times and positions (Jolpica); stints, tyre age, pit flags and
+    track status derived, see missingness notes
+- relative_path: data/processed/2017_bahrain_gp/results.parquet
+  sha256: sha256:ef0f1dbf7e8752dbb0a8d448d88c01759928caba240ecbf12bbeb77bd6e4a31d
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification (Jolpica)
+- relative_path: data/processed/2017_bahrain_gp/track_status.parquet
+  sha256: sha256:b8e0c57efbfe149e0b5157c9ea056ce734a8fef57e97d3022bf856a2195a4c0f
+  rows: 3
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: estimated_from_data
+  description: neutralised laps inferred
+- relative_path: data/processed/2017_bahrain_gp/weather.parquet
+  sha256: sha256:eb35ba5db679c71275d39c63352199b00792fcb1816b0ef5d0e1cd1b17613fe8
+  rows: 57
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: estimated_from_data
+  description: rain per lap inferred from lap times
+- relative_path: data/processed/2017_bahrain_gp/race_control.parquet
+  sha256: sha256:aeed3440cc15104b2331e32ef6ab8df8d822bcef6986ed5bfa8c6e235a532997
+  rows: 0
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: editorial_assumption
+  description: 'no race control messages: empty'
+unit_conventions:
+  time: seconds from the start (lap times summed per car)
+missingness_notes:
+- 'pit_stops: historical_verified: Jolpica pit stops'
+- 'stints_tyre_age: estimated_from_data: laps since the start / last stop; new sets'
+- 'track_status: estimated_from_data: neutralised laps inferred from the field''s
+  lap times'
+- 'compound: unknown (Jolpica has no tyre data): compound = MEDIUM placeholder, compound_name
+  = UNKNOWN'
+- 'weather: estimated_from_data: rain only, inferred from lap times (0 wet laps: field
+  median (1.08, 1.22) x the race''s 5th-percentile green lap); temperatures unknown'

@@ -1,0 +1,37 @@
+model_name: tyre_life
+model_version: v1
+kind: stint-length life + same-lap wear regression; globals fitted on behaviour
+source_type: estimated_from_data
+artifact: configs/calibration/tyre_life_2012_v1.json
+artifact_sha256: sha256:f92617f5d33d10e989c5eecb0fe0d1cd0a70ce5d04663db3a9b98c1c5034e12f
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2012_v1.yaml
+training_dataset_content_sha256: sha256:63fa29026c4ffd3f8b351850f4a5cc01fbd91559e0061d34236a70ac811768b8
+training_races:
+- 2012_abu_dhabi_gp
+- 2012_australian_gp
+- 2012_british_gp
+- 2012_canadian_gp
+- 2012_chinese_gp
+- 2012_german_gp
+- 2012_hungarian_gp
+- 2012_indian_gp
+- 2012_italian_gp
+- 2012_japanese_gp
+- 2012_monaco_gp
+- 2012_singapore_gp
+- 2012_spanish_gp
+- 2012_united_states_gp
+metrics:
+  dry_train_fit:
+    kappa: 1.1
+    delta_s: 0.65
+    loss: 0.0904
+    stops_sim: 1.864
+    stops_real: 1.925
+    share_sim:
+      SOFT: 0.657
+      MEDIUM: 0.343
+      HARD: 0.0
+  held_out_check: EXP-010 (docs/experiments/exp010.json)
+status: fitted for 2012 (H2a, D-054); held-out check EXP-023

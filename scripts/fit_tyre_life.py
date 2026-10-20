@@ -34,9 +34,11 @@ from f1ar.calibration.tyre_life_fit import fit_events, to_json
 
 print = functools.partial(print, flush=True)  # noqa: A001 (progress through pipes)
 ROOT = Path(__file__).resolve().parents[1]
-KAPPAS = (0.8, 0.9, 1.0, 1.1, 1.2, 1.45)
-DELTAS = (0.0, 0.1, 0.2, 0.35, 0.5)
+KAPPAS = (0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.45)
+"""0.6 and 0.7 added in H2b: four 2010-2017 seasons hit 0.8, the old edge."""
+DELTAS = (0.0, 0.1, 0.2, 0.35, 0.5, 0.65)
 SEEDS = (1, 2, 3)
+FIRST_COMPOUND_SEASON = 2018
 SHARE_WEIGHT = 4.0
 """Weight of the compound-share error (shares are 0-1; stops ~1-3)."""
 
@@ -165,9 +167,9 @@ def write_manifest(
     )
 
 
-def loss(sim: dict[str, Any], real: dict[str, Any]) -> float:
+def loss(sim: dict[str, Any], real: dict[str, Any], share_weight: float = SHARE_WEIGHT) -> float:
     share = sum((sim["shares"][c] - real["shares"][c]) ** 2 for c in real["shares"])
-    return float((sim["stops"] - real["stops"]) ** 2 + SHARE_WEIGHT * share)
+    return float((sim["stops"] - real["stops"]) ** 2 + share_weight * share)
 
 
 def main() -> None:
@@ -178,19 +180,43 @@ def main() -> None:
     parser.add_argument("--workers", type=int, default=14)
     parser.add_argument("--report", type=Path, help="write the grid results as JSON")
     parser.add_argument("--season", type=int, default=2024)
+    parser.add_argument(
+        "--reference-season",
+        type=int,
+        help="compound ratios from this season's fit (default: 2018 for seasons before 2018, "
+        "which have no compound data; H2b)",
+    )
     args = parser.parse_args()
+    ref_season = args.reference_season or (FIRST_COMPOUND_SEASON if args.season < 2018 else None)
+    reference = None
+    if ref_season is not None:
+        ref_file = ROOT / "configs" / season_path(LIFE_FILE, ref_season)
+        reference = json.loads(ref_file.read_text(encoding="utf-8"))
+    # compound shares are meaningless with the MEDIUM placeholder: fit stops only
+    share_weight = 0.0 if reference is not None else SHARE_WEIGHT
     t0 = time.perf_counter()
     dataset, splits_file = dataset_files(ROOT, args.season)
     laps = pd.read_parquet(dataset)
     splits = yaml.safe_load(splits_file.read_text(encoding="utf-8"))["splits"]
     train, test = list(splits["dry_train"]), list(splits["dry_test"])
-    season, ratios, events = fit_events(laps, train + test, train)
+    season, ratios, events = fit_events(laps, train + test, train, reference)
     sha = "sha256:" + hashlib.sha256(dataset.read_bytes()).hexdigest()
     out_path = ROOT / "configs" / season_path(LIFE_FILE, args.season)
 
     def write(kappa: float, delta: float) -> None:
         cfg = to_json(
-            season, ratios, events, train, kappa=kappa, delta=delta, data_sha=sha, year=args.season
+            season,
+            ratios,
+            events,
+            train,
+            kappa=kappa,
+            delta=delta,
+            data_sha=sha,
+            year=args.season,
+            reference=None
+            if ref_season is None
+            else f"compounds unknown: soft/hard wear and life ratios to the medium from "
+            f"{season_path(LIFE_FILE, ref_season).as_posix()} (borrowed); stops-only fit",
         )
         out_path.write_text(json.dumps(cfg, indent=1) + "\n", encoding="utf-8", newline="\n")
 
@@ -217,7 +243,7 @@ def main() -> None:
     for k, d in product(KAPPAS, DELTAS):
         mine = [r for r in rows if r["kappa"] == k and r["delta"] == d]
         grid[(k, d)] = {
-            "loss": statistics.fmean(loss(r, targets[r["event"]]) for r in mine),
+            "loss": statistics.fmean(loss(r, targets[r["event"]], share_weight) for r in mine),
             "stops_sim": statistics.fmean(r["stops"] for r in mine),
             "stops_real": statistics.fmean(targets[r["event"]]["stops"] for r in mine),
             "share_sim": {

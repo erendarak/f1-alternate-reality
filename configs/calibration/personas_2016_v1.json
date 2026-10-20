@@ -1,0 +1,201 @@
+{
+ "label": "2016 persona estimates (W5, D-045)",
+ "fitted_on": [
+  "2016_australian_gp",
+  "2016_bahrain_gp",
+  "2016_chinese_gp",
+  "2016_spanish_gp",
+  "2016_canadian_gp",
+  "2016_austrian_gp",
+  "2016_hungarian_gp",
+  "2016_belgian_gp",
+  "2016_italian_gp",
+  "2016_singapore_gp",
+  "2016_japanese_gp",
+  "2016_united_states_gp",
+  "2016_mexican_gp",
+  "2016_abu_dhabi_gp"
+ ],
+ "wear": {
+  "reference_slope_s_per_lap2": 0.050237456358583406,
+  "split_half_drivers": 0.558,
+  "split_half_teams": 0.359,
+  "reliability_drivers": 0.716,
+  "reliability_teams": 0.528,
+  "drivers": {
+   "ALO": {
+    "team_id": "mclaren_2016",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": -0.01245,
+    "team_vs_field_s_per_lap2": -0.00986,
+    "races": 9
+   },
+   "BOT": {
+    "team_id": "williams_2016",
+    "wear_multiplier": 1.0764,
+    "vs_teammate_s_per_lap2": 0.00261,
+    "team_vs_field_s_per_lap2": 0.00373,
+    "races": 12
+   },
+   "BUT": {
+    "team_id": "mclaren_2016",
+    "wear_multiplier": 1.074,
+    "vs_teammate_s_per_lap2": 0.01245,
+    "team_vs_field_s_per_lap2": -0.00986,
+    "races": 9
+   },
+   "ERI": {
+    "team_id": "sauber_2016",
+    "wear_multiplier": 1.0323,
+    "vs_teammate_s_per_lap2": 0.00067,
+    "team_vs_field_s_per_lap2": 0.00216,
+    "races": 12
+   },
+   "GRO": {
+    "team_id": "haas_2016",
+    "wear_multiplier": 1.1687,
+    "vs_teammate_s_per_lap2": 0.00901,
+    "team_vs_field_s_per_lap2": 0.00382,
+    "races": 10
+   },
+   "GUT": {
+    "team_id": "haas_2016",
+    "wear_multiplier": 0.9117,
+    "vs_teammate_s_per_lap2": -0.00901,
+    "team_vs_field_s_per_lap2": 0.00382,
+    "races": 10
+   },
+   "HAM": {
+    "team_id": "mercedes_2016",
+    "wear_multiplier": 1.0625,
+    "vs_teammate_s_per_lap2": 0.00959,
+    "team_vs_field_s_per_lap2": -0.00706,
+    "races": 13
+   },
+   "HAR": {
+    "team_id": "manor_2016",
+    "wear_multiplier": 1.1093,
+    "vs_teammate_s_per_lap2": -0.00523,
+    "team_vs_field_s_per_lap2": 0.01749,
+    "races": 6
+   },
+   "HUL": {
+    "team_id": "force_india_2016",
+    "wear_multiplier": 0.9253,
+    "vs_teammate_s_per_lap2": -0.00686,
+    "team_vs_field_s_per_lap2": 0.0022,
+    "races": 11
+   },
+   "KVY": {
+    "team_id": "toro_rosso_2016",
+    "wear_multiplier": 0.9852,
+    "vs_teammate_s_per_lap2": 0.00522,
+    "team_vs_field_s_per_lap2": -0.00849,
+    "races": 10
+   },
+   "MAG": {
+    "team_id": "renault_2016",
+    "wear_multiplier": 0.9686,
+    "vs_teammate_s_per_lap2": -0.00085,
+    "team_vs_field_s_per_lap2": -0.00183,
+    "races": 9
+   },
+   "MAS": {
+    "team_id": "williams_2016",
+    "wear_multiplier": 1.002,
+    "vs_teammate_s_per_lap2": -0.00261,
+    "team_vs_field_s_per_lap2": 0.00373,
+    "races": 12
+   },
+   "NAS": {
+    "team_id": "sauber_2016",
+    "wear_multiplier": 1.0131,
+    "vs_teammate_s_per_lap2": -0.00067,
+    "team_vs_field_s_per_lap2": 0.00216,
+    "races": 12
+   },
+   "OCO": {
+    "team_id": "manor_2016",
+    "wear_multiplier": 1.1271,
+    "vs_teammate_s_per_lap2": -0.00398,
+    "team_vs_field_s_per_lap2": 0.01749,
+    "races": 5
+   },
+   "PAL": {
+    "team_id": "renault_2016",
+    "wear_multiplier": 0.9929,
+    "vs_teammate_s_per_lap2": 0.00085,
+    "team_vs_field_s_per_lap2": -0.00183,
+    "races": 9
+   },
+   "PER": {
+    "team_id": "force_india_2016",
+    "wear_multiplier": 1.121,
+    "vs_teammate_s_per_lap2": 0.00686,
+    "team_vs_field_s_per_lap2": 0.0022,
+    "races": 11
+   },
+   "RAI": {
+    "team_id": "ferrari_2016",
+    "wear_multiplier": 1.0329,
+    "vs_teammate_s_per_lap2": 0.00407,
+    "team_vs_field_s_per_lap2": -0.00239,
+    "races": 12
+   },
+   "RIC": {
+    "team_id": "red_bull_2016",
+    "wear_multiplier": 0.9574,
+    "vs_teammate_s_per_lap2": -0.00277,
+    "team_vs_field_s_per_lap2": -0.00029,
+    "races": 13
+   },
+   "ROS": {
+    "team_id": "mercedes_2016",
+    "wear_multiplier": 0.7892,
+    "vs_teammate_s_per_lap2": -0.00959,
+    "team_vs_field_s_per_lap2": -0.00706,
+    "races": 13
+   },
+   "SAI": {
+    "team_id": "toro_rosso_2016",
+    "wear_multiplier": 0.9134,
+    "vs_teammate_s_per_lap2": 0.00019,
+    "team_vs_field_s_per_lap2": -0.00849,
+    "races": 11
+   },
+   "VER": {
+    "team_id": "red_bull_2016",
+    "wear_multiplier": 0.9785,
+    "vs_teammate_s_per_lap2": -0.0013,
+    "team_vs_field_s_per_lap2": -0.00029,
+    "races": 14
+   },
+   "VET": {
+    "team_id": "ferrari_2016",
+    "wear_multiplier": 0.9168,
+    "vs_teammate_s_per_lap2": -0.00407,
+    "team_vs_field_s_per_lap2": -0.00239,
+    "races": 12
+   },
+   "WEH": {
+    "team_id": "manor_2016",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": 0.00466,
+    "team_vs_field_s_per_lap2": 0.01749,
+    "races": 11
+   }
+  }
+ },
+ "derived_at_setup": {
+  "consistency": "rank of W2 lap noise (driver_pace_2016_v1), persona spread",
+  "overtake_skill": "rank of W3 attack term (racecraft_2016_v1), persona spread",
+  "defense_skill": "rank of W3 defend term (racecraft_2016_v1), persona spread"
+ },
+ "not_measurable": {
+  "mistake proneness (consistency x composure in incidents)": "blue flags dominate big losses (2024: 24 events left; odd vs even races r = -0.33)",
+  "composure": "no measurement (penalties too few per driver)",
+  "wet_skill": "3 wet races",
+  "risk_appetite": "a preference, not a measurement",
+  "qualifying_skill": "the grid is real"
+ }
+}

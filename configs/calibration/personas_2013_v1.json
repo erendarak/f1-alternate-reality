@@ -1,0 +1,201 @@
+{
+ "label": "2013 persona estimates (W5, D-045)",
+ "fitted_on": [
+  "2013_australian_gp",
+  "2013_chinese_gp",
+  "2013_spanish_gp",
+  "2013_monaco_gp",
+  "2013_canadian_gp",
+  "2013_german_gp",
+  "2013_hungarian_gp",
+  "2013_belgian_gp",
+  "2013_singapore_gp",
+  "2013_korean_gp",
+  "2013_japanese_gp",
+  "2013_abu_dhabi_gp",
+  "2013_united_states_gp",
+  "2013_brazilian_gp"
+ ],
+ "wear": {
+  "reference_slope_s_per_lap2": 0.04581556019502633,
+  "split_half_drivers": 0.578,
+  "split_half_teams": 0.673,
+  "reliability_drivers": 0.733,
+  "reliability_teams": 0.805,
+  "drivers": {
+   "ALO": {
+    "team_id": "ferrari_2013",
+    "wear_multiplier": 0.8211,
+    "vs_teammate_s_per_lap2": -0.00521,
+    "team_vs_field_s_per_lap2": -0.00545,
+    "races": 11
+   },
+   "BIA": {
+    "team_id": "marussia_2013",
+    "wear_multiplier": 1.2244,
+    "vs_teammate_s_per_lap2": 0.00163,
+    "team_vs_field_s_per_lap2": 0.0113,
+    "races": 12
+   },
+   "BOT": {
+    "team_id": "williams_2013",
+    "wear_multiplier": 1.0186,
+    "vs_teammate_s_per_lap2": -0.00482,
+    "team_vs_field_s_per_lap2": 0.00545,
+    "races": 13
+   },
+   "BUT": {
+    "team_id": "mclaren_2013",
+    "wear_multiplier": 0.9377,
+    "vs_teammate_s_per_lap2": -0.00383,
+    "team_vs_field_s_per_lap2": -6e-05,
+    "races": 14
+   },
+   "CHI": {
+    "team_id": "marussia_2013",
+    "wear_multiplier": 1.1724,
+    "vs_teammate_s_per_lap2": -0.00163,
+    "team_vs_field_s_per_lap2": 0.0113,
+    "races": 12
+   },
+   "DIR": {
+    "team_id": "force_india_2013",
+    "wear_multiplier": 0.7598,
+    "vs_teammate_s_per_lap2": -0.01802,
+    "team_vs_field_s_per_lap2": 0.00273,
+    "races": 9
+   },
+   "GRO": {
+    "team_id": "lotus_f1_2013",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": 0.00535,
+    "team_vs_field_s_per_lap2": -0.02193,
+    "races": 8
+   },
+   "GUT": {
+    "team_id": "sauber_2013",
+    "wear_multiplier": 1.1187,
+    "vs_teammate_s_per_lap2": 0.00491,
+    "team_vs_field_s_per_lap2": 0.00229,
+    "races": 12
+   },
+   "HAM": {
+    "team_id": "mercedes_2013",
+    "wear_multiplier": 0.9263,
+    "vs_teammate_s_per_lap2": 0.01002,
+    "team_vs_field_s_per_lap2": -0.01332,
+    "races": 12
+   },
+   "HUL": {
+    "team_id": "sauber_2013",
+    "wear_multiplier": 0.9618,
+    "vs_teammate_s_per_lap2": -0.00491,
+    "team_vs_field_s_per_lap2": 0.00229,
+    "races": 12
+   },
+   "KOV": {
+    "team_id": "lotus_f1_2013",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": 0.00637,
+    "team_vs_field_s_per_lap2": -0.02193,
+    "races": 1
+   },
+   "MAL": {
+    "team_id": "williams_2013",
+    "wear_multiplier": 1.1728,
+    "vs_teammate_s_per_lap2": 0.00482,
+    "team_vs_field_s_per_lap2": 0.00545,
+    "races": 13
+   },
+   "MAS": {
+    "team_id": "ferrari_2013",
+    "wear_multiplier": 0.9877,
+    "vs_teammate_s_per_lap2": 0.00521,
+    "team_vs_field_s_per_lap2": -0.00545,
+    "races": 11
+   },
+   "PER": {
+    "team_id": "mclaren_2013",
+    "wear_multiplier": 1.0602,
+    "vs_teammate_s_per_lap2": 0.00383,
+    "team_vs_field_s_per_lap2": -6e-05,
+    "races": 14
+   },
+   "PIC": {
+    "team_id": "caterham_2013",
+    "wear_multiplier": 0.9473,
+    "vs_teammate_s_per_lap2": -0.01484,
+    "team_vs_field_s_per_lap2": 0.01051,
+    "races": 10
+   },
+   "RAI": {
+    "team_id": "lotus_f1_2013",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": -0.00702,
+    "team_vs_field_s_per_lap2": -0.02193,
+    "races": 7
+   },
+   "RIC": {
+    "team_id": "toro_rosso_2013",
+    "wear_multiplier": 1.1997,
+    "vs_teammate_s_per_lap2": -0.00243,
+    "team_vs_field_s_per_lap2": 0.01358,
+    "races": 13
+   },
+   "ROS": {
+    "team_id": "mercedes_2013",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": -0.01002,
+    "team_vs_field_s_per_lap2": -0.01332,
+    "races": 12
+   },
+   "SUT": {
+    "team_id": "force_india_2013",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": 0.01802,
+    "team_vs_field_s_per_lap2": 0.00273,
+    "races": 9
+   },
+   "VDG": {
+    "team_id": "caterham_2013",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": 0.01484,
+    "team_vs_field_s_per_lap2": 0.01051,
+    "races": 10
+   },
+   "VER": {
+    "team_id": "toro_rosso_2013",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": 0.00243,
+    "team_vs_field_s_per_lap2": 0.01358,
+    "races": 13
+   },
+   "VET": {
+    "team_id": "red_bull_2013",
+    "wear_multiplier": 0.8973,
+    "vs_teammate_s_per_lap2": -0.00082,
+    "team_vs_field_s_per_lap2": -0.0051,
+    "races": 13
+   },
+   "WEB": {
+    "team_id": "red_bull_2013",
+    "wear_multiplier": 0.9236,
+    "vs_teammate_s_per_lap2": 0.00082,
+    "team_vs_field_s_per_lap2": -0.0051,
+    "races": 13
+   }
+  }
+ },
+ "derived_at_setup": {
+  "consistency": "rank of W2 lap noise (driver_pace_2013_v1), persona spread",
+  "overtake_skill": "rank of W3 attack term (racecraft_2013_v1), persona spread",
+  "defense_skill": "rank of W3 defend term (racecraft_2013_v1), persona spread"
+ },
+ "not_measurable": {
+  "mistake proneness (consistency x composure in incidents)": "blue flags dominate big losses (2024: 24 events left; odd vs even races r = -0.33)",
+  "composure": "no measurement (penalties too few per driver)",
+  "wet_skill": "3 wet races",
+  "risk_appetite": "a preference, not a measurement",
+  "qualifying_skill": "the grid is real"
+ }
+}

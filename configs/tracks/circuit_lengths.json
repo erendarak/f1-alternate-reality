@@ -1,0 +1,10 @@
+{
+  "description": "Published circuit lengths for 2010-2017 races whose layout has no FastF1 outline (H2b, D-055): circuits not raced since 2017, and layouts used once. Checked before borrowing a same-circuit outline from another season. source_type historical_verified.",
+  "circuits": [
+    {"circuit_id": "sepang", "seasons": [2010, 2017], "length_m": 5543, "source": "en.wikipedia.org/wiki/Sepang_International_Circuit"},
+    {"circuit_id": "yeongam", "seasons": [2010, 2013], "length_m": 5615, "source": "fia.com/news/f1-korean-gp-race-preview (55 laps, 308.630 km)"},
+    {"circuit_id": "buddh", "seasons": [2011, 2013], "length_m": 5125, "source": "fia.com/news/indian-gp-race-preview (60 laps, 307.249 km)"},
+    {"circuit_id": "valencia", "seasons": [2010, 2012], "length_m": 5419, "source": "en.wikipedia.org/wiki/2012_European_Grand_Prix (57 laps, 308.883 km)"},
+    {"circuit_id": "bahrain", "seasons": [2010, 2010], "length_m": 6299, "source": "en.wikipedia.org/wiki/2010_Bahrain_Grand_Prix (Endurance layout, 49 laps; only in 2010)"}
+  ]
+}

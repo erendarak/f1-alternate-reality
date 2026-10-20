@@ -1,0 +1,102 @@
+dataset_id: 2012_abu_dhabi_gp_jolpica_v1
+event: 2012_abu_dhabi_gp
+source: jolpica-f1 (history cache, H2b)
+source_api_version: ergast-compatible v1
+retrieved_utc: '2026-10-20T18:25:14Z'
+session_key: 2012/round 18/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2012_abu_dhabi_gp/laps.parquet
+  sha256: sha256:a715b9fb05fa235c7a6529300983078ca4d1953e3e04fb863685c9b6a5481812
+  rows: 1083
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - lap_start_time_s
+  - lap_end_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - position
+  - track_status
+  - is_accurate
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - speed_trap_kph
+  - fresh_tyre
+  - deleted
+  - fastf1_generated
+  - compound_name
+  source_type: historical_verified
+  description: lap times and positions (Jolpica); stints, tyre age, pit flags and
+    track status derived, see missingness notes
+- relative_path: data/processed/2012_abu_dhabi_gp/results.parquet
+  sha256: sha256:93745ad06c96d94000d4b16fb00883134614a21b1bd50e944c0690a1bdce39e3
+  rows: 24
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification (Jolpica)
+- relative_path: data/processed/2012_abu_dhabi_gp/track_status.parquet
+  sha256: sha256:35271826d7cfe254c9553cb590d158a7fbf8ea064c041f0f044ef5177b1b4586
+  rows: 5
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: estimated_from_data
+  description: neutralised laps inferred
+- relative_path: data/processed/2012_abu_dhabi_gp/weather.parquet
+  sha256: sha256:f43727738b474e93089853e65e9bca339b22e515f0c91295a60d0dccd0045c2f
+  rows: 55
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: estimated_from_data
+  description: rain per lap inferred from lap times
+- relative_path: data/processed/2012_abu_dhabi_gp/race_control.parquet
+  sha256: sha256:aeed3440cc15104b2331e32ef6ab8df8d822bcef6986ed5bfa8c6e235a532997
+  rows: 0
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: editorial_assumption
+  description: 'no race control messages: empty'
+unit_conventions:
+  time: seconds from the start (lap times summed per car)
+missingness_notes:
+- 'pit_stops: historical_verified: Jolpica pit stops'
+- 'stints_tyre_age: estimated_from_data: laps since the start / last stop; new sets'
+- 'track_status: estimated_from_data: neutralised laps inferred from the field''s
+  lap times'
+- 'compound: unknown (Jolpica has no tyre data): compound = MEDIUM placeholder, compound_name
+  = UNKNOWN'
+- 'weather: estimated_from_data: rain only, inferred from lap times (0 wet laps: field
+  median (1.08, 1.22) x the race''s 5th-percentile green lap); temperatures unknown'

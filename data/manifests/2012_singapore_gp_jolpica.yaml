@@ -1,0 +1,102 @@
+dataset_id: 2012_singapore_gp_jolpica_v1
+event: 2012_singapore_gp
+source: jolpica-f1 (history cache, H2b)
+source_api_version: ergast-compatible v1
+retrieved_utc: '2026-10-20T18:25:14Z'
+session_key: 2012/round 14/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2012_singapore_gp/laps.parquet
+  sha256: sha256:80e8656deec0d249f58a0e2c1dedbcbe8cd12f6c930573c2ac92a22d02c8ddd0
+  rows: 1280
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - lap_start_time_s
+  - lap_end_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - position
+  - track_status
+  - is_accurate
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - speed_trap_kph
+  - fresh_tyre
+  - deleted
+  - fastf1_generated
+  - compound_name
+  source_type: historical_verified
+  description: lap times and positions (Jolpica); stints, tyre age, pit flags and
+    track status derived, see missingness notes
+- relative_path: data/processed/2012_singapore_gp/results.parquet
+  sha256: sha256:4f9368569a619f2da64ecf7cdaa923bbe935c90ccec8172a92941ceb56029125
+  rows: 24
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification (Jolpica)
+- relative_path: data/processed/2012_singapore_gp/track_status.parquet
+  sha256: sha256:9d1852bfc9c9a4f92eeeabe4943ad33687ad5bd213942100f0b0da4a560e264a
+  rows: 5
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: estimated_from_data
+  description: neutralised laps inferred
+- relative_path: data/processed/2012_singapore_gp/weather.parquet
+  sha256: sha256:f7654559863757d92e427146d1db49fd0388fb93d902adc295f673f4689877f9
+  rows: 59
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: estimated_from_data
+  description: rain per lap inferred from lap times
+- relative_path: data/processed/2012_singapore_gp/race_control.parquet
+  sha256: sha256:aeed3440cc15104b2331e32ef6ab8df8d822bcef6986ed5bfa8c6e235a532997
+  rows: 0
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: editorial_assumption
+  description: 'no race control messages: empty'
+unit_conventions:
+  time: seconds from the start (lap times summed per car)
+missingness_notes:
+- 'pit_stops: historical_verified: Jolpica pit stops'
+- 'stints_tyre_age: estimated_from_data: laps since the start / last stop; new sets'
+- 'track_status: estimated_from_data: neutralised laps inferred from the field''s
+  lap times'
+- 'compound: unknown (Jolpica has no tyre data): compound = MEDIUM placeholder, compound_name
+  = UNKNOWN'
+- 'weather: estimated_from_data: rain only, inferred from lap times (0 wet laps: field
+  median (1.08, 1.22) x the race''s 5th-percentile green lap); temperatures unknown'

@@ -1,0 +1,267 @@
+{
+ "label": "2012 race events (W4, D-042)",
+ "events": [
+  "2012_australian_gp",
+  "2012_chinese_gp",
+  "2012_spanish_gp",
+  "2012_monaco_gp",
+  "2012_canadian_gp",
+  "2012_british_gp",
+  "2012_german_gp",
+  "2012_hungarian_gp",
+  "2012_italian_gp",
+  "2012_singapore_gp",
+  "2012_japanese_gp",
+  "2012_indian_gp",
+  "2012_abu_dhabi_gp",
+  "2012_united_states_gp",
+  "2012_bahrain_gp",
+  "2012_european_gp",
+  "2012_belgian_gp",
+  "2012_korean_gp",
+  "2012_malaysian_gp",
+  "2012_brazilian_gp"
+ ],
+ "dry_events": [
+  "2012_australian_gp",
+  "2012_chinese_gp",
+  "2012_spanish_gp",
+  "2012_monaco_gp",
+  "2012_canadian_gp",
+  "2012_british_gp",
+  "2012_german_gp",
+  "2012_hungarian_gp",
+  "2012_italian_gp",
+  "2012_singapore_gp",
+  "2012_japanese_gp",
+  "2012_indian_gp",
+  "2012_abu_dhabi_gp",
+  "2012_united_states_gp",
+  "2012_bahrain_gp",
+  "2012_european_gp",
+  "2012_belgian_gp",
+  "2012_korean_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": 0.0967,
+  "slow_stop_scale_s": 4.98,
+  "stops": 848,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {
+  "caterham_2012": {
+   "pit_crew_offset_s": 0.413,
+   "pit_slow_multiplier": 1.405,
+   "stops": 87,
+   "raw_median_rel_s": 0.508,
+   "raw_slow_share": 0.149
+  },
+  "ferrari_2012": {
+   "pit_crew_offset_s": -0.541,
+   "pit_slow_multiplier": 0.592,
+   "stops": 73,
+   "raw_median_rel_s": -0.689,
+   "raw_slow_share": 0.041
+  },
+  "force_india_2012": {
+   "pit_crew_offset_s": -0.076,
+   "pit_slow_multiplier": 0.842,
+   "stops": 67,
+   "raw_median_rel_s": -0.099,
+   "raw_slow_share": 0.075
+  },
+  "hrt_2012": {
+   "pit_crew_offset_s": 1.475,
+   "pit_slow_multiplier": 1.827,
+   "stops": 60,
+   "raw_median_rel_s": 1.966,
+   "raw_slow_share": 0.217
+  },
+  "lotus_f1_2012": {
+   "pit_crew_offset_s": -0.065,
+   "pit_slow_multiplier": 1.239,
+   "stops": 61,
+   "raw_median_rel_s": -0.086,
+   "raw_slow_share": 0.131
+  },
+  "marussia_2012": {
+   "pit_crew_offset_s": 0.45,
+   "pit_slow_multiplier": 1.231,
+   "stops": 70,
+   "raw_median_rel_s": 0.579,
+   "raw_slow_share": 0.129
+  },
+  "mclaren_2012": {
+   "pit_crew_offset_s": -0.467,
+   "pit_slow_multiplier": 0.616,
+   "stops": 69,
+   "raw_median_rel_s": -0.603,
+   "raw_slow_share": 0.043
+  },
+  "mercedes_2012": {
+   "pit_crew_offset_s": -0.374,
+   "pit_slow_multiplier": 0.817,
+   "stops": 70,
+   "raw_median_rel_s": -0.481,
+   "raw_slow_share": 0.071
+  },
+  "red_bull_2012": {
+   "pit_crew_offset_s": -0.553,
+   "pit_slow_multiplier": 0.68,
+   "stops": 75,
+   "raw_median_rel_s": -0.701,
+   "raw_slow_share": 0.053
+  },
+  "sauber_2012": {
+   "pit_crew_offset_s": 0.325,
+   "pit_slow_multiplier": 1.348,
+   "stops": 69,
+   "raw_median_rel_s": 0.419,
+   "raw_slow_share": 0.145
+  },
+  "toro_rosso_2012": {
+   "pit_crew_offset_s": -0.041,
+   "pit_slow_multiplier": 0.457,
+   "stops": 81,
+   "raw_median_rel_s": -0.051,
+   "raw_slow_share": 0.025
+  },
+  "williams_2012": {
+   "pit_crew_offset_s": 0.111,
+   "pit_slow_multiplier": 1.067,
+   "stops": 66,
+   "raw_median_rel_s": 0.145,
+   "raw_slow_share": 0.106
+  }
+ },
+ "reliability": {
+  "field_retirements_per_start": 0.1862,
+  "teams": {
+   "caterham_2012": {
+    "failure_multiplier": 0.711,
+    "retirements": 4,
+    "starts": 40
+   },
+   "ferrari_2012": {
+    "failure_multiplier": 0.627,
+    "retirements": 3,
+    "starts": 40
+   },
+   "force_india_2012": {
+    "failure_multiplier": 0.795,
+    "retirements": 5,
+    "starts": 40
+   },
+   "hrt_2012": {
+    "failure_multiplier": 1.34,
+    "retirements": 11,
+    "starts": 38
+   },
+   "lotus_f1_2012": {
+    "failure_multiplier": 0.962,
+    "retirements": 7,
+    "starts": 40
+   },
+   "marussia_2012": {
+    "failure_multiplier": 0.962,
+    "retirements": 7,
+    "starts": 40
+   },
+   "mclaren_2012": {
+    "failure_multiplier": 1.214,
+    "retirements": 10,
+    "starts": 40
+   },
+   "mercedes_2012": {
+    "failure_multiplier": 1.214,
+    "retirements": 10,
+    "starts": 40
+   },
+   "red_bull_2012": {
+    "failure_multiplier": 0.795,
+    "retirements": 5,
+    "starts": 40
+   },
+   "sauber_2012": {
+    "failure_multiplier": 1.214,
+    "retirements": 10,
+    "starts": 40
+   },
+   "toro_rosso_2012": {
+    "failure_multiplier": 0.795,
+    "retirements": 5,
+    "starts": 40
+   },
+   "williams_2012": {
+    "failure_multiplier": 1.382,
+    "retirements": 12,
+    "starts": 40
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.0,
+  "sc_share": 0.4,
+  "count": 0,
+  "race_laps": 1065,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 0,
+  "races": 20,
+  "per_race": 0.0
+ },
+ "penalties": {
+  "counts": {},
+  "collision_per_pass": 0.0,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.0,
+  "other_per_car_lap": 0.0,
+  "passes": 1457,
+  "raw": {
+   "collision_per_pass": 0.0,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.0,
+   "other_per_car_lap": 0.0
+  },
+  "scale": 1.0,
+  "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
+ },
+ "fitted": {
+  "risk_scale": 1.6825,
+  "red_flag_per_crash": 0.0,
+  "fit": {
+   "races": [
+    "2012_australian_gp",
+    "2012_chinese_gp",
+    "2012_spanish_gp",
+    "2012_monaco_gp",
+    "2012_canadian_gp",
+    "2012_british_gp",
+    "2012_german_gp",
+    "2012_hungarian_gp",
+    "2012_italian_gp",
+    "2012_singapore_gp",
+    "2012_japanese_gp",
+    "2012_indian_gp",
+    "2012_abu_dhabi_gp",
+    "2012_united_states_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 1.8,
+   "sim_failures_per_race": 0.686,
+   "real_retirements_per_race": 3.714,
+   "target_red_flags_per_race": 0.0
+  },
+  "check": {
+   "retirements_per_race": 3.629,
+   "red_flags_per_race": 0.0,
+   "safety_cars_per_race": 0.814,
+   "vscs_per_race": 0.0,
+   "penalties_per_race": 0.0,
+   "penalties_per_race_after_scale": 0.0
+  }
+ }
+}

@@ -1,0 +1,244 @@
+{
+ "label": "2017 race events (W4, D-042)",
+ "events": [
+  "2017_australian_gp",
+  "2017_chinese_gp",
+  "2017_bahrain_gp",
+  "2017_spanish_gp",
+  "2017_monaco_gp",
+  "2017_canadian_gp",
+  "2017_austrian_gp",
+  "2017_british_gp",
+  "2017_hungarian_gp",
+  "2017_italian_gp",
+  "2017_malaysian_gp",
+  "2017_united_states_gp",
+  "2017_mexican_gp",
+  "2017_brazilian_gp",
+  "2017_russian_gp",
+  "2017_azerbaijan_gp",
+  "2017_belgian_gp",
+  "2017_japanese_gp",
+  "2017_abu_dhabi_gp",
+  "2017_singapore_gp"
+ ],
+ "dry_events": [
+  "2017_australian_gp",
+  "2017_chinese_gp",
+  "2017_bahrain_gp",
+  "2017_spanish_gp",
+  "2017_monaco_gp",
+  "2017_canadian_gp",
+  "2017_austrian_gp",
+  "2017_british_gp",
+  "2017_hungarian_gp",
+  "2017_italian_gp",
+  "2017_malaysian_gp",
+  "2017_united_states_gp",
+  "2017_mexican_gp",
+  "2017_brazilian_gp",
+  "2017_russian_gp",
+  "2017_azerbaijan_gp",
+  "2017_belgian_gp",
+  "2017_japanese_gp",
+  "2017_abu_dhabi_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": 0.1098,
+  "slow_stop_scale_s": 7.57,
+  "stops": 437,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {
+  "ferrari_2017": {
+   "pit_crew_offset_s": -0.14,
+   "pit_slow_multiplier": 1.007,
+   "stops": 45,
+   "raw_median_rel_s": -0.202,
+   "raw_slow_share": 0.111
+  },
+  "force_india_2017": {
+   "pit_crew_offset_s": 0.0,
+   "pit_slow_multiplier": 0.735,
+   "stops": 48,
+   "raw_median_rel_s": 0.0,
+   "raw_slow_share": 0.062
+  },
+  "haas_2017": {
+   "pit_crew_offset_s": 0.108,
+   "pit_slow_multiplier": 1.454,
+   "stops": 47,
+   "raw_median_rel_s": 0.154,
+   "raw_slow_share": 0.191
+  },
+  "mclaren_2017": {
+   "pit_crew_offset_s": 0.094,
+   "pit_slow_multiplier": 1.358,
+   "stops": 39,
+   "raw_median_rel_s": 0.142,
+   "raw_slow_share": 0.179
+  },
+  "mercedes_2017": {
+   "pit_crew_offset_s": -0.43,
+   "pit_slow_multiplier": 0.863,
+   "stops": 47,
+   "raw_median_rel_s": -0.613,
+   "raw_slow_share": 0.085
+  },
+  "red_bull_2017": {
+   "pit_crew_offset_s": -0.26,
+   "pit_slow_multiplier": 0.73,
+   "stops": 36,
+   "raw_median_rel_s": -0.404,
+   "raw_slow_share": 0.056
+  },
+  "renault_2017": {
+   "pit_crew_offset_s": 0.268,
+   "pit_slow_multiplier": 0.949,
+   "stops": 40,
+   "raw_median_rel_s": 0.402,
+   "raw_slow_share": 0.1
+  },
+  "sauber_2017": {
+   "pit_crew_offset_s": 0.494,
+   "pit_slow_multiplier": 1.302,
+   "stops": 42,
+   "raw_median_rel_s": 0.729,
+   "raw_slow_share": 0.167
+  },
+  "toro_rosso_2017": {
+   "pit_crew_offset_s": -0.016,
+   "pit_slow_multiplier": 0.922,
+   "stops": 42,
+   "raw_median_rel_s": -0.024,
+   "raw_slow_share": 0.095
+  },
+  "williams_2017": {
+   "pit_crew_offset_s": -0.233,
+   "pit_slow_multiplier": 0.708,
+   "stops": 51,
+   "raw_median_rel_s": -0.324,
+   "raw_slow_share": 0.059
+  }
+ },
+ "reliability": {
+  "field_retirements_per_start": 0.2375,
+  "teams": {
+   "ferrari_2017": {
+    "failure_multiplier": 0.77,
+    "retirements": 6,
+    "starts": 40
+   },
+   "force_india_2017": {
+    "failure_multiplier": 0.572,
+    "retirements": 3,
+    "starts": 40
+   },
+   "haas_2017": {
+    "failure_multiplier": 0.901,
+    "retirements": 8,
+    "starts": 40
+   },
+   "mclaren_2017": {
+    "failure_multiplier": 1.559,
+    "retirements": 18,
+    "starts": 40
+   },
+   "mercedes_2017": {
+    "failure_multiplier": 0.441,
+    "retirements": 1,
+    "starts": 40
+   },
+   "red_bull_2017": {
+    "failure_multiplier": 1.23,
+    "retirements": 13,
+    "starts": 40
+   },
+   "renault_2017": {
+    "failure_multiplier": 1.296,
+    "retirements": 14,
+    "starts": 40
+   },
+   "sauber_2017": {
+    "failure_multiplier": 1.099,
+    "retirements": 11,
+    "starts": 40
+   },
+   "toro_rosso_2017": {
+    "failure_multiplier": 1.23,
+    "retirements": 13,
+    "starts": 40
+   },
+   "williams_2017": {
+    "failure_multiplier": 0.901,
+    "retirements": 8,
+    "starts": 40
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.0,
+  "sc_share": 0.4,
+  "count": 0,
+  "race_laps": 1138,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 0,
+  "races": 20,
+  "per_race": 0.0
+ },
+ "penalties": {
+  "counts": {},
+  "collision_per_pass": 0.0,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.0,
+  "other_per_car_lap": 0.0,
+  "passes": 874,
+  "raw": {
+   "collision_per_pass": 0.0,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.0,
+   "other_per_car_lap": 0.0
+  },
+  "scale": 1.0,
+  "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
+ },
+ "fitted": {
+  "risk_scale": 2.0,
+  "red_flag_per_crash": 0.0,
+  "fit": {
+   "races": [
+    "2017_australian_gp",
+    "2017_chinese_gp",
+    "2017_bahrain_gp",
+    "2017_spanish_gp",
+    "2017_monaco_gp",
+    "2017_canadian_gp",
+    "2017_austrian_gp",
+    "2017_british_gp",
+    "2017_hungarian_gp",
+    "2017_italian_gp",
+    "2017_malaysian_gp",
+    "2017_united_states_gp",
+    "2017_mexican_gp",
+    "2017_brazilian_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 1.571,
+   "sim_failures_per_race": 0.571,
+   "real_retirements_per_race": 3.714,
+   "target_red_flags_per_race": 0.0
+  },
+  "check": {
+   "retirements_per_race": 3.543,
+   "red_flags_per_race": 0.0,
+   "safety_cars_per_race": 0.643,
+   "vscs_per_race": 0.6,
+   "penalties_per_race": 0.0,
+   "penalties_per_race_after_scale": 0.0
+  }
+ }
+}

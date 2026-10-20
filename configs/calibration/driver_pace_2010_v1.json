@@ -1,0 +1,277 @@
+{
+ "label": "2010 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2010_bahrain_gp",
+  "2010_australian_gp",
+  "2010_malaysian_gp",
+  "2010_spanish_gp",
+  "2010_monaco_gp",
+  "2010_turkish_gp",
+  "2010_european_gp",
+  "2010_british_gp",
+  "2010_german_gp",
+  "2010_italian_gp",
+  "2010_singapore_gp",
+  "2010_brazilian_gp",
+  "2010_abu_dhabi_gp"
+ ],
+ "field_noise_s": 0.5561,
+ "form_sd_s": 0.3171,
+ "form_note": "within-pair gap SD 0.491 s, sampling SD 0.201 s over 119 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "ALG": {
+   "team_id": "toro_rosso_2010",
+   "pace_vs_teammate_s": -0.0315,
+   "raw_mean_gap_s": -0.0401,
+   "races": 11,
+   "lap_noise_s": 0.5333,
+   "raw_noise_s": 0.5221,
+   "clean_laps": 305
+  },
+  "ALO": {
+   "team_id": "ferrari_2010",
+   "pace_vs_teammate_s": -0.0141,
+   "raw_mean_gap_s": -0.0183,
+   "races": 10,
+   "lap_noise_s": 0.5362,
+   "raw_noise_s": 0.526,
+   "clean_laps": 291
+  },
+  "BAR": {
+   "team_id": "williams_2010",
+   "pace_vs_teammate_s": -0.0932,
+   "raw_mean_gap_s": -0.1186,
+   "races": 11,
+   "lap_noise_s": 0.5408,
+   "raw_noise_s": 0.535,
+   "clean_laps": 393
+  },
+  "BUE": {
+   "team_id": "toro_rosso_2010",
+   "pace_vs_teammate_s": 0.0315,
+   "raw_mean_gap_s": 0.0401,
+   "races": 11,
+   "lap_noise_s": 0.5727,
+   "raw_noise_s": 0.5838,
+   "clean_laps": 222
+  },
+  "BUT": {
+   "team_id": "mclaren_2010",
+   "pace_vs_teammate_s": 0.0817,
+   "raw_mean_gap_s": 0.1039,
+   "races": 11,
+   "lap_noise_s": 0.4844,
+   "raw_noise_s": 0.4457,
+   "clean_laps": 278
+  },
+  "CHA": {
+   "team_id": "hrt_2010",
+   "pace_vs_teammate_s": 0.0873,
+   "raw_mean_gap_s": 0.1396,
+   "races": 5,
+   "lap_noise_s": 0.6533,
+   "raw_noise_s": 0.7227,
+   "clean_laps": 210
+  },
+  "DIG": {
+   "team_id": "virgin_2010",
+   "pace_vs_teammate_s": 0.26,
+   "raw_mean_gap_s": 0.3575,
+   "races": 8,
+   "lap_noise_s": 0.7468,
+   "raw_noise_s": 0.837,
+   "clean_laps": 317
+  },
+  "DLR": {
+   "team_id": "sauber_2010",
+   "pace_vs_teammate_s": 0.1055,
+   "raw_mean_gap_s": 0.1689,
+   "races": 5,
+   "lap_noise_s": 0.5263,
+   "raw_noise_s": 0.5029,
+   "clean_laps": 191
+  },
+  "GLO": {
+   "team_id": "virgin_2010",
+   "pace_vs_teammate_s": -0.26,
+   "raw_mean_gap_s": -0.3575,
+   "races": 8,
+   "lap_noise_s": 0.6827,
+   "raw_noise_s": 0.7575,
+   "clean_laps": 254
+  },
+  "HAM": {
+   "team_id": "mclaren_2010",
+   "pace_vs_teammate_s": -0.0817,
+   "raw_mean_gap_s": -0.1039,
+   "races": 11,
+   "lap_noise_s": 0.4728,
+   "raw_noise_s": 0.4349,
+   "clean_laps": 330
+  },
+  "HEI": {
+   "team_id": "sauber_2010",
+   "pace_vs_teammate_s": 0.002,
+   "raw_mean_gap_s": 0.0039,
+   "races": 3,
+   "lap_noise_s": 0.5947,
+   "raw_noise_s": 0.8701,
+   "clean_laps": 21
+  },
+  "HUL": {
+   "team_id": "williams_2010",
+   "pace_vs_teammate_s": 0.0932,
+   "raw_mean_gap_s": 0.1186,
+   "races": 11,
+   "lap_noise_s": 0.6214,
+   "raw_noise_s": 0.6667,
+   "clean_laps": 216
+  },
+  "KLI": {
+   "team_id": "hrt_2010",
+   "pace_vs_teammate_s": 0.003,
+   "raw_mean_gap_s": 0.0059,
+   "races": 3,
+   "lap_noise_s": 0.6185,
+   "raw_noise_s": 0.7151,
+   "clean_laps": 97
+  },
+  "KOB": {
+   "team_id": "sauber_2010",
+   "pace_vs_teammate_s": -0.0778,
+   "raw_mean_gap_s": -0.107,
+   "races": 8,
+   "lap_noise_s": 0.5427,
+   "raw_noise_s": 0.526,
+   "clean_laps": 121
+  },
+  "KOV": {
+   "team_id": "lotus_racing_2010",
+   "pace_vs_teammate_s": -0.1986,
+   "raw_mean_gap_s": -0.2648,
+   "races": 9,
+   "lap_noise_s": 0.6368,
+   "raw_noise_s": 0.6743,
+   "clean_laps": 323
+  },
+  "KUB": {
+   "team_id": "renault_2010",
+   "pace_vs_teammate_s": -0.2228,
+   "raw_mean_gap_s": -0.2896,
+   "races": 10,
+   "lap_noise_s": 0.499,
+   "raw_noise_s": 0.4582,
+   "clean_laps": 210
+  },
+  "LIU": {
+   "team_id": "force_india_2010",
+   "pace_vs_teammate_s": 0.133,
+   "raw_mean_gap_s": 0.1773,
+   "races": 9,
+   "lap_noise_s": 0.5494,
+   "raw_noise_s": 0.5461,
+   "clean_laps": 307
+  },
+  "MAS": {
+   "team_id": "ferrari_2010",
+   "pace_vs_teammate_s": 0.0141,
+   "raw_mean_gap_s": 0.0183,
+   "races": 10,
+   "lap_noise_s": 0.55,
+   "raw_noise_s": 0.5447,
+   "clean_laps": 172
+  },
+  "MSC": {
+   "team_id": "mercedes_2010",
+   "pace_vs_teammate_s": 0.0055,
+   "raw_mean_gap_s": 0.007,
+   "races": 11,
+   "lap_noise_s": 0.5561,
+   "raw_noise_s": 0.5561,
+   "clean_laps": 262
+  },
+  "PET": {
+   "team_id": "renault_2010",
+   "pace_vs_teammate_s": 0.2228,
+   "raw_mean_gap_s": 0.2896,
+   "races": 10,
+   "lap_noise_s": 0.5826,
+   "raw_noise_s": 0.6028,
+   "clean_laps": 196
+  },
+  "ROS": {
+   "team_id": "mercedes_2010",
+   "pace_vs_teammate_s": -0.0055,
+   "raw_mean_gap_s": -0.007,
+   "races": 11,
+   "lap_noise_s": 0.5347,
+   "raw_noise_s": 0.5254,
+   "clean_laps": 347
+  },
+  "SEN": {
+   "team_id": "hrt_2010",
+   "pace_vs_teammate_s": -0.0732,
+   "raw_mean_gap_s": -0.1007,
+   "races": 8,
+   "lap_noise_s": 0.6396,
+   "raw_noise_s": 0.6966,
+   "clean_laps": 220
+  },
+  "SUT": {
+   "team_id": "force_india_2010",
+   "pace_vs_teammate_s": -0.133,
+   "raw_mean_gap_s": -0.1773,
+   "races": 9,
+   "lap_noise_s": 0.561,
+   "raw_noise_s": 0.5632,
+   "clean_laps": 329
+  },
+  "TRU": {
+   "team_id": "lotus_racing_2010",
+   "pace_vs_teammate_s": 0.1986,
+   "raw_mean_gap_s": 0.2648,
+   "races": 9,
+   "lap_noise_s": 0.7004,
+   "raw_noise_s": 0.7674,
+   "clean_laps": 323
+  },
+  "VET": {
+   "team_id": "red_bull_2010",
+   "pace_vs_teammate_s": -0.0458,
+   "raw_mean_gap_s": -0.0572,
+   "races": 12,
+   "lap_noise_s": 0.5283,
+   "raw_noise_s": 0.518,
+   "clean_laps": 402
+  },
+  "WEB": {
+   "team_id": "red_bull_2010",
+   "pace_vs_teammate_s": 0.0458,
+   "raw_mean_gap_s": 0.0572,
+   "races": 12,
+   "lap_noise_s": 0.5173,
+   "raw_noise_s": 0.5005,
+   "clean_laps": 346
+  },
+  "YAM": {
+   "team_id": "hrt_2010",
+   "pace_vs_teammate_s": 0.0179,
+   "raw_mean_gap_s": 0.0448,
+   "races": 2,
+   "lap_noise_s": 0.5579,
+   "raw_noise_s": 0.5621,
+   "clean_laps": 66
+  }
+ },
+ "overtake_threshold_shift_s": 0.0,
+ "overtake_shift_fit": {
+  "skipped": "superseded by the W3 racecraft refit (H2a)"
+ }
+}

@@ -351,7 +351,12 @@ def setup_from_codes(
         rules=rules_for(configs, roster.season),
         car_offsets_s=estimate.offsets_s,
         inputs={
-            "start_compounds": f"historical_verified: lap-1 compound, {data_dir.name}/laps.parquet",
+            "start_compounds": (
+                "editorial_assumption: compound unknown (Jolpica, H2b): MEDIUM placeholder for "
+                "every car"
+                if "compound_name" in raw_laps and (raw_laps["compound_name"] == "UNKNOWN").all()
+                else f"historical_verified: lap-1 compound, {data_dir.name}/laps.parquet"
+            ),
             "car_pace_offsets": estimate.note,
             "base_lap": base.note,
             "pit_loss": pit_note,
@@ -640,6 +645,19 @@ def track_for(event_id: str, data_dir: Path | None = None) -> TrackSpec:
         return _TRACKS[event_id]()
     outline_dir, borrowed = data_dir, ""
     if data_dir is not None and not (data_dir / "track_outline.parquet").exists():
+        published = _published_length(event_id, data_dir)
+        if published is not None:  # H2b: a layout no FastF1 race has (Sepang, Bahrain 2010...)
+            length_m, source = published
+            laps = int(pd.read_parquet(data_dir / "results.parquet")["laps"].max())
+            return TrackSpec(
+                track_id=event_id.split("_", 1)[1],
+                length_m=length_m,
+                total_laps=laps,
+                source_note=(
+                    f"historical_verified: published length {length_m / 1000:.3f} km "
+                    f"({source}); {laps} race laps from results; no track outline"
+                ),
+            )
         sibling = _same_circuit_outline(event_id, data_dir)
         if sibling is not None:  # H2a: no position data in F1's archive (2018 AUS, BHR)
             outline_dir = sibling
@@ -670,6 +688,21 @@ def track_for(event_id: str, data_dir: Path | None = None) -> TrackSpec:
             f"figure); {laps} race laps from results"
         ),
     )
+
+
+def _published_length(event_id: str, data_dir: Path) -> tuple[float, str] | None:
+    """``configs/tracks/circuit_lengths.json``: the race's layout length if listed (H2b)."""
+    root = data_dir.parents[2]
+    table = root / "configs" / "tracks" / "circuit_lengths.json"
+    own = root / "configs" / "rosters" / f"{event_id}.json"
+    if not table.exists() or not own.exists():
+        return None
+    me = json.loads(own.read_text(encoding="utf-8"))
+    for c in json.loads(table.read_text(encoding="utf-8"))["circuits"]:
+        first, last = c["seasons"]
+        if c["circuit_id"] == me["circuit_id"] and first <= int(me["season"]) <= last:
+            return float(c["length_m"]), str(c["source"])
+    return None
 
 
 def _same_circuit_outline(event_id: str, data_dir: Path) -> Path | None:

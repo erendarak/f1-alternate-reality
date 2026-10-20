@@ -1,0 +1,509 @@
+{
+ "label": "2017 tyre life + same-lap wear (W1, D-041)",
+ "compound_reference": "compounds unknown: soft/hard wear and life ratios to the medium from calibration/tyre_life_2018_v1.json (borrowed); stops-only fit",
+ "dataset_sha256": "sha256:ac024e4616d5c5774a43dad4a6586e44b6d7b58026703dd539446d3836572e82",
+ "fitted_on": [
+  "2017_australian_gp",
+  "2017_austrian_gp",
+  "2017_bahrain_gp",
+  "2017_brazilian_gp",
+  "2017_british_gp",
+  "2017_canadian_gp",
+  "2017_chinese_gp",
+  "2017_hungarian_gp",
+  "2017_italian_gp",
+  "2017_malaysian_gp",
+  "2017_mexican_gp",
+  "2017_monaco_gp",
+  "2017_spanish_gp",
+  "2017_united_states_gp"
+ ],
+ "globals": {
+  "kappa": 0.7,
+  "kappa_note": "life_laps = kappa x life_raw; fitted on dry_train behaviour",
+  "delta_s": 0.5,
+  "delta_note": "potential pace step: SOFT -delta, MEDIUM 0, HARD +delta; fitted"
+ },
+ "season_wear": {
+  "lin": {
+   "MEDIUM": 0.0234260452179617,
+   "SOFT": 0.034006707223854106,
+   "HARD": 0.024263547525576634
+  },
+  "quad": {
+   "MEDIUM": -0.00010981731737337648,
+   "SOFT": -0.00013057188380072285,
+   "HARD": -0.0001020359628648121
+  },
+  "fresh_bonus_s": -0.3018125327599814,
+  "same_lap_offsets": {
+   "SOFT": 0.0,
+   "MEDIUM": 0.0,
+   "HARD": 0.0
+  },
+  "laps": 11474
+ },
+ "life_ratios_vs_medium": {
+  "MEDIUM": 1.0,
+  "SOFT": 1.0212765957446808,
+  "HARD": 1.0172413793103448
+ },
+ "editorial": {
+  "pace_modes": {
+   "CONSERVE": {
+    "offset_s": 0.35,
+    "wear_multiplier": 0.75
+   },
+   "BALANCED": {
+    "offset_s": 0.0,
+    "wear_multiplier": 1.0
+   },
+   "PUSH": {
+    "offset_s": -0.3,
+    "wear_multiplier": 1.4
+   }
+  },
+  "cliff_s_per_lap": 0.5,
+  "neutralised_life_factor": 0.35,
+  "note": "editorial_assumption: research ranges (docs/RESEARCH_REAL_F1.md)"
+ },
+ "events": {
+  "2017_australian_gp": {
+   "total_laps": 57,
+   "life_raw": {
+    "SOFT": 25.02,
+    "MEDIUM": 24.5,
+    "HARD": 24.92
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 19 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 19,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.131,
+   "wear_multiplier_raw": 1.195,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_chinese_gp": {
+   "total_laps": 56,
+   "life_raw": {
+    "SOFT": 29.62,
+    "MEDIUM": 29.0,
+    "HARD": 29.5
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 16 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 16,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.931,
+   "wear_multiplier_raw": 2.542,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_bahrain_gp": {
+   "total_laps": 57,
+   "life_raw": {
+    "SOFT": 25.28,
+    "MEDIUM": 24.75,
+    "HARD": 25.18
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 22 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 22,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.832,
+   "wear_multiplier_raw": 2.432,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_spanish_gp": {
+   "total_laps": 66,
+   "life_raw": {
+    "SOFT": 20.94,
+    "MEDIUM": 20.5,
+    "HARD": 20.85
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 23 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 23,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.889,
+   "wear_multiplier_raw": 2.307,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_monaco_gp": {
+   "total_laps": 78,
+   "life_raw": {
+    "SOFT": 40.09,
+    "MEDIUM": 39.25,
+    "HARD": 39.93
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 20 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 20,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.138,
+   "wear_multiplier_raw": 1.19,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_canadian_gp": {
+   "total_laps": 70,
+   "life_raw": {
+    "SOFT": 40.6,
+    "MEDIUM": 39.75,
+    "HARD": 40.44
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 16 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 16,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.658,
+   "wear_multiplier_raw": 0.489,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_austrian_gp": {
+   "total_laps": 71,
+   "life_raw": {
+    "SOFT": 41.36,
+    "MEDIUM": 40.5,
+    "HARD": 41.2
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 19 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 19,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.431,
+   "wear_multiplier_raw": 0.208,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_british_gp": {
+   "total_laps": 51,
+   "life_raw": {
+    "SOFT": 28.6,
+    "MEDIUM": 28.0,
+    "HARD": 28.48
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 24 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 24,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.737,
+   "wear_multiplier_raw": 0.576,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_hungarian_gp": {
+   "total_laps": 70,
+   "life_raw": {
+    "SOFT": 41.87,
+    "MEDIUM": 41.0,
+    "HARD": 41.71
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 19 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 19,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.524,
+   "wear_multiplier_raw": 0.332,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_italian_gp": {
+   "total_laps": 53,
+   "life_raw": {
+    "SOFT": 31.66,
+    "MEDIUM": 31.0,
+    "HARD": 31.53
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 19 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 19,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.865,
+   "wear_multiplier_raw": 0.791,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_malaysian_gp": {
+   "total_laps": 56,
+   "life_raw": {
+    "SOFT": 29.11,
+    "MEDIUM": 28.5,
+    "HARD": 28.99
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 19 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 19,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.556,
+   "wear_multiplier_raw": 0.336,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_united_states_gp": {
+   "total_laps": 56,
+   "life_raw": {
+    "SOFT": 25.02,
+    "MEDIUM": 24.5,
+    "HARD": 24.92
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 23 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 23,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.092,
+   "wear_multiplier_raw": 1.145,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_mexican_gp": {
+   "total_laps": 71,
+   "life_raw": {
+    "SOFT": 31.66,
+    "MEDIUM": 31.0,
+    "HARD": 31.53
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 8 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 8,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.686,
+   "wear_multiplier_raw": 0.559,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_brazilian_gp": {
+   "total_laps": 71,
+   "life_raw": {
+    "SOFT": 40.6,
+    "MEDIUM": 39.75,
+    "HARD": 40.44
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 18 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 18,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.379,
+   "wear_multiplier_raw": 0.098,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_russian_gp": {
+   "total_laps": 52,
+   "life_raw": {
+    "SOFT": 29.62,
+    "MEDIUM": 29.0,
+    "HARD": 29.5
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 17 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 17,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.747,
+   "wear_multiplier_raw": 0.604,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_azerbaijan_gp": {
+   "total_laps": 51,
+   "life_raw": {
+    "SOFT": 13.28,
+    "MEDIUM": 13.0,
+    "HARD": 13.22
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 8 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 8,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -1.5,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_belgian_gp": {
+   "total_laps": 44,
+   "life_raw": {
+    "SOFT": 15.32,
+    "MEDIUM": 15.0,
+    "HARD": 15.26
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 21 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 21,
+    "HARD": 0
+   },
+   "wear_multiplier": 2.368,
+   "wear_multiplier_raw": 3.518,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_japanese_gp": {
+   "total_laps": 53,
+   "life_raw": {
+    "SOFT": 27.83,
+    "MEDIUM": 27.25,
+    "HARD": 27.72
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 18 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 18,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.933,
+   "wear_multiplier_raw": 0.888,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2017_abu_dhabi_gp": {
+   "total_laps": 55,
+   "life_raw": {
+    "SOFT": 28.09,
+    "MEDIUM": 27.5,
+    "HARD": 27.97
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 22 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 22,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.8,
+   "wear_multiplier_raw": 0.706,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  }
+ }
+}

@@ -1,0 +1,227 @@
+{
+ "label": "2011 persona estimates (W5, D-045)",
+ "fitted_on": [
+  "2011_australian_gp",
+  "2011_malaysian_gp",
+  "2011_chinese_gp",
+  "2011_spanish_gp",
+  "2011_monaco_gp",
+  "2011_german_gp",
+  "2011_italian_gp",
+  "2011_singapore_gp",
+  "2011_japanese_gp",
+  "2011_indian_gp",
+  "2011_abu_dhabi_gp",
+  "2011_brazilian_gp"
+ ],
+ "wear": {
+  "reference_slope_s_per_lap2": 0.041396265250476724,
+  "split_half_drivers": -0.038,
+  "split_half_teams": 0.827,
+  "reliability_drivers": 0.0,
+  "reliability_teams": 0.906,
+  "drivers": {
+   "ALG": {
+    "team_id": "toro_rosso_2011",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": 0.00665,
+    "team_vs_field_s_per_lap2": 0.02558,
+    "races": 8
+   },
+   "ALO": {
+    "team_id": "ferrari_2011",
+    "wear_multiplier": 0.861,
+    "vs_teammate_s_per_lap2": -0.01088,
+    "team_vs_field_s_per_lap2": -0.00635,
+    "races": 11
+   },
+   "BAR": {
+    "team_id": "williams_2011",
+    "wear_multiplier": 0.8126,
+    "vs_teammate_s_per_lap2": -0.00575,
+    "team_vs_field_s_per_lap2": -0.00857,
+    "races": 7
+   },
+   "BUE": {
+    "team_id": "toro_rosso_2011",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": -0.00665,
+    "team_vs_field_s_per_lap2": 0.02558,
+    "races": 8
+   },
+   "BUT": {
+    "team_id": "mclaren_2011",
+    "wear_multiplier": 0.9118,
+    "vs_teammate_s_per_lap2": -0.00403,
+    "team_vs_field_s_per_lap2": -0.00403,
+    "races": 11
+   },
+   "CHA": {
+    "team_id": "lotus_racing_2011",
+    "wear_multiplier": 0.8391,
+    "vs_teammate_s_per_lap2": 0.01048,
+    "team_vs_field_s_per_lap2": -0.00736,
+    "races": 1
+   },
+   "DAM": {
+    "team_id": "virgin_2011",
+    "wear_multiplier": 0.9336,
+    "vs_teammate_s_per_lap2": 0.01031,
+    "team_vs_field_s_per_lap2": -0.00304,
+    "races": 7
+   },
+   "DIR": {
+    "team_id": "force_india_2011",
+    "wear_multiplier": 0.9843,
+    "vs_teammate_s_per_lap2": 0.00202,
+    "team_vs_field_s_per_lap2": -0.00072,
+    "races": 11
+   },
+   "GLO": {
+    "team_id": "virgin_2011",
+    "wear_multiplier": 0.9336,
+    "vs_teammate_s_per_lap2": -0.01031,
+    "team_vs_field_s_per_lap2": -0.00304,
+    "races": 7
+   },
+   "HAM": {
+    "team_id": "mclaren_2011",
+    "wear_multiplier": 0.9118,
+    "vs_teammate_s_per_lap2": 0.00403,
+    "team_vs_field_s_per_lap2": -0.00403,
+    "races": 11
+   },
+   "HEI": {
+    "team_id": "renault_2011",
+    "wear_multiplier": 1.0057,
+    "vs_teammate_s_per_lap2": 0.00172,
+    "team_vs_field_s_per_lap2": 0.00026,
+    "races": 5
+   },
+   "KAR": {
+    "team_id": "hrt_2011",
+    "wear_multiplier": 1.1337,
+    "vs_teammate_s_per_lap2": 0.02064,
+    "team_vs_field_s_per_lap2": 0.00611,
+    "races": 4
+   },
+   "KOB": {
+    "team_id": "sauber_2011",
+    "wear_multiplier": 0.9428,
+    "vs_teammate_s_per_lap2": -0.00869,
+    "team_vs_field_s_per_lap2": -0.00262,
+    "races": 8
+   },
+   "KOV": {
+    "team_id": "lotus_racing_2011",
+    "wear_multiplier": 0.8391,
+    "vs_teammate_s_per_lap2": -0.00233,
+    "team_vs_field_s_per_lap2": -0.00736,
+    "races": 11
+   },
+   "LIU": {
+    "team_id": "hrt_2011",
+    "wear_multiplier": 1.1337,
+    "vs_teammate_s_per_lap2": -0.0037,
+    "team_vs_field_s_per_lap2": 0.00611,
+    "races": 8
+   },
+   "MAL": {
+    "team_id": "williams_2011",
+    "wear_multiplier": 0.8126,
+    "vs_teammate_s_per_lap2": 0.00575,
+    "team_vs_field_s_per_lap2": -0.00857,
+    "races": 7
+   },
+   "MAS": {
+    "team_id": "ferrari_2011",
+    "wear_multiplier": 0.861,
+    "vs_teammate_s_per_lap2": 0.01088,
+    "team_vs_field_s_per_lap2": -0.00635,
+    "races": 11
+   },
+   "MSC": {
+    "team_id": "mercedes_2011",
+    "wear_multiplier": 1.0457,
+    "vs_teammate_s_per_lap2": -0.00657,
+    "team_vs_field_s_per_lap2": 0.00209,
+    "races": 10
+   },
+   "PER": {
+    "team_id": "sauber_2011",
+    "wear_multiplier": 0.9428,
+    "vs_teammate_s_per_lap2": 0.00869,
+    "team_vs_field_s_per_lap2": -0.00262,
+    "races": 8
+   },
+   "PET": {
+    "team_id": "renault_2011",
+    "wear_multiplier": 1.0057,
+    "vs_teammate_s_per_lap2": -0.00164,
+    "team_vs_field_s_per_lap2": 0.00026,
+    "races": 10
+   },
+   "RIC": {
+    "team_id": "hrt_2011",
+    "wear_multiplier": 1.1337,
+    "vs_teammate_s_per_lap2": -0.00883,
+    "team_vs_field_s_per_lap2": 0.00611,
+    "races": 6
+   },
+   "ROS": {
+    "team_id": "mercedes_2011",
+    "wear_multiplier": 1.0457,
+    "vs_teammate_s_per_lap2": 0.00657,
+    "team_vs_field_s_per_lap2": 0.00209,
+    "races": 10
+   },
+   "SEN": {
+    "team_id": "renault_2011",
+    "wear_multiplier": 1.0057,
+    "vs_teammate_s_per_lap2": 0.00157,
+    "team_vs_field_s_per_lap2": 0.00026,
+    "races": 5
+   },
+   "SUT": {
+    "team_id": "force_india_2011",
+    "wear_multiplier": 0.9843,
+    "vs_teammate_s_per_lap2": -0.00202,
+    "team_vs_field_s_per_lap2": -0.00072,
+    "races": 11
+   },
+   "TRU": {
+    "team_id": "lotus_racing_2011",
+    "wear_multiplier": 0.8391,
+    "vs_teammate_s_per_lap2": 0.00151,
+    "team_vs_field_s_per_lap2": -0.00736,
+    "races": 10
+   },
+   "VET": {
+    "team_id": "red_bull_2011",
+    "wear_multiplier": 0.9812,
+    "vs_teammate_s_per_lap2": -0.00104,
+    "team_vs_field_s_per_lap2": -0.00086,
+    "races": 10
+   },
+   "WEB": {
+    "team_id": "red_bull_2011",
+    "wear_multiplier": 0.9812,
+    "vs_teammate_s_per_lap2": 0.00104,
+    "team_vs_field_s_per_lap2": -0.00086,
+    "races": 10
+   }
+  }
+ },
+ "derived_at_setup": {
+  "consistency": "rank of W2 lap noise (driver_pace_2011_v1), persona spread",
+  "overtake_skill": "rank of W3 attack term (racecraft_2011_v1), persona spread",
+  "defense_skill": "rank of W3 defend term (racecraft_2011_v1), persona spread"
+ },
+ "not_measurable": {
+  "mistake proneness (consistency x composure in incidents)": "blue flags dominate big losses (2024: 24 events left; odd vs even races r = -0.33)",
+  "composure": "no measurement (penalties too few per driver)",
+  "wet_skill": "3 wet races",
+  "risk_appetite": "a preference, not a measurement",
+  "qualifying_skill": "the grid is real"
+ }
+}

@@ -1,0 +1,41 @@
+model_name: race_events
+model_version: v1
+kind: rates and shrunk team multipliers from 2016 timing; 2 values fitted by simulation
+source_type: estimated_from_data
+artifact: configs/calibration/race_events_2016_v1.json
+artifact_sha256: sha256:d0ffb22383c077feb9b33e3c6517907b52a0aa8f0e7832fe0dbae90827c373fb
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2016_v1.yaml
+training_dataset_content_sha256: sha256:f4680315653b995fb9b40d115939c71e0492ef8aac60308c1a01114896df156a
+training_races:
+- 2016_abu_dhabi_gp
+- 2016_australian_gp
+- 2016_austrian_gp
+- 2016_bahrain_gp
+- 2016_belgian_gp
+- 2016_brazilian_gp
+- 2016_british_gp
+- 2016_canadian_gp
+- 2016_chinese_gp
+- 2016_european_gp
+- 2016_german_gp
+- 2016_hungarian_gp
+- 2016_italian_gp
+- 2016_japanese_gp
+- 2016_malaysian_gp
+- 2016_mexican_gp
+- 2016_monaco_gp
+- 2016_russian_gp
+- 2016_singapore_gp
+- 2016_spanish_gp
+- 2016_united_states_gp
+metrics:
+  dry_train_check:
+    retirements_per_race: 2.686
+    red_flags_per_race: 0.0
+    safety_cars_per_race: 0.743
+    vscs_per_race: 0.443
+    penalties_per_race: 0.0
+    penalties_per_race_after_scale: 0.0
+  held_out_check: EXP-011
+status: fitted for 2016 (H2a, D-054); held-out check EXP-023

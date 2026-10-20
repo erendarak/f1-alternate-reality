@@ -1,0 +1,187 @@
+{
+ "label": "2015 persona estimates (W5, D-045)",
+ "fitted_on": [
+  "2015_australian_gp",
+  "2015_malaysian_gp",
+  "2015_chinese_gp",
+  "2015_spanish_gp",
+  "2015_monaco_gp",
+  "2015_canadian_gp",
+  "2015_hungarian_gp",
+  "2015_belgian_gp",
+  "2015_singapore_gp",
+  "2015_japanese_gp",
+  "2015_russian_gp",
+  "2015_mexican_gp",
+  "2015_brazilian_gp",
+  "2015_abu_dhabi_gp"
+ ],
+ "wear": {
+  "reference_slope_s_per_lap2": 0.03992050499315028,
+  "split_half_drivers": -0.102,
+  "split_half_teams": 0.482,
+  "reliability_drivers": 0.0,
+  "reliability_teams": 0.65,
+  "drivers": {
+   "ALO": {
+    "team_id": "mclaren_2015",
+    "wear_multiplier": 0.9758,
+    "vs_teammate_s_per_lap2": -0.00406,
+    "team_vs_field_s_per_lap2": -0.00149,
+    "races": 11
+   },
+   "BOT": {
+    "team_id": "williams_2015",
+    "wear_multiplier": 0.9485,
+    "vs_teammate_s_per_lap2": -0.0027,
+    "team_vs_field_s_per_lap2": -0.00316,
+    "races": 13
+   },
+   "BUT": {
+    "team_id": "mclaren_2015",
+    "wear_multiplier": 0.9758,
+    "vs_teammate_s_per_lap2": 0.00406,
+    "team_vs_field_s_per_lap2": -0.00149,
+    "races": 11
+   },
+   "ERI": {
+    "team_id": "sauber_2015",
+    "wear_multiplier": 0.9827,
+    "vs_teammate_s_per_lap2": -0.00391,
+    "team_vs_field_s_per_lap2": -0.00106,
+    "races": 12
+   },
+   "GRO": {
+    "team_id": "lotus_f1_2015",
+    "wear_multiplier": 0.9358,
+    "vs_teammate_s_per_lap2": -0.00142,
+    "team_vs_field_s_per_lap2": -0.00394,
+    "races": 9
+   },
+   "HAM": {
+    "team_id": "mercedes_2015",
+    "wear_multiplier": 0.927,
+    "vs_teammate_s_per_lap2": 0.00296,
+    "team_vs_field_s_per_lap2": -0.00448,
+    "races": 13
+   },
+   "HUL": {
+    "team_id": "force_india_2015",
+    "wear_multiplier": 1.1366,
+    "vs_teammate_s_per_lap2": -0.00211,
+    "team_vs_field_s_per_lap2": 0.00838,
+    "races": 10
+   },
+   "KVY": {
+    "team_id": "red_bull_2015",
+    "wear_multiplier": 0.9701,
+    "vs_teammate_s_per_lap2": -0.00072,
+    "team_vs_field_s_per_lap2": -0.00183,
+    "races": 11
+   },
+   "MAL": {
+    "team_id": "lotus_f1_2015",
+    "wear_multiplier": 0.9358,
+    "vs_teammate_s_per_lap2": 0.00142,
+    "team_vs_field_s_per_lap2": -0.00394,
+    "races": 9
+   },
+   "MAS": {
+    "team_id": "williams_2015",
+    "wear_multiplier": 0.9485,
+    "vs_teammate_s_per_lap2": 0.0027,
+    "team_vs_field_s_per_lap2": -0.00316,
+    "races": 13
+   },
+   "MER": {
+    "team_id": "manor_2015",
+    "wear_multiplier": 1.1771,
+    "vs_teammate_s_per_lap2": 0.00221,
+    "team_vs_field_s_per_lap2": 0.01087,
+    "races": 8
+   },
+   "NAS": {
+    "team_id": "sauber_2015",
+    "wear_multiplier": 0.9827,
+    "vs_teammate_s_per_lap2": 0.00391,
+    "team_vs_field_s_per_lap2": -0.00106,
+    "races": 12
+   },
+   "PER": {
+    "team_id": "force_india_2015",
+    "wear_multiplier": 1.1366,
+    "vs_teammate_s_per_lap2": 0.00211,
+    "team_vs_field_s_per_lap2": 0.00838,
+    "races": 10
+   },
+   "RAI": {
+    "team_id": "ferrari_2015",
+    "wear_multiplier": 0.8691,
+    "vs_teammate_s_per_lap2": 0.00417,
+    "team_vs_field_s_per_lap2": -0.00803,
+    "races": 13
+   },
+   "RIC": {
+    "team_id": "red_bull_2015",
+    "wear_multiplier": 0.9701,
+    "vs_teammate_s_per_lap2": 0.00072,
+    "team_vs_field_s_per_lap2": -0.00183,
+    "races": 11
+   },
+   "ROS": {
+    "team_id": "mercedes_2015",
+    "wear_multiplier": 0.927,
+    "vs_teammate_s_per_lap2": -0.00296,
+    "team_vs_field_s_per_lap2": -0.00448,
+    "races": 13
+   },
+   "RSS": {
+    "team_id": "manor_2015",
+    "wear_multiplier": 1.1771,
+    "vs_teammate_s_per_lap2": -0.00095,
+    "team_vs_field_s_per_lap2": 0.01087,
+    "races": 4
+   },
+   "SAI": {
+    "team_id": "toro_rosso_2015",
+    "wear_multiplier": 1.0854,
+    "vs_teammate_s_per_lap2": 0.00074,
+    "team_vs_field_s_per_lap2": 0.00524,
+    "races": 12
+   },
+   "STE": {
+    "team_id": "manor_2015",
+    "wear_multiplier": 1.1771,
+    "vs_teammate_s_per_lap2": -0.00115,
+    "team_vs_field_s_per_lap2": 0.01087,
+    "races": 12
+   },
+   "VER": {
+    "team_id": "toro_rosso_2015",
+    "wear_multiplier": 1.0854,
+    "vs_teammate_s_per_lap2": -0.00074,
+    "team_vs_field_s_per_lap2": 0.00524,
+    "races": 12
+   },
+   "VET": {
+    "team_id": "ferrari_2015",
+    "wear_multiplier": 0.8691,
+    "vs_teammate_s_per_lap2": -0.00417,
+    "team_vs_field_s_per_lap2": -0.00803,
+    "races": 13
+   }
+  }
+ },
+ "derived_at_setup": {
+  "consistency": "rank of W2 lap noise (driver_pace_2015_v1), persona spread",
+  "overtake_skill": "rank of W3 attack term (racecraft_2015_v1), persona spread",
+  "defense_skill": "rank of W3 defend term (racecraft_2015_v1), persona spread"
+ },
+ "not_measurable": {
+  "mistake proneness (consistency x composure in incidents)": "blue flags dominate big losses (2024: 24 events left; odd vs even races r = -0.33)",
+  "composure": "no measurement (penalties too few per driver)",
+  "wet_skill": "3 wet races",
+  "risk_appetite": "a preference, not a measurement",
+  "qualifying_skill": "the grid is real"
+ }
+}

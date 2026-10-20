@@ -165,15 +165,37 @@ def life_ratios(st: pd.DataFrame) -> dict[str, float]:
     return out
 
 
+def with_reference(season: WearFit, reference: dict[str, Any]) -> tuple[WearFit, dict[str, float]]:
+    """H2b (D-055): a season without compound data (2010-2017: every lap is the MEDIUM
+    placeholder) measures one wear curve and one stint life; the soft and hard tyres take the
+    reference season's ratios to the medium (borrowed, labelled in the config)."""
+    ref = reference["season_wear"]
+    lin, quad = dict(season.lin), dict(season.quad)
+    for c in DRY:
+        if c != "MEDIUM":
+            lin[c] = season.lin["MEDIUM"] * float(ref["lin"][c]) / float(ref["lin"]["MEDIUM"])
+            quad[c] = season.quad["MEDIUM"] * float(ref["quad"][c]) / float(ref["quad"]["MEDIUM"])
+    filled = WearFit(lin, quad, season.fresh_bonus_s, dict.fromkeys(DRY, 0.0), season.laps)
+    ratios = {c: float(v) for c, v in reference["life_ratios_vs_medium"].items()}
+    return filled, ratios
+
+
 def fit_events(
-    laps: pd.DataFrame, events: Sequence[str], train: Sequence[str]
+    laps: pd.DataFrame,
+    events: Sequence[str],
+    train: Sequence[str],
+    reference: dict[str, Any] | None = None,
 ) -> tuple[WearFit, dict[str, float], list[EventTyres]]:
-    """The season wear shape (pooled over ``train``), life ratios and every event's values."""
+    """The season wear shape (pooled over ``train``), life ratios and every event's values;
+    ``reference``: another season's tyre-life config for compound ratios (H2b)."""
     g_all = green_laps(laps)
     season = fit_wear(g_all[g_all["event_id"].isin(train)])
     st = stint_lives(laps)
     ratios = life_ratios(st[st["event_id"].isin(train)])
-    season_rate = sum(season.lin[c] for c in ("MEDIUM", "HARD")) / 2
+    if reference is not None:
+        season, ratios = with_reference(season, reference)
+    rate_compounds = ("MEDIUM",) if reference is not None else ("MEDIUM", "HARD")
+    season_rate = sum(season.lin[c] for c in rate_compounds) / len(rate_compounds)
     out = []
     for ev in events:
         race = laps[laps["event_id"] == ev]
@@ -240,9 +262,11 @@ def to_json(
     delta: float,
     data_sha: str,
     year: int = 2024,
+    reference: str | None = None,
 ) -> dict[str, Any]:
     return {
         "label": f"{year} tyre life + same-lap wear (W1, D-041)",
+        "compound_reference": reference,
         "dataset_sha256": data_sha,
         "fitted_on": sorted(train),
         "globals": {

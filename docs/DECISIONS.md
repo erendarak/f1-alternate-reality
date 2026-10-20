@@ -1278,3 +1278,31 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
 - Jolpica: the pipeline's own call backs off on HTTP 429; `fetch_season.py` prints errors as they
   happen and has `--pause` (a fast telemetry run plus the history fetch went over 500/hour once).
 
+## D-055 — H2b: 2010-2017 races from the Jolpica history (2026-10-20)
+
+- **One data format for every era:** `data/history_race.py` + `scripts/convert_history.py` write
+  each 2010-2017 race (156) into the same `data/processed/<event>/` tables as FastF1 races, so
+  the dataset, estimators, fits and engine run unchanged. Manifest `<event>_jolpica.yaml` states
+  what each column really is:
+  lap times, positions, results, grid: `historical_verified`; pit stops and pit-lane times
+  (Jolpica's duration) 2011+: `historical_verified`; 2010 stops inferred from lap times
+  (EXP-021): `estimated_from_data`; stints / tyre age (sets assumed new): `estimated_from_data`;
+  neutralised laps (SC/VSC not told apart): `estimated_from_data`; race control: none.
+- **Compounds unknown:** `compound_name` = UNKNOWN, `compound` = a MEDIUM placeholder (the engine
+  needs a dry compound); start tyres labelled editorial. The tyre fit measures one wear curve and
+  stint life per race and takes soft/hard ratios from 2018's fit (borrowed, labelled; 2018's life
+  ratios are ~1: stints are set by strategy, not the compound); kappa/delta fitted on stops per
+  finisher only (compound shares are meaningless); grid widened (kappa 0.6-1.45, delta 0-0.65)
+  because four seasons hit the old edge.
+- **Wet races from lap times:** a lap is wet when the field median is 8-22 % slower than the
+  race's 5th-percentile green lap; a race needs >= 10 % such laps. Validated on 2018-2025 from lap
+  times alone: 14 of 25 wet races, no false alarm. 15 wet races 2010-2017 (all genuinely wet);
+  wet laps aren't counted as neutralised.
+- **Track lengths:** the same layout's FastF1 outline from the nearest season (137 races); a
+  sourced table `configs/tracks/circuit_lengths.json` for layouts no FastF1 race has (Sepang,
+  Yeongam, Buddh, Valencia, Bahrain 2010 endurance; 19 races).
+- **Jolpica quirks:** two cars on one grid slot (2015 Italy, Russia) resolved by qualifying,
+  moving later cars back only as needed (noted in the manifest).
+- **Car pace cap 10 -> 15 s:** HRT's first race (2010 Bahrain) lost ~10 s a lap.
+- Personas 2010-2017 as D-054 (editorial; 2010 rookies wrong until the 2000s are fetched).
+

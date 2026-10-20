@@ -1,0 +1,39 @@
+model_name: race_events
+model_version: v1
+kind: rates and shrunk team multipliers from 2014 timing; 2 values fitted by simulation
+source_type: estimated_from_data
+artifact: configs/calibration/race_events_2014_v1.json
+artifact_sha256: sha256:92f2ce468e33850c9219effa3fa9345193809f130aa21453f02d0946546e4e4d
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2014_v1.yaml
+training_dataset_content_sha256: sha256:19b742042e53a0c75769f5416019c75afe966c3434f9afa39892d4ece688cfa6
+training_races:
+- 2014_abu_dhabi_gp
+- 2014_australian_gp
+- 2014_austrian_gp
+- 2014_bahrain_gp
+- 2014_belgian_gp
+- 2014_brazilian_gp
+- 2014_british_gp
+- 2014_canadian_gp
+- 2014_chinese_gp
+- 2014_german_gp
+- 2014_hungarian_gp
+- 2014_italian_gp
+- 2014_japanese_gp
+- 2014_malaysian_gp
+- 2014_monaco_gp
+- 2014_russian_gp
+- 2014_singapore_gp
+- 2014_spanish_gp
+- 2014_united_states_gp
+metrics:
+  dry_train_check:
+    retirements_per_race: 3.557
+    red_flags_per_race: 0.0
+    safety_cars_per_race: 0.686
+    vscs_per_race: 0.0
+    penalties_per_race: 0.0
+    penalties_per_race_after_scale: 0.0
+  held_out_check: EXP-011
+status: fitted for 2014 (H2a, D-054); held-out check EXP-023

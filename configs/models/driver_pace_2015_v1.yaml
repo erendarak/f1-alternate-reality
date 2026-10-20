@@ -1,0 +1,29 @@
+model_name: driver_pace
+model_version: v1
+kind: same-lap regression per race; driver vs teammate and residual SD, shrunk
+source_type: estimated_from_data
+artifact: configs/calibration/driver_pace_2015_v1.json
+artifact_sha256: sha256:f4f03af5435e5dbfbc1a8a2f75019969a5a54a7aa95f116d960b743b472ec22e
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2015_v1.yaml
+training_dataset_content_sha256: sha256:e1c38af794b353b7993adcc251ff822b5a38319c6c03d51f96a29565175a5ae0
+training_races:
+- 2015_abu_dhabi_gp
+- 2015_australian_gp
+- 2015_belgian_gp
+- 2015_brazilian_gp
+- 2015_canadian_gp
+- 2015_chinese_gp
+- 2015_hungarian_gp
+- 2015_japanese_gp
+- 2015_malaysian_gp
+- 2015_mexican_gp
+- 2015_monaco_gp
+- 2015_russian_gp
+- 2015_singapore_gp
+- 2015_spanish_gp
+metrics:
+  field_noise_s: 0.5241
+  overtake_threshold_shift_s: 0.0
+  held_out_check: EXP-012
+status: fitted for 2015 (H2a, D-054); held-out check EXP-023

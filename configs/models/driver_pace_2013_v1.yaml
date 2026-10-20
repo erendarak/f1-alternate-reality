@@ -1,0 +1,29 @@
+model_name: driver_pace
+model_version: v1
+kind: same-lap regression per race; driver vs teammate and residual SD, shrunk
+source_type: estimated_from_data
+artifact: configs/calibration/driver_pace_2013_v1.json
+artifact_sha256: sha256:4c7a39def0aaf894e2755a4868f3934a816584d736dc0866e0f17043a42ea07a
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2013_v1.yaml
+training_dataset_content_sha256: sha256:1c06fb772754d6378e754ffda4b7cda9701d4f407cf9219e0467aec23714a158
+training_races:
+- 2013_abu_dhabi_gp
+- 2013_australian_gp
+- 2013_belgian_gp
+- 2013_brazilian_gp
+- 2013_canadian_gp
+- 2013_chinese_gp
+- 2013_german_gp
+- 2013_hungarian_gp
+- 2013_japanese_gp
+- 2013_korean_gp
+- 2013_monaco_gp
+- 2013_singapore_gp
+- 2013_spanish_gp
+- 2013_united_states_gp
+metrics:
+  field_noise_s: 0.5734
+  overtake_threshold_shift_s: 0.0
+  held_out_check: EXP-012
+status: fitted for 2013 (H2a, D-054); held-out check EXP-023

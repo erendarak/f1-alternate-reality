@@ -1,0 +1,317 @@
+{
+  "schema_version": 1,
+  "event_id": "2017_mexican_gp",
+  "season": 2017,
+  "round": 18,
+  "circuit_id": "rodriguez",
+  "race_date": "2017-10-29",
+  "source_type": "historical_verified",
+  "source": {
+    "name": "jolpica-f1",
+    "url": "https://api.jolpi.ca/ergast/f1/2017/18/results.json",
+    "retrieved_utc": "2026-10-20T18:25:18Z",
+    "license_review_status": "research_only"
+  },
+  "entries": [
+    {
+      "driver_id": "sebastian_vettel_2017",
+      "person_id": "sebastian_vettel",
+      "code": "VET",
+      "car_number": 5,
+      "given_name": "Sebastian",
+      "family_name": "Vettel",
+      "team_id": "ferrari_2017",
+      "team_name": "Ferrari",
+      "grid_position": 1,
+      "external_ids": {
+        "jolpica_driver_id": "vettel",
+        "jolpica_constructor_id": "ferrari"
+      }
+    },
+    {
+      "driver_id": "max_verstappen_2017",
+      "person_id": "max_verstappen",
+      "code": "VER",
+      "car_number": 33,
+      "given_name": "Max",
+      "family_name": "Verstappen",
+      "team_id": "red_bull_2017",
+      "team_name": "Red Bull",
+      "grid_position": 2,
+      "external_ids": {
+        "jolpica_driver_id": "max_verstappen",
+        "jolpica_constructor_id": "red_bull"
+      }
+    },
+    {
+      "driver_id": "lewis_hamilton_2017",
+      "person_id": "lewis_hamilton",
+      "code": "HAM",
+      "car_number": 44,
+      "given_name": "Lewis",
+      "family_name": "Hamilton",
+      "team_id": "mercedes_2017",
+      "team_name": "Mercedes",
+      "grid_position": 3,
+      "external_ids": {
+        "jolpica_driver_id": "hamilton",
+        "jolpica_constructor_id": "mercedes"
+      }
+    },
+    {
+      "driver_id": "valtteri_bottas_2017",
+      "person_id": "valtteri_bottas",
+      "code": "BOT",
+      "car_number": 77,
+      "given_name": "Valtteri",
+      "family_name": "Bottas",
+      "team_id": "mercedes_2017",
+      "team_name": "Mercedes",
+      "grid_position": 4,
+      "external_ids": {
+        "jolpica_driver_id": "bottas",
+        "jolpica_constructor_id": "mercedes"
+      }
+    },
+    {
+      "driver_id": "kimi_raikkonen_2017",
+      "person_id": "kimi_raikkonen",
+      "code": "RAI",
+      "car_number": 7,
+      "given_name": "Kimi",
+      "family_name": "Räikkönen",
+      "team_id": "ferrari_2017",
+      "team_name": "Ferrari",
+      "grid_position": 5,
+      "external_ids": {
+        "jolpica_driver_id": "raikkonen",
+        "jolpica_constructor_id": "ferrari"
+      }
+    },
+    {
+      "driver_id": "esteban_ocon_2017",
+      "person_id": "esteban_ocon",
+      "code": "OCO",
+      "car_number": 31,
+      "given_name": "Esteban",
+      "family_name": "Ocon",
+      "team_id": "force_india_2017",
+      "team_name": "Force India",
+      "grid_position": 6,
+      "external_ids": {
+        "jolpica_driver_id": "ocon",
+        "jolpica_constructor_id": "force_india"
+      }
+    },
+    {
+      "driver_id": "nico_hulkenberg_2017",
+      "person_id": "nico_hulkenberg",
+      "code": "HUL",
+      "car_number": 27,
+      "given_name": "Nico",
+      "family_name": "Hülkenberg",
+      "team_id": "renault_2017",
+      "team_name": "Renault",
+      "grid_position": 7,
+      "external_ids": {
+        "jolpica_driver_id": "hulkenberg",
+        "jolpica_constructor_id": "renault"
+      }
+    },
+    {
+      "driver_id": "carlos_sainz_2017",
+      "person_id": "carlos_sainz",
+      "code": "SAI",
+      "car_number": 55,
+      "given_name": "Carlos",
+      "family_name": "Sainz",
+      "team_id": "renault_2017",
+      "team_name": "Renault",
+      "grid_position": 8,
+      "external_ids": {
+        "jolpica_driver_id": "sainz",
+        "jolpica_constructor_id": "renault"
+      }
+    },
+    {
+      "driver_id": "sergio_perez_2017",
+      "person_id": "sergio_perez",
+      "code": "PER",
+      "car_number": 11,
+      "given_name": "Sergio",
+      "family_name": "Pérez",
+      "team_id": "force_india_2017",
+      "team_name": "Force India",
+      "grid_position": 9,
+      "external_ids": {
+        "jolpica_driver_id": "perez",
+        "jolpica_constructor_id": "force_india"
+      }
+    },
+    {
+      "driver_id": "felipe_massa_2017",
+      "person_id": "felipe_massa",
+      "code": "MAS",
+      "car_number": 19,
+      "given_name": "Felipe",
+      "family_name": "Massa",
+      "team_id": "williams_2017",
+      "team_name": "Williams",
+      "grid_position": 10,
+      "external_ids": {
+        "jolpica_driver_id": "massa",
+        "jolpica_constructor_id": "williams"
+      }
+    },
+    {
+      "driver_id": "lance_stroll_2017",
+      "person_id": "lance_stroll",
+      "code": "STR",
+      "car_number": 18,
+      "given_name": "Lance",
+      "family_name": "Stroll",
+      "team_id": "williams_2017",
+      "team_name": "Williams",
+      "grid_position": 11,
+      "external_ids": {
+        "jolpica_driver_id": "stroll",
+        "jolpica_constructor_id": "williams"
+      }
+    },
+    {
+      "driver_id": "marcus_ericsson_2017",
+      "person_id": "marcus_ericsson",
+      "code": "ERI",
+      "car_number": 9,
+      "given_name": "Marcus",
+      "family_name": "Ericsson",
+      "team_id": "sauber_2017",
+      "team_name": "Sauber",
+      "grid_position": 12,
+      "external_ids": {
+        "jolpica_driver_id": "ericsson",
+        "jolpica_constructor_id": "sauber"
+      }
+    },
+    {
+      "driver_id": "pascal_wehrlein_2017",
+      "person_id": "pascal_wehrlein",
+      "code": "WEH",
+      "car_number": 94,
+      "given_name": "Pascal",
+      "family_name": "Wehrlein",
+      "team_id": "sauber_2017",
+      "team_name": "Sauber",
+      "grid_position": 13,
+      "external_ids": {
+        "jolpica_driver_id": "wehrlein",
+        "jolpica_constructor_id": "sauber"
+      }
+    },
+    {
+      "driver_id": "kevin_magnussen_2017",
+      "person_id": "kevin_magnussen",
+      "code": "MAG",
+      "car_number": 20,
+      "given_name": "Kevin",
+      "family_name": "Magnussen",
+      "team_id": "haas_2017",
+      "team_name": "Haas F1 Team",
+      "grid_position": 14,
+      "external_ids": {
+        "jolpica_driver_id": "kevin_magnussen",
+        "jolpica_constructor_id": "haas"
+      }
+    },
+    {
+      "driver_id": "romain_grosjean_2017",
+      "person_id": "romain_grosjean",
+      "code": "GRO",
+      "car_number": 8,
+      "given_name": "Romain",
+      "family_name": "Grosjean",
+      "team_id": "haas_2017",
+      "team_name": "Haas F1 Team",
+      "grid_position": 15,
+      "external_ids": {
+        "jolpica_driver_id": "grosjean",
+        "jolpica_constructor_id": "haas"
+      }
+    },
+    {
+      "driver_id": "daniel_ricciardo_2017",
+      "person_id": "daniel_ricciardo",
+      "code": "RIC",
+      "car_number": 3,
+      "given_name": "Daniel",
+      "family_name": "Ricciardo",
+      "team_id": "red_bull_2017",
+      "team_name": "Red Bull",
+      "grid_position": 16,
+      "external_ids": {
+        "jolpica_driver_id": "ricciardo",
+        "jolpica_constructor_id": "red_bull"
+      }
+    },
+    {
+      "driver_id": "brendon_hartley_2017",
+      "person_id": "brendon_hartley",
+      "code": "HAR",
+      "car_number": 28,
+      "given_name": "Brendon",
+      "family_name": "Hartley",
+      "team_id": "toro_rosso_2017",
+      "team_name": "Toro Rosso",
+      "grid_position": 17,
+      "external_ids": {
+        "jolpica_driver_id": "brendon_hartley",
+        "jolpica_constructor_id": "toro_rosso"
+      }
+    },
+    {
+      "driver_id": "fernando_alonso_2017",
+      "person_id": "fernando_alonso",
+      "code": "ALO",
+      "car_number": 14,
+      "given_name": "Fernando",
+      "family_name": "Alonso",
+      "team_id": "mclaren_2017",
+      "team_name": "McLaren",
+      "grid_position": 18,
+      "external_ids": {
+        "jolpica_driver_id": "alonso",
+        "jolpica_constructor_id": "mclaren"
+      }
+    },
+    {
+      "driver_id": "stoffel_vandoorne_2017",
+      "person_id": "stoffel_vandoorne",
+      "code": "VAN",
+      "car_number": 2,
+      "given_name": "Stoffel",
+      "family_name": "Vandoorne",
+      "team_id": "mclaren_2017",
+      "team_name": "McLaren",
+      "grid_position": 19,
+      "external_ids": {
+        "jolpica_driver_id": "vandoorne",
+        "jolpica_constructor_id": "mclaren"
+      }
+    },
+    {
+      "driver_id": "pierre_gasly_2017",
+      "person_id": "pierre_gasly",
+      "code": "GAS",
+      "car_number": 10,
+      "given_name": "Pierre",
+      "family_name": "Gasly",
+      "team_id": "toro_rosso_2017",
+      "team_name": "Toro Rosso",
+      "grid_position": 20,
+      "external_ids": {
+        "jolpica_driver_id": "gasly",
+        "jolpica_constructor_id": "toro_rosso"
+      }
+    }
+  ]
+}

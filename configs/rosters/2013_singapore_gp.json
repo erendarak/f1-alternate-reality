@@ -1,0 +1,347 @@
+{
+  "schema_version": 1,
+  "event_id": "2013_singapore_gp",
+  "season": 2013,
+  "round": 13,
+  "circuit_id": "marina_bay",
+  "race_date": "2013-09-22",
+  "source_type": "historical_verified",
+  "source": {
+    "name": "jolpica-f1",
+    "url": "https://api.jolpi.ca/ergast/f1/2013/13/results.json",
+    "retrieved_utc": "2026-10-20T18:25:14Z",
+    "license_review_status": "research_only"
+  },
+  "entries": [
+    {
+      "driver_id": "sebastian_vettel_2013",
+      "person_id": "sebastian_vettel",
+      "code": "VET",
+      "car_number": 1,
+      "given_name": "Sebastian",
+      "family_name": "Vettel",
+      "team_id": "red_bull_2013",
+      "team_name": "Red Bull",
+      "grid_position": 1,
+      "external_ids": {
+        "jolpica_driver_id": "vettel",
+        "jolpica_constructor_id": "red_bull"
+      }
+    },
+    {
+      "driver_id": "nico_rosberg_2013",
+      "person_id": "nico_rosberg",
+      "code": "ROS",
+      "car_number": 9,
+      "given_name": "Nico",
+      "family_name": "Rosberg",
+      "team_id": "mercedes_2013",
+      "team_name": "Mercedes",
+      "grid_position": 2,
+      "external_ids": {
+        "jolpica_driver_id": "rosberg",
+        "jolpica_constructor_id": "mercedes"
+      }
+    },
+    {
+      "driver_id": "romain_grosjean_2013",
+      "person_id": "romain_grosjean",
+      "code": "GRO",
+      "car_number": 8,
+      "given_name": "Romain",
+      "family_name": "Grosjean",
+      "team_id": "lotus_f1_2013",
+      "team_name": "Lotus F1",
+      "grid_position": 3,
+      "external_ids": {
+        "jolpica_driver_id": "grosjean",
+        "jolpica_constructor_id": "lotus_f1"
+      }
+    },
+    {
+      "driver_id": "mark_webber_2013",
+      "person_id": "mark_webber",
+      "code": "WEB",
+      "car_number": 2,
+      "given_name": "Mark",
+      "family_name": "Webber",
+      "team_id": "red_bull_2013",
+      "team_name": "Red Bull",
+      "grid_position": 4,
+      "external_ids": {
+        "jolpica_driver_id": "webber",
+        "jolpica_constructor_id": "red_bull"
+      }
+    },
+    {
+      "driver_id": "lewis_hamilton_2013",
+      "person_id": "lewis_hamilton",
+      "code": "HAM",
+      "car_number": 10,
+      "given_name": "Lewis",
+      "family_name": "Hamilton",
+      "team_id": "mercedes_2013",
+      "team_name": "Mercedes",
+      "grid_position": 5,
+      "external_ids": {
+        "jolpica_driver_id": "hamilton",
+        "jolpica_constructor_id": "mercedes"
+      }
+    },
+    {
+      "driver_id": "felipe_massa_2013",
+      "person_id": "felipe_massa",
+      "code": "MAS",
+      "car_number": 4,
+      "given_name": "Felipe",
+      "family_name": "Massa",
+      "team_id": "ferrari_2013",
+      "team_name": "Ferrari",
+      "grid_position": 6,
+      "external_ids": {
+        "jolpica_driver_id": "massa",
+        "jolpica_constructor_id": "ferrari"
+      }
+    },
+    {
+      "driver_id": "fernando_alonso_2013",
+      "person_id": "fernando_alonso",
+      "code": "ALO",
+      "car_number": 3,
+      "given_name": "Fernando",
+      "family_name": "Alonso",
+      "team_id": "ferrari_2013",
+      "team_name": "Ferrari",
+      "grid_position": 7,
+      "external_ids": {
+        "jolpica_driver_id": "alonso",
+        "jolpica_constructor_id": "ferrari"
+      }
+    },
+    {
+      "driver_id": "jenson_button_2013",
+      "person_id": "jenson_button",
+      "code": "BUT",
+      "car_number": 5,
+      "given_name": "Jenson",
+      "family_name": "Button",
+      "team_id": "mclaren_2013",
+      "team_name": "McLaren",
+      "grid_position": 8,
+      "external_ids": {
+        "jolpica_driver_id": "button",
+        "jolpica_constructor_id": "mclaren"
+      }
+    },
+    {
+      "driver_id": "daniel_ricciardo_2013",
+      "person_id": "daniel_ricciardo",
+      "code": "RIC",
+      "car_number": 19,
+      "given_name": "Daniel",
+      "family_name": "Ricciardo",
+      "team_id": "toro_rosso_2013",
+      "team_name": "Toro Rosso",
+      "grid_position": 9,
+      "external_ids": {
+        "jolpica_driver_id": "ricciardo",
+        "jolpica_constructor_id": "toro_rosso"
+      }
+    },
+    {
+      "driver_id": "esteban_gutierrez_2013",
+      "person_id": "esteban_gutierrez",
+      "code": "GUT",
+      "car_number": 12,
+      "given_name": "Esteban",
+      "family_name": "Gutiérrez",
+      "team_id": "sauber_2013",
+      "team_name": "Sauber",
+      "grid_position": 10,
+      "external_ids": {
+        "jolpica_driver_id": "gutierrez",
+        "jolpica_constructor_id": "sauber"
+      }
+    },
+    {
+      "driver_id": "nico_hulkenberg_2013",
+      "person_id": "nico_hulkenberg",
+      "code": "HUL",
+      "car_number": 11,
+      "given_name": "Nico",
+      "family_name": "Hülkenberg",
+      "team_id": "sauber_2013",
+      "team_name": "Sauber",
+      "grid_position": 11,
+      "external_ids": {
+        "jolpica_driver_id": "hulkenberg",
+        "jolpica_constructor_id": "sauber"
+      }
+    },
+    {
+      "driver_id": "jean_eric_vergne_2013",
+      "person_id": "jean_eric_vergne",
+      "code": "VER",
+      "car_number": 18,
+      "given_name": "Jean-Éric",
+      "family_name": "Vergne",
+      "team_id": "toro_rosso_2013",
+      "team_name": "Toro Rosso",
+      "grid_position": 12,
+      "external_ids": {
+        "jolpica_driver_id": "vergne",
+        "jolpica_constructor_id": "toro_rosso"
+      }
+    },
+    {
+      "driver_id": "kimi_raikkonen_2013",
+      "person_id": "kimi_raikkonen",
+      "code": "RAI",
+      "car_number": 7,
+      "given_name": "Kimi",
+      "family_name": "Räikkönen",
+      "team_id": "lotus_f1_2013",
+      "team_name": "Lotus F1",
+      "grid_position": 13,
+      "external_ids": {
+        "jolpica_driver_id": "raikkonen",
+        "jolpica_constructor_id": "lotus_f1"
+      }
+    },
+    {
+      "driver_id": "sergio_perez_2013",
+      "person_id": "sergio_perez",
+      "code": "PER",
+      "car_number": 6,
+      "given_name": "Sergio",
+      "family_name": "Pérez",
+      "team_id": "mclaren_2013",
+      "team_name": "McLaren",
+      "grid_position": 14,
+      "external_ids": {
+        "jolpica_driver_id": "perez",
+        "jolpica_constructor_id": "mclaren"
+      }
+    },
+    {
+      "driver_id": "adrian_sutil_2013",
+      "person_id": "adrian_sutil",
+      "code": "SUT",
+      "car_number": 15,
+      "given_name": "Adrian",
+      "family_name": "Sutil",
+      "team_id": "force_india_2013",
+      "team_name": "Force India",
+      "grid_position": 15,
+      "external_ids": {
+        "jolpica_driver_id": "sutil",
+        "jolpica_constructor_id": "force_india"
+      }
+    },
+    {
+      "driver_id": "valtteri_bottas_2013",
+      "person_id": "valtteri_bottas",
+      "code": "BOT",
+      "car_number": 17,
+      "given_name": "Valtteri",
+      "family_name": "Bottas",
+      "team_id": "williams_2013",
+      "team_name": "Williams",
+      "grid_position": 16,
+      "external_ids": {
+        "jolpica_driver_id": "bottas",
+        "jolpica_constructor_id": "williams"
+      }
+    },
+    {
+      "driver_id": "paul_di_resta_2013",
+      "person_id": "paul_di_resta",
+      "code": "DIR",
+      "car_number": 14,
+      "given_name": "Paul",
+      "family_name": "di Resta",
+      "team_id": "force_india_2013",
+      "team_name": "Force India",
+      "grid_position": 17,
+      "external_ids": {
+        "jolpica_driver_id": "resta",
+        "jolpica_constructor_id": "force_india"
+      }
+    },
+    {
+      "driver_id": "pastor_maldonado_2013",
+      "person_id": "pastor_maldonado",
+      "code": "MAL",
+      "car_number": 16,
+      "given_name": "Pastor",
+      "family_name": "Maldonado",
+      "team_id": "williams_2013",
+      "team_name": "Williams",
+      "grid_position": 18,
+      "external_ids": {
+        "jolpica_driver_id": "maldonado",
+        "jolpica_constructor_id": "williams"
+      }
+    },
+    {
+      "driver_id": "charles_pic_2013",
+      "person_id": "charles_pic",
+      "code": "PIC",
+      "car_number": 20,
+      "given_name": "Charles",
+      "family_name": "Pic",
+      "team_id": "caterham_2013",
+      "team_name": "Caterham",
+      "grid_position": 19,
+      "external_ids": {
+        "jolpica_driver_id": "pic",
+        "jolpica_constructor_id": "caterham"
+      }
+    },
+    {
+      "driver_id": "giedo_van_der_garde_2013",
+      "person_id": "giedo_van_der_garde",
+      "code": "VDG",
+      "car_number": 21,
+      "given_name": "Giedo",
+      "family_name": "van der Garde",
+      "team_id": "caterham_2013",
+      "team_name": "Caterham",
+      "grid_position": 20,
+      "external_ids": {
+        "jolpica_driver_id": "garde",
+        "jolpica_constructor_id": "caterham"
+      }
+    },
+    {
+      "driver_id": "jules_bianchi_2013",
+      "person_id": "jules_bianchi",
+      "code": "BIA",
+      "car_number": 22,
+      "given_name": "Jules",
+      "family_name": "Bianchi",
+      "team_id": "marussia_2013",
+      "team_name": "Marussia",
+      "grid_position": 21,
+      "external_ids": {
+        "jolpica_driver_id": "jules_bianchi",
+        "jolpica_constructor_id": "marussia"
+      }
+    },
+    {
+      "driver_id": "max_chilton_2013",
+      "person_id": "max_chilton",
+      "code": "CHI",
+      "car_number": 23,
+      "given_name": "Max",
+      "family_name": "Chilton",
+      "team_id": "marussia_2013",
+      "team_name": "Marussia",
+      "grid_position": 22,
+      "external_ids": {
+        "jolpica_driver_id": "chilton",
+        "jolpica_constructor_id": "marussia"
+      }
+    }
+  ]
+}

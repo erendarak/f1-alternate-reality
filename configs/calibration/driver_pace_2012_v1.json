@@ -1,0 +1,260 @@
+{
+ "label": "2012 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2012_australian_gp",
+  "2012_chinese_gp",
+  "2012_spanish_gp",
+  "2012_monaco_gp",
+  "2012_canadian_gp",
+  "2012_british_gp",
+  "2012_german_gp",
+  "2012_hungarian_gp",
+  "2012_italian_gp",
+  "2012_singapore_gp",
+  "2012_japanese_gp",
+  "2012_indian_gp",
+  "2012_abu_dhabi_gp",
+  "2012_united_states_gp"
+ ],
+ "field_noise_s": 0.5347,
+ "form_sd_s": 0.3054,
+ "form_note": "within-pair gap SD 0.461 s, sampling SD 0.161 s over 143 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "ALO": {
+   "team_id": "ferrari_2012",
+   "pace_vs_teammate_s": -0.1445,
+   "raw_mean_gap_s": -0.1779,
+   "races": 13,
+   "lap_noise_s": 0.4552,
+   "raw_noise_s": 0.427,
+   "clean_laps": 422
+  },
+  "BUT": {
+   "team_id": "mclaren_2012",
+   "pace_vs_teammate_s": 0.0784,
+   "raw_mean_gap_s": 0.0952,
+   "races": 14,
+   "lap_noise_s": 0.5056,
+   "raw_noise_s": 0.4913,
+   "clean_laps": 305
+  },
+  "DAM": {
+   "team_id": "lotus_f1_2012",
+   "pace_vs_teammate_s": 0.119,
+   "raw_mean_gap_s": 0.4761,
+   "races": 1,
+   "lap_noise_s": 0.545,
+   "raw_noise_s": 0.6028,
+   "clean_laps": 27
+  },
+  "DIR": {
+   "team_id": "force_india_2012",
+   "pace_vs_teammate_s": 0.0673,
+   "raw_mean_gap_s": 0.0857,
+   "races": 11,
+   "lap_noise_s": 0.4662,
+   "raw_noise_s": 0.4393,
+   "clean_laps": 383
+  },
+  "DLR": {
+   "team_id": "hrt_2012",
+   "pace_vs_teammate_s": -0.0809,
+   "raw_mean_gap_s": -0.1029,
+   "races": 11,
+   "lap_noise_s": 0.6702,
+   "raw_noise_s": 0.7173,
+   "clean_laps": 431
+  },
+  "GLO": {
+   "team_id": "marussia_2012",
+   "pace_vs_teammate_s": -0.0201,
+   "raw_mean_gap_s": -0.0244,
+   "races": 14,
+   "lap_noise_s": 0.6307,
+   "raw_noise_s": 0.6582,
+   "clean_laps": 524
+  },
+  "GRO": {
+   "team_id": "lotus_f1_2012",
+   "pace_vs_teammate_s": 0.0689,
+   "raw_mean_gap_s": 0.0896,
+   "races": 10,
+   "lap_noise_s": 0.5283,
+   "raw_noise_s": 0.5246,
+   "clean_laps": 261
+  },
+  "HAM": {
+   "team_id": "mclaren_2012",
+   "pace_vs_teammate_s": -0.0784,
+   "raw_mean_gap_s": -0.0952,
+   "races": 14,
+   "lap_noise_s": 0.4646,
+   "raw_noise_s": 0.4387,
+   "clean_laps": 406
+  },
+  "HUL": {
+   "team_id": "force_india_2012",
+   "pace_vs_teammate_s": -0.0673,
+   "raw_mean_gap_s": -0.0857,
+   "races": 11,
+   "lap_noise_s": 0.4998,
+   "raw_noise_s": 0.4841,
+   "clean_laps": 332
+  },
+  "KAR": {
+   "team_id": "hrt_2012",
+   "pace_vs_teammate_s": 0.0809,
+   "raw_mean_gap_s": 0.1029,
+   "races": 11,
+   "lap_noise_s": 0.7093,
+   "raw_noise_s": 0.7814,
+   "clean_laps": 363
+  },
+  "KOB": {
+   "team_id": "sauber_2012",
+   "pace_vs_teammate_s": 0.1169,
+   "raw_mean_gap_s": 0.1487,
+   "races": 11,
+   "lap_noise_s": 0.5379,
+   "raw_noise_s": 0.5395,
+   "clean_laps": 302
+  },
+  "KOV": {
+   "team_id": "caterham_2012",
+   "pace_vs_teammate_s": -0.0295,
+   "raw_mean_gap_s": -0.0364,
+   "races": 13,
+   "lap_noise_s": 0.5861,
+   "raw_noise_s": 0.6016,
+   "clean_laps": 498
+  },
+  "MAL": {
+   "team_id": "williams_2012",
+   "pace_vs_teammate_s": -0.0644,
+   "raw_mean_gap_s": -0.0805,
+   "races": 12,
+   "lap_noise_s": 0.4846,
+   "raw_noise_s": 0.4581,
+   "clean_laps": 283
+  },
+  "MAS": {
+   "team_id": "ferrari_2012",
+   "pace_vs_teammate_s": 0.1445,
+   "raw_mean_gap_s": 0.1779,
+   "races": 13,
+   "lap_noise_s": 0.4933,
+   "raw_noise_s": 0.4756,
+   "clean_laps": 351
+  },
+  "MSC": {
+   "team_id": "mercedes_2012",
+   "pace_vs_teammate_s": 0.1089,
+   "raw_mean_gap_s": 0.1498,
+   "races": 8,
+   "lap_noise_s": 0.5392,
+   "raw_noise_s": 0.5415,
+   "clean_laps": 285
+  },
+  "PER": {
+   "team_id": "sauber_2012",
+   "pace_vs_teammate_s": -0.1169,
+   "raw_mean_gap_s": -0.1487,
+   "races": 11,
+   "lap_noise_s": 0.5347,
+   "raw_noise_s": 0.5347,
+   "clean_laps": 219
+  },
+  "PET": {
+   "team_id": "caterham_2012",
+   "pace_vs_teammate_s": 0.0295,
+   "raw_mean_gap_s": 0.0364,
+   "races": 13,
+   "lap_noise_s": 0.6183,
+   "raw_noise_s": 0.6527,
+   "clean_laps": 365
+  },
+  "PIC": {
+   "team_id": "marussia_2012",
+   "pace_vs_teammate_s": 0.0201,
+   "raw_mean_gap_s": 0.0244,
+   "races": 14,
+   "lap_noise_s": 0.6514,
+   "raw_noise_s": 0.689,
+   "clean_laps": 466
+  },
+  "RAI": {
+   "team_id": "lotus_f1_2012",
+   "pace_vs_teammate_s": -0.098,
+   "raw_mean_gap_s": -0.1247,
+   "races": 11,
+   "lap_noise_s": 0.4964,
+   "raw_noise_s": 0.48,
+   "clean_laps": 350
+  },
+  "RIC": {
+   "team_id": "toro_rosso_2012",
+   "pace_vs_teammate_s": 0.043,
+   "raw_mean_gap_s": 0.0537,
+   "races": 12,
+   "lap_noise_s": 0.5465,
+   "raw_noise_s": 0.5511,
+   "clean_laps": 390
+  },
+  "ROS": {
+   "team_id": "mercedes_2012",
+   "pace_vs_teammate_s": -0.1089,
+   "raw_mean_gap_s": -0.1498,
+   "races": 8,
+   "lap_noise_s": 0.4837,
+   "raw_noise_s": 0.4624,
+   "clean_laps": 358
+  },
+  "SEN": {
+   "team_id": "williams_2012",
+   "pace_vs_teammate_s": 0.0644,
+   "raw_mean_gap_s": 0.0805,
+   "races": 12,
+   "lap_noise_s": 0.5402,
+   "raw_noise_s": 0.5441,
+   "clean_laps": 212
+  },
+  "VER": {
+   "team_id": "toro_rosso_2012",
+   "pace_vs_teammate_s": -0.043,
+   "raw_mean_gap_s": -0.0537,
+   "races": 12,
+   "lap_noise_s": 0.5625,
+   "raw_noise_s": 0.5773,
+   "clean_laps": 281
+  },
+  "VET": {
+   "team_id": "red_bull_2012",
+   "pace_vs_teammate_s": -0.1213,
+   "raw_mean_gap_s": -0.1493,
+   "races": 13,
+   "lap_noise_s": 0.5143,
+   "raw_noise_s": 0.5059,
+   "clean_laps": 365
+  },
+  "WEB": {
+   "team_id": "red_bull_2012",
+   "pace_vs_teammate_s": 0.1213,
+   "raw_mean_gap_s": 0.1493,
+   "races": 13,
+   "lap_noise_s": 0.5143,
+   "raw_noise_s": 0.5047,
+   "clean_laps": 320
+  }
+ },
+ "overtake_threshold_shift_s": 0.0,
+ "overtake_shift_fit": {
+  "skipped": "superseded by the W3 racecraft refit (H2a)"
+ }
+}

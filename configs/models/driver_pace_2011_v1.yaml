@@ -1,0 +1,27 @@
+model_name: driver_pace
+model_version: v1
+kind: same-lap regression per race; driver vs teammate and residual SD, shrunk
+source_type: estimated_from_data
+artifact: configs/calibration/driver_pace_2011_v1.json
+artifact_sha256: sha256:0be93b315cf6f4f17c28ff0cc26bbe6199ea70c5c6421738a4359d512768ab93
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2011_v1.yaml
+training_dataset_content_sha256: sha256:cff23165fccd44386cae400988126a3d08a82b691f723b29dc840051ac3c946b
+training_races:
+- 2011_abu_dhabi_gp
+- 2011_australian_gp
+- 2011_brazilian_gp
+- 2011_chinese_gp
+- 2011_german_gp
+- 2011_indian_gp
+- 2011_italian_gp
+- 2011_japanese_gp
+- 2011_malaysian_gp
+- 2011_monaco_gp
+- 2011_singapore_gp
+- 2011_spanish_gp
+metrics:
+  field_noise_s: 0.6904
+  overtake_threshold_shift_s: 0.0
+  held_out_check: EXP-012
+status: fitted for 2011 (H2a, D-054); held-out check EXP-023

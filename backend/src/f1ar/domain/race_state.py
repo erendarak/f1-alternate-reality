@@ -381,9 +381,10 @@ class DriverEntry(_Frozen):
     team_id: str
     grid_position: int = Field(ge=0)
     start_compound: Compound
-    car_pace_offset_s: float = Field(default=0.0, ge=0.0, le=10.0)
+    car_pace_offset_s: float = Field(default=0.0, ge=0.0, le=15.0)
     """Car performance: lap time lost vs. the fastest car in the field (0 = fastest car).
-    Separate from driver skill (plan §5.2); see ``RaceSetup.inputs`` for its provenance."""
+    Separate from driver skill (plan §5.2); see ``RaceSetup.inputs`` for its provenance. Up to
+    15 s: HRT in its first race (2010 Bahrain, 6.3 km layout) lost ~10 s a lap (H2b)."""
     pit_crew_offset_s: float = Field(default=0.0, ge=-2.0, le=5.0)
     """W4: the team's stationary time vs. the field's median."""
     pit_slow_multiplier: float = Field(default=1.0, ge=0)

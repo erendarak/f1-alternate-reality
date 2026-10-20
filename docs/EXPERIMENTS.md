@@ -1382,6 +1382,45 @@ Negative:             2021's three test races get 33-41 passes vs 60-66 real (fi
 Caveat:               3-5 test races per season: per-season numbers are noisy; trust the pool.
 ```
 
+## EXP-024 — 2010-2017 races (Jolpica only) on their own season's fits vs reality (2026-10-20)
+
+```text
+Experiment ID:        EXP-024
+Research question:    With no compounds, track status or weather, do per-season fits make
+                      held-out 2010-2017 races like the real ones?
+Setup:                as EXP-023 (scripts/experiments/exp023_seasons.py) on 2010-2017: 32 dry_test
+                      races, 6 per-race seeds; "season" vs "borrowed" (2024 tyre model,
+                      editorial driver values). "Real" stops and passes come from Jolpica
+                      (2010: inferred stops); SC laps inferred for both.
+Output:               docs/experiments/exp024.json
+```
+
+| Season | races | stops MAE | passes MAE | retirements bias | order rho |
+|---|---|---|---|---|---|
+| 2010 | 3 | **0.24** (1.17) | 38.1 (43.3) | +0.6 (-2.1) | 0.46 (0.62) |
+| 2011 | 4 | **0.30** (0.97) | **11.3** (32.1) | +2.3 (+0.7) | 0.53 (0.64) |
+| 2012 | 4 | **0.34** (0.57) | 15.3 (14.6) | -0.6 (-1.1) | 0.57 (0.58) |
+| 2013 | 4 | **0.40** (0.49) | 30.9 (28.8) | +0.3 (-0.5) | 0.49 (0.52) |
+| 2014 | 4 | **0.17** (0.34) | 13.3 (13.5) | +0.5 (-0.7) | 0.54 (0.67) |
+| 2015 | 3 | 0.58 (**0.47**) | 14.3 (15.2) | +0.4 (-0.2) | 0.59 (0.63) |
+| 2016 | 5 | **0.36** (0.58) | **14.5** (20.3) | -0.8 (-1.1) | 0.58 (0.61) |
+| 2017 | 5 | **0.73** (1.10) | 19.4 (17.5) | -0.4 (-1.3) | 0.43 (0.48) |
+| **pooled (32)** | | **0.40** (0.71); bias -0.02 (-0.35) | 19.1 (22.5); bias -2.7 (-16.1) | +0.20 (-0.80) | 0.52 (0.59) |
+
+```text
+Findings:             as for 2018-2025: own-season fits halve the stop error and remove its
+                      bias; passes closer on average (borrowed under-passes by 16 a race);
+                      retirements closer; finishing order vs the real race lower (W2 race form).
+                      Tyre management is measurable in the high-degradation years (2013 W5
+                      split-half 0.58 vs 0.13 in 2024).
+Negative:             2010's fit races: 58.9 simulated vs 75.8 "real" passes. Likely a data
+                      artefact: 2010's inferred stops miss 1 in 4, and position changes around a
+                      missed stop count as passes. 2013 test races under-pass (30.9 MAE).
+Caveat:               3-5 test races per season; compounds unknown (2018 ratios), SC and VSC not
+                      told apart, no penalties; the tyre grid was widened after four seasons hit
+                      its edge (kappa 0.8).
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

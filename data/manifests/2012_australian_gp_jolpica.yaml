@@ -1,0 +1,102 @@
+dataset_id: 2012_australian_gp_jolpica_v1
+event: 2012_australian_gp
+source: jolpica-f1 (history cache, H2b)
+source_api_version: ergast-compatible v1
+retrieved_utc: '2026-10-20T18:25:13Z'
+session_key: 2012/round 1/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2012_australian_gp/laps.parquet
+  sha256: sha256:7c6d8524394b31034de9c61b9e8b149394ed1d1e65c45dd631cb8f12a89881f5
+  rows: 1044
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - lap_start_time_s
+  - lap_end_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - position
+  - track_status
+  - is_accurate
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - speed_trap_kph
+  - fresh_tyre
+  - deleted
+  - fastf1_generated
+  - compound_name
+  source_type: historical_verified
+  description: lap times and positions (Jolpica); stints, tyre age, pit flags and
+    track status derived, see missingness notes
+- relative_path: data/processed/2012_australian_gp/results.parquet
+  sha256: sha256:43d9aad10ce943838c63b1eacf4b3f99b2fa9a0b8c40b5359a7041680d1fb0bd
+  rows: 22
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification (Jolpica)
+- relative_path: data/processed/2012_australian_gp/track_status.parquet
+  sha256: sha256:1239b54bbcbc6b914faaea426821f42715e36d99b6b9096162d5b840a4698ed6
+  rows: 3
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: estimated_from_data
+  description: neutralised laps inferred
+- relative_path: data/processed/2012_australian_gp/weather.parquet
+  sha256: sha256:fb332288c24258223ec517b631a7893ce28aef8b72aa907097ed5a9de5d4e709
+  rows: 58
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: estimated_from_data
+  description: rain per lap inferred from lap times
+- relative_path: data/processed/2012_australian_gp/race_control.parquet
+  sha256: sha256:aeed3440cc15104b2331e32ef6ab8df8d822bcef6986ed5bfa8c6e235a532997
+  rows: 0
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: editorial_assumption
+  description: 'no race control messages: empty'
+unit_conventions:
+  time: seconds from the start (lap times summed per car)
+missingness_notes:
+- 'pit_stops: historical_verified: Jolpica pit stops'
+- 'stints_tyre_age: estimated_from_data: laps since the start / last stop; new sets'
+- 'track_status: estimated_from_data: neutralised laps inferred from the field''s
+  lap times'
+- 'compound: unknown (Jolpica has no tyre data): compound = MEDIUM placeholder, compound_name
+  = UNKNOWN'
+- 'weather: estimated_from_data: rain only, inferred from lap times (0 wet laps: field
+  median (1.08, 1.22) x the race''s 5th-percentile green lap); temperatures unknown'

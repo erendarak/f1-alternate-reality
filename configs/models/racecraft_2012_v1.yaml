@@ -1,0 +1,36 @@
+model_name: racecraft
+model_version: v1
+kind: ML on lap-level encounters (W2 noise convolved) with ridge driver terms; lap-1 gains; launch spread
+  by simulation
+source_type: estimated_from_data (lap-1 grid profile editorial)
+artifact: configs/calibration/racecraft_2012_v1.json
+artifact_sha256: sha256:72076724fbbd74ce6f36b3c4a0e4764516e55b5bc03b3cd11061c94ef7f9f2a2
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2012_v1.yaml
+training_dataset_content_sha256: sha256:63fa29026c4ffd3f8b351850f4a5cc01fbd91559e0061d34236a70ac811768b8
+training_races:
+- 2012_abu_dhabi_gp
+- 2012_australian_gp
+- 2012_bahrain_gp
+- 2012_belgian_gp
+- 2012_british_gp
+- 2012_canadian_gp
+- 2012_chinese_gp
+- 2012_european_gp
+- 2012_german_gp
+- 2012_hungarian_gp
+- 2012_indian_gp
+- 2012_italian_gp
+- 2012_japanese_gp
+- 2012_korean_gp
+- 2012_monaco_gp
+- 2012_singapore_gp
+- 2012_spanish_gp
+- 2012_united_states_gp
+metrics:
+  check:
+    dry_train_passes_sim: 63.59
+    dry_train_passes_real: 62.14
+    dry_train_lap1_passes_real: 17.93
+  held_out_check: EXP-013
+status: fitted for 2012 (H2a, D-054); held-out check EXP-023

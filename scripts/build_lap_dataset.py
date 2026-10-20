@@ -110,6 +110,8 @@ def main() -> None:
         if is_wet_race(race):
             wet.add(event_id)
         source_manifest = ROOT / "data" / "manifests" / f"{event_id}_fastf1.yaml"
+        if not source_manifest.exists():  # H2b: 2010-2017 races converted from Jolpica
+            source_manifest = source_manifest.with_name(f"{event_id}_jolpica.yaml")
         sources[event_id] = file_sha256(source_manifest)
         reference[event_id] = race_reference(data_dir, race, event_id in wet)
         races.append(race)

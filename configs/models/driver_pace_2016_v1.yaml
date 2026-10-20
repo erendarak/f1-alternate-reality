@@ -1,0 +1,29 @@
+model_name: driver_pace
+model_version: v1
+kind: same-lap regression per race; driver vs teammate and residual SD, shrunk
+source_type: estimated_from_data
+artifact: configs/calibration/driver_pace_2016_v1.json
+artifact_sha256: sha256:3157cbfddc3036c7aa2fe6b68f941eeb5be7037cf21721fa9c9a3eddaadc0f38
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2016_v1.yaml
+training_dataset_content_sha256: sha256:f4680315653b995fb9b40d115939c71e0492ef8aac60308c1a01114896df156a
+training_races:
+- 2016_abu_dhabi_gp
+- 2016_australian_gp
+- 2016_austrian_gp
+- 2016_bahrain_gp
+- 2016_belgian_gp
+- 2016_canadian_gp
+- 2016_chinese_gp
+- 2016_hungarian_gp
+- 2016_italian_gp
+- 2016_japanese_gp
+- 2016_mexican_gp
+- 2016_singapore_gp
+- 2016_spanish_gp
+- 2016_united_states_gp
+metrics:
+  field_noise_s: 0.5345
+  overtake_threshold_shift_s: 0.0
+  held_out_check: EXP-012
+status: fitted for 2016 (H2a, D-054); held-out check EXP-023

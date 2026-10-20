@@ -1,0 +1,103 @@
+dataset_id: 2011_hungarian_gp_jolpica_v1
+event: 2011_hungarian_gp
+source: jolpica-f1 (history cache, H2b)
+source_api_version: ergast-compatible v1
+retrieved_utc: '2026-10-20T18:25:13Z'
+session_key: 2011/round 11/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2011_hungarian_gp/laps.parquet
+  sha256: sha256:d9055c235fcb9cba8344f7e7a043a85c45bd53cd7fc27b085c6822174067fc95
+  rows: 1489
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - lap_start_time_s
+  - lap_end_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - position
+  - track_status
+  - is_accurate
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - speed_trap_kph
+  - fresh_tyre
+  - deleted
+  - fastf1_generated
+  - compound_name
+  source_type: historical_verified
+  description: lap times and positions (Jolpica); stints, tyre age, pit flags and
+    track status derived, see missingness notes
+- relative_path: data/processed/2011_hungarian_gp/results.parquet
+  sha256: sha256:c10941aa3da3cebfda81f98e3563b56d7bdb6617bd213e108165c776259c5750
+  rows: 24
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification (Jolpica)
+- relative_path: data/processed/2011_hungarian_gp/track_status.parquet
+  sha256: sha256:5716f4f03c8735f6679534255494d433b1b0882f405e7ed3d04c0d024cc72f65
+  rows: 3
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: estimated_from_data
+  description: neutralised laps inferred
+- relative_path: data/processed/2011_hungarian_gp/weather.parquet
+  sha256: sha256:878decb1863275d39fda336e7e7dec3b9007b4e0c9c75bf7981ec6dad97cf243
+  rows: 70
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: estimated_from_data
+  description: rain per lap inferred from lap times
+- relative_path: data/processed/2011_hungarian_gp/race_control.parquet
+  sha256: sha256:aeed3440cc15104b2331e32ef6ab8df8d822bcef6986ed5bfa8c6e235a532997
+  rows: 0
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: editorial_assumption
+  description: 'no race control messages: empty'
+unit_conventions:
+  time: seconds from the start (lap times summed per car)
+missingness_notes:
+- 'pit_stops: historical_verified: Jolpica pit stops'
+- 'stints_tyre_age: estimated_from_data: laps since the start / last stop; new sets'
+- 'track_status: estimated_from_data: neutralised laps inferred from the field''s
+  lap times'
+- 'compound: unknown (Jolpica has no tyre data): compound = MEDIUM placeholder, compound_name
+  = UNKNOWN'
+- 'weather: estimated_from_data: rain only, inferred from lap times (13 wet laps:
+  field median (1.08, 1.22) x the race''s 5th-percentile green lap); temperatures
+  unknown'

@@ -1,0 +1,228 @@
+{
+ "label": "2010 persona estimates (W5, D-045)",
+ "fitted_on": [
+  "2010_bahrain_gp",
+  "2010_australian_gp",
+  "2010_malaysian_gp",
+  "2010_spanish_gp",
+  "2010_monaco_gp",
+  "2010_turkish_gp",
+  "2010_european_gp",
+  "2010_british_gp",
+  "2010_german_gp",
+  "2010_italian_gp",
+  "2010_singapore_gp",
+  "2010_brazilian_gp",
+  "2010_abu_dhabi_gp"
+ ],
+ "wear": {
+  "reference_slope_s_per_lap2": 0.015458871930219368,
+  "split_half_drivers": -0.246,
+  "split_half_teams": 0.562,
+  "reliability_drivers": 0.0,
+  "reliability_teams": 0.72,
+  "drivers": {
+   "ALG": {
+    "team_id": "toro_rosso_2010",
+    "wear_multiplier": 0.8719,
+    "vs_teammate_s_per_lap2": -0.00307,
+    "team_vs_field_s_per_lap2": -0.00275,
+    "races": 11
+   },
+   "ALO": {
+    "team_id": "ferrari_2010",
+    "wear_multiplier": 1.2323,
+    "vs_teammate_s_per_lap2": 0.00218,
+    "team_vs_field_s_per_lap2": 0.00499,
+    "races": 10
+   },
+   "BAR": {
+    "team_id": "williams_2010",
+    "wear_multiplier": 0.902,
+    "vs_teammate_s_per_lap2": -0.00813,
+    "team_vs_field_s_per_lap2": -0.0021,
+    "races": 10
+   },
+   "BUE": {
+    "team_id": "toro_rosso_2010",
+    "wear_multiplier": 0.8719,
+    "vs_teammate_s_per_lap2": 0.00307,
+    "team_vs_field_s_per_lap2": -0.00275,
+    "races": 11
+   },
+   "BUT": {
+    "team_id": "mclaren_2010",
+    "wear_multiplier": 0.9075,
+    "vs_teammate_s_per_lap2": -0.00613,
+    "team_vs_field_s_per_lap2": -0.00199,
+    "races": 11
+   },
+   "CHA": {
+    "team_id": "hrt_2010",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": -0.00131,
+    "team_vs_field_s_per_lap2": 0.01518,
+    "races": 5
+   },
+   "DIG": {
+    "team_id": "virgin_2010",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": 0.00259,
+    "team_vs_field_s_per_lap2": 0.00749,
+    "races": 8
+   },
+   "DLR": {
+    "team_id": "sauber_2010",
+    "wear_multiplier": 1.0571,
+    "vs_teammate_s_per_lap2": -0.0024,
+    "team_vs_field_s_per_lap2": 0.00123,
+    "races": 3
+   },
+   "GLO": {
+    "team_id": "virgin_2010",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": -0.00259,
+    "team_vs_field_s_per_lap2": 0.00749,
+    "races": 8
+   },
+   "HAM": {
+    "team_id": "mclaren_2010",
+    "wear_multiplier": 0.9075,
+    "vs_teammate_s_per_lap2": 0.00613,
+    "team_vs_field_s_per_lap2": -0.00199,
+    "races": 11
+   },
+   "HEI": {
+    "team_id": "sauber_2010",
+    "wear_multiplier": 1.0571,
+    "vs_teammate_s_per_lap2": -0.00049,
+    "team_vs_field_s_per_lap2": 0.00123,
+    "races": 2
+   },
+   "HUL": {
+    "team_id": "williams_2010",
+    "wear_multiplier": 0.902,
+    "vs_teammate_s_per_lap2": 0.00813,
+    "team_vs_field_s_per_lap2": -0.0021,
+    "races": 10
+   },
+   "KLI": {
+    "team_id": "hrt_2010",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": 0.00731,
+    "team_vs_field_s_per_lap2": 0.01518,
+    "races": 3
+   },
+   "KOB": {
+    "team_id": "sauber_2010",
+    "wear_multiplier": 1.0571,
+    "vs_teammate_s_per_lap2": 0.00164,
+    "team_vs_field_s_per_lap2": 0.00123,
+    "races": 5
+   },
+   "KOV": {
+    "team_id": "lotus_racing_2010",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": -0.00856,
+    "team_vs_field_s_per_lap2": 0.00694,
+    "races": 8
+   },
+   "KUB": {
+    "team_id": "renault_2010",
+    "wear_multiplier": 0.7778,
+    "vs_teammate_s_per_lap2": -0.00065,
+    "team_vs_field_s_per_lap2": -0.00477,
+    "races": 10
+   },
+   "LIU": {
+    "team_id": "force_india_2010",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": 0.00013,
+    "team_vs_field_s_per_lap2": -0.01335,
+    "races": 8
+   },
+   "MAS": {
+    "team_id": "ferrari_2010",
+    "wear_multiplier": 1.2323,
+    "vs_teammate_s_per_lap2": -0.00218,
+    "team_vs_field_s_per_lap2": 0.00499,
+    "races": 10
+   },
+   "MSC": {
+    "team_id": "mercedes_2010",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": -0.00111,
+    "team_vs_field_s_per_lap2": -0.01299,
+    "races": 10
+   },
+   "PET": {
+    "team_id": "renault_2010",
+    "wear_multiplier": 0.7778,
+    "vs_teammate_s_per_lap2": 0.00065,
+    "team_vs_field_s_per_lap2": -0.00477,
+    "races": 10
+   },
+   "ROS": {
+    "team_id": "mercedes_2010",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": 0.00111,
+    "team_vs_field_s_per_lap2": -0.01299,
+    "races": 10
+   },
+   "SEN": {
+    "team_id": "hrt_2010",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": -0.00186,
+    "team_vs_field_s_per_lap2": 0.01518,
+    "races": 7
+   },
+   "SUT": {
+    "team_id": "force_india_2010",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": -0.00013,
+    "team_vs_field_s_per_lap2": -0.01335,
+    "races": 8
+   },
+   "TRU": {
+    "team_id": "lotus_racing_2010",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": 0.00856,
+    "team_vs_field_s_per_lap2": 0.00694,
+    "races": 8
+   },
+   "VET": {
+    "team_id": "red_bull_2010",
+    "wear_multiplier": 1.099,
+    "vs_teammate_s_per_lap2": 0.00241,
+    "team_vs_field_s_per_lap2": 0.00213,
+    "races": 10
+   },
+   "WEB": {
+    "team_id": "red_bull_2010",
+    "wear_multiplier": 1.099,
+    "vs_teammate_s_per_lap2": -0.00241,
+    "team_vs_field_s_per_lap2": 0.00213,
+    "races": 10
+   },
+   "YAM": {
+    "team_id": "hrt_2010",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": -0.00237,
+    "team_vs_field_s_per_lap2": 0.01518,
+    "races": 1
+   }
+  }
+ },
+ "derived_at_setup": {
+  "consistency": "rank of W2 lap noise (driver_pace_2010_v1), persona spread",
+  "overtake_skill": "rank of W3 attack term (racecraft_2010_v1), persona spread",
+  "defense_skill": "rank of W3 defend term (racecraft_2010_v1), persona spread"
+ },
+ "not_measurable": {
+  "mistake proneness (consistency x composure in incidents)": "blue flags dominate big losses (2024: 24 events left; odd vs even races r = -0.33)",
+  "composure": "no measurement (penalties too few per driver)",
+  "wet_skill": "3 wet races",
+  "risk_appetite": "a preference, not a measurement",
+  "qualifying_skill": "the grid is real"
+ }
+}

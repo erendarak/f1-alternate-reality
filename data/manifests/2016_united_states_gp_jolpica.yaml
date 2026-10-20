@@ -1,0 +1,102 @@
+dataset_id: 2016_united_states_gp_jolpica_v1
+event: 2016_united_states_gp
+source: jolpica-f1 (history cache, H2b)
+source_api_version: ergast-compatible v1
+retrieved_utc: '2026-10-20T18:25:17Z'
+session_key: 2016/round 18/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2016_united_states_gp/laps.parquet
+  sha256: sha256:d60b08f58fa3bbf02df25673309e1bd88ef0cfd4d27ea8309e417c5e31ee0d1f
+  rows: 1078
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - lap_start_time_s
+  - lap_end_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - position
+  - track_status
+  - is_accurate
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - speed_trap_kph
+  - fresh_tyre
+  - deleted
+  - fastf1_generated
+  - compound_name
+  source_type: historical_verified
+  description: lap times and positions (Jolpica); stints, tyre age, pit flags and
+    track status derived, see missingness notes
+- relative_path: data/processed/2016_united_states_gp/results.parquet
+  sha256: sha256:6c77b502650dfc0111227ab88e970c60c403c0a69fb2e69bf5f1ba2e65f4e605
+  rows: 22
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification (Jolpica)
+- relative_path: data/processed/2016_united_states_gp/track_status.parquet
+  sha256: sha256:d0bc5306e800f0d165278a97dfe5700f55127f990170c43475f2e16abb080ca6
+  rows: 3
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: estimated_from_data
+  description: neutralised laps inferred
+- relative_path: data/processed/2016_united_states_gp/weather.parquet
+  sha256: sha256:1f172e4a5fb6015bc459609d874350fd29e7bec38e4397e78e974c6ecae9168f
+  rows: 56
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: estimated_from_data
+  description: rain per lap inferred from lap times
+- relative_path: data/processed/2016_united_states_gp/race_control.parquet
+  sha256: sha256:aeed3440cc15104b2331e32ef6ab8df8d822bcef6986ed5bfa8c6e235a532997
+  rows: 0
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: editorial_assumption
+  description: 'no race control messages: empty'
+unit_conventions:
+  time: seconds from the start (lap times summed per car)
+missingness_notes:
+- 'pit_stops: historical_verified: Jolpica pit stops'
+- 'stints_tyre_age: estimated_from_data: laps since the start / last stop; new sets'
+- 'track_status: estimated_from_data: neutralised laps inferred from the field''s
+  lap times'
+- 'compound: unknown (Jolpica has no tyre data): compound = MEDIUM placeholder, compound_name
+  = UNKNOWN'
+- 'weather: estimated_from_data: rain only, inferred from lap times (0 wet laps: field
+  median (1.08, 1.22) x the race''s 5th-percentile green lap); temperatures unknown'

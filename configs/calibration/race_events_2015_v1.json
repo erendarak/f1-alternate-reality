@@ -1,0 +1,241 @@
+{
+ "label": "2015 race events (W4, D-042)",
+ "events": [
+  "2015_australian_gp",
+  "2015_malaysian_gp",
+  "2015_chinese_gp",
+  "2015_spanish_gp",
+  "2015_monaco_gp",
+  "2015_canadian_gp",
+  "2015_hungarian_gp",
+  "2015_belgian_gp",
+  "2015_singapore_gp",
+  "2015_japanese_gp",
+  "2015_russian_gp",
+  "2015_mexican_gp",
+  "2015_brazilian_gp",
+  "2015_abu_dhabi_gp",
+  "2015_bahrain_gp",
+  "2015_austrian_gp",
+  "2015_italian_gp",
+  "2015_british_gp",
+  "2015_united_states_gp"
+ ],
+ "dry_events": [
+  "2015_australian_gp",
+  "2015_malaysian_gp",
+  "2015_chinese_gp",
+  "2015_spanish_gp",
+  "2015_monaco_gp",
+  "2015_canadian_gp",
+  "2015_hungarian_gp",
+  "2015_belgian_gp",
+  "2015_singapore_gp",
+  "2015_japanese_gp",
+  "2015_russian_gp",
+  "2015_mexican_gp",
+  "2015_brazilian_gp",
+  "2015_abu_dhabi_gp",
+  "2015_bahrain_gp",
+  "2015_austrian_gp",
+  "2015_italian_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": 0.1236,
+  "slow_stop_scale_s": 7.69,
+  "stops": 623,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {
+  "ferrari_2015": {
+   "pit_crew_offset_s": -0.373,
+   "pit_slow_multiplier": 1.053,
+   "stops": 60,
+   "raw_median_rel_s": -0.497,
+   "raw_slow_share": 0.133
+  },
+  "force_india_2015": {
+   "pit_crew_offset_s": -0.097,
+   "pit_slow_multiplier": 0.922,
+   "stops": 64,
+   "raw_median_rel_s": -0.127,
+   "raw_slow_share": 0.109
+  },
+  "lotus_f1_2015": {
+   "pit_crew_offset_s": 0.032,
+   "pit_slow_multiplier": 1.275,
+   "stops": 57,
+   "raw_median_rel_s": 0.043,
+   "raw_slow_share": 0.175
+  },
+  "manor_2015": {
+   "pit_crew_offset_s": 1.112,
+   "pit_slow_multiplier": 1.444,
+   "stops": 58,
+   "raw_median_rel_s": 1.495,
+   "raw_slow_share": 0.207
+  },
+  "mclaren_2015": {
+   "pit_crew_offset_s": 0.004,
+   "pit_slow_multiplier": 0.883,
+   "stops": 59,
+   "raw_median_rel_s": 0.006,
+   "raw_slow_share": 0.102
+  },
+  "mercedes_2015": {
+   "pit_crew_offset_s": -0.497,
+   "pit_slow_multiplier": 0.419,
+   "stops": 61,
+   "raw_median_rel_s": -0.66,
+   "raw_slow_share": 0.016
+  },
+  "red_bull_2015": {
+   "pit_crew_offset_s": -0.273,
+   "pit_slow_multiplier": 0.81,
+   "stops": 57,
+   "raw_median_rel_s": -0.369,
+   "raw_slow_share": 0.088
+  },
+  "sauber_2015": {
+   "pit_crew_offset_s": 0.255,
+   "pit_slow_multiplier": 0.877,
+   "stops": 78,
+   "raw_median_rel_s": 0.32,
+   "raw_slow_share": 0.103
+  },
+  "toro_rosso_2015": {
+   "pit_crew_offset_s": 0.165,
+   "pit_slow_multiplier": 1.454,
+   "stops": 63,
+   "raw_median_rel_s": 0.217,
+   "raw_slow_share": 0.206
+  },
+  "williams_2015": {
+   "pit_crew_offset_s": -0.068,
+   "pit_slow_multiplier": 0.902,
+   "stops": 66,
+   "raw_median_rel_s": -0.089,
+   "raw_slow_share": 0.106
+  }
+ },
+ "reliability": {
+  "field_retirements_per_start": 0.2143,
+  "teams": {
+   "ferrari_2015": {
+    "failure_multiplier": 0.914,
+    "retirements": 7,
+    "starts": 38
+   },
+   "force_india_2015": {
+    "failure_multiplier": 0.914,
+    "retirements": 7,
+    "starts": 38
+   },
+   "lotus_f1_2015": {
+    "failure_multiplier": 1.591,
+    "retirements": 16,
+    "starts": 38
+   },
+   "manor_2015": {
+    "failure_multiplier": 0.711,
+    "retirements": 4,
+    "starts": 36
+   },
+   "mclaren_2015": {
+    "failure_multiplier": 1.441,
+    "retirements": 14,
+    "starts": 38
+   },
+   "mercedes_2015": {
+    "failure_multiplier": 0.538,
+    "retirements": 2,
+    "starts": 38
+   },
+   "red_bull_2015": {
+    "failure_multiplier": 0.839,
+    "retirements": 6,
+    "starts": 38
+   },
+   "sauber_2015": {
+    "failure_multiplier": 0.839,
+    "retirements": 6,
+    "starts": 38
+   },
+   "toro_rosso_2015": {
+    "failure_multiplier": 1.29,
+    "retirements": 12,
+    "starts": 38
+   },
+   "williams_2015": {
+    "failure_multiplier": 0.914,
+    "retirements": 7,
+    "starts": 38
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.0,
+  "sc_share": 0.4,
+  "count": 0,
+  "race_laps": 1041,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 0,
+  "races": 19,
+  "per_race": 0.0
+ },
+ "penalties": {
+  "counts": {},
+  "collision_per_pass": 0.0,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.0,
+  "other_per_car_lap": 0.0,
+  "passes": 953,
+  "raw": {
+   "collision_per_pass": 0.0,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.0,
+   "other_per_car_lap": 0.0
+  },
+  "scale": 1.0,
+  "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
+ },
+ "fitted": {
+  "risk_scale": 1.8776,
+  "red_flag_per_crash": 0.0,
+  "fit": {
+   "races": [
+    "2015_australian_gp",
+    "2015_malaysian_gp",
+    "2015_chinese_gp",
+    "2015_spanish_gp",
+    "2015_monaco_gp",
+    "2015_canadian_gp",
+    "2015_hungarian_gp",
+    "2015_belgian_gp",
+    "2015_singapore_gp",
+    "2015_japanese_gp",
+    "2015_russian_gp",
+    "2015_mexican_gp",
+    "2015_brazilian_gp",
+    "2015_abu_dhabi_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 1.4,
+   "sim_failures_per_race": 0.514,
+   "real_retirements_per_race": 3.143,
+   "target_red_flags_per_race": 0.0
+  },
+  "check": {
+   "retirements_per_race": 2.957,
+   "red_flags_per_race": 0.0,
+   "safety_cars_per_race": 0.757,
+   "vscs_per_race": 0.443,
+   "penalties_per_race": 0.0,
+   "penalties_per_race_after_scale": 0.0
+  }
+ }
+}

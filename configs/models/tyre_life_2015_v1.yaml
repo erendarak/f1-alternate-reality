@@ -1,0 +1,37 @@
+model_name: tyre_life
+model_version: v1
+kind: stint-length life + same-lap wear regression; globals fitted on behaviour
+source_type: estimated_from_data
+artifact: configs/calibration/tyre_life_2015_v1.json
+artifact_sha256: sha256:5a38bf549672a7e72836fd0d2d054897a57601f904e19f14448cb1020dfdc293
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2015_v1.yaml
+training_dataset_content_sha256: sha256:e1c38af794b353b7993adcc251ff822b5a38319c6c03d51f96a29565175a5ae0
+training_races:
+- 2015_abu_dhabi_gp
+- 2015_australian_gp
+- 2015_belgian_gp
+- 2015_brazilian_gp
+- 2015_canadian_gp
+- 2015_chinese_gp
+- 2015_hungarian_gp
+- 2015_japanese_gp
+- 2015_malaysian_gp
+- 2015_mexican_gp
+- 2015_monaco_gp
+- 2015_russian_gp
+- 2015_singapore_gp
+- 2015_spanish_gp
+metrics:
+  dry_train_fit:
+    kappa: 0.8
+    delta_s: 0.65
+    loss: 0.4467
+    stops_sim: 2.181
+    stops_real: 2.209
+    share_sim:
+      SOFT: 0.711
+      MEDIUM: 0.289
+      HARD: 0.0
+  held_out_check: EXP-010 (docs/experiments/exp010.json)
+status: fitted for 2015 (H2a, D-054); held-out check EXP-023

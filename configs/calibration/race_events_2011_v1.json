@@ -1,0 +1,262 @@
+{
+ "label": "2011 race events (W4, D-042)",
+ "events": [
+  "2011_australian_gp",
+  "2011_malaysian_gp",
+  "2011_chinese_gp",
+  "2011_spanish_gp",
+  "2011_monaco_gp",
+  "2011_german_gp",
+  "2011_italian_gp",
+  "2011_singapore_gp",
+  "2011_japanese_gp",
+  "2011_indian_gp",
+  "2011_abu_dhabi_gp",
+  "2011_brazilian_gp",
+  "2011_turkish_gp",
+  "2011_european_gp",
+  "2011_belgian_gp",
+  "2011_korean_gp",
+  "2011_canadian_gp",
+  "2011_british_gp",
+  "2011_hungarian_gp"
+ ],
+ "dry_events": [
+  "2011_australian_gp",
+  "2011_malaysian_gp",
+  "2011_chinese_gp",
+  "2011_spanish_gp",
+  "2011_monaco_gp",
+  "2011_german_gp",
+  "2011_italian_gp",
+  "2011_singapore_gp",
+  "2011_japanese_gp",
+  "2011_indian_gp",
+  "2011_abu_dhabi_gp",
+  "2011_brazilian_gp",
+  "2011_turkish_gp",
+  "2011_european_gp",
+  "2011_belgian_gp",
+  "2011_korean_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": 0.1051,
+  "slow_stop_scale_s": 4.71,
+  "stops": 1018,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {
+  "ferrari_2011": {
+   "pit_crew_offset_s": -0.362,
+   "pit_slow_multiplier": 0.65,
+   "stops": 104,
+   "raw_median_rel_s": -0.432,
+   "raw_slow_share": 0.058
+  },
+  "force_india_2011": {
+   "pit_crew_offset_s": -0.251,
+   "pit_slow_multiplier": 0.751,
+   "stops": 86,
+   "raw_median_rel_s": -0.309,
+   "raw_slow_share": 0.07
+  },
+  "hrt_2011": {
+   "pit_crew_offset_s": 1.797,
+   "pit_slow_multiplier": 3.185,
+   "stops": 75,
+   "raw_median_rel_s": 2.276,
+   "raw_slow_share": 0.427
+  },
+  "lotus_racing_2011": {
+   "pit_crew_offset_s": 0.546,
+   "pit_slow_multiplier": 0.712,
+   "stops": 79,
+   "raw_median_rel_s": 0.684,
+   "raw_slow_share": 0.063
+  },
+  "mclaren_2011": {
+   "pit_crew_offset_s": -0.548,
+   "pit_slow_multiplier": 0.52,
+   "stops": 101,
+   "raw_median_rel_s": -0.657,
+   "raw_slow_share": 0.04
+  },
+  "mercedes_2011": {
+   "pit_crew_offset_s": -0.56,
+   "pit_slow_multiplier": 0.738,
+   "stops": 88,
+   "raw_median_rel_s": -0.687,
+   "raw_slow_share": 0.068
+  },
+  "red_bull_2011": {
+   "pit_crew_offset_s": -0.644,
+   "pit_slow_multiplier": 0.468,
+   "stops": 95,
+   "raw_median_rel_s": -0.78,
+   "raw_slow_share": 0.032
+  },
+  "renault_2011": {
+   "pit_crew_offset_s": 0.037,
+   "pit_slow_multiplier": 0.915,
+   "stops": 86,
+   "raw_median_rel_s": 0.045,
+   "raw_slow_share": 0.093
+  },
+  "sauber_2011": {
+   "pit_crew_offset_s": 0.228,
+   "pit_slow_multiplier": 1.373,
+   "stops": 75,
+   "raw_median_rel_s": 0.288,
+   "raw_slow_share": 0.16
+  },
+  "toro_rosso_2011": {
+   "pit_crew_offset_s": 0.22,
+   "pit_slow_multiplier": 0.746,
+   "stops": 74,
+   "raw_median_rel_s": 0.28,
+   "raw_slow_share": 0.068
+  },
+  "virgin_2011": {
+   "pit_crew_offset_s": 0.636,
+   "pit_slow_multiplier": 1.18,
+   "stops": 68,
+   "raw_median_rel_s": 0.823,
+   "raw_slow_share": 0.132
+  },
+  "williams_2011": {
+   "pit_crew_offset_s": 0.096,
+   "pit_slow_multiplier": 1.151,
+   "stops": 87,
+   "raw_median_rel_s": 0.118,
+   "raw_slow_share": 0.126
+  }
+ },
+ "reliability": {
+  "field_retirements_per_start": 0.1718,
+  "teams": {
+   "ferrari_2011": {
+    "failure_multiplier": 0.763,
+    "retirements": 4,
+    "starts": 38
+   },
+   "force_india_2011": {
+    "failure_multiplier": 0.763,
+    "retirements": 4,
+    "starts": 38
+   },
+   "hrt_2011": {
+    "failure_multiplier": 0.982,
+    "retirements": 6,
+    "starts": 36
+   },
+   "lotus_racing_2011": {
+    "failure_multiplier": 1.232,
+    "retirements": 9,
+    "starts": 38
+   },
+   "mclaren_2011": {
+    "failure_multiplier": 0.856,
+    "retirements": 5,
+    "starts": 38
+   },
+   "mercedes_2011": {
+    "failure_multiplier": 1.044,
+    "retirements": 7,
+    "starts": 38
+   },
+   "red_bull_2011": {
+    "failure_multiplier": 0.575,
+    "retirements": 2,
+    "starts": 38
+   },
+   "renault_2011": {
+    "failure_multiplier": 1.044,
+    "retirements": 7,
+    "starts": 38
+   },
+   "sauber_2011": {
+    "failure_multiplier": 1.044,
+    "retirements": 7,
+    "starts": 38
+   },
+   "toro_rosso_2011": {
+    "failure_multiplier": 1.232,
+    "retirements": 9,
+    "starts": 38
+   },
+   "virgin_2011": {
+    "failure_multiplier": 1.138,
+    "retirements": 8,
+    "starts": 38
+   },
+   "williams_2011": {
+    "failure_multiplier": 1.326,
+    "retirements": 10,
+    "starts": 38
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.0,
+  "sc_share": 0.4,
+  "count": 0,
+  "race_laps": 941,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 0,
+  "races": 19,
+  "per_race": 0.0
+ },
+ "penalties": {
+  "counts": {},
+  "collision_per_pass": 0.0,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.0,
+  "other_per_car_lap": 0.0,
+  "passes": 1374,
+  "raw": {
+   "collision_per_pass": 0.0,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.0,
+   "other_per_car_lap": 0.0
+  },
+  "scale": 1.0,
+  "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
+ },
+ "fitted": {
+  "risk_scale": 2.7794,
+  "red_flag_per_crash": 0.0,
+  "fit": {
+   "races": [
+    "2011_australian_gp",
+    "2011_malaysian_gp",
+    "2011_chinese_gp",
+    "2011_spanish_gp",
+    "2011_monaco_gp",
+    "2011_german_gp",
+    "2011_italian_gp",
+    "2011_singapore_gp",
+    "2011_japanese_gp",
+    "2011_indian_gp",
+    "2011_abu_dhabi_gp",
+    "2011_brazilian_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 1.133,
+   "sim_failures_per_race": 0.767,
+   "real_retirements_per_race": 3.917,
+   "target_red_flags_per_race": 0.0
+  },
+  "check": {
+   "retirements_per_race": 4.083,
+   "red_flags_per_race": 0.0,
+   "safety_cars_per_race": 0.717,
+   "vscs_per_race": 0.0,
+   "penalties_per_race": 0.0,
+   "penalties_per_race_after_scale": 0.0
+  }
+ }
+}

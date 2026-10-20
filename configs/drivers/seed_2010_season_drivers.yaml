@@ -1,0 +1,138 @@
+# Driver persona seed for the 2010 season (H2a, D-054), written by
+# scripts/build_season_seeds.py. Identity comes from each race's roster (Jolpica).
+# THE NUMBERS ARE EDITORIAL ASSUMPTIONS: illustrative simulation personas, not verified
+# psychometrics. Drivers who raced in 2024 keep their 2024 seed persona (not refitted for
+# 2010); others are template-only (rookie = no start in an earlier season we have).
+schema_version: 1
+season: 2010
+event_id: 2010_season
+explanation: Illustrative simulation persona; not verified driver psychometrics.
+profile_revision: v1
+policy:
+  type: profile_conditioned_baseline
+  version: untrained
+drivers:
+  adrian_sutil_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  bruno_senna_2010:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  christian_klien_2010:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  felipe_massa_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  fernando_alonso_2010:
+    template: generic_veteran
+    confidence: 0.15
+    origin: copied from the 2024 seed (master plan §3.3 (Stage 1 fields))
+    persona_label: tactical veteran
+    overrides:
+      race_pace_skill: 0.89
+      consistency: 0.92
+      risk_appetite: 0.7
+      tire_management: 0.91
+      wet_skill: 0.89
+      adaptability: 0.94
+  heikki_kovalainen_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jaime_alguersuari_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jarno_trulli_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jenson_button_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  kamui_kobayashi_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  karun_chandhok_2010:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  lewis_hamilton_2010:
+    template: generic_veteran
+    confidence: 0.15
+    origin: copied from the 2024 seed (master plan §3.3 (Stage 1 fields))
+    persona_label: smooth veteran
+    overrides:
+      race_pace_skill: 0.93
+      consistency: 0.94
+      risk_appetite: 0.58
+      tire_management: 0.95
+      wet_skill: 0.93
+      adaptability: 0.88
+  lucas_di_grassi_2010:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  mark_webber_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  michael_schumacher_2010:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  nick_heidfeld_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  nico_hulkenberg_2010:
+    template: generic_veteran
+    confidence: 0.15
+    origin: copied from the 2024 seed (template only)
+  nico_rosberg_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  pedro_de_la_rosa_2010:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  robert_kubica_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  rubens_barrichello_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  sakon_yamamoto_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  sebastian_vettel_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  sebastien_buemi_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  timo_glock_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  vitaly_petrov_2010:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  vitantonio_liuzzi_2010:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only

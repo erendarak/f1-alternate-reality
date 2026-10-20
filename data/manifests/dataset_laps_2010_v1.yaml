@@ -1,0 +1,257 @@
+dataset_id: laps_2010_v1
+dataset_version: 1
+feature_schema_version: 1
+season: 2010
+license_review_status: research_only (F1 timing data via FastF1; not redistributed)
+built_by: scripts/build_lap_dataset.py
+file:
+  relative_path: data/processed/datasets/laps_2010_v1.parquet
+  sha256: sha256:cb2a9151c7ebe443856bdc3dd818566013f53f2369168c2a266ac13bf71638b7
+  content_sha256: sha256:e69694f4e199d4bb3bd1810fed3f4ce04fa3d1be3850772cdfbbd7fc95b5c689
+  rows: 22537
+  representative_rows: 19370
+target: lap_time_s
+features:
+- name: circuit_id
+  available: pre_race
+  source_type: historical_verified
+  description: Jolpica circuit id
+- name: driver_id
+  available: pre_race
+  source_type: historical_verified
+  description: season-specific driver id (roster)
+- name: team_id
+  available: pre_race
+  source_type: historical_verified
+  description: team id (roster)
+- name: grid_position
+  available: pre_race
+  source_type: historical_verified
+  description: official starting slot (0 = pit lane)
+- name: scheduled_laps
+  available: pre_race
+  source_type: historical_verified
+  description: race distance in laps (winner's laps)
+- name: lap_number
+  available: lap_start
+  source_type: historical_verified
+  description: 1-based lap number
+- name: laps_remaining
+  available: lap_start
+  source_type: estimated_from_data
+  description: scheduled_laps - lap_number + 1 (fuel proxy)
+- name: compound
+  available: lap_start
+  source_type: historical_verified
+  description: tyre compound on this lap
+- name: tyre_age_start
+  available: lap_start
+  source_type: estimated_from_data
+  description: laps already on the set when the lap starts
+- name: fresh_tyre
+  available: lap_start
+  source_type: historical_verified
+  description: the set was new when fitted (FastF1 FreshTyre)
+- name: stint
+  available: lap_start
+  source_type: historical_verified
+  description: stint number
+- name: stint_lap
+  available: lap_start
+  source_type: estimated_from_data
+  description: 1-based lap index within the stint
+- name: pit_out_lap
+  available: lap_start
+  source_type: historical_verified
+  description: the lap starts in the pit lane
+- name: pit_in_lap
+  available: decision
+  source_type: historical_verified
+  description: the car boxes at the end of this lap
+- name: position_start
+  available: lap_start
+  source_type: historical_verified
+  description: position when the lap starts (grid on lap 1)
+- name: gap_ahead_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds behind the car that crossed the line just before, same lap (NaN on lap 1)
+- name: gap_behind_prev_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds ahead of the next car at the PREVIOUS line crossing (the gap to the car behind
+    at this crossing isn't known yet when the lap starts; found by the leakage audit)
+- name: track_status_start
+  available: lap_start
+  source_type: historical_verified
+  description: track status code when the lap starts
+- name: air_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: track_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: humidity_pct
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: rainfall_start
+  available: lap_start
+  source_type: historical_verified
+  description: rain flag of the latest weather sample
+- name: wind_speed_ms
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+lap_facts_never_features:
+- lap_status
+- position_end
+- is_accurate
+- deleted
+- fastf1_generated
+- representative
+leakage_audit: tests/unit/test_lap_dataset.py::test_no_feature_uses_anything_after_the_lap_starts
+excluded_quality_fail: {}
+splits:
+  rule: wet = any intermediate/wet tyre lap or rain at >= 5% of lap starts; among dry races, rounds divisible
+    by 4 are held out (dry_test), the rest are dry_train; leave-one-race-out folds run over dry_train.
+    Rule fixed before any model was fitted.
+  wet:
+  - 2010_chinese_gp
+  - 2010_belgian_gp
+  - 2010_korean_gp
+  dry_test:
+  - 2010_canadian_gp
+  - 2010_hungarian_gp
+  - 2010_japanese_gp
+  dry_train:
+  - 2010_bahrain_gp
+  - 2010_australian_gp
+  - 2010_malaysian_gp
+  - 2010_spanish_gp
+  - 2010_monaco_gp
+  - 2010_turkish_gp
+  - 2010_european_gp
+  - 2010_british_gp
+  - 2010_german_gp
+  - 2010_italian_gp
+  - 2010_singapore_gp
+  - 2010_brazilian_gp
+  - 2010_abu_dhabi_gp
+events:
+  2010_abu_dhabi_gp:
+    round: 19
+    group: dry_train
+    rows: 1187
+    representative_rows: 1041
+    source_manifest_sha256: sha256:c192969658ee0b8882727b457398d8a9d9747549748b26716590cc06a468c050
+  2010_australian_gp:
+    round: 2
+    group: dry_train
+    rows: 919
+    representative_rows: 696
+    source_manifest_sha256: sha256:ca518df529eb529c18aa20125664acf496e3419204878bb1c40dce6fe351677d
+  2010_bahrain_gp:
+    round: 1
+    group: dry_train
+    rows: 912
+    representative_rows: 838
+    source_manifest_sha256: sha256:6df87a3a59fed52c23338bb5fda40fe3ebcc7f99df38906b21a4a6332edaa808
+  2010_belgian_gp:
+    round: 13
+    group: wet
+    rows: 920
+    representative_rows: 732
+    source_manifest_sha256: sha256:6245d834be146be83de2ab710e8bc7843873b1c4f8154631f276205e90f47e07
+  2010_brazilian_gp:
+    round: 18
+    group: dry_train
+    rows: 1649
+    representative_rows: 1437
+    source_manifest_sha256: sha256:88feceabe63bb27caf462978ec9912b29adc8dc37bd475d5141c3d7f413b1c13
+  2010_british_gp:
+    round: 10
+    group: dry_train
+    rows: 1133
+    representative_rows: 994
+    source_manifest_sha256: sha256:f2d2183ad09d72c6d452c458c0e42cc221b184ec07ae6fefebd6b5936cd0e9ed
+  2010_canadian_gp:
+    round: 8
+    group: dry_test
+    rows: 1445
+    representative_rows: 1311
+    source_manifest_sha256: sha256:538de8100a8b8a07a3d09d23fd26acbbd3f8dace449fb3825701afff6e60bf60
+  2010_chinese_gp:
+    round: 4
+    group: wet
+    rows: 985
+    representative_rows: 792
+    source_manifest_sha256: sha256:3034875e26357e31abbbf5da96007aa998d4caad9f8a0ff9acf99f82a48ad6a7
+  2010_european_gp:
+    round: 9
+    group: dry_train
+    rows: 1251
+    representative_rows: 1079
+    source_manifest_sha256: sha256:0b35630bf8e7ab0d6e838bda43322615d5f0b3c6ce0b94a18e3363999f6786fd
+  2010_german_gp:
+    round: 11
+    group: dry_train
+    rows: 1382
+    representative_rows: 1300
+    source_manifest_sha256: sha256:62f1054288322d33408aaf8ed590bb1810b5c0637db02122f94b55811875b4ac
+  2010_hungarian_gp:
+    round: 12
+    group: dry_test
+    rows: 1379
+    representative_rows: 1273
+    source_manifest_sha256: sha256:7ac91bf225bbd49d3b6da3c4173bc02e572b35a356000bd46c4edcbb915da3de
+  2010_italian_gp:
+    round: 14
+    group: dry_train
+    rows: 1105
+    representative_rows: 1037
+    source_manifest_sha256: sha256:e13e885d7fd87f6d81f336a19d9c7ec196261a63bb15528220552ae8c89475f7
+  2010_japanese_gp:
+    round: 16
+    group: dry_test
+    rows: 930
+    representative_rows: 782
+    source_manifest_sha256: sha256:bb5c12df00f00ded58edc6fc317302355c4e399b6fb481415b3f5f839ae56af7
+  2010_korean_gp:
+    round: 17
+    group: wet
+    rows: 1097
+    representative_rows: 565
+    source_manifest_sha256: sha256:0052b72954fffdd9393cbdeab367a0b62a11fccaa93714098a83fcfe7120c3a8
+  2010_malaysian_gp:
+    round: 3
+    group: dry_train
+    rows: 1041
+    representative_rows: 946
+    source_manifest_sha256: sha256:9e27016fee4538cfa46ba4c551c447fd7d5903d8a57c4c1c1adf456b458da4df
+  2010_monaco_gp:
+    round: 6
+    group: dry_train
+    rows: 1384
+    representative_rows: 1074
+    source_manifest_sha256: sha256:16116fac9a0c5e5c35e8a31c45dc58bc962d2a723046840a410f14af48df1d37
+  2010_singapore_gp:
+    round: 15
+    group: dry_train
+    rows: 1205
+    representative_rows: 1022
+    source_manifest_sha256: sha256:8389132e60a1af008bd285b9d83d72654c3a702520e865f7f9cde3b60ea5bef1
+  2010_spanish_gp:
+    round: 5
+    group: dry_train
+    rows: 1320
+    representative_rows: 1242
+    source_manifest_sha256: sha256:32172a5c6e6d24bec5d9133c7ce82c78b6bb23d881a719a2e24d491fd144e551
+  2010_turkish_gp:
+    round: 7
+    group: dry_train
+    rows: 1293
+    representative_rows: 1209
+    source_manifest_sha256: sha256:07f52b3bc986ad76830022bbe0bb69decef5c05a1cc161d631b1c4a1fd1e7f78

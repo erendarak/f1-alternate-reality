@@ -1,0 +1,486 @@
+{
+ "label": "2014 tyre life + same-lap wear (W1, D-041)",
+ "compound_reference": "compounds unknown: soft/hard wear and life ratios to the medium from calibration/tyre_life_2018_v1.json (borrowed); stops-only fit",
+ "dataset_sha256": "sha256:ce5cef665292710812631c3328b6d1dd8d7f44c6a141a4403bc133e8e71ade60",
+ "fitted_on": [
+  "2014_abu_dhabi_gp",
+  "2014_australian_gp",
+  "2014_bahrain_gp",
+  "2014_brazilian_gp",
+  "2014_british_gp",
+  "2014_canadian_gp",
+  "2014_german_gp",
+  "2014_italian_gp",
+  "2014_japanese_gp",
+  "2014_malaysian_gp",
+  "2014_monaco_gp",
+  "2014_singapore_gp",
+  "2014_spanish_gp",
+  "2014_united_states_gp"
+ ],
+ "globals": {
+  "kappa": 0.7,
+  "kappa_note": "life_laps = kappa x life_raw; fitted on dry_train behaviour",
+  "delta_s": 0.2,
+  "delta_note": "potential pace step: SOFT -delta, MEDIUM 0, HARD +delta; fitted"
+ },
+ "season_wear": {
+  "lin": {
+   "MEDIUM": 0.044379540956407865,
+   "SOFT": 0.06442410752611534,
+   "HARD": 0.04596614969109027
+  },
+  "quad": {
+   "MEDIUM": -0.00022828187847316668,
+   "SOFT": -0.0002714252690080313,
+   "HARD": -0.00021210644943549318
+  },
+  "fresh_bonus_s": -0.20868643947339421,
+  "same_lap_offsets": {
+   "SOFT": 0.0,
+   "MEDIUM": 0.0,
+   "HARD": 0.0
+  },
+  "laps": 10241
+ },
+ "life_ratios_vs_medium": {
+  "MEDIUM": 1.0,
+  "SOFT": 1.0212765957446808,
+  "HARD": 1.0172413793103448
+ },
+ "editorial": {
+  "pace_modes": {
+   "CONSERVE": {
+    "offset_s": 0.35,
+    "wear_multiplier": 0.75
+   },
+   "BALANCED": {
+    "offset_s": 0.0,
+    "wear_multiplier": 1.0
+   },
+   "PUSH": {
+    "offset_s": -0.3,
+    "wear_multiplier": 1.4
+   }
+  },
+  "cliff_s_per_lap": 0.5,
+  "neutralised_life_factor": 0.35,
+  "note": "editorial_assumption: research ranges (docs/RESEARCH_REAL_F1.md)"
+ },
+ "events": {
+  "2014_australian_gp": {
+   "total_laps": 57,
+   "life_raw": {
+    "SOFT": 26.04,
+    "MEDIUM": 25.5,
+    "HARD": 25.94
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 23 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 23,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.184,
+   "wear_multiplier_raw": 1.302,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_malaysian_gp": {
+   "total_laps": 56,
+   "life_raw": {
+    "SOFT": 16.34,
+    "MEDIUM": 16.0,
+    "HARD": 16.28
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 50 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 50,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.865,
+   "wear_multiplier_raw": 0.791,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_bahrain_gp": {
+   "total_laps": 57,
+   "life_raw": {
+    "SOFT": 17.36,
+    "MEDIUM": 17.0,
+    "HARD": 17.29
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 48 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 48,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.609,
+   "wear_multiplier_raw": 2.008,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_spanish_gp": {
+   "total_laps": 66,
+   "life_raw": {
+    "SOFT": 20.68,
+    "MEDIUM": 20.25,
+    "HARD": 20.6
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 48 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 48,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.779,
+   "wear_multiplier_raw": 0.692,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_monaco_gp": {
+   "total_laps": 78,
+   "life_raw": {
+    "SOFT": 38.3,
+    "MEDIUM": 37.5,
+    "HARD": 38.15
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 12 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 12,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.347,
+   "wear_multiplier_raw": 0.059,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_canadian_gp": {
+   "total_laps": 70,
+   "life_raw": {
+    "SOFT": 27.57,
+    "MEDIUM": 27.0,
+    "HARD": 27.47
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 31 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 31,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.645,
+   "wear_multiplier_raw": 0.421,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_british_gp": {
+   "total_laps": 52,
+   "life_raw": {
+    "SOFT": 27.57,
+    "MEDIUM": 27.0,
+    "HARD": 27.47
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 22 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 22,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.686,
+   "wear_multiplier_raw": 0.501,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_german_gp": {
+   "total_laps": 67,
+   "life_raw": {
+    "SOFT": 22.47,
+    "MEDIUM": 22.0,
+    "HARD": 22.38
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 53 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 53,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.039,
+   "wear_multiplier_raw": 1.055,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_italian_gp": {
+   "total_laps": 53,
+   "life_raw": {
+    "SOFT": 25.02,
+    "MEDIUM": 24.5,
+    "HARD": 24.92
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 23 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 23,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.31,
+   "wear_multiplier_raw": -0.054,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_singapore_gp": {
+   "total_laps": 60,
+   "life_raw": {
+    "SOFT": 15.32,
+    "MEDIUM": 15.0,
+    "HARD": 15.26
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 45 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 45,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.567,
+   "wear_multiplier_raw": 1.909,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_japanese_gp": {
+   "total_laps": 44,
+   "life_raw": {
+    "SOFT": 15.32,
+    "MEDIUM": 15.0,
+    "HARD": 15.26
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 45 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 45,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.123,
+   "wear_multiplier_raw": 1.225,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_united_states_gp": {
+   "total_laps": 56,
+   "life_raw": {
+    "SOFT": 20.43,
+    "MEDIUM": 20.0,
+    "HARD": 20.34
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 30 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 30,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.863,
+   "wear_multiplier_raw": 0.767,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_brazilian_gp": {
+   "total_laps": 71,
+   "life_raw": {
+    "SOFT": 21.45,
+    "MEDIUM": 21.0,
+    "HARD": 21.36
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 51 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 51,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.436,
+   "wear_multiplier_raw": 0.166,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_abu_dhabi_gp": {
+   "total_laps": 55,
+   "life_raw": {
+    "SOFT": 21.7,
+    "MEDIUM": 21.25,
+    "HARD": 21.62
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 40 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 40,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.875,
+   "wear_multiplier_raw": 0.811,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_chinese_gp": {
+   "total_laps": 54,
+   "life_raw": {
+    "SOFT": 20.43,
+    "MEDIUM": 20.0,
+    "HARD": 20.34
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 45 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 45,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.566,
+   "wear_multiplier_raw": 1.817,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_austrian_gp": {
+   "total_laps": 71,
+   "life_raw": {
+    "SOFT": 29.87,
+    "MEDIUM": 29.25,
+    "HARD": 29.75
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 40 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 40,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.234,
+   "wear_multiplier_raw": -0.046,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_belgian_gp": {
+   "total_laps": 44,
+   "life_raw": {
+    "SOFT": 14.3,
+    "MEDIUM": 14.0,
+    "HARD": 14.24
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 43 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 43,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.125,
+   "wear_multiplier_raw": 1.213,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2014_russian_gp": {
+   "total_laps": 53,
+   "life_raw": {
+    "SOFT": 26.55,
+    "MEDIUM": 26.0,
+    "HARD": 26.45
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 20 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 20,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.318,
+   "wear_multiplier_raw": -0.021,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  }
+ }
+}

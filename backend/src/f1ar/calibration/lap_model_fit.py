@@ -190,6 +190,8 @@ def life_lap_model(
         f"pace-mode trade-offs, cliff {ed['cliff_s_per_lap']} s/lap, SC/VSC life factor "
         f"{ed['neutralised_life_factor']}; skill gap and noise editorial (D-010)"
     )
+    if life_cfg.get("compound_reference"):  # H2b: a season without compound data
+        note += f" [{life_cfg['compound_reference']}]"
     params = build(potential).model_copy(update={"note": note})
     estimation = build(observed).model_copy(update={"note": note + " [estimation variant]"})
     return LifeLapModel(params, estimation, note)

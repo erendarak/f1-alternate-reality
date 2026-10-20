@@ -2,6 +2,19 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## H2b (2010-2017 from the Jolpica history, D-055)
+
+- **No tyre compounds before 2018**: one measured wear curve and life per race, soft/hard via
+  2018's ratios; start tyres a MEDIUM placeholder; simulated compound use means nothing.
+- **No race control before 2018**: no penalties simulated 2010-2017 (data has none); SC and VSC
+  are not told apart in the data (inferred neutralised laps).
+- **Wet detection misses light rain** (11 of 25 wet 2018-2025 races missed); no temperatures.
+- **2010: pit stops inferred** (precision 0.88, recall 0.73), no pit-lane times (crews default).
+- **Tyre age at the start is unknown** (every set assumed new; 2010-2013 top 10 started on used
+  Q3 tyres).
+- **2010 persona seeds** count returning veterans (e.g. M. Schumacher) as rookies until the
+  2000-2009 history is fetched; rerun `scripts/build_season_seeds.py`.
+
 ## H2a (season fits 2018-2025, engine v0.17.0, D-054)
 
 - **The W1 tyre-life fit undershoots stops in every season** (dry_train: e.g. 2019 1.10 vs 1.48,

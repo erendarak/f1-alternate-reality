@@ -154,6 +154,8 @@ def fit(
     lanes = pd.concat(
         [pit_lane_times(processed / e, _team_of(configs, e)) for e in events], ignore_index=True
     )
+    if lanes.empty:  # H2b: 2010 has no pit-lane times (Jolpica's pit stops start in 2011)
+        lanes = pd.DataFrame({"team": pd.Series(dtype=str), "lane": [], "rel": []})
     slow = lanes["rel"] > SLOW_THRESHOLD_S
     field_slow = float(slow.mean())
     slow_excess = float((lanes.loc[slow, "rel"] - SLOW_THRESHOLD_S).mean())

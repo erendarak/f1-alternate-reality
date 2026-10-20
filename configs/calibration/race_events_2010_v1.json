@@ -1,0 +1,178 @@
+{
+ "label": "2010 race events (W4, D-042)",
+ "events": [
+  "2010_bahrain_gp",
+  "2010_australian_gp",
+  "2010_malaysian_gp",
+  "2010_spanish_gp",
+  "2010_monaco_gp",
+  "2010_turkish_gp",
+  "2010_european_gp",
+  "2010_british_gp",
+  "2010_german_gp",
+  "2010_italian_gp",
+  "2010_singapore_gp",
+  "2010_brazilian_gp",
+  "2010_abu_dhabi_gp",
+  "2010_canadian_gp",
+  "2010_hungarian_gp",
+  "2010_japanese_gp",
+  "2010_chinese_gp",
+  "2010_belgian_gp",
+  "2010_korean_gp"
+ ],
+ "dry_events": [
+  "2010_bahrain_gp",
+  "2010_australian_gp",
+  "2010_malaysian_gp",
+  "2010_spanish_gp",
+  "2010_monaco_gp",
+  "2010_turkish_gp",
+  "2010_european_gp",
+  "2010_british_gp",
+  "2010_german_gp",
+  "2010_italian_gp",
+  "2010_singapore_gp",
+  "2010_brazilian_gp",
+  "2010_abu_dhabi_gp",
+  "2010_canadian_gp",
+  "2010_hungarian_gp",
+  "2010_japanese_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": NaN,
+  "slow_stop_scale_s": NaN,
+  "stops": 0,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {},
+ "reliability": {
+  "field_retirements_per_start": 0.2588,
+  "teams": {
+   "ferrari_2010": {
+    "failure_multiplier": 0.574,
+    "retirements": 3,
+    "starts": 38
+   },
+   "force_india_2010": {
+    "failure_multiplier": 1.073,
+    "retirements": 11,
+    "starts": 38
+   },
+   "hrt_2010": {
+    "failure_multiplier": 1.322,
+    "retirements": 15,
+    "starts": 38
+   },
+   "lotus_racing_2010": {
+    "failure_multiplier": 1.447,
+    "retirements": 17,
+    "starts": 38
+   },
+   "mclaren_2010": {
+    "failure_multiplier": 0.761,
+    "retirements": 6,
+    "starts": 38
+   },
+   "mercedes_2010": {
+    "failure_multiplier": 0.699,
+    "retirements": 5,
+    "starts": 38
+   },
+   "red_bull_2010": {
+    "failure_multiplier": 0.699,
+    "retirements": 5,
+    "starts": 38
+   },
+   "renault_2010": {
+    "failure_multiplier": 0.948,
+    "retirements": 9,
+    "starts": 38
+   },
+   "sauber_2010": {
+    "failure_multiplier": 1.384,
+    "retirements": 16,
+    "starts": 38
+   },
+   "toro_rosso_2010": {
+    "failure_multiplier": 0.886,
+    "retirements": 8,
+    "starts": 38
+   },
+   "virgin_2010": {
+    "failure_multiplier": 1.447,
+    "retirements": 17,
+    "starts": 38
+   },
+   "williams_2010": {
+    "failure_multiplier": 0.761,
+    "retirements": 6,
+    "starts": 38
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.0,
+  "sc_share": 0.4,
+  "count": 0,
+  "race_laps": 974,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 0,
+  "races": 19,
+  "per_race": 0.0
+ },
+ "penalties": {
+  "counts": {},
+  "collision_per_pass": 0.0,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.0,
+  "other_per_car_lap": 0.0,
+  "passes": 1573,
+  "raw": {
+   "collision_per_pass": 0.0,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.0,
+   "other_per_car_lap": 0.0
+  },
+  "scale": 1.0,
+  "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
+ },
+ "fitted": {
+  "risk_scale": 2.1232,
+  "red_flag_per_crash": 0.0,
+  "fit": {
+   "races": [
+    "2010_bahrain_gp",
+    "2010_australian_gp",
+    "2010_malaysian_gp",
+    "2010_spanish_gp",
+    "2010_monaco_gp",
+    "2010_turkish_gp",
+    "2010_european_gp",
+    "2010_british_gp",
+    "2010_german_gp",
+    "2010_italian_gp",
+    "2010_singapore_gp",
+    "2010_brazilian_gp",
+    "2010_abu_dhabi_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 2.123,
+   "sim_failures_per_race": 0.723,
+   "real_retirements_per_race": 5.231,
+   "target_red_flags_per_race": 0.0
+  },
+  "check": {
+   "retirements_per_race": 5.231,
+   "red_flags_per_race": 0.0,
+   "safety_cars_per_race": 1.215,
+   "vscs_per_race": 0.0,
+   "penalties_per_race": 0.0,
+   "penalties_per_race_after_scale": 0.0
+  }
+ }
+}
