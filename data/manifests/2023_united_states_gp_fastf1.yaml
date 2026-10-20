@@ -2,12 +2,12 @@ dataset_id: 2023_united_states_gp_fastf1_v1
 event: 2023_united_states_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:58:17Z'
+retrieved_utc: '2026-10-17T17:40:35Z'
 session_key: 2023/round 18/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2023_united_states_gp/laps.parquet
-  sha256: sha256:f8612d726fcb97d8c94be0c7a9763c3ca58d36426a9cfa9063ca435296c4e990
+  sha256: sha256:d8d2b0e14e86d0b8f3cceb9a755fa5962c681ab6a0aa6c22f87ceee7d85c845a
   rows: 1014
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2023_united_states_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2023_united_states_gp/positions.parquet
+  sha256: sha256:035dec54cf13bb15dee548696de06f4cef6a3a48670e4487db7e5432de16d13b
+  rows: 745500
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2023_united_states_gp/track_outline.parquet
+  sha256: sha256:0309bb6f922b6cdb47cfbf6c43dbe8dedb861c9697d9386cd9d62d5c38ab6c19
+  rows: 399
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 22 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

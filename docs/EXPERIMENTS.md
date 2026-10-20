@@ -1346,6 +1346,42 @@ Findings:             the catalogue reproduces every official result so far (3,0
 Status:               2010 (inferred stops) and 2018-2024 when the Jolpica fetch completes.
 ```
 
+## EXP-023 — 2018-2025 races on their own season's fits vs reality (2026-10-20)
+
+```text
+Experiment ID:        EXP-023
+Research question:    Do per-season fits (H2a) make held-out races of 2018-2025 more like the
+                      real ones than 2024's tyre model + editorial driver values?
+Setup:                engine v0.17.0; each season's dry_test races (34; never used by the
+                      simulation-fitted values), 6 per-race seeds, variants "season" (own fits)
+                      and "borrowed" (configs without the season's files)
+Code:                 scripts/experiments/exp023_seasons.py -> docs/experiments/exp023.json
+```
+
+| Season | races | stops MAE | passes MAE | retirements bias | order rho |
+|---|---|---|---|---|---|
+| 2018 | 5 | **0.41** (0.76) | 25.4 (29.8) | +0.6 (-1.4) | 0.41 (0.49) |
+| 2019 | 5 | **0.30** (0.67) | 23.5 (30.6) | -0.7 (-0.8) | 0.53 (0.53) |
+| 2020 | 4 | **0.23** (0.60) | 14.2 (14.9) | +1.3 (-0.1) | 0.43 (0.38) |
+| 2021 | 3 | **0.46** (0.69) | 25.9 (6.4) | +0.9 (+0.1) | 0.53 (0.58) |
+| 2022 | 3 | **0.47** (0.66) | 11.7 (10.1) | +0.2 (-1.2) | 0.41 (0.49) |
+| 2023 | 4 | 0.45 (**0.29**) | 19.0 (26.8) | -0.1 (-1.4) | 0.48 (0.60) |
+| 2024 | 5 | **0.29** (0.87, no fits at all) | 15.9 (31.2) | -1.3 (-1.6) | 0.63 (0.65) |
+| 2025 | 5 | **0.23** (0.70) | 15.0 (16.4) | +1.0 (+1.2) | 0.56 (0.61) |
+| **2018-2025 excl. 2024 (29)** | | **0.35** (0.63); bias -0.09 (+0.52) | 19.5 (20.7) | +0.41 (-0.48) | 0.48 (0.53) |
+
+```text
+Findings:             the season's own fits halve the stop-count error (bias +0.52 -> -0.09)
+                      in 6 of 7 seasons; passes about equal overall; retirements equal size,
+                      opposite sign; finishing order vs the real race lower (the W2 random
+                      race form, as EXP-012 found for 2024).
+Negative:             2021's three test races get 33-41 passes vs 60-66 real (fit races match:
+                      53.4 vs 53.4): the season's racecraft threshold (0.76 s) with 2024's
+                      per-track overtaking table under-passes those tracks. Per-track /
+                      per-era overtaking is H2c.
+Caveat:               3-5 test races per season: per-season numbers are noisy; trust the pool.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

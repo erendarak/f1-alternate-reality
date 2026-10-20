@@ -2,12 +2,12 @@ dataset_id: 2020_70th_anniversary_gp_fastf1_v1
 event: 2020_70th_anniversary_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:08:43Z'
+retrieved_utc: '2026-10-17T16:46:19Z'
 session_key: 2020/round 5/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2020_70th_anniversary_gp/laps.parquet
-  sha256: sha256:022d6d42523bbb22d2a28349d9f0ff717a642227f6fdf724d2a6c6eb9cd2e7e2
+  sha256: sha256:98c5113629c7625b2142d0d5de73cac37d62de7f968c73fd06c7719f1b64eb7f
   rows: 1025
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2020_70th_anniversary_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2020_70th_anniversary_gp/positions.parquet
+  sha256: sha256:0ab1a8a564dbf29d78856264e65960655add09fe4b655deefd22ef2af754ed95
+  rows: 633900
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2020_70th_anniversary_gp/track_outline.parquet
+  sha256: sha256:e31e67fcc60684f65c50c033fabc198e231bad5aa947acb18906733a98aefed1
+  rows: 416
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 33 lap 24 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

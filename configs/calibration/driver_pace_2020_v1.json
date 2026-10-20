@@ -1,0 +1,229 @@
+{
+ "label": "2020 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2020_styrian_gp",
+  "2020_70th_anniversary_gp",
+  "2020_spanish_gp",
+  "2020_belgian_gp",
+  "2020_tuscan_gp",
+  "2020_russian_gp",
+  "2020_eifel_gp",
+  "2020_emilia_romagna_gp",
+  "2020_bahrain_gp",
+  "2020_abu_dhabi_gp"
+ ],
+ "field_noise_s": 0.5274,
+ "form_sd_s": 0.2172,
+ "form_note": "within-pair gap SD 0.340 s, sampling SD 0.147 s over 79 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "ALB": {
+   "team_id": "red_bull_2020",
+   "pace_vs_teammate_s": 0.2893,
+   "raw_mean_gap_s": 0.3977,
+   "races": 8,
+   "lap_noise_s": 0.4949,
+   "raw_noise_s": 0.4716,
+   "clean_laps": 210
+  },
+  "BOT": {
+   "team_id": "mercedes_2020",
+   "pace_vs_teammate_s": 0.0706,
+   "raw_mean_gap_s": 0.0941,
+   "races": 9,
+   "lap_noise_s": 0.5208,
+   "raw_noise_s": 0.5176,
+   "clean_laps": 306
+  },
+  "FIT": {
+   "team_id": "haas_2020",
+   "pace_vs_teammate_s": 0.0652,
+   "raw_mean_gap_s": 0.2608,
+   "races": 1,
+   "lap_noise_s": 0.5713,
+   "raw_noise_s": 0.9185,
+   "clean_laps": 19
+  },
+  "GAS": {
+   "team_id": "alphatauri_2020",
+   "pace_vs_teammate_s": -0.0704,
+   "raw_mean_gap_s": -0.0968,
+   "races": 8,
+   "lap_noise_s": 0.5632,
+   "raw_noise_s": 0.5965,
+   "clean_laps": 161
+  },
+  "GIO": {
+   "team_id": "alfa_2020",
+   "pace_vs_teammate_s": 0.0371,
+   "raw_mean_gap_s": 0.051,
+   "races": 8,
+   "lap_noise_s": 0.5493,
+   "raw_noise_s": 0.5703,
+   "clean_laps": 156
+  },
+  "GRO": {
+   "team_id": "haas_2020",
+   "pace_vs_teammate_s": -0.0714,
+   "raw_mean_gap_s": -0.1021,
+   "races": 7,
+   "lap_noise_s": 0.5553,
+   "raw_noise_s": 0.5804,
+   "clean_laps": 167
+  },
+  "HAM": {
+   "team_id": "mercedes_2020",
+   "pace_vs_teammate_s": -0.0706,
+   "raw_mean_gap_s": -0.0941,
+   "races": 9,
+   "lap_noise_s": 0.485,
+   "raw_noise_s": 0.4698,
+   "clean_laps": 418
+  },
+  "HUL": {
+   "team_id": "racing_point_2020",
+   "pace_vs_teammate_s": 0.0903,
+   "raw_mean_gap_s": 0.2257,
+   "races": 2,
+   "lap_noise_s": 0.5215,
+   "raw_noise_s": 0.5027,
+   "clean_laps": 47
+  },
+  "KVY": {
+   "team_id": "alphatauri_2020",
+   "pace_vs_teammate_s": 0.0704,
+   "raw_mean_gap_s": 0.0968,
+   "races": 8,
+   "lap_noise_s": 0.5024,
+   "raw_noise_s": 0.4793,
+   "clean_laps": 163
+  },
+  "LAT": {
+   "team_id": "williams_2020",
+   "pace_vs_teammate_s": 0.028,
+   "raw_mean_gap_s": 0.04,
+   "races": 7,
+   "lap_noise_s": 0.5793,
+   "raw_noise_s": 0.6136,
+   "clean_laps": 227
+  },
+  "LEC": {
+   "team_id": "ferrari_2020",
+   "pace_vs_teammate_s": -0.1224,
+   "raw_mean_gap_s": -0.1632,
+   "races": 9,
+   "lap_noise_s": 0.5337,
+   "raw_noise_s": 0.5393,
+   "clean_laps": 168
+  },
+  "MAG": {
+   "team_id": "haas_2020",
+   "pace_vs_teammate_s": 0.0412,
+   "raw_mean_gap_s": 0.0567,
+   "races": 8,
+   "lap_noise_s": 0.6234,
+   "raw_noise_s": 0.6895,
+   "clean_laps": 218
+  },
+  "NOR": {
+   "team_id": "mclaren_2020",
+   "pace_vs_teammate_s": 0.0088,
+   "raw_mean_gap_s": 0.0125,
+   "races": 7,
+   "lap_noise_s": 0.5077,
+   "raw_noise_s": 0.4936,
+   "clean_laps": 209
+  },
+  "OCO": {
+   "team_id": "renault_2020",
+   "pace_vs_teammate_s": 0.1679,
+   "raw_mean_gap_s": 0.2308,
+   "races": 8,
+   "lap_noise_s": 0.5387,
+   "raw_noise_s": 0.551,
+   "clean_laps": 138
+  },
+  "PER": {
+   "team_id": "racing_point_2020",
+   "pace_vs_teammate_s": -0.0381,
+   "raw_mean_gap_s": -0.0571,
+   "races": 6,
+   "lap_noise_s": 0.518,
+   "raw_noise_s": 0.5093,
+   "clean_laps": 164
+  },
+  "RAI": {
+   "team_id": "alfa_2020",
+   "pace_vs_teammate_s": -0.0371,
+   "raw_mean_gap_s": -0.051,
+   "races": 8,
+   "lap_noise_s": 0.5327,
+   "raw_noise_s": 0.5371,
+   "clean_laps": 181
+  },
+  "RIC": {
+   "team_id": "renault_2020",
+   "pace_vs_teammate_s": -0.1679,
+   "raw_mean_gap_s": -0.2308,
+   "races": 8,
+   "lap_noise_s": 0.5134,
+   "raw_noise_s": 0.506,
+   "clean_laps": 286
+  },
+  "RUS": {
+   "team_id": "williams_2020",
+   "pace_vs_teammate_s": -0.028,
+   "raw_mean_gap_s": -0.04,
+   "races": 7,
+   "lap_noise_s": 0.5484,
+   "raw_noise_s": 0.5649,
+   "clean_laps": 190
+  },
+  "SAI": {
+   "team_id": "mclaren_2020",
+   "pace_vs_teammate_s": -0.0088,
+   "raw_mean_gap_s": -0.0125,
+   "races": 7,
+   "lap_noise_s": 0.492,
+   "raw_noise_s": 0.4586,
+   "clean_laps": 159
+  },
+  "STR": {
+   "team_id": "racing_point_2020",
+   "pace_vs_teammate_s": -0.0121,
+   "raw_mean_gap_s": -0.0181,
+   "races": 6,
+   "lap_noise_s": 0.4894,
+   "raw_noise_s": 0.4469,
+   "clean_laps": 134
+  },
+  "VER": {
+   "team_id": "red_bull_2020",
+   "pace_vs_teammate_s": -0.2893,
+   "raw_mean_gap_s": -0.3977,
+   "races": 8,
+   "lap_noise_s": 0.469,
+   "raw_noise_s": 0.4412,
+   "clean_laps": 314
+  },
+  "VET": {
+   "team_id": "ferrari_2020",
+   "pace_vs_teammate_s": 0.1224,
+   "raw_mean_gap_s": 0.1632,
+   "races": 9,
+   "lap_noise_s": 0.5703,
+   "raw_noise_s": 0.6089,
+   "clean_laps": 167
+  }
+ },
+ "overtake_threshold_shift_s": 0.0,
+ "overtake_shift_fit": {
+  "skipped": "superseded by the W3 racecraft refit (H2a)"
+ }
+}

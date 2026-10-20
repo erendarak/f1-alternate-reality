@@ -1,17 +1,18 @@
 """Fit the W4 race events (engine v0.11.0, D-042).
 
-Writes configs/calibration/race_events_2024_v1.json and its registry manifest.
+Writes configs/calibration/race_events_<season>_v1.json and its registry manifest.
 
 1. From data (all 24 races; debris on the dry ones): pit crews and slow stops per team,
    failure multipliers per team, neutralisations without a retirement, red flags, penalties
    (``f1ar.calibration.race_events_fit``).
 2. By simulation on the dry_train races only (the rule field, ``--seeds`` per race):
    ``risk_scale`` so simulated retirements match the real ones (crashes are scaled, failures
-   aren't), then ``red_flag_per_crash`` so red flags per race match 2024's 3 in 24.
+   aren't), then ``red_flag_per_crash`` so red flags per race match the season's real ones.
    A second run with the fitted values checks both.
 
 Usage:
     uv run python scripts/fit_race_events.py --seeds 5     # ~5-10 min
+    uv run python scripts/fit_race_events.py --season 2019  # H2a
 """
 
 import argparse
@@ -29,10 +30,10 @@ import yaml
 
 from f1ar.calibration.race_events_fit import EVENTS_FILE, fit
 from f1ar.calibration.reference_metrics import real_metrics
+from f1ar.calibration.season_files import dataset_files, season_path
 
 print = functools.partial(print, flush=True)  # noqa: A001 (progress through pipes)
 ROOT = Path(__file__).resolve().parents[1]
-SPLITS = ROOT / "data" / "manifests" / "dataset_laps_2024_v1.yaml"
 
 
 def simulate(job: tuple[str, int, dict[str, float]]) -> dict[str, Any]:
@@ -92,15 +93,18 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--seeds", type=int, default=5)
     parser.add_argument("--workers", type=int, default=14)
+    parser.add_argument("--season", type=int, default=2024)
     args = parser.parse_args()
     t0 = time.perf_counter()
-    manifest = yaml.safe_load(SPLITS.read_text(encoding="utf-8"))
+    _, splits_file = dataset_files(ROOT, args.season)
+    manifest = yaml.safe_load(splits_file.read_text(encoding="utf-8"))
     splits = manifest["splits"]
     train, test, wet = list(splits["dry_train"]), list(splits["dry_test"]), list(splits["wet"])
     events = train + test + wet
     real = {e: real_metrics(ROOT / "data" / "processed" / e) for e in events}
-    cfg = fit(ROOT, events, train + test, {e: m.overtakes for e in events for m in [real[e]]})
-    out = ROOT / "configs" / EVENTS_FILE
+    passes = {e: m.overtakes for e in events for m in [real[e]]}
+    cfg = fit(ROOT, events, train + test, passes, args.season)
+    out = ROOT / "configs" / season_path(EVENTS_FILE, args.season)
 
     def write() -> None:
         out.write_text(json.dumps(cfg, indent=1) + "\n", encoding="utf-8", newline="\n")
@@ -181,18 +185,21 @@ def main() -> None:
     body = {
         "model_name": "race_events",
         "model_version": "v1",
-        "kind": "rates and shrunk team multipliers from 2024 timing; 2 values fitted by simulation",
+        "kind": f"rates and shrunk team multipliers from {args.season} timing; 2 values fitted by "
+        "simulation",
         "source_type": "estimated_from_data",
         "artifact": out.relative_to(ROOT).as_posix(),
         "artifact_sha256": "sha256:" + hashlib.sha256(out.read_bytes()).hexdigest(),
         "feature_schema_version": 1,
-        "training_dataset_manifest": SPLITS.relative_to(ROOT).as_posix(),
+        "training_dataset_manifest": splits_file.relative_to(ROOT).as_posix(),
         "training_dataset_content_sha256": manifest["file"]["content_sha256"],
         "training_races": sorted(events),
         "metrics": {"dry_train_check": cfg["fitted"]["check"], "held_out_check": "EXP-011"},
-        "status": "validated_for_engine_use (W4, engine v0.11.0, D-042)",
+        "status": "validated_for_engine_use (W4, engine v0.11.0, D-042)"
+        if args.season == 2024
+        else f"fitted for {args.season} (H2a, D-054); held-out check EXP-023",
     }
-    (ROOT / "configs" / "models" / "race_events_2024_v1.yaml").write_text(
+    (ROOT / "configs" / "models" / f"race_events_{args.season}_v1.yaml").write_text(
         yaml.safe_dump(body, sort_keys=False, width=100), encoding="utf-8", newline="\n"
     )
     print(f"done in {(time.perf_counter() - t0) / 60:.1f} min")

@@ -2,12 +2,12 @@ dataset_id: 2021_dutch_gp_fastf1_v1
 event: 2021_dutch_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-17T15:13:47Z'
+retrieved_utc: '2026-10-17T16:56:30Z'
 session_key: 2021/round 13/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2021_dutch_gp/laps.parquet
-  sha256: sha256:1d7e703c2d8c58ba218583a26cd169a65cc4f8758f87fda3bed4738e677902c0
+  sha256: sha256:d398093bf35b8e91db1d5b1845317c15525809501667a74d4579dba3c349a277
   rows: 1361
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2021_dutch_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2021_dutch_gp/positions.parquet
+  sha256: sha256:9b68be82c6abff7de12012883f410befe88b14278dba0a64bdbe4a1c50833306
+  rows: 860000
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2021_dutch_gp/track_outline.parquet
+  sha256: sha256:4f7d884150bc6a8da82e2525a6d6b15c569912c9a6702eec717f38b815906afa
+  rows: 340
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 33 lap 54 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

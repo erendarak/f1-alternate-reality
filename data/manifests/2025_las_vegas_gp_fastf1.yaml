@@ -2,12 +2,12 @@ dataset_id: 2025_las_vegas_gp_fastf1_v1
 event: 2025_las_vegas_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:53:37Z'
+retrieved_utc: '2026-10-19T20:15:52Z'
 session_key: 2025/round 22/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2025_las_vegas_gp/laps.parquet
-  sha256: sha256:1ab14d0f40961b21691c911ac8028d3bde7584905d9c13c1e5a4f6b3e63d4e6f
+  sha256: sha256:a09f6c1a32d4182d0ad8e0edcdf4fa70b9382abf383d8d4915fa5c01ec4e6712
   rows: 886
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2025_las_vegas_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2025_las_vegas_gp/positions.parquet
+  sha256: sha256:9a07bf51624965d22aade92faa9a8c7bf94a798af2ba24df79c7c51c8f850c60
+  rows: 647060
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2025_las_vegas_gp/track_outline.parquet
+  sha256: sha256:ee6a7a989647cab25e7314f20de3ce36ea629e65ecf2e1d33efb3e42cc18d931
+  rows: 364
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 30 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

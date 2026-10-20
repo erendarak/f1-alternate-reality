@@ -1,0 +1,222 @@
+{
+ "label": "2022 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2022_bahrain_gp",
+  "2022_australian_gp",
+  "2022_miami_gp",
+  "2022_spanish_gp",
+  "2022_canadian_gp",
+  "2022_british_gp",
+  "2022_austrian_gp",
+  "2022_belgian_gp",
+  "2022_dutch_gp",
+  "2022_united_states_gp",
+  "2022_sao_paulo_gp",
+  "2022_abu_dhabi_gp"
+ ],
+ "field_noise_s": 0.4354,
+ "form_sd_s": 0.2933,
+ "form_note": "within-pair gap SD 0.436 s, sampling SD 0.134 s over 106 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "ALB": {
+   "team_id": "williams_2022",
+   "pace_vs_teammate_s": -0.2126,
+   "raw_mean_gap_s": -0.2705,
+   "races": 11,
+   "lap_noise_s": 0.4653,
+   "raw_noise_s": 0.4807,
+   "clean_laps": 290
+  },
+  "ALO": {
+   "team_id": "alpine_2022",
+   "pace_vs_teammate_s": -0.0471,
+   "raw_mean_gap_s": -0.06,
+   "races": 11,
+   "lap_noise_s": 0.4151,
+   "raw_noise_s": 0.3994,
+   "clean_laps": 193
+  },
+  "BOT": {
+   "team_id": "alfa_2022",
+   "pace_vs_teammate_s": -0.1164,
+   "raw_mean_gap_s": -0.1601,
+   "races": 8,
+   "lap_noise_s": 0.4935,
+   "raw_noise_s": 0.5399,
+   "clean_laps": 188
+  },
+  "GAS": {
+   "team_id": "alphatauri_2022",
+   "pace_vs_teammate_s": -0.0379,
+   "raw_mean_gap_s": -0.0474,
+   "races": 12,
+   "lap_noise_s": 0.4244,
+   "raw_noise_s": 0.417,
+   "clean_laps": 221
+  },
+  "HAM": {
+   "team_id": "mercedes_2022",
+   "pace_vs_teammate_s": -0.0598,
+   "raw_mean_gap_s": -0.0777,
+   "races": 10,
+   "lap_noise_s": 0.4572,
+   "raw_noise_s": 0.468,
+   "clean_laps": 300
+  },
+  "HUL": {
+   "team_id": "aston_martin_2022",
+   "pace_vs_teammate_s": 0.0682,
+   "raw_mean_gap_s": 0.2726,
+   "races": 1,
+   "lap_noise_s": 0.4733,
+   "raw_noise_s": 0.7722,
+   "clean_laps": 19
+  },
+  "LAT": {
+   "team_id": "williams_2022",
+   "pace_vs_teammate_s": 0.2126,
+   "raw_mean_gap_s": 0.2705,
+   "races": 11,
+   "lap_noise_s": 0.5228,
+   "raw_noise_s": 0.5619,
+   "clean_laps": 335
+  },
+  "LEC": {
+   "team_id": "ferrari_2022",
+   "pace_vs_teammate_s": -0.0544,
+   "raw_mean_gap_s": -0.0707,
+   "races": 10,
+   "lap_noise_s": 0.3808,
+   "raw_noise_s": 0.3578,
+   "clean_laps": 357
+  },
+  "MAG": {
+   "team_id": "haas_2022",
+   "pace_vs_teammate_s": -0.0056,
+   "raw_mean_gap_s": -0.0071,
+   "races": 11,
+   "lap_noise_s": 0.4857,
+   "raw_noise_s": 0.5155,
+   "clean_laps": 253
+  },
+  "MSC": {
+   "team_id": "haas_2022",
+   "pace_vs_teammate_s": 0.0056,
+   "raw_mean_gap_s": 0.0071,
+   "races": 11,
+   "lap_noise_s": 0.4957,
+   "raw_noise_s": 0.543,
+   "clean_laps": 191
+  },
+  "NOR": {
+   "team_id": "mclaren_2022",
+   "pace_vs_teammate_s": -0.1765,
+   "raw_mean_gap_s": -0.2247,
+   "races": 11,
+   "lap_noise_s": 0.4327,
+   "raw_noise_s": 0.4309,
+   "clean_laps": 221
+  },
+  "OCO": {
+   "team_id": "alpine_2022",
+   "pace_vs_teammate_s": 0.0471,
+   "raw_mean_gap_s": 0.06,
+   "races": 11,
+   "lap_noise_s": 0.3771,
+   "raw_noise_s": 0.3464,
+   "clean_laps": 285
+  },
+  "PER": {
+   "team_id": "red_bull_2022",
+   "pace_vs_teammate_s": 0.1519,
+   "raw_mean_gap_s": 0.1933,
+   "races": 11,
+   "lap_noise_s": 0.4247,
+   "raw_noise_s": 0.4188,
+   "clean_laps": 277
+  },
+  "RIC": {
+   "team_id": "mclaren_2022",
+   "pace_vs_teammate_s": 0.1765,
+   "raw_mean_gap_s": 0.2247,
+   "races": 11,
+   "lap_noise_s": 0.4442,
+   "raw_noise_s": 0.4524,
+   "clean_laps": 162
+  },
+  "RUS": {
+   "team_id": "mercedes_2022",
+   "pace_vs_teammate_s": 0.0598,
+   "raw_mean_gap_s": 0.0777,
+   "races": 10,
+   "lap_noise_s": 0.4119,
+   "raw_noise_s": 0.4023,
+   "clean_laps": 367
+  },
+  "SAI": {
+   "team_id": "ferrari_2022",
+   "pace_vs_teammate_s": 0.0544,
+   "raw_mean_gap_s": 0.0707,
+   "races": 10,
+   "lap_noise_s": 0.3626,
+   "raw_noise_s": 0.3316,
+   "clean_laps": 352
+  },
+  "STR": {
+   "team_id": "aston_martin_2022",
+   "pace_vs_teammate_s": -0.0203,
+   "raw_mean_gap_s": -0.0258,
+   "races": 11,
+   "lap_noise_s": 0.4654,
+   "raw_noise_s": 0.4842,
+   "clean_laps": 240
+  },
+  "TSU": {
+   "team_id": "alphatauri_2022",
+   "pace_vs_teammate_s": 0.0379,
+   "raw_mean_gap_s": 0.0474,
+   "races": 12,
+   "lap_noise_s": 0.3918,
+   "raw_noise_s": 0.3651,
+   "clean_laps": 245
+  },
+  "VER": {
+   "team_id": "red_bull_2022",
+   "pace_vs_teammate_s": -0.1519,
+   "raw_mean_gap_s": -0.1933,
+   "races": 11,
+   "lap_noise_s": 0.3958,
+   "raw_noise_s": 0.3819,
+   "clean_laps": 427
+  },
+  "VET": {
+   "team_id": "aston_martin_2022",
+   "pace_vs_teammate_s": 0.0009,
+   "raw_mean_gap_s": 0.0011,
+   "races": 10,
+   "lap_noise_s": 0.4354,
+   "raw_noise_s": 0.4354,
+   "clean_laps": 188
+  },
+  "ZHO": {
+   "team_id": "alfa_2022",
+   "pace_vs_teammate_s": 0.1164,
+   "raw_mean_gap_s": 0.1601,
+   "races": 8,
+   "lap_noise_s": 0.4396,
+   "raw_noise_s": 0.4468,
+   "clean_laps": 87
+  }
+ },
+ "overtake_threshold_shift_s": 0.0,
+ "overtake_shift_fit": {
+  "skipped": "superseded by the W3 racecraft refit (H2a)"
+ }
+}

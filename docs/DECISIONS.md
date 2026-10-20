@@ -1244,3 +1244,37 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
 - Regression: 2024 races are identical to v0.15 (Monza, Spa, Monaco, wet Canada x 3 seeds:
   same order, times, SC/VSC). EXP-022 checks the catalogue against the official points.
 
+## D-054 — H2a: every 2018-2025 race runs on its own season's fits (2026-10-20; engine v0.17.0)
+
+- **Data:** FastF1 position telemetry for 2018-2025 (track spec from the outline; 169 races in the
+  app). No archive positions for 2018 Australia / Bahrain: their outline comes from the same
+  circuit's nearest season (labelled); 2021 Spa (SC laps only) can't be simulated.
+- **Calibration per season** (`calibration/season_files.py`, `<kind>_<season>_v1.json`): values
+  keyed by driver or team (W2 pace + lap noise, W3 racecraft, W4 crews/reliability/events, W5
+  personas) are that season's fit or none (editorial path, labelled); 2024's are never matched
+  onto another season's drivers by code. Tyre life / shape: the season's fit, else 2024's
+  labelled "borrowed". Era rates (traffic table, race control, weather, wet races) stay 2024's,
+  labelled "[2024 rates applied to <season>; per-era fit in H2c]". The probe before H2a showed
+  a 2019 race silently taking 2024 driver values labelled `estimated_from_data`: fixed.
+- `scripts/fit_season.py --season Y` runs the chain (dataset, W2 data-only, W1, W4, W3, W5); the
+  five fit scripts take `--season` (2024 by default, its files untouched). Order differs from
+  2024's milestone order (W1 was fitted before W2-W4 existed); documented.
+- **Persona seeds 2018-2025** (`scripts/build_season_seeds.py`, editorial): a driver who also
+  raced in 2024 keeps his 2024 persona (not refitted), others template-only (rookie = no start
+  in an earlier season in our data, Jolpica 2000+).
+- **Era differences in the data, found and fixed** (each checked to leave 2024 unchanged):
+  2018's named compounds (hypersoft...superhard) mapped per race to SOFT/MEDIUM/HARD by
+  softness (every 2018 race shows exactly three; `compound_name` keeps Pirelli's); lapped
+  finishers are "+N Lap(s)" before 2023 (counted as retirements: risk scale x5.3 in the first
+  2019 fit; `data/status.py`); penalty messages without "FIA STEWARDS:" before 2022, and
+  stop-go penalties (the 2024 parser missed 3 of 50; 2024's fit not redone); retirements by cause
+  ("Engine") instead of "Retired"; NaN tyre ages from feed gaps (2022 Austria: every 2022 driver
+  pace became NaN); quality-FAIL races (results declared early, feed gaps, a DNS car without a
+  FastF1 grid slot, Las Vegas's Saturday date check) excluded from the datasets.
+- **Engine v0.17.0: a pit-lane starter (Jolpica grid 0) starts behind the grid**; it was sorted to
+  the front (36 races 2018-2025, incl. 2024 Mexico since M4). Later release from the pit exit not
+  modelled. 2024 races without one are identical to v0.16 (4 tracks x 3 seeds); 2024's fits
+  (fitted with the old order, Mexico in them) not redone.
+- Jolpica: the pipeline's own call backs off on HTTP 429; `fetch_season.py` prints errors as they
+  happen and has `--pause` (a fast telemetry run plus the history fetch went over 500/hour once).
+

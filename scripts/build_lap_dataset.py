@@ -43,6 +43,15 @@ def content_sha256(df: pd.DataFrame) -> str:
     return "sha256:" + hashlib.sha256(row_hashes.tobytes()).hexdigest()
 
 
+def quality_failures(event_id: str) -> list[str]:
+    """The FAIL checks of a race's quality report (``docs/data/<event>_quality.md``)."""
+    report = ROOT / "docs" / "data" / f"{event_id}_quality.md"
+    if not report.exists():
+        return []
+    rows = report.read_text(encoding="utf-8").splitlines()
+    return [r.split("|")[2].strip() for r in rows if r.startswith("| FAIL |")]
+
+
 def race_reference(data_dir: Path, race: pd.DataFrame, wet: bool) -> dict[str, Any]:
     m = real_metrics(data_dir)
     status = pd.read_parquet(data_dir / "track_status.parquet")["status"].astype(str).to_list()
@@ -89,7 +98,13 @@ def main() -> None:
     wet: set[str] = set()
     sources: dict[str, str] = {}
     reference: dict[str, dict[str, Any]] = {}
+    excluded: dict[str, str] = {}
     for event_id, data_dir, roster_path in events:
+        failed = quality_failures(event_id)
+        if failed:  # H2a (D-054): e.g. results declared before the laps run, feed gaps
+            excluded[event_id] = "; ".join(failed)
+            print(f"  excluded {event_id:<28} quality FAIL: {excluded[event_id][:80]}")
+            continue
         race = race_from_dir(data_dir, roster_path)
         rounds[event_id] = int(race["round"].iloc[0])
         if is_wet_race(race):
@@ -141,6 +156,7 @@ def main() -> None:
         "leakage_audit": (
             "tests/unit/test_lap_dataset.py::test_no_feature_uses_anything_after_the_lap_starts"
         ),
+        "excluded_quality_fail": excluded,
         "splits": {
             "rule": splits.rule,
             "wet": list(splits.wet),

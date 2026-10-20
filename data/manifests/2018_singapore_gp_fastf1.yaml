@@ -2,12 +2,12 @@ dataset_id: 2018_singapore_gp_fastf1_v1
 event: 2018_singapore_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:19:23Z'
+retrieved_utc: '2026-10-17T17:31:40Z'
 session_key: 2018/round 15/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2018_singapore_gp/laps.parquet
-  sha256: sha256:822d547ff93ea7ea4928b8915e11310e7ff78a16e051471da44d065f8e06d118
+  sha256: sha256:5b66de66c6d796df24c07e25389337d18e6124b3d367b9f7d6108c006445a04b
   rows: 1146
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2018_singapore_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2018_singapore_gp/positions.parquet
+  sha256: sha256:e7e0706c9265e12739b18a4b0d792c35ddfe5d3cc4125d74b940daa89d78143b
+  rows: 535000
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2018_singapore_gp/track_outline.parquet
+  sha256: sha256:3ab657ae00d48f90c6ede0f631ff4c3063cca856a69bb3b2dff3a1010ae0cbaa
+  rows: 354
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 41 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)
@@ -116,3 +139,4 @@ missingness_notes:
 - lap table `tyre_life_laps` missing in 20 rows
 - lap table `position` missing in 1 rows
 - lap table `speed_trap_kph` missing in 1 rows
+- lap table `compound_name` missing in 20 rows

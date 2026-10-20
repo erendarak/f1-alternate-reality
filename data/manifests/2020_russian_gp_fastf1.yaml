@@ -2,12 +2,12 @@ dataset_id: 2020_russian_gp_fastf1_v1
 event: 2020_russian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:09:52Z'
+retrieved_utc: '2026-10-17T16:48:48Z'
 session_key: 2020/round 10/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2020_russian_gp/laps.parquet
-  sha256: sha256:b472cddbe56ed38a3730559c5afefb52098d930872101f167d62a37998f3415b
+  sha256: sha256:a981afd17fe2b03552c7777578e7b1e0473f52979aad8158311cbccaca6b13a5
   rows: 948
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2020_russian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2020_russian_gp/positions.parquet
+  sha256: sha256:04d7fd53401d47924fd0e1222eb00f6e39b2ddf4b2db7b61d36fb464e6333e7a
+  rows: 721560
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2020_russian_gp/track_outline.parquet
+  sha256: sha256:dddd5e69f20786f80ceb2d7b77cbb691d4a1e94e513e5b6c6aaa282c6c4891d9
+  rows: 452
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 77 lap 21 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

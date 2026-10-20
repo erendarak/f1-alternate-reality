@@ -65,6 +65,8 @@ def green_laps(laps: pd.DataFrame) -> pd.DataFrame:
         & (laps["gap_ahead_s"].fillna(99.0) > 1.0)
     ].copy()
     g["age"] = g["tyre_age_start"] + g["stint_lap"] - 1
+    # H2a (D-054): FastF1 feed gaps leave a stint's tyre age unknown (2022 Austria: 105 laps)
+    g = g[g["age"].notna()]
     med = g.groupby("event_id")["lap_time_s"].transform("median")
     g = g[g["lap_time_s"] < med * 1.07]
     g["fresh"] = ((g["stint_lap"] == 2) & (g["stint"] > 1)).astype(float)
@@ -237,9 +239,10 @@ def to_json(
     kappa: float,
     delta: float,
     data_sha: str,
+    year: int = 2024,
 ) -> dict[str, Any]:
     return {
-        "label": "2024 tyre life + same-lap wear (W1, D-041)",
+        "label": f"{year} tyre life + same-lap wear (W1, D-041)",
         "dataset_sha256": data_sha,
         "fitted_on": sorted(train),
         "globals": {

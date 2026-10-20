@@ -2,12 +2,12 @@ dataset_id: 2018_british_gp_fastf1_v1
 event: 2018_british_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:18:26Z'
+retrieved_utc: '2026-10-17T17:31:15Z'
 session_key: 2018/round 10/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2018_british_gp/laps.parquet
-  sha256: sha256:b9bf2d7b1fd782345fb1c367f8dfc73aea6b817c026589053a8a14ac4d76315e
+  sha256: sha256:c1a032b3d7909c2810f3565b110253bac869abd3db12cd5c6120c45218d19be4
   rows: 902
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2018_british_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2018_british_gp/positions.parquet
+  sha256: sha256:84912f27e969d6cbfc661705eb3cd6b07d63b4c5b364c315592ae103346e2bcf
+  rows: 397460
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2018_british_gp/track_outline.parquet
+  sha256: sha256:0e8511cfe25e627d509e974f99182c605474fa4c49b6d3b82214819cb2bc9034
+  rows: 313
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 5 lap 4 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)
@@ -116,3 +139,4 @@ missingness_notes:
 - lap table `tyre_life_laps` missing in 21 rows
 - lap table `position` missing in 4 rows
 - lap table `speed_trap_kph` missing in 4 rows
+- lap table `compound_name` missing in 21 rows

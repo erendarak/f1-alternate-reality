@@ -2,12 +2,12 @@ dataset_id: 2022_austrian_gp_fastf1_v1
 event: 2022_austrian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:02:07Z'
+retrieved_utc: '2026-10-17T17:32:26Z'
 session_key: 2022/round 11/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2022_austrian_gp/laps.parquet
-  sha256: sha256:7ddec463024eb4ff69eccec2639d413b2a55dde6b789e435de3af93919bc75e4
+  sha256: sha256:8523755daa2c9c60e77aad80f20709f99caf97975c8383229529847d76e4ae96
   rows: 1324
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2022_austrian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2022_austrian_gp/positions.parquet
+  sha256: sha256:57d59a00e912040e57481182dfe9cdb20326c61591be7b622f822e56b27ea75e
+  rows: 589620
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2022_austrian_gp/track_outline.parquet
+  sha256: sha256:8491ea195745e43d86778e03a8d8089749edef0d682bc46b29c46eb0bf9a3fdd
+  rows: 262
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 16 lap 32 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)
@@ -115,3 +138,4 @@ missingness_notes:
 - lap table `tyre_life_laps` missing in 359 rows
 - lap table `position` missing in 1 rows
 - lap table `speed_trap_kph` missing in 1 rows
+- lap table `compound_name` missing in 299 rows

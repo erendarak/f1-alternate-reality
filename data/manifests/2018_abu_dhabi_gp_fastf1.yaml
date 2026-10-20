@@ -2,12 +2,12 @@ dataset_id: 2018_abu_dhabi_gp_fastf1_v1
 event: 2018_abu_dhabi_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-17T15:12:01Z'
+retrieved_utc: '2026-10-17T17:32:19Z'
 session_key: 2018/round 21/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2018_abu_dhabi_gp/laps.parquet
-  sha256: sha256:163944db0605b851a5753c646d0575be8d3d8690981a70ac0a3f222bcd35bc81
+  sha256: sha256:7840b4c9b0c3a41c632ad77fbe87c2e1a9eed63a7c6bc39b5b08c2b5df4da6f4
   rows: 943
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2018_abu_dhabi_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2018_abu_dhabi_gp/positions.parquet
+  sha256: sha256:02eae96f0a4f0dfa2e135d273045f97eb24733468e60fdef24ccc152bef271eb
+  rows: 553340
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2018_abu_dhabi_gp/track_outline.parquet
+  sha256: sha256:8523eacdb06c79ade85e710d3f7d9c31d861faa9004cb57e6ee49b05d401e7b6
+  rows: 349
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 41 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

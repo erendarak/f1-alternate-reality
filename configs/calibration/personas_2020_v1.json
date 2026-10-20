@@ -1,0 +1,190 @@
+{
+ "label": "2020 persona estimates (W5, D-045)",
+ "fitted_on": [
+  "2020_styrian_gp",
+  "2020_70th_anniversary_gp",
+  "2020_spanish_gp",
+  "2020_belgian_gp",
+  "2020_tuscan_gp",
+  "2020_russian_gp",
+  "2020_eifel_gp",
+  "2020_emilia_romagna_gp",
+  "2020_bahrain_gp",
+  "2020_abu_dhabi_gp"
+ ],
+ "wear": {
+  "reference_slope_s_per_lap2": 0.032729432831674586,
+  "split_half_drivers": -0.093,
+  "split_half_teams": 0.705,
+  "reliability_drivers": 0.0,
+  "reliability_teams": 0.827,
+  "drivers": {
+   "ALB": {
+    "team_id": "red_bull_2020",
+    "wear_multiplier": 0.986,
+    "vs_teammate_s_per_lap2": -0.00521,
+    "team_vs_field_s_per_lap2": -0.00055,
+    "races": 8
+   },
+   "BOT": {
+    "team_id": "mercedes_2020",
+    "wear_multiplier": 1.0476,
+    "vs_teammate_s_per_lap2": 0.00722,
+    "team_vs_field_s_per_lap2": 0.00188,
+    "races": 9
+   },
+   "FIT": {
+    "team_id": "haas_2020",
+    "wear_multiplier": 1.1829,
+    "vs_teammate_s_per_lap2": -0.00708,
+    "team_vs_field_s_per_lap2": 0.00724,
+    "races": 1
+   },
+   "GAS": {
+    "team_id": "alphatauri_2020",
+    "wear_multiplier": 0.8573,
+    "vs_teammate_s_per_lap2": -0.00538,
+    "team_vs_field_s_per_lap2": -0.00565,
+    "races": 8
+   },
+   "GIO": {
+    "team_id": "alfa_2020",
+    "wear_multiplier": 1.2166,
+    "vs_teammate_s_per_lap2": 0.00407,
+    "team_vs_field_s_per_lap2": 0.00857,
+    "races": 8
+   },
+   "GRO": {
+    "team_id": "haas_2020",
+    "wear_multiplier": 1.1829,
+    "vs_teammate_s_per_lap2": 0.0031,
+    "team_vs_field_s_per_lap2": 0.00724,
+    "races": 7
+   },
+   "HAM": {
+    "team_id": "mercedes_2020",
+    "wear_multiplier": 1.0476,
+    "vs_teammate_s_per_lap2": -0.00722,
+    "team_vs_field_s_per_lap2": 0.00188,
+    "races": 9
+   },
+   "HUL": {
+    "team_id": "racing_point_2020",
+    "wear_multiplier": 0.9967,
+    "vs_teammate_s_per_lap2": -0.00777,
+    "team_vs_field_s_per_lap2": -0.00013,
+    "races": 2
+   },
+   "KVY": {
+    "team_id": "alphatauri_2020",
+    "wear_multiplier": 0.8573,
+    "vs_teammate_s_per_lap2": 0.00538,
+    "team_vs_field_s_per_lap2": -0.00565,
+    "races": 8
+   },
+   "LAT": {
+    "team_id": "williams_2020",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": -0.00045,
+    "team_vs_field_s_per_lap2": 0.01601,
+    "races": 7
+   },
+   "LEC": {
+    "team_id": "ferrari_2020",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": 0.00124,
+    "team_vs_field_s_per_lap2": 0.01073,
+    "races": 9
+   },
+   "MAG": {
+    "team_id": "haas_2020",
+    "wear_multiplier": 1.1829,
+    "vs_teammate_s_per_lap2": -0.00183,
+    "team_vs_field_s_per_lap2": 0.00724,
+    "races": 8
+   },
+   "NOR": {
+    "team_id": "mclaren_2020",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": -0.00324,
+    "team_vs_field_s_per_lap2": -0.01611,
+    "races": 7
+   },
+   "OCO": {
+    "team_id": "renault_2020",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": 0.00031,
+    "team_vs_field_s_per_lap2": -0.02091,
+    "races": 7
+   },
+   "PER": {
+    "team_id": "racing_point_2020",
+    "wear_multiplier": 0.9967,
+    "vs_teammate_s_per_lap2": 0.00252,
+    "team_vs_field_s_per_lap2": -0.00013,
+    "races": 6
+   },
+   "RAI": {
+    "team_id": "alfa_2020",
+    "wear_multiplier": 1.2166,
+    "vs_teammate_s_per_lap2": -0.00407,
+    "team_vs_field_s_per_lap2": 0.00857,
+    "races": 8
+   },
+   "RIC": {
+    "team_id": "renault_2020",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": -0.00031,
+    "team_vs_field_s_per_lap2": -0.02091,
+    "races": 7
+   },
+   "RUS": {
+    "team_id": "williams_2020",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": 0.00045,
+    "team_vs_field_s_per_lap2": 0.01601,
+    "races": 7
+   },
+   "SAI": {
+    "team_id": "mclaren_2020",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": 0.00324,
+    "team_vs_field_s_per_lap2": -0.01611,
+    "races": 7
+   },
+   "STR": {
+    "team_id": "racing_point_2020",
+    "wear_multiplier": 0.9967,
+    "vs_teammate_s_per_lap2": 7e-05,
+    "team_vs_field_s_per_lap2": -0.00013,
+    "races": 6
+   },
+   "VER": {
+    "team_id": "red_bull_2020",
+    "wear_multiplier": 0.986,
+    "vs_teammate_s_per_lap2": 0.00521,
+    "team_vs_field_s_per_lap2": -0.00055,
+    "races": 8
+   },
+   "VET": {
+    "team_id": "ferrari_2020",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": -0.00124,
+    "team_vs_field_s_per_lap2": 0.01073,
+    "races": 9
+   }
+  }
+ },
+ "derived_at_setup": {
+  "consistency": "rank of W2 lap noise (driver_pace_2020_v1), persona spread",
+  "overtake_skill": "rank of W3 attack term (racecraft_2020_v1), persona spread",
+  "defense_skill": "rank of W3 defend term (racecraft_2020_v1), persona spread"
+ },
+ "not_measurable": {
+  "mistake proneness (consistency x composure in incidents)": "blue flags dominate big losses (2024: 24 events left; odd vs even races r = -0.33)",
+  "composure": "no measurement (penalties too few per driver)",
+  "wet_skill": "3 wet races",
+  "risk_appetite": "a preference, not a measurement",
+  "qualifying_skill": "the grid is real"
+ }
+}

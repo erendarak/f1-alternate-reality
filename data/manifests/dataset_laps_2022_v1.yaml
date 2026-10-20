@@ -1,0 +1,260 @@
+dataset_id: laps_2022_v1
+dataset_version: 1
+feature_schema_version: 1
+season: 2022
+license_review_status: research_only (F1 timing data via FastF1; not redistributed)
+built_by: scripts/build_lap_dataset.py
+file:
+  relative_path: data/processed/datasets/laps_2022_v1.parquet
+  sha256: sha256:561729d3fbb61f9915b5ed10339841835dd5386df2532e3b81c475e0bc4ae0d6
+  content_sha256: sha256:6c03eeb66580351aaa8d2fc4a24b1ab045943c91552c7ed4b08440445ad4121a
+  rows: 21292
+  representative_rows: 16804
+target: lap_time_s
+features:
+- name: circuit_id
+  available: pre_race
+  source_type: historical_verified
+  description: Jolpica circuit id
+- name: driver_id
+  available: pre_race
+  source_type: historical_verified
+  description: season-specific driver id (roster)
+- name: team_id
+  available: pre_race
+  source_type: historical_verified
+  description: team id (roster)
+- name: grid_position
+  available: pre_race
+  source_type: historical_verified
+  description: official starting slot (0 = pit lane)
+- name: scheduled_laps
+  available: pre_race
+  source_type: historical_verified
+  description: race distance in laps (winner's laps)
+- name: lap_number
+  available: lap_start
+  source_type: historical_verified
+  description: 1-based lap number
+- name: laps_remaining
+  available: lap_start
+  source_type: estimated_from_data
+  description: scheduled_laps - lap_number + 1 (fuel proxy)
+- name: compound
+  available: lap_start
+  source_type: historical_verified
+  description: tyre compound on this lap
+- name: tyre_age_start
+  available: lap_start
+  source_type: estimated_from_data
+  description: laps already on the set when the lap starts
+- name: fresh_tyre
+  available: lap_start
+  source_type: historical_verified
+  description: the set was new when fitted (FastF1 FreshTyre)
+- name: stint
+  available: lap_start
+  source_type: historical_verified
+  description: stint number
+- name: stint_lap
+  available: lap_start
+  source_type: estimated_from_data
+  description: 1-based lap index within the stint
+- name: pit_out_lap
+  available: lap_start
+  source_type: historical_verified
+  description: the lap starts in the pit lane
+- name: pit_in_lap
+  available: decision
+  source_type: historical_verified
+  description: the car boxes at the end of this lap
+- name: position_start
+  available: lap_start
+  source_type: historical_verified
+  description: position when the lap starts (grid on lap 1)
+- name: gap_ahead_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds behind the car that crossed the line just before, same lap (NaN on lap 1)
+- name: gap_behind_prev_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds ahead of the next car at the PREVIOUS line crossing (the gap to the car behind
+    at this crossing isn't known yet when the lap starts; found by the leakage audit)
+- name: track_status_start
+  available: lap_start
+  source_type: historical_verified
+  description: track status code when the lap starts
+- name: air_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: track_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: humidity_pct
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: rainfall_start
+  available: lap_start
+  source_type: historical_verified
+  description: rain flag of the latest weather sample
+- name: wind_speed_ms
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+lap_facts_never_features:
+- lap_status
+- position_end
+- is_accurate
+- deleted
+- fastf1_generated
+- representative
+leakage_audit: tests/unit/test_lap_dataset.py::test_no_feature_uses_anything_after_the_lap_starts
+excluded_quality_fail:
+  2022_saudi_arabian_gp: Starting grid matches the roster; Finishing position and laps agree with Jolpica
+  2022_french_gp: Lap rows per car equal classified laps
+  2022_japanese_gp: Race distance is 28 laps; Lap rows per car equal classified laps
+splits:
+  rule: wet = any intermediate/wet tyre lap or rain at >= 5% of lap starts; among dry races, rounds divisible
+    by 4 are held out (dry_test), the rest are dry_train; leave-one-race-out folds run over dry_train.
+    Rule fixed before any model was fitted.
+  wet:
+  - 2022_emilia_romagna_gp
+  - 2022_monaco_gp
+  - 2022_hungarian_gp
+  - 2022_singapore_gp
+  dry_test:
+  - 2022_azerbaijan_gp
+  - 2022_italian_gp
+  - 2022_mexico_city_gp
+  dry_train:
+  - 2022_bahrain_gp
+  - 2022_australian_gp
+  - 2022_miami_gp
+  - 2022_spanish_gp
+  - 2022_canadian_gp
+  - 2022_british_gp
+  - 2022_austrian_gp
+  - 2022_belgian_gp
+  - 2022_dutch_gp
+  - 2022_united_states_gp
+  - 2022_sao_paulo_gp
+  - 2022_abu_dhabi_gp
+events:
+  2022_abu_dhabi_gp:
+    round: 22
+    group: dry_train
+    rows: 1117
+    representative_rows: 994
+    source_manifest_sha256: sha256:fe7501a09d44a68751d9fb400da7820ea413d24e250e2cfccc70520e3ae64776
+  2022_australian_gp:
+    round: 3
+    group: dry_train
+    rows: 1045
+    representative_rows: 794
+    source_manifest_sha256: sha256:22c627a480cd7abf6719c97a87ab8dd70b3c11e883cd25f8d562a2f6e733b139
+  2022_austrian_gp:
+    round: 11
+    group: dry_train
+    rows: 1324
+    representative_rows: 1080
+    source_manifest_sha256: sha256:bf3da85b8bfd71c1909867f41a4c6e96b24f1c2d9ce84cb1725815c6c44eff55
+  2022_azerbaijan_gp:
+    round: 8
+    group: dry_test
+    rows: 891
+    representative_rows: 734
+    source_manifest_sha256: sha256:8f807880cf4fbd3c6fbde35c157803e7d51c306cb93977cb40a29a11275cc4d0
+  2022_bahrain_gp:
+    round: 1
+    group: dry_train
+    rows: 1125
+    representative_rows: 854
+    source_manifest_sha256: sha256:957ddc5cd22b5309846e04482efcfebfbdf6bcc14fa4c49463e5c790f2062744
+  2022_belgian_gp:
+    round: 14
+    group: dry_train
+    rows: 792
+    representative_rows: 624
+    source_manifest_sha256: sha256:150031af40b0dcc1227cd65d420251ca5025deccd666196274dfa3698d128483
+  2022_british_gp:
+    round: 10
+    group: dry_train
+    rows: 815
+    representative_rows: 646
+    source_manifest_sha256: sha256:7ffd1aec7b66d4761631bb75dba003ae1008736b600155696c38193737a157fd
+  2022_canadian_gp:
+    round: 9
+    group: dry_train
+    rows: 1264
+    representative_rows: 1000
+    source_manifest_sha256: sha256:20100cd8139638b03431c04ae40d00dde4d04cd20348fa4653322608cc60d016
+  2022_dutch_gp:
+    round: 15
+    group: dry_train
+    rows: 1392
+    representative_rows: 1042
+    source_manifest_sha256: sha256:23628ed2a9b5b047d6338b2249f27983b10686eca5240b4903f8019c596db70f
+  2022_emilia_romagna_gp:
+    round: 4
+    group: wet
+    rows: 1132
+    representative_rows: 957
+    source_manifest_sha256: sha256:6aba79e43a95241b1a59b38ba86341163efd16caca9d77779788acaef6dd568a
+  2022_hungarian_gp:
+    round: 13
+    group: wet
+    rows: 1383
+    representative_rows: 1122
+    source_manifest_sha256: sha256:4863d29f8996778ac2c3057d3c805f749917e54d79379014800165e5481fa296
+  2022_italian_gp:
+    round: 16
+    group: dry_test
+    rows: 971
+    representative_rows: 736
+    source_manifest_sha256: sha256:c8bd64b8f011e7f2b275e5ff4e56a8ffeff9de6090ff657d50eea46dcfd761ba
+  2022_mexico_city_gp:
+    round: 20
+    group: dry_test
+    rows: 1379
+    representative_rows: 1276
+    source_manifest_sha256: sha256:1fde53670efd82d982dc25927cf92505631965eb97d639ad619724994d2bb1b4
+  2022_miami_gp:
+    round: 5
+    group: dry_train
+    rows: 1057
+    representative_rows: 802
+    source_manifest_sha256: sha256:561bcf7ce853e099bcbb30a1c27629416ab79919ecb16be6af2c6dbe01b61db0
+  2022_monaco_gp:
+    round: 7
+    group: wet
+    rows: 1179
+    representative_rows: 833
+    source_manifest_sha256: sha256:a31e3dd7a7ec2e2d77f8fb6258cac7c988a5667748642d58d5e9dfb4e90e8328
+  2022_sao_paulo_gp:
+    round: 21
+    group: dry_train
+    rows: 1259
+    representative_rows: 904
+    source_manifest_sha256: sha256:3e80fb4e7a25349938c76b95486b7e1161e0ef3e9d083af8bf976d544701ee7a
+  2022_singapore_gp:
+    round: 17
+    group: wet
+    rows: 945
+    representative_rows: 617
+    source_manifest_sha256: sha256:52d52c28a10007fc5236bcaa2e0d85ba4ddfa9214e227151bd036fbe0c8f9e74
+  2022_spanish_gp:
+    round: 6
+    group: dry_train
+    rows: 1230
+    representative_rows: 1046
+    source_manifest_sha256: sha256:b34e4c0b791b660f1690f22e2f26b9bd7a8e32f17d758c5fd793858fc85244dc
+  2022_united_states_gp:
+    round: 19
+    group: dry_train
+    rows: 992
+    representative_rows: 743
+    source_manifest_sha256: sha256:ea7cc9e6f74aa1360b936e24275ca1103014abce614b406eb30b97244e60f99a

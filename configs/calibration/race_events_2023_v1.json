@@ -1,0 +1,242 @@
+{
+ "label": "2023 race events (W4, D-042)",
+ "events": [
+  "2023_bahrain_gp",
+  "2023_saudi_arabian_gp",
+  "2023_australian_gp",
+  "2023_miami_gp",
+  "2023_spanish_gp",
+  "2023_austrian_gp",
+  "2023_british_gp",
+  "2023_hungarian_gp",
+  "2023_qatar_gp",
+  "2023_united_states_gp",
+  "2023_mexico_city_gp",
+  "2023_abu_dhabi_gp",
+  "2023_azerbaijan_gp",
+  "2023_canadian_gp",
+  "2023_japanese_gp",
+  "2023_sao_paulo_gp",
+  "2023_monaco_gp",
+  "2023_belgian_gp",
+  "2023_dutch_gp"
+ ],
+ "dry_events": [
+  "2023_bahrain_gp",
+  "2023_saudi_arabian_gp",
+  "2023_australian_gp",
+  "2023_miami_gp",
+  "2023_spanish_gp",
+  "2023_austrian_gp",
+  "2023_british_gp",
+  "2023_hungarian_gp",
+  "2023_qatar_gp",
+  "2023_united_states_gp",
+  "2023_mexico_city_gp",
+  "2023_abu_dhabi_gp",
+  "2023_azerbaijan_gp",
+  "2023_canadian_gp",
+  "2023_japanese_gp",
+  "2023_sao_paulo_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": 0.1036,
+  "slow_stop_scale_s": 6.02,
+  "stops": 560,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {
+  "alfa_2023": {
+   "pit_crew_offset_s": 0.295,
+   "pit_slow_multiplier": 1.011,
+   "stops": 57,
+   "raw_median_rel_s": 0.398,
+   "raw_slow_share": 0.105
+  },
+  "alphatauri_2023": {
+   "pit_crew_offset_s": -0.212,
+   "pit_slow_multiplier": 1.285,
+   "stops": 61,
+   "raw_median_rel_s": -0.281,
+   "raw_slow_share": 0.148
+  },
+  "alpine_2023": {
+   "pit_crew_offset_s": 0.195,
+   "pit_slow_multiplier": 1.262,
+   "stops": 55,
+   "raw_median_rel_s": 0.266,
+   "raw_slow_share": 0.145
+  },
+  "aston_martin_2023": {
+   "pit_crew_offset_s": 0.0,
+   "pit_slow_multiplier": 0.461,
+   "stops": 56,
+   "raw_median_rel_s": 0.0,
+   "raw_slow_share": 0.018
+  },
+  "ferrari_2023": {
+   "pit_crew_offset_s": -0.315,
+   "pit_slow_multiplier": 0.847,
+   "stops": 51,
+   "raw_median_rel_s": -0.438,
+   "raw_slow_share": 0.078
+  },
+  "haas_2023": {
+   "pit_crew_offset_s": 0.201,
+   "pit_slow_multiplier": 1.135,
+   "stops": 56,
+   "raw_median_rel_s": 0.273,
+   "raw_slow_share": 0.125
+  },
+  "mclaren_2023": {
+   "pit_crew_offset_s": -0.046,
+   "pit_slow_multiplier": 1.53,
+   "stops": 59,
+   "raw_median_rel_s": -0.062,
+   "raw_slow_share": 0.186
+  },
+  "mercedes_2023": {
+   "pit_crew_offset_s": -0.091,
+   "pit_slow_multiplier": 0.702,
+   "stops": 54,
+   "raw_median_rel_s": -0.125,
+   "raw_slow_share": 0.056
+  },
+  "red_bull_2023": {
+   "pit_crew_offset_s": -0.351,
+   "pit_slow_multiplier": 0.87,
+   "stops": 60,
+   "raw_median_rel_s": -0.467,
+   "raw_slow_share": 0.083
+  },
+  "williams_2023": {
+   "pit_crew_offset_s": 0.201,
+   "pit_slow_multiplier": 0.847,
+   "stops": 51,
+   "raw_median_rel_s": 0.28,
+   "raw_slow_share": 0.078
+  }
+ },
+ "reliability": {
+  "field_retirements_per_start": 0.1421,
+  "teams": {
+   "alfa_2023": {
+    "failure_multiplier": 0.955,
+    "retirements": 5,
+    "starts": 38
+   },
+   "alphatauri_2023": {
+    "failure_multiplier": 0.614,
+    "retirements": 2,
+    "starts": 38
+   },
+   "alpine_2023": {
+    "failure_multiplier": 1.295,
+    "retirements": 8,
+    "starts": 38
+   },
+   "aston_martin_2023": {
+    "failure_multiplier": 1.068,
+    "retirements": 6,
+    "starts": 38
+   },
+   "ferrari_2023": {
+    "failure_multiplier": 1.182,
+    "retirements": 7,
+    "starts": 38
+   },
+   "haas_2023": {
+    "failure_multiplier": 1.068,
+    "retirements": 6,
+    "starts": 38
+   },
+   "mclaren_2023": {
+    "failure_multiplier": 0.728,
+    "retirements": 3,
+    "starts": 38
+   },
+   "mercedes_2023": {
+    "failure_multiplier": 0.841,
+    "retirements": 4,
+    "starts": 38
+   },
+   "red_bull_2023": {
+    "failure_multiplier": 0.614,
+    "retirements": 2,
+    "starts": 38
+   },
+   "williams_2023": {
+    "failure_multiplier": 1.636,
+    "retirements": 11,
+    "starts": 38
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.00517,
+  "sc_share": 0.6,
+  "count": 5,
+  "race_laps": 968,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 7,
+  "races": 19,
+  "per_race": 0.3684
+ },
+ "penalties": {
+  "counts": {
+   "other": 32,
+   "pit_speeding": 6,
+   "collision": 10
+  },
+  "collision_per_pass": 0.011901,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.009579,
+  "other_per_car_lap": 0.001903,
+  "passes": 1155,
+  "raw": {
+   "collision_per_pass": 0.00866,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.00697,
+   "other_per_car_lap": 0.001385
+  },
+  "scale": 1.3743,
+  "scale_note": "x1.374: simulated dry_train 2.18 vs real 3.00 per race"
+ },
+ "fitted": {
+  "risk_scale": 1.7231,
+  "red_flag_per_crash": 0.1974,
+  "fit": {
+   "races": [
+    "2023_bahrain_gp",
+    "2023_saudi_arabian_gp",
+    "2023_australian_gp",
+    "2023_miami_gp",
+    "2023_spanish_gp",
+    "2023_austrian_gp",
+    "2023_british_gp",
+    "2023_hungarian_gp",
+    "2023_qatar_gp",
+    "2023_united_states_gp",
+    "2023_mexico_city_gp",
+    "2023_abu_dhabi_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 1.083,
+   "sim_failures_per_race": 0.717,
+   "real_retirements_per_race": 2.583,
+   "target_red_flags_per_race": 0.3684
+  },
+  "check": {
+   "retirements_per_race": 2.7,
+   "red_flags_per_race": 0.35,
+   "safety_cars_per_race": 1.117,
+   "vscs_per_race": 0.617,
+   "penalties_per_race": 2.183,
+   "penalties_per_race_after_scale": 3.033
+  }
+ }
+}

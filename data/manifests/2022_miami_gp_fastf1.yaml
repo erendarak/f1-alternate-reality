@@ -2,12 +2,12 @@ dataset_id: 2022_miami_gp_fastf1_v1
 event: 2022_miami_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:00:29Z'
+retrieved_utc: '2026-10-17T17:02:51Z'
 session_key: 2022/round 5/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2022_miami_gp/laps.parquet
-  sha256: sha256:3892208ffe93fbfceca60c345b059690367fdb218c76721cb105a7e64135f0d0
+  sha256: sha256:3065a8a764fa8e33fb6e6808008a31affbcf8821c6a430dfc5135c267e7480d8
   rows: 1057
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2022_miami_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2022_miami_gp/positions.parquet
+  sha256: sha256:7d348785236a35a705646c3f608c1e64da70a98b05b1c6bbda967b9dc7c1d5ef
+  rows: 742520
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2022_miami_gp/track_outline.parquet
+  sha256: sha256:7ea9ab54a0b5dfa7507ca3e6415e2d5e8561406af6de93a43ce91d27ba2ef61e
+  rows: 370
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 30 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

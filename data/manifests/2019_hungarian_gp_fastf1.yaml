@@ -2,7 +2,7 @@ dataset_id: 2019_hungarian_gp_fastf1_v1
 event: 2019_hungarian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:14:12Z'
+retrieved_utc: '2026-10-17T16:42:23Z'
 session_key: 2019/round 12/R
 license_review_status: research_only
 files:
@@ -99,6 +99,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2019_hungarian_gp/positions.parquet
+  sha256: sha256:173e2da7219d9cab953400c1fefc83725ac4af6eadf4111642b9b540880027d0
+  rows: 526840
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2019_hungarian_gp/track_outline.parquet
+  sha256: sha256:60d42f65a3c62f3062306877649034f2a30d20b7c1210e7e2a532215c607ca35
+  rows: 273
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 36 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

@@ -2,12 +2,12 @@ dataset_id: 2018_bahrain_gp_fastf1_v1
 event: 2018_bahrain_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:16:42Z'
+retrieved_utc: '2026-10-17T17:30:24Z'
 session_key: 2018/round 2/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2018_bahrain_gp/laps.parquet
-  sha256: sha256:9b4f4738991e3a7e9ba0587f20f36b1a9ec65f73f9c9a94b3a68a3cbf75cf7ac
+  sha256: sha256:81a79c29e9e11dfc65b531ecf08c62181a111e6592e5af8b515c5f1471561f5e
   rows: 998
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2018_bahrain_gp/results.parquet
@@ -88,8 +89,8 @@ files:
   source_type: historical_verified
   description: race control messages
 - relative_path: data/processed/2018_bahrain_gp/corners.parquet
-  sha256: sha256:1b411b856584f408a900cbb55ba301cc427277e8ae5eff484ce529cc035e3d58
-  rows: 15
+  sha256: sha256:c37aee02b9528f27c7476e6db0305185b4d82ce9e436ccc95977d4c5c92aad3f
+  rows: 0
   columns:
   - number
   - letter
@@ -116,3 +117,4 @@ missingness_notes:
 - lap table `tyre_life_laps` missing in 22 rows
 - lap table `position` missing in 6 rows
 - lap table `speed_trap_kph` missing in 6 rows
+- lap table `compound_name` missing in 22 rows

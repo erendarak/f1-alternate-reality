@@ -1,0 +1,179 @@
+{
+ "label": "2019 persona estimates (W5, D-045)",
+ "fitted_on": [
+  "2019_australian_gp",
+  "2019_bahrain_gp",
+  "2019_chinese_gp",
+  "2019_spanish_gp",
+  "2019_canadian_gp",
+  "2019_austrian_gp",
+  "2019_british_gp",
+  "2019_belgian_gp",
+  "2019_italian_gp",
+  "2019_singapore_gp",
+  "2019_mexican_gp",
+  "2019_united_states_gp",
+  "2019_abu_dhabi_gp"
+ ],
+ "wear": {
+  "reference_slope_s_per_lap2": 0.04328179470597421,
+  "split_half_drivers": 0.289,
+  "split_half_teams": 0.523,
+  "reliability_drivers": 0.449,
+  "reliability_teams": 0.687,
+  "drivers": {
+   "ALB": {
+    "team_id": "red_bull_2019",
+    "wear_multiplier": 0.896,
+    "vs_teammate_s_per_lap2": 1e-05,
+    "team_vs_field_s_per_lap2": -0.00656,
+    "races": 12
+   },
+   "BOT": {
+    "team_id": "mercedes_2019",
+    "wear_multiplier": 0.9418,
+    "vs_teammate_s_per_lap2": 0.0004,
+    "team_vs_field_s_per_lap2": -0.00393,
+    "races": 13
+   },
+   "GAS": {
+    "team_id": "toro_rosso_2019",
+    "wear_multiplier": 0.9524,
+    "vs_teammate_s_per_lap2": 0.00409,
+    "team_vs_field_s_per_lap2": -0.00567,
+    "races": 13
+   },
+   "GIO": {
+    "team_id": "alfa_2019",
+    "wear_multiplier": 1.0336,
+    "vs_teammate_s_per_lap2": 0.00077,
+    "team_vs_field_s_per_lap2": 0.00161,
+    "races": 12
+   },
+   "GRO": {
+    "team_id": "haas_2019",
+    "wear_multiplier": 1.2201,
+    "vs_teammate_s_per_lap2": 0.00279,
+    "team_vs_field_s_per_lap2": 0.01204,
+    "races": 11
+   },
+   "HAM": {
+    "team_id": "mercedes_2019",
+    "wear_multiplier": 0.9336,
+    "vs_teammate_s_per_lap2": -0.0004,
+    "team_vs_field_s_per_lap2": -0.00393,
+    "races": 13
+   },
+   "HUL": {
+    "team_id": "renault_2019",
+    "wear_multiplier": 0.8706,
+    "vs_teammate_s_per_lap2": -0.00361,
+    "team_vs_field_s_per_lap2": -0.00579,
+    "races": 11
+   },
+   "KUB": {
+    "team_id": "williams_2019",
+    "wear_multiplier": 1.0494,
+    "vs_teammate_s_per_lap2": -0.00418,
+    "team_vs_field_s_per_lap2": 0.00584,
+    "races": 13
+   },
+   "KVY": {
+    "team_id": "toro_rosso_2019",
+    "wear_multiplier": 0.911,
+    "vs_teammate_s_per_lap2": 0.00011,
+    "team_vs_field_s_per_lap2": -0.00567,
+    "races": 13
+   },
+   "LEC": {
+    "team_id": "ferrari_2019",
+    "wear_multiplier": 1.1728,
+    "vs_teammate_s_per_lap2": 0.00545,
+    "team_vs_field_s_per_lap2": 0.00733,
+    "races": 12
+   },
+   "MAG": {
+    "team_id": "haas_2019",
+    "wear_multiplier": 1.1622,
+    "vs_teammate_s_per_lap2": -0.00279,
+    "team_vs_field_s_per_lap2": 0.01204,
+    "races": 11
+   },
+   "NOR": {
+    "team_id": "mclaren_2019",
+    "wear_multiplier": 0.9676,
+    "vs_teammate_s_per_lap2": -0.00087,
+    "team_vs_field_s_per_lap2": -0.00147,
+    "races": 10
+   },
+   "PER": {
+    "team_id": "racing_point_2019",
+    "wear_multiplier": 0.8961,
+    "vs_teammate_s_per_lap2": -0.00481,
+    "team_vs_field_s_per_lap2": -0.0034,
+    "races": 13
+   },
+   "RAI": {
+    "team_id": "alfa_2019",
+    "wear_multiplier": 1.0176,
+    "vs_teammate_s_per_lap2": -0.00077,
+    "team_vs_field_s_per_lap2": 0.00161,
+    "races": 12
+   },
+   "RIC": {
+    "team_id": "renault_2019",
+    "wear_multiplier": 0.9455,
+    "vs_teammate_s_per_lap2": 0.00361,
+    "team_vs_field_s_per_lap2": -0.00579,
+    "races": 11
+   },
+   "RUS": {
+    "team_id": "williams_2019",
+    "wear_multiplier": 1.1361,
+    "vs_teammate_s_per_lap2": 0.00418,
+    "team_vs_field_s_per_lap2": 0.00584,
+    "races": 13
+   },
+   "SAI": {
+    "team_id": "mclaren_2019",
+    "wear_multiplier": 0.9856,
+    "vs_teammate_s_per_lap2": 0.00087,
+    "team_vs_field_s_per_lap2": -0.00147,
+    "races": 10
+   },
+   "STR": {
+    "team_id": "racing_point_2019",
+    "wear_multiplier": 0.996,
+    "vs_teammate_s_per_lap2": 0.00481,
+    "team_vs_field_s_per_lap2": -0.0034,
+    "races": 13
+   },
+   "VER": {
+    "team_id": "red_bull_2019",
+    "wear_multiplier": 0.8486,
+    "vs_teammate_s_per_lap2": -0.00456,
+    "team_vs_field_s_per_lap2": -0.00656,
+    "races": 12
+   },
+   "VET": {
+    "team_id": "ferrari_2019",
+    "wear_multiplier": 1.0598,
+    "vs_teammate_s_per_lap2": -0.00545,
+    "team_vs_field_s_per_lap2": 0.00733,
+    "races": 12
+   }
+  }
+ },
+ "derived_at_setup": {
+  "consistency": "rank of W2 lap noise (driver_pace_2019_v1), persona spread",
+  "overtake_skill": "rank of W3 attack term (racecraft_2019_v1), persona spread",
+  "defense_skill": "rank of W3 defend term (racecraft_2019_v1), persona spread"
+ },
+ "not_measurable": {
+  "mistake proneness (consistency x composure in incidents)": "blue flags dominate big losses (2024: 24 events left; odd vs even races r = -0.33)",
+  "composure": "no measurement (penalties too few per driver)",
+  "wet_skill": "3 wet races",
+  "risk_appetite": "a preference, not a measurement",
+  "qualifying_skill": "the grid is real"
+ }
+}

@@ -2,12 +2,12 @@ dataset_id: 2023_azerbaijan_gp_fastf1_v1
 event: 2023_azerbaijan_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:55:02Z'
+retrieved_utc: '2026-10-17T17:36:22Z'
 session_key: 2023/round 4/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2023_azerbaijan_gp/laps.parquet
-  sha256: sha256:f49676c7e981c6cc0b901d9852d40dd062dd49c1d5857c8a660abc635d56f81f
+  sha256: sha256:efd35ba9f554f6c47b7bd8ecc97add952a72f1b6f1b9138e818bbf3b264a0380
   rows: 962
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2023_azerbaijan_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2023_azerbaijan_gp/positions.parquet
+  sha256: sha256:253b5d133c38721517631bf5ee4daaa7826978921930dd8c147a845664b6edac
+  rows: 731880
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2023_azerbaijan_gp/track_outline.parquet
+  sha256: sha256:b2f3c462577414955bb6fe85a35aaca13398c149a2f88d86047cfd38cfdb1610
+  rows: 417
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 11 lap 18 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

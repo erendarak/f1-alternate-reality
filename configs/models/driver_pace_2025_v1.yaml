@@ -1,0 +1,30 @@
+model_name: driver_pace
+model_version: v1
+kind: same-lap regression per race; driver vs teammate and residual SD, shrunk
+source_type: estimated_from_data
+artifact: configs/calibration/driver_pace_2025_v1.json
+artifact_sha256: sha256:1e860ea79eb4d36b209619354c7eef6b51cb4665ded56a8f158356680a1d7b3c
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2025_v1.yaml
+training_dataset_content_sha256: sha256:1d956cba8adde74b065a63e18fb5ae43c4d503c845ea1b461f2a28c5ee13e9ed
+training_races:
+- 2025_austrian_gp
+- 2025_azerbaijan_gp
+- 2025_canadian_gp
+- 2025_chinese_gp
+- 2025_dutch_gp
+- 2025_emilia_romagna_gp
+- 2025_hungarian_gp
+- 2025_japanese_gp
+- 2025_miami_gp
+- 2025_qatar_gp
+- 2025_sao_paulo_gp
+- 2025_saudi_arabian_gp
+- 2025_singapore_gp
+- 2025_spanish_gp
+- 2025_united_states_gp
+metrics:
+  field_noise_s: 0.4186
+  overtake_threshold_shift_s: 0.0
+  held_out_check: EXP-012
+status: fitted for 2025 (H2a, D-054); held-out check EXP-023

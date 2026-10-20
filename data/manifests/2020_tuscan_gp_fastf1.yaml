@@ -2,12 +2,12 @@ dataset_id: 2020_tuscan_gp_fastf1_v1
 event: 2020_tuscan_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:09:38Z'
+retrieved_utc: '2026-10-17T16:48:12Z'
 session_key: 2020/round 9/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2020_tuscan_gp/laps.parquet
-  sha256: sha256:bbfbc1160b601bb9f9944fe61f0186ccb1f0ac616bd5be791407e8b987b5bbe5
+  sha256: sha256:6be1714987dccdae02af2e4522bba4f7573fc78fe3ce64e5f3a627485849b333
   rows: 786
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2020_tuscan_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2020_tuscan_gp/positions.parquet
+  sha256: sha256:7971ec3859702f1cbd1bd6667e9c991d552afcf0cf4f53dab76685379e93e40b
+  rows: 964020
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2020_tuscan_gp/track_outline.parquet
+  sha256: sha256:16165ee08e8edf5f92bb62c79f9d8554ed3b4dd616fe9b6d3bd9cfa1adb76ef3
+  rows: 377
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 11 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

@@ -2,12 +2,12 @@ dataset_id: 2021_french_gp_fastf1_v1
 event: 2021_french_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:06:34Z'
+retrieved_utc: '2026-10-17T16:54:08Z'
 session_key: 2021/round 7/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2021_french_gp/laps.parquet
-  sha256: sha256:44a559926ad2ad3faf49ac18382132d24d64dea54255cd71cf3e0eb69f26e61e
+  sha256: sha256:3c83bc46ca548e00fd69aa7d489cdc8f5d0162996adddb46c60113c1dc7dc65a
   rows: 1051
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2021_french_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2021_french_gp/positions.parquet
+  sha256: sha256:f358781eef451690505fe59c644130d36285d77e528662c87b01cd1c5a7f4613
+  rows: 683760
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2021_french_gp/track_outline.parquet
+  sha256: sha256:29c11669f08b92a5dfdbe8c356b6dcc2a790c2a2fe76cde04c6bc625a060b4cf
+  rows: 445
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 33 lap 25 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

@@ -1,0 +1,30 @@
+model_name: personas
+model_version: v1
+kind: tyre wear slopes vs teammate/team (shrunk by split-half reliability)
+source_type: estimated_from_data
+artifact: configs/calibration/personas_2025_v1.json
+artifact_sha256: sha256:479006317b21299162fb1dcefe9a2418b62402e9fa24cc1849d0086b2672b008
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2025_v1.yaml
+training_dataset_content_sha256: sha256:1d956cba8adde74b065a63e18fb5ae43c4d503c845ea1b461f2a28c5ee13e9ed
+training_races:
+- 2025_austrian_gp
+- 2025_azerbaijan_gp
+- 2025_canadian_gp
+- 2025_chinese_gp
+- 2025_dutch_gp
+- 2025_emilia_romagna_gp
+- 2025_hungarian_gp
+- 2025_japanese_gp
+- 2025_miami_gp
+- 2025_qatar_gp
+- 2025_sao_paulo_gp
+- 2025_saudi_arabian_gp
+- 2025_singapore_gp
+- 2025_spanish_gp
+- 2025_united_states_gp
+metrics:
+  split_half_drivers: 0.392
+  split_half_teams: 0.414
+  held_out_check: EXP-014
+status: fitted for 2025 (H2a, D-054); held-out check EXP-023

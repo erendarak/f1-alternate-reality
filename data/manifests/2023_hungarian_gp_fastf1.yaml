@@ -2,12 +2,12 @@ dataset_id: 2023_hungarian_gp_fastf1_v1
 event: 2023_hungarian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:56:41Z'
+retrieved_utc: '2026-10-17T17:38:57Z'
 session_key: 2023/round 11/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2023_hungarian_gp/laps.parquet
-  sha256: sha256:de52016b275421c3b479e3e6c9401d6ceefbb0a6254bf7ab11658741ec253724
+  sha256: sha256:722aafbe280f707f79ef9a69b52ca9667f09b655fb9bf3d0045f3c6a991111ea
   rows: 1252
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2023_hungarian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2023_hungarian_gp/positions.parquet
+  sha256: sha256:834be486a5c8ff177ddea4291babebe21eef3a9564639127abd08298a8e9f3c7
+  rows: 753620
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2023_hungarian_gp/track_outline.parquet
+  sha256: sha256:e790f1964f0b1079a5411395054731c6fa0077f1363ac1ac2d23dcfb6109582a
+  rows: 311
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 28 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

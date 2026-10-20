@@ -41,6 +41,7 @@ def main() -> None:
     parser.add_argument("--rounds", type=int, nargs="+")
     parser.add_argument("--telemetry", action="store_true", help="also fetch position samples")
     parser.add_argument("--refresh", action="store_true", help="fetch already-fetched races again")
+    parser.add_argument("--pause", type=float, default=PAUSE_S, help="seconds between races")
     args = parser.parse_args()
     if args.rounds:
         rounds = args.rounds
@@ -60,11 +61,13 @@ def main() -> None:
             result = fetch_event(args.season, round_, ROOT, telemetry=args.telemetry)
         except (DataSourceError, OSError, ValueError) as exc:
             summary.append(f"  round {round_:>2}: ERROR {type(exc).__name__}: {exc}")
+            print(summary[-1], flush=True)
             continue
         except Exception as exc:  # noqa: BLE001 (H0: one bad race must not stop the season)
             print(f"  round {round_:>2}: unexpected {type(exc).__name__}", flush=True)
             traceback.print_exc()
             summary.append(f"  round {round_:>2}: ERROR {type(exc).__name__}: {exc}")
+            print(summary[-1], flush=True)
             continue
         took = time.monotonic() - started
         summary.append(
@@ -72,7 +75,7 @@ def main() -> None:
             f"({took:.0f} s)"
         )
         print(summary[-1], flush=True)
-        time.sleep(PAUSE_S)
+        time.sleep(args.pause)
     print("\nSeason summary:")
     print("\n".join(summary))
 

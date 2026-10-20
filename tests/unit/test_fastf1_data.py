@@ -19,6 +19,7 @@ from f1ar.data.fastf1_adapter import (
     normalize_results,
     normalize_track_status,
     normalize_weather,
+    relative_compounds,
     track_outline,
 )
 from f1ar.data.manifests import DatasetManifest, verify_files, write_table
@@ -333,3 +334,24 @@ def test_missing_classification_detects_blank_jolpica_columns() -> None:
     one_dns = raw_results()
     one_dns.loc[1, "Laps"] = float("nan")  # one car without laps is a real result, not a gap
     assert missing_classification(one_dns) == []
+
+
+def test_2018_named_compounds_become_relative() -> None:
+    # H2a: 2018 China used ultrasoft / soft / medium -> SOFT / MEDIUM / HARD
+    names = pd.Series(["ULTRASOFT", "SOFT", "MEDIUM", None, "INTERMEDIATE"], dtype="string")
+    out = relative_compounds(names)
+    assert out.tolist()[:3] == ["SOFT", "MEDIUM", "HARD"]
+    assert pd.isna(out.iloc[3]) and out.iloc[4] == "INTERMEDIATE"
+    modern = pd.Series(["SOFT", "HARD"], dtype="string")
+    assert relative_compounds(modern).tolist() == ["SOFT", "HARD"]
+    two = pd.Series(["HYPERSOFT", "ULTRASOFT"], dtype="string")  # nomination not visible
+    assert relative_compounds(two).tolist() == ["HYPERSOFT", "ULTRASOFT"]
+
+
+def test_lapped_status_of_every_era() -> None:
+    from f1ar.data.status import is_finisher, is_running_finish
+
+    # H2a: "+1 Lap" before 2023 (counted as retirements until D-054), "Lapped" since
+    assert all(is_finisher(s) for s in ("Finished", "Lapped", "+1 Lap", "+12 Laps", "Disqualified"))
+    assert not any(is_finisher(s) for s in ("Engine", "Retired", "Collision", "Did not start"))
+    assert not is_running_finish("Disqualified")

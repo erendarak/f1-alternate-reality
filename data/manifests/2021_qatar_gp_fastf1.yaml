@@ -2,12 +2,12 @@ dataset_id: 2021_qatar_gp_fastf1_v1
 event: 2021_qatar_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-17T15:15:08Z'
+retrieved_utc: '2026-10-17T16:59:45Z'
 session_key: 2021/round 20/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2021_qatar_gp/laps.parquet
-  sha256: sha256:0f10c7bae7a166e368eaa972efa24f84c02ae7bc7d3a49c3b6a17d693a445ecb
+  sha256: sha256:81d14c4d92f6a7ed714b4c646c29af5f06370c3f95325d18adab92413b896a97
   rows: 1114
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2021_qatar_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2021_qatar_gp/positions.parquet
+  sha256: sha256:c2f4c0bf22846fc9a85e002b522b59380bf3f2cf611bb0289f97f82948ce1922
+  rows: 833400
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2021_qatar_gp/track_outline.parquet
+  sha256: sha256:f10ef296308a89db81ba73ba68a21de1a753fcf22f7a661f46f75ac51bb86824
+  rows: 398
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 23 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

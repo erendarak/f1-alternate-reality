@@ -1,0 +1,27 @@
+model_name: driver_pace
+model_version: v1
+kind: same-lap regression per race; driver vs teammate and residual SD, shrunk
+source_type: estimated_from_data
+artifact: configs/calibration/driver_pace_2023_v1.json
+artifact_sha256: sha256:22d5d19bcd40358e57dff16f786c69b93067e6beef0f18d40db0dbff9da29198
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2023_v1.yaml
+training_dataset_content_sha256: sha256:68f96669b4c05a3c23c10acd6999f40b3aecbca737138faf77cedb7bf1c01b83
+training_races:
+- 2023_abu_dhabi_gp
+- 2023_australian_gp
+- 2023_austrian_gp
+- 2023_bahrain_gp
+- 2023_british_gp
+- 2023_hungarian_gp
+- 2023_mexico_city_gp
+- 2023_miami_gp
+- 2023_qatar_gp
+- 2023_saudi_arabian_gp
+- 2023_spanish_gp
+- 2023_united_states_gp
+metrics:
+  field_noise_s: 0.4162
+  overtake_threshold_shift_s: 0.0
+  held_out_check: EXP-012
+status: fitted for 2023 (H2a, D-054); held-out check EXP-023

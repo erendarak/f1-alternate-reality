@@ -1,0 +1,244 @@
+{
+ "label": "2021 race events (W4, D-042)",
+ "events": [
+  "2021_bahrain_gp",
+  "2021_portuguese_gp",
+  "2021_monaco_gp",
+  "2021_azerbaijan_gp",
+  "2021_french_gp",
+  "2021_austrian_gp",
+  "2021_british_gp",
+  "2021_dutch_gp",
+  "2021_italian_gp",
+  "2021_united_states_gp",
+  "2021_mexico_city_gp",
+  "2021_sao_paulo_gp",
+  "2021_saudi_arabian_gp",
+  "2021_spanish_gp",
+  "2021_styrian_gp",
+  "2021_qatar_gp",
+  "2021_emilia_romagna_gp",
+  "2021_hungarian_gp",
+  "2021_russian_gp",
+  "2021_turkish_gp"
+ ],
+ "dry_events": [
+  "2021_bahrain_gp",
+  "2021_portuguese_gp",
+  "2021_monaco_gp",
+  "2021_azerbaijan_gp",
+  "2021_french_gp",
+  "2021_austrian_gp",
+  "2021_british_gp",
+  "2021_dutch_gp",
+  "2021_italian_gp",
+  "2021_united_states_gp",
+  "2021_mexico_city_gp",
+  "2021_sao_paulo_gp",
+  "2021_saudi_arabian_gp",
+  "2021_spanish_gp",
+  "2021_styrian_gp",
+  "2021_qatar_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": 0.1102,
+  "slow_stop_scale_s": 6.68,
+  "stops": 472,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {
+  "alfa_2021": {
+   "pit_crew_offset_s": -0.022,
+   "pit_slow_multiplier": 1.199,
+   "stops": 48,
+   "raw_median_rel_s": -0.031,
+   "raw_slow_share": 0.146
+  },
+  "alphatauri_2021": {
+   "pit_crew_offset_s": -0.022,
+   "pit_slow_multiplier": 1.451,
+   "stops": 47,
+   "raw_median_rel_s": -0.031,
+   "raw_slow_share": 0.191
+  },
+  "alpine_2021": {
+   "pit_crew_offset_s": -0.071,
+   "pit_slow_multiplier": 0.921,
+   "stops": 42,
+   "raw_median_rel_s": -0.104,
+   "raw_slow_share": 0.095
+  },
+  "aston_martin_2021": {
+   "pit_crew_offset_s": -0.004,
+   "pit_slow_multiplier": 0.85,
+   "stops": 48,
+   "raw_median_rel_s": -0.005,
+   "raw_slow_share": 0.083
+  },
+  "ferrari_2021": {
+   "pit_crew_offset_s": -0.037,
+   "pit_slow_multiplier": 0.773,
+   "stops": 44,
+   "raw_median_rel_s": -0.054,
+   "raw_slow_share": 0.068
+  },
+  "haas_2021": {
+   "pit_crew_offset_s": 0.413,
+   "pit_slow_multiplier": 0.966,
+   "stops": 48,
+   "raw_median_rel_s": 0.585,
+   "raw_slow_share": 0.104
+  },
+  "mclaren_2021": {
+   "pit_crew_offset_s": 0.108,
+   "pit_slow_multiplier": 1.141,
+   "stops": 44,
+   "raw_median_rel_s": 0.157,
+   "raw_slow_share": 0.136
+  },
+  "mercedes_2021": {
+   "pit_crew_offset_s": -0.171,
+   "pit_slow_multiplier": 0.819,
+   "stops": 51,
+   "raw_median_rel_s": -0.238,
+   "raw_slow_share": 0.078
+  },
+  "red_bull_2021": {
+   "pit_crew_offset_s": -0.274,
+   "pit_slow_multiplier": 0.789,
+   "stops": 54,
+   "raw_median_rel_s": -0.376,
+   "raw_slow_share": 0.074
+  },
+  "williams_2021": {
+   "pit_crew_offset_s": 0.012,
+   "pit_slow_multiplier": 1.111,
+   "stops": 46,
+   "raw_median_rel_s": 0.017,
+   "raw_slow_share": 0.13
+  }
+ },
+ "reliability": {
+  "field_retirements_per_start": 0.13,
+  "teams": {
+   "alfa_2021": {
+    "failure_multiplier": 0.495,
+    "retirements": 1,
+    "starts": 40
+   },
+   "alphatauri_2021": {
+    "failure_multiplier": 1.337,
+    "retirements": 8,
+    "starts": 40
+   },
+   "alpine_2021": {
+    "failure_multiplier": 0.976,
+    "retirements": 5,
+    "starts": 40
+   },
+   "aston_martin_2021": {
+    "failure_multiplier": 1.216,
+    "retirements": 7,
+    "starts": 40
+   },
+   "ferrari_2021": {
+    "failure_multiplier": 0.615,
+    "retirements": 2,
+    "starts": 40
+   },
+   "haas_2021": {
+    "failure_multiplier": 1.337,
+    "retirements": 8,
+    "starts": 40
+   },
+   "mclaren_2021": {
+    "failure_multiplier": 0.615,
+    "retirements": 2,
+    "starts": 40
+   },
+   "mercedes_2021": {
+    "failure_multiplier": 0.976,
+    "retirements": 5,
+    "starts": 40
+   },
+   "red_bull_2021": {
+    "failure_multiplier": 0.976,
+    "retirements": 5,
+    "starts": 40
+   },
+   "williams_2021": {
+    "failure_multiplier": 1.457,
+    "retirements": 9,
+    "starts": 40
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.01107,
+  "sc_share": 0.091,
+  "count": 11,
+  "race_laps": 994,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 6,
+  "races": 20,
+  "per_race": 0.3
+ },
+ "penalties": {
+  "counts": {
+   "collision": 11,
+   "other": 13,
+   "pit_speeding": 3
+  },
+  "collision_per_pass": 0.01138,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.004547,
+  "other_per_car_lap": 0.000632,
+  "passes": 1163,
+  "raw": {
+   "collision_per_pass": 0.00946,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.00378,
+   "other_per_car_lap": 0.000525
+  },
+  "scale": 1.2029,
+  "scale_note": "x1.203: simulated dry_train 1.22 vs real 1.46 per race"
+ },
+ "fitted": {
+  "risk_scale": 1.4333,
+  "red_flag_per_crash": 0.1512,
+  "fit": {
+   "races": [
+    "2021_bahrain_gp",
+    "2021_portuguese_gp",
+    "2021_monaco_gp",
+    "2021_azerbaijan_gp",
+    "2021_french_gp",
+    "2021_austrian_gp",
+    "2021_british_gp",
+    "2021_dutch_gp",
+    "2021_italian_gp",
+    "2021_united_states_gp",
+    "2021_mexico_city_gp",
+    "2021_sao_paulo_gp",
+    "2021_saudi_arabian_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 1.385,
+   "sim_failures_per_race": 0.554,
+   "real_retirements_per_race": 2.538,
+   "target_red_flags_per_race": 0.3
+  },
+  "check": {
+   "retirements_per_race": 2.6,
+   "red_flags_per_race": 0.323,
+   "safety_cars_per_race": 1.031,
+   "vscs_per_race": 0.815,
+   "penalties_per_race": 1.215,
+   "penalties_per_race_after_scale": 1.385
+  }
+ }
+}

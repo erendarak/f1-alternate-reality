@@ -1,0 +1,210 @@
+{
+ "label": "2018 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2018_australian_gp",
+  "2018_chinese_gp",
+  "2018_austrian_gp",
+  "2018_british_gp",
+  "2018_belgian_gp",
+  "2018_singapore_gp",
+  "2018_japanese_gp",
+  "2018_united_states_gp",
+  "2018_mexican_gp"
+ ],
+ "field_noise_s": 0.5713,
+ "form_sd_s": 0.3203,
+ "form_note": "within-pair gap SD 0.484 s, sampling SD 0.169 s over 71 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "ALO": {
+   "team_id": "mclaren_2018",
+   "pace_vs_teammate_s": -0.1577,
+   "raw_mean_gap_s": -0.2522,
+   "races": 5,
+   "lap_noise_s": 0.5669,
+   "raw_noise_s": 0.5617,
+   "clean_laps": 124
+  },
+  "BOT": {
+   "team_id": "mercedes_2018",
+   "pace_vs_teammate_s": 0.1509,
+   "raw_mean_gap_s": 0.2012,
+   "races": 9,
+   "lap_noise_s": 0.6072,
+   "raw_noise_s": 0.6292,
+   "clean_laps": 245
+  },
+  "ERI": {
+   "team_id": "sauber_2018",
+   "pace_vs_teammate_s": -0.0339,
+   "raw_mean_gap_s": -0.0484,
+   "races": 7,
+   "lap_noise_s": 0.5983,
+   "raw_noise_s": 0.6224,
+   "clean_laps": 168
+  },
+  "GAS": {
+   "team_id": "toro_rosso_2018",
+   "pace_vs_teammate_s": -0.0421,
+   "raw_mean_gap_s": -0.0632,
+   "races": 6,
+   "lap_noise_s": 0.5636,
+   "raw_noise_s": 0.5559,
+   "clean_laps": 150
+  },
+  "GRO": {
+   "team_id": "haas_2018",
+   "pace_vs_teammate_s": -0.0348,
+   "raw_mean_gap_s": -0.0497,
+   "races": 7,
+   "lap_noise_s": 0.5873,
+   "raw_noise_s": 0.6,
+   "clean_laps": 188
+  },
+  "HAM": {
+   "team_id": "mercedes_2018",
+   "pace_vs_teammate_s": -0.1509,
+   "raw_mean_gap_s": -0.2012,
+   "races": 9,
+   "lap_noise_s": 0.6252,
+   "raw_noise_s": 0.6549,
+   "clean_laps": 273
+  },
+  "HAR": {
+   "team_id": "toro_rosso_2018",
+   "pace_vs_teammate_s": 0.0421,
+   "raw_mean_gap_s": 0.0632,
+   "races": 6,
+   "lap_noise_s": 0.5457,
+   "raw_noise_s": 0.5212,
+   "clean_laps": 156
+  },
+  "HUL": {
+   "team_id": "renault_2018",
+   "pace_vs_teammate_s": -0.0002,
+   "raw_mean_gap_s": -0.0002,
+   "races": 7,
+   "lap_noise_s": 0.593,
+   "raw_noise_s": 0.6105,
+   "clean_laps": 187
+  },
+  "LEC": {
+   "team_id": "sauber_2018",
+   "pace_vs_teammate_s": 0.0339,
+   "raw_mean_gap_s": 0.0484,
+   "races": 7,
+   "lap_noise_s": 0.6315,
+   "raw_noise_s": 0.6841,
+   "clean_laps": 172
+  },
+  "MAG": {
+   "team_id": "haas_2018",
+   "pace_vs_teammate_s": 0.0348,
+   "raw_mean_gap_s": 0.0497,
+   "races": 7,
+   "lap_noise_s": 0.5537,
+   "raw_noise_s": 0.5364,
+   "clean_laps": 152
+  },
+  "OCO": {
+   "team_id": "force_india_2018",
+   "pace_vs_teammate_s": 0.0596,
+   "raw_mean_gap_s": 0.0852,
+   "races": 7,
+   "lap_noise_s": 0.4515,
+   "raw_noise_s": 0.3506,
+   "clean_laps": 178
+  },
+  "PER": {
+   "team_id": "force_india_2018",
+   "pace_vs_teammate_s": -0.0596,
+   "raw_mean_gap_s": -0.0852,
+   "races": 7,
+   "lap_noise_s": 0.5682,
+   "raw_noise_s": 0.5647,
+   "clean_laps": 131
+  },
+  "RAI": {
+   "team_id": "ferrari_2018",
+   "pace_vs_teammate_s": 0.0018,
+   "raw_mean_gap_s": 0.0026,
+   "races": 7,
+   "lap_noise_s": 0.5814,
+   "raw_noise_s": 0.588,
+   "clean_laps": 230
+  },
+  "RIC": {
+   "team_id": "red_bull_2018",
+   "pace_vs_teammate_s": 0.0328,
+   "raw_mean_gap_s": 0.0452,
+   "races": 8,
+   "lap_noise_s": 0.5975,
+   "raw_noise_s": 0.6218,
+   "clean_laps": 162
+  },
+  "SAI": {
+   "team_id": "renault_2018",
+   "pace_vs_teammate_s": 0.0002,
+   "raw_mean_gap_s": 0.0002,
+   "races": 7,
+   "lap_noise_s": 0.5047,
+   "raw_noise_s": 0.4467,
+   "clean_laps": 172
+  },
+  "SIR": {
+   "team_id": "williams_2018",
+   "pace_vs_teammate_s": 0.0839,
+   "raw_mean_gap_s": 0.1153,
+   "races": 8,
+   "lap_noise_s": 0.6584,
+   "raw_noise_s": 0.723,
+   "clean_laps": 202
+  },
+  "STR": {
+   "team_id": "williams_2018",
+   "pace_vs_teammate_s": -0.0839,
+   "raw_mean_gap_s": -0.1153,
+   "races": 8,
+   "lap_noise_s": 0.552,
+   "raw_noise_s": 0.5366,
+   "clean_laps": 189
+  },
+  "VAN": {
+   "team_id": "mclaren_2018",
+   "pace_vs_teammate_s": 0.1577,
+   "raw_mean_gap_s": 0.2522,
+   "races": 5,
+   "lap_noise_s": 0.5548,
+   "raw_noise_s": 0.5426,
+   "clean_laps": 202
+  },
+  "VER": {
+   "team_id": "red_bull_2018",
+   "pace_vs_teammate_s": -0.0328,
+   "raw_mean_gap_s": -0.0452,
+   "races": 8,
+   "lap_noise_s": 0.5102,
+   "raw_noise_s": 0.4753,
+   "clean_laps": 263
+  },
+  "VET": {
+   "team_id": "ferrari_2018",
+   "pace_vs_teammate_s": -0.0018,
+   "raw_mean_gap_s": -0.0026,
+   "races": 7,
+   "lap_noise_s": 0.5754,
+   "raw_noise_s": 0.5779,
+   "clean_laps": 249
+  }
+ },
+ "overtake_threshold_shift_s": 0.0,
+ "overtake_shift_fit": {
+  "skipped": "superseded by the W3 racecraft refit (H2a)"
+ }
+}

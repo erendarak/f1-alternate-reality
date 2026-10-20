@@ -2,12 +2,12 @@ dataset_id: 2018_brazilian_gp_fastf1_v1
 event: 2018_brazilian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-17T15:11:48Z'
+retrieved_utc: '2026-10-17T17:32:13Z'
 session_key: 2018/round 20/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2018_brazilian_gp/laps.parquet
-  sha256: sha256:04bf53f422ba0888c728a7edb4a4933dbec8d6b3c360291fcc7f06816f6acac6
+  sha256: sha256:b1cab293c99d50cca7db5adde2a47ba4c07afb65b52da8335cb53ed248a5347a
   rows: 1318
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2018_brazilian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2018_brazilian_gp/positions.parquet
+  sha256: sha256:f7991815e0723f07dc3839fc49426b9903a7df9461825c0c81f61c87d3d47403
+  rows: 503740
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2018_brazilian_gp/track_outline.parquet
+  sha256: sha256:0b35541c9c3f752c57b0ecdf66387e2e9f43847ef6fe43d229cd0d60ef5a1048
+  rows: 247
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 31 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

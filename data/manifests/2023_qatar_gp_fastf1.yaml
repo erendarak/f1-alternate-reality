@@ -2,12 +2,12 @@ dataset_id: 2023_qatar_gp_fastf1_v1
 event: 2023_qatar_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:58:03Z'
+retrieved_utc: '2026-10-17T17:40:22Z'
 session_key: 2023/round 17/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2023_qatar_gp/laps.parquet
-  sha256: sha256:b39431be3ec1dbf209c8b0328816351cc6030a26b266d695228bc4d9dc7fa24a
+  sha256: sha256:264201733b1e039763e3b9469556e084bdfa2f4b5cd06079623d6ec71b2d8d63
   rows: 1006
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2023_qatar_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2023_qatar_gp/positions.parquet
+  sha256: sha256:c50ea0997ffaf0b21be312b694ea8ae5e25d217aff07cf5c0175d7b94d17db5c
+  rows: 716020
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2023_qatar_gp/track_outline.parquet
+  sha256: sha256:2054c349fdb8f32caa55bccf3f5a6c24437221664611ff41e2ef3738a3ea62ff
+  rows: 333
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 29 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

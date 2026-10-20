@@ -2,7 +2,7 @@ dataset_id: 2019_canadian_gp_fastf1_v1
 event: 2019_canadian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:13:05Z'
+retrieved_utc: '2026-10-17T16:41:04Z'
 session_key: 2019/round 7/R
 license_review_status: research_only
 files:
@@ -99,6 +99,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2019_canadian_gp/positions.parquet
+  sha256: sha256:80402d8279bd88e3d3606e41bf027e171376d492db2b2bd69b30dd9d7cc56a09
+  rows: 508500
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2019_canadian_gp/track_outline.parquet
+  sha256: sha256:a6ceaa12e487ab2336a4254ba22f099e88ef7de9185cded5c959c713826b97a8
+  rows: 255
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 69 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

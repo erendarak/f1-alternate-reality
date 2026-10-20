@@ -1,0 +1,237 @@
+dataset_id: laps_2020_v1
+dataset_version: 1
+feature_schema_version: 1
+season: 2020
+license_review_status: research_only (F1 timing data via FastF1; not redistributed)
+built_by: scripts/build_lap_dataset.py
+file:
+  relative_path: data/processed/datasets/laps_2020_v1.parquet
+  sha256: sha256:34db54695e0b17b83a4f219098cd05516daa0c2449084adf94bd12c017fba973
+  content_sha256: sha256:5bbb5e3b275006cf794a7917223ab1536dee650010ff994448fa2b8ac1e07d76
+  rows: 17289
+  representative_rows: 13930
+target: lap_time_s
+features:
+- name: circuit_id
+  available: pre_race
+  source_type: historical_verified
+  description: Jolpica circuit id
+- name: driver_id
+  available: pre_race
+  source_type: historical_verified
+  description: season-specific driver id (roster)
+- name: team_id
+  available: pre_race
+  source_type: historical_verified
+  description: team id (roster)
+- name: grid_position
+  available: pre_race
+  source_type: historical_verified
+  description: official starting slot (0 = pit lane)
+- name: scheduled_laps
+  available: pre_race
+  source_type: historical_verified
+  description: race distance in laps (winner's laps)
+- name: lap_number
+  available: lap_start
+  source_type: historical_verified
+  description: 1-based lap number
+- name: laps_remaining
+  available: lap_start
+  source_type: estimated_from_data
+  description: scheduled_laps - lap_number + 1 (fuel proxy)
+- name: compound
+  available: lap_start
+  source_type: historical_verified
+  description: tyre compound on this lap
+- name: tyre_age_start
+  available: lap_start
+  source_type: estimated_from_data
+  description: laps already on the set when the lap starts
+- name: fresh_tyre
+  available: lap_start
+  source_type: historical_verified
+  description: the set was new when fitted (FastF1 FreshTyre)
+- name: stint
+  available: lap_start
+  source_type: historical_verified
+  description: stint number
+- name: stint_lap
+  available: lap_start
+  source_type: estimated_from_data
+  description: 1-based lap index within the stint
+- name: pit_out_lap
+  available: lap_start
+  source_type: historical_verified
+  description: the lap starts in the pit lane
+- name: pit_in_lap
+  available: decision
+  source_type: historical_verified
+  description: the car boxes at the end of this lap
+- name: position_start
+  available: lap_start
+  source_type: historical_verified
+  description: position when the lap starts (grid on lap 1)
+- name: gap_ahead_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds behind the car that crossed the line just before, same lap (NaN on lap 1)
+- name: gap_behind_prev_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds ahead of the next car at the PREVIOUS line crossing (the gap to the car behind
+    at this crossing isn't known yet when the lap starts; found by the leakage audit)
+- name: track_status_start
+  available: lap_start
+  source_type: historical_verified
+  description: track status code when the lap starts
+- name: air_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: track_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: humidity_pct
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: rainfall_start
+  available: lap_start
+  source_type: historical_verified
+  description: rain flag of the latest weather sample
+- name: wind_speed_ms
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+lap_facts_never_features:
+- lap_status
+- position_end
+- is_accurate
+- deleted
+- fastf1_generated
+- representative
+leakage_audit: tests/unit/test_lap_dataset.py::test_no_feature_uses_anything_after_the_lap_starts
+excluded_quality_fail:
+  2020_austrian_gp: Race distance is 71 laps; Lap rows per car equal classified laps
+splits:
+  rule: wet = any intermediate/wet tyre lap or rain at >= 5% of lap starts; among dry races, rounds divisible
+    by 4 are held out (dry_test), the rest are dry_train; leave-one-race-out folds run over dry_train.
+    Rule fixed before any model was fitted.
+  wet:
+  - 2020_hungarian_gp
+  - 2020_turkish_gp
+  dry_test:
+  - 2020_british_gp
+  - 2020_italian_gp
+  - 2020_portuguese_gp
+  - 2020_sakhir_gp
+  dry_train:
+  - 2020_styrian_gp
+  - 2020_70th_anniversary_gp
+  - 2020_spanish_gp
+  - 2020_belgian_gp
+  - 2020_tuscan_gp
+  - 2020_russian_gp
+  - 2020_eifel_gp
+  - 2020_emilia_romagna_gp
+  - 2020_bahrain_gp
+  - 2020_abu_dhabi_gp
+events:
+  2020_70th_anniversary_gp:
+    round: 5
+    group: dry_train
+    rows: 1025
+    representative_rows: 894
+    source_manifest_sha256: sha256:d19cf4ea1a3e7db80ea434c9a8dce06607c870917f3ec523f1f54394de6bf06a
+  2020_abu_dhabi_gp:
+    round: 17
+    group: dry_train
+    rows: 1044
+    representative_rows: 901
+    source_manifest_sha256: sha256:58e242b94057dae68f3ea6a114500d0050b9d53dd5f5958f41fdfd4e1e56e7c5
+  2020_bahrain_gp:
+    round: 15
+    group: dry_train
+    rows: 1019
+    representative_rows: 714
+    source_manifest_sha256: sha256:6a36c6c481897d8acd336928aca16ec6826eec240001035788da8b003ecfe0d7
+  2020_belgian_gp:
+    round: 7
+    group: dry_train
+    rows: 768
+    representative_rows: 637
+    source_manifest_sha256: sha256:362d1f232235a318c2a1d089de2fa1ad5c97363b0a2507d8b70a5b3968d7270a
+  2020_british_gp:
+    round: 4
+    group: dry_test
+    rows: 897
+    representative_rows: 647
+    source_manifest_sha256: sha256:b4407ead6bb9bea6a90b2363be851bb347f9985f5b68c0de2a572a10de9ff438
+  2020_eifel_gp:
+    round: 11
+    group: dry_train
+    rows: 1019
+    representative_rows: 738
+    source_manifest_sha256: sha256:60f7158b6eaa02e862660df41e57992a471111788b595001ce67173534385607
+  2020_emilia_romagna_gp:
+    round: 13
+    group: dry_train
+    rows: 1131
+    representative_rows: 873
+    source_manifest_sha256: sha256:438fa7721aab78bb2d737272e87f232db97b722c777b4447abd9059d107f2e58
+  2020_hungarian_gp:
+    round: 3
+    group: wet
+    rows: 1327
+    representative_rows: 1185
+    source_manifest_sha256: sha256:d3cadd4b5160534a290972cb678c168d47af50cc8c138b6425185b2cd27b7df7
+  2020_italian_gp:
+    round: 8
+    group: dry_test
+    rows: 926
+    representative_rows: 695
+    source_manifest_sha256: sha256:4fe21731ec76e16d87931b52636336b240d6c5c5016a35a0e6be50e7894e8bc2
+  2020_portuguese_gp:
+    round: 12
+    group: dry_test
+    rows: 1288
+    representative_rows: 1181
+    source_manifest_sha256: sha256:f4113cce03310e29b9b68d3ede3c7bd501fa9c3065dccb4f368dbe3147e40d17
+  2020_russian_gp:
+    round: 10
+    group: dry_train
+    rows: 948
+    representative_rows: 789
+    source_manifest_sha256: sha256:d5acf327fcc6054fbab2eea49d4cdddd2fcaee7017fccfcfcd4939bee23e29c9
+  2020_sakhir_gp:
+    round: 16
+    group: dry_test
+    rows: 1534
+    representative_rows: 1169
+    source_manifest_sha256: sha256:5f87a632933e3e16d69e132f20ae998f4f9b7d51f6f9b504a9ce92f37bdf21ee
+  2020_spanish_gp:
+    round: 6
+    group: dry_train
+    rows: 1274
+    representative_rows: 1149
+    source_manifest_sha256: sha256:d14ae5b4a67e66001475cf557c87002db611765f89cbdc772f7fb6563f43d2c8
+  2020_styrian_gp:
+    round: 2
+    group: dry_train
+    rows: 1226
+    representative_rows: 1086
+    source_manifest_sha256: sha256:b0a34782fe5f9a674c5b453ec56ad3797f94b8662cbdc57cf61c8be3aaf43d33
+  2020_turkish_gp:
+    round: 14
+    group: wet
+    rows: 1077
+    representative_rows: 720
+    source_manifest_sha256: sha256:2e6ff5375c3f2c70412219f98b11e2e11e78af818c4b8a073e9c3f60c430eeef
+  2020_tuscan_gp:
+    round: 9
+    group: dry_train
+    rows: 786
+    representative_rows: 552
+    source_manifest_sha256: sha256:e8c8e0798e9d57c0b914d925a6b3da1d49f2ad8cbce61e299cf7d38b19deb4aa

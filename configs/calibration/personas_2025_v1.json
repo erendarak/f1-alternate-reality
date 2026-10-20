@@ -1,0 +1,188 @@
+{
+ "label": "2025 persona estimates (W5, D-045)",
+ "fitted_on": [
+  "2025_chinese_gp",
+  "2025_japanese_gp",
+  "2025_saudi_arabian_gp",
+  "2025_miami_gp",
+  "2025_emilia_romagna_gp",
+  "2025_spanish_gp",
+  "2025_canadian_gp",
+  "2025_austrian_gp",
+  "2025_hungarian_gp",
+  "2025_dutch_gp",
+  "2025_azerbaijan_gp",
+  "2025_singapore_gp",
+  "2025_united_states_gp",
+  "2025_sao_paulo_gp",
+  "2025_qatar_gp"
+ ],
+ "wear": {
+  "reference_slope_s_per_lap2": 0.030548053939706735,
+  "split_half_drivers": 0.392,
+  "split_half_teams": 0.414,
+  "reliability_drivers": 0.563,
+  "reliability_teams": 0.586,
+  "drivers": {
+   "ALB": {
+    "team_id": "williams_2025",
+    "wear_multiplier": 0.8667,
+    "vs_teammate_s_per_lap2": -0.00079,
+    "team_vs_field_s_per_lap2": -0.00619,
+    "races": 12
+   },
+   "ALO": {
+    "team_id": "aston_martin_2025",
+    "wear_multiplier": 0.8253,
+    "vs_teammate_s_per_lap2": -0.00646,
+    "team_vs_field_s_per_lap2": -0.00291,
+    "races": 11
+   },
+   "ANT": {
+    "team_id": "mercedes_2025",
+    "wear_multiplier": 0.93,
+    "vs_teammate_s_per_lap2": -0.00186,
+    "team_vs_field_s_per_lap2": -0.00186,
+    "races": 14
+   },
+   "BEA": {
+    "team_id": "haas_2025",
+    "wear_multiplier": 1.0006,
+    "vs_teammate_s_per_lap2": -0.00048,
+    "team_vs_field_s_per_lap2": 0.0005,
+    "races": 13
+   },
+   "BOR": {
+    "team_id": "sauber_2025",
+    "wear_multiplier": 1.1285,
+    "vs_teammate_s_per_lap2": 0.00447,
+    "team_vs_field_s_per_lap2": 0.00241,
+    "races": 13
+   },
+   "COL": {
+    "team_id": "alpine_2025",
+    "wear_multiplier": 1.237,
+    "vs_teammate_s_per_lap2": 0.00233,
+    "team_vs_field_s_per_lap2": 0.01013,
+    "races": 9
+   },
+   "DOO": {
+    "team_id": "alpine_2025",
+    "wear_multiplier": 1.2275,
+    "vs_teammate_s_per_lap2": 0.00181,
+    "team_vs_field_s_per_lap2": 0.01013,
+    "races": 2
+   },
+   "GAS": {
+    "team_id": "alpine_2025",
+    "wear_multiplier": 1.1529,
+    "vs_teammate_s_per_lap2": -0.00223,
+    "team_vs_field_s_per_lap2": 0.01013,
+    "races": 11
+   },
+   "HAD": {
+    "team_id": "rb_2025",
+    "wear_multiplier": 0.9318,
+    "vs_teammate_s_per_lap2": 0.00285,
+    "team_vs_field_s_per_lap2": -0.0063,
+    "races": 14
+   },
+   "HAM": {
+    "team_id": "ferrari_2025",
+    "wear_multiplier": 1.0368,
+    "vs_teammate_s_per_lap2": -0.00371,
+    "team_vs_field_s_per_lap2": 0.00548,
+    "races": 13
+   },
+   "HUL": {
+    "team_id": "sauber_2025",
+    "wear_multiplier": 0.9638,
+    "vs_teammate_s_per_lap2": -0.00447,
+    "team_vs_field_s_per_lap2": 0.00241,
+    "races": 13
+   },
+   "LAW": {
+    "team_id": "rb_2025",
+    "wear_multiplier": 0.8672,
+    "vs_teammate_s_per_lap2": -0.00065,
+    "team_vs_field_s_per_lap2": -0.0063,
+    "races": 14
+   },
+   "LEC": {
+    "team_id": "ferrari_2025",
+    "wear_multiplier": 1.1734,
+    "vs_teammate_s_per_lap2": 0.00371,
+    "team_vs_field_s_per_lap2": 0.00548,
+    "races": 13
+   },
+   "NOR": {
+    "team_id": "mclaren_2025",
+    "wear_multiplier": 0.9164,
+    "vs_teammate_s_per_lap2": -0.00177,
+    "team_vs_field_s_per_lap2": -0.00266,
+    "races": 14
+   },
+   "OCO": {
+    "team_id": "haas_2025",
+    "wear_multiplier": 1.0185,
+    "vs_teammate_s_per_lap2": 0.00048,
+    "team_vs_field_s_per_lap2": 0.0005,
+    "races": 13
+   },
+   "PIA": {
+    "team_id": "mclaren_2025",
+    "wear_multiplier": 0.9816,
+    "vs_teammate_s_per_lap2": 0.00177,
+    "team_vs_field_s_per_lap2": -0.00266,
+    "races": 14
+   },
+   "RUS": {
+    "team_id": "mercedes_2025",
+    "wear_multiplier": 0.9987,
+    "vs_teammate_s_per_lap2": 0.00186,
+    "team_vs_field_s_per_lap2": -0.00186,
+    "races": 14
+   },
+   "SAI": {
+    "team_id": "williams_2025",
+    "wear_multiplier": 0.8958,
+    "vs_teammate_s_per_lap2": 0.00079,
+    "team_vs_field_s_per_lap2": -0.00619,
+    "races": 12
+   },
+   "STR": {
+    "team_id": "aston_martin_2025",
+    "wear_multiplier": 1.0633,
+    "vs_teammate_s_per_lap2": 0.00646,
+    "team_vs_field_s_per_lap2": -0.00291,
+    "races": 11
+   },
+   "TSU": {
+    "team_id": "red_bull_2025",
+    "wear_multiplier": 0.9578,
+    "vs_teammate_s_per_lap2": -0.00375,
+    "team_vs_field_s_per_lap2": 0.0014,
+    "races": 13
+   },
+   "VER": {
+    "team_id": "red_bull_2025",
+    "wear_multiplier": 1.0524,
+    "vs_teammate_s_per_lap2": 0.00138,
+    "team_vs_field_s_per_lap2": 0.0014,
+    "races": 13
+   }
+  }
+ },
+ "derived_at_setup": {
+  "consistency": "rank of W2 lap noise (driver_pace_2025_v1), persona spread",
+  "overtake_skill": "rank of W3 attack term (racecraft_2025_v1), persona spread",
+  "defense_skill": "rank of W3 defend term (racecraft_2025_v1), persona spread"
+ },
+ "not_measurable": {
+  "mistake proneness (consistency x composure in incidents)": "blue flags dominate big losses (2024: 24 events left; odd vs even races r = -0.33)",
+  "composure": "no measurement (penalties too few per driver)",
+  "wet_skill": "3 wet races",
+  "risk_appetite": "a preference, not a measurement",
+  "qualifying_skill": "the grid is real"
+ }
+}

@@ -2,12 +2,12 @@ dataset_id: 2025_singapore_gp_fastf1_v1
 event: 2025_singapore_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:52:40Z'
+retrieved_utc: '2026-10-19T20:13:42Z'
 session_key: 2025/round 18/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2025_singapore_gp/laps.parquet
-  sha256: sha256:d052ec7c192df1f259dc49c8c9c042edefc33092bbd459f6e6cb4ae56e90cf1d
+  sha256: sha256:8e89c5b50d53e6e79a582cc57b137d2db315e6b62d55221d7fa3448d1cdd7669
   rows: 1229
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2025_singapore_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2025_singapore_gp/positions.parquet
+  sha256: sha256:ae451921f694ab1411e14a083068129da06e968722e56736302a5062bfda9f8f
+  rows: 709760
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2025_singapore_gp/track_outline.parquet
+  sha256: sha256:d884da4388e253638a50f75244ee8af0c05c95707c97a857f8a51ac01d2843e9
+  rows: 376
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 63 lap 12 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

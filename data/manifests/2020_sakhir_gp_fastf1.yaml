@@ -2,12 +2,12 @@ dataset_id: 2020_sakhir_gp_fastf1_v1
 event: 2020_sakhir_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:11:15Z'
+retrieved_utc: '2026-10-17T16:51:10Z'
 session_key: 2020/round 16/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2020_sakhir_gp/laps.parquet
-  sha256: sha256:2b442108a8bcb3762e6ce8049a8d71c820792ec7652d57478d9af31dc209c3f9
+  sha256: sha256:de7ffe837a44630dfdabf906a06fd28bce422516eb7b911aaa5d9a1747e76bf4
   rows: 1534
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2020_sakhir_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2020_sakhir_gp/positions.parquet
+  sha256: sha256:9ed2352f657255b8be9aea5974f284a2b7d8503a5032f1b3358b3ab3254202cc
+  rows: 692920
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2020_sakhir_gp/track_outline.parquet
+  sha256: sha256:9f9cb075d761069a0a8f4b0087c4a837be83a5e21b6dff953bd18eed4d24bda4
+  rows: 267
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 11 lap 42 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

@@ -2,12 +2,12 @@ dataset_id: 2018_russian_gp_fastf1_v1
 event: 2018_russian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:19:36Z'
+retrieved_utc: '2026-10-17T17:31:47Z'
 session_key: 2018/round 16/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2018_russian_gp/laps.parquet
-  sha256: sha256:5ffba993af3ecd9bc39f17fa8c45ae8731ac2e499671d4123cb57bdd13745fa6
+  sha256: sha256:4d64e53c2d6e85954fedb5e080d33dcf8314e5b149b95f5dfd94fe828be0ea2b
   rows: 948
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2018_russian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2018_russian_gp/positions.parquet
+  sha256: sha256:e0f782cbfa62171f032125900fef8b4b7fa3aa312a5d21524f26ed1c972e00e9
+  rows: 443860
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2018_russian_gp/track_outline.parquet
+  sha256: sha256:d7f9b2493b885c2711535cf94ca236d683d5b15de8e4e1f013c099fd60b237da
+  rows: 331
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 29 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)
@@ -114,3 +137,4 @@ missingness_notes:
 - lap table `stint` missing in 21 rows
 - lap table `compound` missing in 21 rows
 - lap table `tyre_life_laps` missing in 21 rows
+- lap table `compound_name` missing in 21 rows

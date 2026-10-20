@@ -1,0 +1,192 @@
+{
+ "label": "2023 persona estimates (W5, D-045)",
+ "fitted_on": [
+  "2023_bahrain_gp",
+  "2023_saudi_arabian_gp",
+  "2023_australian_gp",
+  "2023_miami_gp",
+  "2023_spanish_gp",
+  "2023_austrian_gp",
+  "2023_british_gp",
+  "2023_hungarian_gp",
+  "2023_qatar_gp",
+  "2023_united_states_gp",
+  "2023_mexico_city_gp",
+  "2023_abu_dhabi_gp"
+ ],
+ "wear": {
+  "reference_slope_s_per_lap2": 0.035823629458838616,
+  "split_half_drivers": 0.432,
+  "split_half_teams": 0.631,
+  "reliability_drivers": 0.603,
+  "reliability_teams": 0.774,
+  "drivers": {
+   "ALB": {
+    "team_id": "williams_2023",
+    "wear_multiplier": 0.9052,
+    "vs_teammate_s_per_lap2": -0.00977,
+    "team_vs_field_s_per_lap2": 0.00322,
+    "races": 10
+   },
+   "ALO": {
+    "team_id": "aston_martin_2023",
+    "wear_multiplier": 0.8284,
+    "vs_teammate_s_per_lap2": -0.00375,
+    "team_vs_field_s_per_lap2": -0.00503,
+    "races": 11
+   },
+   "BOT": {
+    "team_id": "alfa_2023",
+    "wear_multiplier": 1.0537,
+    "vs_teammate_s_per_lap2": 0.00108,
+    "team_vs_field_s_per_lap2": 0.00164,
+    "races": 11
+   },
+   "DEV": {
+    "team_id": "alphatauri_2023",
+    "wear_multiplier": 1.0156,
+    "vs_teammate_s_per_lap2": 0.00052,
+    "team_vs_field_s_per_lap2": 0.00032,
+    "races": 7
+   },
+   "GAS": {
+    "team_id": "alpine_2023",
+    "wear_multiplier": 1.0825,
+    "vs_teammate_s_per_lap2": 0.0024,
+    "team_vs_field_s_per_lap2": 0.00195,
+    "races": 7
+   },
+   "HAM": {
+    "team_id": "mercedes_2023",
+    "wear_multiplier": 0.8063,
+    "vs_teammate_s_per_lap2": -0.00311,
+    "team_vs_field_s_per_lap2": -0.00654,
+    "races": 10
+   },
+   "HUL": {
+    "team_id": "haas_2023",
+    "wear_multiplier": 1.2471,
+    "vs_teammate_s_per_lap2": -0.00141,
+    "team_vs_field_s_per_lap2": 0.01254,
+    "races": 10
+   },
+   "LAW": {
+    "team_id": "alphatauri_2023",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": -0.03114,
+    "team_vs_field_s_per_lap2": 0.00032,
+    "races": 1
+   },
+   "LEC": {
+    "team_id": "ferrari_2023",
+    "wear_multiplier": 0.9738,
+    "vs_teammate_s_per_lap2": 0.00292,
+    "team_vs_field_s_per_lap2": -0.00349,
+    "races": 10
+   },
+   "MAG": {
+    "team_id": "haas_2023",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": 0.00141,
+    "team_vs_field_s_per_lap2": 0.01254,
+    "races": 10
+   },
+   "NOR": {
+    "team_id": "mclaren_2023",
+    "wear_multiplier": 1.0066,
+    "vs_teammate_s_per_lap2": 0.0019,
+    "team_vs_field_s_per_lap2": -0.00118,
+    "races": 10
+   },
+   "OCO": {
+    "team_id": "alpine_2023",
+    "wear_multiplier": 1.0016,
+    "vs_teammate_s_per_lap2": -0.0024,
+    "team_vs_field_s_per_lap2": 0.00195,
+    "races": 7
+   },
+   "PER": {
+    "team_id": "red_bull_2023",
+    "wear_multiplier": 0.9763,
+    "vs_teammate_s_per_lap2": 0.0028,
+    "team_vs_field_s_per_lap2": -0.00328,
+    "races": 11
+   },
+   "PIA": {
+    "team_id": "mclaren_2023",
+    "wear_multiplier": 0.9425,
+    "vs_teammate_s_per_lap2": -0.0019,
+    "team_vs_field_s_per_lap2": -0.00118,
+    "races": 10
+   },
+   "RIC": {
+    "team_id": "alphatauri_2023",
+    "wear_multiplier": 1.0238,
+    "vs_teammate_s_per_lap2": 0.001,
+    "team_vs_field_s_per_lap2": 0.00032,
+    "races": 4
+   },
+   "RUS": {
+    "team_id": "mercedes_2023",
+    "wear_multiplier": 0.9111,
+    "vs_teammate_s_per_lap2": 0.00311,
+    "team_vs_field_s_per_lap2": -0.00654,
+    "races": 10
+   },
+   "SAI": {
+    "team_id": "ferrari_2023",
+    "wear_multiplier": 0.8755,
+    "vs_teammate_s_per_lap2": -0.00292,
+    "team_vs_field_s_per_lap2": -0.00349,
+    "races": 10
+   },
+   "SAR": {
+    "team_id": "williams_2023",
+    "wear_multiplier": 1.2341,
+    "vs_teammate_s_per_lap2": 0.00977,
+    "team_vs_field_s_per_lap2": 0.00322,
+    "races": 10
+   },
+   "STR": {
+    "team_id": "aston_martin_2023",
+    "wear_multiplier": 0.9546,
+    "vs_teammate_s_per_lap2": 0.00375,
+    "team_vs_field_s_per_lap2": -0.00503,
+    "races": 11
+   },
+   "TSU": {
+    "team_id": "alphatauri_2023",
+    "wear_multiplier": 1.0399,
+    "vs_teammate_s_per_lap2": 0.00196,
+    "team_vs_field_s_per_lap2": 0.00032,
+    "races": 12
+   },
+   "VER": {
+    "team_id": "red_bull_2023",
+    "wear_multiplier": 0.8822,
+    "vs_teammate_s_per_lap2": -0.0028,
+    "team_vs_field_s_per_lap2": -0.00328,
+    "races": 11
+   },
+   "ZHO": {
+    "team_id": "alfa_2023",
+    "wear_multiplier": 1.0172,
+    "vs_teammate_s_per_lap2": -0.00108,
+    "team_vs_field_s_per_lap2": 0.00164,
+    "races": 11
+   }
+  }
+ },
+ "derived_at_setup": {
+  "consistency": "rank of W2 lap noise (driver_pace_2023_v1), persona spread",
+  "overtake_skill": "rank of W3 attack term (racecraft_2023_v1), persona spread",
+  "defense_skill": "rank of W3 defend term (racecraft_2023_v1), persona spread"
+ },
+ "not_measurable": {
+  "mistake proneness (consistency x composure in incidents)": "blue flags dominate big losses (2024: 24 events left; odd vs even races r = -0.33)",
+  "composure": "no measurement (penalties too few per driver)",
+  "wet_skill": "3 wet races",
+  "risk_appetite": "a preference, not a measurement",
+  "qualifying_skill": "the grid is real"
+ }
+}

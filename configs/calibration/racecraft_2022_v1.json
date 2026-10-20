@@ -1,0 +1,536 @@
+{
+ "label": "2022 racecraft (W3, D-044)",
+ "events": [
+  "2022_bahrain_gp",
+  "2022_australian_gp",
+  "2022_miami_gp",
+  "2022_spanish_gp",
+  "2022_canadian_gp",
+  "2022_british_gp",
+  "2022_austrian_gp",
+  "2022_belgian_gp",
+  "2022_dutch_gp",
+  "2022_united_states_gp",
+  "2022_sao_paulo_gp",
+  "2022_abu_dhabi_gp",
+  "2022_azerbaijan_gp",
+  "2022_italian_gp",
+  "2022_mexico_city_gp"
+ ],
+ "overtaking": {
+  "min_gap_s": 0.4615,
+  "threshold_s": 0.5599,
+  "scale_s": 0.2871,
+  "eps": 0.00276,
+  "track_threshold_s": {
+   "2022_abu_dhabi_gp": 0.397,
+   "2022_australian_gp": 0.7466,
+   "2022_austrian_gp": 0.5835,
+   "2022_azerbaijan_gp": 0.579,
+   "2022_bahrain_gp": 0.3222,
+   "2022_belgian_gp": 0.4053,
+   "2022_british_gp": 0.8775,
+   "2022_canadian_gp": 0.7749,
+   "2022_dutch_gp": 0.8642,
+   "2022_italian_gp": 0.4912,
+   "2022_mexico_city_gp": 0.5073,
+   "2022_miami_gp": 0.476,
+   "2022_sao_paulo_gp": 0.5015,
+   "2022_spanish_gp": 0.4663,
+   "2022_united_states_gp": 0.3846
+  },
+  "track_encounters": {
+   "2022_abu_dhabi_gp": 431,
+   "2022_australian_gp": 497,
+   "2022_austrian_gp": 436,
+   "2022_azerbaijan_gp": 291,
+   "2022_bahrain_gp": 348,
+   "2022_belgian_gp": 287,
+   "2022_british_gp": 355,
+   "2022_canadian_gp": 534,
+   "2022_dutch_gp": 472,
+   "2022_italian_gp": 383,
+   "2022_mexico_city_gp": 510,
+   "2022_miami_gp": 416,
+   "2022_sao_paulo_gp": 446,
+   "2022_spanish_gp": 311,
+   "2022_united_states_gp": 440
+  },
+  "track_passes": {
+   "2022_abu_dhabi_gp": 50,
+   "2022_australian_gp": 27,
+   "2022_austrian_gp": 30,
+   "2022_azerbaijan_gp": 21,
+   "2022_bahrain_gp": 45,
+   "2022_belgian_gp": 40,
+   "2022_british_gp": 25,
+   "2022_canadian_gp": 29,
+   "2022_dutch_gp": 15,
+   "2022_italian_gp": 43,
+   "2022_mexico_city_gp": 20,
+   "2022_miami_gp": 30,
+   "2022_sao_paulo_gp": 51,
+   "2022_spanish_gp": 40,
+   "2022_united_states_gp": 56
+  },
+  "drivers": {
+   "ALB": {
+    "attack_s": 0.0649,
+    "defend_s": 0.1797,
+    "encounters_attacking": 251,
+    "encounters_defending": 382,
+    "passes_made": 16,
+    "passes_suffered": 34
+   },
+   "ALO": {
+    "attack_s": 0.026,
+    "defend_s": -0.0449,
+    "encounters_attacking": 374,
+    "encounters_defending": 412,
+    "passes_made": 36,
+    "passes_suffered": 24
+   },
+   "BOT": {
+    "attack_s": -0.1944,
+    "defend_s": 0.0079,
+    "encounters_attacking": 343,
+    "encounters_defending": 310,
+    "passes_made": 21,
+    "passes_suffered": 31
+   },
+   "DEV": {
+    "attack_s": -0.0568,
+    "defend_s": 0.0364,
+    "encounters_attacking": 40,
+    "encounters_defending": 37,
+    "passes_made": 0,
+    "passes_suffered": 1
+   },
+   "GAS": {
+    "attack_s": -0.0126,
+    "defend_s": 0.1336,
+    "encounters_attacking": 392,
+    "encounters_defending": 383,
+    "passes_made": 20,
+    "passes_suffered": 30
+   },
+   "HAM": {
+    "attack_s": -0.112,
+    "defend_s": -0.3818,
+    "encounters_attacking": 293,
+    "encounters_defending": 243,
+    "passes_made": 40,
+    "passes_suffered": 16
+   },
+   "HUL": {
+    "attack_s": -0.042,
+    "defend_s": -0.009,
+    "encounters_attacking": 20,
+    "encounters_defending": 19,
+    "passes_made": 0,
+    "passes_suffered": 5
+   },
+   "LAT": {
+    "attack_s": 0.1596,
+    "defend_s": 0.0579,
+    "encounters_attacking": 244,
+    "encounters_defending": 189,
+    "passes_made": 9,
+    "passes_suffered": 43
+   },
+   "LEC": {
+    "attack_s": 0.0875,
+    "defend_s": 0.0584,
+    "encounters_attacking": 210,
+    "encounters_defending": 223,
+    "passes_made": 34,
+    "passes_suffered": 8
+   },
+   "MAG": {
+    "attack_s": 0.1563,
+    "defend_s": -0.1334,
+    "encounters_attacking": 307,
+    "encounters_defending": 289,
+    "passes_made": 24,
+    "passes_suffered": 52
+   },
+   "MSC": {
+    "attack_s": 0.0656,
+    "defend_s": -0.1565,
+    "encounters_attacking": 355,
+    "encounters_defending": 382,
+    "passes_made": 26,
+    "passes_suffered": 53
+   },
+   "NOR": {
+    "attack_s": -0.056,
+    "defend_s": -0.0562,
+    "encounters_attacking": 387,
+    "encounters_defending": 365,
+    "passes_made": 28,
+    "passes_suffered": 23
+   },
+   "OCO": {
+    "attack_s": 0.0636,
+    "defend_s": 0.0316,
+    "encounters_attacking": 318,
+    "encounters_defending": 380,
+    "passes_made": 38,
+    "passes_suffered": 22
+   },
+   "PER": {
+    "attack_s": -0.0308,
+    "defend_s": -0.1318,
+    "encounters_attacking": 262,
+    "encounters_defending": 191,
+    "passes_made": 23,
+    "passes_suffered": 16
+   },
+   "RIC": {
+    "attack_s": -0.0505,
+    "defend_s": 0.0069,
+    "encounters_attacking": 403,
+    "encounters_defending": 351,
+    "passes_made": 17,
+    "passes_suffered": 32
+   },
+   "RUS": {
+    "attack_s": 0.0362,
+    "defend_s": 0.0651,
+    "encounters_attacking": 185,
+    "encounters_defending": 247,
+    "passes_made": 21,
+    "passes_suffered": 6
+   },
+   "SAI": {
+    "attack_s": 0.1078,
+    "defend_s": 0.0058,
+    "encounters_attacking": 155,
+    "encounters_defending": 207,
+    "passes_made": 28,
+    "passes_suffered": 6
+   },
+   "STR": {
+    "attack_s": -0.0163,
+    "defend_s": 0.1854,
+    "encounters_attacking": 354,
+    "encounters_defending": 337,
+    "passes_made": 28,
+    "passes_suffered": 32
+   },
+   "TSU": {
+    "attack_s": -0.024,
+    "defend_s": 0.1172,
+    "encounters_attacking": 345,
+    "encounters_defending": 355,
+    "passes_made": 30,
+    "passes_suffered": 24
+   },
+   "VER": {
+    "attack_s": 0.0654,
+    "defend_s": 0.0525,
+    "encounters_attacking": 148,
+    "encounters_defending": 227,
+    "passes_made": 28,
+    "passes_suffered": 3
+   },
+   "VET": {
+    "attack_s": -0.0739,
+    "defend_s": -0.0577,
+    "encounters_attacking": 354,
+    "encounters_defending": 293,
+    "passes_made": 22,
+    "passes_suffered": 35
+   },
+   "ZHO": {
+    "attack_s": -0.1427,
+    "defend_s": 0.0121,
+    "encounters_attacking": 417,
+    "encounters_defending": 335,
+    "passes_made": 33,
+    "passes_suffered": 26
+   }
+  },
+  "encounters": 6157,
+  "passes": 522,
+  "ridge_track": 50.0,
+  "ridge_driver": 50.0,
+  "log_likelihood": -977.82,
+  "race_level_shift_s": -0.1133
+ },
+ "launch": {
+  "seconds_per_position": 0.663,
+  "pace_vs_grid_beta": 0.0735,
+  "mean_abs_gain": 1.596,
+  "drivers": {
+   "ALB": {
+    "positions_per_start": 0.271,
+    "launch_offset_s": -0.1795,
+    "raw_mean_positions": 0.396,
+    "starts": 13
+   },
+   "ALO": {
+    "positions_per_start": 0.302,
+    "launch_offset_s": -0.1999,
+    "raw_mean_positions": 0.422,
+    "starts": 15
+   },
+   "BOT": {
+    "positions_per_start": -1.102,
+    "launch_offset_s": 0.7303,
+    "raw_mean_positions": -1.574,
+    "starts": 14
+   },
+   "DEV": {
+    "positions_per_start": 0.251,
+    "launch_offset_s": -0.1664,
+    "raw_mean_positions": 1.757,
+    "starts": 1
+   },
+   "GAS": {
+    "positions_per_start": -0.006,
+    "launch_offset_s": 0.0037,
+    "raw_mean_positions": -0.008,
+    "starts": 14
+   },
+   "HAM": {
+    "positions_per_start": -0.1,
+    "launch_offset_s": 0.0665,
+    "raw_mean_positions": -0.143,
+    "starts": 14
+   },
+   "HUL": {
+    "positions_per_start": 0.089,
+    "launch_offset_s": -0.059,
+    "raw_mean_positions": 0.623,
+    "starts": 1
+   },
+   "LAT": {
+    "positions_per_start": -0.758,
+    "launch_offset_s": 0.5027,
+    "raw_mean_positions": -1.061,
+    "starts": 15
+   },
+   "LEC": {
+    "positions_per_start": 0.503,
+    "launch_offset_s": -0.3336,
+    "raw_mean_positions": 0.704,
+    "starts": 15
+   },
+   "MAG": {
+    "positions_per_start": -0.367,
+    "launch_offset_s": 0.2434,
+    "raw_mean_positions": -0.524,
+    "starts": 14
+   },
+   "MSC": {
+    "positions_per_start": 0.215,
+    "launch_offset_s": -0.1425,
+    "raw_mean_positions": 0.301,
+    "starts": 15
+   },
+   "NOR": {
+    "positions_per_start": 0.024,
+    "launch_offset_s": -0.0156,
+    "raw_mean_positions": 0.033,
+    "starts": 15
+   },
+   "OCO": {
+    "positions_per_start": 0.418,
+    "launch_offset_s": -0.2773,
+    "raw_mean_positions": 0.597,
+    "starts": 14
+   },
+   "PER": {
+    "positions_per_start": -0.677,
+    "launch_offset_s": 0.4488,
+    "raw_mean_positions": -0.948,
+    "starts": 15
+   },
+   "RIC": {
+    "positions_per_start": 0.065,
+    "launch_offset_s": -0.0434,
+    "raw_mean_positions": 0.093,
+    "starts": 14
+   },
+   "RUS": {
+    "positions_per_start": 0.424,
+    "launch_offset_s": -0.2808,
+    "raw_mean_positions": 0.605,
+    "starts": 14
+   },
+   "SAI": {
+    "positions_per_start": -1.042,
+    "launch_offset_s": 0.6911,
+    "raw_mean_positions": -1.459,
+    "starts": 15
+   },
+   "STR": {
+    "positions_per_start": 0.628,
+    "launch_offset_s": -0.4163,
+    "raw_mean_positions": 0.897,
+    "starts": 14
+   },
+   "TSU": {
+    "positions_per_start": 0.281,
+    "launch_offset_s": -0.1865,
+    "raw_mean_positions": 0.411,
+    "starts": 13
+   },
+   "VER": {
+    "positions_per_start": 0.803,
+    "launch_offset_s": -0.5321,
+    "raw_mean_positions": 1.124,
+    "starts": 15
+   },
+   "VET": {
+    "positions_per_start": 0.721,
+    "launch_offset_s": -0.4783,
+    "raw_mean_positions": 1.054,
+    "starts": 13
+   },
+   "ZHO": {
+    "positions_per_start": -0.584,
+    "launch_offset_s": 0.3871,
+    "raw_mean_positions": -0.834,
+    "starts": 14
+   }
+  },
+  "start_spread_s": 0.5098
+ },
+ "lap1_grid_profile": [
+  0.2239,
+  0.2239,
+  1.194,
+  1.194,
+  1.3433,
+  1.3433,
+  1.306,
+  1.306,
+  1.306,
+  1.306,
+  1.306,
+  1.306,
+  1.306,
+  1.306,
+  1.3433,
+  1.3433,
+  0.5224,
+  0.5224,
+  0.1493,
+  0.1493
+ ],
+ "lap1_grid_profile_note": "editorial shape: Dartmouth Sports Analytics 2022-23 lap-1 incident involvements by grid row (rows 4-7 interpolated), mean 1",
+ "fit_history": [
+  {
+   "param": "spread",
+   "value": 1.75,
+   "passes": 25.6
+  },
+  {
+   "param": "spread",
+   "value": 1.125,
+   "passes": 18.25
+  },
+  {
+   "param": "spread",
+   "value": 0.8125,
+   "passes": 15.5
+  },
+  {
+   "param": "spread",
+   "value": 0.6562,
+   "passes": 14.29
+  },
+  {
+   "param": "spread",
+   "value": 0.5781,
+   "passes": 14.08
+  },
+  {
+   "param": "spread",
+   "value": 0.5391,
+   "passes": 13.96
+  },
+  {
+   "param": "spread",
+   "value": 0.5195,
+   "passes": 13.92
+  },
+  {
+   "param": "shift",
+   "value": 0.0,
+   "passes": 64.08
+  },
+  {
+   "param": "shift",
+   "value": -0.25,
+   "passes": 81.04
+  },
+  {
+   "param": "shift",
+   "value": -0.125,
+   "passes": 71.21
+  },
+  {
+   "param": "shift",
+   "value": -0.0625,
+   "passes": 67.54
+  },
+  {
+   "param": "shift",
+   "value": -0.0938,
+   "passes": 68.21
+  },
+  {
+   "param": "shift",
+   "value": -0.1094,
+   "passes": 70.17
+  },
+  {
+   "param": "shift",
+   "value": -0.1172,
+   "passes": 70.98
+  },
+  {
+   "param": "spread",
+   "value": 1.75,
+   "passes": 26.78
+  },
+  {
+   "param": "spread",
+   "value": 1.125,
+   "passes": 18.99
+  },
+  {
+   "param": "spread",
+   "value": 0.8125,
+   "passes": 16.29
+  },
+  {
+   "param": "spread",
+   "value": 0.6562,
+   "passes": 14.96
+  },
+  {
+   "param": "spread",
+   "value": 0.5781,
+   "passes": 14.81
+  },
+  {
+   "param": "spread",
+   "value": 0.5391,
+   "passes": 14.61
+  },
+  {
+   "param": "spread",
+   "value": 0.5195,
+   "passes": 14.51
+  }
+ ],
+ "check": {
+  "dry_train_passes_sim": 70.48,
+  "dry_train_passes_real": 70.17,
+  "dry_train_lap1_passes_real": 12.08
+ }
+}

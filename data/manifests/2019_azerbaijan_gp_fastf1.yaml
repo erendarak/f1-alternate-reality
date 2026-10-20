@@ -2,7 +2,7 @@ dataset_id: 2019_azerbaijan_gp_fastf1_v1
 event: 2019_azerbaijan_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:12:25Z'
+retrieved_utc: '2026-10-17T16:40:16Z'
 session_key: 2019/round 4/R
 license_review_status: research_only
 files:
@@ -99,6 +99,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2019_azerbaijan_gp/positions.parquet
+  sha256: sha256:802e277eefa05620e839834238056c1d077d1305c3f2fa3e4344714f7be4f2da
+  rows: 520580
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2019_azerbaijan_gp/track_outline.parquet
+  sha256: sha256:1b32bcbf1524b13093b76138404998b84bc4e23c2cc7f49b0349c32878e3f40c
+  rows: 357
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 77 lap 17 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

@@ -2,12 +2,12 @@ dataset_id: 2021_austrian_gp_fastf1_v1
 event: 2021_austrian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:07:02Z'
+retrieved_utc: '2026-10-17T16:54:43Z'
 session_key: 2021/round 9/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2021_austrian_gp/laps.parquet
-  sha256: sha256:17dd367b557d4633209574e22a0fb8e2b6c8982a6aaac04b5aa9502c87221805
+  sha256: sha256:52106fee342c03a89684141146c6e1f5b7bfee6bb465ff63f592d84e9f7981c6
   rows: 1338
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2021_austrian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2021_austrian_gp/positions.parquet
+  sha256: sha256:6cde05872e76a59661627061e4ea47cbe2a5221ca7bdab8db002ccd703817f3a
+  rows: 830120
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2021_austrian_gp/track_outline.parquet
+  sha256: sha256:a8b7fd47cf01555634d590efd26ad1e8e3380b663fd1a6fbf0964e87353eb58c
+  rows: 314
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 33 lap 41 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

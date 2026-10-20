@@ -2,12 +2,12 @@ dataset_id: 2021_monaco_gp_fastf1_v1
 event: 2021_monaco_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:06:05Z'
+retrieved_utc: '2026-10-17T16:53:31Z'
 session_key: 2021/round 5/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2021_monaco_gp/laps.parquet
-  sha256: sha256:ce71bd6a150e66687b1848668ea88a08ea340e31376f82eea1d6b610cb54e029
+  sha256: sha256:a27ef196881f914ef7886228b6eb9e853e1495b2436649d2667a6313888464f4
   rows: 1419
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2021_monaco_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2021_monaco_gp/positions.parquet
+  sha256: sha256:390c4a9e618bd59f7c2e83f69a699e1f3aaf897bf732a28ae5c18557ab872ee7
+  rows: 739460
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2021_monaco_gp/track_outline.parquet
+  sha256: sha256:572396602a6ea94c689d6321a5427f50cc69f32e47a8b68062f220c6b4b516cb
+  rows: 345
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 33 lap 43 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

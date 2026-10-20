@@ -2,6 +2,26 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## H2a (season fits 2018-2025, engine v0.17.0, D-054)
+
+- **The W1 tyre-life fit undershoots stops in every season** (dry_train: e.g. 2019 1.10 vs 1.48,
+  2024 1.52 vs 1.76): the rule planner stops less than real teams for the fitted tyre life, and
+  the fit trades stops against compound shares (weight 4, set on 2024; kept for every season).
+- **Finishing order matches the specific real race less with the season fits** (EXP-023): the
+  W2 race form is random (same trade-off as EXP-012 for 2024).
+- **Era rates are 2024's for every season** (overtaking table per track, race control, weather,
+  wet races) until H2c; racecraft (pass threshold, attack/defend, launch) is per season.
+- **Personas 2018-2025 are editorial**: copied from the 2024 seed for drivers who raced in 2024
+  (e.g. VER 2018 = VER 2024), templates otherwise; W5 refits only consistency / overtake /
+  defense where measurable.
+- **Pit-lane starters start last but leave the line with the grid** (no pit-exit delay).
+- **2024's own fits were made before the H2a data fixes** (3 stop-go penalties missed, Mexico
+  with a pit-lane starter at the front); left as they are so 2024 stays identical.
+- **Quality-FAIL races are left out of the season datasets** (1-3 per season), including harmless
+  ones (a car that didn't start, one lap row too many, the Las Vegas date check).
+- **2018 Australia and Bahrain use the 2019 outline** (same circuit; a layout change between
+  seasons wouldn't be detected); 2021 Spa can't be simulated.
+
 ## H1 (sporting rules per season, engine v0.16.0, D-053)
 
 - **Only 2024 races can be simulated**: persona seeds and fits exist for 2024 only (H2); the rules

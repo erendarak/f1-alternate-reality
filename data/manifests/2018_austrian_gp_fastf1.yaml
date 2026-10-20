@@ -2,12 +2,12 @@ dataset_id: 2018_austrian_gp_fastf1_v1
 event: 2018_austrian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:18:13Z'
+retrieved_utc: '2026-10-17T17:31:09Z'
 session_key: 2018/round 9/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2018_austrian_gp/laps.parquet
-  sha256: sha256:e2bb7c5281b79d18168bdcfc1e378d891af8131fcec576d63464244e77f518d8
+  sha256: sha256:042a102586ae8cbb152224fb7e38a5ddacade3000f4c204b916dbab155cc0fc2
   rows: 1244
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2018_austrian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2018_austrian_gp/positions.parquet
+  sha256: sha256:9250e2e9fc019b8a35c07d2d7fa8dc17ebc7b21a1f23512db9c47d7c71446d33
+  rows: 370180
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2018_austrian_gp/track_outline.parquet
+  sha256: sha256:9824326032139e3b00755b4684f74b6e67d45e39b851d3d5266ad1069961236c
+  rows: 231
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 33 lap 23 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)
@@ -117,3 +140,4 @@ missingness_notes:
 - lap table `position` missing in 5 rows
 - lap table `track_status` missing in 20 rows
 - lap table `speed_trap_kph` missing in 5 rows
+- lap table `compound_name` missing in 20 rows

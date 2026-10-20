@@ -2,12 +2,12 @@ dataset_id: 2018_united_states_gp_fastf1_v1
 event: 2018_united_states_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-17T15:11:22Z'
+retrieved_utc: '2026-10-17T17:32:00Z'
 session_key: 2018/round 18/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2018_united_states_gp/laps.parquet
-  sha256: sha256:9486cf9c4bbd54538cd67f5566b2faaca3184e28b1cbfc2d1020203f8637e963
+  sha256: sha256:7b957529845ad710e1a519c0f1418dc993678ea7cefd1f68c6101fd7d8356360
   rows: 932
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2018_united_states_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2018_united_states_gp/positions.parquet
+  sha256: sha256:cd8e875a0f48f2e84a909ee553e549c4a6fb80da345dd4728f1be1409bcd5e69
+  rows: 529660
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2018_united_states_gp/track_outline.parquet
+  sha256: sha256:f4e5e665702dfe7deb0da99c08dd57c60de3b9d640736ab66d0ab31d768b3967
+  rows: 335
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 7 lap 33 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)
@@ -114,3 +137,4 @@ missingness_notes:
 - lap table `compound` missing in 33 rows
 - lap table `position` missing in 1 rows
 - lap table `speed_trap_kph` missing in 1 rows
+- lap table `compound_name` missing in 33 rows

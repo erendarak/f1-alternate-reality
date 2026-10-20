@@ -26,6 +26,7 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
 
+from f1ar.calibration.season_files import REFERENCE_SEASON, own_season
 from f1ar.calibration.traffic_fit import held_gap, pass_probability_with_noise
 
 RACECRAFT_FILE = Path("calibration") / "racecraft_2024_v1.json"
@@ -160,9 +161,10 @@ def launch_skills(laps: pd.DataFrame, events: Sequence[str]) -> dict[str, Any]:
     }
 
 
-def load_racecraft(configs: Path) -> dict[str, Any] | None:
-    path = configs / RACECRAFT_FILE
-    if not path.exists():
+def load_racecraft(configs: Path, season: int = REFERENCE_SEASON) -> dict[str, Any] | None:
+    """This season's fit, or None: keyed by driver/team, never borrowed (H2a, D-054)."""
+    path = own_season(configs, RACECRAFT_FILE, season)
+    if path is None:
         return None
     data: dict[str, Any] = json.loads(path.read_text(encoding="utf-8"))
     return data

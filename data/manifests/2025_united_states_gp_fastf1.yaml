@@ -2,12 +2,12 @@ dataset_id: 2025_united_states_gp_fastf1_v1
 event: 2025_united_states_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:52:54Z'
+retrieved_utc: '2026-10-19T20:14:15Z'
 session_key: 2025/round 19/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2025_united_states_gp/laps.parquet
-  sha256: sha256:682adbf350bcf2438b5f8156a891f6badb32cc32e3fde67d4a36895faddcc04b
+  sha256: sha256:0208eae54f409974ab3e165d4ec3bc8b8a4d7cfe661661788a14d37a321b678c
   rows: 1067
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2025_united_states_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2025_united_states_gp/positions.parquet
+  sha256: sha256:07559430f7617ea3084c5de6d4b84d8a84747823ed60535c6c137afa1d2e8cec
+  rows: 706300
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2025_united_states_gp/track_outline.parquet
+  sha256: sha256:8b6c4866bca4ba3964ad02cbf935cd103d3701466b52c50a66e7f8f49d2b4607
+  rows: 385
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 12 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

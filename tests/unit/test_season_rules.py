@@ -113,3 +113,22 @@ def test_fastest_lap_point_and_dry_compound_rule_follow_the_season(
     assert with_point[holder].points - without[holder].points == (1 if pos <= 10 else 0)
     others = [d for d in with_point if d != holder]
     assert all(with_point[d].points == without[d].points for d in others)
+
+
+def test_a_pit_lane_starter_starts_behind_the_grid(
+    monza_roster: RaceRoster, monza_profiles: ProfileSet
+) -> None:
+    """H2a (D-054): Jolpica's grid 0 = pit-lane start; it was sorted to the front before."""
+    from f1ar.domain.race_state import PIT_LANE_SLOT, start_slot
+
+    assert start_slot(0) == PIT_LANE_SLOT and start_slot(1) == 1
+    first = monza_roster.entries[0]
+    entries = [
+        e.model_copy(update={"grid_position": 0}) if e.driver_id == first.driver_id else e
+        for e in monza_roster.entries
+    ]
+    roster = monza_roster.model_copy(update={"entries": tuple(entries)})
+    setup = build_setup(roster, monza_profiles, roster.driver_ids())
+    assert setup.drivers[-1].driver_id == first.driver_id
+    state = engine.start(engine.create_world(setup, seed=2, world_id="w"))
+    assert engine.standings(state)[-1] == first.driver_id

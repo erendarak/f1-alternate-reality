@@ -2,12 +2,12 @@ dataset_id: 2025_italian_gp_fastf1_v1
 event: 2025_italian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:52:12Z'
+retrieved_utc: '2026-10-19T20:12:53Z'
 session_key: 2025/round 16/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2025_italian_gp/laps.parquet
-  sha256: sha256:ec3101d1c289fe835779cda39e4510963ba709a32fe8b07ce77d144784a2a1f4
+  sha256: sha256:d27b0accd790e61d72a1e467d7fbbebc06aa131bee4d6e9663f919e174046d53
   rows: 974
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2025_italian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2025_italian_gp/positions.parquet
+  sha256: sha256:b825b06f9869f8dfd441abb9add4a1d6d305325bd751b0715bf4232d2e05344d
+  rows: 614000
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2025_italian_gp/track_outline.parquet
+  sha256: sha256:d73e4d1a81174e9beda2052a05fd958f39732a1f90cf70abbeeddb46473155a4
+  rows: 327
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 17 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

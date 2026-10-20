@@ -29,6 +29,8 @@ from typing import Any
 
 import pandas as pd
 
+from f1ar.calibration.season_files import REFERENCE_SEASON, own_season
+from f1ar.data.status import is_finisher
 from f1ar.domain.identities import load_roster
 
 CREW_PRIOR_STOPS = 20.0
@@ -85,9 +87,11 @@ PENALTY_KINDS = (
 
 
 def penalty_kind(message: str) -> str | None:
-    if "PENALTY FOR" not in message or "STEWARDS" not in message:
+    """A time / drive-through / stop-go penalty's kind. H2a (D-054): before 2022 the messages
+    have no "FIA STEWARDS:" prefix, and stop-go penalties were missed (3 of 50 in 2024)."""
+    if "PENALTY FOR" not in message:
         return None
-    if "DRIVE THROUGH" not in message and "SECOND TIME PENALTY" not in message:
+    if not any(k in message for k in ("DRIVE THROUGH", "SECOND TIME PENALTY", "STOP/GO")):
         return None
     for kind, pattern in PENALTY_KINDS:
         if re.search(pattern, message):
@@ -102,16 +106,16 @@ def event_counts(data_dir: Path, configs: Path, event_id: str) -> EventCounts:
     ts = pd.read_parquet(data_dir / "track_status.parquet")
     laps = pd.read_parquet(data_dir / "laps.parquet")
     total = int(res["laps"].max())
-    out_status = {"Retired", "Did not start"}
+    # H2a (D-054): 2024 says "Retired"; earlier seasons give the cause ("Engine", ...)
     ret_laps = [
-        int(n) + 1 for n, s in zip(res["laps"], res["status"], strict=True) if s in out_status
+        int(n) + 1 for n, s in zip(res["laps"], res["status"], strict=True) if not is_finisher(s)
     ]
     by_team_ret: dict[str, int] = {}
     by_team_start: dict[str, int] = {}
     for number, status in zip(res["driver_number"], res["status"], strict=True):
         team = team_of.get(int(str(number)), "?")
         by_team_start[team] = by_team_start.get(team, 0) + 1
-        if status in out_status:
+        if not is_finisher(status):
             by_team_ret[team] = by_team_ret.get(team, 0) + 1
     neutral = []
     for _, m in rc[rc["message"].astype(str).str.contains("SAFETY CAR DEPLOYED")].iterrows():
@@ -142,6 +146,7 @@ def fit(
     events: Sequence[str],
     dry: Sequence[str],
     passes_by_event: dict[str, int],
+    season: int = REFERENCE_SEASON,
 ) -> dict[str, Any]:
     """Everything measurable from data; ``risk_scale`` / ``red_flag_per_crash`` start at 1 / 0."""
     configs = root / "configs"
@@ -194,7 +199,7 @@ def fit(
     car_laps = sum(c.laps * c.starters for c in counts)
     passes = sum(passes_by_event.get(c.event_id, 0) for c in counts)
     return {
-        "label": "2024 race events (W4, D-042)",
+        "label": f"{season} race events (W4, D-042)",
         "events": list(events),
         "dry_events": list(dry),
         "pit": {
@@ -238,9 +243,10 @@ def fit(
     }
 
 
-def load_events(configs: Path) -> dict[str, Any] | None:
-    path = configs / EVENTS_FILE
-    if not path.exists():
+def load_events(configs: Path, season: int = REFERENCE_SEASON) -> dict[str, Any] | None:
+    """This season's fit, or None: keyed by driver/team, never borrowed (H2a, D-054)."""
+    path = own_season(configs, EVENTS_FILE, season)
+    if path is None:
         return None
     data: dict[str, Any] = json.loads(path.read_text(encoding="utf-8"))
     return data

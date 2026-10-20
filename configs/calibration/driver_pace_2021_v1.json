@@ -1,0 +1,223 @@
+{
+ "label": "2021 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2021_bahrain_gp",
+  "2021_portuguese_gp",
+  "2021_monaco_gp",
+  "2021_azerbaijan_gp",
+  "2021_french_gp",
+  "2021_austrian_gp",
+  "2021_british_gp",
+  "2021_dutch_gp",
+  "2021_italian_gp",
+  "2021_united_states_gp",
+  "2021_mexico_city_gp",
+  "2021_sao_paulo_gp",
+  "2021_saudi_arabian_gp"
+ ],
+ "field_noise_s": 0.4918,
+ "form_sd_s": 0.2547,
+ "form_note": "within-pair gap SD 0.386 s, sampling SD 0.137 s over 115 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "ALO": {
+   "team_id": "alpine_2021",
+   "pace_vs_teammate_s": -0.0364,
+   "raw_mean_gap_s": -0.0463,
+   "races": 11,
+   "lap_noise_s": 0.5103,
+   "raw_noise_s": 0.5187,
+   "clean_laps": 330
+  },
+  "BOT": {
+   "team_id": "mercedes_2021",
+   "pace_vs_teammate_s": 0.1555,
+   "raw_mean_gap_s": 0.1944,
+   "races": 12,
+   "lap_noise_s": 0.4932,
+   "raw_noise_s": 0.4938,
+   "clean_laps": 318
+  },
+  "GAS": {
+   "team_id": "alphatauri_2021",
+   "pace_vs_teammate_s": -0.1802,
+   "raw_mean_gap_s": -0.2342,
+   "races": 10,
+   "lap_noise_s": 0.4193,
+   "raw_noise_s": 0.3889,
+   "clean_laps": 357
+  },
+  "GIO": {
+   "team_id": "alfa_2021",
+   "pace_vs_teammate_s": -0.0233,
+   "raw_mean_gap_s": -0.0292,
+   "races": 12,
+   "lap_noise_s": 0.503,
+   "raw_noise_s": 0.5088,
+   "clean_laps": 292
+  },
+  "HAM": {
+   "team_id": "mercedes_2021",
+   "pace_vs_teammate_s": -0.1555,
+   "raw_mean_gap_s": -0.1944,
+   "races": 12,
+   "lap_noise_s": 0.4568,
+   "raw_noise_s": 0.4433,
+   "clean_laps": 390
+  },
+  "KUB": {
+   "team_id": "alfa_2021",
+   "pace_vs_teammate_s": 0.1239,
+   "raw_mean_gap_s": 0.3098,
+   "races": 2,
+   "lap_noise_s": 0.523,
+   "raw_noise_s": 0.5937,
+   "clean_laps": 66
+  },
+  "LAT": {
+   "team_id": "williams_2021",
+   "pace_vs_teammate_s": 0.1073,
+   "raw_mean_gap_s": 0.1341,
+   "races": 12,
+   "lap_noise_s": 0.5826,
+   "raw_noise_s": 0.6151,
+   "clean_laps": 418
+  },
+  "LEC": {
+   "team_id": "ferrari_2021",
+   "pace_vs_teammate_s": -0.0444,
+   "raw_mean_gap_s": -0.0555,
+   "races": 12,
+   "lap_noise_s": 0.4197,
+   "raw_noise_s": 0.3905,
+   "clean_laps": 369
+  },
+  "MAZ": {
+   "team_id": "haas_2021",
+   "pace_vs_teammate_s": 0.1692,
+   "raw_mean_gap_s": 0.2199,
+   "races": 10,
+   "lap_noise_s": 0.6166,
+   "raw_noise_s": 0.6679,
+   "clean_laps": 365
+  },
+  "MSC": {
+   "team_id": "haas_2021",
+   "pace_vs_teammate_s": -0.1692,
+   "raw_mean_gap_s": -0.2199,
+   "races": 10,
+   "lap_noise_s": 0.6228,
+   "raw_noise_s": 0.6745,
+   "clean_laps": 380
+  },
+  "NOR": {
+   "team_id": "mclaren_2021",
+   "pace_vs_teammate_s": -0.1007,
+   "raw_mean_gap_s": -0.1239,
+   "races": 13,
+   "lap_noise_s": 0.4246,
+   "raw_noise_s": 0.4016,
+   "clean_laps": 437
+  },
+  "OCO": {
+   "team_id": "alpine_2021",
+   "pace_vs_teammate_s": 0.0364,
+   "raw_mean_gap_s": 0.0463,
+   "races": 11,
+   "lap_noise_s": 0.4821,
+   "raw_noise_s": 0.4763,
+   "clean_laps": 250
+  },
+  "PER": {
+   "team_id": "red_bull_2021",
+   "pace_vs_teammate_s": 0.1589,
+   "raw_mean_gap_s": 0.2065,
+   "races": 10,
+   "lap_noise_s": 0.4918,
+   "raw_noise_s": 0.4918,
+   "clean_laps": 351
+  },
+  "RAI": {
+   "team_id": "alfa_2021",
+   "pace_vs_teammate_s": -0.0207,
+   "raw_mean_gap_s": -0.027,
+   "races": 10,
+   "lap_noise_s": 0.512,
+   "raw_noise_s": 0.5219,
+   "clean_laps": 306
+  },
+  "RIC": {
+   "team_id": "mclaren_2021",
+   "pace_vs_teammate_s": 0.1007,
+   "raw_mean_gap_s": 0.1239,
+   "races": 13,
+   "lap_noise_s": 0.4699,
+   "raw_noise_s": 0.4615,
+   "clean_laps": 387
+  },
+  "RUS": {
+   "team_id": "williams_2021",
+   "pace_vs_teammate_s": -0.1073,
+   "raw_mean_gap_s": -0.1341,
+   "races": 12,
+   "lap_noise_s": 0.5684,
+   "raw_noise_s": 0.6012,
+   "clean_laps": 350
+  },
+  "SAI": {
+   "team_id": "ferrari_2021",
+   "pace_vs_teammate_s": 0.0444,
+   "raw_mean_gap_s": 0.0555,
+   "races": 12,
+   "lap_noise_s": 0.4318,
+   "raw_noise_s": 0.407,
+   "clean_laps": 364
+  },
+  "STR": {
+   "team_id": "aston_martin_2021",
+   "pace_vs_teammate_s": 0.0761,
+   "raw_mean_gap_s": 0.0936,
+   "races": 13,
+   "lap_noise_s": 0.4925,
+   "raw_noise_s": 0.4929,
+   "clean_laps": 297
+  },
+  "TSU": {
+   "team_id": "alphatauri_2021",
+   "pace_vs_teammate_s": 0.1802,
+   "raw_mean_gap_s": 0.2342,
+   "races": 10,
+   "lap_noise_s": 0.4895,
+   "raw_noise_s": 0.4882,
+   "clean_laps": 266
+  },
+  "VER": {
+   "team_id": "red_bull_2021",
+   "pace_vs_teammate_s": -0.1589,
+   "raw_mean_gap_s": -0.2065,
+   "races": 10,
+   "lap_noise_s": 0.4436,
+   "raw_noise_s": 0.4292,
+   "clean_laps": 503
+  },
+  "VET": {
+   "team_id": "aston_martin_2021",
+   "pace_vs_teammate_s": -0.0761,
+   "raw_mean_gap_s": -0.0936,
+   "races": 13,
+   "lap_noise_s": 0.4648,
+   "raw_noise_s": 0.4524,
+   "clean_laps": 328
+  }
+ },
+ "overtake_threshold_shift_s": 0.0,
+ "overtake_shift_fit": {
+  "skipped": "superseded by the W3 racecraft refit (H2a)"
+ }
+}

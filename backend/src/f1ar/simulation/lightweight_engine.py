@@ -54,6 +54,7 @@ from f1ar.domain.race_state import (
     WeatherState,
     WorldState,
     WorldStatus,
+    start_slot,
 )
 from f1ar.policy.baseline_strategy import (
     POLICY_ID,
@@ -87,7 +88,7 @@ from f1ar.simulation.weather import (
 )
 from f1ar.simulation.weather import penalty_s as weather_penalty_s
 
-ENGINE_VERSION = "lightweight_engine_v0.16.0"
+ENGINE_VERSION = "lightweight_engine_v0.17.0"
 """v0.15.0: racecraft intent ATTACK / NORMAL / DEFEND per lap (risk for track position, D-048).
 v0.14.0: fresh wet-weather tyres under SC/VSC and the wet incident factor, fitted on the 2024
 wet races (D-046).
@@ -727,7 +728,8 @@ def _advance_racing(state: WorldState, emit: _Emit) -> _Moved:
 def _resolve_start(state: WorldState, cars: list[CarState], emit: _Emit) -> None:
     """Lap 1: everyone leaves the line at t=0; the road order is the grid order."""
     grid = sorted(
-        range(len(cars)), key=lambda i: state.setup.driver(cars[i].driver_id).grid_position
+        range(len(cars)),
+        key=lambda i: start_slot(state.setup.driver(cars[i].driver_id).grid_position),
     )
     for k, i in enumerate(grid):
         cars[i] = _with_incident(state, cars[i])
@@ -1506,7 +1508,7 @@ def standings(state: WorldState) -> tuple[str, ...]:
     """
 
     def key(car: CarState) -> tuple[int, int, float, float, float, int]:
-        grid = state.setup.driver(car.driver_id).grid_position
+        grid = start_slot(state.setup.driver(car.driver_id).grid_position)
         if car.status is CarStatus.RETIRED:  # classified by distance completed, then by time
             return (1, -car.laps_completed, -(car.retired_at_s or 0.0), 0.0, 0.0, grid)
         return (

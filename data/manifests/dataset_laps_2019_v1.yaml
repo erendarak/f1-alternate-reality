@@ -1,0 +1,265 @@
+dataset_id: laps_2019_v1
+dataset_version: 1
+feature_schema_version: 1
+season: 2019
+license_review_status: research_only (F1 timing data via FastF1; not redistributed)
+built_by: scripts/build_lap_dataset.py
+file:
+  relative_path: data/processed/datasets/laps_2019_v1.parquet
+  sha256: sha256:ea5a1f75bcf309e25c2ae7c1f9de15a6ce0f284624f89e08a18d90976f0c678a
+  content_sha256: sha256:b0e8668ae11771a2e16e1a633366514de9448f45a5328e706dec5de00fbf5b74
+  rows: 22671
+  representative_rows: 18859
+target: lap_time_s
+features:
+- name: circuit_id
+  available: pre_race
+  source_type: historical_verified
+  description: Jolpica circuit id
+- name: driver_id
+  available: pre_race
+  source_type: historical_verified
+  description: season-specific driver id (roster)
+- name: team_id
+  available: pre_race
+  source_type: historical_verified
+  description: team id (roster)
+- name: grid_position
+  available: pre_race
+  source_type: historical_verified
+  description: official starting slot (0 = pit lane)
+- name: scheduled_laps
+  available: pre_race
+  source_type: historical_verified
+  description: race distance in laps (winner's laps)
+- name: lap_number
+  available: lap_start
+  source_type: historical_verified
+  description: 1-based lap number
+- name: laps_remaining
+  available: lap_start
+  source_type: estimated_from_data
+  description: scheduled_laps - lap_number + 1 (fuel proxy)
+- name: compound
+  available: lap_start
+  source_type: historical_verified
+  description: tyre compound on this lap
+- name: tyre_age_start
+  available: lap_start
+  source_type: estimated_from_data
+  description: laps already on the set when the lap starts
+- name: fresh_tyre
+  available: lap_start
+  source_type: historical_verified
+  description: the set was new when fitted (FastF1 FreshTyre)
+- name: stint
+  available: lap_start
+  source_type: historical_verified
+  description: stint number
+- name: stint_lap
+  available: lap_start
+  source_type: estimated_from_data
+  description: 1-based lap index within the stint
+- name: pit_out_lap
+  available: lap_start
+  source_type: historical_verified
+  description: the lap starts in the pit lane
+- name: pit_in_lap
+  available: decision
+  source_type: historical_verified
+  description: the car boxes at the end of this lap
+- name: position_start
+  available: lap_start
+  source_type: historical_verified
+  description: position when the lap starts (grid on lap 1)
+- name: gap_ahead_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds behind the car that crossed the line just before, same lap (NaN on lap 1)
+- name: gap_behind_prev_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds ahead of the next car at the PREVIOUS line crossing (the gap to the car behind
+    at this crossing isn't known yet when the lap starts; found by the leakage audit)
+- name: track_status_start
+  available: lap_start
+  source_type: historical_verified
+  description: track status code when the lap starts
+- name: air_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: track_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: humidity_pct
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: rainfall_start
+  available: lap_start
+  source_type: historical_verified
+  description: rain flag of the latest weather sample
+- name: wind_speed_ms
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+lap_facts_never_features:
+- lap_status
+- position_end
+- is_accurate
+- deleted
+- fastf1_generated
+- representative
+leakage_audit: tests/unit/test_lap_dataset.py::test_no_feature_uses_anything_after_the_lap_starts
+excluded_quality_fail:
+  2019_japanese_gp: Race distance is 52 laps; Lap rows per car equal classified laps
+splits:
+  rule: wet = any intermediate/wet tyre lap or rain at >= 5% of lap starts; among dry races, rounds divisible
+    by 4 are held out (dry_test), the rest are dry_train; leave-one-race-out folds run over dry_train.
+    Rule fixed before any model was fitted.
+  wet:
+  - 2019_monaco_gp
+  - 2019_german_gp
+  dry_test:
+  - 2019_azerbaijan_gp
+  - 2019_french_gp
+  - 2019_hungarian_gp
+  - 2019_russian_gp
+  - 2019_brazilian_gp
+  dry_train:
+  - 2019_australian_gp
+  - 2019_bahrain_gp
+  - 2019_chinese_gp
+  - 2019_spanish_gp
+  - 2019_canadian_gp
+  - 2019_austrian_gp
+  - 2019_british_gp
+  - 2019_belgian_gp
+  - 2019_italian_gp
+  - 2019_singapore_gp
+  - 2019_mexican_gp
+  - 2019_united_states_gp
+  - 2019_abu_dhabi_gp
+events:
+  2019_abu_dhabi_gp:
+    round: 21
+    group: dry_train
+    rows: 1075
+    representative_rows: 1001
+    source_manifest_sha256: sha256:59a689430c7a01345fa7cebc1f23ebf851a8628feb8c43ccf4606f3e695fc615
+  2019_australian_gp:
+    round: 1
+    group: dry_train
+    rows: 1041
+    representative_rows: 958
+    source_manifest_sha256: sha256:f932c645e04722a1bb97bc6046db33f408ca9b19c0b0b331a99f0924f3aff887
+  2019_austrian_gp:
+    round: 9
+    group: dry_train
+    rows: 1401
+    representative_rows: 1334
+    source_manifest_sha256: sha256:520cd2c05c27e3f282b0ed4ef9318c66edf4266d4dc8f918c1e46e63ed607cd8
+  2019_azerbaijan_gp:
+    round: 4
+    group: dry_test
+    rows: 948
+    representative_rows: 791
+    source_manifest_sha256: sha256:89d48776dd496f8a0b2993f0422892930a8a694e3a25ffefe071202af00781b5
+  2019_bahrain_gp:
+    round: 2
+    group: dry_train
+    rows: 1083
+    representative_rows: 785
+    source_manifest_sha256: sha256:cedd5c4b7a2ec6e8230bde605dfe6ad9d01d142003fea289370cf272b8ed9d6b
+  2019_belgian_gp:
+    round: 13
+    group: dry_train
+    rows: 787
+    representative_rows: 647
+    source_manifest_sha256: sha256:3ccc2bd58b3093b8a540837541667182337c72c119ec248b092b65d724027c3f
+  2019_brazilian_gp:
+    round: 20
+    group: dry_test
+    rows: 1385
+    representative_rows: 1029
+    source_manifest_sha256: sha256:5130db5066f625b1a5ded0b7d8542fb34611cba9f53b014221abb5e78d5a45e5
+  2019_british_gp:
+    round: 10
+    group: dry_train
+    rows: 914
+    representative_rows: 725
+    source_manifest_sha256: sha256:d87ba082675a0a87958253150c7971bd7b2bc16775c3309e459412adf81e13e7
+  2019_canadian_gp:
+    round: 7
+    group: dry_train
+    rows: 1312
+    representative_rows: 1114
+    source_manifest_sha256: sha256:9b378d4915e715de395eb81c4bd960da0e7f096a8595d3f4431494d1edd3e2f4
+  2019_chinese_gp:
+    round: 3
+    group: dry_train
+    rows: 1046
+    representative_rows: 933
+    source_manifest_sha256: sha256:b56c15c349b3acf76138c67b754b26ffbe8e7beb1318e4de5b5886a112822ec7
+  2019_french_gp:
+    round: 8
+    group: dry_test
+    rows: 1037
+    representative_rows: 885
+    source_manifest_sha256: sha256:6b58123c20d0c9d0c441af017a378abfa0284508d373859167a53f8b28e7f484
+  2019_german_gp:
+    round: 11
+    group: wet
+    rows: 1059
+    representative_rows: 592
+    source_manifest_sha256: sha256:44c8e5ca921cfd81b545a1b93fecf32effad988d933b8ca1f0471cd4c1db01c9
+  2019_hungarian_gp:
+    round: 12
+    group: dry_test
+    rows: 1358
+    representative_rows: 1269
+    source_manifest_sha256: sha256:bea72cd519d7d31e5510bf220e23e5ef7c4c278ea47c7ec963caeb468ba8500c
+  2019_italian_gp:
+    round: 14
+    group: dry_train
+    rows: 991
+    representative_rows: 819
+    source_manifest_sha256: sha256:780d8f58b6a29c4f7ebde7e96cabfd4dd8e506f2267d62202c30181c24c39b80
+  2019_mexican_gp:
+    round: 18
+    group: dry_train
+    rows: 1370
+    representative_rows: 1221
+    source_manifest_sha256: sha256:e01f05d27022337282fd7c011ab17469642e7e77b4308fe371b69a4d2caa4669
+  2019_monaco_gp:
+    round: 6
+    group: wet
+    rows: 1490
+    representative_rows: 1226
+    source_manifest_sha256: sha256:8025c4772b8afcb7bd015e5e27894cc4dbe17931bd8c65533ba526104840d83d
+  2019_russian_gp:
+    round: 16
+    group: dry_test
+    rows: 901
+    representative_rows: 736
+    source_manifest_sha256: sha256:506fe758e25e8a51bcfa92a4e8b08c7299b4986fabb9bc80041385954e411e44
+  2019_singapore_gp:
+    round: 15
+    group: dry_train
+    rows: 1165
+    representative_rows: 873
+    source_manifest_sha256: sha256:e113f3dabe6c3d1524a7510f629621ac7574402803efb1e3493efa5b08a1a0d3
+  2019_spanish_gp:
+    round: 5
+    group: dry_train
+    rows: 1276
+    representative_rows: 1062
+    source_manifest_sha256: sha256:bedf1a33e4fda59edddab15476da07d6cef5a84e7e064b892d9bfa5399375bfc
+  2019_united_states_gp:
+    round: 19
+    group: dry_train
+    rows: 1032
+    representative_rows: 859
+    source_manifest_sha256: sha256:dda811f77d88484a774ab7c66cab34ccc55972f715de5241d9f1d4dc5e929f5a

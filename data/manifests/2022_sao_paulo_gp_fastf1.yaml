@@ -2,12 +2,12 @@ dataset_id: 2022_sao_paulo_gp_fastf1_v1
 event: 2022_sao_paulo_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:04:49Z'
+retrieved_utc: '2026-10-17T17:34:47Z'
 session_key: 2022/round 21/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2022_sao_paulo_gp/laps.parquet
-  sha256: sha256:e35bff4915475cab82bbff4de7970acf0f54e403c5fc46cb24f7a20039c28561
+  sha256: sha256:5d3b5b3b5ef8afd126e9f3f75e81c318e65c2ed4f7ecd1b86975eaebd5154229
   rows: 1259
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2022_sao_paulo_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2022_sao_paulo_gp/positions.parquet
+  sha256: sha256:dd6dc9a104ea18a4167f78326ec44854ea9185020709b2e3b533fcd450f095cc
+  rows: 766180
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2022_sao_paulo_gp/track_outline.parquet
+  sha256: sha256:03c010bb9b0014c684cd60cefca62de4368f1d6c9a3dcc62aae66b58578843bc
+  rows: 294
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 63 lap 46 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

@@ -2,7 +2,7 @@ dataset_id: 2019_monaco_gp_fastf1_v1
 event: 2019_monaco_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:12:51Z'
+retrieved_utc: '2026-10-17T16:40:47Z'
 session_key: 2019/round 6/R
 license_review_status: research_only
 files:
@@ -99,6 +99,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2019_monaco_gp/positions.parquet
+  sha256: sha256:716b7cf91732040adac73535f68e24e2de6691bd91327a9680b5a9e79e4d60dc
+  rows: 564340
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2019_monaco_gp/track_outline.parquet
+  sha256: sha256:d1dc44c711177efcf4fb52739d0df66b3c9015e7575db7c91aeb6129ad14e5ec
+  rows: 261
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 72 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

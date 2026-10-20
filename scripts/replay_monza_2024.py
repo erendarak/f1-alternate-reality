@@ -12,6 +12,7 @@ import argparse
 import sys
 from pathlib import Path
 
+from f1ar.data.status import is_running_finish
 from f1ar.history.reference import HistoricalRace
 from f1ar.simulation.scenarios import MONZA_2024
 
@@ -46,7 +47,7 @@ def main() -> None:
 
     print("\nFinal classification (official order)")
     for car in sorted(race.cars, key=lambda c: c.classified_position or 99):
-        pos = f"P{car.classified_position}" if car.status in ("Finished", "Lapped") else "DNF"
+        pos = f"P{car.classified_position}" if is_running_finish(car.status) else "DNF"
         print(
             f"  {pos:<4} {car.code}  {car.team:<16} {car.status:<9} {car.laps_completed} laps"
             f"  (grid P{car.grid_position})"

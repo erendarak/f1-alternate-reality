@@ -33,6 +33,7 @@ import pandas as pd
 import scipy.sparse as sp
 from scipy.sparse.linalg import lsqr
 
+from f1ar.calibration.season_files import REFERENCE_SEASON, own_season
 from f1ar.calibration.tyre_life_fit import green_laps
 
 PACE_FILE = Path("calibration") / "driver_pace_2024_v1.json"
@@ -70,7 +71,9 @@ def race_fit(g: pd.DataFrame) -> tuple[dict[str, float], pd.DataFrame]:
     return {str(d): float(t) for d, t in zip(drivers, terms, strict=True)}, g
 
 
-def fit(laps: pd.DataFrame, events: Sequence[str]) -> dict[str, Any]:
+def fit(
+    laps: pd.DataFrame, events: Sequence[str], season: int = REFERENCE_SEASON
+) -> dict[str, Any]:
     all_green = green_laps(laps[laps["event_id"].isin(events)])
     gaps: dict[str, list[tuple[str, float, int]]] = {}
     pair_gaps: list[tuple[str, float, float]] = []  # (pair, gap, sampling variance)
@@ -124,7 +127,7 @@ def fit(laps: pd.DataFrame, events: Sequence[str]) -> dict[str, Any]:
             "clean_laps": laps_n,
         }
     return {
-        "label": "2024 driver race pace vs teammate + lap noise (W2, D-043)",
+        "label": f"{season} driver race pace vs teammate + lap noise (W2, D-043)",
         "events": list(events),
         "field_noise_s": round(field, 4),
         "form_sd_s": round(form_sd, 4),
@@ -143,9 +146,10 @@ def fit(laps: pd.DataFrame, events: Sequence[str]) -> dict[str, Any]:
     }
 
 
-def load_pace(configs: Path) -> dict[str, Any] | None:
-    path = configs / PACE_FILE
-    if not path.exists():
+def load_pace(configs: Path, season: int = REFERENCE_SEASON) -> dict[str, Any] | None:
+    """This season's fit, or None: keyed by driver/team, never borrowed (H2a, D-054)."""
+    path = own_season(configs, PACE_FILE, season)
+    if path is None:
         return None
     data: dict[str, Any] = json.loads(path.read_text(encoding="utf-8"))
     return data

@@ -2,12 +2,12 @@ dataset_id: 2025_belgian_gp_fastf1_v1
 event: 2025_belgian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:51:30Z'
+retrieved_utc: '2026-10-17T17:44:12Z'
 session_key: 2025/round 13/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2025_belgian_gp/laps.parquet
-  sha256: sha256:a382d0e037358a1ee7dd9820aa6579e848ec0beadab181fb23def8cd17d8802e
+  sha256: sha256:419ddff23e363837c09458a627e67ca17d0fc8566a437ea2f16b415d5cc451e9
   rows: 879
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2025_belgian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2025_belgian_gp/positions.parquet
+  sha256: sha256:49bfbe749a28b6694e6c383e7b012b513dee59dcccd820e8fb04f8f4901bd066
+  rows: 987740
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2025_belgian_gp/track_outline.parquet
+  sha256: sha256:447cc8f47f4e7129fb98c4c1c22621132854d8b60e4dc85474c83d34089c38d2
+  rows: 407
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 81 lap 37 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)
@@ -111,3 +134,4 @@ missingness_notes:
 - lap table `pit_out_time_s` missing in 833 rows
 - lap table `compound` missing in 57 rows
 - lap table `tyre_life_laps` missing in 75 rows
+- lap table `compound_name` missing in 57 rows

@@ -1,0 +1,460 @@
+{
+ "label": "2021 tyre life + same-lap wear (W1, D-041)",
+ "dataset_sha256": "sha256:228a9fba5e1f79e5116f73888e9a9cc15a771cfdd31c1721d4dcbd417ba5ca61",
+ "fitted_on": [
+  "2021_austrian_gp",
+  "2021_azerbaijan_gp",
+  "2021_bahrain_gp",
+  "2021_british_gp",
+  "2021_dutch_gp",
+  "2021_french_gp",
+  "2021_italian_gp",
+  "2021_mexico_city_gp",
+  "2021_monaco_gp",
+  "2021_portuguese_gp",
+  "2021_sao_paulo_gp",
+  "2021_saudi_arabian_gp",
+  "2021_united_states_gp"
+ ],
+ "globals": {
+  "kappa": 0.9,
+  "kappa_note": "life_laps = kappa x life_raw; fitted on dry_train behaviour",
+  "delta_s": 0.0,
+  "delta_note": "potential pace step: SOFT -delta, MEDIUM 0, HARD +delta; fitted"
+ },
+ "season_wear": {
+  "lin": {
+   "SOFT": 0.014826092584438,
+   "MEDIUM": 0.033892918884874966,
+   "HARD": 0.02868847044720582
+  },
+  "quad": {
+   "SOFT": -0.00010800493332437367,
+   "MEDIUM": -0.0002528030528592394,
+   "HARD": -0.00019702919562749127
+  },
+  "fresh_bonus_s": -0.17988570049172845,
+  "same_lap_offsets": {
+   "SOFT": 0.2304925438019238,
+   "MEDIUM": 0.0,
+   "HARD": 0.15552024642857684
+  },
+  "laps": 10608
+ },
+ "life_ratios_vs_medium": {
+  "MEDIUM": 1.0,
+  "SOFT": 0.7364457831325302,
+  "HARD": 1.0072992700729928
+ },
+ "editorial": {
+  "pace_modes": {
+   "CONSERVE": {
+    "offset_s": 0.35,
+    "wear_multiplier": 0.75
+   },
+   "BALANCED": {
+    "offset_s": 0.0,
+    "wear_multiplier": 1.0
+   },
+   "PUSH": {
+    "offset_s": -0.3,
+    "wear_multiplier": 1.4
+   }
+  },
+  "cliff_s_per_lap": 0.5,
+  "neutralised_life_factor": 0.35,
+  "note": "editorial_assumption: research ranges (docs/RESEARCH_REAL_F1.md)"
+ },
+ "events": {
+  "2021_bahrain_gp": {
+   "total_laps": 56,
+   "life_raw": {
+    "SOFT": 15.0,
+    "MEDIUM": 20.68,
+    "HARD": 18.9
+   },
+   "life_source": {
+    "SOFT": "q75 of 9 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 22 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 9 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 9,
+    "MEDIUM": 22,
+    "HARD": 9
+   },
+   "wear_multiplier": 1.595,
+   "wear_multiplier_raw": 1.918,
+   "same_lap_offsets": {
+    "SOFT": 2.91,
+    "MEDIUM": 0.0,
+    "HARD": 0.236
+   }
+  },
+  "2021_portuguese_gp": {
+   "total_laps": 66,
+   "life_raw": {
+    "SOFT": 27.5,
+    "MEDIUM": 39.26,
+    "HARD": 34.2
+   },
+   "life_source": {
+    "SOFT": "q75 of 6 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 13 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 3 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 6,
+    "MEDIUM": 13,
+    "HARD": 3
+   },
+   "wear_multiplier": 0.242,
+   "wear_multiplier_raw": -0.093,
+   "same_lap_offsets": {
+    "SOFT": -0.506,
+    "MEDIUM": 0.0,
+    "HARD": 0.072
+   }
+  },
+  "2021_monaco_gp": {
+   "total_laps": 78,
+   "life_raw": {
+    "SOFT": 38.0,
+    "MEDIUM": 47.3,
+    "HARD": 55.36
+   },
+   "life_source": {
+    "SOFT": "q75 of 12 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 5 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 3 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 12,
+    "MEDIUM": 5,
+    "HARD": 3
+   },
+   "wear_multiplier": 0.604,
+   "wear_multiplier_raw": 0.475,
+   "same_lap_offsets": {
+    "SOFT": -0.638,
+    "MEDIUM": 0.0,
+    "HARD": -0.043
+   }
+  },
+  "2021_azerbaijan_gp": {
+   "total_laps": 51,
+   "life_raw": {
+    "SOFT": 16.55,
+    "MEDIUM": 28.8,
+    "HARD": 33.64
+   },
+   "life_source": {
+    "SOFT": "q75 of 15 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "MEDIUM": "filled from the race's other compounds x season ratio",
+    "HARD": "q75 of 6 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 15,
+    "MEDIUM": 2,
+    "HARD": 6
+   },
+   "wear_multiplier": 0.568,
+   "wear_multiplier_raw": 0.262,
+   "same_lap_offsets": {
+    "SOFT": 0.0,
+    "HARD": 0.0
+   }
+  },
+  "2021_french_gp": {
+   "total_laps": 53,
+   "life_raw": {
+    "SOFT": 20.16,
+    "MEDIUM": 23.23,
+    "HARD": 31.07
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 14 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 8 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 14,
+    "HARD": 8
+   },
+   "wear_multiplier": 1.058,
+   "wear_multiplier_raw": 1.087,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0,
+    "HARD": -0.628
+   }
+  },
+  "2021_austrian_gp": {
+   "total_laps": 71,
+   "life_raw": {
+    "SOFT": 21.9,
+    "MEDIUM": 34.25,
+    "HARD": 34.5
+   },
+   "life_source": {
+    "SOFT": "q75 of 4 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 12 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 11 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 4,
+    "MEDIUM": 12,
+    "HARD": 11
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -0.336,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0,
+    "HARD": -0.603
+   }
+  },
+  "2021_british_gp": {
+   "total_laps": 52,
+   "life_raw": {
+    "SOFT": 16.97,
+    "MEDIUM": 24.81,
+    "HARD": 22.39
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 20 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 3 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 20,
+    "HARD": 3
+   },
+   "wear_multiplier": 0.807,
+   "wear_multiplier_raw": 0.692,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0,
+    "HARD": 1.35
+   }
+  },
+  "2021_dutch_gp": {
+   "total_laps": 72,
+   "life_raw": {
+    "SOFT": 32.07,
+    "MEDIUM": 36.75,
+    "HARD": 35.51
+   },
+   "life_source": {
+    "SOFT": "q75 of 13 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 12 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 5 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 13,
+    "MEDIUM": 12,
+    "HARD": 5
+   },
+   "wear_multiplier": 0.532,
+   "wear_multiplier_raw": 0.356,
+   "same_lap_offsets": {
+    "SOFT": -0.077,
+    "MEDIUM": 0.0,
+    "HARD": -0.015
+   }
+  },
+  "2021_italian_gp": {
+   "total_laps": 53,
+   "life_raw": {
+    "SOFT": 19.08,
+    "MEDIUM": 25.98,
+    "HARD": 26.05
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 14 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 5 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 14,
+    "HARD": 5
+   },
+   "wear_multiplier": 0.858,
+   "wear_multiplier_raw": 0.757,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0,
+    "HARD": 0.332
+   }
+  },
+  "2021_united_states_gp": {
+   "total_laps": 56,
+   "life_raw": {
+    "SOFT": 14.85,
+    "MEDIUM": 18.37,
+    "HARD": 21.95
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 24 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 15 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 2,
+    "MEDIUM": 24,
+    "HARD": 15
+   },
+   "wear_multiplier": 0.312,
+   "wear_multiplier_raw": -0.027,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0,
+    "HARD": -0.496
+   }
+  },
+  "2021_mexico_city_gp": {
+   "total_laps": 71,
+   "life_raw": {
+    "SOFT": 27.79,
+    "MEDIUM": 36.98,
+    "HARD": 38.5
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 16 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 5 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 1,
+    "MEDIUM": 16,
+    "HARD": 5
+   },
+   "wear_multiplier": 1.012,
+   "wear_multiplier_raw": 1.017,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0,
+    "HARD": 0.588
+   }
+  },
+  "2021_sao_paulo_gp": {
+   "total_laps": 71,
+   "life_raw": {
+    "SOFT": 21.1,
+    "MEDIUM": 29.72,
+    "HARD": 27.82
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 19 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 16 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 19,
+    "HARD": 16
+   },
+   "wear_multiplier": 0.668,
+   "wear_multiplier_raw": 0.523,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0,
+    "HARD": -0.274
+   }
+  },
+  "2021_saudi_arabian_gp": {
+   "total_laps": 50,
+   "life_raw": {
+    "SOFT": 12.89,
+    "MEDIUM": 17.5,
+    "HARD": 17.63
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 8 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 8,
+    "HARD": 2
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -1.663,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0,
+    "HARD": 1.026
+   }
+  },
+  "2021_spanish_gp": {
+   "total_laps": 66,
+   "life_raw": {
+    "SOFT": 26.82,
+    "MEDIUM": 30.76,
+    "HARD": 33.92
+   },
+   "life_source": {
+    "SOFT": "q75 of 15 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 19 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 15,
+    "MEDIUM": 19,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.556,
+   "wear_multiplier_raw": 0.354,
+   "same_lap_offsets": {
+    "SOFT": 0.016,
+    "MEDIUM": 0.0
+   }
+  },
+  "2021_styrian_gp": {
+   "total_laps": 71,
+   "life_raw": {
+    "SOFT": 28.74,
+    "MEDIUM": 35.23,
+    "HARD": 36.0
+   },
+   "life_source": {
+    "SOFT": "q75 of 6 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 11 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 5 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 6,
+    "MEDIUM": 11,
+    "HARD": 5
+   },
+   "wear_multiplier": 0.48,
+   "wear_multiplier_raw": 0.275,
+   "same_lap_offsets": {
+    "SOFT": -0.117,
+    "MEDIUM": 0.0,
+    "HARD": -0.054
+   }
+  },
+  "2021_qatar_gp": {
+   "total_laps": 57,
+   "life_raw": {
+    "SOFT": 24.37,
+    "MEDIUM": 26.75,
+    "HARD": 25.34
+   },
+   "life_source": {
+    "SOFT": "q75 of 11 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 14 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 6 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 11,
+    "MEDIUM": 14,
+    "HARD": 6
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -0.363,
+   "same_lap_offsets": {
+    "SOFT": -0.36,
+    "MEDIUM": 0.0,
+    "HARD": 0.391
+   }
+  }
+ }
+}

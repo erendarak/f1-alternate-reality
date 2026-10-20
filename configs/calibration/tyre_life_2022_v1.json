@@ -1,0 +1,437 @@
+{
+ "label": "2022 tyre life + same-lap wear (W1, D-041)",
+ "dataset_sha256": "sha256:561729d3fbb61f9915b5ed10339841835dd5386df2532e3b81c475e0bc4ae0d6",
+ "fitted_on": [
+  "2022_abu_dhabi_gp",
+  "2022_australian_gp",
+  "2022_austrian_gp",
+  "2022_bahrain_gp",
+  "2022_belgian_gp",
+  "2022_british_gp",
+  "2022_canadian_gp",
+  "2022_dutch_gp",
+  "2022_miami_gp",
+  "2022_sao_paulo_gp",
+  "2022_spanish_gp",
+  "2022_united_states_gp"
+ ],
+ "globals": {
+  "kappa": 0.8,
+  "kappa_note": "life_laps = kappa x life_raw; fitted on dry_train behaviour",
+  "delta_s": 0.2,
+  "delta_note": "potential pace step: SOFT -delta, MEDIUM 0, HARD +delta; fitted"
+ },
+ "season_wear": {
+  "lin": {
+   "SOFT": 0.07909507856322705,
+   "MEDIUM": 0.07159383032063646,
+   "HARD": 0.025656551018695944
+  },
+  "quad": {
+   "SOFT": -0.0007436063078037718,
+   "MEDIUM": -0.0007176488387829576,
+   "HARD": -0.00011237723111715208
+  },
+  "fresh_bonus_s": -0.08998586660036091,
+  "same_lap_offsets": {
+   "SOFT": -0.4360468362327509,
+   "MEDIUM": 0.0,
+   "HARD": 0.6193728914739481
+  },
+  "laps": 7911
+ },
+ "life_ratios_vs_medium": {
+  "MEDIUM": 1.0,
+  "SOFT": 0.9,
+  "HARD": 1.3333333333333333
+ },
+ "editorial": {
+  "pace_modes": {
+   "CONSERVE": {
+    "offset_s": 0.35,
+    "wear_multiplier": 0.75
+   },
+   "BALANCED": {
+    "offset_s": 0.0,
+    "wear_multiplier": 1.0
+   },
+   "PUSH": {
+    "offset_s": -0.3,
+    "wear_multiplier": 1.4
+   }
+  },
+  "cliff_s_per_lap": 0.5,
+  "neutralised_life_factor": 0.35,
+  "note": "editorial_assumption: research ranges (docs/RESEARCH_REAL_F1.md)"
+ },
+ "events": {
+  "2022_bahrain_gp": {
+   "total_laps": 57,
+   "life_raw": {
+    "SOFT": 18.0,
+    "MEDIUM": 20.0,
+    "HARD": 21.39
+   },
+   "life_source": {
+    "SOFT": "q75 of 27 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 19 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 6 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 27,
+    "MEDIUM": 19,
+    "HARD": 6
+   },
+   "wear_multiplier": 1.402,
+   "wear_multiplier_raw": 1.63,
+   "same_lap_offsets": {
+    "SOFT": -0.236,
+    "MEDIUM": 0.0,
+    "HARD": 0.134
+   }
+  },
+  "2022_australian_gp": {
+   "total_laps": 58,
+   "life_raw": {
+    "SOFT": 22.84,
+    "MEDIUM": 22.47,
+    "HARD": 36.42
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 15 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 5 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 15,
+    "HARD": 5
+   },
+   "wear_multiplier": 2.027,
+   "wear_multiplier_raw": 2.86,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0,
+    "HARD": 2.138
+   }
+  },
+  "2022_miami_gp": {
+   "total_laps": 57,
+   "life_raw": {
+    "SOFT": 25.2,
+    "MEDIUM": 26.45,
+    "HARD": 38.67
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 17 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 5 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 17,
+    "HARD": 5
+   },
+   "wear_multiplier": 0.583,
+   "wear_multiplier_raw": 0.324,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0,
+    "HARD": 0.199
+   }
+  },
+  "2022_spanish_gp": {
+   "total_laps": 66,
+   "life_raw": {
+    "SOFT": 20.85,
+    "MEDIUM": 21.22,
+    "HARD": 29.56
+   },
+   "life_source": {
+    "SOFT": "q75 of 31 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 22 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 31,
+    "MEDIUM": 22,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.055,
+   "wear_multiplier_raw": 1.078,
+   "same_lap_offsets": {
+    "SOFT": -0.177,
+    "MEDIUM": 0.0,
+    "HARD": 0.796
+   }
+  },
+  "2022_canadian_gp": {
+   "total_laps": 70,
+   "life_raw": {
+    "SOFT": 20.36,
+    "MEDIUM": 20.21,
+    "HARD": 33.66
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 10 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 13 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 10,
+    "HARD": 13
+   },
+   "wear_multiplier": 0.46,
+   "wear_multiplier_raw": 0.145,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0,
+    "HARD": -0.106
+   }
+  },
+  "2022_british_gp": {
+   "total_laps": 52,
+   "life_raw": {
+    "SOFT": 17.75,
+    "MEDIUM": 28.59,
+    "HARD": 21.36
+   },
+   "life_source": {
+    "SOFT": "q75 of 6 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 13 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 6 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 6,
+    "MEDIUM": 13,
+    "HARD": 6
+   },
+   "wear_multiplier": 0.779,
+   "wear_multiplier_raw": 0.571,
+   "same_lap_offsets": {
+    "SOFT": -0.237,
+    "MEDIUM": 0.0,
+    "HARD": 0.676
+   }
+  },
+  "2022_austrian_gp": {
+   "total_laps": 71,
+   "life_raw": {
+    "SOFT": 21.15,
+    "MEDIUM": 25.43,
+    "HARD": 28.67
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 17 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 20 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 17,
+    "HARD": 20
+   },
+   "wear_multiplier": 1.136,
+   "wear_multiplier_raw": 1.231,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0,
+    "HARD": -0.26
+   }
+  },
+  "2022_belgian_gp": {
+   "total_laps": 44,
+   "life_raw": {
+    "SOFT": 12.83,
+    "MEDIUM": 14.25,
+    "HARD": 19.0
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 24 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 10 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 2,
+    "MEDIUM": 24,
+    "HARD": 10
+   },
+   "wear_multiplier": 1.893,
+   "wear_multiplier_raw": 2.685,
+   "same_lap_offsets": {
+    "SOFT": -0.633,
+    "MEDIUM": 0.0,
+    "HARD": 0.04
+   }
+  },
+  "2022_dutch_gp": {
+   "total_laps": 72,
+   "life_raw": {
+    "SOFT": 18.75,
+    "MEDIUM": 26.2,
+    "HARD": 31.33
+   },
+   "life_source": {
+    "SOFT": "q75 of 16 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 17 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 16,
+    "MEDIUM": 17,
+    "HARD": 2
+   },
+   "wear_multiplier": 0.866,
+   "wear_multiplier_raw": 0.804,
+   "same_lap_offsets": {
+    "SOFT": -0.976,
+    "MEDIUM": 0.0,
+    "HARD": 0.378
+   }
+  },
+  "2022_united_states_gp": {
+   "total_laps": 56,
+   "life_raw": {
+    "SOFT": 14.85,
+    "MEDIUM": 15.91,
+    "HARD": 22.72
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 18 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 13 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 18,
+    "HARD": 13
+   },
+   "wear_multiplier": 0.787,
+   "wear_multiplier_raw": 0.627,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0,
+    "HARD": 0.674
+   }
+  },
+  "2022_sao_paulo_gp": {
+   "total_laps": 71,
+   "life_raw": {
+    "SOFT": 23.42,
+    "MEDIUM": 21.96,
+    "HARD": 32.11
+   },
+   "life_source": {
+    "SOFT": "q75 of 15 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 23 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 15,
+    "MEDIUM": 23,
+    "HARD": 1
+   },
+   "wear_multiplier": 0.916,
+   "wear_multiplier_raw": 0.87,
+   "same_lap_offsets": {
+    "SOFT": -0.137,
+    "MEDIUM": 0.0
+   }
+  },
+  "2022_abu_dhabi_gp": {
+   "total_laps": 58,
+   "life_raw": {
+    "SOFT": 17.89,
+    "MEDIUM": 18.99,
+    "HARD": 27.62
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 18 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 15 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 1,
+    "MEDIUM": 18,
+    "HARD": 15
+   },
+   "wear_multiplier": 1.345,
+   "wear_multiplier_raw": 1.508,
+   "same_lap_offsets": {
+    "SOFT": 0.491,
+    "MEDIUM": 0.0,
+    "HARD": 0.689
+   }
+  },
+  "2022_azerbaijan_gp": {
+   "total_laps": 51,
+   "life_raw": {
+    "SOFT": 16.59,
+    "MEDIUM": 17.34,
+    "HARD": 25.9
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 16 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 11 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 16,
+    "HARD": 11
+   },
+   "wear_multiplier": 0.36,
+   "wear_multiplier_raw": -0.032,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0,
+    "HARD": 0.162
+   }
+  },
+  "2022_italian_gp": {
+   "total_laps": 53,
+   "life_raw": {
+    "SOFT": 22.0,
+    "MEDIUM": 30.11,
+    "HARD": 30.0
+   },
+   "life_source": {
+    "SOFT": "q75 of 6 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 15 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "q75 of 4 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 6,
+    "MEDIUM": 15,
+    "HARD": 4
+   },
+   "wear_multiplier": 0.811,
+   "wear_multiplier_raw": 0.666,
+   "same_lap_offsets": {
+    "SOFT": 0.384,
+    "MEDIUM": 0.0,
+    "HARD": 0.534
+   }
+  },
+  "2022_mexico_city_gp": {
+   "total_laps": 71,
+   "life_raw": {
+    "SOFT": 31.07,
+    "MEDIUM": 39.07,
+    "HARD": 48.89
+   },
+   "life_source": {
+    "SOFT": "q75 of 9 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 13 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 9,
+    "MEDIUM": 13,
+    "HARD": 2
+   },
+   "wear_multiplier": 0.784,
+   "wear_multiplier_raw": 0.707,
+   "same_lap_offsets": {
+    "SOFT": -0.388,
+    "MEDIUM": 0.0,
+    "HARD": 0.35
+   }
+  }
+ }
+}

@@ -1,0 +1,225 @@
+{
+ "label": "2025 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2025_chinese_gp",
+  "2025_japanese_gp",
+  "2025_saudi_arabian_gp",
+  "2025_miami_gp",
+  "2025_emilia_romagna_gp",
+  "2025_spanish_gp",
+  "2025_canadian_gp",
+  "2025_austrian_gp",
+  "2025_hungarian_gp",
+  "2025_dutch_gp",
+  "2025_azerbaijan_gp",
+  "2025_singapore_gp",
+  "2025_united_states_gp",
+  "2025_sao_paulo_gp",
+  "2025_qatar_gp"
+ ],
+ "field_noise_s": 0.4186,
+ "form_sd_s": 0.2184,
+ "form_note": "within-pair gap SD 0.330 s, sampling SD 0.116 s over 131 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "ALB": {
+   "team_id": "williams_2025",
+   "pace_vs_teammate_s": -0.011,
+   "raw_mean_gap_s": -0.0135,
+   "races": 13,
+   "lap_noise_s": 0.4329,
+   "raw_noise_s": 0.4421,
+   "clean_laps": 232
+  },
+  "ALO": {
+   "team_id": "aston_martin_2025",
+   "pace_vs_teammate_s": -0.0765,
+   "raw_mean_gap_s": -0.0942,
+   "races": 13,
+   "lap_noise_s": 0.4599,
+   "raw_noise_s": 0.4779,
+   "clean_laps": 344
+  },
+  "ANT": {
+   "team_id": "mercedes_2025",
+   "pace_vs_teammate_s": 0.0669,
+   "raw_mean_gap_s": 0.0813,
+   "races": 14,
+   "lap_noise_s": 0.3896,
+   "raw_noise_s": 0.3745,
+   "clean_laps": 287
+  },
+  "BEA": {
+   "team_id": "haas_2025",
+   "pace_vs_teammate_s": -0.0841,
+   "raw_mean_gap_s": -0.1035,
+   "races": 13,
+   "lap_noise_s": 0.4583,
+   "raw_noise_s": 0.4816,
+   "clean_laps": 256
+  },
+  "BOR": {
+   "team_id": "sauber_2025",
+   "pace_vs_teammate_s": 0.0424,
+   "raw_mean_gap_s": 0.0522,
+   "races": 13,
+   "lap_noise_s": 0.4689,
+   "raw_noise_s": 0.4935,
+   "clean_laps": 307
+  },
+  "COL": {
+   "team_id": "alpine_2025",
+   "pace_vs_teammate_s": 0.0694,
+   "raw_mean_gap_s": 0.0925,
+   "races": 9,
+   "lap_noise_s": 0.5606,
+   "raw_noise_s": 0.6606,
+   "clean_laps": 213
+  },
+  "DOO": {
+   "team_id": "alpine_2025",
+   "pace_vs_teammate_s": 0.0546,
+   "raw_mean_gap_s": 0.1365,
+   "races": 2,
+   "lap_noise_s": 0.4896,
+   "raw_noise_s": 0.651,
+   "clean_laps": 66
+  },
+  "GAS": {
+   "team_id": "alpine_2025",
+   "pace_vs_teammate_s": -0.079,
+   "raw_mean_gap_s": -0.1005,
+   "races": 11,
+   "lap_noise_s": 0.4507,
+   "raw_noise_s": 0.4699,
+   "clean_laps": 250
+  },
+  "HAD": {
+   "team_id": "rb_2025",
+   "pace_vs_teammate_s": -0.0473,
+   "raw_mean_gap_s": -0.0575,
+   "races": 14,
+   "lap_noise_s": 0.4143,
+   "raw_noise_s": 0.4123,
+   "clean_laps": 313
+  },
+  "HAM": {
+   "team_id": "ferrari_2025",
+   "pace_vs_teammate_s": 0.0564,
+   "raw_mean_gap_s": 0.0695,
+   "races": 13,
+   "lap_noise_s": 0.4135,
+   "raw_noise_s": 0.4115,
+   "clean_laps": 371
+  },
+  "HUL": {
+   "team_id": "sauber_2025",
+   "pace_vs_teammate_s": -0.0424,
+   "raw_mean_gap_s": -0.0522,
+   "races": 13,
+   "lap_noise_s": 0.4842,
+   "raw_noise_s": 0.518,
+   "clean_laps": 291
+  },
+  "LAW": {
+   "team_id": "rb_2025",
+   "pace_vs_teammate_s": 0.0737,
+   "raw_mean_gap_s": 0.0895,
+   "races": 14,
+   "lap_noise_s": 0.407,
+   "raw_noise_s": 0.4012,
+   "clean_laps": 297
+  },
+  "LEC": {
+   "team_id": "ferrari_2025",
+   "pace_vs_teammate_s": -0.0564,
+   "raw_mean_gap_s": -0.0695,
+   "races": 13,
+   "lap_noise_s": 0.4741,
+   "raw_noise_s": 0.4942,
+   "clean_laps": 413
+  },
+  "NOR": {
+   "team_id": "mclaren_2025",
+   "pace_vs_teammate_s": -0.0205,
+   "raw_mean_gap_s": -0.0249,
+   "races": 14,
+   "lap_noise_s": 0.3443,
+   "raw_noise_s": 0.3186,
+   "clean_laps": 434
+  },
+  "OCO": {
+   "team_id": "haas_2025",
+   "pace_vs_teammate_s": 0.0841,
+   "raw_mean_gap_s": 0.1035,
+   "races": 13,
+   "lap_noise_s": 0.3991,
+   "raw_noise_s": 0.3884,
+   "clean_laps": 276
+  },
+  "PIA": {
+   "team_id": "mclaren_2025",
+   "pace_vs_teammate_s": 0.0205,
+   "raw_mean_gap_s": 0.0249,
+   "races": 14,
+   "lap_noise_s": 0.3527,
+   "raw_noise_s": 0.333,
+   "clean_laps": 502
+  },
+  "RUS": {
+   "team_id": "mercedes_2025",
+   "pace_vs_teammate_s": -0.0669,
+   "raw_mean_gap_s": -0.0813,
+   "races": 14,
+   "lap_noise_s": 0.3756,
+   "raw_noise_s": 0.3616,
+   "clean_laps": 461
+  },
+  "SAI": {
+   "team_id": "williams_2025",
+   "pace_vs_teammate_s": 0.011,
+   "raw_mean_gap_s": 0.0135,
+   "races": 13,
+   "lap_noise_s": 0.3792,
+   "raw_noise_s": 0.3554,
+   "clean_laps": 249
+  },
+  "STR": {
+   "team_id": "aston_martin_2025",
+   "pace_vs_teammate_s": 0.0765,
+   "raw_mean_gap_s": 0.0942,
+   "races": 13,
+   "lap_noise_s": 0.4186,
+   "raw_noise_s": 0.4186,
+   "clean_laps": 340
+  },
+  "TSU": {
+   "team_id": "red_bull_2025",
+   "pace_vs_teammate_s": 0.3601,
+   "raw_mean_gap_s": 0.4432,
+   "races": 13,
+   "lap_noise_s": 0.4422,
+   "raw_noise_s": 0.4546,
+   "clean_laps": 286
+  },
+  "VER": {
+   "team_id": "red_bull_2025",
+   "pace_vs_teammate_s": -0.3881,
+   "raw_mean_gap_s": -0.4777,
+   "races": 13,
+   "lap_noise_s": 0.3554,
+   "raw_noise_s": 0.3367,
+   "clean_laps": 506
+  }
+ },
+ "overtake_threshold_shift_s": 0.0,
+ "overtake_shift_fit": {
+  "skipped": "superseded by the W3 racecraft refit (H2a)"
+ }
+}

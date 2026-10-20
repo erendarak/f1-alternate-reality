@@ -2,12 +2,12 @@ dataset_id: 2025_japanese_gp_fastf1_v1
 event: 2025_japanese_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:49:11Z'
+retrieved_utc: '2026-10-17T17:42:07Z'
 session_key: 2025/round 3/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2025_japanese_gp/laps.parquet
-  sha256: sha256:99ce355bb61bcc6f7a93f2585750cf11a46a99b5065546b14640ddd3602228da
+  sha256: sha256:b479df3e1284e6f5d97f11b1434cbda45020c6a3a9ec8b55900c5622ae50f27e
   rows: 1059
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2025_japanese_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2025_japanese_gp/positions.parquet
+  sha256: sha256:0da97d9fce828105bbe5f4c844ee91647878e4c1380b37d015387f691567ff80
+  rows: 640980
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2025_japanese_gp/track_outline.parquet
+  sha256: sha256:b3dd3437a7c6f9c6c7a6dbe03395c86c8b357421f38539142531294989975e01
+  rows: 348
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 24 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

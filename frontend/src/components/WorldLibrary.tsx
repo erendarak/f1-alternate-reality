@@ -70,7 +70,7 @@ export function WorldLibrary({ onOpen, message }: Props) {
           <div className="brand">F1 ALTERNATE REALITY</div>
           <h1>World Library</h1>
           <p className="sub">
-            Pausable, saveable, forkable races on real 2024 grids. Everything that happens in a race
+            Pausable, saveable, forkable races on real 2018-2025 grids. Everything that happens in a race
             is simulated, not the real result.
           </p>
         </div>

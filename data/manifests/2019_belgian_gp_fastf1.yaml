@@ -2,7 +2,7 @@ dataset_id: 2019_belgian_gp_fastf1_v1
 event: 2019_belgian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:14:25Z'
+retrieved_utc: '2026-10-17T16:42:39Z'
 session_key: 2019/round 13/R
 license_review_status: research_only
 files:
@@ -99,6 +99,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2019_belgian_gp/positions.parquet
+  sha256: sha256:7b96e830fc3676db43d744b83d8a70844188b2ee6b8601022638860600e3bd55
+  rows: 484980
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2019_belgian_gp/track_outline.parquet
+  sha256: sha256:74eacda31c0a0d1903bf5a471858277d58c27e316ce328ef69c3d9c3e65dfed7
+  rows: 365
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 16 lap 40 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

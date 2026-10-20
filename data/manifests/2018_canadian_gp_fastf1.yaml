@@ -2,12 +2,12 @@ dataset_id: 2018_canadian_gp_fastf1_v1
 event: 2018_canadian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:17:47Z'
+retrieved_utc: '2026-10-17T17:30:56Z'
 session_key: 2018/round 7/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2018_canadian_gp/laps.parquet
-  sha256: sha256:dafd18ac91a6930e797db4a4b9f54b292e0a934a43dc36059b8b94f4829d3ee8
+  sha256: sha256:e20105c7d815d0a606731aba83b7d00dc4464adaddeb67298573dc8abe4601c8
   rows: 1219
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2018_canadian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2018_canadian_gp/positions.parquet
+  sha256: sha256:0988f9a19a3cb5e10eff915659cb0b4fbbaf07148e165113a4c8d3815367ab9a
+  rows: 425100
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2018_canadian_gp/track_outline.parquet
+  sha256: sha256:828e953214b3241769f20c66695907f2bb1c033111b8e6f60eeee3beb40009ac
+  rows: 253
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 5 lap 17 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)
@@ -116,3 +139,4 @@ missingness_notes:
 - lap table `tyre_life_laps` missing in 17 rows
 - lap table `position` missing in 2 rows
 - lap table `speed_trap_kph` missing in 2 rows
+- lap table `compound_name` missing in 17 rows

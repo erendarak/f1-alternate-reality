@@ -24,13 +24,13 @@ from pathlib import Path
 import pandas as pd
 
 from f1ar.calibration.reference_metrics import red_flag_periods
+from f1ar.data.status import is_finisher
 from f1ar.domain.provenance import SourceType
 from f1ar.domain.race_state import RaceControlParams
 
 CRASH_SHARE = 0.6
 """Editorial: share of retirements after lap 1 that are crashes (the rest are failures)."""
 RACE_CONTROL_FILE = Path("calibration") / "race_control_2024_v1.json"
-FINISHED = ("Finished", "Lapped", "Disqualified")
 
 
 @dataclass
@@ -56,7 +56,7 @@ def race_counts(data_dir: Path) -> RaceCounts:
     lap1 = later = exposure = 0
     for code, st in zip(started["driver_code"], started["status"], strict=True):
         n = int(last.get(code, 0))
-        retired = str(st) not in FINISHED
+        retired = not is_finisher(st)
         laps_started = n if retired else min(n, total)
         exposure += max(0, laps_started - 1)
         if retired:

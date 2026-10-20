@@ -24,6 +24,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from f1ar.data.status import is_running_finish
 from f1ar.domain.race_state import RaceSetup, WorldStatus
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.simulation.scenarios import MONZA_2024, event_data_dir, load_event, setup_from_codes
@@ -55,7 +56,9 @@ def main() -> None:
         raise SystemExit("fetch the data first: uv run python scripts/fetch_monza_2024.py")
     roster, profiles = load_event(ROOT / "configs")
     results = pd.read_parquet(data_dir / "results.parquet")
-    classified = results[results["status"].isin(["Finished", "Lapped"])].sort_values("position")
+    classified = results[results["status"].map(is_running_finish).astype(bool)].sort_values(
+        "position"
+    )
     real = [str(c) for c in classified["driver_code"]]
     team_of = {e.code: e.team_id for e in roster.entries}
     real_podium_teams = sorted(team_of[c] for c in real[:3])

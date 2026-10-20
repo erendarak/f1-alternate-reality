@@ -2,12 +2,12 @@ dataset_id: 2022_singapore_gp_fastf1_v1
 event: 2022_singapore_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:03:45Z'
+retrieved_utc: '2026-10-17T17:33:46Z'
 session_key: 2022/round 17/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2022_singapore_gp/laps.parquet
-  sha256: sha256:f49a650f155a3b10fed001a633cd938efdc62e26ea748d643aaf5a56559668f6
+  sha256: sha256:6d6ee41244cac06746af913e62abbc2655312b7ffd99ee4d6dba8ac97cb417a1
   rows: 945
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2022_singapore_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2022_singapore_gp/positions.parquet
+  sha256: sha256:bdee20af56acfd27b6a7b6f7405f84a398629104d0954725269800c1fa7381d5
+  rows: 1169420
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2022_singapore_gp/track_outline.parquet
+  sha256: sha256:47a7ac3660609348822360d9f8cc59dfcc3b65fa90a1c5c7f6bb9617c44fd446
+  rows: 446
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 11 lap 34 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

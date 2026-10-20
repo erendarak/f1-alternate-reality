@@ -1,0 +1,35 @@
+model_name: tyre_life
+model_version: v1
+kind: stint-length life + same-lap wear regression; globals fitted on behaviour
+source_type: estimated_from_data
+artifact: configs/calibration/tyre_life_2022_v1.json
+artifact_sha256: sha256:85f4180d48a4c05cbf91978b786e0db2b59fe52b6a25317abe312a90d5900f6e
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2022_v1.yaml
+training_dataset_content_sha256: sha256:6c03eeb66580351aaa8d2fc4a24b1ab045943c91552c7ed4b08440445ad4121a
+training_races:
+- 2022_abu_dhabi_gp
+- 2022_australian_gp
+- 2022_austrian_gp
+- 2022_bahrain_gp
+- 2022_belgian_gp
+- 2022_british_gp
+- 2022_canadian_gp
+- 2022_dutch_gp
+- 2022_miami_gp
+- 2022_sao_paulo_gp
+- 2022_spanish_gp
+- 2022_united_states_gp
+metrics:
+  dry_train_fit:
+    kappa: 0.8
+    delta_s: 0.2
+    loss: 1.6041
+    stops_sim: 2.01
+    stops_real: 2.266
+    share_sim:
+      SOFT: 0.103
+      MEDIUM: 0.192
+      HARD: 0.705
+  held_out_check: EXP-010 (docs/experiments/exp010.json)
+status: fitted for 2022 (H2a, D-054); held-out check EXP-023

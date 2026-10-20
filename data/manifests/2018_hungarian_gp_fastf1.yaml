@@ -2,12 +2,12 @@ dataset_id: 2018_hungarian_gp_fastf1_v1
 event: 2018_hungarian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:18:53Z'
+retrieved_utc: '2026-10-17T17:31:28Z'
 session_key: 2018/round 12/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2018_hungarian_gp/laps.parquet
-  sha256: sha256:6e6a2478d1c872b1ce3c1007d264d0306c32612eb105254e1cd23a41f12867b5
+  sha256: sha256:dfe692b6e788138f8bdf21460a8c8b48256d705c77f57f0a67dae717a0051bb2
   rows: 1233
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2018_hungarian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2018_hungarian_gp/positions.parquet
+  sha256: sha256:607cca0573775a05f13eda0608a1d39357f44c5da5cd6446ec6ac1aa8aef3218
+  rows: 433280
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2018_hungarian_gp/track_outline.parquet
+  sha256: sha256:9b6900196e5ac471fde9ba058399b5518aa6edae15ebf1abc8042a4595a63c18
+  rows: 277
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 44 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)
@@ -117,3 +140,4 @@ missingness_notes:
 - lap table `position` missing in 3 rows
 - lap table `track_status` missing in 96 rows
 - lap table `speed_trap_kph` missing in 4 rows
+- lap table `compound_name` missing in 20 rows

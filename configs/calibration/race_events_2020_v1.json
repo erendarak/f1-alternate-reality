@@ -1,0 +1,234 @@
+{
+ "label": "2020 race events (W4, D-042)",
+ "events": [
+  "2020_styrian_gp",
+  "2020_70th_anniversary_gp",
+  "2020_spanish_gp",
+  "2020_belgian_gp",
+  "2020_tuscan_gp",
+  "2020_russian_gp",
+  "2020_eifel_gp",
+  "2020_emilia_romagna_gp",
+  "2020_bahrain_gp",
+  "2020_abu_dhabi_gp",
+  "2020_british_gp",
+  "2020_italian_gp",
+  "2020_portuguese_gp",
+  "2020_sakhir_gp",
+  "2020_hungarian_gp",
+  "2020_turkish_gp"
+ ],
+ "dry_events": [
+  "2020_styrian_gp",
+  "2020_70th_anniversary_gp",
+  "2020_spanish_gp",
+  "2020_belgian_gp",
+  "2020_tuscan_gp",
+  "2020_russian_gp",
+  "2020_eifel_gp",
+  "2020_emilia_romagna_gp",
+  "2020_bahrain_gp",
+  "2020_abu_dhabi_gp",
+  "2020_british_gp",
+  "2020_italian_gp",
+  "2020_portuguese_gp",
+  "2020_sakhir_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": 0.0769,
+  "slow_stop_scale_s": 3.92,
+  "stops": 338,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {
+  "alfa_2020": {
+   "pit_crew_offset_s": -0.013,
+   "pit_slow_multiplier": 1.891,
+   "stops": 34,
+   "raw_median_rel_s": -0.02,
+   "raw_slow_share": 0.206
+  },
+  "alphatauri_2020": {
+   "pit_crew_offset_s": 0.0,
+   "pit_slow_multiplier": 0.903,
+   "stops": 32,
+   "raw_median_rel_s": 0.0,
+   "raw_slow_share": 0.062
+  },
+  "ferrari_2020": {
+   "pit_crew_offset_s": 0.113,
+   "pit_slow_multiplier": 0.862,
+   "stops": 35,
+   "raw_median_rel_s": 0.178,
+   "raw_slow_share": 0.057
+  },
+  "haas_2020": {
+   "pit_crew_offset_s": 0.464,
+   "pit_slow_multiplier": 1.281,
+   "stops": 34,
+   "raw_median_rel_s": 0.737,
+   "raw_slow_share": 0.118
+  },
+  "mclaren_2020": {
+   "pit_crew_offset_s": 0.022,
+   "pit_slow_multiplier": 1.484,
+   "stops": 34,
+   "raw_median_rel_s": 0.034,
+   "raw_slow_share": 0.147
+  },
+  "mercedes_2020": {
+   "pit_crew_offset_s": -0.071,
+   "pit_slow_multiplier": 0.652,
+   "stops": 36,
+   "raw_median_rel_s": -0.11,
+   "raw_slow_share": 0.028
+  },
+  "racing_point_2020": {
+   "pit_crew_offset_s": 0.006,
+   "pit_slow_multiplier": 0.918,
+   "stops": 31,
+   "raw_median_rel_s": 0.01,
+   "raw_slow_share": 0.065
+  },
+  "red_bull_2020": {
+   "pit_crew_offset_s": -0.401,
+   "pit_slow_multiplier": 0.455,
+   "stops": 36,
+   "raw_median_rel_s": -0.624,
+   "raw_slow_share": 0.0
+  },
+  "renault_2020": {
+   "pit_crew_offset_s": -0.09,
+   "pit_slow_multiplier": 0.536,
+   "stops": 26,
+   "raw_median_rel_s": -0.159,
+   "raw_slow_share": 0.0
+  },
+  "williams_2020": {
+   "pit_crew_offset_s": -0.039,
+   "pit_slow_multiplier": 0.986,
+   "stops": 40,
+   "raw_median_rel_s": -0.058,
+   "raw_slow_share": 0.075
+  }
+ },
+ "reliability": {
+  "field_retirements_per_start": 0.15,
+  "teams": {
+   "alfa_2020": {
+    "failure_multiplier": 0.786,
+    "retirements": 3,
+    "starts": 32
+   },
+   "alphatauri_2020": {
+    "failure_multiplier": 0.905,
+    "retirements": 4,
+    "starts": 32
+   },
+   "ferrari_2020": {
+    "failure_multiplier": 1.143,
+    "retirements": 6,
+    "starts": 32
+   },
+   "haas_2020": {
+    "failure_multiplier": 1.381,
+    "retirements": 8,
+    "starts": 32
+   },
+   "mclaren_2020": {
+    "failure_multiplier": 0.905,
+    "retirements": 4,
+    "starts": 32
+   },
+   "mercedes_2020": {
+    "failure_multiplier": 0.548,
+    "retirements": 1,
+    "starts": 32
+   },
+   "racing_point_2020": {
+    "failure_multiplier": 1.262,
+    "retirements": 7,
+    "starts": 32
+   },
+   "red_bull_2020": {
+    "failure_multiplier": 1.024,
+    "retirements": 5,
+    "starts": 32
+   },
+   "renault_2020": {
+    "failure_multiplier": 0.905,
+    "retirements": 4,
+    "starts": 32
+   },
+   "williams_2020": {
+    "failure_multiplier": 1.143,
+    "retirements": 6,
+    "starts": 32
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.01074,
+  "sc_share": 0.444,
+  "count": 9,
+  "race_laps": 838,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 4,
+  "races": 16,
+  "per_race": 0.25
+ },
+ "penalties": {
+  "counts": {
+   "other": 18,
+   "collision": 5
+  },
+  "collision_per_pass": 0.005731,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.0,
+  "other_per_car_lap": 0.000964,
+  "passes": 902,
+  "raw": {
+   "collision_per_pass": 0.00554,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.0,
+   "other_per_car_lap": 0.000932
+  },
+  "scale": 1.0345,
+  "scale_note": "x1.034: simulated dry_train 1.16 vs real 1.20 per race"
+ },
+ "fitted": {
+  "risk_scale": 1.9,
+  "red_flag_per_crash": 0.094,
+  "fit": {
+   "races": [
+    "2020_styrian_gp",
+    "2020_70th_anniversary_gp",
+    "2020_spanish_gp",
+    "2020_belgian_gp",
+    "2020_tuscan_gp",
+    "2020_russian_gp",
+    "2020_eifel_gp",
+    "2020_emilia_romagna_gp",
+    "2020_bahrain_gp",
+    "2020_abu_dhabi_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 1.4,
+   "sim_failures_per_race": 0.44,
+   "real_retirements_per_race": 3.1,
+   "target_red_flags_per_race": 0.25
+  },
+  "check": {
+   "retirements_per_race": 3.0,
+   "red_flags_per_race": 0.14,
+   "safety_cars_per_race": 1.04,
+   "vscs_per_race": 0.98,
+   "penalties_per_race": 1.16,
+   "penalties_per_race_after_scale": 1.18
+  }
+ }
+}

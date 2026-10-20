@@ -1,11 +1,18 @@
 """Scenario builders: turn roster + profiles into a ``RaceSetup``."""
 
 import hashlib
+import json
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 
 import pandas as pd
 
+from f1ar.calibration.season_files import (
+    borrowed_note,
+    era_rates_note,
+    season_path,
+    with_fallback,
+)
 from f1ar.domain.driver_profiles import (
     DriverArchetype,
     ProfileSet,
@@ -29,6 +36,7 @@ from f1ar.domain.race_state import (
     WeatherMode,
     WeatherParams,
     default_weather_params,
+    start_slot,
 )
 from f1ar.domain.season_rules import SEASON_2024, SeasonRules, rules_for
 from f1ar.policy.baseline_strategy import POLICY_ID as STRATEGY_POLICY_ID
@@ -42,10 +50,16 @@ _SEED_FILES = {
 }
 SIMULATED_EVENTS = tuple(_SEED_FILES)
 """Events with their own persona seed file (M2). Since M4 every 2024 race also has personas
-through the season seed (``SEASON_SEED_FILES``); see ``has_personas``."""
-SEASON_SEED_FILES = {2024: "seed_2024_season_drivers.yaml"}
+through the season seed (``season_seed``); see ``has_personas``."""
 REPO_CONFIGS = Path(__file__).resolve().parents[4] / "configs"
 """This repository's ``configs/`` (the package is installed from the repo, editable)."""
+
+
+def season_seed(configs_dir: Path, season: int) -> Path | None:
+    """``configs/drivers/seed_<season>_season_drivers.yaml`` if it exists (2024 since M4,
+    2018-2025 since H2a: ``scripts/build_season_seeds.py``)."""
+    path = configs_dir / "drivers" / f"seed_{season}_season_drivers.yaml"
+    return path if path.exists() else None
 
 
 def has_personas(configs_dir: Path, event_id: str) -> bool:
@@ -54,7 +68,7 @@ def has_personas(configs_dir: Path, event_id: str) -> bool:
     if not roster_path.exists():
         return False
     season = load_roster(roster_path, expected_event_id=event_id).season
-    return event_id in _SEED_FILES or season in SEASON_SEED_FILES
+    return event_id in _SEED_FILES or season_seed(configs_dir, season) is not None
 
 
 def load_event(configs_dir: Path, event_id: str = MONZA_2024) -> tuple[RaceRoster, ProfileSet]:
@@ -66,10 +80,8 @@ def load_event(configs_dir: Path, event_id: str = MONZA_2024) -> tuple[RaceRoste
     templates = configs_dir / "drivers" / "archetypes.yaml"
     if event_id in _SEED_FILES:
         profiles = load_profiles(configs_dir / "drivers" / _SEED_FILES[event_id], templates, roster)
-    elif roster.season in SEASON_SEED_FILES:
-        profiles = load_season_profiles(
-            configs_dir / "drivers" / SEASON_SEED_FILES[roster.season], templates, roster
-        )
+    elif (seed := season_seed(configs_dir, roster.season)) is not None:
+        profiles = load_season_profiles(seed, templates, roster)
     else:
         raise ValueError(f"no persona seed for {event_id} (season {roster.season})")
     return roster, profiles
@@ -140,10 +152,12 @@ def setup_from_codes(
     from f1ar.calibration.persona_fit import PERSONA_FILE, load_personas, refit_profiles
     from f1ar.calibration.racecraft_fit import load_racecraft as _load_racecraft
 
-    personas_cfg = load_personas(configs)
+    season = roster.season
+    personas_cfg = load_personas(configs, season)
     persona_notes: dict[str, dict[str, str]] = {}
     personas_note = (
-        f"editorial_assumption: personas as configured ({PERSONA_FILE.as_posix()} missing)"
+        f"editorial_assumption: personas as configured (no {season} persona fit: "
+        f"{season_path(PERSONA_FILE, season).as_posix()})"
     )
     if personas_cfg is not None:
         lm0 = default_lap_model(90.0)
@@ -151,15 +165,16 @@ def setup_from_codes(
             profiles,
             roster,
             personas_cfg,
-            _load_pace(configs),
-            _load_racecraft(configs),
+            _load_pace(configs, season),
+            _load_racecraft(configs, season),
             lm0.tyre_mgmt_wear_max,
             lm0.tyre_mgmt_wear_min,
         )
         personas_note = (
-            f"estimated_from_data: persona fields re-fitted from 2024 where measurable "
-            f"({PERSONA_FILE.as_posix()}): consistency (W2 lap noise rank), overtake/defense "
-            f"skill (W3 terms rank); tire_management only if its reliability >= 0.3 (2024: "
+            f"estimated_from_data: persona fields re-fitted from {season} where measurable "
+            f"({season_path(PERSONA_FILE, season).as_posix()}): consistency (W2 lap noise "
+            f"rank), overtake/defense "
+            f"skill (W3 terms rank); tire_management only if its reliability >= 0.3 ({season}: "
             f"{personas_cfg['wear']['reliability_drivers']}); other persona fields editorial"
         )
     weather = default_weather_params()
@@ -198,10 +213,10 @@ def setup_from_codes(
         )
     editorial = default_lap_model(_NOMINAL_BASE_LAP_S.get(roster.event_id, 90.0))
     field = [profiles.get(d).archetype for d in roster.driver_ids()]
-    life = load_life(configs)
+    life = load_life(configs, season)
     estimation_params = None
     if life is not None and (configs / SHAPE_FILE).exists():  # W1: tyre life (D-041)
-        shape, _ = load_shape(configs)
+        shape, _ = load_shape(configs, season)
         model = life_lap_model(
             editorial,
             *life,
@@ -213,7 +228,7 @@ def setup_from_codes(
         )
         lap_params, estimation_params, tyre_note = model.params, model.estimation_params, model.note
     elif (configs / SHAPE_FILE).exists():
-        calibrated = calibrated_lap_model(editorial, *load_shape(configs), race, field)
+        calibrated = calibrated_lap_model(editorial, *load_shape(configs, season), race, field)
         lap_params, tyre_note = calibrated.params, calibrated.note
     else:  # no fitted model: the deterministic editorial model still runs (plan §16 M4)
         lap_params = editorial
@@ -225,11 +240,12 @@ def setup_from_codes(
     # they replace the persona skill term (skill gap 0) and the persona noise
     from f1ar.calibration.driver_pace_fit import PACE_FILE, load_pace
 
-    pace = load_pace(configs)
+    pace = load_pace(configs, season)
     driver_offsets: dict[str, float] | None = None
     noise: dict[str, float] = {}
     pace_note = (
-        f"editorial_assumption: persona race pace and noise ({PACE_FILE.as_posix()} missing)"
+        f"editorial_assumption: persona race pace and noise (no {season} fit: "
+        f"{season_path(PACE_FILE, season).as_posix()})"
     )
     if pace is not None:
         fitted_drivers = pace["drivers"]
@@ -250,7 +266,8 @@ def setup_from_codes(
             estimation_params = estimation_params.model_copy(update={"skill_gap_s": 0.0})
         pace_note = (
             f"estimated_from_data: driver race pace vs teammate and lap noise "
-            f"{PACE_FILE.as_posix()} (2024 season, same-lap fit, shrunk; field noise "
+            f"{season_path(PACE_FILE, season).as_posix()} ({season} season, same-lap fit, "
+            f"shrunk; field noise "
             f"{pace['field_noise_s']} s); persona race_pace_skill / consistency not used here"
         )
     # W1: car pace and the base lap are read off real (managed) race laps with the offsets seen
@@ -308,7 +325,7 @@ def setup_from_codes(
     if (
         pace is not None
         and pace.get("overtake_threshold_shift_s")
-        and load_racecraft(configs) is None  # W3's refit supersedes the global shift
+        and load_racecraft(configs, season) is None  # W3's refit supersedes the global shift
     ):
         # W2: realistic lap noise makes more passing chances; the pass threshold is shifted
         # (fitted on the simulated dry_train field) so passes stay at 2024's level
@@ -373,7 +390,8 @@ def setup_from_codes(
         }
     )
     setup = with_racecraft(setup, configs, racecraft_overrides or {})
-    return with_race_events(setup, configs, race_events_overrides or {})
+    setup = with_race_events(setup, configs, race_events_overrides or {})
+    return _label_other_seasons(setup, configs)
 
 
 def with_racecraft(
@@ -385,9 +403,13 @@ def with_racecraft(
     while fitting."""
     from f1ar.calibration.racecraft_fit import RACECRAFT_FILE, load_racecraft
 
-    cfg = load_racecraft(configs)
+    season = setup.rules.season
+    cfg = load_racecraft(configs, season)
     if cfg is None:
-        note = f"editorial_assumption: no fitted racecraft ({RACECRAFT_FILE.as_posix()} missing)"
+        note = (
+            f"editorial_assumption: no fitted racecraft "
+            f"({season_path(RACECRAFT_FILE, season).as_posix()} missing)"
+        )
         return setup.model_copy(update={"inputs": {**setup.inputs, "racecraft": note}})
     ov = cfg["overtaking"]
     own = setup.event_id in ov["track_threshold_s"]
@@ -428,7 +450,8 @@ def with_racecraft(
         update={"first_lap_grid_profile": tuple(float(v) for v in cfg["lap1_grid_profile"])}
     )
     note = (
-        f"estimated_from_data: racecraft {RACECRAFT_FILE.as_posix()} (2024): attack/defend per "
+        f"estimated_from_data: racecraft {season_path(RACECRAFT_FILE, season).as_posix()} "
+        f"({season}): attack/defend per "
         f"driver (ridge-shrunk; driver and car effects not separable), launch skill per driver "
         f"(lap-1 gains beyond grid and car pace, shrunk); lap-1 risk by grid slot: editorial "
         f"shape from Dartmouth's 2022-23 lap-1 incident counts"
@@ -451,9 +474,13 @@ def with_race_events(
     (and says so). ``overrides`` replace fitted values (only while fitting them)."""
     from f1ar.calibration.race_events_fit import EVENTS_FILE, load_events
 
-    cfg = load_events(configs)
+    season = setup.rules.season
+    cfg = load_events(configs, season)
     if cfg is None:
-        note = f"editorial_assumption: no fitted race events ({EVENTS_FILE.as_posix()} missing)"
+        note = (
+            f"editorial_assumption: no fitted race events "
+            f"({season_path(EVENTS_FILE, season).as_posix()} missing)"
+        )
         return setup.model_copy(update={"inputs": {**setup.inputs, "race_events": note}})
     o = dict(overrides or {})
     fitted = cfg["fitted"]
@@ -492,7 +519,8 @@ def with_race_events(
         for d in setup.drivers
     )
     note = (
-        f"estimated_from_data: race events {EVENTS_FILE.as_posix()} (2024): pit crews and "
+        f"estimated_from_data: race events {season_path(EVENTS_FILE, season).as_posix()} "
+        f"({season}): pit crews and "
         f"slow stops per team from {cfg['pit']['stops']} green stops, team failure multipliers "
         f"(all-cause retirements as proxy, shrunk), debris SC/VSC {cfg['debris']['per_lap']}/lap, "
         f"penalties by type; risk scale {rc.risk_scale:.2f} and red flags per crash "
@@ -507,6 +535,25 @@ def with_race_events(
             "inputs": {**setup.inputs, "race_events": note},
         }
     )
+
+
+def _label_other_seasons(setup: RaceSetup, configs: Path) -> RaceSetup:
+    """H2a (D-054): say which inputs of a non-2024 race come from 2024 (tyre model borrowed,
+    era-level rates kept until H2c)."""
+    from f1ar.calibration.lap_model_fit import LIFE_FILE, SHAPE_FILE
+
+    season = setup.rules.season
+    _, life_season = with_fallback(configs, LIFE_FILE, season)
+    _, shape_season = with_fallback(configs, SHAPE_FILE, season)
+    inputs = dict(setup.inputs)
+    if "tyre_model" in inputs:
+        inputs["tyre_model"] += borrowed_note(season, life_season or shape_season)
+        if life_season == season and shape_season not in (None, season):
+            inputs["tyre_model"] += f" [fuel effect from the {shape_season} tyre shape fit]"
+    for key in ("traffic", "race_control", "weather", "wet_incidents"):
+        if key in inputs:
+            inputs[key] += era_rates_note(season)
+    return setup.model_copy(update={"inputs": inputs})
 
 
 def _fitted_traffic(configs: Path, event_id: str) -> tuple[TrafficParams, str]:
@@ -591,14 +638,24 @@ def track_for(event_id: str, data_dir: Path | None = None) -> TrackSpec:
     shorter than the official length; ``estimated_from_data``)."""
     if event_id in _TRACKS:
         return _TRACKS[event_id]()
-    if data_dir is None or not (data_dir / "track_outline.parquet").exists():
+    outline_dir, borrowed = data_dir, ""
+    if data_dir is not None and not (data_dir / "track_outline.parquet").exists():
+        sibling = _same_circuit_outline(event_id, data_dir)
+        if sibling is not None:  # H2a: no position data in F1's archive (2018 AUS, BHR)
+            outline_dir = sibling
+            borrowed = f" (outline of {sibling.name}: same circuit, nearest season with one)"
+    if (
+        outline_dir is None
+        or data_dir is None
+        or not (outline_dir / "track_outline.parquet").exists()
+    ):
         raise ValueError(
             f"no track spec for {event_id}: it needs fetched data with the track outline "
             "(scripts/fetch_event.py without --no-telemetry)"
         )
     from f1ar.presentation.track_geometry import TrackGeometry
 
-    outline = pd.read_parquet(data_dir / "track_outline.parquet")
+    outline = pd.read_parquet(outline_dir / "track_outline.parquet")
     length = TrackGeometry.from_points(
         list(zip(outline["x_m"].astype(float), outline["y_m"].astype(float), strict=True))
     ).length_m
@@ -608,11 +665,34 @@ def track_for(event_id: str, data_dir: Path | None = None) -> TrackSpec:
         length_m=round(length, 1),
         total_laps=laps,
         source_note=(
-            f"estimated_from_data: length {length / 1000:.3f} km = the fetched track outline "
-            "(winner's typical racing line, 1-2 % shorter than the official figure); "
-            f"{laps} race laps from results"
+            f"estimated_from_data: length {length / 1000:.3f} km = the fetched track outline"
+            f"{borrowed} (winner's typical racing line, 1-2 % shorter than the official "
+            f"figure); {laps} race laps from results"
         ),
     )
+
+
+def _same_circuit_outline(event_id: str, data_dir: Path) -> Path | None:
+    """The data folder of the nearest-season race on the same circuit (``circuit_id`` in the
+    rosters) that has a track outline. A layout change between the seasons isn't detected:
+    the nearest season keeps that risk small (labelled in the source note)."""
+    root = data_dir.parents[2]
+    rosters = root / "configs" / "rosters"
+    own = rosters / f"{event_id}.json"
+    if not own.exists():
+        return None
+    me = json.loads(own.read_text(encoding="utf-8"))
+    best: tuple[int, Path] | None = None
+    for path in rosters.glob("*.json"):
+        other = json.loads(path.read_text(encoding="utf-8"))
+        if other["circuit_id"] != me["circuit_id"] or path.stem == event_id:
+            continue
+        folder = root / "data" / "processed" / path.stem
+        if (folder / "track_outline.parquet").exists():
+            gap = abs(int(other["season"]) - int(me["season"]))
+            if best is None or gap < best[0]:
+                best = (gap, folder)
+    return None if best is None else best[1]
 
 
 def default_lap_model(base_lap_s: float = 82.0) -> LapModelParams:
@@ -782,7 +862,9 @@ def build_setup(
     """
     if roster.event_id != profiles.event_id:
         raise ValueError("roster and profiles belong to different events")
-    entries = sorted((roster.entry(d) for d in driver_ids), key=lambda e: e.grid_position)
+    entries = sorted(
+        (roster.entry(d) for d in driver_ids), key=lambda e: start_slot(e.grid_position)
+    )
     pit = pit or default_pit_params()
     if rules is not None:  # H1: the season's dry-compound rule
         pit = pit.model_copy(

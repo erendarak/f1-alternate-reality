@@ -1,0 +1,252 @@
+dataset_id: laps_2018_v1
+dataset_version: 1
+feature_schema_version: 1
+season: 2018
+license_review_status: research_only (F1 timing data via FastF1; not redistributed)
+built_by: scripts/build_lap_dataset.py
+file:
+  relative_path: data/processed/datasets/laps_2018_v1.parquet
+  sha256: sha256:a4f36a6db8cb7894513ef100753e54ffd70a88fd4e3c7a2b41c182d63e77d60e
+  content_sha256: sha256:9eeaf68074edeecd0cea994b036795ad3105e533169d50804f2fcfbf5e8f50f3
+  rows: 19193
+  representative_rows: 14492
+target: lap_time_s
+features:
+- name: circuit_id
+  available: pre_race
+  source_type: historical_verified
+  description: Jolpica circuit id
+- name: driver_id
+  available: pre_race
+  source_type: historical_verified
+  description: season-specific driver id (roster)
+- name: team_id
+  available: pre_race
+  source_type: historical_verified
+  description: team id (roster)
+- name: grid_position
+  available: pre_race
+  source_type: historical_verified
+  description: official starting slot (0 = pit lane)
+- name: scheduled_laps
+  available: pre_race
+  source_type: historical_verified
+  description: race distance in laps (winner's laps)
+- name: lap_number
+  available: lap_start
+  source_type: historical_verified
+  description: 1-based lap number
+- name: laps_remaining
+  available: lap_start
+  source_type: estimated_from_data
+  description: scheduled_laps - lap_number + 1 (fuel proxy)
+- name: compound
+  available: lap_start
+  source_type: historical_verified
+  description: tyre compound on this lap
+- name: tyre_age_start
+  available: lap_start
+  source_type: estimated_from_data
+  description: laps already on the set when the lap starts
+- name: fresh_tyre
+  available: lap_start
+  source_type: historical_verified
+  description: the set was new when fitted (FastF1 FreshTyre)
+- name: stint
+  available: lap_start
+  source_type: historical_verified
+  description: stint number
+- name: stint_lap
+  available: lap_start
+  source_type: estimated_from_data
+  description: 1-based lap index within the stint
+- name: pit_out_lap
+  available: lap_start
+  source_type: historical_verified
+  description: the lap starts in the pit lane
+- name: pit_in_lap
+  available: decision
+  source_type: historical_verified
+  description: the car boxes at the end of this lap
+- name: position_start
+  available: lap_start
+  source_type: historical_verified
+  description: position when the lap starts (grid on lap 1)
+- name: gap_ahead_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds behind the car that crossed the line just before, same lap (NaN on lap 1)
+- name: gap_behind_prev_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds ahead of the next car at the PREVIOUS line crossing (the gap to the car behind
+    at this crossing isn't known yet when the lap starts; found by the leakage audit)
+- name: track_status_start
+  available: lap_start
+  source_type: historical_verified
+  description: track status code when the lap starts
+- name: air_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: track_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: humidity_pct
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: rainfall_start
+  available: lap_start
+  source_type: historical_verified
+  description: rain flag of the latest weather sample
+- name: wind_speed_ms
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+lap_facts_never_features:
+- lap_status
+- position_end
+- is_accurate
+- deleted
+- fastf1_generated
+- representative
+leakage_audit: tests/unit/test_lap_dataset.py::test_no_feature_uses_anything_after_the_lap_starts
+excluded_quality_fail:
+  2018_bahrain_gp: Lap rows per car equal classified laps
+  2018_canadian_gp: Race distance is 68 laps; Lap rows per car equal classified laps
+splits:
+  rule: wet = any intermediate/wet tyre lap or rain at >= 5% of lap starts; among dry races, rounds divisible
+    by 4 are held out (dry_test), the rest are dry_train; leave-one-race-out folds run over dry_train.
+    Rule fixed before any model was fitted.
+  wet:
+  - 2018_spanish_gp
+  - 2018_monaco_gp
+  - 2018_german_gp
+  - 2018_abu_dhabi_gp
+  dry_test:
+  - 2018_azerbaijan_gp
+  - 2018_french_gp
+  - 2018_hungarian_gp
+  - 2018_russian_gp
+  - 2018_brazilian_gp
+  dry_train:
+  - 2018_australian_gp
+  - 2018_chinese_gp
+  - 2018_austrian_gp
+  - 2018_british_gp
+  - 2018_belgian_gp
+  - 2018_singapore_gp
+  - 2018_japanese_gp
+  - 2018_united_states_gp
+  - 2018_mexican_gp
+events:
+  2018_abu_dhabi_gp:
+    round: 21
+    group: wet
+    rows: 943
+    representative_rows: 768
+    source_manifest_sha256: sha256:8ccac3416da392442ded7784ca16f68c35e5e8d5b3af7368bc9501578e3887d6
+  2018_australian_gp:
+    round: 1
+    group: dry_train
+    rows: 940
+    representative_rows: 637
+    source_manifest_sha256: sha256:f04b3f56afc37ef872c685f48188bc0401fa4e2d79f6b5596ef9924e87e83227
+  2018_austrian_gp:
+    round: 9
+    group: dry_train
+    rows: 1244
+    representative_rows: 989
+    source_manifest_sha256: sha256:7e72d12f1cff057d4d9aff30c98e3ea1ce33cc4d8a6c609af1c23de03b4f9f4d
+  2018_azerbaijan_gp:
+    round: 4
+    group: dry_test
+    rows: 848
+    representative_rows: 487
+    source_manifest_sha256: sha256:fc492a631515b498dbc184e73faaae05fc28781bc0c2dc87ca33ff4627bdc811
+  2018_belgian_gp:
+    round: 13
+    group: dry_train
+    rows: 693
+    representative_rows: 578
+    source_manifest_sha256: sha256:da386fe76dc134c9ff32eb120d1cf5a9373616946ffc6110b6eae62c1306ae96
+  2018_brazilian_gp:
+    round: 20
+    group: dry_test
+    rows: 1318
+    representative_rows: 1200
+    source_manifest_sha256: sha256:fa3c4ead90dbf031199531985aa81db08271788c69566b9bf921bb3e520afdaf
+  2018_british_gp:
+    round: 10
+    group: dry_train
+    rows: 902
+    representative_rows: 562
+    source_manifest_sha256: sha256:9a28716c683828d310ebbeaaf7aa2d50500aa3c702a57dc3cc28bc2c63923cec
+  2018_chinese_gp:
+    round: 3
+    group: dry_train
+    rows: 1115
+    representative_rows: 394
+    source_manifest_sha256: sha256:e9ab226d8272acdde05eb38eaa81f6ac28a382a05f0170bceb568bc8ca306faa
+  2018_french_gp:
+    round: 8
+    group: dry_test
+    rows: 920
+    representative_rows: 718
+    source_manifest_sha256: sha256:f15bc6d34ea5485c57da1811d1317ed7dca6d3cd1cd9d7b19630813d3a5a892f
+  2018_german_gp:
+    round: 11
+    group: wet
+    rows: 1252
+    representative_rows: 477
+    source_manifest_sha256: sha256:4bb3ac6acb7bb466cdd1114d2c827197bdbfe87c651c17880d44e179c6d91610
+  2018_hungarian_gp:
+    round: 12
+    group: dry_test
+    rows: 1233
+    representative_rows: 1030
+    source_manifest_sha256: sha256:b33cef6696b9758e22739735af8fcb12aebbe251783863b87cd4d6cd41d9d71b
+  2018_japanese_gp:
+    round: 17
+    group: dry_train
+    rows: 977
+    representative_rows: 772
+    source_manifest_sha256: sha256:4990fb06a79acc9de9357251ef0fb768ccc8937fd379fb370af2f3c3478da059
+  2018_mexican_gp:
+    round: 19
+    group: dry_train
+    rows: 1245
+    representative_rows: 1043
+    source_manifest_sha256: sha256:3698372c65fc2db321f9d42ca52608f9c69131fdff28173d4cff10dcce8fd3e8
+  2018_monaco_gp:
+    round: 6
+    group: wet
+    rows: 1516
+    representative_rows: 1323
+    source_manifest_sha256: sha256:fb1ebea3d802c1ad3cacc5c4c6c1b5c86eeec36aafafacbb99db77e5cf01ac67
+  2018_russian_gp:
+    round: 16
+    group: dry_test
+    rows: 948
+    representative_rows: 868
+    source_manifest_sha256: sha256:e90ff62ad46c88b9c0fa4b8978c252c141266062de501ef9e6d97742293d5abc
+  2018_singapore_gp:
+    round: 15
+    group: dry_train
+    rows: 1146
+    representative_rows: 1021
+    source_manifest_sha256: sha256:fa4572b7901d3548c6c70af49880a0036b12ba2ab44b78cad3f966cc9f5a1df9
+  2018_spanish_gp:
+    round: 5
+    group: wet
+    rows: 1021
+    representative_rows: 830
+    source_manifest_sha256: sha256:83024ddc802f6000a2fada74ebb03e1790b5f4ff6b38776f14ae2068b7b564eb
+  2018_united_states_gp:
+    round: 18
+    group: dry_train
+    rows: 932
+    representative_rows: 795
+    source_manifest_sha256: sha256:08b896680520f61ea0c48a1a86b709791291d0528af0f028ee0f65e74f62667d

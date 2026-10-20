@@ -2,12 +2,12 @@ dataset_id: 2023_british_gp_fastf1_v1
 event: 2023_british_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:56:27Z'
+retrieved_utc: '2026-10-17T17:38:36Z'
 session_key: 2023/round 10/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2023_british_gp/laps.parquet
-  sha256: sha256:e63dea837e791d2bb701e21355b25777d48c33fcd1c1eb0d9c314450d89cdbd4
+  sha256: sha256:e5d0929d52232b30525abe7e173e22e218ce15856f8106a3897d07299f52d354
   rows: 971
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2023_british_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2023_british_gp/positions.parquet
+  sha256: sha256:a2fe75a2b6e747afee89a2bbc17b79bf74b547bb35a7de2d180904b4add9f152
+  rows: 696180
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2023_british_gp/track_outline.parquet
+  sha256: sha256:9382676c7d84083049b302a186001e66e047dffc779d8af4e9afe4f496428223
+  rows: 349
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 20 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

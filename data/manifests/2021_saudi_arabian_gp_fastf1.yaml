@@ -2,12 +2,12 @@ dataset_id: 2021_saudi_arabian_gp_fastf1_v1
 event: 2021_saudi_arabian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-17T15:15:22Z'
+retrieved_utc: '2026-10-17T17:00:04Z'
 session_key: 2021/round 21/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2021_saudi_arabian_gp/laps.parquet
-  sha256: sha256:d1c060a1be690bca2b6a2f2f9111a977a7374b05329c01feb8061a5eb7a59556
+  sha256: sha256:348c3b8bb666743761dec6b72bbe812f98bdb2f6cd784e3c8cce919183ea5b5e
   rows: 845
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2021_saudi_arabian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2021_saudi_arabian_gp/positions.parquet
+  sha256: sha256:33b62dfec99a31c7d6f205fb4c9e91e7f6de69d48b7e4f68c40456d7f40a9325
+  rows: 1059160
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2021_saudi_arabian_gp/track_outline.parquet
+  sha256: sha256:40e0892642294c7772daab165981c4b8d77a9b8ac400b793974f6e0956392b1b
+  rows: 426
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 21 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

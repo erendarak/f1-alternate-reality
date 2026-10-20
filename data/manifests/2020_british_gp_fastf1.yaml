@@ -2,12 +2,12 @@ dataset_id: 2020_british_gp_fastf1_v1
 event: 2020_british_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:08:30Z'
+retrieved_utc: '2026-10-17T16:45:57Z'
 session_key: 2020/round 4/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2020_british_gp/laps.parquet
-  sha256: sha256:1c72c7c96ffea3951beca7619609dedb8b63f98ddf143dc64df9f27743804ae9
+  sha256: sha256:21236b98f3bbecda3aa7d27b093eee78eea4c4181f98553e0e314f23414f83bc
   rows: 897
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2020_british_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2020_british_gp/positions.parquet
+  sha256: sha256:78510f21474d8451716024f295e146c8ea5e76e7d83d8c102f27064ba960b623
+  rows: 700620
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2020_british_gp/track_outline.parquet
+  sha256: sha256:3159247115ae95005a518791330b41e135647548dc678f3646616ab3e3f30154
+  rows: 411
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 32 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

@@ -2,12 +2,12 @@ dataset_id: 2018_azerbaijan_gp_fastf1_v1
 event: 2018_azerbaijan_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:17:08Z'
+retrieved_utc: '2026-10-17T17:30:37Z'
 session_key: 2018/round 4/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2018_azerbaijan_gp/laps.parquet
-  sha256: sha256:bd4839653b2e8a5c79ae2ac46f17f5b7020f5df637549fda6f0d032390de48b6
+  sha256: sha256:dd211501e2b4b75bceea0993bb55cda77806b7b1ab7c7b59356c776fb93f1922
   rows: 848
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2018_azerbaijan_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2018_azerbaijan_gp/positions.parquet
+  sha256: sha256:3c1edaeb67689ff58c51cba65d9e5426e217f133f10a94ad03e556feac25575f
+  rows: 459000
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2018_azerbaijan_gp/track_outline.parquet
+  sha256: sha256:6cec09749e5d4e7193c2ab624cc3744f08f5d41a5bfe34392cff63cc7051a313
+  rows: 359
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 25 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)
@@ -116,3 +139,4 @@ missingness_notes:
 - lap table `tyre_life_laps` missing in 25 rows
 - lap table `position` missing in 7 rows
 - lap table `speed_trap_kph` missing in 7 rows
+- lap table `compound_name` missing in 14 rows

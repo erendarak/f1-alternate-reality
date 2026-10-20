@@ -2,12 +2,12 @@ dataset_id: 2022_french_gp_fastf1_v1
 event: 2022_french_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:02:23Z'
+retrieved_utc: '2026-10-17T17:32:39Z'
 session_key: 2022/round 12/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2022_french_gp/laps.parquet
-  sha256: sha256:be8ec67c9a48a31ec6615c94586a696a7b27e3a5fa366e430c39623b38aca7d8
+  sha256: sha256:9d8d634dad5aeed5e6f5b90a1b6d053220d49b0a83f1d5d288d3cbb5db514648
   rows: 958
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2022_french_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2022_french_gp/positions.parquet
+  sha256: sha256:b618e4fa9180e0db4c0f1c89044f95a1c051b3d1d3ee4ec82be89f39fa8964f9
+  rows: 581840
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2022_french_gp/track_outline.parquet
+  sha256: sha256:247485fb5c14d5353bf56933c85c4a70bcf4d149fc29802dd9a7e93f511fe3c0
+  rows: 380
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 47 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

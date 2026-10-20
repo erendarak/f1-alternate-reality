@@ -2,12 +2,12 @@ dataset_id: 2021_bahrain_gp_fastf1_v1
 event: 2021_bahrain_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:48:14Z'
+retrieved_utc: '2026-10-17T16:52:12Z'
 session_key: 2021/round 1/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2021_bahrain_gp/laps.parquet
-  sha256: sha256:da84847f20d3574f68c01f604621bc34e4494aa8847e85ed9e39e844e5a8ad3d
+  sha256: sha256:3e79cac361adc11a63f2ecf1d17775173cdf57033f4ef3f010dcb01d91ebf073
   rows: 1027
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2021_bahrain_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2021_bahrain_gp/positions.parquet
+  sha256: sha256:0bf23349e4c5055eb8f32aebfa10f55c0ed6476dca4d0074d992d0813581f4be
+  rows: 726620
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2021_bahrain_gp/track_outline.parquet
+  sha256: sha256:c36dbd06af1f1bdd6d1cb83af1d2cab77128ae3658209db58a8fdcd102f79c44
+  rows: 433
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 52 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

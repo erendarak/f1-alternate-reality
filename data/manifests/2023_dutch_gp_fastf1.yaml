@@ -2,12 +2,12 @@ dataset_id: 2023_dutch_gp_fastf1_v1
 event: 2023_dutch_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:57:08Z'
+retrieved_utc: '2026-10-17T17:39:28Z'
 session_key: 2023/round 13/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2023_dutch_gp/laps.parquet
-  sha256: sha256:78be6f5dcdadb61eda53b425a7459d158783de19e44bb81832ad5a382c17ad69
+  sha256: sha256:e4aa960cf61733b5640501031b4b74d74bd755ff0a7c8c8826c9f95d31ff71a2
   rows: 1343
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2023_dutch_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2023_dutch_gp/positions.parquet
+  sha256: sha256:8b160cb6610c27a99d2a1d9f7e085a23eb62846d7c2675b4f04f8d2a54745969
+  rows: 956200
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2023_dutch_gp/track_outline.parquet
+  sha256: sha256:078a32fa1bf980c77f6ebed01033d90f5f4684e838a73922ecaca07af268a776
+  rows: 300
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 30 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

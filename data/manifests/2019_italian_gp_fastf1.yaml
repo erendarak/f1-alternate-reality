@@ -2,7 +2,7 @@ dataset_id: 2019_italian_gp_fastf1_v1
 event: 2019_italian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:14:38Z'
+retrieved_utc: '2026-10-17T16:42:54Z'
 session_key: 2019/round 14/R
 license_review_status: research_only
 files:
@@ -99,6 +99,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2019_italian_gp/positions.parquet
+  sha256: sha256:3c1723bfdf9edfc03ef862b3f18d23553c8735485f8cab0ac12853c41eb15317
+  rows: 450320
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2019_italian_gp/track_outline.parquet
+  sha256: sha256:fb62a168e0238dffe16e6d7b0649989a94014b32bdfc2a56aef6281816cc67ca
+  rows: 284
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 16 lap 37 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

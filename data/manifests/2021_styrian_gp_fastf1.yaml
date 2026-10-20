@@ -2,12 +2,12 @@ dataset_id: 2021_styrian_gp_fastf1_v1
 event: 2021_styrian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:06:48Z'
+retrieved_utc: '2026-10-17T16:54:26Z'
 session_key: 2021/round 8/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2021_styrian_gp/laps.parquet
-  sha256: sha256:1f329c38bad9552aec1da74c12f728f0706dff353c60f2372974c3aef37d7d3d
+  sha256: sha256:226875f8c53277cd151ce943b6b6cb0e45211134ab62fff72e8ab4ce08d110f9
   rows: 1296
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2021_styrian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2021_styrian_gp/positions.parquet
+  sha256: sha256:eb855bee49e3de49e7e4c86aeb4c6cf8187a110405e8718dd6be1cfa0a4f9850
+  rows: 658580
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2021_styrian_gp/track_outline.parquet
+  sha256: sha256:ab8a30d848b8ff787a433d5d463bdb9d952319998df648acb3de6c3b31ee45d1
+  rows: 320
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 33 lap 31 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

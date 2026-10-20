@@ -29,7 +29,14 @@ first-lap risk, FCY phases); all rates are editorial (D-024).
 from dataclasses import dataclass
 from enum import StrEnum
 
-from f1ar.domain.race_state import CarState, PaceMode, RacecraftIntent, RacePhase, RaceSetup
+from f1ar.domain.race_state import (
+    CarState,
+    PaceMode,
+    RacecraftIntent,
+    RacePhase,
+    RaceSetup,
+    start_slot,
+)
 from f1ar.simulation.rng_streams import uniform
 
 
@@ -95,7 +102,7 @@ def lap_incident(
     risk *= 1.0 + setup.weather.wet_incident_factor * wetness
     first = p.first_lap_crash_multiplier if lap == 1 else 1.0
     if lap == 1 and p.first_lap_grid_profile:  # W3: midfield starts are riskier
-        slot = setup.driver(car.driver_id).grid_position
+        slot = start_slot(setup.driver(car.driver_id).grid_position)
         profile = p.first_lap_grid_profile
         first *= profile[min(max(slot, 1), len(profile)) - 1]
     crash = p.crash_per_lap * risk * first

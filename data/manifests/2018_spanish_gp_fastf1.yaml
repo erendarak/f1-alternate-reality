@@ -2,12 +2,12 @@ dataset_id: 2018_spanish_gp_fastf1_v1
 event: 2018_spanish_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:17:21Z'
+retrieved_utc: '2026-10-17T17:30:44Z'
 session_key: 2018/round 5/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2018_spanish_gp/laps.parquet
-  sha256: sha256:f6a91e09f31d9b58d6db52376fe1a7574c22ba9c1eea2309ecc8a0e82fd984aa
+  sha256: sha256:6839c9206b7093b68cf5cf55381eca03be2decc4408a4d31c34d42a05f63e592
   rows: 1021
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2018_spanish_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2018_spanish_gp/positions.parquet
+  sha256: sha256:edb8b51a0abcf36322e01646313bdca6dd693b53dd620bbb3fc03e16a7610e2d
+  rows: 426120
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2018_spanish_gp/track_outline.parquet
+  sha256: sha256:31f54c14d46e55689d5f653fb13026896bac58ef7162228e7d0bc31a1df59812
+  rows: 272
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 28 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)
@@ -116,3 +139,4 @@ missingness_notes:
 - lap table `tyre_life_laps` missing in 18 rows
 - lap table `position` missing in 4 rows
 - lap table `speed_trap_kph` missing in 4 rows
+- lap table `compound_name` missing in 18 rows

@@ -2,12 +2,12 @@ dataset_id: 2022_monaco_gp_fastf1_v1
 event: 2022_monaco_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:01:02Z'
+retrieved_utc: '2026-10-17T17:03:30Z'
 session_key: 2022/round 7/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2022_monaco_gp/laps.parquet
-  sha256: sha256:78a3444670fa61d82c658a7452bbd2c215ffcce555eea207b7b11b209a410b9c
+  sha256: sha256:5554dc3c9c3bd022245fe19efc73d1965c3acdea95421d27fa8c8326c153e781
   rows: 1179
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2022_monaco_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2022_monaco_gp/positions.parquet
+  sha256: sha256:864bc47f86410c340fc7ff147bfd6bb122720c444775ed30fb30eb883cd382c6
+  rows: 1128200
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2022_monaco_gp/track_outline.parquet
+  sha256: sha256:d0368e2d518258405bf4359d04b540e900dcfa995ee6b20020aeb9c519452621
+  rows: 306
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 11 lap 59 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)
@@ -115,3 +138,4 @@ missingness_notes:
 - lap table `tyre_life_laps` missing in 161 rows
 - lap table `position` missing in 1 rows
 - lap table `speed_trap_kph` missing in 1 rows
+- lap table `compound_name` missing in 35 rows

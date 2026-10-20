@@ -2,7 +2,7 @@ dataset_id: 2019_french_gp_fastf1_v1
 event: 2019_french_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:13:18Z'
+retrieved_utc: '2026-10-17T16:41:19Z'
 session_key: 2019/round 8/R
 license_review_status: research_only
 files:
@@ -99,6 +99,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2019_french_gp/positions.parquet
+  sha256: sha256:3c34e4aeeff94cc104e751554dd37af055171fe767658dc38eadc15decdb5495
+  rows: 488000
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2019_french_gp/track_outline.parquet
+  sha256: sha256:7b8e52316b765bad2ab2e5d3159adba1471dcd82fa30ac47b00e9ffd7c994942
+  rows: 319
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 14 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

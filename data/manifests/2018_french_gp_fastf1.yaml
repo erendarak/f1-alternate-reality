@@ -2,12 +2,12 @@ dataset_id: 2018_french_gp_fastf1_v1
 event: 2018_french_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:18:00Z'
+retrieved_utc: '2026-10-17T17:31:03Z'
 session_key: 2018/round 8/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2018_french_gp/laps.parquet
-  sha256: sha256:8216ebcfc7b41f98625a71a5475cc6c1653edb7d8dde609aefd7dde47c2a5f0c
+  sha256: sha256:2e7b4596ffad045692d08019c24b9b387344204b2675f4076db383d26e44b50f
   rows: 920
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2018_french_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2018_french_gp/positions.parquet
+  sha256: sha256:5eefc194bb7239daeecfdbd22cda44bc46217fe5f71a5ee60fccca2ccf6fa6ff
+  rows: 411860
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2018_french_gp/track_outline.parquet
+  sha256: sha256:9bb7fe959ad4977e7dcd6af3f22f9168a83717dc7c79d9cde34c23067f56565e
+  rows: 324
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 24 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)
@@ -116,3 +139,4 @@ missingness_notes:
 - lap table `tyre_life_laps` missing in 14 rows
 - lap table `position` missing in 3 rows
 - lap table `speed_trap_kph` missing in 3 rows
+- lap table `compound_name` missing in 14 rows

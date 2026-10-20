@@ -1,0 +1,33 @@
+model_name: racecraft
+model_version: v1
+kind: ML on lap-level encounters (W2 noise convolved) with ridge driver terms; lap-1 gains; launch spread
+  by simulation
+source_type: estimated_from_data (lap-1 grid profile editorial)
+artifact: configs/calibration/racecraft_2022_v1.json
+artifact_sha256: sha256:66aeb67963830e69abdfa0a7951bb8687467cda3026ece0cfacaaf2f5f537707
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2022_v1.yaml
+training_dataset_content_sha256: sha256:6c03eeb66580351aaa8d2fc4a24b1ab045943c91552c7ed4b08440445ad4121a
+training_races:
+- 2022_abu_dhabi_gp
+- 2022_australian_gp
+- 2022_austrian_gp
+- 2022_azerbaijan_gp
+- 2022_bahrain_gp
+- 2022_belgian_gp
+- 2022_british_gp
+- 2022_canadian_gp
+- 2022_dutch_gp
+- 2022_italian_gp
+- 2022_mexico_city_gp
+- 2022_miami_gp
+- 2022_sao_paulo_gp
+- 2022_spanish_gp
+- 2022_united_states_gp
+metrics:
+  check:
+    dry_train_passes_sim: 70.48
+    dry_train_passes_real: 70.17
+    dry_train_lap1_passes_real: 12.08
+  held_out_check: EXP-013
+status: fitted for 2022 (H2a, D-054); held-out check EXP-023

@@ -1,0 +1,40 @@
+model_name: race_events
+model_version: v1
+kind: rates and shrunk team multipliers from 2021 timing; 2 values fitted by simulation
+source_type: estimated_from_data
+artifact: configs/calibration/race_events_2021_v1.json
+artifact_sha256: sha256:1cf78c038ed2a7d4b40e89d94ee0f2f0b739f36737fc05c7b22fa61628a38f2c
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2021_v1.yaml
+training_dataset_content_sha256: sha256:ae5da476cd96588a11be9a59b08c588ba6c68f0761ee96a376c1e85ea3cbc4bc
+training_races:
+- 2021_austrian_gp
+- 2021_azerbaijan_gp
+- 2021_bahrain_gp
+- 2021_british_gp
+- 2021_dutch_gp
+- 2021_emilia_romagna_gp
+- 2021_french_gp
+- 2021_hungarian_gp
+- 2021_italian_gp
+- 2021_mexico_city_gp
+- 2021_monaco_gp
+- 2021_portuguese_gp
+- 2021_qatar_gp
+- 2021_russian_gp
+- 2021_sao_paulo_gp
+- 2021_saudi_arabian_gp
+- 2021_spanish_gp
+- 2021_styrian_gp
+- 2021_turkish_gp
+- 2021_united_states_gp
+metrics:
+  dry_train_check:
+    retirements_per_race: 2.6
+    red_flags_per_race: 0.323
+    safety_cars_per_race: 1.031
+    vscs_per_race: 0.815
+    penalties_per_race: 1.215
+    penalties_per_race_after_scale: 1.385
+  held_out_check: EXP-011
+status: fitted for 2021 (H2a, D-054); held-out check EXP-023

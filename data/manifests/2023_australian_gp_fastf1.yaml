@@ -2,12 +2,12 @@ dataset_id: 2023_australian_gp_fastf1_v1
 event: 2023_australian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:54:48Z'
+retrieved_utc: '2026-10-17T17:35:52Z'
 session_key: 2023/round 3/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2023_australian_gp/laps.parquet
-  sha256: sha256:d3d31f0bfd1fcfa64ad8055f7c50d8fb441c6dd1c9592c028d9be85e93e12b7c
+  sha256: sha256:640d9a379203b5ed98f78fc6aaeae27879001b5bb9a69957e6c084ff6f1ab7d3
   rows: 1003
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2023_australian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2023_australian_gp/positions.parquet
+  sha256: sha256:ff967332a9133494702a2fbdfcb0a993d8d0b29648f04b09feb89a18edaa4ddf
+  rows: 1008120
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2023_australian_gp/track_outline.parquet
+  sha256: sha256:56c9af8354cf49fc459fe74428728d47aed44af8582589455b5bfe3bf74cf712
+  rows: 311
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 27 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

@@ -2,12 +2,12 @@ dataset_id: 2025_sao_paulo_gp_fastf1_v1
 event: 2025_sao_paulo_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:53:22Z'
+retrieved_utc: '2026-10-19T20:15:21Z'
 session_key: 2025/round 21/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2025_sao_paulo_gp/laps.parquet
-  sha256: sha256:cb69c02c4d49e3d1a7e0dc72ddb3e3299c0eb664cfb8537ada972f3342d5a9c6
+  sha256: sha256:1dabf9b038a4d53168baf714d7c7f68e90d0b6de54cdcfe69d00fd58a43fc2bd
   rows: 1251
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2025_sao_paulo_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2025_sao_paulo_gp/positions.parquet
+  sha256: sha256:ba6c65efd663b3a610e8cb59a7f49751c9bd2a7dd98b950d018cf52f16af09db
+  rows: 681440
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2025_sao_paulo_gp/track_outline.parquet
+  sha256: sha256:c6b759da47b12dff91d85809b378940189a842b92d3294ef351e79489928a301
+  rows: 278
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 4 lap 39 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

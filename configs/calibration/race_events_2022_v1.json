@@ -1,0 +1,241 @@
+{
+ "label": "2022 race events (W4, D-042)",
+ "events": [
+  "2022_bahrain_gp",
+  "2022_australian_gp",
+  "2022_miami_gp",
+  "2022_spanish_gp",
+  "2022_canadian_gp",
+  "2022_british_gp",
+  "2022_austrian_gp",
+  "2022_belgian_gp",
+  "2022_dutch_gp",
+  "2022_united_states_gp",
+  "2022_sao_paulo_gp",
+  "2022_abu_dhabi_gp",
+  "2022_azerbaijan_gp",
+  "2022_italian_gp",
+  "2022_mexico_city_gp",
+  "2022_emilia_romagna_gp",
+  "2022_monaco_gp",
+  "2022_hungarian_gp",
+  "2022_singapore_gp"
+ ],
+ "dry_events": [
+  "2022_bahrain_gp",
+  "2022_australian_gp",
+  "2022_miami_gp",
+  "2022_spanish_gp",
+  "2022_canadian_gp",
+  "2022_british_gp",
+  "2022_austrian_gp",
+  "2022_belgian_gp",
+  "2022_dutch_gp",
+  "2022_united_states_gp",
+  "2022_sao_paulo_gp",
+  "2022_abu_dhabi_gp",
+  "2022_azerbaijan_gp",
+  "2022_italian_gp",
+  "2022_mexico_city_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": 0.0776,
+  "slow_stop_scale_s": 4.0,
+  "stops": 490,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {
+  "alfa_2022": {
+   "pit_crew_offset_s": 0.361,
+   "pit_slow_multiplier": 1.2,
+   "stops": 38,
+   "raw_median_rel_s": 0.551,
+   "raw_slow_share": 0.105
+  },
+  "alphatauri_2022": {
+   "pit_crew_offset_s": -0.181,
+   "pit_slow_multiplier": 1.567,
+   "stops": 55,
+   "raw_median_rel_s": -0.247,
+   "raw_slow_share": 0.145
+  },
+  "alpine_2022": {
+   "pit_crew_offset_s": -0.021,
+   "pit_slow_multiplier": 0.764,
+   "stops": 43,
+   "raw_median_rel_s": -0.031,
+   "raw_slow_share": 0.047
+  },
+  "aston_martin_2022": {
+   "pit_crew_offset_s": 0.013,
+   "pit_slow_multiplier": 0.715,
+   "stops": 48,
+   "raw_median_rel_s": 0.018,
+   "raw_slow_share": 0.042
+  },
+  "ferrari_2022": {
+   "pit_crew_offset_s": -0.319,
+   "pit_slow_multiplier": 0.58,
+   "stops": 44,
+   "raw_median_rel_s": -0.464,
+   "raw_slow_share": 0.023
+  },
+  "haas_2022": {
+   "pit_crew_offset_s": 0.522,
+   "pit_slow_multiplier": 1.799,
+   "stops": 44,
+   "raw_median_rel_s": 0.759,
+   "raw_slow_share": 0.182
+  },
+  "mclaren_2022": {
+   "pit_crew_offset_s": -0.151,
+   "pit_slow_multiplier": 0.672,
+   "stops": 53,
+   "raw_median_rel_s": -0.207,
+   "raw_slow_share": 0.038
+  },
+  "mercedes_2022": {
+   "pit_crew_offset_s": -0.105,
+   "pit_slow_multiplier": 0.869,
+   "stops": 49,
+   "raw_median_rel_s": -0.149,
+   "raw_slow_share": 0.061
+  },
+  "red_bull_2022": {
+   "pit_crew_offset_s": -0.449,
+   "pit_slow_multiplier": 0.755,
+   "stops": 61,
+   "raw_median_rel_s": -0.596,
+   "raw_slow_share": 0.049
+  },
+  "williams_2022": {
+   "pit_crew_offset_s": 0.217,
+   "pit_slow_multiplier": 1.111,
+   "stops": 55,
+   "raw_median_rel_s": 0.296,
+   "raw_slow_share": 0.091
+  }
+ },
+ "reliability": {
+  "field_retirements_per_start": 0.1605,
+  "teams": {
+   "alfa_2022": {
+    "failure_multiplier": 1.392,
+    "retirements": 10,
+    "starts": 38
+   },
+   "alphatauri_2022": {
+    "failure_multiplier": 1.09,
+    "retirements": 7,
+    "starts": 38
+   },
+   "alpine_2022": {
+    "failure_multiplier": 1.09,
+    "retirements": 7,
+    "starts": 38
+   },
+   "aston_martin_2022": {
+    "failure_multiplier": 0.99,
+    "retirements": 6,
+    "starts": 38
+   },
+   "ferrari_2022": {
+    "failure_multiplier": 1.09,
+    "retirements": 7,
+    "starts": 38
+   },
+   "haas_2022": {
+    "failure_multiplier": 0.99,
+    "retirements": 6,
+    "starts": 38
+   },
+   "mclaren_2022": {
+    "failure_multiplier": 0.789,
+    "retirements": 4,
+    "starts": 38
+   },
+   "mercedes_2022": {
+    "failure_multiplier": 0.689,
+    "retirements": 3,
+    "starts": 38
+   },
+   "red_bull_2022": {
+    "failure_multiplier": 0.889,
+    "retirements": 5,
+    "starts": 38
+   },
+   "williams_2022": {
+    "failure_multiplier": 0.99,
+    "retirements": 6,
+    "starts": 38
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.00551,
+  "sc_share": 0.6,
+  "count": 5,
+  "race_laps": 907,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 3,
+  "races": 19,
+  "per_race": 0.1579
+ },
+ "penalties": {
+  "counts": {
+   "collision": 16,
+   "other": 18,
+   "pit_speeding": 4
+  },
+  "collision_per_pass": 0.020573,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.008282,
+  "other_per_car_lap": 0.001194,
+  "passes": 1199,
+  "raw": {
+   "collision_per_pass": 0.01334,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.00537,
+   "other_per_car_lap": 0.000774
+  },
+  "scale": 1.5422,
+  "scale_note": "x1.542: simulated dry_train 1.57 vs real 2.42 per race"
+ },
+ "fitted": {
+  "risk_scale": 1.7857,
+  "red_flag_per_crash": 0.0632,
+  "fit": {
+   "races": [
+    "2022_bahrain_gp",
+    "2022_australian_gp",
+    "2022_miami_gp",
+    "2022_spanish_gp",
+    "2022_canadian_gp",
+    "2022_british_gp",
+    "2022_austrian_gp",
+    "2022_belgian_gp",
+    "2022_dutch_gp",
+    "2022_united_states_gp",
+    "2022_sao_paulo_gp",
+    "2022_abu_dhabi_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 1.4,
+   "sim_failures_per_race": 0.667,
+   "real_retirements_per_race": 3.167,
+   "target_red_flags_per_race": 0.1579
+  },
+  "check": {
+   "retirements_per_race": 3.1,
+   "red_flags_per_race": 0.117,
+   "safety_cars_per_race": 0.983,
+   "vscs_per_race": 0.717,
+   "penalties_per_race": 1.567,
+   "penalties_per_race_after_scale": 2.7
+  }
+ }
+}

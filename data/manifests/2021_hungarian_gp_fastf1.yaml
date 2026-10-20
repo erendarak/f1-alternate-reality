@@ -2,12 +2,12 @@ dataset_id: 2021_hungarian_gp_fastf1_v1
 event: 2021_hungarian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:07:29Z'
+retrieved_utc: '2026-10-17T16:55:22Z'
 session_key: 2021/round 11/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2021_hungarian_gp/laps.parquet
-  sha256: sha256:0d1447aaa9666aa4fc97dc67d05dcc859c8b854953587693151b4638d2d335a4
+  sha256: sha256:4595ccc8d5014c96c5825ae1555e01d51b56e44955b769a02fbf8bdc4c3aa8ef
   rows: 985
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2021_hungarian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2021_hungarian_gp/positions.parquet
+  sha256: sha256:afe911276bdfa41294e1c710af40e1d1518e913cab3bee64fe82a626fcff70d2
+  rows: 1043760
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2021_hungarian_gp/track_outline.parquet
+  sha256: sha256:a60c3dcf0f56f326ca572e88b164ac12a0986d2ad935975ab984abdb0f299d48
+  rows: 378
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 31 lap 48 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

@@ -2,12 +2,12 @@ dataset_id: 2023_italian_gp_fastf1_v1
 event: 2023_italian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:57:22Z'
+retrieved_utc: '2026-10-17T17:39:43Z'
 session_key: 2023/round 14/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2023_italian_gp/laps.parquet
-  sha256: sha256:7e80770b08a5493b242c0c85c79cfadfd65343dceb1ae2d8682771ac7fa3efdf
+  sha256: sha256:9fdbf745f19a2f7b1287b1ad84415e38c00fe3951c7d73b78f914218cc300f20
   rows: 957
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2023_italian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2023_italian_gp/positions.parquet
+  sha256: sha256:628e32cb4ccb8c0093c11da149e32905ce7f17e576adcf28dc08fb426516ab83
+  rows: 746600
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2023_italian_gp/track_outline.parquet
+  sha256: sha256:9a6b7d24402ccebdeb6c8fdfdac1c90df7c9ff4ffe4fc0a90d14139c625c502a
+  rows: 321
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 43 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

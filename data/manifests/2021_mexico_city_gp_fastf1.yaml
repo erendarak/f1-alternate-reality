@@ -2,12 +2,12 @@ dataset_id: 2021_mexico_city_gp_fastf1_v1
 event: 2021_mexico_city_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-17T15:14:41Z'
+retrieved_utc: '2026-10-17T16:59:01Z'
 session_key: 2021/round 18/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2021_mexico_city_gp/laps.parquet
-  sha256: sha256:0f18c67e96dc2c96414e4e9bf1d88fa13997343eb18485a8119e6c517c426402
+  sha256: sha256:5da0b81aae9e14b3c35024b267a49e089868a59f996d3e4fbcf06b95c71a17b3
   rows: 1261
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2021_mexico_city_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2021_mexico_city_gp/positions.parquet
+  sha256: sha256:9cf1624dcdc66de46cda8da3d26973e919446155e08b62aabcf7c8426a06e1e0
+  rows: 897020
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2021_mexico_city_gp/track_outline.parquet
+  sha256: sha256:1b63978b38af2c2196d4d6c41876be121685d6d06745f930de588668bb0d74d3
+  rows: 367
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 33 lap 48 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

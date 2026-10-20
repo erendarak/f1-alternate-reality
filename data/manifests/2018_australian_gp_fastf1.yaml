@@ -2,12 +2,12 @@ dataset_id: 2018_australian_gp_fastf1_v1
 event: 2018_australian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:16:28Z'
+retrieved_utc: '2026-10-17T17:30:04Z'
 session_key: 2018/round 1/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2018_australian_gp/laps.parquet
-  sha256: sha256:82417e8d37d816896c8a74cfd312a1c4b3e4e0bc4ed6c738aaac8b647d7b820f
+  sha256: sha256:e7827c04da7d4fdc4780762ac12e00cdb82a2c4a1cd3b54f7847019e9ebf9e99
   rows: 940
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2018_australian_gp/results.parquet
@@ -88,8 +89,8 @@ files:
   source_type: historical_verified
   description: race control messages
 - relative_path: data/processed/2018_australian_gp/corners.parquet
-  sha256: sha256:e7a1f191c73848199bd9fc5ed3b14be34f2e4e010692a2f6fdc85203f4bc79be
-  rows: 14
+  sha256: sha256:c37aee02b9528f27c7476e6db0305185b4d82ce9e436ccc95977d4c5c92aad3f
+  rows: 0
   columns:
   - number
   - letter
@@ -117,3 +118,4 @@ missingness_notes:
 - lap table `position` missing in 1 rows
 - lap table `track_status` missing in 83 rows
 - lap table `speed_trap_kph` missing in 1 rows
+- lap table `compound_name` missing in 20 rows

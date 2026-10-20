@@ -2,12 +2,12 @@ dataset_id: 2022_dutch_gp_fastf1_v1
 event: 2022_dutch_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:03:12Z'
+retrieved_utc: '2026-10-17T17:33:18Z'
 session_key: 2022/round 15/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2022_dutch_gp/laps.parquet
-  sha256: sha256:8f261caa0208fa8bab352e26ff4cb2b5f406b5ae1d22d9374a406421349d36f1
+  sha256: sha256:5ab2ec1e360d54eded289a9696c1161fafec825748662783f91cd46bab82b35b
   rows: 1392
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2022_dutch_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2022_dutch_gp/positions.parquet
+  sha256: sha256:fcab850ca0858016ae2a6dfc4bd786b3cf7662aceb991e334f9192ec55052f80
+  rows: 745080
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2022_dutch_gp/track_outline.parquet
+  sha256: sha256:1be7412dcc941699d37c557ba2b71d575c9df1d4e1552f7701c48b5181c21fa8
+  rows: 293
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 25 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

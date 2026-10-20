@@ -14,6 +14,7 @@ import pandas as pd
 from pydantic import BaseModel, ConfigDict
 
 from f1ar.data.fastf1_adapter import NEUTRALISED_STATUSES, TRACK_STATUS_NAMES, RaceTables
+from f1ar.data.status import is_finisher, is_running_finish
 from f1ar.domain.identities import RaceRoster
 
 Status = Literal["PASS", "WARN", "FAIL"]
@@ -236,7 +237,7 @@ def build_quality_report(
     explained, unexplained = [], []
     for n, rows, classified in lap_count_diff:
         status = res[n]["status"]
-        finished = status in ("Finished", "Lapped", "Disqualified")
+        finished = is_finisher(status)
         retired_lap = not finished and rows == classified + 1
         if retired_lap or status == "Disqualified":
             explained.append((n, rows, classified, status))
@@ -263,7 +264,7 @@ def build_quality_report(
         )
     )
     short = results[results["laps"] < total]
-    non_finishers = results[~results["status"].isin(["Finished", "Lapped"])]
+    non_finishers = results[~results["status"].map(is_running_finish).astype(bool)]
     checks.append(
         _check(
             "classification",

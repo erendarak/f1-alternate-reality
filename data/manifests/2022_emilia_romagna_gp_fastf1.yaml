@@ -2,12 +2,12 @@ dataset_id: 2022_emilia_romagna_gp_fastf1_v1
 event: 2022_emilia_romagna_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:00:12Z'
+retrieved_utc: '2026-10-17T17:02:33Z'
 session_key: 2022/round 4/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2022_emilia_romagna_gp/laps.parquet
-  sha256: sha256:0c6854159353555a2d7b78e2265129bab84790ba00eb20092b043caf0e24e98b
+  sha256: sha256:ead638f9dd482f18a61e3121f8ed7e3886771afde94d82495dcf80321542a4bd
   rows: 1132
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2022_emilia_romagna_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2022_emilia_romagna_gp/positions.parquet
+  sha256: sha256:875700d1c2fd7d0bfd6db4a82fa32a2c96e6303ba2aacbbf4ad6a947169281c1
+  rows: 740820
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2022_emilia_romagna_gp/track_outline.parquet
+  sha256: sha256:6f4994be3bb0fc052bb64c4107402292a0d8e642b8866f25d8c7b783bc513997
+  rows: 316
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 31 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

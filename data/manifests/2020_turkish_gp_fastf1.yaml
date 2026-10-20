@@ -2,12 +2,12 @@ dataset_id: 2020_turkish_gp_fastf1_v1
 event: 2020_turkish_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:10:47Z'
+retrieved_utc: '2026-10-17T16:50:17Z'
 session_key: 2020/round 14/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2020_turkish_gp/laps.parquet
-  sha256: sha256:d1746b8ee19384090b947cf488ad9872a2917dd291961d4a35e8376eeb052579
+  sha256: sha256:860d65eec6f567d0dec183467cb4f5d0d116b6711d1d6a3914bbec73e41af00a
   rows: 1077
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2020_turkish_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2020_turkish_gp/positions.parquet
+  sha256: sha256:f08fc5e37ed2841f0097d8240a1d1a99d27fdcb9a2b5ade9a9c22f86f97272f8
+  rows: 768380
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2020_turkish_gp/track_outline.parquet
+  sha256: sha256:cab514034b4370258b9452d63d8e9ca203b482f20105b0a35b4c73f425c91ad0
+  rows: 475
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 29 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

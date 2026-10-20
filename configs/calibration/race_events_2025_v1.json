@@ -1,0 +1,254 @@
+{
+ "label": "2025 race events (W4, D-042)",
+ "events": [
+  "2025_chinese_gp",
+  "2025_japanese_gp",
+  "2025_saudi_arabian_gp",
+  "2025_miami_gp",
+  "2025_emilia_romagna_gp",
+  "2025_spanish_gp",
+  "2025_canadian_gp",
+  "2025_austrian_gp",
+  "2025_hungarian_gp",
+  "2025_dutch_gp",
+  "2025_azerbaijan_gp",
+  "2025_singapore_gp",
+  "2025_united_states_gp",
+  "2025_sao_paulo_gp",
+  "2025_qatar_gp",
+  "2025_bahrain_gp",
+  "2025_monaco_gp",
+  "2025_italian_gp",
+  "2025_mexico_city_gp",
+  "2025_abu_dhabi_gp",
+  "2025_australian_gp",
+  "2025_british_gp",
+  "2025_belgian_gp"
+ ],
+ "dry_events": [
+  "2025_chinese_gp",
+  "2025_japanese_gp",
+  "2025_saudi_arabian_gp",
+  "2025_miami_gp",
+  "2025_emilia_romagna_gp",
+  "2025_spanish_gp",
+  "2025_canadian_gp",
+  "2025_austrian_gp",
+  "2025_hungarian_gp",
+  "2025_dutch_gp",
+  "2025_azerbaijan_gp",
+  "2025_singapore_gp",
+  "2025_united_states_gp",
+  "2025_sao_paulo_gp",
+  "2025_qatar_gp",
+  "2025_bahrain_gp",
+  "2025_monaco_gp",
+  "2025_italian_gp",
+  "2025_mexico_city_gp",
+  "2025_abu_dhabi_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": 0.0756,
+  "slow_stop_scale_s": 6.01,
+  "stops": 529,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {
+  "alpine_2025": {
+   "pit_crew_offset_s": 0.202,
+   "pit_slow_multiplier": 0.829,
+   "stops": 54,
+   "raw_median_rel_s": 0.277,
+   "raw_slow_share": 0.056
+  },
+  "aston_martin_2025": {
+   "pit_crew_offset_s": 0.103,
+   "pit_slow_multiplier": 1.286,
+   "stops": 55,
+   "raw_median_rel_s": 0.141,
+   "raw_slow_share": 0.109
+  },
+  "ferrari_2025": {
+   "pit_crew_offset_s": -0.197,
+   "pit_slow_multiplier": 0.672,
+   "stops": 54,
+   "raw_median_rel_s": -0.27,
+   "raw_slow_share": 0.037
+  },
+  "haas_2025": {
+   "pit_crew_offset_s": 0.31,
+   "pit_slow_multiplier": 1.063,
+   "stops": 48,
+   "raw_median_rel_s": 0.44,
+   "raw_slow_share": 0.083
+  },
+  "mclaren_2025": {
+   "pit_crew_offset_s": -0.172,
+   "pit_slow_multiplier": 0.672,
+   "stops": 54,
+   "raw_median_rel_s": -0.236,
+   "raw_slow_share": 0.037
+  },
+  "mercedes_2025": {
+   "pit_crew_offset_s": -0.069,
+   "pit_slow_multiplier": 0.353,
+   "stops": 55,
+   "raw_median_rel_s": -0.093,
+   "raw_slow_share": 0.0
+  },
+  "rb_2025": {
+   "pit_crew_offset_s": -0.137,
+   "pit_slow_multiplier": 1.036,
+   "stops": 50,
+   "raw_median_rel_s": -0.192,
+   "raw_slow_share": 0.08
+  },
+  "red_bull_2025": {
+   "pit_crew_offset_s": -0.032,
+   "pit_slow_multiplier": 1.598,
+   "stops": 55,
+   "raw_median_rel_s": -0.043,
+   "raw_slow_share": 0.145
+  },
+  "sauber_2025": {
+   "pit_crew_offset_s": -0.034,
+   "pit_slow_multiplier": 0.715,
+   "stops": 49,
+   "raw_median_rel_s": -0.048,
+   "raw_slow_share": 0.041
+  },
+  "williams_2025": {
+   "pit_crew_offset_s": 0.026,
+   "pit_slow_multiplier": 1.753,
+   "stops": 55,
+   "raw_median_rel_s": 0.035,
+   "raw_slow_share": 0.164
+  }
+ },
+ "reliability": {
+  "field_retirements_per_start": 0.1111,
+  "teams": {
+   "alpine_2025": {
+    "failure_multiplier": 0.986,
+    "retirements": 5,
+    "starts": 46
+   },
+   "aston_martin_2025": {
+    "failure_multiplier": 1.13,
+    "retirements": 6,
+    "starts": 45
+   },
+   "ferrari_2025": {
+    "failure_multiplier": 0.857,
+    "retirements": 4,
+    "starts": 46
+   },
+   "haas_2025": {
+    "failure_multiplier": 0.857,
+    "retirements": 4,
+    "starts": 46
+   },
+   "mclaren_2025": {
+    "failure_multiplier": 0.729,
+    "retirements": 3,
+    "starts": 46
+   },
+   "mercedes_2025": {
+    "failure_multiplier": 0.857,
+    "retirements": 4,
+    "starts": 46
+   },
+   "rb_2025": {
+    "failure_multiplier": 1.243,
+    "retirements": 7,
+    "starts": 46
+   },
+   "red_bull_2025": {
+    "failure_multiplier": 0.729,
+    "retirements": 3,
+    "starts": 46
+   },
+   "sauber_2025": {
+    "failure_multiplier": 1.243,
+    "retirements": 7,
+    "starts": 46
+   },
+   "williams_2025": {
+    "failure_multiplier": 1.371,
+    "retirements": 8,
+    "starts": 46
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.00403,
+  "sc_share": 0.2,
+  "count": 5,
+  "race_laps": 1241,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 1,
+  "races": 23,
+  "per_race": 0.0435
+ },
+ "penalties": {
+  "counts": {
+   "collision": 24,
+   "other": 30,
+   "pit_speeding": 9,
+   "false_start": 8
+  },
+  "collision_per_pass": 0.016445,
+  "false_start_per_starter": 0.014876,
+  "pit_speeding_per_stop": 0.009355,
+  "other_per_car_lap": 0.00092,
+  "passes": 1238,
+  "raw": {
+   "collision_per_pass": 0.01939,
+   "false_start_per_starter": 0.01754,
+   "pit_speeding_per_stop": 0.01103,
+   "other_per_car_lap": 0.001085
+  },
+  "scale": 0.8481,
+  "scale_note": "x0.848: simulated dry_train 2.99 vs real 2.53 per race"
+ },
+ "fitted": {
+  "risk_scale": 0.958,
+  "red_flag_per_crash": 0.0286,
+  "fit": {
+   "races": [
+    "2025_chinese_gp",
+    "2025_japanese_gp",
+    "2025_saudi_arabian_gp",
+    "2025_miami_gp",
+    "2025_emilia_romagna_gp",
+    "2025_spanish_gp",
+    "2025_canadian_gp",
+    "2025_austrian_gp",
+    "2025_hungarian_gp",
+    "2025_dutch_gp",
+    "2025_azerbaijan_gp",
+    "2025_singapore_gp",
+    "2025_united_states_gp",
+    "2025_sao_paulo_gp",
+    "2025_qatar_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 1.587,
+   "sim_failures_per_race": 0.48,
+   "real_retirements_per_race": 2.0,
+   "target_red_flags_per_race": 0.0435
+  },
+  "check": {
+   "retirements_per_race": 2.013,
+   "red_flags_per_race": 0.04,
+   "safety_cars_per_race": 0.627,
+   "vscs_per_race": 0.6,
+   "penalties_per_race": 2.987,
+   "penalties_per_race_after_scale": 2.373
+  }
+ }
+}

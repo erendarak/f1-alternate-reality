@@ -2,7 +2,7 @@ dataset_id: 2019_bahrain_gp_fastf1_v1
 event: 2019_bahrain_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:11:58Z'
+retrieved_utc: '2026-10-17T16:39:43Z'
 session_key: 2019/round 2/R
 license_review_status: research_only
 files:
@@ -99,6 +99,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2019_bahrain_gp/positions.parquet
+  sha256: sha256:88d48a15152130e27391191fc51af60b46bcad2f768d6bfd813cee794846bb9c
+  rows: 522780
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2019_bahrain_gp/track_outline.parquet
+  sha256: sha256:f0c13eaab7235562320608ab5d3d3df03591919734b80c74b20a7805b68f96fd
+  rows: 326
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 3 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

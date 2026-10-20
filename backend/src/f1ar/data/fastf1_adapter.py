@@ -142,8 +142,8 @@ def tables_from_session(session: Any) -> RaceTables:
         positions = _empty_positions()
     try:
         circuit_info = session.get_circuit_info()
-    except AttributeError:  # no usable reference lap (e.g. 2021 Belgian GP: SC laps only)
-        circuit_info = None
+    except (AttributeError, KeyError):  # no usable reference lap (2021 Belgian GP: SC laps
+        circuit_info = None  # only) or no telemetry for its car (2018 Australia, Bahrain)
     return RaceTables(
         event=event,
         laps=normalize_laps(session.laps),
@@ -199,7 +199,28 @@ def normalize_laps(laps: pd.DataFrame) -> pd.DataFrame:
             "fastf1_generated": laps["FastF1Generated"].astype("boolean"),
         }
     )
+    df["compound_name"] = df["compound"]
+    df["compound"] = relative_compounds(df["compound"])
     return df.sort_values(["driver_number", "lap_number"], kind="stable").reset_index(drop=True)
+
+
+NAMED_DRY_COMPOUNDS = ("HYPERSOFT", "ULTRASOFT", "SUPERSOFT", "SOFT", "MEDIUM", "HARD", "SUPERHARD")
+"""Pirelli's 2018 range, softest first (from 2019 the three per race are SOFT/MEDIUM/HARD)."""
+
+
+def relative_compounds(compound: pd.Series) -> pd.Series:
+    """H2a (D-054): a 2018 race's three nominated dry compounds as SOFT / MEDIUM / HARD by
+    softness (how 2019+ labels them); ``compound_name`` keeps Pirelli's name. A race that
+    doesn't show exactly three named dry compounds keeps the names (the quality report flags
+    them). 2019+ races are returned unchanged."""
+    used = set(compound.dropna())
+    if not used & {"HYPERSOFT", "ULTRASOFT", "SUPERSOFT", "SUPERHARD"}:
+        return compound
+    dry = sorted(used & set(NAMED_DRY_COMPOUNDS), key=NAMED_DRY_COMPOUNDS.index)
+    if len(dry) != 3:
+        return compound
+    mapping = dict(zip(dry, ("SOFT", "MEDIUM", "HARD"), strict=True))
+    return compound.map(lambda c: mapping.get(c, c), na_action="ignore").astype("string")
 
 
 def normalize_results(results: pd.DataFrame) -> pd.DataFrame:

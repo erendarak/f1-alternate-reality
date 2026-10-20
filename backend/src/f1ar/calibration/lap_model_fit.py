@@ -22,6 +22,7 @@ from typing import Any
 import pandas as pd
 
 from f1ar.calibration.pace_models import RaceAdjustment, TyreShape, fit_race_adjustment
+from f1ar.calibration.season_files import REFERENCE_SEASON, with_fallback
 from f1ar.domain.driver_profiles import DriverArchetype
 from f1ar.domain.provenance import SourceType
 from f1ar.domain.race_state import (
@@ -40,9 +41,10 @@ WEAR_MULTIPLIER_FLOOR = 0.1
 
 
 @cache
-def load_shape(configs_dir: Path) -> tuple[TyreShape, str]:
-    """The fitted season shape and its file hash."""
-    text = (configs_dir / SHAPE_FILE).read_text(encoding="utf-8")
+def load_shape(configs_dir: Path, season: int = REFERENCE_SEASON) -> tuple[TyreShape, str]:
+    """The fitted season shape and its file hash (this season's, else 2024's: H2a)."""
+    path, _ = with_fallback(configs_dir, SHAPE_FILE, season)
+    text = (path or configs_dir / SHAPE_FILE).read_text(encoding="utf-8")
     return TyreShape.from_json(text), "sha256:" + hashlib.sha256(text.encode()).hexdigest()
 
 
@@ -104,9 +106,12 @@ LIFE_FILE = Path("calibration") / "tyre_life_2024_v1.json"
 
 
 @cache
-def load_life(configs_dir: Path) -> tuple[dict[str, Any], str] | None:
-    path = configs_dir / LIFE_FILE
-    if not path.exists():
+def load_life(
+    configs_dir: Path, season: int = REFERENCE_SEASON
+) -> tuple[dict[str, Any], str] | None:
+    """This season's tyre life fit, else 2024's (H2a: the caller labels a borrowed one)."""
+    path, _ = with_fallback(configs_dir, LIFE_FILE, season)
+    if path is None:
         return None
     text = path.read_text(encoding="utf-8")
     return json.loads(text), "sha256:" + hashlib.sha256(text.encode()).hexdigest()

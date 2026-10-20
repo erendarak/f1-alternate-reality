@@ -1357,3 +1357,23 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Tests: 471 offline (+5 `tests/unit/test_season_rules.py`); frontend 17; ruff, mypy clean.
 - Next: H0 close-out when the fetch completes, then H2 (calibration across eras), or H1b.
 
+### 2026-10-20 — H2a: every 2018-2025 race on its own season's fits (engine v0.17.0, D-054, EXP-023)
+
+- FastF1 telemetry 2018-2025 (track spec for every race but 2021 Spa; 2018 AUS/BHR use the
+  2019 outline); 169 races in the app (checked: 2019 Monza loads with its real grid and tyres).
+- Per-season calibration files; driver/team values never borrowed; tyre model / era rates
+  labelled when borrowed (the pre-H2a probe showed a 2019 race silently taking 2024 driver
+  values). Fit scripts take `--season`; `scripts/fit_season.py`; persona seeds 2018-2025
+  (`scripts/build_season_seeds.py`, editorial).
+- Era differences found and fixed: 2018 compound names, "+N Laps" status, older penalty
+  messages and stop-go penalties, retirement causes, NaN tyre ages (2022), quality-FAIL races
+  excluded; every fix checked to leave 2024 unchanged.
+- Engine v0.17.0: pit-lane starters (grid 0) start last (were first: 36 races incl. 2024 Mexico);
+  2024 races without one identical to v0.16.
+- EXP-023 (29 held-out races 2018-2025 excl. 2024): stops MAE 0.35 vs 0.63 borrowed; passes and
+  retirements about equal; order rho 0.48 vs 0.53; 2021 test races under-pass (H2c).
+- Jolpica rate limit hit once (fast telemetry + history fetch): 429 back-off added.
+- E2E passes; tests 478 offline (+13: season files, status, compounds, pit lane, outline),
+  frontend 17; ruff, mypy clean; history fetch running (2009 -> 2000, then 2018-2025).
+- Next: close H0 when the fetch completes (EXP-021 coverage, EXP-022 rerun), then H2b
+  (2010-2017 without compounds) or H2c (per-era rates).

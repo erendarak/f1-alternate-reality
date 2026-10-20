@@ -1,0 +1,39 @@
+model_name: race_events
+model_version: v1
+kind: rates and shrunk team multipliers from 2022 timing; 2 values fitted by simulation
+source_type: estimated_from_data
+artifact: configs/calibration/race_events_2022_v1.json
+artifact_sha256: sha256:1985a28f938ec8b9b122eef32aef572f4b72b77a850fce0cf693572b7a90689f
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2022_v1.yaml
+training_dataset_content_sha256: sha256:6c03eeb66580351aaa8d2fc4a24b1ab045943c91552c7ed4b08440445ad4121a
+training_races:
+- 2022_abu_dhabi_gp
+- 2022_australian_gp
+- 2022_austrian_gp
+- 2022_azerbaijan_gp
+- 2022_bahrain_gp
+- 2022_belgian_gp
+- 2022_british_gp
+- 2022_canadian_gp
+- 2022_dutch_gp
+- 2022_emilia_romagna_gp
+- 2022_hungarian_gp
+- 2022_italian_gp
+- 2022_mexico_city_gp
+- 2022_miami_gp
+- 2022_monaco_gp
+- 2022_sao_paulo_gp
+- 2022_singapore_gp
+- 2022_spanish_gp
+- 2022_united_states_gp
+metrics:
+  dry_train_check:
+    retirements_per_race: 3.1
+    red_flags_per_race: 0.117
+    safety_cars_per_race: 0.983
+    vscs_per_race: 0.717
+    penalties_per_race: 1.567
+    penalties_per_race_after_scale: 2.7
+  held_out_check: EXP-011
+status: fitted for 2022 (H2a, D-054); held-out check EXP-023

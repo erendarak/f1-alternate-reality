@@ -1,0 +1,186 @@
+{
+ "label": "2021 persona estimates (W5, D-045)",
+ "fitted_on": [
+  "2021_bahrain_gp",
+  "2021_portuguese_gp",
+  "2021_monaco_gp",
+  "2021_azerbaijan_gp",
+  "2021_french_gp",
+  "2021_austrian_gp",
+  "2021_british_gp",
+  "2021_dutch_gp",
+  "2021_italian_gp",
+  "2021_united_states_gp",
+  "2021_mexico_city_gp",
+  "2021_sao_paulo_gp",
+  "2021_saudi_arabian_gp"
+ ],
+ "wear": {
+  "reference_slope_s_per_lap2": 0.033892918884874966,
+  "split_half_drivers": -0.09,
+  "split_half_teams": -0.438,
+  "reliability_drivers": 0.0,
+  "reliability_teams": 0.0,
+  "drivers": {
+   "ALO": {
+    "team_id": "alpine_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": -0.0031,
+    "team_vs_field_s_per_lap2": -0.01015,
+    "races": 10
+   },
+   "BOT": {
+    "team_id": "mercedes_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": 0.00025,
+    "team_vs_field_s_per_lap2": -0.00281,
+    "races": 12
+   },
+   "GAS": {
+    "team_id": "alphatauri_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": 0.00776,
+    "team_vs_field_s_per_lap2": 0.03711,
+    "races": 10
+   },
+   "GIO": {
+    "team_id": "alfa_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": 0.00076,
+    "team_vs_field_s_per_lap2": -0.00588,
+    "races": 12
+   },
+   "HAM": {
+    "team_id": "mercedes_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": -0.00025,
+    "team_vs_field_s_per_lap2": -0.00281,
+    "races": 12
+   },
+   "KUB": {
+    "team_id": "alfa_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": 0.00648,
+    "team_vs_field_s_per_lap2": -0.00588,
+    "races": 2
+   },
+   "LAT": {
+    "team_id": "williams_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": 0.00393,
+    "team_vs_field_s_per_lap2": -0.00572,
+    "races": 12
+   },
+   "LEC": {
+    "team_id": "ferrari_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": 0.00273,
+    "team_vs_field_s_per_lap2": -0.00171,
+    "races": 12
+   },
+   "MAZ": {
+    "team_id": "haas_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": -0.00041,
+    "team_vs_field_s_per_lap2": 0.00124,
+    "races": 10
+   },
+   "MSC": {
+    "team_id": "haas_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": 0.00041,
+    "team_vs_field_s_per_lap2": 0.00124,
+    "races": 10
+   },
+   "NOR": {
+    "team_id": "mclaren_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": -0.0009,
+    "team_vs_field_s_per_lap2": -0.01099,
+    "races": 13
+   },
+   "OCO": {
+    "team_id": "alpine_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": 0.0031,
+    "team_vs_field_s_per_lap2": -0.01015,
+    "races": 10
+   },
+   "PER": {
+    "team_id": "red_bull_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": 0.00045,
+    "team_vs_field_s_per_lap2": 0.00692,
+    "races": 10
+   },
+   "RAI": {
+    "team_id": "alfa_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": -0.00221,
+    "team_vs_field_s_per_lap2": -0.00588,
+    "races": 10
+   },
+   "RIC": {
+    "team_id": "mclaren_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": 0.0009,
+    "team_vs_field_s_per_lap2": -0.01099,
+    "races": 13
+   },
+   "RUS": {
+    "team_id": "williams_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": -0.00393,
+    "team_vs_field_s_per_lap2": -0.00572,
+    "races": 12
+   },
+   "SAI": {
+    "team_id": "ferrari_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": -0.00273,
+    "team_vs_field_s_per_lap2": -0.00171,
+    "races": 12
+   },
+   "STR": {
+    "team_id": "aston_martin_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": 0.00087,
+    "team_vs_field_s_per_lap2": -0.008,
+    "races": 13
+   },
+   "TSU": {
+    "team_id": "alphatauri_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": -0.00776,
+    "team_vs_field_s_per_lap2": 0.03711,
+    "races": 10
+   },
+   "VER": {
+    "team_id": "red_bull_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": -0.00045,
+    "team_vs_field_s_per_lap2": 0.00692,
+    "races": 10
+   },
+   "VET": {
+    "team_id": "aston_martin_2021",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": -0.00087,
+    "team_vs_field_s_per_lap2": -0.008,
+    "races": 13
+   }
+  }
+ },
+ "derived_at_setup": {
+  "consistency": "rank of W2 lap noise (driver_pace_2021_v1), persona spread",
+  "overtake_skill": "rank of W3 attack term (racecraft_2021_v1), persona spread",
+  "defense_skill": "rank of W3 defend term (racecraft_2021_v1), persona spread"
+ },
+ "not_measurable": {
+  "mistake proneness (consistency x composure in incidents)": "blue flags dominate big losses (2024: 24 events left; odd vs even races r = -0.33)",
+  "composure": "no measurement (penalties too few per driver)",
+  "wet_skill": "3 wet races",
+  "risk_appetite": "a preference, not a measurement",
+  "qualifying_skill": "the grid is real"
+ }
+}

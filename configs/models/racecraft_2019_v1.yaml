@@ -1,0 +1,36 @@
+model_name: racecraft
+model_version: v1
+kind: ML on lap-level encounters (W2 noise convolved) with ridge driver terms; lap-1 gains; launch spread
+  by simulation
+source_type: estimated_from_data (lap-1 grid profile editorial)
+artifact: configs/calibration/racecraft_2019_v1.json
+artifact_sha256: sha256:a5dbefe692cea2b11c2bfbe49374f032746c37d9ac80b57f4d5454af6e6f179a
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2019_v1.yaml
+training_dataset_content_sha256: sha256:b0e8668ae11771a2e16e1a633366514de9448f45a5328e706dec5de00fbf5b74
+training_races:
+- 2019_abu_dhabi_gp
+- 2019_australian_gp
+- 2019_austrian_gp
+- 2019_azerbaijan_gp
+- 2019_bahrain_gp
+- 2019_belgian_gp
+- 2019_brazilian_gp
+- 2019_british_gp
+- 2019_canadian_gp
+- 2019_chinese_gp
+- 2019_french_gp
+- 2019_hungarian_gp
+- 2019_italian_gp
+- 2019_mexican_gp
+- 2019_russian_gp
+- 2019_singapore_gp
+- 2019_spanish_gp
+- 2019_united_states_gp
+metrics:
+  check:
+    dry_train_passes_sim: 58.29
+    dry_train_passes_real: 58.46
+    dry_train_lap1_passes_real: 14.38
+  held_out_check: EXP-013
+status: fitted for 2019 (H2a, D-054); held-out check EXP-023

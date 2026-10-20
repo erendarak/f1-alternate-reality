@@ -2,12 +2,12 @@ dataset_id: 2021_portuguese_gp_fastf1_v1
 event: 2021_portuguese_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:05:38Z'
+retrieved_utc: '2026-10-17T16:52:56Z'
 session_key: 2021/round 3/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2021_portuguese_gp/laps.parquet
-  sha256: sha256:aa04678517fc8a272a8c7f4540407ad7e05ad21d9a925828ff03ec8f427ea367
+  sha256: sha256:29d15c692cba7d7918caff9ca8b712d820ee87a7173996a4b2a00c6a495419d1
   rows: 1245
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2021_portuguese_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2021_portuguese_gp/positions.parquet
+  sha256: sha256:1dad30705a02d6422d389d18512b26c70d2ca2e06e54f9c33c5dd20ff1360f3a
+  rows: 721900
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2021_portuguese_gp/track_outline.parquet
+  sha256: sha256:56bcd80db016f00e493e3fc5b8a8d9ad135bec477fed958f0809c8a953540245
+  rows: 373
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 46 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

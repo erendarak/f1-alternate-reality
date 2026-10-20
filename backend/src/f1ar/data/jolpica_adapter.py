@@ -6,7 +6,9 @@ be tested offline with fixtures.
 
 import json
 import re
+import time
 import unicodedata
+import urllib.error
 import urllib.request
 from typing import Any
 
@@ -21,10 +23,18 @@ def results_url(season: int, round_: int) -> str:
     return f"{BASE_URL}/{season}/{round_}/results.json"
 
 
-def fetch_json(url: str, timeout_s: float = 30.0) -> Any:
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(request, timeout=timeout_s) as response:
-        return json.loads(response.read().decode("utf-8"))
+def fetch_json(url: str, timeout_s: float = 30.0, retries: int = 5) -> Any:
+    """GET JSON; on HTTP 429 (Jolpica's 500 requests/hour) waits 60, 120, ... s and retries."""
+    for attempt in range(retries):
+        request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+        try:
+            with urllib.request.urlopen(request, timeout=timeout_s) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            if exc.code != 429 or attempt == retries - 1:
+                raise
+            time.sleep(60.0 * 2**attempt)
+    raise AssertionError("unreachable")
 
 
 def slug(text: str) -> str:

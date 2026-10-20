@@ -1,0 +1,36 @@
+model_name: race_events
+model_version: v1
+kind: rates and shrunk team multipliers from 2020 timing; 2 values fitted by simulation
+source_type: estimated_from_data
+artifact: configs/calibration/race_events_2020_v1.json
+artifact_sha256: sha256:af84fb47aa6edc9d6d37dc5e78fe8859789a9968a3b9bdee2fc95e368fa88b64
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2020_v1.yaml
+training_dataset_content_sha256: sha256:5bbb5e3b275006cf794a7917223ab1536dee650010ff994448fa2b8ac1e07d76
+training_races:
+- 2020_70th_anniversary_gp
+- 2020_abu_dhabi_gp
+- 2020_bahrain_gp
+- 2020_belgian_gp
+- 2020_british_gp
+- 2020_eifel_gp
+- 2020_emilia_romagna_gp
+- 2020_hungarian_gp
+- 2020_italian_gp
+- 2020_portuguese_gp
+- 2020_russian_gp
+- 2020_sakhir_gp
+- 2020_spanish_gp
+- 2020_styrian_gp
+- 2020_turkish_gp
+- 2020_tuscan_gp
+metrics:
+  dry_train_check:
+    retirements_per_race: 3.0
+    red_flags_per_race: 0.14
+    safety_cars_per_race: 1.04
+    vscs_per_race: 0.98
+    penalties_per_race: 1.16
+    penalties_per_race_after_scale: 1.18
+  held_out_check: EXP-011
+status: fitted for 2020 (H2a, D-054); held-out check EXP-023

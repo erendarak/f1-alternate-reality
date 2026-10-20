@@ -1,0 +1,39 @@
+model_name: race_events
+model_version: v1
+kind: rates and shrunk team multipliers from 2023 timing; 2 values fitted by simulation
+source_type: estimated_from_data
+artifact: configs/calibration/race_events_2023_v1.json
+artifact_sha256: sha256:75976ff3231e7a0c34f79d6cfccf15130a6bd4eefa19c723815986549ee58519
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2023_v1.yaml
+training_dataset_content_sha256: sha256:68f96669b4c05a3c23c10acd6999f40b3aecbca737138faf77cedb7bf1c01b83
+training_races:
+- 2023_abu_dhabi_gp
+- 2023_australian_gp
+- 2023_austrian_gp
+- 2023_azerbaijan_gp
+- 2023_bahrain_gp
+- 2023_belgian_gp
+- 2023_british_gp
+- 2023_canadian_gp
+- 2023_dutch_gp
+- 2023_hungarian_gp
+- 2023_japanese_gp
+- 2023_mexico_city_gp
+- 2023_miami_gp
+- 2023_monaco_gp
+- 2023_qatar_gp
+- 2023_sao_paulo_gp
+- 2023_saudi_arabian_gp
+- 2023_spanish_gp
+- 2023_united_states_gp
+metrics:
+  dry_train_check:
+    retirements_per_race: 2.7
+    red_flags_per_race: 0.35
+    safety_cars_per_race: 1.117
+    vscs_per_race: 0.617
+    penalties_per_race: 2.183
+    penalties_per_race_after_scale: 3.033
+  held_out_check: EXP-011
+status: fitted for 2023 (H2a, D-054); held-out check EXP-023

@@ -1,0 +1,231 @@
+{
+ "label": "2023 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2023_bahrain_gp",
+  "2023_saudi_arabian_gp",
+  "2023_australian_gp",
+  "2023_miami_gp",
+  "2023_spanish_gp",
+  "2023_austrian_gp",
+  "2023_british_gp",
+  "2023_hungarian_gp",
+  "2023_qatar_gp",
+  "2023_united_states_gp",
+  "2023_mexico_city_gp",
+  "2023_abu_dhabi_gp"
+ ],
+ "field_noise_s": 0.4162,
+ "form_sd_s": 0.2127,
+ "form_note": "within-pair gap SD 0.321 s, sampling SD 0.112 s over 106 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "ALB": {
+   "team_id": "williams_2023",
+   "pace_vs_teammate_s": -0.1012,
+   "raw_mean_gap_s": -0.1315,
+   "races": 10,
+   "lap_noise_s": 0.3878,
+   "raw_noise_s": 0.3743,
+   "clean_laps": 317
+  },
+  "ALO": {
+   "team_id": "aston_martin_2023",
+   "pace_vs_teammate_s": -0.0663,
+   "raw_mean_gap_s": -0.0843,
+   "races": 11,
+   "lap_noise_s": 0.3677,
+   "raw_noise_s": 0.3445,
+   "clean_laps": 313
+  },
+  "BOT": {
+   "team_id": "alfa_2023",
+   "pace_vs_teammate_s": 0.0653,
+   "raw_mean_gap_s": 0.0816,
+   "races": 12,
+   "lap_noise_s": 0.4715,
+   "raw_noise_s": 0.4989,
+   "clean_laps": 303
+  },
+  "DEV": {
+   "team_id": "alphatauri_2023",
+   "pace_vs_teammate_s": 0.0888,
+   "raw_mean_gap_s": 0.1269,
+   "races": 7,
+   "lap_noise_s": 0.4164,
+   "raw_noise_s": 0.4166,
+   "clean_laps": 166
+  },
+  "GAS": {
+   "team_id": "alpine_2023",
+   "pace_vs_teammate_s": -0.0224,
+   "raw_mean_gap_s": -0.0299,
+   "races": 9,
+   "lap_noise_s": 0.383,
+   "raw_noise_s": 0.3566,
+   "clean_laps": 189
+  },
+  "HAM": {
+   "team_id": "mercedes_2023",
+   "pace_vs_teammate_s": -0.0337,
+   "raw_mean_gap_s": -0.0439,
+   "races": 10,
+   "lap_noise_s": 0.4251,
+   "raw_noise_s": 0.4292,
+   "clean_laps": 325
+  },
+  "HUL": {
+   "team_id": "haas_2023",
+   "pace_vs_teammate_s": -0.0849,
+   "raw_mean_gap_s": -0.1081,
+   "races": 11,
+   "lap_noise_s": 0.4259,
+   "raw_noise_s": 0.4311,
+   "clean_laps": 277
+  },
+  "LAW": {
+   "team_id": "alphatauri_2023",
+   "pace_vs_teammate_s": 0.079,
+   "raw_mean_gap_s": 0.3162,
+   "races": 1,
+   "lap_noise_s": 0.4638,
+   "raw_noise_s": 0.7385,
+   "clean_laps": 26
+  },
+  "LEC": {
+   "team_id": "ferrari_2023",
+   "pace_vs_teammate_s": -0.0374,
+   "raw_mean_gap_s": -0.0486,
+   "races": 10,
+   "lap_noise_s": 0.4159,
+   "raw_noise_s": 0.4157,
+   "clean_laps": 319
+  },
+  "MAG": {
+   "team_id": "haas_2023",
+   "pace_vs_teammate_s": 0.0849,
+   "raw_mean_gap_s": 0.1081,
+   "races": 11,
+   "lap_noise_s": 0.4871,
+   "raw_noise_s": 0.5278,
+   "clean_laps": 261
+  },
+  "NOR": {
+   "team_id": "mclaren_2023",
+   "pace_vs_teammate_s": -0.1383,
+   "raw_mean_gap_s": -0.1798,
+   "races": 10,
+   "lap_noise_s": 0.4072,
+   "raw_noise_s": 0.4028,
+   "clean_laps": 302
+  },
+  "OCO": {
+   "team_id": "alpine_2023",
+   "pace_vs_teammate_s": 0.0224,
+   "raw_mean_gap_s": 0.0299,
+   "races": 9,
+   "lap_noise_s": 0.4145,
+   "raw_noise_s": 0.4134,
+   "clean_laps": 216
+  },
+  "PER": {
+   "team_id": "red_bull_2023",
+   "pace_vs_teammate_s": 0.117,
+   "raw_mean_gap_s": 0.1489,
+   "races": 11,
+   "lap_noise_s": 0.3776,
+   "raw_noise_s": 0.3593,
+   "clean_laps": 316
+  },
+  "PIA": {
+   "team_id": "mclaren_2023",
+   "pace_vs_teammate_s": 0.1383,
+   "raw_mean_gap_s": 0.1798,
+   "races": 10,
+   "lap_noise_s": 0.4519,
+   "raw_noise_s": 0.4729,
+   "clean_laps": 256
+  },
+  "RIC": {
+   "team_id": "alphatauri_2023",
+   "pace_vs_teammate_s": 0.0195,
+   "raw_mean_gap_s": 0.0341,
+   "races": 4,
+   "lap_noise_s": 0.4437,
+   "raw_noise_s": 0.4836,
+   "clean_laps": 103
+  },
+  "RUS": {
+   "team_id": "mercedes_2023",
+   "pace_vs_teammate_s": 0.0337,
+   "raw_mean_gap_s": 0.0439,
+   "races": 10,
+   "lap_noise_s": 0.3753,
+   "raw_noise_s": 0.3534,
+   "clean_laps": 280
+  },
+  "SAI": {
+   "team_id": "ferrari_2023",
+   "pace_vs_teammate_s": 0.0374,
+   "raw_mean_gap_s": 0.0486,
+   "races": 10,
+   "lap_noise_s": 0.3811,
+   "raw_noise_s": 0.3652,
+   "clean_laps": 331
+  },
+  "SAR": {
+   "team_id": "williams_2023",
+   "pace_vs_teammate_s": 0.1012,
+   "raw_mean_gap_s": 0.1315,
+   "races": 10,
+   "lap_noise_s": 0.4762,
+   "raw_noise_s": 0.51,
+   "clean_laps": 267
+  },
+  "STR": {
+   "team_id": "aston_martin_2023",
+   "pace_vs_teammate_s": 0.0663,
+   "raw_mean_gap_s": 0.0843,
+   "races": 11,
+   "lap_noise_s": 0.3975,
+   "raw_noise_s": 0.3848,
+   "clean_laps": 221
+  },
+  "TSU": {
+   "team_id": "alphatauri_2023",
+   "pace_vs_teammate_s": -0.0894,
+   "raw_mean_gap_s": -0.1117,
+   "races": 12,
+   "lap_noise_s": 0.434,
+   "raw_noise_s": 0.446,
+   "clean_laps": 221
+  },
+  "VER": {
+   "team_id": "red_bull_2023",
+   "pace_vs_teammate_s": -0.117,
+   "raw_mean_gap_s": -0.1489,
+   "races": 11,
+   "lap_noise_s": 0.369,
+   "raw_noise_s": 0.3561,
+   "clean_laps": 550
+  },
+  "ZHO": {
+   "team_id": "alfa_2023",
+   "pace_vs_teammate_s": -0.0653,
+   "raw_mean_gap_s": -0.0816,
+   "races": 12,
+   "lap_noise_s": 0.4272,
+   "raw_noise_s": 0.4335,
+   "clean_laps": 260
+  }
+ },
+ "overtake_threshold_shift_s": 0.0,
+ "overtake_shift_fit": {
+  "skipped": "superseded by the W3 racecraft refit (H2a)"
+ }
+}

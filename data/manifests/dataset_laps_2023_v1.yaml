@@ -1,0 +1,260 @@
+dataset_id: laps_2023_v1
+dataset_version: 1
+feature_schema_version: 1
+season: 2023
+license_review_status: research_only (F1 timing data via FastF1; not redistributed)
+built_by: scripts/build_lap_dataset.py
+file:
+  relative_path: data/processed/datasets/laps_2023_v1.parquet
+  sha256: sha256:2dee9e3823f3eac5199d97a598aeace3ec9fb665a24016f9c9fc649e926c4c53
+  content_sha256: sha256:68f96669b4c05a3c23c10acd6999f40b3aecbca737138faf77cedb7bf1c01b83
+  rows: 21429
+  representative_rows: 17849
+target: lap_time_s
+features:
+- name: circuit_id
+  available: pre_race
+  source_type: historical_verified
+  description: Jolpica circuit id
+- name: driver_id
+  available: pre_race
+  source_type: historical_verified
+  description: season-specific driver id (roster)
+- name: team_id
+  available: pre_race
+  source_type: historical_verified
+  description: team id (roster)
+- name: grid_position
+  available: pre_race
+  source_type: historical_verified
+  description: official starting slot (0 = pit lane)
+- name: scheduled_laps
+  available: pre_race
+  source_type: historical_verified
+  description: race distance in laps (winner's laps)
+- name: lap_number
+  available: lap_start
+  source_type: historical_verified
+  description: 1-based lap number
+- name: laps_remaining
+  available: lap_start
+  source_type: estimated_from_data
+  description: scheduled_laps - lap_number + 1 (fuel proxy)
+- name: compound
+  available: lap_start
+  source_type: historical_verified
+  description: tyre compound on this lap
+- name: tyre_age_start
+  available: lap_start
+  source_type: estimated_from_data
+  description: laps already on the set when the lap starts
+- name: fresh_tyre
+  available: lap_start
+  source_type: historical_verified
+  description: the set was new when fitted (FastF1 FreshTyre)
+- name: stint
+  available: lap_start
+  source_type: historical_verified
+  description: stint number
+- name: stint_lap
+  available: lap_start
+  source_type: estimated_from_data
+  description: 1-based lap index within the stint
+- name: pit_out_lap
+  available: lap_start
+  source_type: historical_verified
+  description: the lap starts in the pit lane
+- name: pit_in_lap
+  available: decision
+  source_type: historical_verified
+  description: the car boxes at the end of this lap
+- name: position_start
+  available: lap_start
+  source_type: historical_verified
+  description: position when the lap starts (grid on lap 1)
+- name: gap_ahead_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds behind the car that crossed the line just before, same lap (NaN on lap 1)
+- name: gap_behind_prev_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds ahead of the next car at the PREVIOUS line crossing (the gap to the car behind
+    at this crossing isn't known yet when the lap starts; found by the leakage audit)
+- name: track_status_start
+  available: lap_start
+  source_type: historical_verified
+  description: track status code when the lap starts
+- name: air_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: track_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: humidity_pct
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: rainfall_start
+  available: lap_start
+  source_type: historical_verified
+  description: rain flag of the latest weather sample
+- name: wind_speed_ms
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+lap_facts_never_features:
+- lap_status
+- position_end
+- is_accurate
+- deleted
+- fastf1_generated
+- representative
+leakage_audit: tests/unit/test_lap_dataset.py::test_no_feature_uses_anything_after_the_lap_starts
+excluded_quality_fail:
+  2023_italian_gp: Lap rows per car equal classified laps
+  2023_singapore_gp: Starting grid matches the roster; Finishing position and laps agree with Jolpica
+  2023_las_vegas_gp: Session is the expected race
+splits:
+  rule: wet = any intermediate/wet tyre lap or rain at >= 5% of lap starts; among dry races, rounds divisible
+    by 4 are held out (dry_test), the rest are dry_train; leave-one-race-out folds run over dry_train.
+    Rule fixed before any model was fitted.
+  wet:
+  - 2023_monaco_gp
+  - 2023_belgian_gp
+  - 2023_dutch_gp
+  dry_test:
+  - 2023_azerbaijan_gp
+  - 2023_canadian_gp
+  - 2023_japanese_gp
+  - 2023_sao_paulo_gp
+  dry_train:
+  - 2023_bahrain_gp
+  - 2023_saudi_arabian_gp
+  - 2023_australian_gp
+  - 2023_miami_gp
+  - 2023_spanish_gp
+  - 2023_austrian_gp
+  - 2023_british_gp
+  - 2023_hungarian_gp
+  - 2023_qatar_gp
+  - 2023_united_states_gp
+  - 2023_mexico_city_gp
+  - 2023_abu_dhabi_gp
+events:
+  2023_abu_dhabi_gp:
+    round: 22
+    group: dry_train
+    rows: 1157
+    representative_rows: 1032
+    source_manifest_sha256: sha256:394cec4d7a6b4ab98d716c33f1b443c6f23da17221d6126ffb1f6c6918d271c0
+  2023_australian_gp:
+    round: 3
+    group: dry_train
+    rows: 1003
+    representative_rows: 755
+    source_manifest_sha256: sha256:d7833234e5051570248f7254f834d15b49bac9b4643b95b4ed8144900f18f69d
+  2023_austrian_gp:
+    round: 9
+    group: dry_train
+    rows: 1354
+    representative_rows: 1087
+    source_manifest_sha256: sha256:b9f83a703d4ed1818f818f9c7fb487af901e4b141cff20193fa0fc54d89412c4
+  2023_azerbaijan_gp:
+    round: 4
+    group: dry_test
+    rows: 962
+    representative_rows: 803
+    source_manifest_sha256: sha256:7667c399d53ad4a42b68db91c5224f9f8c2468eeec4ad865d3e1c38467c1c8c9
+  2023_bahrain_gp:
+    round: 1
+    group: dry_train
+    rows: 1056
+    representative_rows: 872
+    source_manifest_sha256: sha256:6b91941896185c06329f84e14a160dd780cf2cfd28d6ac3271a69221a5d44682
+  2023_belgian_gp:
+    round: 12
+    group: wet
+    rows: 816
+    representative_rows: 653
+    source_manifest_sha256: sha256:d0e1b0bc37a9b8f509b8535d540c159fc3e53794851bd8aed4ab64efd22d858c
+  2023_british_gp:
+    round: 10
+    group: dry_train
+    rows: 971
+    representative_rows: 787
+    source_manifest_sha256: sha256:80bee0db20541c44a1c2d1dd72eed45a7e2f4763beaa197a36ad9aa2b40992ef
+  2023_canadian_gp:
+    round: 8
+    group: dry_test
+    rows: 1317
+    representative_rows: 1066
+    source_manifest_sha256: sha256:0142bc62e0af136aa0341e4e1660609cfcfa97e7a072d553d07e3a68ee7273ca
+  2023_dutch_gp:
+    round: 13
+    group: wet
+    rows: 1343
+    representative_rows: 993
+    source_manifest_sha256: sha256:68d4b6921453365001714eadaf2abe32fc80c826237fe0795cb3d6b5fb885162
+  2023_hungarian_gp:
+    round: 11
+    group: dry_train
+    rows: 1252
+    representative_rows: 1124
+    source_manifest_sha256: sha256:66f1ae2dee067460ce6b502d398e26bbdf237616171aeb7fea5867158dc1f59b
+  2023_japanese_gp:
+    round: 16
+    group: dry_test
+    rows: 880
+    representative_rows: 673
+    source_manifest_sha256: sha256:6ac956979baf5184bc04befdc669df40b0098795edc7b1109a63d7e37e8bbb64
+  2023_mexico_city_gp:
+    round: 19
+    group: dry_train
+    rows: 1282
+    representative_rows: 1061
+    source_manifest_sha256: sha256:4d48c180374f82384f28a63ff2274d64d57e35ac6b0f80f92e31ae8774d21b29
+  2023_miami_gp:
+    round: 5
+    group: dry_train
+    rows: 1138
+    representative_rows: 1071
+    source_manifest_sha256: sha256:7a3a77b52a691d89c2193f41f5dfd9d50a34dc92ac55e7eef4daad736e412985
+  2023_monaco_gp:
+    round: 6
+    group: wet
+    rows: 1515
+    representative_rows: 1238
+    source_manifest_sha256: sha256:e125229a3eb36291164906540709b587cd8f2a1871fd55f18c04e88cb345802b
+  2023_qatar_gp:
+    round: 17
+    group: dry_train
+    rows: 1006
+    representative_rows: 760
+    source_manifest_sha256: sha256:ef5ac50a99d05e8d80bbc629897ae701da4018f4a5e4b73ad6d152e2b007681f
+  2023_sao_paulo_gp:
+    round: 20
+    group: dry_test
+    rows: 1108
+    representative_rows: 986
+    source_manifest_sha256: sha256:4e327b4c30e032fc84ee1af81b1fdec0934207179a65c3288500a9d2f769f2b9
+  2023_saudi_arabian_gp:
+    round: 2
+    group: dry_train
+    rows: 943
+    representative_rows: 809
+    source_manifest_sha256: sha256:e1949c7e0a10a02897b959bb894b3210184ba10e94906f42a08331e9877f3dec
+  2023_spanish_gp:
+    round: 7
+    group: dry_train
+    rows: 1312
+    representative_rows: 1198
+    source_manifest_sha256: sha256:8fb92940b11c4451a932af08f8cf02f93129de504d53c06311690d2fcbb0a108
+  2023_united_states_gp:
+    round: 18
+    group: dry_train
+    rows: 1014
+    representative_rows: 881
+    source_manifest_sha256: sha256:5a44a1e4d3b123e4dabdf7bed80b3156d55f235bb334b253155a3641853eb14d

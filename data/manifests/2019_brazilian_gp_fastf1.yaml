@@ -2,7 +2,7 @@ dataset_id: 2019_brazilian_gp_fastf1_v1
 event: 2019_brazilian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:15:59Z'
+retrieved_utc: '2026-10-17T16:44:30Z'
 session_key: 2019/round 20/R
 license_review_status: research_only
 files:
@@ -99,6 +99,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2019_brazilian_gp/positions.parquet
+  sha256: sha256:3a58c10e583f3f71cf44e37a476d627e35ca28c8ca56ba4ef351534df388b9e2
+  rows: 530920
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2019_brazilian_gp/track_outline.parquet
+  sha256: sha256:248e3d820d105ba1ef01fba12fe7f4595760a3b0381c35f25dd4a743de241829
+  rows: 245
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 33 lap 34 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

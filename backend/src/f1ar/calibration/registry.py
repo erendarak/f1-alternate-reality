@@ -5,13 +5,15 @@ that fitted it). This module reads them all and checks each one:
 
 - the artifact exists and its SHA-256 equals the manifest's (a tracked artifact must match; a
   local-only artifact, ``artifact_tracked: false``, may be missing and is rebuilt by its script);
-- it was trained on the current lap dataset (content hash of ``dataset_laps_2024_v1``);
+- it was trained on the current lap dataset (content hash of the dataset manifest it names,
+  ``dataset_laps_<season>_v1``; 2024's when it names none);
 - whether the engine uses it: ``ENGINE_ARTIFACTS`` lists the files ``setup_from_codes`` loads.
   Each of them is optional: without it the setup falls back to the editorial model and says so
   in ``RaceSetup.inputs`` (tested).
 """
 
 import hashlib
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -82,9 +84,19 @@ def _sha(path: Path) -> str:
     return "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _current_dataset_sha(root: Path, manifest: str | None) -> str | None:
+    path = root / (manifest or DATASET_MANIFEST)
+    if not path.exists():
+        return None
+    return str(yaml.safe_load(path.read_text(encoding="utf-8"))["file"]["content_sha256"])
+
+
+def _engine_use(artifact: str) -> str | None:
+    """What the setup loads it for; per-season files (H2a) like their 2024 original."""
+    return ENGINE_ARTIFACTS.get(re.sub(r"_(19|20)\d\d_v", "_2024_v", artifact))
+
+
 def load_registry(root: Path) -> list[ModelEntry]:
-    dataset = yaml.safe_load((root / DATASET_MANIFEST).read_text(encoding="utf-8"))
-    current = str(dataset["file"]["content_sha256"])
     entries = []
     for path in sorted((root / "configs" / "models").glob("*.yaml")):
         m: dict[str, Any] = yaml.safe_load(path.read_text(encoding="utf-8"))
@@ -105,8 +117,9 @@ def load_registry(root: Path) -> list[ModelEntry]:
                 artifact_found=found,
                 artifact_matches=found and _sha(file) == m["artifact_sha256"],
                 dataset_sha256=str(m.get("training_dataset_content_sha256", "")),
-                dataset_current=m.get("training_dataset_content_sha256") == current,
-                used_by_engine=ENGINE_ARTIFACTS.get(artifact),
+                dataset_current=m.get("training_dataset_content_sha256")
+                == _current_dataset_sha(root, m.get("training_dataset_manifest")),
+                used_by_engine=_engine_use(artifact),
             )
         )
     return entries

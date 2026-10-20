@@ -2,12 +2,12 @@ dataset_id: 2022_australian_gp_fastf1_v1
 event: 2022_australian_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:59:55Z'
+retrieved_utc: '2026-10-17T17:02:14Z'
 session_key: 2022/round 3/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2022_australian_gp/laps.parquet
-  sha256: sha256:c468f6fdf24ae8283a3b0c88b40915457cefbaae32c47eefe72c5bd358e81b41
+  sha256: sha256:a1275f70bfcc7d8fa45d4c45e83f94815c22d37ea3909e91d792aaa2795c6c31
   rows: 1045
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2022_australian_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2022_australian_gp/positions.parquet
+  sha256: sha256:edfcbb57a2a80c3d510fe95c5299cb470bf9704d319461238e50436d502a7fd5
+  rows: 719540
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2022_australian_gp/track_outline.parquet
+  sha256: sha256:b3d15d8489fc3ded947810392da8b8f605b26117e90cddd2d6fe811e50c4d41e
+  rows: 325
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 16 lap 55 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

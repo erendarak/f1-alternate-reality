@@ -1,0 +1,266 @@
+dataset_id: laps_2021_v1
+dataset_version: 1
+feature_schema_version: 1
+season: 2021
+license_review_status: research_only (F1 timing data via FastF1; not redistributed)
+built_by: scripts/build_lap_dataset.py
+file:
+  relative_path: data/processed/datasets/laps_2021_v1.parquet
+  sha256: sha256:228a9fba5e1f79e5116f73888e9a9cc15a771cfdd31c1721d4dcbd417ba5ca61
+  content_sha256: sha256:ae5da476cd96588a11be9a59b08c588ba6c68f0761ee96a376c1e85ea3cbc4bc
+  rows: 22696
+  representative_rows: 19183
+target: lap_time_s
+features:
+- name: circuit_id
+  available: pre_race
+  source_type: historical_verified
+  description: Jolpica circuit id
+- name: driver_id
+  available: pre_race
+  source_type: historical_verified
+  description: season-specific driver id (roster)
+- name: team_id
+  available: pre_race
+  source_type: historical_verified
+  description: team id (roster)
+- name: grid_position
+  available: pre_race
+  source_type: historical_verified
+  description: official starting slot (0 = pit lane)
+- name: scheduled_laps
+  available: pre_race
+  source_type: historical_verified
+  description: race distance in laps (winner's laps)
+- name: lap_number
+  available: lap_start
+  source_type: historical_verified
+  description: 1-based lap number
+- name: laps_remaining
+  available: lap_start
+  source_type: estimated_from_data
+  description: scheduled_laps - lap_number + 1 (fuel proxy)
+- name: compound
+  available: lap_start
+  source_type: historical_verified
+  description: tyre compound on this lap
+- name: tyre_age_start
+  available: lap_start
+  source_type: estimated_from_data
+  description: laps already on the set when the lap starts
+- name: fresh_tyre
+  available: lap_start
+  source_type: historical_verified
+  description: the set was new when fitted (FastF1 FreshTyre)
+- name: stint
+  available: lap_start
+  source_type: historical_verified
+  description: stint number
+- name: stint_lap
+  available: lap_start
+  source_type: estimated_from_data
+  description: 1-based lap index within the stint
+- name: pit_out_lap
+  available: lap_start
+  source_type: historical_verified
+  description: the lap starts in the pit lane
+- name: pit_in_lap
+  available: decision
+  source_type: historical_verified
+  description: the car boxes at the end of this lap
+- name: position_start
+  available: lap_start
+  source_type: historical_verified
+  description: position when the lap starts (grid on lap 1)
+- name: gap_ahead_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds behind the car that crossed the line just before, same lap (NaN on lap 1)
+- name: gap_behind_prev_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds ahead of the next car at the PREVIOUS line crossing (the gap to the car behind
+    at this crossing isn't known yet when the lap starts; found by the leakage audit)
+- name: track_status_start
+  available: lap_start
+  source_type: historical_verified
+  description: track status code when the lap starts
+- name: air_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: track_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: humidity_pct
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: rainfall_start
+  available: lap_start
+  source_type: historical_verified
+  description: rain flag of the latest weather sample
+- name: wind_speed_ms
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+lap_facts_never_features:
+- lap_status
+- position_end
+- is_accurate
+- deleted
+- fastf1_generated
+- representative
+leakage_audit: tests/unit/test_lap_dataset.py::test_no_feature_uses_anything_after_the_lap_starts
+excluded_quality_fail:
+  2021_belgian_gp: Race distance is 1 laps; Lap rows per car equal classified laps
+  2021_abu_dhabi_gp: Starting grid matches the roster; Finishing position and laps agree with Jolpica
+splits:
+  rule: wet = any intermediate/wet tyre lap or rain at >= 5% of lap starts; among dry races, rounds divisible
+    by 4 are held out (dry_test), the rest are dry_train; leave-one-race-out folds run over dry_train.
+    Rule fixed before any model was fitted.
+  wet:
+  - 2021_emilia_romagna_gp
+  - 2021_hungarian_gp
+  - 2021_russian_gp
+  - 2021_turkish_gp
+  dry_test:
+  - 2021_spanish_gp
+  - 2021_styrian_gp
+  - 2021_qatar_gp
+  dry_train:
+  - 2021_bahrain_gp
+  - 2021_portuguese_gp
+  - 2021_monaco_gp
+  - 2021_azerbaijan_gp
+  - 2021_french_gp
+  - 2021_austrian_gp
+  - 2021_british_gp
+  - 2021_dutch_gp
+  - 2021_italian_gp
+  - 2021_united_states_gp
+  - 2021_mexico_city_gp
+  - 2021_sao_paulo_gp
+  - 2021_saudi_arabian_gp
+events:
+  2021_austrian_gp:
+    round: 9
+    group: dry_train
+    rows: 1338
+    representative_rows: 1176
+    source_manifest_sha256: sha256:36f8404db83c036512e8c9ddf15bd947233b4a3b6fdf8ff36e456a95788216ae
+  2021_azerbaijan_gp:
+    round: 6
+    group: dry_train
+    rows: 943
+    representative_rows: 622
+    source_manifest_sha256: sha256:6f3bf924f8bf75a48a0afe2af1075f7655606bd0527b4df0fd191e871cba9251
+  2021_bahrain_gp:
+    round: 1
+    group: dry_train
+    rows: 1027
+    representative_rows: 832
+    source_manifest_sha256: sha256:52ec2880dc32edfe8f13b2617a28397c661022b3b1e090d6892f8ac24407dafa
+  2021_british_gp:
+    round: 10
+    group: dry_train
+    rows: 970
+    representative_rows: 815
+    source_manifest_sha256: sha256:9d8dd6796abefd15ea8a68f0a11aefdaff97bb0b487d6904114ee8404f929e4f
+  2021_dutch_gp:
+    round: 13
+    group: dry_train
+    rows: 1361
+    representative_rows: 1261
+    source_manifest_sha256: sha256:6bb7d5565e2c5b8fa404e70f0e850792a23c709ac96f8dea24239058f35973bf
+  2021_emilia_romagna_gp:
+    round: 2
+    group: wet
+    rows: 1127
+    representative_rows: 782
+    source_manifest_sha256: sha256:cf2c474e289dcedf906c7f4f5563b5b5474dec36362f68e08dc94bb1d55b4e16
+  2021_french_gp:
+    round: 7
+    group: dry_train
+    rows: 1051
+    representative_rows: 986
+    source_manifest_sha256: sha256:4d82d81409824c52c0b9132e6ff09d751555743ce919c92d35b3be4300b085e9
+  2021_hungarian_gp:
+    round: 11
+    group: wet
+    rows: 985
+    representative_rows: 866
+    source_manifest_sha256: sha256:75a34c2f96cbfffc31ea27360de6cd06af4e61142b26fafd6c876f1020a685ef
+  2021_italian_gp:
+    round: 14
+    group: dry_train
+    rows: 891
+    representative_rows: 681
+    source_manifest_sha256: sha256:39a9346bd04e283ed8cd62832d663cb557dfabd82cb7df40666e11062778596d
+  2021_mexico_city_gp:
+    round: 18
+    group: dry_train
+    rows: 1261
+    representative_rows: 1140
+    source_manifest_sha256: sha256:72042bc1af7e0f75f588631430de71c2b7bf720bfa748a3dc7147ca8ea588e3f
+  2021_monaco_gp:
+    round: 5
+    group: dry_train
+    rows: 1419
+    representative_rows: 1339
+    source_manifest_sha256: sha256:e85c3ea83faa6799e65f04d73843692839acf94433ad630f31265e8062657e02
+  2021_portuguese_gp:
+    round: 3
+    group: dry_train
+    rows: 1245
+    representative_rows: 1068
+    source_manifest_sha256: sha256:56a3c59bc8a039914bb9f7c6505a907d8a055f26952e5a1e96cd5cf83d25b1bb
+  2021_qatar_gp:
+    round: 20
+    group: dry_test
+    rows: 1114
+    representative_rows: 917
+    source_manifest_sha256: sha256:4e4e0469898002f36f1932f84182f4fa8a3b74e6da4c942d9c689257957eb370
+  2021_russian_gp:
+    round: 15
+    group: wet
+    rows: 1025
+    representative_rows: 862
+    source_manifest_sha256: sha256:86a02c06e5ea56db1852463a64a7b0f83bea2cab563034b606171e8fac040798
+  2021_sao_paulo_gp:
+    round: 19
+    group: dry_train
+    rows: 1360
+    representative_rows: 1105
+    source_manifest_sha256: sha256:63747b0c49928c11f981a080bab67790079f05ba5a1a9c04641992f3b13c6e9d
+  2021_saudi_arabian_gp:
+    round: 21
+    group: dry_train
+    rows: 845
+    representative_rows: 521
+    source_manifest_sha256: sha256:ad9190447acfed74726b6f287fb2e083c8b1a9854193b7d16a9ff35de45b8786
+  2021_spanish_gp:
+    round: 4
+    group: dry_test
+    rows: 1247
+    representative_rows: 1087
+    source_manifest_sha256: sha256:116aaed9bc75bf10bc4978f70490589426f0877dd853b375a5eff489c9194ec2
+  2021_styrian_gp:
+    round: 8
+    group: dry_test
+    rows: 1296
+    representative_rows: 1209
+    source_manifest_sha256: sha256:d5e0714467d6a59f15fa17dde7862cf9596249ddde3ddf316cb3cb021647944c
+  2021_turkish_gp:
+    round: 16
+    group: wet
+    rows: 1147
+    representative_rows: 1031
+    source_manifest_sha256: sha256:35b30c9c10a0fd3add989decbf27012d79d449eff71b1786c508c42dbdd53816
+  2021_united_states_gp:
+    round: 17
+    group: dry_train
+    rows: 1044
+    representative_rows: 883
+    source_manifest_sha256: sha256:6dcebc7d7ea5b9e42f4f50c55cece71781f96954fb6a60b60261ed35e8c93ea9

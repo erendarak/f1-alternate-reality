@@ -1,0 +1,185 @@
+{
+ "label": "2022 persona estimates (W5, D-045)",
+ "fitted_on": [
+  "2022_bahrain_gp",
+  "2022_australian_gp",
+  "2022_miami_gp",
+  "2022_spanish_gp",
+  "2022_canadian_gp",
+  "2022_british_gp",
+  "2022_austrian_gp",
+  "2022_belgian_gp",
+  "2022_dutch_gp",
+  "2022_united_states_gp",
+  "2022_sao_paulo_gp",
+  "2022_abu_dhabi_gp"
+ ],
+ "wear": {
+  "reference_slope_s_per_lap2": 0.07159383032063646,
+  "split_half_drivers": -0.281,
+  "split_half_teams": 0.532,
+  "reliability_drivers": 0.0,
+  "reliability_teams": 0.694,
+  "drivers": {
+   "ALB": {
+    "team_id": "williams_2022",
+    "wear_multiplier": 1.1105,
+    "vs_teammate_s_per_lap2": -0.00384,
+    "team_vs_field_s_per_lap2": 0.0114,
+    "races": 11
+   },
+   "ALO": {
+    "team_id": "alpine_2022",
+    "wear_multiplier": 0.9307,
+    "vs_teammate_s_per_lap2": -0.00159,
+    "team_vs_field_s_per_lap2": -0.00715,
+    "races": 11
+   },
+   "BOT": {
+    "team_id": "alfa_2022",
+    "wear_multiplier": 1.0491,
+    "vs_teammate_s_per_lap2": -0.0039,
+    "team_vs_field_s_per_lap2": 0.00506,
+    "races": 4
+   },
+   "GAS": {
+    "team_id": "alphatauri_2022",
+    "wear_multiplier": 0.9915,
+    "vs_teammate_s_per_lap2": 0.00377,
+    "team_vs_field_s_per_lap2": -0.00087,
+    "races": 10
+   },
+   "HAM": {
+    "team_id": "mercedes_2022",
+    "wear_multiplier": 0.9708,
+    "vs_teammate_s_per_lap2": 0.0017,
+    "team_vs_field_s_per_lap2": -0.00301,
+    "races": 10
+   },
+   "HUL": {
+    "team_id": "aston_martin_2022",
+    "wear_multiplier": 0.9322,
+    "vs_teammate_s_per_lap2": 0.02865,
+    "team_vs_field_s_per_lap2": -0.007,
+    "races": 1
+   },
+   "LAT": {
+    "team_id": "williams_2022",
+    "wear_multiplier": 1.1105,
+    "vs_teammate_s_per_lap2": 0.00384,
+    "team_vs_field_s_per_lap2": 0.0114,
+    "races": 11
+   },
+   "LEC": {
+    "team_id": "ferrari_2022",
+    "wear_multiplier": 0.9617,
+    "vs_teammate_s_per_lap2": -0.00224,
+    "team_vs_field_s_per_lap2": -0.00395,
+    "races": 10
+   },
+   "MAG": {
+    "team_id": "haas_2022",
+    "wear_multiplier": 1.0712,
+    "vs_teammate_s_per_lap2": -0.00205,
+    "team_vs_field_s_per_lap2": 0.00734,
+    "races": 8
+   },
+   "MSC": {
+    "team_id": "haas_2022",
+    "wear_multiplier": 1.0712,
+    "vs_teammate_s_per_lap2": 0.00205,
+    "team_vs_field_s_per_lap2": 0.00734,
+    "races": 8
+   },
+   "NOR": {
+    "team_id": "mclaren_2022",
+    "wear_multiplier": 0.9527,
+    "vs_teammate_s_per_lap2": 0.00317,
+    "team_vs_field_s_per_lap2": -0.00488,
+    "races": 9
+   },
+   "OCO": {
+    "team_id": "alpine_2022",
+    "wear_multiplier": 0.9307,
+    "vs_teammate_s_per_lap2": 0.00159,
+    "team_vs_field_s_per_lap2": -0.00715,
+    "races": 11
+   },
+   "PER": {
+    "team_id": "red_bull_2022",
+    "wear_multiplier": 1.0338,
+    "vs_teammate_s_per_lap2": 0.00087,
+    "team_vs_field_s_per_lap2": 0.00349,
+    "races": 11
+   },
+   "RIC": {
+    "team_id": "mclaren_2022",
+    "wear_multiplier": 0.9527,
+    "vs_teammate_s_per_lap2": -0.00317,
+    "team_vs_field_s_per_lap2": -0.00488,
+    "races": 9
+   },
+   "RUS": {
+    "team_id": "mercedes_2022",
+    "wear_multiplier": 0.9708,
+    "vs_teammate_s_per_lap2": -0.0017,
+    "team_vs_field_s_per_lap2": -0.00301,
+    "races": 10
+   },
+   "SAI": {
+    "team_id": "ferrari_2022",
+    "wear_multiplier": 0.9617,
+    "vs_teammate_s_per_lap2": 0.00224,
+    "team_vs_field_s_per_lap2": -0.00395,
+    "races": 10
+   },
+   "STR": {
+    "team_id": "aston_martin_2022",
+    "wear_multiplier": 0.9322,
+    "vs_teammate_s_per_lap2": -0.00135,
+    "team_vs_field_s_per_lap2": -0.007,
+    "races": 9
+   },
+   "TSU": {
+    "team_id": "alphatauri_2022",
+    "wear_multiplier": 0.9915,
+    "vs_teammate_s_per_lap2": -0.00377,
+    "team_vs_field_s_per_lap2": -0.00087,
+    "races": 10
+   },
+   "VER": {
+    "team_id": "red_bull_2022",
+    "wear_multiplier": 1.0338,
+    "vs_teammate_s_per_lap2": -0.00087,
+    "team_vs_field_s_per_lap2": 0.00349,
+    "races": 11
+   },
+   "VET": {
+    "team_id": "aston_martin_2022",
+    "wear_multiplier": 0.9322,
+    "vs_teammate_s_per_lap2": -0.00206,
+    "team_vs_field_s_per_lap2": -0.007,
+    "races": 8
+   },
+   "ZHO": {
+    "team_id": "alfa_2022",
+    "wear_multiplier": 1.0491,
+    "vs_teammate_s_per_lap2": 0.0039,
+    "team_vs_field_s_per_lap2": 0.00506,
+    "races": 4
+   }
+  }
+ },
+ "derived_at_setup": {
+  "consistency": "rank of W2 lap noise (driver_pace_2022_v1), persona spread",
+  "overtake_skill": "rank of W3 attack term (racecraft_2022_v1), persona spread",
+  "defense_skill": "rank of W3 defend term (racecraft_2022_v1), persona spread"
+ },
+ "not_measurable": {
+  "mistake proneness (consistency x composure in incidents)": "blue flags dominate big losses (2024: 24 events left; odd vs even races r = -0.33)",
+  "composure": "no measurement (penalties too few per driver)",
+  "wet_skill": "3 wet races",
+  "risk_appetite": "a preference, not a measurement",
+  "qualifying_skill": "the grid is real"
+ }
+}

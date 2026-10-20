@@ -36,6 +36,7 @@ import pandas as pd
 import scipy.sparse as sp
 from scipy.sparse.linalg import lsqr
 
+from f1ar.calibration.season_files import REFERENCE_SEASON, own_season
 from f1ar.calibration.tyre_life_fit import green_laps
 from f1ar.domain.driver_profiles import ProfileSet
 from f1ar.domain.identities import RaceRoster
@@ -208,7 +209,7 @@ def refit_profiles(
                         update={
                             "overridden_fields": fields,
                             "explanation": f"{meta.explanation} W5 (D-045): "
-                            f"{', '.join(sorted(changes))} estimated from 2024 data.",
+                            f"{', '.join(sorted(changes))} estimated from {roster.season} data.",
                         }
                     ),
                 }
@@ -217,9 +218,10 @@ def refit_profiles(
     return profiles.model_copy(update={"profiles": tuple(out)}), notes
 
 
-def load_personas(configs: Path) -> dict[str, Any] | None:
-    path = configs / PERSONA_FILE
-    if not path.exists():
+def load_personas(configs: Path, season: int = REFERENCE_SEASON) -> dict[str, Any] | None:
+    """This season's fit, or None: keyed by driver/team, never borrowed (H2a, D-054)."""
+    path = own_season(configs, PERSONA_FILE, season)
+    if path is None:
         return None
     data: dict[str, Any] = json.loads(path.read_text(encoding="utf-8"))
     return data

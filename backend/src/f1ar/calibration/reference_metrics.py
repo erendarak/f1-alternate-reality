@@ -22,6 +22,8 @@ from typing import Any
 
 import pandas as pd
 
+from f1ar.data.status import is_finisher
+
 TYRE_OFFSET_LAPS = 5
 PASS_CAUSES = ("lap1", "neutral", "tyre_offset", "green")
 
@@ -152,7 +154,7 @@ def real_metrics(data_dir: Path) -> RaceMetrics:
         if lap >= last.get(r["code"], (0, 0.0))[0]:
             last[r["code"]] = (lap, t)
     total = max(lap for lap, _ in last.values())
-    finishers = {d for d in last if official.get(d) in ("Finished", "Lapped", "Disqualified")}
+    finishers = {d for d in last if is_finisher(official.get(d))}
     order = sorted(last, key=lambda d: (d not in finishers, -last[d][0], last[d][1]))
     start = min(float(r["lap_start_time_s"]) for r in rows if int(r["lap_number"]) == 1)
 

@@ -1,5 +1,5 @@
-"""Fit the W1 tyre-life model on 2024 (engine v0.10.0, D-041) and write
-configs/calibration/tyre_life_2024_v1.json.
+"""Fit the W1 tyre-life model on a season (engine v0.10.0, D-041) and write
+configs/calibration/tyre_life_<season>_v1.json (2024 by default; H2a: any season 2018+).
 
 1. Per race: raw tyre life per compound (stint lengths), wear multiplier; season same-lap wear
    curve and fresh-tyre peak (``f1ar.calibration.tyre_life_fit``).
@@ -11,6 +11,7 @@ configs/calibration/tyre_life_2024_v1.json.
 Usage:
     uv run python scripts/fit_tyre_life.py                      # data + grid search (~15-30 min)
     uv run python scripts/fit_tyre_life.py --kappa 1.0 --delta 0.35 --no-grid
+    uv run python scripts/fit_tyre_life.py --season 2019        # H2a
 """
 
 import argparse
@@ -28,12 +29,11 @@ import pandas as pd
 import yaml
 
 from f1ar.calibration.lap_model_fit import LIFE_FILE
+from f1ar.calibration.season_files import dataset_files, season_path
 from f1ar.calibration.tyre_life_fit import fit_events, to_json
 
 print = functools.partial(print, flush=True)  # noqa: A001 (progress through pipes)
 ROOT = Path(__file__).resolve().parents[1]
-DATASET = ROOT / "data" / "processed" / "datasets" / "laps_2024_v1.parquet"
-SPLITS = ROOT / "data" / "manifests" / "dataset_laps_2024_v1.yaml"
 KAPPAS = (0.8, 0.9, 1.0, 1.1, 1.2, 1.45)
 DELTAS = (0.0, 0.1, 0.2, 0.35, 0.5)
 SEEDS = (1, 2, 3)
@@ -118,20 +118,22 @@ def simulate(job: tuple[str, float, float, tuple[int, ...]]) -> dict[str, Any]:
     }
 
 
-def content_sha() -> str:
-    manifest = yaml.safe_load(SPLITS.read_text(encoding="utf-8"))
+def content_sha(splits_file: Path) -> str:
+    manifest = yaml.safe_load(splits_file.read_text(encoding="utf-8"))
     return str(manifest["file"]["content_sha256"])
 
 
 def write_manifest(
     artifact: Path,
     *,
+    season: int,
+    splits_file: Path,
     splits_sha: str,
     train: list[str],
     best: tuple[float, float],
     fit: dict[str, Any],
 ) -> None:
-    """The model registry entry (configs/models/tyre_life_2024_v1.yaml)."""
+    """The model registry entry (configs/models/tyre_life_<season>_v1.yaml)."""
     body = {
         "model_name": "tyre_life",
         "model_version": "v1",
@@ -140,7 +142,7 @@ def write_manifest(
         "artifact": artifact.relative_to(ROOT).as_posix(),
         "artifact_sha256": "sha256:" + hashlib.sha256(artifact.read_bytes()).hexdigest(),
         "feature_schema_version": 1,
-        "training_dataset_manifest": SPLITS.relative_to(ROOT).as_posix(),
+        "training_dataset_manifest": splits_file.relative_to(ROOT).as_posix(),
         "training_dataset_content_sha256": splits_sha,
         "training_races": sorted(train),
         "metrics": {
@@ -154,9 +156,11 @@ def write_manifest(
             },
             "held_out_check": "EXP-010 (docs/experiments/exp010.json)",
         },
-        "status": "validated_for_engine_use (W1, engine v0.10.0, D-041)",
+        "status": "validated_for_engine_use (W1, engine v0.10.0, D-041)"
+        if season == 2024
+        else f"fitted for {season} (H2a, D-054); held-out check EXP-023",
     }
-    (ROOT / "configs" / "models" / "tyre_life_2024_v1.yaml").write_text(
+    (ROOT / "configs" / "models" / f"tyre_life_{season}_v1.yaml").write_text(
         yaml.safe_dump(body, sort_keys=False, width=100), encoding="utf-8", newline="\n"
     )
 
@@ -173,17 +177,21 @@ def main() -> None:
     parser.add_argument("--no-grid", action="store_true")
     parser.add_argument("--workers", type=int, default=14)
     parser.add_argument("--report", type=Path, help="write the grid results as JSON")
+    parser.add_argument("--season", type=int, default=2024)
     args = parser.parse_args()
     t0 = time.perf_counter()
-    laps = pd.read_parquet(DATASET)
-    splits = yaml.safe_load(SPLITS.read_text(encoding="utf-8"))["splits"]
+    dataset, splits_file = dataset_files(ROOT, args.season)
+    laps = pd.read_parquet(dataset)
+    splits = yaml.safe_load(splits_file.read_text(encoding="utf-8"))["splits"]
     train, test = list(splits["dry_train"]), list(splits["dry_test"])
     season, ratios, events = fit_events(laps, train + test, train)
-    sha = "sha256:" + hashlib.sha256(DATASET.read_bytes()).hexdigest()
-    out_path = ROOT / "configs" / LIFE_FILE
+    sha = "sha256:" + hashlib.sha256(dataset.read_bytes()).hexdigest()
+    out_path = ROOT / "configs" / season_path(LIFE_FILE, args.season)
 
     def write(kappa: float, delta: float) -> None:
-        cfg = to_json(season, ratios, events, train, kappa=kappa, delta=delta, data_sha=sha)
+        cfg = to_json(
+            season, ratios, events, train, kappa=kappa, delta=delta, data_sha=sha, year=args.season
+        )
         out_path.write_text(json.dumps(cfg, indent=1) + "\n", encoding="utf-8", newline="\n")
 
     write(args.kappa, args.delta)
@@ -225,7 +233,15 @@ def main() -> None:
     best = min(grid, key=lambda kd: float(grid[kd]["loss"]))
     print(f"best: kappa {best[0]}, delta {best[1]}: {grid[best]}", flush=True)
     write(*best)
-    write_manifest(out_path, splits_sha=content_sha(), train=train, best=best, fit=grid[best])
+    write_manifest(
+        out_path,
+        season=args.season,
+        splits_file=splits_file,
+        splits_sha=content_sha(splits_file),
+        train=train,
+        best=best,
+        fit=grid[best],
+    )
     if args.report:
         report = {
             "real_share_train": {

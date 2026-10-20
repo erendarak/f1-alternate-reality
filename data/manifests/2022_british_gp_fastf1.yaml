@@ -2,12 +2,12 @@ dataset_id: 2022_british_gp_fastf1_v1
 event: 2022_british_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:01:51Z'
+retrieved_utc: '2026-10-17T17:04:51Z'
 session_key: 2022/round 10/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2022_british_gp/laps.parquet
-  sha256: sha256:e174c3dbd0521cfe1264367bd15583e2edfc71e339b5891b24b86b160b52b8e7
+  sha256: sha256:6bf3c4e104778b86922bb4259765fb72aefcc59d7f72c881fa4e0f622d45a390
   rows: 815
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2022_british_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2022_british_gp/positions.parquet
+  sha256: sha256:e0902bebf02f504286897aa1406a9895f238f0f63b28724f616179a2ffc09fe6
+  rows: 933880
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2022_british_gp/track_outline.parquet
+  sha256: sha256:0cc43e5d4142a131c54271f757a68f97effcfae31b997baa99cb7a5b53cfa2e9
+  rows: 365
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 55 lap 34 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

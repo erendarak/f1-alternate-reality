@@ -1,6 +1,6 @@
 """Fit the W3 racecraft (engine v0.13.0, D-044).
 
-Writes configs/calibration/racecraft_2024_v1.json and its registry manifest:
+Writes configs/calibration/racecraft_<season>_v1.json and its registry manifest:
 
 1. Overtaking refit on the real lap-level encounters of the 21 dry races with the W2 lap noise,
    plus attack/defend terms per driver (``calibration/racecraft_fit``).
@@ -12,6 +12,7 @@ Writes configs/calibration/racecraft_2024_v1.json and its registry manifest:
 
 Usage:
     uv run python scripts/fit_racecraft.py --seeds 4     # ~5-10 min
+    uv run python scripts/fit_racecraft.py --season 2019  # H2a: needs that season's W2 fit
 """
 
 import argparse
@@ -36,14 +37,13 @@ from f1ar.calibration.racecraft_fit import (
     launch_skills,
 )
 from f1ar.calibration.reference_metrics import real_metrics
+from f1ar.calibration.season_files import dataset_files, season_path
 from f1ar.calibration.traffic_fit import encounters
 from f1ar.simulation.scenarios import default_traffic_params
 
 print = functools.partial(print, flush=True)  # noqa: A001 (progress through pipes)
 ROOT = Path(__file__).resolve().parents[1]
 CONFIGS = ROOT / "configs"
-DATASET = ROOT / "data" / "processed" / "datasets" / "laps_2024_v1.parquet"
-SPLITS = ROOT / "data" / "manifests" / "dataset_laps_2024_v1.yaml"
 
 
 def event_seed(event: str, k: int) -> int:
@@ -74,22 +74,24 @@ def main() -> None:
     parser.add_argument("--seeds", type=int, default=4)
     parser.add_argument("--workers", type=int, default=14)
     parser.add_argument("--iterations", type=int, default=7)
+    parser.add_argument("--season", type=int, default=2024)
     args = parser.parse_args()
     t0 = time.perf_counter()
-    manifest = yaml.safe_load(SPLITS.read_text(encoding="utf-8"))
+    dataset, splits_file = dataset_files(ROOT, args.season)
+    manifest = yaml.safe_load(splits_file.read_text(encoding="utf-8"))
     splits = manifest["splits"]
     train, test = list(splits["dry_train"]), list(splits["dry_test"])
     dry_events = train + test
-    laps = pd.read_parquet(DATASET)
+    laps = pd.read_parquet(dataset)
     dry = laps[laps["event_id"].isin(dry_events)]
-    pace = load_pace(CONFIGS)
-    assert pace is not None, "fit the W2 driver pace first (scripts/fit_driver_pace.py)"
+    pace = load_pace(CONFIGS, args.season)
+    assert pace is not None, f"fit the {args.season} W2 driver pace first (fit_driver_pace.py)"
     noise = {c: float(v["lap_noise_s"]) for c, v in pace["drivers"].items()}
     sd_of = {
         str(c): noise.get(str(c), float(pace["field_noise_s"])) for c in dry["driver_code"].unique()
     }
     tp = default_traffic_params()
-    shape, _ = load_shape(CONFIGS)
+    shape, _ = load_shape(CONFIGS, args.season)
     enc = encounters(
         dry,
         shape,
@@ -105,7 +107,7 @@ def main() -> None:
     )
     old = json.loads((CONFIGS / "calibration" / "traffic_2024_v1.json").read_text(encoding="utf-8"))
     cfg: dict[str, Any] = {
-        "label": "2024 racecraft (W3, D-044)",
+        "label": f"{args.season} racecraft (W3, D-044)",
         "events": dry_events,
         "overtaking": overtaking,
         "launch": {
@@ -116,7 +118,7 @@ def main() -> None:
         "lap1_grid_profile_note": "editorial shape: Dartmouth Sports Analytics 2022-23 lap-1 "
         "incident involvements by grid row (rows 4-7 interpolated), mean 1",
     }
-    out = CONFIGS / RACECRAFT_FILE
+    out = CONFIGS / season_path(RACECRAFT_FILE, args.season)
 
     def write() -> None:
         out.write_text(json.dumps(cfg, indent=1) + "\n", encoding="utf-8", newline="\n")
@@ -180,13 +182,15 @@ def main() -> None:
         "artifact": out.relative_to(ROOT).as_posix(),
         "artifact_sha256": "sha256:" + hashlib.sha256(out.read_bytes()).hexdigest(),
         "feature_schema_version": 1,
-        "training_dataset_manifest": SPLITS.relative_to(ROOT).as_posix(),
+        "training_dataset_manifest": splits_file.relative_to(ROOT).as_posix(),
         "training_dataset_content_sha256": manifest["file"]["content_sha256"],
         "training_races": sorted(dry_events),
         "metrics": {"check": cfg["check"], "held_out_check": "EXP-013"},
-        "status": "validated_for_engine_use (W3, engine v0.13.0, D-044)",
+        "status": "validated_for_engine_use (W3, engine v0.13.0, D-044)"
+        if args.season == 2024
+        else f"fitted for {args.season} (H2a, D-054); held-out check EXP-023",
     }
-    (CONFIGS / "models" / "racecraft_2024_v1.yaml").write_text(
+    (CONFIGS / "models" / f"racecraft_{args.season}_v1.yaml").write_text(
         yaml.safe_dump(body, sort_keys=False, width=100), encoding="utf-8", newline="\n"
     )
     print(f"done in {(time.perf_counter() - t0) / 60:.1f} min")

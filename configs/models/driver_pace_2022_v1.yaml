@@ -1,0 +1,27 @@
+model_name: driver_pace
+model_version: v1
+kind: same-lap regression per race; driver vs teammate and residual SD, shrunk
+source_type: estimated_from_data
+artifact: configs/calibration/driver_pace_2022_v1.json
+artifact_sha256: sha256:2219495caf49c21ec70957775d8ae6617986e1ee3b318aa383af25c6fb3aaefa
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2022_v1.yaml
+training_dataset_content_sha256: sha256:6c03eeb66580351aaa8d2fc4a24b1ab045943c91552c7ed4b08440445ad4121a
+training_races:
+- 2022_abu_dhabi_gp
+- 2022_australian_gp
+- 2022_austrian_gp
+- 2022_bahrain_gp
+- 2022_belgian_gp
+- 2022_british_gp
+- 2022_canadian_gp
+- 2022_dutch_gp
+- 2022_miami_gp
+- 2022_sao_paulo_gp
+- 2022_spanish_gp
+- 2022_united_states_gp
+metrics:
+  field_noise_s: 0.4354
+  overtake_threshold_shift_s: 0.0
+  held_out_check: EXP-012
+status: fitted for 2022 (H2a, D-054); held-out check EXP-023

@@ -2,12 +2,12 @@ dataset_id: 2022_spanish_gp_fastf1_v1
 event: 2022_spanish_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:00:45Z'
+retrieved_utc: '2026-10-17T17:03:10Z'
 session_key: 2022/round 6/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2022_spanish_gp/laps.parquet
-  sha256: sha256:2714caa8eaf4ba9de783933fce49bd934d32f9640ba8869ab4c8ac742ccf2031
+  sha256: sha256:80cca2cca2829437f91eb2098d6ddf1c145807fb4fa77e1d6357c79a82dd74a1
   rows: 1230
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2022_spanish_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2022_spanish_gp/positions.parquet
+  sha256: sha256:847cdcf785d3cc04af3ec3f24ffc8527cbb8a8aaa4c514dd3ac2d24df2f2dbab
+  rows: 758600
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2022_spanish_gp/track_outline.parquet
+  sha256: sha256:6e152d58f4880993b3d685f016421b6ec5f12be8f27f12235f5ba25b4af839a4
+  rows: 332
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 1 lap 42 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

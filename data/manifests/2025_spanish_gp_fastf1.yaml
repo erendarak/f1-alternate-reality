@@ -2,12 +2,12 @@ dataset_id: 2025_spanish_gp_fastf1_v1
 event: 2025_spanish_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T21:50:35Z'
+retrieved_utc: '2026-10-17T17:43:20Z'
 session_key: 2025/round 9/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2025_spanish_gp/laps.parquet
-  sha256: sha256:b69cf55a86bc86ff40d36941837bc34b0d7f1cb9cb9a92f1738da7bb270244ba
+  sha256: sha256:d9566b59a075ff47e97a07b969ddba6f17182b7fa0112a676e459bcaae45e896
   rows: 1203
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2025_spanish_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2025_spanish_gp/positions.parquet
+  sha256: sha256:647ac676aef7e9bbf9e089ef6795f2dcb9bc7f6e0cc47ee3ab5f2587b56b11fb
+  rows: 654265
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2025_spanish_gp/track_outline.parquet
+  sha256: sha256:8f3a2960751da7e4245dbdb08ccad977cbbe99c33113992f75c9c76b2560aad9
+  rows: 301
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 81 lap 24 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)

@@ -407,6 +407,16 @@ class DriverEntry(_Frozen):
     profile: DriverProfile
 
 
+PIT_LANE_SLOT = 100
+"""Start slot of a pit-lane starter (Jolpica grid 0): behind the whole grid (H2a, D-054)."""
+
+
+def start_slot(grid_position: int) -> int:
+    """The grid slot for ordering the start: a pit-lane starter (grid 0) goes last. It doesn't
+    model the later release from the pit exit (an approximation)."""
+    return grid_position if grid_position > 0 else PIT_LANE_SLOT
+
+
 class RaceSetup(_Frozen):
     event_id: str
     track: TrackSpec

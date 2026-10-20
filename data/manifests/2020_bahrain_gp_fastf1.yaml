@@ -2,12 +2,12 @@ dataset_id: 2020_bahrain_gp_fastf1_v1
 event: 2020_bahrain_gp
 source: fastf1
 source_api_version: 3.8.3
-retrieved_utc: '2026-10-16T22:11:01Z'
+retrieved_utc: '2026-10-17T16:50:35Z'
 session_key: 2020/round 15/R
 license_review_status: research_only
 files:
 - relative_path: data/processed/2020_bahrain_gp/laps.parquet
-  sha256: sha256:4f76e33f6e6d9cc3759d5dd69b5e0e74c392f0f69617a263e26e16c55e4cb3b2
+  sha256: sha256:2c7b81b287f0f523f4b511ce4f3cd93c0377fc6508d21f67b1e832f4d6fcbfbc
   rows: 1019
   columns:
   - driver_number
@@ -32,6 +32,7 @@ files:
   - is_accurate
   - deleted
   - fastf1_generated
+  - compound_name
   source_type: historical_verified
   description: 'one row per car per lap: times, sectors, tyres, stint, position'
 - relative_path: data/processed/2020_bahrain_gp/results.parquet
@@ -99,6 +100,28 @@ files:
   - display_rotation_deg
   source_type: historical_verified
   description: corner numbers/positions (metres) + suggested display rotation
+- relative_path: data/processed/2020_bahrain_gp/positions.parquet
+  sha256: sha256:1600122de90d14409604b9fdc86ccaa2d8bf12c849ae8b27d15851bed9e06f61
+  rows: 1184320
+  columns:
+  - driver_number
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  - status
+  source_type: historical_verified
+  description: car X/Y/Z location samples in metres (~4 Hz)
+- relative_path: data/processed/2020_bahrain_gp/track_outline.parquet
+  sha256: sha256:3fe1b7398cd24ffad67d50e9f8a5b7c253845bb63e2562c2f8b61d2c2ba045f9
+  rows: 427
+  columns:
+  - session_time_s
+  - x_m
+  - y_m
+  - z_m
+  source_type: estimated_from_data
+  description: 'derived: car 44 lap 25 path as outline'
 unit_conventions:
   time: seconds (float); *_time_s columns are session time
   distance: metres (positions converted from FastF1 1/10 m)
