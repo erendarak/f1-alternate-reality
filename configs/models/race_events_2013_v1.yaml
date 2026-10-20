@@ -3,7 +3,7 @@ model_version: v1
 kind: rates and shrunk team multipliers from 2013 timing; 2 values fitted by simulation
 source_type: estimated_from_data
 artifact: configs/calibration/race_events_2013_v1.json
-artifact_sha256: sha256:946fa7e0e69211173675e44293628caeca3820218610cd0412090b663bb077c4
+artifact_sha256: sha256:41ad614a6d44aa9163859473360ab3627e644a9f3cd543076312674086a9159f
 feature_schema_version: 1
 training_dataset_manifest: data/manifests/dataset_laps_2013_v1.yaml
 training_dataset_content_sha256: sha256:1c06fb772754d6378e754ffda4b7cda9701d4f407cf9219e0467aec23714a158
@@ -29,9 +29,9 @@ training_races:
 - 2013_united_states_gp
 metrics:
   dry_train_check:
-    retirements_per_race: 3.2
+    retirements_per_race: 3.014
     red_flags_per_race: 0.0
-    safety_cars_per_race: 0.671
+    safety_cars_per_race: 0.371
     vscs_per_race: 0.0
     penalties_per_race: 0.0
     penalties_per_race_after_scale: 0.0

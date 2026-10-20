@@ -1,5 +1,6 @@
 {
  "label": "2021 tyre life + same-lap wear (W1, D-041)",
+ "compound_reference": null,
  "dataset_sha256": "sha256:228a9fba5e1f79e5116f73888e9a9cc15a771cfdd31c1721d4dcbd417ba5ca61",
  "fitted_on": [
   "2021_austrian_gp",
@@ -17,7 +18,7 @@
   "2021_united_states_gp"
  ],
  "globals": {
-  "kappa": 0.9,
+  "kappa": 0.7,
   "kappa_note": "life_laps = kappa x life_raw; fitted on dry_train behaviour",
   "delta_s": 0.0,
   "delta_note": "potential pace step: SOFT -delta, MEDIUM 0, HARD +delta; fitted"

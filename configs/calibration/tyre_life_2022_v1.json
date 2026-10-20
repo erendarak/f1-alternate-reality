@@ -1,5 +1,6 @@
 {
  "label": "2022 tyre life + same-lap wear (W1, D-041)",
+ "compound_reference": null,
  "dataset_sha256": "sha256:561729d3fbb61f9915b5ed10339841835dd5386df2532e3b81c475e0bc4ae0d6",
  "fitted_on": [
   "2022_abu_dhabi_gp",
@@ -16,9 +17,9 @@
   "2022_united_states_gp"
  ],
  "globals": {
-  "kappa": 0.8,
+  "kappa": 0.9,
   "kappa_note": "life_laps = kappa x life_raw; fitted on dry_train behaviour",
-  "delta_s": 0.2,
+  "delta_s": 0.35,
   "delta_note": "potential pace step: SOFT -delta, MEDIUM 0, HARD +delta; fitted"
  },
  "season_wear": {

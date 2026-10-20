@@ -1,0 +1,33 @@
+{
+  "crash_per_lap": 0.001709,
+  "failure_per_lap": 0.001139,
+  "first_lap_crash_multiplier": 15.1,
+  "fitted_on": [
+    "2012_australian_gp",
+    "2012_chinese_gp",
+    "2012_spanish_gp",
+    "2012_monaco_gp",
+    "2012_canadian_gp",
+    "2012_british_gp",
+    "2012_german_gp",
+    "2012_hungarian_gp",
+    "2012_italian_gp",
+    "2012_singapore_gp",
+    "2012_japanese_gp",
+    "2012_indian_gp",
+    "2012_abu_dhabi_gp",
+    "2012_united_states_gp"
+  ],
+  "lap1_retirement_per_starter": 0.02695,
+  "note": "H2c: 14 dry_train 2012 races; neutralisations inferred from lap times (no VSC yet)",
+  "races": 14,
+  "retirement_per_car_lap": 0.002848,
+  "retirements": 60,
+  "safety_cars": 7,
+  "sc_laps_median": 5.49,
+  "sc_laps_p25": 2.78,
+  "sc_laps_p75": 8.33,
+  "sc_per_retirement": 0.1167,
+  "vsc_per_retirement_without_sc": 0.0,
+  "vscs": 0
+}

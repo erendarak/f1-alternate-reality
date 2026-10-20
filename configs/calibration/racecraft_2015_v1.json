@@ -256,7 +256,7 @@
   "ridge_track": 50.0,
   "ridge_driver": 50.0,
   "log_likelihood": -855.19,
-  "race_level_shift_s": -0.1523
+  "race_level_shift_s": -0.1992
  },
  "launch": {
   "seconds_per_position": 0.714,
@@ -390,7 +390,7 @@
     "starts": 17
    }
   },
-  "start_spread_s": 1.6621
+  "start_spread_s": 1.623
  },
  "lap1_grid_profile": [
   0.2239,
@@ -419,111 +419,111 @@
   {
    "param": "spread",
    "value": 1.75,
-   "passes": 14.44
-  },
-  {
-   "param": "spread",
-   "value": 2.375,
-   "passes": 22.32
-  },
-  {
-   "param": "spread",
-   "value": 2.0625,
-   "passes": 18.3
-  },
-  {
-   "param": "spread",
-   "value": 1.9062,
-   "passes": 15.85
-  },
-  {
-   "param": "spread",
-   "value": 1.8281,
-   "passes": 15.36
-  },
-  {
-   "param": "spread",
-   "value": 1.7891,
-   "passes": 14.79
-  },
-  {
-   "param": "spread",
-   "value": 1.7695,
-   "passes": 14.62
-  },
-  {
-   "param": "shift",
-   "value": 0.0,
-   "passes": 44.39
-  },
-  {
-   "param": "shift",
-   "value": -0.25,
-   "passes": 54.23
-  },
-  {
-   "param": "shift",
-   "value": -0.125,
-   "passes": 49.27
-  },
-  {
-   "param": "shift",
-   "value": -0.1875,
-   "passes": 51.45
-  },
-  {
-   "param": "shift",
-   "value": -0.1562,
-   "passes": 50.41
-  },
-  {
-   "param": "shift",
-   "value": -0.1406,
-   "passes": 49.43
-  },
-  {
-   "param": "shift",
-   "value": -0.1484,
-   "passes": 49.64
-  },
-  {
-   "param": "spread",
-   "value": 1.75,
-   "passes": 15.33
+   "passes": 14.84
   },
   {
    "param": "spread",
    "value": 1.125,
-   "passes": 9.46
+   "passes": 8.69
   },
   {
    "param": "spread",
    "value": 1.4375,
-   "passes": 12.15
+   "passes": 11.17
   },
   {
    "param": "spread",
    "value": 1.5938,
-   "passes": 13.56
+   "passes": 12.71
   },
   {
    "param": "spread",
    "value": 1.6719,
-   "passes": 14.69
+   "passes": 14.0
+  },
+  {
+   "param": "spread",
+   "value": 1.7109,
+   "passes": 14.24
+  },
+  {
+   "param": "spread",
+   "value": 1.7305,
+   "passes": 14.52
+  },
+  {
+   "param": "shift",
+   "value": 0.0,
+   "passes": 41.82
+  },
+  {
+   "param": "shift",
+   "value": -0.25,
+   "passes": 51.46
+  },
+  {
+   "param": "shift",
+   "value": -0.125,
+   "passes": 45.96
+  },
+  {
+   "param": "shift",
+   "value": -0.1875,
+   "passes": 48.71
+  },
+  {
+   "param": "shift",
+   "value": -0.2188,
+   "passes": 50.36
+  },
+  {
+   "param": "shift",
+   "value": -0.2031,
+   "passes": 49.7
+  },
+  {
+   "param": "shift",
+   "value": -0.1953,
+   "passes": 48.95
+  },
+  {
+   "param": "spread",
+   "value": 1.75,
+   "passes": 15.96
+  },
+  {
+   "param": "spread",
+   "value": 1.125,
+   "passes": 9.71
+  },
+  {
+   "param": "spread",
+   "value": 1.4375,
+   "passes": 12.38
+  },
+  {
+   "param": "spread",
+   "value": 1.5938,
+   "passes": 13.97
+  },
+  {
+   "param": "spread",
+   "value": 1.6719,
+   "passes": 15.42
   },
   {
    "param": "spread",
    "value": 1.6328,
-   "passes": 13.96
+   "passes": 14.79
   },
   {
    "param": "spread",
-   "value": 1.6523,
-   "passes": 14.54
+   "value": 1.6133,
+   "passes": 14.35
   }
  ],
  "check": {
-  "dry_train_passes_sim": 48.61,
+  "dry_train_passes_sim": 46.46,
   "dry_train_passes_real": 49.64,
   "dry_train_lap1_passes_real": 14.57
  }

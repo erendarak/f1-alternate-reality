@@ -1,0 +1,26 @@
+model_name: race_control
+model_version: v1
+kind: 'method of moments: retirement hazard, SC/VSC per retirement, SC length'
+source_type: estimated_from_data
+artifact: configs/calibration/race_control_2020_v1.json
+artifact_sha256: sha256:16f021ad5a150abd67646b374e70fd1582141c02a64b251ab1b66bb95b2f487f
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2020_v1.yaml
+training_dataset_content_sha256: sha256:5bbb5e3b275006cf794a7917223ab1536dee650010ff994448fa2b8ac1e07d76
+training_races:
+- 2020_70th_anniversary_gp
+- 2020_abu_dhabi_gp
+- 2020_bahrain_gp
+- 2020_belgian_gp
+- 2020_eifel_gp
+- 2020_emilia_romagna_gp
+- 2020_russian_gp
+- 2020_spanish_gp
+- 2020_styrian_gp
+- 2020_tuscan_gp
+metrics:
+  retirements: 32
+  safety_cars: 11
+  vscs: 4
+  held_out_check: EXP-025
+status: fitted for 2020 (H2c, D-056)

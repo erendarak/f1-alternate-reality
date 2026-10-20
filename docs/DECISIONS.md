@@ -1275,6 +1275,12 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   the front (36 races 2018-2025, incl. 2024 Mexico since M4). Later release from the pit exit not
   modelled. 2024 races without one are identical to v0.16 (4 tracks x 3 seeds); 2024's fits
   (fitted with the old order, Mexico in them) not redone.
+- **Correction (H2c, 2026-10-20):** EXP-023 blamed 2021's under-passing on 2024's per-track
+  overtaking table. Wrong: the season's racecraft fit has its own per-track thresholds (the 2021
+  test tracks too) and replaces the traffic table entirely. The missing passes are tyre-offset
+  passes (cars on different-age tyres: real 13-37 a race, simulated < 1): every car runs the same
+  rule planner on the true tyre model, so strategies hardly diverge (EXP-020's finding; H3/H4).
+  The traffic input of a season with racecraft was also mislabelled "2024 rates": fixed.
 - Jolpica: the pipeline's own call backs off on HTTP 429; `fetch_season.py` prints errors as they
   happen and has `--pause` (a fast telemetry run plus the history fetch went over 500/hour once).
 
@@ -1305,4 +1311,22 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   moving later cars back only as needed (noted in the manifest).
 - **Car pace cap 10 -> 15 s:** HRT's first race (2010 Bahrain) lost ~10 s a lap.
 - Personas 2010-2017 as D-054 (editorial; 2010 rookies wrong until the 2000s are fetched).
+
+## D-056 — H2c: race control per season; overtaking already per season (2026-10-21)
+
+- **Overtaking was already per season and per track** (each season's W3 racecraft fit has its
+  own track thresholds and replaces the 2024 traffic table): the label now says so; nothing to
+  refit. 2021's under-passing is too little strategy diversity, not a rate (D-054 correction).
+- **Race control per season** (`scripts/fit_race_control.py`, `race_control_<season>_v1.json`,
+  step 3 of `scripts/fit_season.py`): retirement hazard, SC/VSC per retirement, SC length, on
+  the season's dry_train races (2024's own file used all 21 dry races). Track status real from
+  2018, inferred before; 2015-2017 SC/VSC split with 2018's VSC share (borrowed, labelled);
+  2010-2014 no VSC. Loader falls back to 2024's (labelled) for a season without a fit.
+- Era trends in the fits: retirements per car-lap 0.0042 (2010) -> 0.0014 (2025); SC per
+  retirement 0.08-0.19 (2010-2017) -> 0.29-0.37 (2020+).
+- Every season 2010-2025 (not 2024) refitted from the tyre step on its own race control.
+- **EXP-025 verdict, mixed:** own race control fixes retirements (bias -0.98 -> +0.43 per race;
+  2010-2017 under-predicted by 1.2-1.4 with 2024's rates) but not SC/VSC counts (MAE 0.79 vs
+  0.74): rare events, 9-15 training races a season. Kept (the era differences are real).
+- Weather and wet-race rates stay 2024's (3 wet races a season are too few to fit).
 

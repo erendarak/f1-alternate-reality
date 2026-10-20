@@ -1,0 +1,28 @@
+model_name: race_control
+model_version: v1
+kind: 'method of moments: retirement hazard, SC/VSC per retirement, SC length'
+source_type: estimated_from_data
+artifact: configs/calibration/race_control_2023_v1.json
+artifact_sha256: sha256:62dd7b97e046c82d4293b23a19cc0b7bf1e734c994bd9191830baf0694deda81
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2023_v1.yaml
+training_dataset_content_sha256: sha256:68f96669b4c05a3c23c10acd6999f40b3aecbca737138faf77cedb7bf1c01b83
+training_races:
+- 2023_abu_dhabi_gp
+- 2023_australian_gp
+- 2023_austrian_gp
+- 2023_bahrain_gp
+- 2023_british_gp
+- 2023_hungarian_gp
+- 2023_mexico_city_gp
+- 2023_miami_gp
+- 2023_qatar_gp
+- 2023_saudi_arabian_gp
+- 2023_spanish_gp
+- 2023_united_states_gp
+metrics:
+  retirements: 31
+  safety_cars: 9
+  vscs: 5
+  held_out_check: EXP-025
+status: fitted for 2023 (H2c, D-056)

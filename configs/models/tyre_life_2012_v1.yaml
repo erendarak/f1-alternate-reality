@@ -26,12 +26,12 @@ metrics:
   dry_train_fit:
     kappa: 1.1
     delta_s: 0.65
-    loss: 0.0904
-    stops_sim: 1.864
+    loss: 0.095
+    stops_sim: 1.87
     stops_real: 1.925
     share_sim:
-      SOFT: 0.657
-      MEDIUM: 0.343
+      SOFT: 0.647
+      MEDIUM: 0.353
       HARD: 0.0
   held_out_check: EXP-010 (docs/experiments/exp010.json)
 status: fitted for 2012 (H2a, D-054); held-out check EXP-023

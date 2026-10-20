@@ -1379,6 +1379,10 @@ Negative:             2021's three test races get 33-41 passes vs 60-66 real (fi
                       53.4 vs 53.4): the season's racecraft threshold (0.76 s) with 2024's
                       per-track overtaking table under-passes those tracks. Per-track /
                       per-era overtaking is H2c.
+Correction (H2c):     wrong diagnosis: the 2021 racecraft fit has those tracks' own thresholds.
+                      By cause, the missing passes are tyre-offset passes (Spain 37 real vs 0.2
+                      simulated, Qatar 21 vs 0.2): too little strategy diversity among rule
+                      teams that all know the true tyre model (EXP-020; H3/H4), not a rate.
 Caveat:               3-5 test races per season: per-season numbers are noisy; trust the pool.
 ```
 
@@ -1419,6 +1423,37 @@ Negative:             2010's fit races: 58.9 simulated vs 75.8 "real" passes. Li
 Caveat:               3-5 test races per season; compounds unknown (2018 ratios), SC and VSC not
                       told apart, no penalties; the tyre grid was widened after four seasons hit
                       its edge (kappa 0.8).
+```
+
+## EXP-025 — Race control per season vs 2024's, 2010-2025 (2026-10-21)
+
+```text
+Experiment ID:        EXP-025
+Research question:    Do per-season race-control rates (H2c) give held-out races the real
+                      number of retirements, safety cars and VSCs?
+Setup:                scripts/experiments/exp023_seasons.py, 15 seasons (2010-2025 excl. 2024),
+                      61 dry_test races, 6 per-race seeds; "own RC" = every season fit; "2024 RC"
+                      = the same with only race_control_<season> removed (--borrow-kinds).
+                      Real SC/VSC 2010-2017 are inferred from lap times (SC/VSC not told apart).
+Output:               docs/experiments/exp025_race_control.json; all-fits vs all-borrowed for
+                      2010-2025: docs/experiments/exp025.json
+```
+
+| Era (races) | retirements bias / MAE | SC bias / MAE | VSC bias / MAE |
+|---|---|---|---|
+| 2010-2014 (19) own / 2024 | **+0.75 / 1.34** / -1.19 / 1.70 | +0.15 / 0.55 / -0.01 / 0.55 | 0 / 0 (no VSC) |
+| 2015-2017 (13) own / 2024 | **-0.04 / 1.58** / -1.44 / 1.72 | -0.81 / 1.06 / -0.72 / 1.00 | +0.27 / **0.27** / +0.38 / 0.38 |
+| 2018-2025 (29) own / 2024 | +0.44 / 1.68 / -0.63 / **1.58** | +0.37 / 0.82 / +0.02 / **0.75** | +0.06 / **0.66** / +0.01 / 0.69 |
+| **all (61)** own / 2024 | **+0.43 / 1.55** / -0.98 / 1.65 | +0.05 / 0.79 / -0.15 / **0.74** | +0.09 / **0.37** / +0.09 / 0.41 |
+
+```text
+Findings:             retirements: the season's own rates remove 2024's under-prediction in the
+                      older, less reliable eras. SC/VSC counts: no improvement (rare events,
+                      noisy per-season rates from 9-15 races); 2015-2017 under-predicts SCs with
+                      both (inferred real neutralisations include red flags and slow
+                      stretches). Stops unchanged (0.38 vs 0.39).
+Verdict:              mixed; per-season race control kept for the retirement gain. All 16
+                      seasons pooled (exp025.json): stops MAE 0.26-0.52 per era with own fits.
 ```
 
 ## BENCH-001 — Batch headless throughput (2026-10-12)

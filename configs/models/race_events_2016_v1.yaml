@@ -3,7 +3,7 @@ model_version: v1
 kind: rates and shrunk team multipliers from 2016 timing; 2 values fitted by simulation
 source_type: estimated_from_data
 artifact: configs/calibration/race_events_2016_v1.json
-artifact_sha256: sha256:d0ffb22383c077feb9b33e3c6517907b52a0aa8f0e7832fe0dbae90827c373fb
+artifact_sha256: sha256:8b0bbf7d11f011d53d125ffca19af595d6452b274ac165dc7a10754f1ef13313
 feature_schema_version: 1
 training_dataset_manifest: data/manifests/dataset_laps_2016_v1.yaml
 training_dataset_content_sha256: sha256:f4680315653b995fb9b40d115939c71e0492ef8aac60308c1a01114896df156a
@@ -31,10 +31,10 @@ training_races:
 - 2016_united_states_gp
 metrics:
   dry_train_check:
-    retirements_per_race: 2.686
+    retirements_per_race: 2.914
     red_flags_per_race: 0.0
-    safety_cars_per_race: 0.743
-    vscs_per_race: 0.443
+    safety_cars_per_race: 0.371
+    vscs_per_race: 0.229
     penalties_per_race: 0.0
     penalties_per_race_after_scale: 0.0
   held_out_check: EXP-011

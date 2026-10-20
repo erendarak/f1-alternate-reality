@@ -1,0 +1,33 @@
+{
+  "crash_per_lap": 0.001718,
+  "failure_per_lap": 0.001146,
+  "first_lap_crash_multiplier": 24.45,
+  "fitted_on": [
+    "2015_australian_gp",
+    "2015_malaysian_gp",
+    "2015_chinese_gp",
+    "2015_spanish_gp",
+    "2015_monaco_gp",
+    "2015_canadian_gp",
+    "2015_hungarian_gp",
+    "2015_belgian_gp",
+    "2015_singapore_gp",
+    "2015_japanese_gp",
+    "2015_russian_gp",
+    "2015_mexican_gp",
+    "2015_brazilian_gp",
+    "2015_abu_dhabi_gp"
+  ],
+  "lap1_retirement_per_starter": 0.04317,
+  "note": "H2c: 14 dry_train 2015 races; neutralisations inferred from lap times, split SC/VSC with 2018's VSC share 0.50 (borrowed)",
+  "races": 14,
+  "retirement_per_car_lap": 0.002864,
+  "retirements": 55,
+  "safety_cars": 6,
+  "sc_laps_median": 6.29,
+  "sc_laps_p25": 3.02,
+  "sc_laps_p75": 8.4,
+  "sc_per_retirement": 0.1,
+  "vsc_per_retirement_without_sc": 0.1111,
+  "vscs": 6
+}

@@ -2,6 +2,13 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## H2c (race control per season, D-056)
+
+- **Per-season SC/VSC rates are noisy** (9-15 training races; EXP-025: no better than 2024's for
+  SC/VSC counts); 2015-2017 SC/VSC split borrowed from 2018; pre-2018 neutralisations inferred.
+- **Crash/failure split stays editorial** (60 % crashes) in every season.
+- **Weather and wet-race rates are 2024's** for every season.
+
 ## H2b (2010-2017 from the Jolpica history, D-055)
 
 - **No tyre compounds before 2018**: one measured wear curve and life per race, soft/hard via
@@ -22,8 +29,10 @@ Honest list of what does **not** work or is only approximate. Update whenever on
   the fit trades stops against compound shares (weight 4, set on 2024; kept for every season).
 - **Finishing order matches the specific real race less with the season fits** (EXP-023): the
   W2 race form is random (same trade-off as EXP-012 for 2024).
-- **Era rates are 2024's for every season** (overtaking table per track, race control, weather,
-  wet races) until H2c; racecraft (pass threshold, attack/defend, launch) is per season.
+- **Too few tyre-offset passes** (real 13-37 a race in 2021, simulated < 1): the rule teams all
+  know the true tyre model, so their strategies hardly diverge (EXP-020; H3/H4).
+- **Weather and wet-race rates are 2024's for every season**; overtaking (per track) is per
+  season (racecraft); race control per season since H2c.
 - **Personas 2018-2025 are editorial**: copied from the 2024 seed for drivers who raced in 2024
   (e.g. VER 2018 = VER 2024), templates otherwise; W5 refits only consistency / overtake /
   defense where measurable.

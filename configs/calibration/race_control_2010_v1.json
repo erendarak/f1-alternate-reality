@@ -1,0 +1,32 @@
+{
+  "crash_per_lap": 0.002519,
+  "failure_per_lap": 0.001679,
+  "first_lap_crash_multiplier": 18.42,
+  "fitted_on": [
+    "2010_bahrain_gp",
+    "2010_australian_gp",
+    "2010_malaysian_gp",
+    "2010_spanish_gp",
+    "2010_monaco_gp",
+    "2010_turkish_gp",
+    "2010_european_gp",
+    "2010_british_gp",
+    "2010_german_gp",
+    "2010_italian_gp",
+    "2010_singapore_gp",
+    "2010_brazilian_gp",
+    "2010_abu_dhabi_gp"
+  ],
+  "lap1_retirement_per_starter": 0.04808,
+  "note": "H2c: 13 dry_train 2010 races; neutralisations inferred from lap times (no VSC yet)",
+  "races": 13,
+  "retirement_per_car_lap": 0.004198,
+  "retirements": 80,
+  "safety_cars": 12,
+  "sc_laps_median": 4.33,
+  "sc_laps_p25": 2.98,
+  "sc_laps_p75": 7.76,
+  "sc_per_retirement": 0.15,
+  "vsc_per_retirement_without_sc": 0.0,
+  "vscs": 0
+}

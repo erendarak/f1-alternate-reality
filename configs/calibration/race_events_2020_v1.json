@@ -186,10 +186,10 @@
    "other": 18,
    "collision": 5
   },
-  "collision_per_pass": 0.005731,
+  "collision_per_pass": 0.005449,
   "false_start_per_starter": 0.0,
   "pit_speeding_per_stop": 0.0,
-  "other_per_car_lap": 0.000964,
+  "other_per_car_lap": 0.000917,
   "passes": 902,
   "raw": {
    "collision_per_pass": 0.00554,
@@ -197,12 +197,12 @@
    "pit_speeding_per_stop": 0.0,
    "other_per_car_lap": 0.000932
   },
-  "scale": 1.0345,
-  "scale_note": "x1.034: simulated dry_train 1.16 vs real 1.20 per race"
+  "scale": 0.9836,
+  "scale_note": "x0.984: simulated dry_train 1.22 vs real 1.20 per race"
  },
  "fitted": {
-  "risk_scale": 1.9,
-  "red_flag_per_crash": 0.094,
+  "risk_scale": 0.9369,
+  "red_flag_per_crash": 0.1202,
   "fit": {
    "races": [
     "2020_styrian_gp",
@@ -217,18 +217,18 @@
     "2020_abu_dhabi_gp"
    ],
    "seeds": 5,
-   "sim_crashes_per_race_at_1": 1.4,
-   "sim_failures_per_race": 0.44,
+   "sim_crashes_per_race_at_1": 2.22,
+   "sim_failures_per_race": 1.02,
    "real_retirements_per_race": 3.1,
    "target_red_flags_per_race": 0.25
   },
   "check": {
-   "retirements_per_race": 3.0,
-   "red_flags_per_race": 0.14,
-   "safety_cars_per_race": 1.04,
-   "vscs_per_race": 0.98,
-   "penalties_per_race": 1.16,
-   "penalties_per_race_after_scale": 1.18
+   "retirements_per_race": 3.16,
+   "red_flags_per_race": 0.18,
+   "safety_cars_per_race": 1.32,
+   "vscs_per_race": 0.74,
+   "penalties_per_race": 1.22,
+   "penalties_per_race_after_scale": 1.2
   }
  }
 }

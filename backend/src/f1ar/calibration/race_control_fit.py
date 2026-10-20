@@ -24,6 +24,7 @@ from pathlib import Path
 import pandas as pd
 
 from f1ar.calibration.reference_metrics import red_flag_periods
+from f1ar.calibration.season_files import REFERENCE_SEASON, with_fallback
 from f1ar.data.status import is_finisher
 from f1ar.domain.provenance import SourceType
 from f1ar.domain.race_state import RaceControlParams
@@ -157,8 +158,12 @@ def fit_race_control(counts: list[RaceCounts], *, note: str = "") -> RaceControl
     )
 
 
-def load_race_control(configs_dir: Path) -> tuple[RaceControlFit, str]:
-    text = (configs_dir / RACE_CONTROL_FILE).read_text(encoding="utf-8")
+def load_race_control(
+    configs_dir: Path, season: int = REFERENCE_SEASON
+) -> tuple[RaceControlFit, str]:
+    """The season's fit (H2c), else 2024's (era-level rates: the caller labels a borrowed one)."""
+    path, _ = with_fallback(configs_dir, RACE_CONTROL_FILE, season)
+    text = (path or configs_dir / RACE_CONTROL_FILE).read_text(encoding="utf-8")
     return RaceControlFit.from_json(text), "sha256:" + hashlib.sha256(text.encode()).hexdigest()
 
 
@@ -170,6 +175,7 @@ def race_control_params(
     field's mean factor: the average driver crashes at the fitted rate. Mistakes, pace-mode
     risk factors, VSC length and the SC mechanics stay editorial."""
     low = max(1, round(fit.sc_laps_p25))
+    year = fit.fitted_on[0][:4] if fit.fitted_on else "2024"
     # validated: a fitted value outside the schema must fail here, not when a save is loaded
     return RaceControlParams.model_validate(
         base.model_dump()
@@ -180,7 +186,8 @@ def race_control_params(
                 f"lap 1, {fit.lap1_retirement_per_starter:.4f}/starter on lap 1, SC "
                 f"{fit.sc_per_retirement:.2f} and VSC {fit.vsc_per_retirement_without_sc:.2f} per "
                 f"retirement, SC {low}-{max(low, round(fit.sc_laps_p75))} laps, from "
-                f"{fit.races} dry 2024 races (EXP-006, {sha[:15]}); crash/failure split "
+                f"{fit.races} dry {year} races ({'EXP-006' if year == '2024' else fit.note}, "
+                f"{sha[:15]}); crash/failure split "
                 f"editorial; field mean skill factor {mean_skill_factor:.2f}"
             ),
             "crash_per_lap": fit.crash_per_lap / mean_skill_factor,

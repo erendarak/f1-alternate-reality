@@ -3,7 +3,7 @@ model_version: v1
 kind: stint-length life + same-lap wear regression; globals fitted on behaviour
 source_type: estimated_from_data
 artifact: configs/calibration/tyre_life_2010_v1.json
-artifact_sha256: sha256:2ebb7eae3941439d8eaa9ab8900673122315ae2732fdf9d5dddf6a2e3a1157f5
+artifact_sha256: sha256:68e43739206fcceedc698b066e3068a4c72d63429cf948c597f68e44157d7470
 feature_schema_version: 1
 training_dataset_manifest: data/manifests/dataset_laps_2010_v1.yaml
 training_dataset_content_sha256: sha256:e69694f4e199d4bb3bd1810fed3f4ce04fa3d1be3850772cdfbbd7fc95b5c689
@@ -24,13 +24,13 @@ training_races:
 metrics:
   dry_train_fit:
     kappa: 1.45
-    delta_s: 0.35
-    loss: 0.1002
-    stops_sim: 1.189
+    delta_s: 0.2
+    loss: 0.0993
+    stops_sim: 1.199
     stops_real: 1.212
     share_sim:
-      SOFT: 0.569
-      MEDIUM: 0.431
+      SOFT: 0.487
+      MEDIUM: 0.513
       HARD: 0.0
   held_out_check: EXP-010 (docs/experiments/exp010.json)
 status: fitted for 2010 (H2a, D-054); held-out check EXP-023

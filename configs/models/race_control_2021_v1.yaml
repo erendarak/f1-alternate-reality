@@ -1,0 +1,29 @@
+model_name: race_control
+model_version: v1
+kind: 'method of moments: retirement hazard, SC/VSC per retirement, SC length'
+source_type: estimated_from_data
+artifact: configs/calibration/race_control_2021_v1.json
+artifact_sha256: sha256:82baa0fcfff0853791a6d2ada80b38a582900bf35d608f77c9085b52b2164306
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2021_v1.yaml
+training_dataset_content_sha256: sha256:ae5da476cd96588a11be9a59b08c588ba6c68f0761ee96a376c1e85ea3cbc4bc
+training_races:
+- 2021_austrian_gp
+- 2021_azerbaijan_gp
+- 2021_bahrain_gp
+- 2021_british_gp
+- 2021_dutch_gp
+- 2021_french_gp
+- 2021_italian_gp
+- 2021_mexico_city_gp
+- 2021_monaco_gp
+- 2021_portuguese_gp
+- 2021_sao_paulo_gp
+- 2021_saudi_arabian_gp
+- 2021_united_states_gp
+metrics:
+  retirements: 35
+  safety_cars: 10
+  vscs: 10
+  held_out_check: EXP-025
+status: fitted for 2021 (H2c, D-056)

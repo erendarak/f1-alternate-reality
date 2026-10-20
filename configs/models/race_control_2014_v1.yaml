@@ -1,0 +1,30 @@
+model_name: race_control
+model_version: v1
+kind: 'method of moments: retirement hazard, SC/VSC per retirement, SC length'
+source_type: estimated_from_data
+artifact: configs/calibration/race_control_2014_v1.json
+artifact_sha256: sha256:371b2f4524f1930ce7166b1879dca86424cbe811b749a1b9f9f6dbe934091952
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2014_v1.yaml
+training_dataset_content_sha256: sha256:19b742042e53a0c75769f5416019c75afe966c3434f9afa39892d4ece688cfa6
+training_races:
+- 2014_abu_dhabi_gp
+- 2014_australian_gp
+- 2014_bahrain_gp
+- 2014_brazilian_gp
+- 2014_british_gp
+- 2014_canadian_gp
+- 2014_german_gp
+- 2014_italian_gp
+- 2014_japanese_gp
+- 2014_malaysian_gp
+- 2014_monaco_gp
+- 2014_singapore_gp
+- 2014_spanish_gp
+- 2014_united_states_gp
+metrics:
+  retirements: 67
+  safety_cars: 13
+  vscs: 0
+  held_out_check: EXP-025
+status: fitted for 2014 (H2c, D-056)

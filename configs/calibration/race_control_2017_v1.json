@@ -1,0 +1,33 @@
+{
+  "crash_per_lap": 0.00202,
+  "failure_per_lap": 0.001347,
+  "first_lap_crash_multiplier": 25.85,
+  "fitted_on": [
+    "2017_australian_gp",
+    "2017_chinese_gp",
+    "2017_bahrain_gp",
+    "2017_spanish_gp",
+    "2017_monaco_gp",
+    "2017_canadian_gp",
+    "2017_austrian_gp",
+    "2017_british_gp",
+    "2017_hungarian_gp",
+    "2017_italian_gp",
+    "2017_malaysian_gp",
+    "2017_united_states_gp",
+    "2017_mexican_gp",
+    "2017_brazilian_gp"
+  ],
+  "lap1_retirement_per_starter": 0.05357,
+  "note": "H2c: 14 dry_train 2017 races; neutralisations inferred from lap times, split SC/VSC with 2018's VSC share 0.50 (borrowed)",
+  "races": 14,
+  "retirement_per_car_lap": 0.003367,
+  "retirements": 65,
+  "safety_cars": 5,
+  "sc_laps_median": 5.12,
+  "sc_laps_p25": 3.38,
+  "sc_laps_p75": 7.94,
+  "sc_per_retirement": 0.0769,
+  "vsc_per_retirement_without_sc": 0.0833,
+  "vscs": 5
+}

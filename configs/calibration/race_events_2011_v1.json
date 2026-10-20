@@ -227,7 +227,7 @@
   "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
  },
  "fitted": {
-  "risk_scale": 2.7794,
+  "risk_scale": 1.188,
   "red_flag_per_crash": 0.0,
   "fit": {
    "races": [
@@ -245,15 +245,15 @@
     "2011_brazilian_gp"
    ],
    "seeds": 5,
-   "sim_crashes_per_race_at_1": 1.133,
-   "sim_failures_per_race": 0.767,
+   "sim_crashes_per_race_at_1": 1.95,
+   "sim_failures_per_race": 1.6,
    "real_retirements_per_race": 3.917,
    "target_red_flags_per_race": 0.0
   },
   "check": {
-   "retirements_per_race": 4.083,
+   "retirements_per_race": 4.0,
    "red_flags_per_race": 0.0,
-   "safety_cars_per_race": 0.717,
+   "safety_cars_per_race": 0.433,
    "vscs_per_race": 0.0,
    "penalties_per_race": 0.0,
    "penalties_per_race_after_scale": 0.0

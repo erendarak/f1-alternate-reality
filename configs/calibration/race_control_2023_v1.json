@@ -1,0 +1,31 @@
+{
+  "crash_per_lap": 0.001223,
+  "failure_per_lap": 0.000815,
+  "first_lap_crash_multiplier": 13.02,
+  "fitted_on": [
+    "2023_bahrain_gp",
+    "2023_saudi_arabian_gp",
+    "2023_australian_gp",
+    "2023_miami_gp",
+    "2023_spanish_gp",
+    "2023_austrian_gp",
+    "2023_british_gp",
+    "2023_hungarian_gp",
+    "2023_qatar_gp",
+    "2023_united_states_gp",
+    "2023_mexico_city_gp",
+    "2023_abu_dhabi_gp"
+  ],
+  "lap1_retirement_per_starter": 0.01674,
+  "note": "H2c: 12 dry_train 2023 races",
+  "races": 12,
+  "retirement_per_car_lap": 0.002038,
+  "retirements": 31,
+  "safety_cars": 9,
+  "sc_laps_median": 4.02,
+  "sc_laps_p25": 2.71,
+  "sc_laps_p75": 5.93,
+  "sc_per_retirement": 0.2903,
+  "vsc_per_retirement_without_sc": 0.2273,
+  "vscs": 5
+}

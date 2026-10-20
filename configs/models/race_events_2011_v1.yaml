@@ -3,7 +3,7 @@ model_version: v1
 kind: rates and shrunk team multipliers from 2011 timing; 2 values fitted by simulation
 source_type: estimated_from_data
 artifact: configs/calibration/race_events_2011_v1.json
-artifact_sha256: sha256:af6a8b63b5a300a90bb914e37768330e1b3df15c36fe7fa1d8ffe7bd8f70d792
+artifact_sha256: sha256:2202351fc92181c95a27dcaf52075cc0948a9f77e5012adeb3cf64059e05a300
 feature_schema_version: 1
 training_dataset_manifest: data/manifests/dataset_laps_2011_v1.yaml
 training_dataset_content_sha256: sha256:cff23165fccd44386cae400988126a3d08a82b691f723b29dc840051ac3c946b
@@ -29,9 +29,9 @@ training_races:
 - 2011_turkish_gp
 metrics:
   dry_train_check:
-    retirements_per_race: 4.083
+    retirements_per_race: 4.0
     red_flags_per_race: 0.0
-    safety_cars_per_race: 0.717
+    safety_cars_per_race: 0.433
     vscs_per_race: 0.0
     penalties_per_race: 0.0
     penalties_per_race_after_scale: 0.0

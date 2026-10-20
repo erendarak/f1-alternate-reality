@@ -1,5 +1,6 @@
 {
  "label": "2025 tyre life + same-lap wear (W1, D-041)",
+ "compound_reference": null,
  "dataset_sha256": "sha256:4fe4f52120f650b1b0229e2b8606b9639d843ddd107d1bf70504241111577c96",
  "fitted_on": [
   "2025_austrian_gp",

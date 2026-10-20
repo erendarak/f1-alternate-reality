@@ -1,0 +1,29 @@
+model_name: race_control
+model_version: v1
+kind: 'method of moments: retirement hazard, SC/VSC per retirement, SC length'
+source_type: estimated_from_data
+artifact: configs/calibration/race_control_2010_v1.json
+artifact_sha256: sha256:0dd7fe74c405de84821c9ae4e5ba2f7aea8edc4aa3d2f3e552e41d41b2a6ccf1
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2010_v1.yaml
+training_dataset_content_sha256: sha256:e69694f4e199d4bb3bd1810fed3f4ce04fa3d1be3850772cdfbbd7fc95b5c689
+training_races:
+- 2010_abu_dhabi_gp
+- 2010_australian_gp
+- 2010_bahrain_gp
+- 2010_brazilian_gp
+- 2010_british_gp
+- 2010_european_gp
+- 2010_german_gp
+- 2010_italian_gp
+- 2010_malaysian_gp
+- 2010_monaco_gp
+- 2010_singapore_gp
+- 2010_spanish_gp
+- 2010_turkish_gp
+metrics:
+  retirements: 80
+  safety_cars: 12
+  vscs: 0
+  held_out_check: EXP-025
+status: fitted for 2010 (H2c, D-056)

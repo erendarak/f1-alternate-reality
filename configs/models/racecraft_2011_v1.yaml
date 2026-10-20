@@ -4,7 +4,7 @@ kind: ML on lap-level encounters (W2 noise convolved) with ridge driver terms; l
   by simulation
 source_type: estimated_from_data (lap-1 grid profile editorial)
 artifact: configs/calibration/racecraft_2011_v1.json
-artifact_sha256: sha256:f9ea155f685c0373e42f177d5c9c816db7101f53fef4fe450d09a22fb24eb760
+artifact_sha256: sha256:64d86bdbab7033d608f110a5a9ef2800c8c124f67c866c78d0c46e7f41d02c04
 feature_schema_version: 1
 training_dataset_manifest: data/manifests/dataset_laps_2011_v1.yaml
 training_dataset_content_sha256: sha256:cff23165fccd44386cae400988126a3d08a82b691f723b29dc840051ac3c946b
@@ -27,7 +27,7 @@ training_races:
 - 2011_turkish_gp
 metrics:
   check:
-    dry_train_passes_sim: 66.23
+    dry_train_passes_sim: 66.4
     dry_train_passes_real: 66.17
     dry_train_lap1_passes_real: 23.75
   held_out_check: EXP-013

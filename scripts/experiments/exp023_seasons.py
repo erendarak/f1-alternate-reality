@@ -69,12 +69,14 @@ def simulate(job: tuple[str, str, str, int]) -> dict[str, Any]:
     }
 
 
-def borrowed_configs(season: int, tmp: Path) -> Path:
-    """A copy of configs/ without the season's own calibration files (H2a undone)."""
+def borrowed_configs(season: int, tmp: Path, kinds: list[str] | None = None) -> Path:
+    """A copy of configs/ without the season's own calibration files (H2a undone), or only
+    without ``kinds`` (e.g. ``race_control``: that file alone back to 2024's; EXP-025)."""
     out = tmp / f"configs_{season}"
     shutil.copytree(ROOT / "configs", out)
     for f in (out / "calibration").glob(f"*_{season}_v1.json"):
-        f.unlink()
+        if kinds is None or any(f.name.startswith(f"{k}_") for k in kinds):
+            f.unlink()
     return out
 
 
@@ -97,6 +99,9 @@ def main() -> None:
     parser.add_argument("--seeds", type=int, default=6)
     parser.add_argument("--workers", type=int, default=14)
     parser.add_argument("--json", type=Path)
+    parser.add_argument(
+        "--borrow-kinds", nargs="+", help="drop only these fit kinds in the borrowed variant"
+    )
     args = parser.parse_args()
     t0 = time.perf_counter()
     out: dict[str, Any] = {"seeds": args.seeds, "seasons": {}}
@@ -107,7 +112,7 @@ def main() -> None:
             test = list(splits["dry_test"])
             variants = {
                 "season": str(ROOT / "configs"),
-                "borrowed": str(borrowed_configs(season, Path(tmp))),
+                "borrowed": str(borrowed_configs(season, Path(tmp), args.borrow_kinds)),
             }
             jobs = [
                 (e, v, c, event_seed(e, k))

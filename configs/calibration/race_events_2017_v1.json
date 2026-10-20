@@ -207,7 +207,7 @@
   "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
  },
  "fitted": {
-  "risk_scale": 2.0,
+  "risk_scale": 0.6136,
   "red_flag_per_crash": 0.0,
   "fit": {
    "races": [
@@ -227,16 +227,16 @@
     "2017_brazilian_gp"
    ],
    "seeds": 5,
-   "sim_crashes_per_race_at_1": 1.571,
-   "sim_failures_per_race": 0.571,
+   "sim_crashes_per_race_at_1": 3.771,
+   "sim_failures_per_race": 1.4,
    "real_retirements_per_race": 3.714,
    "target_red_flags_per_race": 0.0
   },
   "check": {
-   "retirements_per_race": 3.543,
+   "retirements_per_race": 3.843,
    "red_flags_per_race": 0.0,
-   "safety_cars_per_race": 0.643,
-   "vscs_per_race": 0.6,
+   "safety_cars_per_race": 0.243,
+   "vscs_per_race": 0.229,
    "penalties_per_race": 0.0,
    "penalties_per_race_after_scale": 0.0
   }

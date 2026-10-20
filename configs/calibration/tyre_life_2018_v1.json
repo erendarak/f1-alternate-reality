@@ -1,5 +1,6 @@
 {
  "label": "2018 tyre life + same-lap wear (W1, D-041)",
+ "compound_reference": null,
  "dataset_sha256": "sha256:a4f36a6db8cb7894513ef100753e54ffd70a88fd4e3c7a2b41c182d63e77d60e",
  "fitted_on": [
   "2018_australian_gp",

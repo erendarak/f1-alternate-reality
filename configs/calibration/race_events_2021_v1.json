@@ -193,10 +193,10 @@
    "other": 13,
    "pit_speeding": 3
   },
-  "collision_per_pass": 0.01138,
+  "collision_per_pass": 0.01474,
   "false_start_per_starter": 0.0,
-  "pit_speeding_per_stop": 0.004547,
-  "other_per_car_lap": 0.000632,
+  "pit_speeding_per_stop": 0.00589,
+  "other_per_car_lap": 0.000818,
   "passes": 1163,
   "raw": {
    "collision_per_pass": 0.00946,
@@ -204,12 +204,12 @@
    "pit_speeding_per_stop": 0.00378,
    "other_per_car_lap": 0.000525
   },
-  "scale": 1.2029,
-  "scale_note": "x1.203: simulated dry_train 1.22 vs real 1.46 per race"
+  "scale": 1.5581,
+  "scale_note": "x1.558: simulated dry_train 0.94 vs real 1.46 per race"
  },
  "fitted": {
-  "risk_scale": 1.4333,
-  "red_flag_per_crash": 0.1512,
+  "risk_scale": 1.0096,
+  "red_flag_per_crash": 0.1857,
   "fit": {
    "races": [
     "2021_bahrain_gp",
@@ -227,17 +227,17 @@
     "2021_saudi_arabian_gp"
    ],
    "seeds": 5,
-   "sim_crashes_per_race_at_1": 1.385,
-   "sim_failures_per_race": 0.554,
+   "sim_crashes_per_race_at_1": 1.6,
+   "sim_failures_per_race": 0.923,
    "real_retirements_per_race": 2.538,
    "target_red_flags_per_race": 0.3
   },
   "check": {
-   "retirements_per_race": 2.6,
-   "red_flags_per_race": 0.323,
-   "safety_cars_per_race": 1.031,
-   "vscs_per_race": 0.815,
-   "penalties_per_race": 1.215,
+   "retirements_per_race": 2.585,
+   "red_flags_per_race": 0.262,
+   "safety_cars_per_race": 1.046,
+   "vscs_per_race": 1.092,
+   "penalties_per_race": 0.938,
    "penalties_per_race_after_scale": 1.385
   }
  }

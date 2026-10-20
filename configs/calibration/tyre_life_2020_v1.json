@@ -1,5 +1,6 @@
 {
  "label": "2020 tyre life + same-lap wear (W1, D-041)",
+ "compound_reference": null,
  "dataset_sha256": "sha256:34db54695e0b17b83a4f219098cd05516daa0c2449084adf94bd12c017fba973",
  "fitted_on": [
   "2020_70th_anniversary_gp",

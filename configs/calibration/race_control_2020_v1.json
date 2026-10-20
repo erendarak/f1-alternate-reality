@@ -1,0 +1,29 @@
+{
+  "crash_per_lap": 0.001494,
+  "failure_per_lap": 0.000996,
+  "first_lap_crash_multiplier": 22.76,
+  "fitted_on": [
+    "2020_styrian_gp",
+    "2020_70th_anniversary_gp",
+    "2020_spanish_gp",
+    "2020_belgian_gp",
+    "2020_tuscan_gp",
+    "2020_russian_gp",
+    "2020_eifel_gp",
+    "2020_emilia_romagna_gp",
+    "2020_bahrain_gp",
+    "2020_abu_dhabi_gp"
+  ],
+  "lap1_retirement_per_starter": 0.035,
+  "note": "H2c: 10 dry_train 2020 races",
+  "races": 10,
+  "retirement_per_car_lap": 0.00249,
+  "retirements": 32,
+  "safety_cars": 11,
+  "sc_laps_median": 7.24,
+  "sc_laps_p25": 4.18,
+  "sc_laps_p75": 8.76,
+  "sc_per_retirement": 0.3438,
+  "vsc_per_retirement_without_sc": 0.1905,
+  "vscs": 4
+}

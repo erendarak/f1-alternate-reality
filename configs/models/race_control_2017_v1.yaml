@@ -1,0 +1,30 @@
+model_name: race_control
+model_version: v1
+kind: 'method of moments: retirement hazard, SC/VSC per retirement, SC length'
+source_type: estimated_from_data
+artifact: configs/calibration/race_control_2017_v1.json
+artifact_sha256: sha256:682329b8201bbe8c0af36d8f09d41af096f182f029be905f2e351888404d830d
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2017_v1.yaml
+training_dataset_content_sha256: sha256:1b878a677c304049bcd3898ad4fabbc98b3ac8772a3c1c4e033f9967f66954b7
+training_races:
+- 2017_australian_gp
+- 2017_austrian_gp
+- 2017_bahrain_gp
+- 2017_brazilian_gp
+- 2017_british_gp
+- 2017_canadian_gp
+- 2017_chinese_gp
+- 2017_hungarian_gp
+- 2017_italian_gp
+- 2017_malaysian_gp
+- 2017_mexican_gp
+- 2017_monaco_gp
+- 2017_spanish_gp
+- 2017_united_states_gp
+metrics:
+  retirements: 65
+  safety_cars: 5
+  vscs: 5
+  held_out_check: EXP-025
+status: fitted for 2017 (H2c, D-056)

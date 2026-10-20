@@ -3,7 +3,7 @@ model_version: v1
 kind: rates and shrunk team multipliers from 2020 timing; 2 values fitted by simulation
 source_type: estimated_from_data
 artifact: configs/calibration/race_events_2020_v1.json
-artifact_sha256: sha256:af84fb47aa6edc9d6d37dc5e78fe8859789a9968a3b9bdee2fc95e368fa88b64
+artifact_sha256: sha256:d0e602683aa7fb02573282837821ad73a8085636148ab86cd9d2900eff42d672
 feature_schema_version: 1
 training_dataset_manifest: data/manifests/dataset_laps_2020_v1.yaml
 training_dataset_content_sha256: sha256:5bbb5e3b275006cf794a7917223ab1536dee650010ff994448fa2b8ac1e07d76
@@ -26,11 +26,11 @@ training_races:
 - 2020_tuscan_gp
 metrics:
   dry_train_check:
-    retirements_per_race: 3.0
-    red_flags_per_race: 0.14
-    safety_cars_per_race: 1.04
-    vscs_per_race: 0.98
-    penalties_per_race: 1.16
-    penalties_per_race_after_scale: 1.18
+    retirements_per_race: 3.16
+    red_flags_per_race: 0.18
+    safety_cars_per_race: 1.32
+    vscs_per_race: 0.74
+    penalties_per_race: 1.22
+    penalties_per_race_after_scale: 1.2
   held_out_check: EXP-011
 status: fitted for 2020 (H2a, D-054); held-out check EXP-023

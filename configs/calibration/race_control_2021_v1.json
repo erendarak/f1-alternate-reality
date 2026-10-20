@@ -1,0 +1,32 @@
+{
+  "crash_per_lap": 0.001159,
+  "failure_per_lap": 0.000773,
+  "first_lap_crash_multiplier": 22.57,
+  "fitted_on": [
+    "2021_bahrain_gp",
+    "2021_portuguese_gp",
+    "2021_monaco_gp",
+    "2021_azerbaijan_gp",
+    "2021_french_gp",
+    "2021_austrian_gp",
+    "2021_british_gp",
+    "2021_dutch_gp",
+    "2021_italian_gp",
+    "2021_united_states_gp",
+    "2021_mexico_city_gp",
+    "2021_sao_paulo_gp",
+    "2021_saudi_arabian_gp"
+  ],
+  "lap1_retirement_per_starter": 0.02692,
+  "note": "H2c: 13 dry_train 2021 races",
+  "races": 13,
+  "retirement_per_car_lap": 0.001931,
+  "retirements": 35,
+  "safety_cars": 10,
+  "sc_laps_median": 5.61,
+  "sc_laps_p25": 3.49,
+  "sc_laps_p75": 7.35,
+  "sc_per_retirement": 0.2857,
+  "vsc_per_retirement_without_sc": 0.4,
+  "vscs": 10
+}

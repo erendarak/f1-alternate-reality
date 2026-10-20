@@ -2,10 +2,11 @@
 
 1. lap dataset + splits (``build_lap_dataset.py``)
 2. driver race pace and lap noise (W2, data only; no pass-threshold shift: W3 supersedes it)
-3. tyre life (W1; kappa/delta by simulation of the season's dry_train races)
-4. race events (W4; risk scale, red flags, penalties by simulation)
-5. racecraft (W3; overtaking, attack/defend, launch; spread and shift by simulation)
-6. persona estimates (W5)
+3. race control rates (H2c, data only)
+4. tyre life (W1; kappa/delta by simulation of the season's dry_train races)
+5. race events (W4; risk scale, red flags, penalties by simulation)
+6. racecraft (W3; overtaking, attack/defend, launch; spread and shift by simulation)
+7. persona estimates (W5)
 
 2024 was fitted in milestone order (W1 first, before W2-W4 existed); here every simulated fit
 runs with the season's earlier fits in place. Needs the season's races fetched with telemetry
@@ -34,6 +35,7 @@ def main() -> None:
     steps = [
         ("lap dataset", ["build_lap_dataset.py", "--season", s]),
         ("driver pace (W2)", ["fit_driver_pace.py", "--season", s, "--no-shift"]),
+        ("race control (H2c)", ["fit_race_control.py", "--season", s]),
         ("tyre life (W1)", ["fit_tyre_life.py", "--season", s, "--workers", w]),
         ("race events (W4)", ["fit_race_events.py", "--season", s, "--workers", w]),
         ("racecraft (W3)", ["fit_racecraft.py", "--season", s, "--workers", w]),

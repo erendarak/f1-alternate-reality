@@ -1,0 +1,33 @@
+{
+  "crash_per_lap": 0.0015,
+  "failure_per_lap": 0.001,
+  "first_lap_crash_multiplier": 10.16,
+  "fitted_on": [
+    "2013_australian_gp",
+    "2013_chinese_gp",
+    "2013_spanish_gp",
+    "2013_monaco_gp",
+    "2013_canadian_gp",
+    "2013_german_gp",
+    "2013_hungarian_gp",
+    "2013_belgian_gp",
+    "2013_singapore_gp",
+    "2013_korean_gp",
+    "2013_japanese_gp",
+    "2013_abu_dhabi_gp",
+    "2013_united_states_gp",
+    "2013_brazilian_gp"
+  ],
+  "lap1_retirement_per_starter": 0.01623,
+  "note": "H2c: 14 dry_train 2013 races; neutralisations inferred from lap times (no VSC yet)",
+  "races": 14,
+  "retirement_per_car_lap": 0.0025,
+  "retirements": 47,
+  "safety_cars": 8,
+  "sc_laps_median": 8.46,
+  "sc_laps_p25": 4.87,
+  "sc_laps_p75": 11.54,
+  "sc_per_retirement": 0.1702,
+  "vsc_per_retirement_without_sc": 0.0,
+  "vscs": 0
+}

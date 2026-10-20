@@ -196,10 +196,10 @@
    "other": 14,
    "false_start": 1
   },
-  "collision_per_pass": 0.005866,
-  "false_start_per_starter": 0.002596,
-  "pit_speeding_per_stop": 0.001609,
-  "other_per_car_lap": 0.000601,
+  "collision_per_pass": 0.00536,
+  "false_start_per_starter": 0.002372,
+  "pit_speeding_per_stop": 0.00147,
+  "other_per_car_lap": 0.000549,
   "passes": 1240,
   "raw": {
    "collision_per_pass": 0.00565,
@@ -207,11 +207,11 @@
    "pit_speeding_per_stop": 0.00155,
    "other_per_car_lap": 0.000579
   },
-  "scale": 1.0382,
-  "scale_note": "x1.038: simulated dry_train 0.81 vs real 0.85 per race"
+  "scale": 0.9486,
+  "scale_note": "x0.949: simulated dry_train 0.89 vs real 0.85 per race"
  },
  "fitted": {
-  "risk_scale": 1.0301,
+  "risk_scale": 0.7133,
   "red_flag_per_crash": 0.0,
   "fit": {
    "races": [
@@ -230,17 +230,17 @@
     "2019_abu_dhabi_gp"
    ],
    "seeds": 5,
-   "sim_crashes_per_race_at_1": 2.046,
-   "sim_failures_per_race": 0.508,
+   "sim_crashes_per_race_at_1": 2.308,
+   "sim_failures_per_race": 0.969,
    "real_retirements_per_race": 2.615,
    "target_red_flags_per_race": 0.0
   },
   "check": {
    "retirements_per_race": 2.615,
    "red_flags_per_race": 0.0,
-   "safety_cars_per_race": 0.646,
-   "vscs_per_race": 0.708,
-   "penalties_per_race": 0.815,
+   "safety_cars_per_race": 0.446,
+   "vscs_per_race": 0.615,
+   "penalties_per_race": 0.892,
    "penalties_per_race_after_scale": 0.831
   }
  }

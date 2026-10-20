@@ -3,7 +3,7 @@ model_version: v1
 kind: stint-length life + same-lap wear regression; globals fitted on behaviour
 source_type: estimated_from_data
 artifact: configs/calibration/tyre_life_2023_v1.json
-artifact_sha256: sha256:6bc03e9811ca11c226430e1cf3db6a518d5f2687252e2c25c915537ad5251c23
+artifact_sha256: sha256:61c292c66a4b19881540bf4ff419e708368c2002065286c1d8922c4a1143c9ee
 feature_schema_version: 1
 training_dataset_manifest: data/manifests/dataset_laps_2023_v1.yaml
 training_dataset_content_sha256: sha256:68f96669b4c05a3c23c10acd6999f40b3aecbca737138faf77cedb7bf1c01b83
@@ -22,14 +22,14 @@ training_races:
 - 2023_united_states_gp
 metrics:
   dry_train_fit:
-    kappa: 0.8
+    kappa: 0.6
     delta_s: 0.0
-    loss: 1.7213
-    stops_sim: 1.625
+    loss: 1.3314
+    stops_sim: 2.023
     stops_real: 2.189
     share_sim:
-      SOFT: 0.046
-      MEDIUM: 0.575
-      HARD: 0.379
+      SOFT: 0.061
+      MEDIUM: 0.546
+      HARD: 0.393
   held_out_check: EXP-010 (docs/experiments/exp010.json)
 status: fitted for 2023 (H2a, D-054); held-out check EXP-023

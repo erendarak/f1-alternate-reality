@@ -201,10 +201,10 @@
    "pit_speeding": 9,
    "false_start": 8
   },
-  "collision_per_pass": 0.016445,
-  "false_start_per_starter": 0.014876,
-  "pit_speeding_per_stop": 0.009355,
-  "other_per_car_lap": 0.00092,
+  "collision_per_pass": 0.017462,
+  "false_start_per_starter": 0.015796,
+  "pit_speeding_per_stop": 0.009933,
+  "other_per_car_lap": 0.000977,
   "passes": 1238,
   "raw": {
    "collision_per_pass": 0.01939,
@@ -212,12 +212,12 @@
    "pit_speeding_per_stop": 0.01103,
    "other_per_car_lap": 0.001085
   },
-  "scale": 0.8481,
-  "scale_note": "x0.848: simulated dry_train 2.99 vs real 2.53 per race"
+  "scale": 0.9006,
+  "scale_note": "x0.901: simulated dry_train 2.81 vs real 2.53 per race"
  },
  "fitted": {
-  "risk_scale": 0.958,
-  "red_flag_per_crash": 0.0286,
+  "risk_scale": 0.9244,
+  "red_flag_per_crash": 0.0297,
   "fit": {
    "races": [
     "2025_chinese_gp",
@@ -238,17 +238,17 @@
    ],
    "seeds": 5,
    "sim_crashes_per_race_at_1": 1.587,
-   "sim_failures_per_race": 0.48,
+   "sim_failures_per_race": 0.533,
    "real_retirements_per_race": 2.0,
    "target_red_flags_per_race": 0.0435
   },
   "check": {
-   "retirements_per_race": 2.013,
+   "retirements_per_race": 2.027,
    "red_flags_per_race": 0.04,
-   "safety_cars_per_race": 0.627,
-   "vscs_per_race": 0.6,
-   "penalties_per_race": 2.987,
-   "penalties_per_race_after_scale": 2.373
+   "safety_cars_per_race": 0.827,
+   "vscs_per_race": 0.56,
+   "penalties_per_race": 2.813,
+   "penalties_per_race_after_scale": 2.573
   }
  }
 }

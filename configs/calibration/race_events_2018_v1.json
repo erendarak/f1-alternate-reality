@@ -189,10 +189,10 @@
    "other": 14,
    "pit_speeding": 1
   },
-  "collision_per_pass": 0.010256,
+  "collision_per_pass": 0.008692,
   "false_start_per_starter": 0.0,
-  "pit_speeding_per_stop": 0.002006,
-  "other_per_car_lap": 0.000634,
+  "pit_speeding_per_stop": 0.0017,
+  "other_per_car_lap": 0.000537,
   "passes": 1151,
   "raw": {
    "collision_per_pass": 0.01043,
@@ -200,11 +200,11 @@
    "pit_speeding_per_stop": 0.00204,
    "other_per_car_lap": 0.000645
   },
-  "scale": 0.9833,
-  "scale_note": "x0.983: simulated dry_train 1.36 vs real 1.33 per race"
+  "scale": 0.8333,
+  "scale_note": "x0.833: simulated dry_train 1.60 vs real 1.33 per race"
  },
  "fitted": {
-  "risk_scale": 2.209,
+  "risk_scale": 0.8374,
   "red_flag_per_crash": 0.0,
   "fit": {
    "races": [
@@ -219,17 +219,17 @@
     "2018_mexican_gp"
    ],
    "seeds": 5,
-   "sim_crashes_per_race_at_1": 1.489,
-   "sim_failures_per_race": 0.6,
+   "sim_crashes_per_race_at_1": 2.733,
+   "sim_failures_per_race": 1.6,
    "real_retirements_per_race": 3.889,
    "target_red_flags_per_race": 0.0
   },
   "check": {
-   "retirements_per_race": 3.689,
+   "retirements_per_race": 3.733,
    "red_flags_per_race": 0.0,
-   "safety_cars_per_race": 1.244,
-   "vscs_per_race": 0.667,
-   "penalties_per_race": 1.356,
+   "safety_cars_per_race": 0.933,
+   "vscs_per_race": 0.844,
+   "penalties_per_race": 1.6,
    "penalties_per_race_after_scale": 1.311
   }
  }

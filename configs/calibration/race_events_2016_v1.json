@@ -220,7 +220,7 @@
   "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
  },
  "fitted": {
-  "risk_scale": 1.663,
+  "risk_scale": 0.9155,
   "red_flag_per_crash": 0.0,
   "fit": {
    "races": [
@@ -240,16 +240,16 @@
     "2016_abu_dhabi_gp"
    ],
    "seeds": 5,
-   "sim_crashes_per_race_at_1": 1.314,
-   "sim_failures_per_race": 0.671,
+   "sim_crashes_per_race_at_1": 2.029,
+   "sim_failures_per_race": 1.0,
    "real_retirements_per_race": 2.857,
    "target_red_flags_per_race": 0.0
   },
   "check": {
-   "retirements_per_race": 2.686,
+   "retirements_per_race": 2.914,
    "red_flags_per_race": 0.0,
-   "safety_cars_per_race": 0.743,
-   "vscs_per_race": 0.443,
+   "safety_cars_per_race": 0.371,
+   "vscs_per_race": 0.229,
    "penalties_per_race": 0.0,
    "penalties_per_race_after_scale": 0.0
   }

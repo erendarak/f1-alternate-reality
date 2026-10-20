@@ -1,0 +1,28 @@
+model_name: race_control
+model_version: v1
+kind: 'method of moments: retirement hazard, SC/VSC per retirement, SC length'
+source_type: estimated_from_data
+artifact: configs/calibration/race_control_2022_v1.json
+artifact_sha256: sha256:4642bbfe2620968d1b53de4c7fa8d7dc84f112f1b19dc5ff9dc2c728286fb036
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2022_v1.yaml
+training_dataset_content_sha256: sha256:6c03eeb66580351aaa8d2fc4a24b1ab045943c91552c7ed4b08440445ad4121a
+training_races:
+- 2022_abu_dhabi_gp
+- 2022_australian_gp
+- 2022_austrian_gp
+- 2022_bahrain_gp
+- 2022_belgian_gp
+- 2022_british_gp
+- 2022_canadian_gp
+- 2022_dutch_gp
+- 2022_miami_gp
+- 2022_sao_paulo_gp
+- 2022_spanish_gp
+- 2022_united_states_gp
+metrics:
+  retirements: 38
+  safety_cars: 12
+  vscs: 9
+  held_out_check: EXP-025
+status: fitted for 2022 (H2c, D-056)

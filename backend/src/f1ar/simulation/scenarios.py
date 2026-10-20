@@ -10,6 +10,7 @@ import pandas as pd
 from f1ar.calibration.season_files import (
     borrowed_note,
     era_rates_note,
+    own_season,
     season_path,
     with_fallback,
 )
@@ -334,7 +335,7 @@ def setup_from_codes(
             update={"overtake_threshold_s": traffic.overtake_threshold_s + shift}
         )
         traffic_note = f"{traffic_note}; threshold +{shift:.3f} s for W2 lap noise"
-    race_control, race_control_note = _fitted_race_control(configs, field)
+    race_control, race_control_note = _fitted_race_control(configs, field, roster.season)
     setup = build_setup(
         roster,
         profiles,
@@ -555,8 +556,19 @@ def _label_other_seasons(setup: RaceSetup, configs: Path) -> RaceSetup:
         inputs["tyre_model"] += borrowed_note(season, life_season or shape_season)
         if life_season == season and shape_season not in (None, season):
             inputs["tyre_model"] += f" [fuel effect from the {shape_season} tyre shape fit]"
+    from f1ar.calibration.race_control_fit import RACE_CONTROL_FILE
+    from f1ar.calibration.racecraft_fit import RACECRAFT_FILE
+
+    has_racecraft = season != 2024 and own_season(configs, RACECRAFT_FILE, season) is not None
+    own_race_control = own_season(configs, RACE_CONTROL_FILE, season) is not None
     for key in ("traffic", "race_control", "weather", "wet_incidents"):
-        if key in inputs:
+        if key not in inputs:
+            continue
+        if key == "traffic" and has_racecraft:  # H2c: the season's racecraft replaces it all
+            inputs[key] += f" [overtaking values superseded by the {season} racecraft fit]"
+        elif key == "race_control" and own_race_control:  # H2c: the season's own rates
+            continue
+        else:
             inputs[key] += era_rates_note(season)
     return setup.model_copy(update={"inputs": inputs})
 
@@ -575,7 +587,7 @@ def _fitted_traffic(configs: Path, event_id: str) -> tuple[TrafficParams, str]:
 
 
 def _fitted_race_control(
-    configs: Path, field: Sequence[DriverArchetype]
+    configs: Path, field: Sequence[DriverArchetype], season: int = 2024
 ) -> tuple[RaceControlParams, str]:
     from f1ar.calibration.race_control_fit import (
         RACE_CONTROL_FILE,
@@ -591,7 +603,7 @@ def _fitted_race_control(
         return base, note
     # the engine's skill factor (incidents.skill_factor), averaged over the field
     mean_skill = sum((1.5 - a.consistency) * (1.5 - a.composure) for a in field) / len(field)
-    params = race_control_params(*load_race_control(configs), base, mean_skill)
+    params = race_control_params(*load_race_control(configs, season), base, mean_skill)
     return params, params.note
 
 

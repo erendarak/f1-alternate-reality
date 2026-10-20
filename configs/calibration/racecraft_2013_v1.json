@@ -276,7 +276,7 @@
   "ridge_track": 50.0,
   "ridge_driver": 50.0,
   "log_likelihood": -1593.11,
-  "race_level_shift_s": 0.0742
+  "race_level_shift_s": 0.1289
  },
  "launch": {
   "seconds_per_position": 0.588,
@@ -422,7 +422,7 @@
     "starts": 18
    }
   },
-  "start_spread_s": 2.0527
+  "start_spread_s": 2.0332
  },
  "lap1_grid_profile": [
   0.2239,
@@ -451,111 +451,111 @@
   {
    "param": "spread",
    "value": 1.75,
-   "passes": 15.51
+   "passes": 16.71
   },
   {
    "param": "spread",
    "value": 2.375,
-   "passes": 26.71
+   "passes": 29.01
   },
   {
    "param": "spread",
    "value": 2.0625,
-   "passes": 21.35
+   "passes": 23.35
   },
   {
    "param": "spread",
    "value": 1.9062,
-   "passes": 17.9
+   "passes": 19.55
   },
   {
    "param": "spread",
    "value": 1.9844,
-   "passes": 19.11
+   "passes": 20.89
   },
   {
    "param": "spread",
-   "value": 2.0234,
-   "passes": 19.77
+   "value": 1.9453,
+   "passes": 19.84
   },
   {
    "param": "spread",
-   "value": 2.043,
-   "passes": 20.6
+   "value": 1.9648,
+   "passes": 20.31
   },
   {
    "param": "shift",
    "value": 0.0,
-   "passes": 64.86
+   "passes": 68.27
   },
   {
    "param": "shift",
    "value": 0.25,
-   "passes": 52.59
+   "passes": 54.59
   },
   {
    "param": "shift",
    "value": 0.125,
-   "passes": 59.39
+   "passes": 62.07
   },
   {
    "param": "shift",
-   "value": 0.0625,
-   "passes": 62.91
+   "value": 0.1875,
+   "passes": 57.52
   },
   {
    "param": "shift",
-   "value": 0.0938,
-   "passes": 60.82
+   "value": 0.1562,
+   "passes": 60.8
   },
   {
    "param": "shift",
-   "value": 0.0781,
-   "passes": 60.73
+   "value": 0.1406,
+   "passes": 61.38
   },
   {
    "param": "shift",
-   "value": 0.0703,
-   "passes": 62.38
+   "value": 0.1328,
+   "passes": 61.82
   },
   {
    "param": "spread",
    "value": 1.75,
-   "passes": 15.15
+   "passes": 15.68
   },
   {
    "param": "spread",
    "value": 2.375,
-   "passes": 25.5
+   "passes": 26.64
   },
   {
    "param": "spread",
    "value": 2.0625,
-   "passes": 20.47
+   "passes": 21.36
   },
   {
    "param": "spread",
    "value": 1.9062,
-   "passes": 16.88
+   "passes": 17.5
   },
   {
    "param": "spread",
    "value": 1.9844,
-   "passes": 18.33
+   "passes": 19.49
   },
   {
    "param": "spread",
    "value": 2.0234,
-   "passes": 19.17
+   "passes": 20.01
   },
   {
    "param": "spread",
    "value": 2.043,
-   "passes": 19.61
+   "passes": 21.04
   }
  ],
  "check": {
-  "dry_train_passes_sim": 62.18,
+  "dry_train_passes_sim": 65.45,
   "dry_train_passes_real": 62.0,
   "dry_train_lap1_passes_real": 20.14
  }

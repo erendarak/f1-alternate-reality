@@ -4,7 +4,7 @@ kind: ML on lap-level encounters (W2 noise convolved) with ridge driver terms; l
   by simulation
 source_type: estimated_from_data (lap-1 grid profile editorial)
 artifact: configs/calibration/racecraft_2025_v1.json
-artifact_sha256: sha256:b7dc12b612cbd8a01ee665f4684a0bbbd481cedb0f2ab6a90ee1a0eb1cc2f294
+artifact_sha256: sha256:0ea255c1097374b79ebae4d8feb334cec0c786a2c33d788292516b8146257c84
 feature_schema_version: 1
 training_dataset_manifest: data/manifests/dataset_laps_2025_v1.yaml
 training_dataset_content_sha256: sha256:1d956cba8adde74b065a63e18fb5ae43c4d503c845ea1b461f2a28c5ee13e9ed
@@ -31,7 +31,7 @@ training_races:
 - 2025_united_states_gp
 metrics:
   check:
-    dry_train_passes_sim: 55.37
+    dry_train_passes_sim: 55.25
     dry_train_passes_real: 53.07
     dry_train_lap1_passes_real: 13.67
   held_out_check: EXP-013

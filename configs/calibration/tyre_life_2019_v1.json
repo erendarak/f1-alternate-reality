@@ -1,5 +1,6 @@
 {
  "label": "2019 tyre life + same-lap wear (W1, D-041)",
+ "compound_reference": null,
  "dataset_sha256": "sha256:ea5a1f75bcf309e25c2ae7c1f9de15a6ce0f284624f89e08a18d90976f0c678a",
  "fitted_on": [
   "2019_abu_dhabi_gp",

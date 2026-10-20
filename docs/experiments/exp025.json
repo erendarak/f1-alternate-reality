@@ -1,0 +1,2265 @@
+{
+ "seeds": 6,
+ "seasons": {
+  "2010": {
+   "dry_test": [
+    "2010_canadian_gp",
+    "2010_hungarian_gp",
+    "2010_japanese_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.147,
+     "passes_bias": -18.5,
+     "retirements_bias": 1.167,
+     "safety_cars_bias": 0.0,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.252,
+     "passes_mae": 36.278,
+     "retirements_mae": 1.167,
+     "safety_cars_mae": 0.222,
+     "vscs_mae": 0.0,
+     "order_rho": 0.45
+    },
+    "borrowed": {
+     "stops_bias": 0.853,
+     "passes_bias": -30.5,
+     "retirements_bias": -2.111,
+     "safety_cars_bias": -0.111,
+     "vscs_bias": 0.0,
+     "stops_mae": 1.169,
+     "passes_mae": 43.278,
+     "retirements_mae": 2.111,
+     "safety_cars_mae": 0.444,
+     "vscs_mae": 0.0,
+     "order_rho": 0.616
+    }
+   },
+   "races": {
+    "2010_canadian_gp": {
+     "real": {
+      "stops": 2.473684210526316,
+      "passes": 141,
+      "retirements": 5,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 58.83,
+      "retirements": 6.5,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.464
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 30.33,
+      "retirements": 2.33,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.731
+     }
+    },
+    "2010_hungarian_gp": {
+     "real": {
+      "stops": 0.8421052631578947,
+      "passes": 49,
+      "retirements": 5,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 59.67,
+      "retirements": 5.67,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.442
+     },
+     "borrowed": {
+      "stops": 3.0,
+      "passes": 54.67,
+      "retirements": 2.5,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.586
+     }
+    },
+    "2010_japanese_gp": {
+     "real": {
+      "stops": 1.125,
+      "passes": 38,
+      "retirements": 3,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 54.0,
+      "retirements": 4.33,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.446
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 51.5,
+      "retirements": 1.83,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.53
+     }
+    }
+   }
+  },
+  "2011": {
+   "dry_test": [
+    "2011_turkish_gp",
+    "2011_european_gp",
+    "2011_belgian_gp",
+    "2011_korean_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.268,
+     "passes_bias": -7.167,
+     "retirements_bias": 1.667,
+     "safety_cars_bias": 0.167,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.268,
+     "passes_mae": 8.667,
+     "retirements_mae": 1.75,
+     "safety_cars_mae": 0.417,
+     "vscs_mae": 0.0,
+     "order_rho": 0.593
+    },
+    "borrowed": {
+     "stops_bias": -0.968,
+     "passes_bias": -32.083,
+     "retirements_bias": 0.708,
+     "safety_cars_bias": 0.167,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.968,
+     "passes_mae": 32.083,
+     "retirements_mae": 1.708,
+     "safety_cars_mae": 0.5,
+     "vscs_mae": 0.0,
+     "order_rho": 0.636
+    }
+   },
+   "races": {
+    "2011_turkish_gp": {
+     "real": {
+      "stops": 3.5454545454545454,
+      "passes": 94,
+      "retirements": 1,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 3.17,
+      "passes": 93.83,
+      "retirements": 3.0,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.698
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 55.5,
+      "retirements": 2.67,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.699
+     }
+    },
+    "2011_european_gp": {
+     "real": {
+      "stops": 2.7083333333333335,
+      "passes": 49,
+      "retirements": 0,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.4,
+      "passes": 46.0,
+      "retirements": 4.0,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.678
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 28.83,
+      "retirements": 3.17,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.696
+     }
+    },
+    "2011_belgian_gp": {
+     "real": {
+      "stops": 2.473684210526316,
+      "passes": 104,
+      "retirements": 4,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.21,
+      "passes": 75.5,
+      "retirements": 3.83,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.384
+     },
+     "borrowed": {
+      "stops": 1.0,
+      "passes": 54.67,
+      "retirements": 2.33,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.488
+     }
+    },
+    "2011_korean_gp": {
+     "real": {
+      "stops": 2.142857142857143,
+      "passes": 55,
+      "retirements": 3,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.02,
+      "passes": 58.0,
+      "retirements": 3.83,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.613
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 34.67,
+      "retirements": 2.67,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.659
+     }
+    }
+   }
+  },
+  "2012": {
+   "dry_test": [
+    "2012_bahrain_gp",
+    "2012_european_gp",
+    "2012_belgian_gp",
+    "2012_korean_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.264,
+     "passes_bias": 3.542,
+     "retirements_bias": -0.208,
+     "safety_cars_bias": -0.167,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.264,
+     "passes_mae": 12.042,
+     "retirements_mae": 0.542,
+     "safety_cars_mae": 0.417,
+     "vscs_mae": 0.0,
+     "order_rho": 0.554
+    },
+    "borrowed": {
+     "stops_bias": -0.542,
+     "passes_bias": -6.958,
+     "retirements_bias": -1.083,
+     "safety_cars_bias": -0.042,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.567,
+     "passes_mae": 14.625,
+     "retirements_mae": 1.083,
+     "safety_cars_mae": 0.542,
+     "vscs_mae": 0.0,
+     "order_rho": 0.583
+    }
+   },
+   "races": {
+    "2012_bahrain_gp": {
+     "real": {
+      "stops": 3.05,
+      "passes": 85,
+      "retirements": 4,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.24,
+      "passes": 73.0,
+      "retirements": 3.17,
+      "safety_cars": 0.17,
+      "vscs": 0.0,
+      "order_rho": 0.72
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 61.33,
+      "retirements": 2.33,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.778
+     }
+    },
+    "2012_european_gp": {
+     "real": {
+      "stops": 2.2222222222222223,
+      "passes": 90,
+      "retirements": 5,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.21,
+      "passes": 85.0,
+      "retirements": 5.33,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.41
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 70.5,
+      "retirements": 3.5,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.247
+     }
+    },
+    "2012_belgian_gp": {
+     "real": {
+      "stops": 1.9444444444444444,
+      "passes": 73,
+      "retirements": 2,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.87,
+      "passes": 84.67,
+      "retirements": 1.33,
+      "safety_cars": 0.0,
+      "vscs": 0.0,
+      "order_rho": 0.591
+     },
+     "borrowed": {
+      "stops": 1.0,
+      "passes": 78.17,
+      "retirements": 0.83,
+      "safety_cars": 0.0,
+      "vscs": 0.0,
+      "order_rho": 0.729
+     }
+    },
+    "2012_korean_gp": {
+     "real": {
+      "stops": 1.95,
+      "passes": 47,
+      "retirements": 3,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.8,
+      "passes": 66.5,
+      "retirements": 3.33,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.496
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 57.17,
+      "retirements": 3.0,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.576
+     }
+    }
+   }
+  },
+  "2013": {
+   "dry_test": [
+    "2013_bahrain_gp",
+    "2013_british_gp",
+    "2013_italian_gp",
+    "2013_indian_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.257,
+     "passes_bias": -3.25,
+     "retirements_bias": 0.333,
+     "safety_cars_bias": -0.042,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.409,
+     "passes_mae": 27.083,
+     "retirements_mae": 1.25,
+     "safety_cars_mae": 0.875,
+     "vscs_mae": 0.0,
+     "order_rho": 0.486
+    },
+    "borrowed": {
+     "stops_bias": -0.494,
+     "passes_bias": -26.583,
+     "retirements_bias": -0.542,
+     "safety_cars_bias": 0.083,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.494,
+     "passes_mae": 28.75,
+     "retirements_mae": 1.458,
+     "safety_cars_mae": 0.833,
+     "vscs_mae": 0.0,
+     "order_rho": 0.521
+    }
+   },
+   "races": {
+    "2013_bahrain_gp": {
+     "real": {
+      "stops": 3.3333333333333335,
+      "passes": 73,
+      "retirements": 1,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.98,
+      "passes": 90.33,
+      "retirements": 2.67,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.572
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 49.33,
+      "retirements": 2.33,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.59
+     }
+    },
+    "2013_british_gp": {
+     "real": {
+      "stops": 2.5555555555555554,
+      "passes": 124,
+      "retirements": 4,
+      "safety_cars": 2,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 63.33,
+      "retirements": 2.5,
+      "safety_cars": 0.17,
+      "vscs": 0.0,
+      "order_rho": 0.344
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 47.17,
+      "retirements": 2.0,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.25
+     }
+    },
+    "2013_italian_gp": {
+     "real": {
+      "stops": 1.2,
+      "passes": 37,
+      "retirements": 1,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.5,
+      "passes": 55.83,
+      "retirements": 2.5,
+      "safety_cars": 0.17,
+      "vscs": 0.0,
+      "order_rho": 0.626
+     },
+     "borrowed": {
+      "stops": 1.17,
+      "passes": 41.33,
+      "retirements": 1.5,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.77
+     }
+    },
+    "2013_indian_gp": {
+     "real": {
+      "stops": 2.0555555555555554,
+      "passes": 56,
+      "retirements": 4,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.63,
+      "passes": 67.5,
+      "retirements": 3.67,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.402
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 45.83,
+      "retirements": 2.0,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.475
+     }
+    }
+   }
+  },
+  "2014": {
+   "dry_test": [
+    "2014_chinese_gp",
+    "2014_austrian_gp",
+    "2014_belgian_gp",
+    "2014_russian_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": 0.017,
+     "passes_bias": 3.292,
+     "retirements_bias": 0.875,
+     "safety_cars_bias": 0.75,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.096,
+     "passes_mae": 7.792,
+     "retirements_mae": 1.958,
+     "safety_cars_mae": 0.75,
+     "vscs_mae": 0.0,
+     "order_rho": 0.537
+    },
+    "borrowed": {
+     "stops_bias": -0.241,
+     "passes_bias": -13.458,
+     "retirements_bias": -0.667,
+     "safety_cars_bias": 0.625,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.339,
+     "passes_mae": 13.458,
+     "retirements_mae": 0.833,
+     "safety_cars_mae": 0.625,
+     "vscs_mae": 0.0,
+     "order_rho": 0.669
+    }
+   },
+   "races": {
+    "2014_chinese_gp": {
+     "real": {
+      "stops": 2.2,
+      "passes": 57,
+      "retirements": 2,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.04,
+      "passes": 56.17,
+      "retirements": 3.5,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.539
+     },
+     "borrowed": {
+      "stops": 1.96,
+      "passes": 50.17,
+      "retirements": 1.67,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.776
+     }
+    },
+    "2014_austrian_gp": {
+     "real": {
+      "stops": 1.894736842105263,
+      "passes": 70,
+      "retirements": 3,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.04,
+      "passes": 61.83,
+      "retirements": 4.67,
+      "safety_cars": 1.0,
+      "vscs": 0.0,
+      "order_rho": 0.417
+     },
+     "borrowed": {
+      "stops": 2.02,
+      "passes": 45.83,
+      "retirements": 3.17,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.564
+     }
+    },
+    "2014_belgian_gp": {
+     "real": {
+      "stops": 2.235294117647059,
+      "passes": 50,
+      "retirements": 5,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.24,
+      "passes": 68.17,
+      "retirements": 2.83,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.532
+     },
+     "borrowed": {
+      "stops": 1.32,
+      "passes": 37.5,
+      "retirements": 2.33,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.571
+     }
+    },
+    "2014_russian_gp": {
+     "real": {
+      "stops": 1.1578947368421053,
+      "passes": 54,
+      "retirements": 2,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.23,
+      "passes": 58.0,
+      "retirements": 4.5,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.662
+     },
+     "borrowed": {
+      "stops": 1.23,
+      "passes": 43.67,
+      "retirements": 2.17,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.763
+     }
+    }
+   }
+  },
+  "2015": {
+   "dry_test": [
+    "2015_bahrain_gp",
+    "2015_austrian_gp",
+    "2015_italian_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": 0.435,
+     "passes_bias": 5.944,
+     "retirements_bias": 1.0,
+     "safety_cars_bias": -0.056,
+     "vscs_bias": 0.278,
+     "stops_mae": 0.57,
+     "passes_mae": 13.5,
+     "retirements_mae": 1.0,
+     "safety_cars_mae": 0.278,
+     "vscs_mae": 0.278,
+     "order_rho": 0.582
+    },
+    "borrowed": {
+     "stops_bias": 0.164,
+     "passes_bias": 2.611,
+     "retirements_bias": -0.222,
+     "safety_cars_bias": 0.056,
+     "vscs_bias": 0.444,
+     "stops_mae": 0.471,
+     "passes_mae": 15.167,
+     "retirements_mae": 0.778,
+     "safety_cars_mae": 0.389,
+     "vscs_mae": 0.444,
+     "order_rho": 0.63
+    }
+   },
+   "races": {
+    "2015_bahrain_gp": {
+     "real": {
+      "stops": 2.2941176470588234,
+      "passes": 55,
+      "retirements": 2,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.09,
+      "passes": 58.17,
+      "retirements": 3.67,
+      "safety_cars": 0.17,
+      "vscs": 0.17,
+      "order_rho": 0.638
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 50.33,
+      "retirements": 2.83,
+      "safety_cars": 0.33,
+      "vscs": 0.5,
+      "order_rho": 0.697
+     }
+    },
+    "2015_austrian_gp": {
+     "real": {
+      "stops": 1.2142857142857142,
+      "passes": 29,
+      "retirements": 4,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 55.0,
+      "retirements": 4.33,
+      "safety_cars": 0.5,
+      "vscs": 0.33,
+      "order_rho": 0.621
+     },
+     "borrowed": {
+      "stops": 2.17,
+      "passes": 55.67,
+      "retirements": 2.5,
+      "safety_cars": 0.5,
+      "vscs": 0.5,
+      "order_rho": 0.633
+     }
+    },
+    "2015_italian_gp": {
+     "real": {
+      "stops": 1.2777777777777777,
+      "passes": 65,
+      "retirements": 2,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 53.67,
+      "retirements": 3.0,
+      "safety_cars": 0.17,
+      "vscs": 0.33,
+      "order_rho": 0.487
+     },
+     "borrowed": {
+      "stops": 1.11,
+      "passes": 50.83,
+      "retirements": 2.0,
+      "safety_cars": 0.33,
+      "vscs": 0.33,
+      "order_rho": 0.561
+     }
+    }
+   }
+  },
+  "2016": {
+   "dry_test": [
+    "2016_russian_gp",
+    "2016_european_gp",
+    "2016_german_gp",
+    "2016_malaysian_gp",
+    "2016_brazilian_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": 0.122,
+     "passes_bias": -1.8,
+     "retirements_bias": -0.667,
+     "safety_cars_bias": -1.067,
+     "vscs_bias": 0.2,
+     "stops_mae": 0.331,
+     "passes_mae": 13.6,
+     "retirements_mae": 1.2,
+     "safety_cars_mae": 1.333,
+     "vscs_mae": 0.2,
+     "order_rho": 0.588
+    },
+    "borrowed": {
+     "stops_bias": -0.579,
+     "passes_bias": -12.333,
+     "retirements_bias": -1.1,
+     "safety_cars_bias": -0.833,
+     "vscs_bias": 0.4,
+     "stops_mae": 0.579,
+     "passes_mae": 20.267,
+     "retirements_mae": 1.1,
+     "safety_cars_mae": 1.3,
+     "vscs_mae": 0.4,
+     "order_rho": 0.614
+    }
+   },
+   "races": {
+    "2016_russian_gp": {
+     "real": {
+      "stops": 1.3888888888888888,
+      "passes": 38,
+      "retirements": 1,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.93,
+      "passes": 67.5,
+      "retirements": 1.67,
+      "safety_cars": 0.17,
+      "vscs": 0.33,
+      "order_rho": 0.68
+     },
+     "borrowed": {
+      "stops": 1.14,
+      "passes": 57.83,
+      "retirements": 1.0,
+      "safety_cars": 0.5,
+      "vscs": 0.17,
+      "order_rho": 0.738
+     }
+    },
+    "2016_european_gp": {
+     "real": {
+      "stops": 1.5,
+      "passes": 78,
+      "retirements": 4,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.92,
+      "passes": 65.17,
+      "retirements": 2.83,
+      "safety_cars": 0.17,
+      "vscs": 0.33,
+      "order_rho": 0.647
+     },
+     "borrowed": {
+      "stops": 1.14,
+      "passes": 62.83,
+      "retirements": 2.83,
+      "safety_cars": 0.67,
+      "vscs": 0.5,
+      "order_rho": 0.641
+     }
+    },
+    "2016_german_gp": {
+     "real": {
+      "stops": 2.75,
+      "passes": 74,
+      "retirements": 2,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.92,
+      "passes": 69.17,
+      "retirements": 2.67,
+      "safety_cars": 0.5,
+      "vscs": 0.17,
+      "order_rho": 0.696
+     },
+     "borrowed": {
+      "stops": 2.03,
+      "passes": 45.67,
+      "retirements": 2.0,
+      "safety_cars": 0.5,
+      "vscs": 0.33,
+      "order_rho": 0.729
+     }
+    },
+    "2016_malaysian_gp": {
+     "real": {
+      "stops": 2.375,
+      "passes": 73,
+      "retirements": 5,
+      "safety_cars": 3,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.01,
+      "passes": 68.83,
+      "retirements": 3.83,
+      "safety_cars": 0.33,
+      "vscs": 0.17,
+      "order_rho": 0.4
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 55.67,
+      "retirements": 3.5,
+      "safety_cars": 0.67,
+      "vscs": 0.33,
+      "order_rho": 0.435
+     }
+    },
+    "2016_brazilian_gp": {
+     "real": {
+      "stops": 3.1875,
+      "passes": 84,
+      "retirements": 5,
+      "safety_cars": 3,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 3.03,
+      "passes": 67.33,
+      "retirements": 2.67,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.516
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 63.33,
+      "retirements": 2.17,
+      "safety_cars": 0.5,
+      "vscs": 0.67,
+      "order_rho": 0.526
+     }
+    }
+   }
+  },
+  "2017": {
+   "dry_test": [
+    "2017_russian_gp",
+    "2017_azerbaijan_gp",
+    "2017_belgian_gp",
+    "2017_japanese_gp",
+    "2017_abu_dhabi_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.147,
+     "passes_bias": -15.2,
+     "retirements_bias": -0.033,
+     "safety_cars_bias": -1.0,
+     "vscs_bias": 0.333,
+     "stops_mae": 0.671,
+     "passes_mae": 17.4,
+     "retirements_mae": 2.3,
+     "safety_cars_mae": 1.267,
+     "vscs_mae": 0.333,
+     "order_rho": 0.418
+    },
+    "borrowed": {
+     "stops_bias": -0.45,
+     "passes_bias": -10.667,
+     "retirements_bias": -1.333,
+     "safety_cars_bias": -0.633,
+     "vscs_bias": 0.367,
+     "stops_mae": 1.099,
+     "passes_mae": 17.533,
+     "retirements_mae": 2.467,
+     "safety_cars_mae": 1.033,
+     "vscs_mae": 0.367,
+     "order_rho": 0.475
+    }
+   },
+   "races": {
+    "2017_russian_gp": {
+     "real": {
+      "stops": 1.25,
+      "passes": 24,
+      "retirements": 1,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.12,
+      "passes": 24.33,
+      "retirements": 3.67,
+      "safety_cars": 0.17,
+      "vscs": 0.5,
+      "order_rho": 0.325
+     },
+     "borrowed": {
+      "stops": 1.24,
+      "passes": 36.83,
+      "retirements": 2.5,
+      "safety_cars": 0.83,
+      "vscs": 0.33,
+      "order_rho": 0.385
+     }
+    },
+    "2017_azerbaijan_gp": {
+     "real": {
+      "stops": 3.769230769230769,
+      "passes": 80,
+      "retirements": 7,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.1,
+      "passes": 38.17,
+      "retirements": 2.5,
+      "safety_cars": 0.17,
+      "vscs": 0.17,
+      "order_rho": 0.277
+     },
+     "borrowed": {
+      "stops": 1.16,
+      "passes": 37.17,
+      "retirements": 1.33,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.268
+     }
+    },
+    "2017_belgian_gp": {
+     "real": {
+      "stops": 2.25,
+      "passes": 57,
+      "retirements": 4,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 34.0,
+      "retirements": 2.67,
+      "safety_cars": 0.0,
+      "vscs": 0.17,
+      "order_rho": 0.617
+     },
+     "borrowed": {
+      "stops": 1.0,
+      "passes": 36.83,
+      "retirements": 1.33,
+      "safety_cars": 0.33,
+      "vscs": 0.5,
+      "order_rho": 0.556
+     }
+    },
+    "2017_japanese_gp": {
+     "real": {
+      "stops": 1.2666666666666666,
+      "passes": 54,
+      "retirements": 4,
+      "safety_cars": 3,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.82,
+      "passes": 37.33,
+      "retirements": 4.0,
+      "safety_cars": 0.0,
+      "vscs": 0.17,
+      "order_rho": 0.5
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 46.5,
+      "retirements": 2.83,
+      "safety_cars": 0.33,
+      "vscs": 0.5,
+      "order_rho": 0.666
+     }
+    },
+    "2017_abu_dhabi_gp": {
+     "real": {
+      "stops": 1.1111111111111112,
+      "passes": 20,
+      "retirements": 2,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.87,
+      "passes": 25.17,
+      "retirements": 5.0,
+      "safety_cars": 0.67,
+      "vscs": 0.67,
+      "order_rho": 0.369
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 24.33,
+      "retirements": 3.33,
+      "safety_cars": 1.0,
+      "vscs": 0.5,
+      "order_rho": 0.499
+     }
+    }
+   }
+  },
+  "2018": {
+   "dry_test": [
+    "2018_azerbaijan_gp",
+    "2018_french_gp",
+    "2018_hungarian_gp",
+    "2018_russian_gp",
+    "2018_brazilian_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.405,
+     "passes_bias": -14.433,
+     "retirements_bias": 0.633,
+     "safety_cars_bias": 0.4,
+     "vscs_bias": 0.3,
+     "stops_mae": 0.405,
+     "passes_mae": 26.033,
+     "retirements_mae": 2.167,
+     "safety_cars_mae": 0.8,
+     "vscs_mae": 0.767,
+     "order_rho": 0.435
+    },
+    "borrowed": {
+     "stops_bias": 0.528,
+     "passes_bias": -17.967,
+     "retirements_bias": -1.367,
+     "safety_cars_bias": -0.167,
+     "vscs_bias": -0.1,
+     "stops_mae": 0.759,
+     "passes_mae": 29.833,
+     "retirements_mae": 2.033,
+     "safety_cars_mae": 0.633,
+     "vscs_mae": 0.567,
+     "order_rho": 0.494
+    }
+   },
+   "races": {
+    "2018_azerbaijan_gp": {
+     "real": {
+      "stops": 2.3846153846153846,
+      "passes": 106,
+      "retirements": 7,
+      "safety_cars": 2,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 73.83,
+      "retirements": 4.0,
+      "safety_cars": 1.0,
+      "vscs": 1.0,
+      "order_rho": 0.079
+     },
+     "borrowed": {
+      "stops": 1.81,
+      "passes": 49.67,
+      "retirements": 1.83,
+      "safety_cars": 0.67,
+      "vscs": 0.33,
+      "order_rho": 0.022
+     }
+    },
+    "2018_french_gp": {
+     "real": {
+      "stops": 1.1333333333333333,
+      "passes": 78,
+      "retirements": 5,
+      "safety_cars": 1,
+      "vscs": 1
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 51.67,
+      "retirements": 4.17,
+      "safety_cars": 1.0,
+      "vscs": 0.67,
+      "order_rho": 0.607
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 52.5,
+      "retirements": 2.17,
+      "safety_cars": 0.33,
+      "vscs": 0.83,
+      "order_rho": 0.684
+     }
+    },
+    "2018_hungarian_gp": {
+     "real": {
+      "stops": 1.1176470588235294,
+      "passes": 77,
+      "retirements": 3,
+      "safety_cars": 0,
+      "vscs": 2
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 43.33,
+      "retirements": 4.33,
+      "safety_cars": 0.5,
+      "vscs": 1.17,
+      "order_rho": 0.415
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 39.33,
+      "retirements": 2.5,
+      "safety_cars": 0.17,
+      "vscs": 0.5,
+      "order_rho": 0.555
+     }
+    },
+    "2018_russian_gp": {
+     "real": {
+      "stops": 1.0555555555555556,
+      "passes": 42,
+      "retirements": 2,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 71.0,
+      "retirements": 3.17,
+      "safety_cars": 0.83,
+      "vscs": 0.33,
+      "order_rho": 0.674
+     },
+     "borrowed": {
+      "stops": 1.36,
+      "passes": 63.0,
+      "retirements": 2.5,
+      "safety_cars": 0.5,
+      "vscs": 0.17,
+      "order_rho": 0.597
+     }
+    },
+    "2018_brazilian_gp": {
+     "real": {
+      "stops": 1.3333333333333333,
+      "passes": 59,
+      "retirements": 2,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 50.0,
+      "retirements": 6.5,
+      "safety_cars": 1.67,
+      "vscs": 1.33,
+      "order_rho": 0.403
+     },
+     "borrowed": {
+      "stops": 2.49,
+      "passes": 67.67,
+      "retirements": 3.17,
+      "safety_cars": 0.5,
+      "vscs": 0.67,
+      "order_rho": 0.612
+     }
+    }
+   }
+  },
+  "2019": {
+   "dry_test": [
+    "2019_azerbaijan_gp",
+    "2019_french_gp",
+    "2019_hungarian_gp",
+    "2019_russian_gp",
+    "2019_brazilian_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.294,
+     "passes_bias": -8.0,
+     "retirements_bias": -0.633,
+     "safety_cars_bias": -0.467,
+     "vscs_bias": -0.167,
+     "stops_mae": 0.295,
+     "passes_mae": 23.933,
+     "retirements_mae": 1.633,
+     "safety_cars_mae": 0.867,
+     "vscs_mae": 0.767,
+     "order_rho": 0.522
+    },
+    "borrowed": {
+     "stops_bias": 0.666,
+     "passes_bias": 7.333,
+     "retirements_bias": -0.8,
+     "safety_cars_bias": -0.4,
+     "vscs_bias": -0.267,
+     "stops_mae": 0.666,
+     "passes_mae": 30.6,
+     "retirements_mae": 1.8,
+     "safety_cars_mae": 0.8,
+     "vscs_mae": 0.467,
+     "order_rho": 0.525
+    }
+   },
+   "races": {
+    "2019_azerbaijan_gp": {
+     "real": {
+      "stops": 1.4375,
+      "passes": 75,
+      "retirements": 4,
+      "safety_cars": 0,
+      "vscs": 1
+     },
+     "season": {
+      "stops": 1.04,
+      "passes": 98.83,
+      "retirements": 2.17,
+      "safety_cars": 0.0,
+      "vscs": 0.33,
+      "order_rho": 0.55
+     },
+     "borrowed": {
+      "stops": 1.74,
+      "passes": 105.67,
+      "retirements": 2.33,
+      "safety_cars": 0.17,
+      "vscs": 0.5,
+      "order_rho": 0.525
+     }
+    },
+    "2019_french_gp": {
+     "real": {
+      "stops": 1.1578947368421053,
+      "passes": 36,
+      "retirements": 1,
+      "safety_cars": 0,
+      "vscs": 1
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 39.5,
+      "retirements": 2.33,
+      "safety_cars": 0.17,
+      "vscs": 0.33,
+      "order_rho": 0.719
+     },
+     "borrowed": {
+      "stops": 1.95,
+      "passes": 48.0,
+      "retirements": 2.17,
+      "safety_cars": 0.17,
+      "vscs": 0.33,
+      "order_rho": 0.75
+     }
+    },
+    "2019_hungarian_gp": {
+     "real": {
+      "stops": 1.2105263157894737,
+      "passes": 45,
+      "retirements": 1,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.21,
+      "passes": 42.33,
+      "retirements": 2.17,
+      "safety_cars": 0.83,
+      "vscs": 0.67,
+      "order_rho": 0.661
+     },
+     "borrowed": {
+      "stops": 2.51,
+      "passes": 63.0,
+      "retirements": 2.33,
+      "safety_cars": 0.67,
+      "vscs": 0.33,
+      "order_rho": 0.632
+     }
+    },
+    "2019_russian_gp": {
+     "real": {
+      "stops": 1.3333333333333333,
+      "passes": 48,
+      "retirements": 5,
+      "safety_cars": 2,
+      "vscs": 1
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 60.5,
+      "retirements": 2.5,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.531
+     },
+     "borrowed": {
+      "stops": 1.95,
+      "passes": 82.17,
+      "retirements": 1.67,
+      "safety_cars": 0.5,
+      "vscs": 0.33,
+      "order_rho": 0.595
+     }
+    },
+    "2019_brazilian_gp": {
+     "real": {
+      "stops": 2.3125,
+      "passes": 132,
+      "retirements": 4,
+      "safety_cars": 2,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.73,
+      "passes": 54.83,
+      "retirements": 2.67,
+      "safety_cars": 0.0,
+      "vscs": 0.83,
+      "order_rho": 0.146
+     },
+     "borrowed": {
+      "stops": 2.64,
+      "passes": 73.83,
+      "retirements": 2.5,
+      "safety_cars": 0.5,
+      "vscs": 0.17,
+      "order_rho": 0.123
+     }
+    }
+   }
+  },
+  "2020": {
+   "dry_test": [
+    "2020_british_gp",
+    "2020_italian_gp",
+    "2020_portuguese_gp",
+    "2020_sakhir_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.091,
+     "passes_bias": -16.167,
+     "retirements_bias": 1.708,
+     "safety_cars_bias": 0.125,
+     "vscs_bias": 0.083,
+     "stops_mae": 0.26,
+     "passes_mae": 16.583,
+     "retirements_mae": 1.792,
+     "safety_cars_mae": 0.708,
+     "vscs_mae": 0.833,
+     "order_rho": 0.404
+    },
+    "borrowed": {
+     "stops_bias": 0.584,
+     "passes_bias": 0.417,
+     "retirements_bias": -0.083,
+     "safety_cars_bias": -0.958,
+     "vscs_bias": -0.208,
+     "stops_mae": 0.6,
+     "passes_mae": 14.917,
+     "retirements_mae": 1.083,
+     "safety_cars_mae": 1.292,
+     "vscs_mae": 0.792,
+     "order_rho": 0.384
+    }
+   },
+   "races": {
+    "2020_british_gp": {
+     "real": {
+      "stops": 1.2941176470588236,
+      "passes": 37,
+      "retirements": 2,
+      "safety_cars": 2,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.04,
+      "passes": 37.83,
+      "retirements": 2.33,
+      "safety_cars": 1.17,
+      "vscs": 0.5,
+      "order_rho": 0.616
+     },
+     "borrowed": {
+      "stops": 1.26,
+      "passes": 42.83,
+      "retirements": 1.5,
+      "safety_cars": 0.17,
+      "vscs": 0.33,
+      "order_rho": 0.384
+     }
+    },
+    "2020_italian_gp": {
+     "real": {
+      "stops": 1.0625,
+      "passes": 63,
+      "retirements": 4,
+      "safety_cars": 2,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.4,
+      "passes": 34.83,
+      "retirements": 3.83,
+      "safety_cars": 1.67,
+      "vscs": 0.83,
+      "order_rho": 0.479
+     },
+     "borrowed": {
+      "stops": 1.59,
+      "passes": 85.67,
+      "retirements": 2.33,
+      "safety_cars": 0.67,
+      "vscs": 0.67,
+      "order_rho": 0.588
+     }
+    },
+    "2020_portuguese_gp": {
+     "real": {
+      "stops": 1.2105263157894737,
+      "passes": 84,
+      "retirements": 1,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 56.83,
+      "retirements": 4.33,
+      "safety_cars": 1.67,
+      "vscs": 0.5,
+      "order_rho": 0.409
+     },
+     "borrowed": {
+      "stops": 2.2,
+      "passes": 55.0,
+      "retirements": 3.0,
+      "safety_cars": 0.67,
+      "vscs": 0.17,
+      "order_rho": 0.422
+     }
+    },
+    "2020_sakhir_gp": {
+     "real": {
+      "stops": 2.235294117647059,
+      "passes": 64,
+      "retirements": 3,
+      "safety_cars": 2,
+      "vscs": 2
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 53.83,
+      "retirements": 6.33,
+      "safety_cars": 2.0,
+      "vscs": 0.5,
+      "order_rho": 0.112
+     },
+     "borrowed": {
+      "stops": 3.09,
+      "passes": 66.17,
+      "retirements": 2.83,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.142
+     }
+    }
+   }
+  },
+  "2021": {
+   "dry_test": [
+    "2021_spanish_gp",
+    "2021_styrian_gp",
+    "2021_qatar_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": 0.409,
+     "passes_bias": -25.833,
+     "retirements_bias": 0.667,
+     "safety_cars_bias": 0.667,
+     "vscs_bias": 0.556,
+     "stops_mae": 0.409,
+     "passes_mae": 25.833,
+     "retirements_mae": 0.667,
+     "safety_cars_mae": 1.0,
+     "vscs_mae": 0.889,
+     "order_rho": 0.607
+    },
+    "borrowed": {
+     "stops_bias": 0.686,
+     "passes_bias": 0.778,
+     "retirements_bias": 0.111,
+     "safety_cars_bias": 0.389,
+     "vscs_bias": -0.056,
+     "stops_mae": 0.686,
+     "passes_mae": 6.444,
+     "retirements_mae": 0.222,
+     "safety_cars_mae": 0.833,
+     "vscs_mae": 0.5,
+     "order_rho": 0.584
+    }
+   },
+   "races": {
+    "2021_spanish_gp": {
+     "real": {
+      "stops": 1.9473684210526316,
+      "passes": 60,
+      "retirements": 1,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 33.67,
+      "retirements": 2.0,
+      "safety_cars": 0.5,
+      "vscs": 1.17,
+      "order_rho": 0.67
+     },
+     "borrowed": {
+      "stops": 2.32,
+      "passes": 51.5,
+      "retirements": 1.5,
+      "safety_cars": 0.33,
+      "vscs": 0.5,
+      "order_rho": 0.65
+     }
+    },
+    "2021_styrian_gp": {
+     "real": {
+      "stops": 1.2222222222222223,
+      "passes": 62,
+      "retirements": 2,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 30.33,
+      "retirements": 2.5,
+      "safety_cars": 1.17,
+      "vscs": 1.0,
+      "order_rho": 0.661
+     },
+     "borrowed": {
+      "stops": 2.47,
+      "passes": 71.17,
+      "retirements": 2.0,
+      "safety_cars": 0.83,
+      "vscs": 0.17,
+      "order_rho": 0.654
+     }
+    },
+    "2021_qatar_gp": {
+     "real": {
+      "stops": 1.5555555555555556,
+      "passes": 66,
+      "retirements": 2,
+      "safety_cars": 0,
+      "vscs": 1
+     },
+     "season": {
+      "stops": 1.95,
+      "passes": 46.5,
+      "retirements": 2.5,
+      "safety_cars": 1.33,
+      "vscs": 0.5,
+      "order_rho": 0.489
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 67.67,
+      "retirements": 1.83,
+      "safety_cars": 1.0,
+      "vscs": 0.17,
+      "order_rho": 0.448
+     }
+    }
+   }
+  },
+  "2022": {
+   "dry_test": [
+    "2022_azerbaijan_gp",
+    "2022_italian_gp",
+    "2022_mexico_city_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.039,
+     "passes_bias": 2.167,
+     "retirements_bias": -0.111,
+     "safety_cars_bias": 0.944,
+     "vscs_bias": -0.667,
+     "stops_mae": 0.595,
+     "passes_mae": 13.056,
+     "retirements_mae": 2.222,
+     "safety_cars_mae": 0.944,
+     "vscs_mae": 0.667,
+     "order_rho": 0.406
+    },
+    "borrowed": {
+     "stops_bias": 0.323,
+     "passes_bias": 1.111,
+     "retirements_bias": -1.167,
+     "safety_cars_bias": 0.222,
+     "vscs_bias": -0.778,
+     "stops_mae": 0.66,
+     "passes_mae": 10.111,
+     "retirements_mae": 1.611,
+     "safety_cars_mae": 0.556,
+     "vscs_mae": 0.778,
+     "order_rho": 0.491
+    }
+   },
+   "races": {
+    "2022_azerbaijan_gp": {
+     "real": {
+      "stops": 1.5333333333333334,
+      "passes": 36,
+      "retirements": 5,
+      "safety_cars": 0,
+      "vscs": 2
+     },
+     "season": {
+      "stops": 1.18,
+      "passes": 49.5,
+      "retirements": 2.33,
+      "safety_cars": 1.5,
+      "vscs": 0.33,
+      "order_rho": 0.208
+     },
+     "borrowed": {
+      "stops": 1.03,
+      "passes": 46.83,
+      "retirements": 2.0,
+      "safety_cars": 0.83,
+      "vscs": 0.33,
+      "order_rho": 0.341
+     }
+    },
+    "2022_italian_gp": {
+     "real": {
+      "stops": 1.625,
+      "passes": 86,
+      "retirements": 4,
+      "safety_cars": 1,
+      "vscs": 1
+     },
+     "season": {
+      "stops": 1.03,
+      "passes": 69.67,
+      "retirements": 3.17,
+      "safety_cars": 1.0,
+      "vscs": 0.83,
+      "order_rho": 0.544
+     },
+     "borrowed": {
+      "stops": 1.88,
+      "passes": 72.5,
+      "retirements": 2.83,
+      "safety_cars": 0.5,
+      "vscs": 0.83,
+      "order_rho": 0.542
+     }
+    },
+    "2022_mexico_city_gp": {
+     "real": {
+      "stops": 1.1666666666666667,
+      "passes": 49,
+      "retirements": 2,
+      "safety_cars": 0,
+      "vscs": 1
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 58.33,
+      "retirements": 5.17,
+      "safety_cars": 1.33,
+      "vscs": 0.83,
+      "order_rho": 0.467
+     },
+     "borrowed": {
+      "stops": 2.38,
+      "passes": 55.0,
+      "retirements": 2.67,
+      "safety_cars": 0.33,
+      "vscs": 0.5,
+      "order_rho": 0.589
+     }
+    }
+   }
+  },
+  "2023": {
+   "dry_test": [
+    "2023_azerbaijan_gp",
+    "2023_canadian_gp",
+    "2023_japanese_gp",
+    "2023_sao_paulo_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": 0.41,
+     "passes_bias": 15.542,
+     "retirements_bias": -0.125,
+     "safety_cars_bias": 0.375,
+     "vscs_bias": -0.0,
+     "stops_mae": 0.728,
+     "passes_mae": 15.542,
+     "retirements_mae": 1.875,
+     "safety_cars_mae": 0.625,
+     "vscs_mae": 0.5,
+     "order_rho": 0.5
+    },
+    "borrowed": {
+     "stops_bias": 0.082,
+     "passes_bias": 26.792,
+     "retirements_bias": -1.375,
+     "safety_cars_bias": -0.375,
+     "vscs_bias": -0.042,
+     "stops_mae": 0.291,
+     "passes_mae": 26.792,
+     "retirements_mae": 1.792,
+     "safety_cars_mae": 0.375,
+     "vscs_mae": 0.542,
+     "order_rho": 0.603
+    }
+   },
+   "races": {
+    "2023_azerbaijan_gp": {
+     "real": {
+      "stops": 1.2222222222222223,
+      "passes": 38,
+      "retirements": 2,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.97,
+      "passes": 41.33,
+      "retirements": 3.17,
+      "safety_cars": 0.83,
+      "vscs": 0.83,
+      "order_rho": 0.642
+     },
+     "borrowed": {
+      "stops": 1.55,
+      "passes": 58.83,
+      "retirements": 1.5,
+      "safety_cars": 0.33,
+      "vscs": 0.67,
+      "order_rho": 0.764
+     }
+    },
+    "2023_canadian_gp": {
+     "real": {
+      "stops": 1.7777777777777777,
+      "passes": 32,
+      "retirements": 2,
+      "safety_cars": 1,
+      "vscs": 1
+     },
+     "season": {
+      "stops": 2.75,
+      "passes": 44.33,
+      "retirements": 4.33,
+      "safety_cars": 1.83,
+      "vscs": 0.67,
+      "order_rho": 0.43
+     },
+     "borrowed": {
+      "stops": 2.19,
+      "passes": 63.67,
+      "retirements": 2.83,
+      "safety_cars": 0.83,
+      "vscs": 0.33,
+      "order_rho": 0.597
+     }
+    },
+    "2023_japanese_gp": {
+     "real": {
+      "stops": 2.066666666666667,
+      "passes": 41,
+      "retirements": 5,
+      "safety_cars": 1,
+      "vscs": 1
+     },
+     "season": {
+      "stops": 2.62,
+      "passes": 49.5,
+      "retirements": 2.33,
+      "safety_cars": 0.67,
+      "vscs": 0.33,
+      "order_rho": 0.492
+     },
+     "borrowed": {
+      "stops": 1.95,
+      "passes": 63.0,
+      "retirements": 2.33,
+      "safety_cars": 0.67,
+      "vscs": 0.5,
+      "order_rho": 0.419
+     }
+    },
+    "2023_sao_paulo_gp": {
+     "real": {
+      "stops": 3.2142857142857144,
+      "passes": 34,
+      "retirements": 5,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.58,
+      "passes": 72.0,
+      "retirements": 3.67,
+      "safety_cars": 2.17,
+      "vscs": 0.17,
+      "order_rho": 0.437
+     },
+     "borrowed": {
+      "stops": 2.91,
+      "passes": 66.67,
+      "retirements": 1.83,
+      "safety_cars": 0.67,
+      "vscs": 0.33,
+      "order_rho": 0.633
+     }
+    }
+   }
+  },
+  "2024": {
+   "dry_test": [
+    "2024_japanese_gp",
+    "2024_monaco_gp",
+    "2024_italian_gp",
+    "2024_mexico_city_gp",
+    "2024_abu_dhabi_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.06,
+     "passes_bias": 0.533,
+     "retirements_bias": -1.267,
+     "safety_cars_bias": 0.033,
+     "vscs_bias": 0.167,
+     "stops_mae": 0.285,
+     "passes_mae": 15.867,
+     "retirements_mae": 1.667,
+     "safety_cars_mae": 0.433,
+     "vscs_mae": 0.567,
+     "order_rho": 0.627
+    },
+    "borrowed": {
+     "stops_bias": 0.066,
+     "passes_bias": -25.433,
+     "retirements_bias": -1.633,
+     "safety_cars_bias": 0.067,
+     "vscs_bias": -0.0,
+     "stops_mae": 0.865,
+     "passes_mae": 31.233,
+     "retirements_mae": 1.9,
+     "safety_cars_mae": 0.467,
+     "vscs_mae": 0.4,
+     "order_rho": 0.651
+    }
+   },
+   "races": {
+    "2024_japanese_gp": {
+     "real": {
+      "stops": 2.0,
+      "passes": 63,
+      "retirements": 3,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 52.33,
+      "retirements": 1.67,
+      "safety_cars": 0.33,
+      "vscs": 0.5,
+      "order_rho": 0.661
+     },
+     "borrowed": {
+      "stops": 1.0,
+      "passes": 31.5,
+      "retirements": 1.5,
+      "safety_cars": 0.33,
+      "vscs": 0.33,
+      "order_rho": 0.712
+     }
+    },
+    "2024_monaco_gp": {
+     "real": {
+      "stops": 0.4375,
+      "passes": 11,
+      "retirements": 4,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 47.5,
+      "retirements": 1.33,
+      "safety_cars": 0.5,
+      "vscs": 0.33,
+      "order_rho": 0.618
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 25.5,
+      "retirements": 1.0,
+      "safety_cars": 0.17,
+      "vscs": 0.17,
+      "order_rho": 0.624
+     }
+    },
+    "2024_italian_gp": {
+     "real": {
+      "stops": 1.5789473684210527,
+      "passes": 53,
+      "retirements": 1,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.39,
+      "passes": 50.67,
+      "retirements": 2.0,
+      "safety_cars": 0.33,
+      "vscs": 0.5,
+      "order_rho": 0.702
+     },
+     "borrowed": {
+      "stops": 1.0,
+      "passes": 13.33,
+      "retirements": 1.67,
+      "safety_cars": 0.67,
+      "vscs": 0.33,
+      "order_rho": 0.72
+     }
+    },
+    "2024_mexico_city_gp": {
+     "real": {
+      "stops": 1.2352941176470589,
+      "passes": 68,
+      "retirements": 3,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 72.5,
+      "retirements": 2.5,
+      "safety_cars": 0.5,
+      "vscs": 0.5,
+      "order_rho": 0.57
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 48.0,
+      "retirements": 1.83,
+      "safety_cars": 0.83,
+      "vscs": 0.17,
+      "order_rho": 0.574
+     }
+    },
+    "2024_abu_dhabi_gp": {
+     "real": {
+      "stops": 1.4375,
+      "passes": 88,
+      "retirements": 4,
+      "safety_cars": 0,
+      "vscs": 1
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 62.67,
+      "retirements": 1.17,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.582
+     },
+     "borrowed": {
+      "stops": 1.02,
+      "passes": 37.5,
+      "retirements": 0.83,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.622
+     }
+    }
+   }
+  },
+  "2025": {
+   "dry_test": [
+    "2025_bahrain_gp",
+    "2025_monaco_gp",
+    "2025_italian_gp",
+    "2025_mexico_city_gp",
+    "2025_abu_dhabi_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": 0.255,
+     "passes_bias": 17.3,
+     "retirements_bias": 0.933,
+     "safety_cars_bias": 0.867,
+     "vscs_bias": 0.233,
+     "stops_mae": 0.266,
+     "passes_mae": 17.3,
+     "retirements_mae": 1.267,
+     "safety_cars_mae": 0.867,
+     "vscs_mae": 0.3,
+     "order_rho": 0.584
+    },
+    "borrowed": {
+     "stops_bias": 0.69,
+     "passes_bias": -0.7,
+     "retirements_bias": 1.2,
+     "safety_cars_bias": 0.4,
+     "vscs_bias": 0.267,
+     "stops_mae": 0.699,
+     "passes_mae": 16.367,
+     "retirements_mae": 1.667,
+     "safety_cars_mae": 0.6,
+     "vscs_mae": 0.267,
+     "order_rho": 0.61
+    }
+   },
+   "races": {
+    "2025_bahrain_gp": {
+     "real": {
+      "stops": 2.0526315789473686,
+      "passes": 77,
+      "retirements": 1,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.31,
+      "passes": 84.33,
+      "retirements": 1.5,
+      "safety_cars": 1.0,
+      "vscs": 0.33,
+      "order_rho": 0.65
+     },
+     "borrowed": {
+      "stops": 2.03,
+      "passes": 51.17,
+      "retirements": 2.17,
+      "safety_cars": 0.5,
+      "vscs": 0.83,
+      "order_rho": 0.663
+     }
+    },
+    "2025_monaco_gp": {
+     "real": {
+      "stops": 2.111111111111111,
+      "passes": 17,
+      "retirements": 2,
+      "safety_cars": 0,
+      "vscs": 1
+     },
+     "season": {
+      "stops": 2.09,
+      "passes": 46.5,
+      "retirements": 3.0,
+      "safety_cars": 1.5,
+      "vscs": 0.83,
+      "order_rho": 0.601
+     },
+     "borrowed": {
+      "stops": 2.9,
+      "passes": 47.17,
+      "retirements": 3.33,
+      "safety_cars": 0.67,
+      "vscs": 1.0,
+      "order_rho": 0.64
+     }
+    },
+    "2025_italian_gp": {
+     "real": {
+      "stops": 1.0,
+      "passes": 34,
+      "retirements": 1,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 0.99,
+      "passes": 53.5,
+      "retirements": 2.5,
+      "safety_cars": 1.33,
+      "vscs": 0.5,
+      "order_rho": 0.614
+     },
+     "borrowed": {
+      "stops": 1.88,
+      "passes": 43.0,
+      "retirements": 2.67,
+      "safety_cars": 0.83,
+      "vscs": 0.5,
+      "order_rho": 0.69
+     }
+    },
+    "2025_mexico_city_gp": {
+     "real": {
+      "stops": 1.375,
+      "passes": 71,
+      "retirements": 4,
+      "safety_cars": 0,
+      "vscs": 1
+     },
+     "season": {
+      "stops": 1.79,
+      "passes": 80.0,
+      "retirements": 3.17,
+      "safety_cars": 1.0,
+      "vscs": 1.0,
+      "order_rho": 0.487
+     },
+     "borrowed": {
+      "stops": 2.51,
+      "passes": 71.0,
+      "retirements": 2.83,
+      "safety_cars": 0.17,
+      "vscs": 1.0,
+      "order_rho": 0.555
+     }
+    },
+    "2025_abu_dhabi_gp": {
+     "real": {
+      "stops": 1.35,
+      "passes": 71,
+      "retirements": 0,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.98,
+      "passes": 92.17,
+      "retirements": 2.5,
+      "safety_cars": 0.5,
+      "vscs": 0.5,
+      "order_rho": 0.569
+     },
+     "borrowed": {
+      "stops": 2.02,
+      "passes": 54.17,
+      "retirements": 3.0,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.5
+     }
+    }
+   }
+  }
+ }
+}

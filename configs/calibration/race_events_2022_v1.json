@@ -191,10 +191,10 @@
    "other": 18,
    "pit_speeding": 4
   },
-  "collision_per_pass": 0.020573,
+  "collision_per_pass": 0.020365,
   "false_start_per_starter": 0.0,
-  "pit_speeding_per_stop": 0.008282,
-  "other_per_car_lap": 0.001194,
+  "pit_speeding_per_stop": 0.008198,
+  "other_per_car_lap": 0.001182,
   "passes": 1199,
   "raw": {
    "collision_per_pass": 0.01334,
@@ -202,12 +202,12 @@
    "pit_speeding_per_stop": 0.00537,
    "other_per_car_lap": 0.000774
   },
-  "scale": 1.5422,
-  "scale_note": "x1.542: simulated dry_train 1.57 vs real 2.42 per race"
+  "scale": 1.5266,
+  "scale_note": "x1.527: simulated dry_train 1.58 vs real 2.42 per race"
  },
  "fitted": {
-  "risk_scale": 1.7857,
-  "red_flag_per_crash": 0.0632,
+  "risk_scale": 0.8592,
+  "red_flag_per_crash": 0.0777,
   "fit": {
    "races": [
     "2022_bahrain_gp",
@@ -224,17 +224,17 @@
     "2022_abu_dhabi_gp"
    ],
    "seeds": 5,
-   "sim_crashes_per_race_at_1": 1.4,
-   "sim_failures_per_race": 0.667,
+   "sim_crashes_per_race_at_1": 2.367,
+   "sim_failures_per_race": 1.133,
    "real_retirements_per_race": 3.167,
    "target_red_flags_per_race": 0.1579
   },
   "check": {
-   "retirements_per_race": 3.1,
-   "red_flags_per_race": 0.117,
-   "safety_cars_per_race": 0.983,
-   "vscs_per_race": 0.717,
-   "penalties_per_race": 1.567,
+   "retirements_per_race": 3.117,
+   "red_flags_per_race": 0.133,
+   "safety_cars_per_race": 1.133,
+   "vscs_per_race": 0.783,
+   "penalties_per_race": 1.583,
    "penalties_per_race_after_scale": 2.7
   }
  }

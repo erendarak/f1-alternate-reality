@@ -1,5 +1,6 @@
 {
  "label": "2023 tyre life + same-lap wear (W1, D-041)",
+ "compound_reference": null,
  "dataset_sha256": "sha256:2dee9e3823f3eac5199d97a598aeace3ec9fb665a24016f9c9fc649e926c4c53",
  "fitted_on": [
   "2023_abu_dhabi_gp",
@@ -16,7 +17,7 @@
   "2023_united_states_gp"
  ],
  "globals": {
-  "kappa": 0.8,
+  "kappa": 0.6,
   "kappa_note": "life_laps = kappa x life_raw; fitted on dry_train behaviour",
   "delta_s": 0.0,
   "delta_note": "potential pace step: SOFT -delta, MEDIUM 0, HARD +delta; fitted"

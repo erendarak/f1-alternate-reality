@@ -1,0 +1,28 @@
+{
+  "crash_per_lap": 0.00193,
+  "failure_per_lap": 0.001287,
+  "first_lap_crash_multiplier": 16.6,
+  "fitted_on": [
+    "2018_australian_gp",
+    "2018_chinese_gp",
+    "2018_austrian_gp",
+    "2018_british_gp",
+    "2018_belgian_gp",
+    "2018_singapore_gp",
+    "2018_japanese_gp",
+    "2018_united_states_gp",
+    "2018_mexican_gp"
+  ],
+  "lap1_retirement_per_starter": 0.03333,
+  "note": "H2c: 9 dry_train 2018 races",
+  "races": 9,
+  "retirement_per_car_lap": 0.003217,
+  "retirements": 35,
+  "safety_cars": 7,
+  "sc_laps_median": 5.58,
+  "sc_laps_p25": 5.47,
+  "sc_laps_p75": 6.17,
+  "sc_per_retirement": 0.2,
+  "vsc_per_retirement_without_sc": 0.25,
+  "vscs": 7
+}

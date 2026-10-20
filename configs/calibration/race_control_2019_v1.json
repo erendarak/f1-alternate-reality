@@ -1,0 +1,32 @@
+{
+  "crash_per_lap": 0.001349,
+  "failure_per_lap": 0.000899,
+  "first_lap_crash_multiplier": 5.04,
+  "fitted_on": [
+    "2019_australian_gp",
+    "2019_bahrain_gp",
+    "2019_chinese_gp",
+    "2019_spanish_gp",
+    "2019_canadian_gp",
+    "2019_austrian_gp",
+    "2019_british_gp",
+    "2019_belgian_gp",
+    "2019_italian_gp",
+    "2019_singapore_gp",
+    "2019_mexican_gp",
+    "2019_united_states_gp",
+    "2019_abu_dhabi_gp"
+  ],
+  "lap1_retirement_per_starter": 0.00769,
+  "note": "H2c: 13 dry_train 2019 races",
+  "races": 13,
+  "retirement_per_car_lap": 0.002248,
+  "retirements": 34,
+  "safety_cars": 7,
+  "sc_laps_median": 5.31,
+  "sc_laps_p25": 4.29,
+  "sc_laps_p75": 7.31,
+  "sc_per_retirement": 0.2059,
+  "vsc_per_retirement_without_sc": 0.1481,
+  "vscs": 4
+}

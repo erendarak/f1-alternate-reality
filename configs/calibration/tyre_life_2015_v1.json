@@ -19,9 +19,9 @@
   "2015_spanish_gp"
  ],
  "globals": {
-  "kappa": 0.8,
+  "kappa": 0.6,
   "kappa_note": "life_laps = kappa x life_raw; fitted on dry_train behaviour",
-  "delta_s": 0.65,
+  "delta_s": 0.0,
   "delta_note": "potential pace step: SOFT -delta, MEDIUM 0, HARD +delta; fitted"
  },
  "season_wear": {

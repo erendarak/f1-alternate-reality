@@ -3,7 +3,7 @@ model_version: v1
 kind: stint-length life + same-lap wear regression; globals fitted on behaviour
 source_type: estimated_from_data
 artifact: configs/calibration/tyre_life_2011_v1.json
-artifact_sha256: sha256:bd442cfec6a85684c45e6f64ce43377a7ecd755e6ac8dab91bf26f5d41f70c49
+artifact_sha256: sha256:2922f652b2d2d990124c0b2dbbab89f79e268cb9849be54b3262b762ad02960a
 feature_schema_version: 1
 training_dataset_manifest: data/manifests/dataset_laps_2011_v1.yaml
 training_dataset_content_sha256: sha256:cff23165fccd44386cae400988126a3d08a82b691f723b29dc840051ac3c946b
@@ -22,14 +22,14 @@ training_races:
 - 2011_spanish_gp
 metrics:
   dry_train_fit:
-    kappa: 0.8
-    delta_s: 0.2
-    loss: 0.3015
-    stops_sim: 2.17
+    kappa: 0.7
+    delta_s: 0.0
+    loss: 0.2265
+    stops_sim: 2.381
     stops_real: 2.508
     share_sim:
-      SOFT: 0.635
-      MEDIUM: 0.365
-      HARD: 0.0
+      SOFT: 0.0
+      MEDIUM: 0.368
+      HARD: 0.632
   held_out_check: EXP-010 (docs/experiments/exp010.json)
 status: fitted for 2011 (H2a, D-054); held-out check EXP-023

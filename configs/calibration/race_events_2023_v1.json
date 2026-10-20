@@ -192,10 +192,10 @@
    "pit_speeding": 6,
    "collision": 10
   },
-  "collision_per_pass": 0.011901,
+  "collision_per_pass": 0.011547,
   "false_start_per_starter": 0.0,
-  "pit_speeding_per_stop": 0.009579,
-  "other_per_car_lap": 0.001903,
+  "pit_speeding_per_stop": 0.009293,
+  "other_per_car_lap": 0.001847,
   "passes": 1155,
   "raw": {
    "collision_per_pass": 0.00866,
@@ -203,12 +203,12 @@
    "pit_speeding_per_stop": 0.00697,
    "other_per_car_lap": 0.001385
   },
-  "scale": 1.3743,
-  "scale_note": "x1.374: simulated dry_train 2.18 vs real 3.00 per race"
+  "scale": 1.3333,
+  "scale_note": "x1.333: simulated dry_train 2.25 vs real 3.00 per race"
  },
  "fitted": {
-  "risk_scale": 1.7231,
-  "red_flag_per_crash": 0.1974,
+  "risk_scale": 1.4265,
+  "red_flag_per_crash": 0.2279,
   "fit": {
    "races": [
     "2023_bahrain_gp",
@@ -225,18 +225,18 @@
     "2023_abu_dhabi_gp"
    ],
    "seeds": 5,
-   "sim_crashes_per_race_at_1": 1.083,
-   "sim_failures_per_race": 0.717,
+   "sim_crashes_per_race_at_1": 1.133,
+   "sim_failures_per_race": 0.967,
    "real_retirements_per_race": 2.583,
    "target_red_flags_per_race": 0.3684
   },
   "check": {
-   "retirements_per_race": 2.7,
-   "red_flags_per_race": 0.35,
-   "safety_cars_per_race": 1.117,
-   "vscs_per_race": 0.617,
-   "penalties_per_race": 2.183,
-   "penalties_per_race_after_scale": 3.033
+   "retirements_per_race": 2.6,
+   "red_flags_per_race": 0.2,
+   "safety_cars_per_race": 1.2,
+   "vscs_per_race": 0.467,
+   "penalties_per_race": 2.25,
+   "penalties_per_race_after_scale": 2.85
   }
  }
 }

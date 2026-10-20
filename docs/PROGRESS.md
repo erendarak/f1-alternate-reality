@@ -1396,3 +1396,17 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
   (~9 h left).
 - Next: H2c (per-era overtaking and race-control rates), then close H0 when the fetch is done.
 
+### 2026-10-21 — H2c: race control per season (D-056, EXP-025)
+
+- Found: overtaking was already per season and per track (racecraft); D-054's 2021 diagnosis was
+  wrong: the missing passes are tyre-offset passes (strategy diversity, H3/H4). Docs corrected,
+  traffic label fixed.
+- `scripts/fit_race_control.py` (step 3 of `fit_season.py`); race control fitted for 2010-2025;
+  every season refitted on it (~2.5 h background).
+- EXP-025 (61 held-out races): retirements bias -0.98 -> +0.43 with own rates; SC/VSC counts not
+  improved (rare, noisy); kept.
+- Tests: 481 offline; ruff, mypy clean; registry ok. History fetch: 2000-2009 done, refetching
+  2018-2025 (~5 h).
+- Next: close H0 when the fetch ends (EXP-021 coverage, EXP-022 rerun, 2010 seeds + refit), then
+  H1b (refuelling era).
+
