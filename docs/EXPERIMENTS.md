@@ -1505,6 +1505,58 @@ Caveat:               inferred stops (recall 0.73) for real stops, stints, start
                       board; 3-4 test races per season.
 ```
 
+## EXP-027 — Value of information: oracle rules vs rule teams on the race-day prior (2026-10-25)
+
+```text
+Experiment ID:        EXP-027 (H3 gate, D-058)
+Research question:    How much is knowing this race's true tyres worth to a rule team, when the
+                      rest of the field only has the prior from history?
+Setup:                exp027_value_of_information.py --seeds 3: 103 held-out (dry_test) races
+                      2000-2025 (37 / 32 / 34 per era), per-race seeds; per race and seed the
+                      prior world (all 20 rule planners on the prior), then each car alone as an
+                      oracle (truth) on identical luck: 6,483 paired car-races per truth mode.
+                      Truth: "historical" (the race's own fit) and "drawn" (around the prior with
+                      the era's measured surprise). Score = M5 POINTS objective (points / 25 +
+                      0.02 x place); CIs bootstrap over races.
+Output:               docs/experiments/exp027.json (per-race summary); configs/calibration/
+                      race_day_prior_v1.json (prior and surprise sizes)
+```
+
+| Gain oracle - prior | score | points | position | historical / drawn |
+|---|---|---|---|---|
+| all 103 races | **+0.019 [0.010, 0.030]** / **+0.021 [0.015, 0.028]** | +0.47 / +0.52 | -0.33 / -0.42 | |
+| 2000-2009 (37) | +0.004 [0.001, 0.007] / +0.010 | +0.10 / +0.25 | -0.14 / -0.33 | season-scaled score +0.010 / +0.025 |
+| 2010-2017 (32) | +0.011 [0.000, 0.022] / +0.013 | +0.27 / +0.31 | -0.19 / -0.25 | |
+| 2018-2025 (34) | **+0.043 [0.019, 0.073]** / **+0.041 [0.026, 0.058]** | +1.06 / +1.02 | -0.68 / -0.66 | |
+| historical life surprise small / middle / large | -0.002 / +0.018 / +0.041 | | | tertiles of abs log 0-0.11 / 0.11-0.24 / 0.24-0.67 |
+
+| | value |
+|---|---|
+| oracle better / worse / same score (historical) | 1,382 / 597 / 4,504 of 6,483; plan changed in 2,734 |
+| stops per finisher: prior world / truth world / real | 1.82 / 1.86 / 1.90; MAE vs real 0.51 / 0.37 |
+| surprise size (fit, 432 races) | life shared log sd 0.24, per compound 0.17 (2018+), wear 0.72; new track 0.31 |
+
+```text
+Findings:             Information is worth about the gate (0.02) overall and twice it in
+                      2018-2025 (~1 point and 0.7 places per car-race). It is worth most where the
+                      compounds' relative lives surprise: 2018 Russia (prior soft 31 laps, truth
+                      14) +0.41 per car, 2020 Silverstone +0.22, 2020 Monza +0.17. The gain grows
+                      with the size of the surprise (historical tertiles -0.002 / +0.018 / +0.041).
+Negative:             Before 2018 the value is small (+0.004 to +0.013): our pre-2018 compounds are
+                      one measured life x 2018's ratios, so only the stop count can be wrong, and
+                      the rule planner (no traffic in its costs) loses by acting on the truth in
+                      some races (2011 Turkey -0.06: an oracle alone stops 3x into a field that
+                      stops 2x). A field planning on the prior alone is further from real stops
+                      (MAE 0.51 vs 0.37): real teams adapt during the race (H4's estimator).
+Gate verdict:         borderline pass overall, clear pass for 2018-2025, fail before 2018 (in
+                      this model). Recommendation: H4 on 2018-2025 first; older eras as a weaker
+                      training signal until compounds exist there.
+Caveats:              truth = per-race fits (their own noise, especially wear); 3 seeds; the
+                      oracle is the same rule planner (a better planner could gain more or less);
+                      drawn-mode tertiles use the historical surprise; car pace and track
+                      evolution are not hidden.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

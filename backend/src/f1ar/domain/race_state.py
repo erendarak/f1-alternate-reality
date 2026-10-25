@@ -17,7 +17,7 @@ from f1ar.domain.season_rules import SEASON_2024, SeasonRules
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 19
+WORLD_SCHEMA_VERSION = 20
 
 
 class _Frozen(BaseModel):
@@ -423,6 +423,21 @@ def start_slot(grid_position: int) -> int:
     return grid_position if grid_position > 0 else PIT_LANE_SLOT
 
 
+class TyreKnowledge(_Frozen):
+    """What the rule teams know about this race's tyres (H3, D-058): the race-day prior, not the
+    truth in ``RaceSetup.lap_model`` that the simulation runs on. The baseline planner of a car
+    not in ``oracle_drivers`` plans with ``lap_model`` and reads its own tyres through it."""
+
+    source_type: Literal[SourceType.ESTIMATED_FROM_DATA, SourceType.EDITORIAL_ASSUMPTION]
+    note: str
+    lap_model: LapModelParams
+    """The truth's lap model with the dry compounds' life and wear taken from the prior."""
+    wear_scale: float = Field(gt=0)
+    """Believed / true wear on a dry set (the prior's wear multiplier over the truth's)."""
+    oracle_drivers: tuple[str, ...] = ()
+    """Cars that plan with the truth (EXP-027's reference: never a world's default)."""
+
+
 class RaceSetup(_Frozen):
     event_id: str
     track: TrackSpec
@@ -433,6 +448,8 @@ class RaceSetup(_Frozen):
     weather: WeatherParams = Field(default_factory=default_weather_params)
     rules: SeasonRules = SEASON_2024
     """The season's sporting rules (H1, D-053); 2024's unless the race is from another season."""
+    knowledge: TyreKnowledge | None = None
+    """H3: what the teams' planners know about the tyres; None = they plan with the truth."""
     tick_seconds: float = Field(gt=0)
     profile_set_manifest_hash: str
     """Hash of the full ProfileSet the embedded profiles were taken from."""
@@ -673,7 +690,7 @@ DriverAction = (
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[19]
+    schema_version: Literal[20]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None

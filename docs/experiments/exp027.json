@@ -1,0 +1,2966 @@
+{
+ "seeds": 3,
+ "events": [
+  "2000_british_gp",
+  "2000_hungarian_gp",
+  "2000_japanese_gp",
+  "2001_canadian_gp",
+  "2001_german_gp",
+  "2001_san_marino_gp",
+  "2001_united_states_gp",
+  "2002_canadian_gp",
+  "2002_german_gp",
+  "2002_san_marino_gp",
+  "2002_united_states_gp",
+  "2003_canadian_gp",
+  "2003_german_gp",
+  "2003_japanese_gp",
+  "2003_san_marino_gp",
+  "2004_canadian_gp",
+  "2004_chinese_gp",
+  "2004_german_gp",
+  "2004_san_marino_gp",
+  "2005_belgian_gp",
+  "2005_canadian_gp",
+  "2005_german_gp",
+  "2005_san_marino_gp",
+  "2006_british_gp",
+  "2006_german_gp",
+  "2006_san_marino_gp",
+  "2007_french_gp",
+  "2007_spanish_gp",
+  "2007_turkish_gp",
+  "2008_european_gp",
+  "2008_french_gp",
+  "2008_japanese_gp",
+  "2008_spanish_gp",
+  "2009_bahrain_gp",
+  "2009_belgian_gp",
+  "2009_brazilian_gp",
+  "2009_british_gp",
+  "2010_canadian_gp",
+  "2010_hungarian_gp",
+  "2010_japanese_gp",
+  "2011_belgian_gp",
+  "2011_european_gp",
+  "2011_korean_gp",
+  "2011_turkish_gp",
+  "2012_bahrain_gp",
+  "2012_belgian_gp",
+  "2012_european_gp",
+  "2012_korean_gp",
+  "2013_bahrain_gp",
+  "2013_british_gp",
+  "2013_indian_gp",
+  "2013_italian_gp",
+  "2014_austrian_gp",
+  "2014_belgian_gp",
+  "2014_chinese_gp",
+  "2014_russian_gp",
+  "2015_austrian_gp",
+  "2015_bahrain_gp",
+  "2015_italian_gp",
+  "2016_brazilian_gp",
+  "2016_european_gp",
+  "2016_german_gp",
+  "2016_malaysian_gp",
+  "2016_russian_gp",
+  "2017_abu_dhabi_gp",
+  "2017_azerbaijan_gp",
+  "2017_belgian_gp",
+  "2017_japanese_gp",
+  "2017_russian_gp",
+  "2018_azerbaijan_gp",
+  "2018_brazilian_gp",
+  "2018_french_gp",
+  "2018_hungarian_gp",
+  "2018_russian_gp",
+  "2019_azerbaijan_gp",
+  "2019_brazilian_gp",
+  "2019_french_gp",
+  "2019_hungarian_gp",
+  "2019_russian_gp",
+  "2020_british_gp",
+  "2020_italian_gp",
+  "2020_portuguese_gp",
+  "2020_sakhir_gp",
+  "2021_qatar_gp",
+  "2021_spanish_gp",
+  "2021_styrian_gp",
+  "2022_azerbaijan_gp",
+  "2022_italian_gp",
+  "2022_mexico_city_gp",
+  "2023_azerbaijan_gp",
+  "2023_canadian_gp",
+  "2023_japanese_gp",
+  "2023_sao_paulo_gp",
+  "2024_abu_dhabi_gp",
+  "2024_italian_gp",
+  "2024_japanese_gp",
+  "2024_mexico_city_gp",
+  "2024_monaco_gp",
+  "2025_abu_dhabi_gp",
+  "2025_bahrain_gp",
+  "2025_italian_gp",
+  "2025_mexico_city_gp",
+  "2025_monaco_gp"
+ ],
+ "modes": {
+  "historical": {
+   "all": {
+    "races": 103,
+    "score": {
+     "mean": 0.019,
+     "ci95": [
+      0.0101,
+      0.0298
+     ]
+    },
+    "score_season": {
+     "mean": 0.021,
+     "ci95": [
+      0.0117,
+      0.0319
+     ]
+    },
+    "points": {
+     "mean": 0.4662,
+     "ci95": [
+      0.2472,
+      0.7309
+     ]
+    },
+    "position": {
+     "mean": -0.3311,
+     "ci95": [
+      -0.4894,
+      -0.1903
+     ]
+    }
+   },
+   "eras": {
+    "2000-2009": {
+     "races": 37,
+     "score": {
+      "mean": 0.0039,
+      "ci95": [
+       0.0012,
+       0.0074
+      ]
+     },
+     "score_season": {
+      "mean": 0.0097,
+      "ci95": [
+       0.0029,
+       0.0183
+      ]
+     },
+     "points": {
+      "mean": 0.0952,
+      "ci95": [
+       0.029,
+       0.1805
+      ]
+     },
+     "position": {
+      "mean": -0.1375,
+      "ci95": [
+       -0.2379,
+       -0.0572
+      ]
+     }
+    },
+    "2010-2017": {
+     "races": 32,
+     "score": {
+      "mean": 0.0109,
+      "ci95": [
+       0.0003,
+       0.0221
+      ]
+     },
+     "score_season": {
+      "mean": 0.0109,
+      "ci95": [
+       0.0003,
+       0.0221
+      ]
+     },
+     "points": {
+      "mean": 0.2666,
+      "ci95": [
+       0.0056,
+       0.5439
+      ]
+     },
+     "position": {
+      "mean": -0.1873,
+      "ci95": [
+       -0.346,
+       -0.0271
+      ]
+     }
+    },
+    "2018-2025": {
+     "races": 34,
+     "score": {
+      "mean": 0.043,
+      "ci95": [
+       0.0189,
+       0.0728
+      ]
+     },
+     "score_season": {
+      "mean": 0.043,
+      "ci95": [
+       0.0189,
+       0.0728
+      ]
+     },
+     "points": {
+      "mean": 1.0578,
+      "ci95": [
+       0.4642,
+       1.7912
+      ]
+     },
+     "position": {
+      "mean": -0.677,
+      "ci95": [
+       -1.125,
+       -0.3142
+      ]
+     }
+    }
+   },
+   "life_surprise_tertiles": {
+    "small": {
+     "races": 34,
+     "score": {
+      "mean": -0.0019,
+      "ci95": [
+       -0.0055,
+       0.0016
+      ]
+     },
+     "score_season": {
+      "mean": -0.0012,
+      "ci95": [
+       -0.0056,
+       0.0031
+      ]
+     },
+     "points": {
+      "mean": -0.0465,
+      "ci95": [
+       -0.1361,
+       0.0409
+      ]
+     },
+     "position": {
+      "mean": 0.0164,
+      "ci95": [
+       -0.0523,
+       0.09
+      ]
+     },
+     "abs_life_log_range": [
+      0.003,
+      0.106
+     ]
+    },
+    "middle": {
+     "races": 34,
+     "score": {
+      "mean": 0.0176,
+      "ci95": [
+       0.0096,
+       0.0266
+      ]
+     },
+     "score_season": {
+      "mean": 0.0196,
+      "ci95": [
+       0.0112,
+       0.0284
+      ]
+     },
+     "points": {
+      "mean": 0.4322,
+      "ci95": [
+       0.2334,
+       0.6511
+      ]
+     },
+     "position": {
+      "mean": -0.3414,
+      "ci95": [
+       -0.5137,
+       -0.1941
+      ]
+     },
+     "abs_life_log_range": [
+      0.107,
+      0.239
+     ]
+    },
+    "large": {
+     "races": 35,
+     "score": {
+      "mean": 0.0406,
+      "ci95": [
+       0.0167,
+       0.0715
+      ]
+     },
+     "score_season": {
+      "mean": 0.0441,
+      "ci95": [
+       0.0194,
+       0.076
+      ]
+     },
+     "points": {
+      "mean": 0.9974,
+      "ci95": [
+       0.4071,
+       1.7561
+      ]
+     },
+     "position": {
+      "mean": -0.6586,
+      "ci95": [
+       -1.0945,
+       -0.3009
+      ]
+     },
+     "abs_life_log_range": [
+      0.24,
+      0.673
+     ]
+    }
+   },
+   "cases": 6483,
+   "oracle_better": 1382,
+   "oracle_worse": 597,
+   "oracle_changed_something": 2734,
+   "stops_prior_world": 1.82,
+   "stops_truth_world": 1.855
+  },
+  "drawn": {
+   "all": {
+    "races": 103,
+    "score": {
+     "mean": 0.0213,
+     "ci95": [
+      0.0149,
+      0.0283
+     ]
+    },
+    "score_season": {
+     "mean": 0.0267,
+     "ci95": [
+      0.0193,
+      0.035
+     ]
+    },
+    "points": {
+     "mean": 0.5229,
+     "ci95": [
+      0.3659,
+      0.6945
+     ]
+    },
+    "position": {
+     "mean": -0.416,
+     "ci95": [
+      -0.5484,
+      -0.295
+     ]
+    }
+   },
+   "eras": {
+    "2000-2009": {
+     "races": 37,
+     "score": {
+      "mean": 0.0103,
+      "ci95": [
+       0.0055,
+       0.0167
+      ]
+     },
+     "score_season": {
+      "mean": 0.0253,
+      "ci95": [
+       0.0133,
+       0.0411
+      ]
+     },
+     "points": {
+      "mean": 0.2493,
+      "ci95": [
+       0.1309,
+       0.4063
+      ]
+     },
+     "position": {
+      "mean": -0.3334,
+      "ci95": [
+       -0.4822,
+       -0.207
+      ]
+     }
+    },
+    "2010-2017": {
+     "races": 32,
+     "score": {
+      "mean": 0.0128,
+      "ci95": [
+       0.0062,
+       0.0201
+      ]
+     },
+     "score_season": {
+      "mean": 0.0128,
+      "ci95": [
+       0.0062,
+       0.0201
+      ]
+     },
+     "points": {
+      "mean": 0.3142,
+      "ci95": [
+       0.1504,
+       0.4935
+      ]
+     },
+     "position": {
+      "mean": -0.2473,
+      "ci95": [
+       -0.377,
+       -0.1273
+      ]
+     }
+    },
+    "2018-2025": {
+     "races": 34,
+     "score": {
+      "mean": 0.0414,
+      "ci95": [
+       0.0259,
+       0.0583
+      ]
+     },
+     "score_season": {
+      "mean": 0.0414,
+      "ci95": [
+       0.0259,
+       0.0583
+      ]
+     },
+     "points": {
+      "mean": 1.0172,
+      "ci95": [
+       0.6387,
+       1.4319
+      ]
+     },
+     "position": {
+      "mean": -0.6647,
+      "ci95": [
+       -0.9882,
+       -0.3858
+      ]
+     }
+    }
+   },
+   "life_surprise_tertiles": {
+    "small": {
+     "races": 34,
+     "score": {
+      "mean": 0.0197,
+      "ci95": [
+       0.0109,
+       0.03
+      ]
+     },
+     "score_season": {
+      "mean": 0.0262,
+      "ci95": [
+       0.016,
+       0.0381
+      ]
+     },
+     "points": {
+      "mean": 0.482,
+      "ci95": [
+       0.2658,
+       0.7363
+      ]
+     },
+     "position": {
+      "mean": -0.4424,
+      "ci95": [
+       -0.6292,
+       -0.2801
+      ]
+     },
+     "abs_life_log_range": [
+      0.003,
+      0.106
+     ]
+    },
+    "middle": {
+     "races": 34,
+     "score": {
+      "mean": 0.0142,
+      "ci95": [
+       0.0072,
+       0.0223
+      ]
+     },
+     "score_season": {
+      "mean": 0.0224,
+      "ci95": [
+       0.0106,
+       0.0394
+      ]
+     },
+     "points": {
+      "mean": 0.3471,
+      "ci95": [
+       0.1761,
+       0.546
+      ]
+     },
+     "position": {
+      "mean": -0.3178,
+      "ci95": [
+       -0.5057,
+       -0.15
+      ]
+     },
+     "abs_life_log_range": [
+      0.107,
+      0.239
+     ]
+    },
+    "large": {
+     "races": 35,
+     "score": {
+      "mean": 0.0298,
+      "ci95": [
+       0.0154,
+       0.0453
+      ]
+     },
+     "score_season": {
+      "mean": 0.0314,
+      "ci95": [
+       0.0167,
+       0.0471
+      ]
+     },
+     "points": {
+      "mean": 0.7334,
+      "ci95": [
+       0.3774,
+       1.1116
+      ]
+     },
+     "position": {
+      "mean": -0.4858,
+      "ci95": [
+       -0.7795,
+       -0.2386
+      ]
+     },
+     "abs_life_log_range": [
+      0.24,
+      0.673
+     ]
+    }
+   },
+   "cases": 6483,
+   "oracle_better": 1532,
+   "oracle_worse": 603,
+   "oracle_changed_something": 2826,
+   "stops_prior_world": 1.82,
+   "stops_truth_world": 1.881
+  }
+ },
+ "real_stops_per_finisher": 1.902,
+ "stops_mae_prior_world": 0.507,
+ "stops_mae_truth_world": 0.373,
+ "races": {
+  "2000_british_gp": {
+   "drawn": {
+    "score": 0.0069,
+    "score_season": 0.0169,
+    "points": 0.1667,
+    "position": -0.2576,
+    "best_score_gain": 0.163,
+    "worst_score_gain": -0.001,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.13
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 0 earlier season(s) at silverstone and 3 earlier round(s) of 2000; truth the race's own tyre-life fit (as it was); stint life truth/prior S 27.6/36.1, M 27.0/35.4, H 27.5/36.0; wear 1.06/0.27",
+   "historical": {
+    "score": 0.0145,
+    "score_season": 0.0354,
+    "points": 0.3485,
+    "position": -0.6061,
+    "best_score_gain": 0.204,
+    "worst_score_gain": -0.002,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.32
+   }
+  },
+  "2000_hungarian_gp": {
+   "drawn": {
+    "score": 0.0,
+    "score_season": 0.0,
+    "points": 0.0,
+    "position": 0.0,
+    "best_score_gain": 0.0,
+    "worst_score_gain": 0.0,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.04
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 0 earlier season(s) at hungaroring and 8 earlier round(s) of 2000; truth the race's own tyre-life fit (as it was); stint life truth/prior S 29.6/34.1, M 29.0/33.4, H 29.5/34.0; wear 1.78/0.62",
+   "historical": {
+    "score": 0.0055,
+    "score_season": 0.0137,
+    "points": 0.1364,
+    "position": -0.0758,
+    "best_score_gain": 0.161,
+    "worst_score_gain": -0.001,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.34
+   }
+  },
+  "2000_japanese_gp": {
+   "drawn": {
+    "score": 0.0013,
+    "score_season": 0.0031,
+    "points": 0.0303,
+    "position": -0.1212,
+    "best_score_gain": 0.082,
+    "worst_score_gain": -0.002,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.1
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 0 earlier season(s) at suzuka and 10 earlier round(s) of 2000; truth the race's own tyre-life fit (as it was); stint life truth/prior S 20.4/34.5, M 20.0/33.8, H 20.3/34.3; wear 3.52/0.62",
+   "historical": {
+    "score": 0.0529,
+    "score_season": 0.1302,
+    "points": 1.2879,
+    "position": -1.5,
+    "best_score_gain": 0.409,
+    "worst_score_gain": -0.041,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.6
+   }
+  },
+  "2001_canadian_gp": {
+   "drawn": {
+    "score": 0.0013,
+    "score_season": 0.0031,
+    "points": 0.0303,
+    "position": -0.0455,
+    "best_score_gain": 0.161,
+    "worst_score_gain": -0.161,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.04
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 0 earlier season(s) at villeneuve and 5 earlier round(s) of 2001; truth the race's own tyre-life fit (as it was); stint life truth/prior S 38.8/34.0, M 38.0/33.3, H 38.7/33.9; wear 0.88/0.59",
+   "historical": {
+    "score": 0.0092,
+    "score_season": 0.0229,
+    "points": 0.2273,
+    "position": -0.1364,
+    "best_score_gain": 0.161,
+    "worst_score_gain": -0.041,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2001_german_gp": {
+   "drawn": {
+    "score": 0.0006,
+    "score_season": 0.0015,
+    "points": 0.0152,
+    "position": 0.0,
+    "best_score_gain": 0.084,
+    "worst_score_gain": -0.083,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 0.69
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 0 earlier season(s) at hockenheimring and 9 earlier round(s) of 2001; truth the race's own tyre-life fit (as it was); stint life truth/prior S 23.0/33.3, M 22.5/32.6, H 22.9/33.2; wear 0.65/0.65",
+   "historical": {
+    "score": 0.0,
+    "score_season": 0.0,
+    "points": 0.0,
+    "position": 0.0,
+    "best_score_gain": 0.0,
+    "worst_score_gain": 0.0,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2001_san_marino_gp": {
+   "drawn": {
+    "score": 0.0105,
+    "score_season": 0.0259,
+    "points": 0.2576,
+    "position": -0.1818,
+    "best_score_gain": 0.165,
+    "worst_score_gain": -0.041,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.33
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 1 earlier season(s) at imola and 1 earlier round(s) of 2001; truth the race's own tyre-life fit (as it was); stint life truth/prior S 26.6/32.2, M 26.0/31.5, H 26.4/32.0; wear 0.81/0.53",
+   "historical": {
+    "score": 0.0032,
+    "score_season": 0.0077,
+    "points": 0.0758,
+    "position": -0.1364,
+    "best_score_gain": 0.082,
+    "worst_score_gain": -0.041,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2001_united_states_gp": {
+   "drawn": {
+    "score": 0.0018,
+    "score_season": 0.0046,
+    "points": 0.0455,
+    "position": -0.0303,
+    "best_score_gain": 0.081,
+    "worst_score_gain": -0.002,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 0 earlier season(s) at indianapolis and 13 earlier round(s) of 2001; truth the race's own tyre-life fit (as it was); stint life truth/prior S 43.7/30.7, M 42.8/30.0, H 43.5/30.6; wear 0.60/0.72",
+   "historical": {
+    "score": 0.0038,
+    "score_season": 0.0092,
+    "points": 0.0909,
+    "position": -0.1364,
+    "best_score_gain": 0.081,
+    "worst_score_gain": -0.041,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2002_canadian_gp": {
+   "drawn": {
+    "score": 0.0039,
+    "score_season": 0.0093,
+    "points": 0.0909,
+    "position": -0.2424,
+    "best_score_gain": 0.122,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.67
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 1 earlier season(s) at villeneuve and 7 earlier round(s) of 2002; truth the race's own tyre-life fit (as it was); stint life truth/prior S 39.3/32.6, M 38.5/32.0, H 39.2/32.5; wear 0.38/0.70",
+   "historical": {
+    "score": 0.0006,
+    "score_season": 0.0015,
+    "points": 0.0152,
+    "position": -0.0152,
+    "best_score_gain": 0.041,
+    "worst_score_gain": -0.001,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2002_german_gp": {
+   "drawn": {
+    "score": 0.0033,
+    "score_season": 0.008,
+    "points": 0.0794,
+    "position": -0.1111,
+    "best_score_gain": 0.082,
+    "worst_score_gain": 0.0,
+    "stops_prior_world": 1.47,
+    "stops_truth_world": 1.38
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 1 earlier season(s) at hockenheimring and 10 earlier round(s) of 2002; truth the race's own tyre-life fit (as it was); stint life truth/prior S 27.3/29.5, M 26.8/28.9, H 27.2/29.4; wear 0.36/0.63",
+   "historical": {
+    "score": 0.002,
+    "score_season": 0.0048,
+    "points": 0.0476,
+    "position": -0.0635,
+    "best_score_gain": 0.082,
+    "worst_score_gain": -0.041,
+    "stops_prior_world": 1.47,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2002_san_marino_gp": {
+   "drawn": {
+    "score": 0.0136,
+    "score_season": 0.0336,
+    "points": 0.3333,
+    "position": -0.2857,
+    "best_score_gain": 0.242,
+    "worst_score_gain": -0.041,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.33
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 2 earlier season(s) at imola and 3 earlier round(s) of 2002; truth the race's own tyre-life fit (as it was); stint life truth/prior S 28.6/30.2, M 28.0/29.6, H 28.5/30.1; wear 0.65/0.59",
+   "historical": {
+    "score": 0.0006,
+    "score_season": 0.0016,
+    "points": 0.0159,
+    "position": 0.0159,
+    "best_score_gain": 0.041,
+    "worst_score_gain": -0.001,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2002_united_states_gp": {
+   "drawn": {
+    "score": 0.0061,
+    "score_season": 0.0151,
+    "points": 0.15,
+    "position": -0.0667,
+    "best_score_gain": 0.161,
+    "worst_score_gain": -0.009,
+    "stops_prior_world": 1.33,
+    "stops_truth_world": 1.33
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 1 earlier season(s) at indianapolis and 14 earlier round(s) of 2002; truth the race's own tyre-life fit (as it was); stint life truth/prior S 36.5/32.4, M 35.8/31.7, H 36.4/32.2; wear 1.40/0.62",
+   "historical": {
+    "score": 0.0067,
+    "score_season": 0.0167,
+    "points": 0.1667,
+    "position": -0.0667,
+    "best_score_gain": 0.123,
+    "worst_score_gain": -0.009,
+    "stops_prior_world": 1.33,
+    "stops_truth_world": 1.33
+   }
+  },
+  "2003_canadian_gp": {
+   "drawn": {
+    "score": 0.0165,
+    "score_season": 0.0405,
+    "points": 0.4,
+    "position": -0.4333,
+    "best_score_gain": 0.214,
+    "worst_score_gain": -0.006,
+    "stops_prior_world": 2.35,
+    "stops_truth_world": 3.63
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 2 earlier season(s) at villeneuve and 7 earlier round(s) of 2003; truth the race's own tyre-life fit (as it was); stint life truth/prior S 28.1/30.0, M 27.5/29.4, H 28.0/29.9; wear 1.05/0.62",
+   "historical": {
+    "score": 0.0014,
+    "score_season": 0.0034,
+    "points": 0.0333,
+    "position": -0.1,
+    "best_score_gain": 0.081,
+    "worst_score_gain": -0.041,
+    "stops_prior_world": 2.35,
+    "stops_truth_world": 2.46
+   }
+  },
+  "2003_german_gp": {
+   "drawn": {
+    "score": 0.0142,
+    "score_season": 0.0352,
+    "points": 0.35,
+    "position": -0.2,
+    "best_score_gain": 0.244,
+    "worst_score_gain": -0.086,
+    "stops_prior_world": 2.74,
+    "stops_truth_world": 2.31
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 2 earlier season(s) at hockenheimring and 11 earlier round(s) of 2003; truth the race's own tyre-life fit (as it was); stint life truth/prior S 22.0/26.0, M 21.5/25.5, H 21.9/25.9; wear 1.19/0.62",
+   "historical": {
+    "score": 0.0034,
+    "score_season": 0.0084,
+    "points": 0.0833,
+    "position": -0.0167,
+    "best_score_gain": 0.122,
+    "worst_score_gain": -0.086,
+    "stops_prior_world": 2.73,
+    "stops_truth_world": 3.25
+   }
+  },
+  "2003_japanese_gp": {
+   "drawn": {
+    "score": 0.0214,
+    "score_season": 0.0524,
+    "points": 0.5167,
+    "position": -0.7167,
+    "best_score_gain": 0.339,
+    "worst_score_gain": 0.0,
+    "stops_prior_world": 2.16,
+    "stops_truth_world": 2.47
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 3 earlier season(s) at suzuka and 14 earlier round(s) of 2003; truth the race's own tyre-life fit (as it was); stint life truth/prior S 15.8/23.1, M 15.5/22.6, H 15.8/23.0; wear 1.09/0.71",
+   "historical": {
+    "score": 0.0151,
+    "score_season": 0.0371,
+    "points": 0.3667,
+    "position": -0.45,
+    "best_score_gain": 0.172,
+    "worst_score_gain": -0.048,
+    "stops_prior_world": 2.16,
+    "stops_truth_world": 3.0
+   }
+  },
+  "2003_san_marino_gp": {
+   "drawn": {
+    "score": -0.0026,
+    "score_season": -0.0066,
+    "points": -0.0667,
+    "position": -0.0833,
+    "best_score_gain": 0.081,
+    "worst_score_gain": -0.162,
+    "stops_prior_world": 2.35,
+    "stops_truth_world": 2.69
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 3 earlier season(s) at imola and 3 earlier round(s) of 2003; truth the race's own tyre-life fit (as it was); stint life truth/prior S 21.4/28.6, M 21.0/28.0, H 21.4/28.5; wear 0.20/0.58",
+   "historical": {
+    "score": -0.0011,
+    "score_season": -0.0031,
+    "points": -0.0333,
+    "position": -0.1833,
+    "best_score_gain": 0.081,
+    "worst_score_gain": -0.123,
+    "stops_prior_world": 2.35,
+    "stops_truth_world": 2.64
+   }
+  },
+  "2004_canadian_gp": {
+   "drawn": {
+    "score": 0.0022,
+    "score_season": 0.0052,
+    "points": 0.05,
+    "position": -0.1667,
+    "best_score_gain": 0.123,
+    "worst_score_gain": -0.041,
+    "stops_prior_world": 2.45,
+    "stops_truth_world": 2.96
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 3 earlier season(s) at villeneuve and 7 earlier round(s) of 2004; truth the race's own tyre-life fit (as it was); stint life truth/prior S 22.5/23.4, M 22.0/22.9, H 22.4/23.3; wear 1.09/0.85",
+   "historical": {
+    "score": -0.0007,
+    "score_season": -0.0017,
+    "points": -0.0167,
+    "position": 0.0,
+    "best_score_gain": 0.001,
+    "worst_score_gain": -0.041,
+    "stops_prior_world": 2.45,
+    "stops_truth_world": 2.54
+   }
+  },
+  "2004_chinese_gp": {
+   "drawn": {
+    "score": -0.0,
+    "score_season": 0.0,
+    "points": 0.0,
+    "position": 0.0,
+    "best_score_gain": 0.041,
+    "worst_score_gain": -0.082,
+    "stops_prior_world": 2.05,
+    "stops_truth_world": 1.9
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 0 earlier season(s) at shanghai and 15 earlier round(s) of 2004; truth the race's own tyre-life fit (as it was); stint life truth/prior S 17.9/22.0, M 17.5/21.5, H 17.8/21.9; wear 0.20/0.75",
+   "historical": {
+    "score": 0.0027,
+    "score_season": 0.0067,
+    "points": 0.0667,
+    "position": -0.0667,
+    "best_score_gain": 0.123,
+    "worst_score_gain": -0.041,
+    "stops_prior_world": 2.05,
+    "stops_truth_world": 2.18
+   }
+  },
+  "2004_german_gp": {
+   "drawn": {
+    "score": -0.0055,
+    "score_season": -0.0135,
+    "points": -0.1333,
+    "position": 0.1167,
+    "best_score_gain": 0.041,
+    "worst_score_gain": -0.162,
+    "stops_prior_world": 2.31,
+    "stops_truth_world": 3.08
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 3 earlier season(s) at hockenheimring and 11 earlier round(s) of 2004; truth the race's own tyre-life fit (as it was); stint life truth/prior S 19.4/20.9, M 19.0/20.5, H 19.3/20.8; wear 0.27/0.83",
+   "historical": {
+    "score": -0.0007,
+    "score_season": -0.0017,
+    "points": -0.0167,
+    "position": 0.0333,
+    "best_score_gain": 0.082,
+    "worst_score_gain": -0.082,
+    "stops_prior_world": 2.31,
+    "stops_truth_world": 2.31
+   }
+  },
+  "2004_san_marino_gp": {
+   "drawn": {
+    "score": 0.0035,
+    "score_season": 0.0085,
+    "points": 0.0833,
+    "position": -0.1667,
+    "best_score_gain": 0.082,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 2.08,
+    "stops_truth_world": 2.67
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 4 earlier season(s) at imola and 3 earlier round(s) of 2004; truth the race's own tyre-life fit (as it was); stint life truth/prior S 18.4/21.6, M 18.0/21.2, H 18.3/21.6; wear 0.65/0.72",
+   "historical": {
+    "score": 0.0002,
+    "score_season": 0.0002,
+    "points": 0.0,
+    "position": -0.15,
+    "best_score_gain": 0.175,
+    "worst_score_gain": -0.082,
+    "stops_prior_world": 2.08,
+    "stops_truth_world": 2.28
+   }
+  },
+  "2005_belgian_gp": {
+   "drawn": {
+    "score": 0.009,
+    "score_season": 0.022,
+    "points": 0.2167,
+    "position": -0.35,
+    "best_score_gain": 0.173,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 1.2,
+    "stops_truth_world": 1.2
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 3 earlier season(s) at spa and 15 earlier round(s) of 2005; truth the race's own tyre-life fit (as it was); stint life truth/prior S 32.7/20.5, M 32.0/20.0, H 32.5/20.4; wear 1.00/0.95",
+   "historical": {
+    "score": 0.0,
+    "score_season": 0.0,
+    "points": 0.0,
+    "position": -0.0333,
+    "best_score_gain": 0.002,
+    "worst_score_gain": 0.0,
+    "stops_prior_world": 1.2,
+    "stops_truth_world": 1.2
+   }
+  },
+  "2005_canadian_gp": {
+   "drawn": {
+    "score": 0.0371,
+    "score_season": 0.0911,
+    "points": 0.9,
+    "position": -1.0,
+    "best_score_gain": 0.286,
+    "worst_score_gain": -0.001,
+    "stops_prior_world": 2.37,
+    "stops_truth_world": 2.37
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 4 earlier season(s) at villeneuve and 7 earlier round(s) of 2005; truth the race's own tyre-life fit (as it was); stint life truth/prior S 24.5/25.1, M 24.0/24.6, H 24.4/25.0; wear 1.00/0.91",
+   "historical": {
+    "score": 0.0007,
+    "score_season": 0.0017,
+    "points": 0.0167,
+    "position": -0.0167,
+    "best_score_gain": 0.041,
+    "worst_score_gain": 0.0,
+    "stops_prior_world": 2.37,
+    "stops_truth_world": 2.37
+   }
+  },
+  "2005_german_gp": {
+   "drawn": {
+    "score": 0.0942,
+    "score_season": 0.2322,
+    "points": 2.3,
+    "position": -2.1,
+    "best_score_gain": 0.411,
+    "worst_score_gain": 0.0,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 4 earlier season(s) at hockenheimring and 11 earlier round(s) of 2005; truth the race's own tyre-life fit (as it was); stint life truth/prior S 26.6/22.2, M 26.0/21.7, H 26.4/22.1; wear 1.00/0.75",
+   "historical": {
+    "score": 0.0,
+    "score_season": 0.0,
+    "points": 0.0,
+    "position": 0.0,
+    "best_score_gain": 0.001,
+    "worst_score_gain": -0.001,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2005_san_marino_gp": {
+   "drawn": {
+    "score": 0.0304,
+    "score_season": 0.0744,
+    "points": 0.7333,
+    "position": -0.9833,
+    "best_score_gain": 0.205,
+    "worst_score_gain": 0.0,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 5 earlier season(s) at imola and 3 earlier round(s) of 2005; truth the race's own tyre-life fit (as it was); stint life truth/prior S 24.5/20.9, M 24.0/20.5, H 24.4/20.8; wear 1.00/0.62",
+   "historical": {
+    "score": 0.002,
+    "score_season": 0.005,
+    "points": 0.05,
+    "position": 0.0,
+    "best_score_gain": 0.081,
+    "worst_score_gain": -0.003,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2006_british_gp": {
+   "drawn": {
+    "score": 0.0116,
+    "score_season": 0.0279,
+    "points": 0.2727,
+    "position": -0.6818,
+    "best_score_gain": 0.216,
+    "worst_score_gain": -0.001,
+    "stops_prior_world": 1.56,
+    "stops_truth_world": 1.89
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 5 earlier season(s) at silverstone and 7 earlier round(s) of 2006; truth the race's own tyre-life fit (as it was); stint life truth/prior S 25.0/26.1, M 24.5/25.5, H 24.9/26.0; wear 0.61/0.85",
+   "historical": {
+    "score": 0.0051,
+    "score_season": 0.0124,
+    "points": 0.1212,
+    "position": -0.2424,
+    "best_score_gain": 0.257,
+    "worst_score_gain": -0.082,
+    "stops_prior_world": 1.56,
+    "stops_truth_world": 1.67
+   }
+  },
+  "2006_german_gp": {
+   "drawn": {
+    "score": 0.0127,
+    "score_season": 0.0308,
+    "points": 0.303,
+    "position": -0.5606,
+    "best_score_gain": 0.285,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 2.16,
+    "stops_truth_world": 2.61
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 5 earlier season(s) at hockenheimring and 11 earlier round(s) of 2006; truth the race's own tyre-life fit (as it was); stint life truth/prior S 26.6/25.1, M 26.0/24.5, H 26.4/25.0; wear 1.35/0.73",
+   "historical": {
+    "score": 0.0056,
+    "score_season": 0.0138,
+    "points": 0.1364,
+    "position": -0.1667,
+    "best_score_gain": 0.082,
+    "worst_score_gain": -0.002,
+    "stops_prior_world": 2.16,
+    "stops_truth_world": 2.18
+   }
+  },
+  "2006_san_marino_gp": {
+   "drawn": {
+    "score": 0.0056,
+    "score_season": 0.0138,
+    "points": 0.1364,
+    "position": -0.1515,
+    "best_score_gain": 0.123,
+    "worst_score_gain": -0.001,
+    "stops_prior_world": 1.83,
+    "stops_truth_world": 1.75
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 6 earlier season(s) at imola and 3 earlier round(s) of 2006; truth the race's own tyre-life fit (as it was); stint life truth/prior S 25.5/23.8, M 25.0/23.3, H 25.4/23.7; wear 0.67/0.69",
+   "historical": {
+    "score": 0.0012,
+    "score_season": 0.003,
+    "points": 0.0303,
+    "position": -0.0152,
+    "best_score_gain": 0.041,
+    "worst_score_gain": -0.041,
+    "stops_prior_world": 1.83,
+    "stops_truth_world": 1.74
+   }
+  },
+  "2007_french_gp": {
+   "drawn": {
+    "score": 0.008,
+    "score_season": 0.0199,
+    "points": 0.197,
+    "position": -0.1667,
+    "best_score_gain": 0.206,
+    "worst_score_gain": -0.123,
+    "stops_prior_world": 3.5,
+    "stops_truth_world": 3.23
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 7 earlier season(s) at magny_cours and 7 earlier round(s) of 2007; truth the race's own tyre-life fit (as it was); stint life truth/prior S 28.1/25.0, M 27.5/24.5, H 28.0/24.9; wear 0.39/0.90",
+   "historical": {
+    "score": 0.012,
+    "score_season": 0.0293,
+    "points": 0.2879,
+    "position": -0.5,
+    "best_score_gain": 0.247,
+    "worst_score_gain": -0.205,
+    "stops_prior_world": 3.5,
+    "stops_truth_world": 2.93
+   }
+  },
+  "2007_spanish_gp": {
+   "drawn": {
+    "score": 0.033,
+    "score_season": 0.0812,
+    "points": 0.803,
+    "position": -0.8939,
+    "best_score_gain": 0.244,
+    "worst_score_gain": 0.0,
+    "stops_prior_world": 2.1,
+    "stops_truth_world": 2.53
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 7 earlier season(s) at catalunya and 3 earlier round(s) of 2007; truth the race's own tyre-life fit (as it was); stint life truth/prior S 25.5/24.9, M 25.0/24.4, H 25.4/24.9; wear 0.20/0.75",
+   "historical": {
+    "score": 0.0056,
+    "score_season": 0.0138,
+    "points": 0.1364,
+    "position": -0.1364,
+    "best_score_gain": 0.081,
+    "worst_score_gain": -0.001,
+    "stops_prior_world": 2.1,
+    "stops_truth_world": 2.04
+   }
+  },
+  "2007_turkish_gp": {
+   "drawn": {
+    "score": -0.0022,
+    "score_season": -0.0058,
+    "points": -0.0606,
+    "position": -0.2727,
+    "best_score_gain": 0.041,
+    "worst_score_gain": -0.082,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.02
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 2 earlier season(s) at istanbul and 10 earlier round(s) of 2007; truth the race's own tyre-life fit (as it was); stint life truth/prior S 24.5/27.2, M 24.0/26.6, H 24.4/27.1; wear 0.24/0.55",
+   "historical": {
+    "score": -0.0029,
+    "score_season": -0.0075,
+    "points": -0.0758,
+    "position": -0.0909,
+    "best_score_gain": 0.041,
+    "worst_score_gain": -0.082,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2008_european_gp": {
+   "drawn": {
+    "score": -0.002,
+    "score_season": -0.005,
+    "points": -0.05,
+    "position": 0.0167,
+    "best_score_gain": 0.003,
+    "worst_score_gain": -0.082,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 0 earlier season(s) at valencia and 9 earlier round(s) of 2008; truth the race's own tyre-life fit (as it was); stint life truth/prior S 22.7/27.7, M 22.2/27.1, H 22.6/27.6; wear 0.98/0.53",
+   "historical": {
+    "score": 0.0056,
+    "score_season": 0.0136,
+    "points": 0.1333,
+    "position": -0.25,
+    "best_score_gain": 0.335,
+    "worst_score_gain": -0.124,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2008_french_gp": {
+   "drawn": {
+    "score": 0.0153,
+    "score_season": 0.0373,
+    "points": 0.3667,
+    "position": -0.6333,
+    "best_score_gain": 0.337,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 2.9,
+    "stops_truth_world": 2.52
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 8 earlier season(s) at magny_cours and 6 earlier round(s) of 2008; truth the race's own tyre-life fit (as it was); stint life truth/prior S 29.6/25.6, M 29.0/25.1, H 29.5/25.5; wear 0.20/0.57",
+   "historical": {
+    "score": -0.0132,
+    "score_season": -0.0322,
+    "points": -0.3167,
+    "position": 0.4667,
+    "best_score_gain": 0.123,
+    "worst_score_gain": -0.326,
+    "stops_prior_world": 2.9,
+    "stops_truth_world": 2.65
+   }
+  },
+  "2008_japanese_gp": {
+   "drawn": {
+    "score": 0.0055,
+    "score_season": 0.0135,
+    "points": 0.1333,
+    "position": -0.1833,
+    "best_score_gain": 0.082,
+    "worst_score_gain": -0.041,
+    "stops_prior_world": 2.05,
+    "stops_truth_world": 2.05
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 1 earlier season(s) at fuji and 13 earlier round(s) of 2008; truth the race's own tyre-life fit (as it was); stint life truth/prior S 35.7/29.3, M 35.0/28.7, H 35.6/29.2; wear 0.20/0.59",
+   "historical": {
+    "score": 0.0069,
+    "score_season": 0.0169,
+    "points": 0.1667,
+    "position": -0.2333,
+    "best_score_gain": 0.122,
+    "worst_score_gain": 0.0,
+    "stops_prior_world": 2.05,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2008_spanish_gp": {
+   "drawn": {
+    "score": 0.0044,
+    "score_season": 0.0108,
+    "points": 0.1061,
+    "position": -0.1667,
+    "best_score_gain": 0.082,
+    "worst_score_gain": -0.041,
+    "stops_prior_world": 2.1,
+    "stops_truth_world": 2.33
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 8 earlier season(s) at catalunya and 3 earlier round(s) of 2008; truth the race's own tyre-life fit (as it was); stint life truth/prior S 26.6/25.7, M 26.0/25.2, H 26.4/25.6; wear 0.32/0.47",
+   "historical": {
+    "score": 0.0038,
+    "score_season": 0.0093,
+    "points": 0.0909,
+    "position": -0.1818,
+    "best_score_gain": 0.082,
+    "worst_score_gain": -0.041,
+    "stops_prior_world": 2.1,
+    "stops_truth_world": 2.04
+   }
+  },
+  "2009_bahrain_gp": {
+   "drawn": {
+    "score": 0.0169,
+    "score_season": 0.0409,
+    "points": 0.4,
+    "position": -0.85,
+    "best_score_gain": 0.334,
+    "worst_score_gain": -0.245,
+    "stops_prior_world": 2.07,
+    "stops_truth_world": 1.99
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 5 earlier season(s) at bahrain and 3 earlier round(s) of 2009; truth the race's own tyre-life fit (as it was); stint life truth/prior S 23.5/24.3, M 23.0/23.8, H 23.4/24.2; wear 0.20/1.01",
+   "historical": {
+    "score": 0.0028,
+    "score_season": 0.0068,
+    "points": 0.0667,
+    "position": -0.1667,
+    "best_score_gain": 0.334,
+    "worst_score_gain": -0.204,
+    "stops_prior_world": 2.07,
+    "stops_truth_world": 2.07
+   }
+  },
+  "2009_belgian_gp": {
+   "drawn": {
+    "score": 0.0026,
+    "score_season": 0.0066,
+    "points": 0.0667,
+    "position": 0.0667,
+    "best_score_gain": 0.204,
+    "worst_score_gain": -0.123,
+    "stops_prior_world": 1.5,
+    "stops_truth_world": 1.53
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 6 earlier season(s) at spa and 11 earlier round(s) of 2009; truth the race's own tyre-life fit (as it was); stint life truth/prior S 23.2/24.0, M 22.8/23.5, H 23.1/23.9; wear 0.20/0.89",
+   "historical": {
+    "score": 0.0048,
+    "score_season": 0.0118,
+    "points": 0.1167,
+    "position": -0.1333,
+    "best_score_gain": 0.164,
+    "worst_score_gain": -0.002,
+    "stops_prior_world": 1.5,
+    "stops_truth_world": 1.44
+   }
+  },
+  "2009_brazilian_gp": {
+   "drawn": {
+    "score": 0.0097,
+    "score_season": 0.0237,
+    "points": 0.2333,
+    "position": -0.3667,
+    "best_score_gain": 0.205,
+    "worst_score_gain": -0.124,
+    "stops_prior_world": 2.35,
+    "stops_truth_world": 2.91
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 7 earlier season(s) at interlagos and 15 earlier round(s) of 2009; truth the race's own tyre-life fit (as it was); stint life truth/prior S 31.7/29.5, M 31.0/28.9, H 31.5/29.4; wear 1.16/0.67",
+   "historical": {
+    "score": 0.0021,
+    "score_season": 0.0051,
+    "points": 0.05,
+    "position": -0.05,
+    "best_score_gain": 0.081,
+    "worst_score_gain": -0.082,
+    "stops_prior_world": 2.35,
+    "stops_truth_world": 2.35
+   }
+  },
+  "2009_british_gp": {
+   "drawn": {
+    "score": -0.0093,
+    "score_season": -0.0233,
+    "points": -0.2333,
+    "position": -0.0667,
+    "best_score_gain": 0.216,
+    "worst_score_gain": -0.411,
+    "stops_prior_world": 2.06,
+    "stops_truth_world": 2.37
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 7 earlier season(s) at silverstone and 7 earlier round(s) of 2009; truth the race's own tyre-life fit (as it was); stint life truth/prior S 27.6/26.3, M 27.0/25.7, H 27.5/26.2; wear 2.06/0.74",
+   "historical": {
+    "score": -0.0157,
+    "score_season": -0.0387,
+    "points": -0.3833,
+    "position": 0.3167,
+    "best_score_gain": 0.082,
+    "worst_score_gain": -0.326,
+    "stops_prior_world": 2.06,
+    "stops_truth_world": 2.33
+   }
+  },
+  "2010_canadian_gp": {
+   "drawn": {
+    "score": 0.0225,
+    "score_season": 0.0225,
+    "points": 0.5556,
+    "position": -0.3611,
+    "best_score_gain": 0.281,
+    "worst_score_gain": -0.003,
+    "stops_prior_world": 1.18,
+    "stops_truth_world": 1.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 8 earlier season(s) at villeneuve and 6 earlier round(s) of 2010; truth the race's own tyre-life fit (as it was); stint life truth/prior S 21.4/26.9, M 21.0/26.4, H 21.4/26.8; wear 2.69/0.96",
+   "historical": {
+    "score": 0.0439,
+    "score_season": 0.0439,
+    "points": 1.0833,
+    "position": -0.6111,
+    "best_score_gain": 0.402,
+    "worst_score_gain": 0.0,
+    "stops_prior_world": 1.18,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2010_hungarian_gp": {
+   "drawn": {
+    "score": 0.0045,
+    "score_season": 0.0045,
+    "points": 0.1111,
+    "position": -0.0972,
+    "best_score_gain": 0.082,
+    "worst_score_gain": -0.082,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 1.73
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 9 earlier season(s) at hungaroring and 10 earlier round(s) of 2010; truth the race's own tyre-life fit (as it was); stint life truth/prior S 41.9/26.0, M 41.0/25.5, H 41.7/25.9; wear 0.49/1.02",
+   "historical": {
+    "score": 0.0119,
+    "score_season": 0.0119,
+    "points": 0.2917,
+    "position": -0.2778,
+    "best_score_gain": 0.163,
+    "worst_score_gain": -0.162,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2010_japanese_gp": {
+   "drawn": {
+    "score": 0.036,
+    "score_season": 0.036,
+    "points": 0.8889,
+    "position": -0.5139,
+    "best_score_gain": 0.525,
+    "worst_score_gain": -0.415,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 8 earlier season(s) at suzuka and 13 earlier round(s) of 2010; truth the race's own tyre-life fit (as it was); stint life truth/prior S 31.9/24.4, M 31.2/23.9, H 31.8/24.3; wear 0.85/0.63",
+   "historical": {
+    "score": -0.0017,
+    "score_season": -0.0017,
+    "points": -0.0417,
+    "position": 0.0278,
+    "best_score_gain": 0.121,
+    "worst_score_gain": -0.415,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2011_belgian_gp": {
+   "drawn": {
+    "score": 0.0841,
+    "score_season": 0.0841,
+    "points": 2.0694,
+    "position": -1.4722,
+    "best_score_gain": 0.684,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 2.21,
+    "stops_truth_world": 1.33
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 7 earlier season(s) at spa and 8 earlier round(s) of 2011; truth the race's own tyre-life fit (as it was); stint life truth/prior S 18.6/20.7, M 18.2/20.3, H 18.6/20.6; wear 0.73/0.72",
+   "historical": {
+    "score": -0.0212,
+    "score_season": -0.0212,
+    "points": -0.5278,
+    "position": 0.1389,
+    "best_score_gain": 0.044,
+    "worst_score_gain": -0.603,
+    "stops_prior_world": 2.21,
+    "stops_truth_world": 2.37
+   }
+  },
+  "2011_european_gp": {
+   "drawn": {
+    "score": -0.0254,
+    "score_season": -0.0254,
+    "points": -0.625,
+    "position": 0.4583,
+    "best_score_gain": 0.001,
+    "worst_score_gain": -0.603,
+    "stops_prior_world": 2.18,
+    "stops_truth_world": 2.41
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 3 earlier season(s) at valencia and 6 earlier round(s) of 2011; truth the race's own tyre-life fit (as it was); stint life truth/prior S 17.4/23.4, M 17.0/22.9, H 17.3/23.3; wear 0.99/1.00",
+   "historical": {
+    "score": -0.0496,
+    "score_season": -0.0496,
+    "points": -1.2222,
+    "position": 0.8194,
+    "best_score_gain": 0.082,
+    "worst_score_gain": -0.603,
+    "stops_prior_world": 2.18,
+    "stops_truth_world": 2.81
+   }
+  },
+  "2011_korean_gp": {
+   "drawn": {
+    "score": -0.0066,
+    "score_season": -0.0066,
+    "points": -0.1667,
+    "position": -0.0972,
+    "best_score_gain": 0.363,
+    "worst_score_gain": -0.402,
+    "stops_prior_world": 2.04,
+    "stops_truth_world": 1.98
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 0 earlier season(s) at yeongam and 12 earlier round(s) of 2011; truth the race's own tyre-life fit (as it was); stint life truth/prior S 20.7/22.0, M 20.2/21.5, H 20.6/21.9; wear 0.20/0.76",
+   "historical": {
+    "score": -0.0168,
+    "score_season": -0.0168,
+    "points": -0.4167,
+    "position": 0.1806,
+    "best_score_gain": 0.0,
+    "worst_score_gain": -0.523,
+    "stops_prior_world": 2.04,
+    "stops_truth_world": 2.04
+   }
+  },
+  "2011_turkish_gp": {
+   "drawn": {
+    "score": 0.0062,
+    "score_season": 0.0062,
+    "points": 0.1528,
+    "position": -0.0972,
+    "best_score_gain": 0.281,
+    "worst_score_gain": -0.121,
+    "stops_prior_world": 2.05,
+    "stops_truth_world": 2.02
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 6 earlier season(s) at istanbul and 3 earlier round(s) of 2011; truth the race's own tyre-life fit (as it was); stint life truth/prior S 15.3/23.8, M 15.0/23.3, H 15.3/23.7; wear 0.75/0.65",
+   "historical": {
+    "score": -0.0573,
+    "score_season": -0.0573,
+    "points": -1.4167,
+    "position": 0.75,
+    "best_score_gain": 0.041,
+    "worst_score_gain": -0.603,
+    "stops_prior_world": 2.05,
+    "stops_truth_world": 3.33
+   }
+  },
+  "2012_bahrain_gp": {
+   "drawn": {
+    "score": 0.009,
+    "score_season": 0.009,
+    "points": 0.2222,
+    "position": -0.1528,
+    "best_score_gain": 0.281,
+    "worst_score_gain": -0.083,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 7 earlier season(s) at bahrain and 2 earlier round(s) of 2012; truth the race's own tyre-life fit (as it was); stint life truth/prior S 15.3/19.9, M 15.0/19.5, H 15.3/19.8; wear 2.29/0.98",
+   "historical": {
+    "score": 0.0249,
+    "score_season": 0.0249,
+    "points": 0.6111,
+    "position": -0.5556,
+    "best_score_gain": 0.283,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2012_belgian_gp": {
+   "drawn": {
+    "score": 0.0118,
+    "score_season": 0.0118,
+    "points": 0.2917,
+    "position": -0.2083,
+    "best_score_gain": 0.281,
+    "worst_score_gain": -0.244,
+    "stops_prior_world": 1.41,
+    "stops_truth_world": 1.22
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 8 earlier season(s) at spa and 10 earlier round(s) of 2012; truth the race's own tyre-life fit (as it was); stint life truth/prior S 16.3/19.8, M 16.0/19.4, H 16.3/19.8; wear 0.91/0.61",
+   "historical": {
+    "score": 0.0057,
+    "score_season": 0.0057,
+    "points": 0.1389,
+    "position": -0.1111,
+    "best_score_gain": 0.281,
+    "worst_score_gain": -0.281,
+    "stops_prior_world": 1.41,
+    "stops_truth_world": 1.87
+   }
+  },
+  "2012_european_gp": {
+   "drawn": {
+    "score": 0.0551,
+    "score_season": 0.0551,
+    "points": 1.3611,
+    "position": -0.7639,
+    "best_score_gain": 0.603,
+    "worst_score_gain": -0.364,
+    "stops_prior_world": 2.25,
+    "stops_truth_world": 1.94
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 4 earlier season(s) at valencia and 6 earlier round(s) of 2012; truth the race's own tyre-life fit (as it was); stint life truth/prior S 19.4/21.6, M 19.0/21.1, H 19.3/21.5; wear 2.05/0.91",
+   "historical": {
+    "score": 0.0086,
+    "score_season": 0.0086,
+    "points": 0.2083,
+    "position": -0.3333,
+    "best_score_gain": 0.613,
+    "worst_score_gain": -0.484,
+    "stops_prior_world": 2.25,
+    "stops_truth_world": 2.41
+   }
+  },
+  "2012_korean_gp": {
+   "drawn": {
+    "score": 0.0214,
+    "score_season": 0.0214,
+    "points": 0.5278,
+    "position": -0.3611,
+    "best_score_gain": 0.363,
+    "worst_score_gain": -0.281,
+    "stops_prior_world": 1.82,
+    "stops_truth_world": 1.43
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 1 earlier season(s) at yeongam and 14 earlier round(s) of 2012; truth the race's own tyre-life fit (as it was); stint life truth/prior S 18.6/21.3, M 18.2/20.9, H 18.6/21.2; wear 0.20/0.57",
+   "historical": {
+    "score": -0.0129,
+    "score_season": -0.0129,
+    "points": -0.3194,
+    "position": 0.1528,
+    "best_score_gain": 0.081,
+    "worst_score_gain": -0.281,
+    "stops_prior_world": 1.82,
+    "stops_truth_world": 1.82
+   }
+  },
+  "2013_bahrain_gp": {
+   "drawn": {
+    "score": 0.0154,
+    "score_season": 0.0154,
+    "points": 0.3788,
+    "position": -0.2121,
+    "best_score_gain": 0.402,
+    "worst_score_gain": -0.162,
+    "stops_prior_world": 2.82,
+    "stops_truth_world": 3.39
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 8 earlier season(s) at bahrain and 2 earlier round(s) of 2013; truth the race's own tyre-life fit (as it was); stint life truth/prior S 16.1/19.1, M 15.8/18.7, H 16.0/19.0; wear 1.70/1.06",
+   "historical": {
+    "score": -0.0299,
+    "score_season": -0.0299,
+    "points": -0.7424,
+    "position": 0.197,
+    "best_score_gain": 1.02,
+    "worst_score_gain": -0.766,
+    "stops_prior_world": 2.82,
+    "stops_truth_world": 3.43
+   }
+  },
+  "2013_british_gp": {
+   "drawn": {
+    "score": 0.0165,
+    "score_season": 0.0165,
+    "points": 0.4091,
+    "position": -0.1061,
+    "best_score_gain": 0.739,
+    "worst_score_gain": -0.121,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.21
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 10 earlier season(s) at silverstone and 6 earlier round(s) of 2013; truth the race's own tyre-life fit (as it was); stint life truth/prior S 20.7/20.8, M 20.2/20.4, H 20.6/20.7; wear 0.99/0.86",
+   "historical": {
+    "score": 0.0018,
+    "score_season": 0.0018,
+    "points": 0.0455,
+    "position": 0.0,
+    "best_score_gain": 0.121,
+    "worst_score_gain": -0.001,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2013_indian_gp": {
+   "drawn": {
+    "score": -0.0002,
+    "score_season": -0.0002,
+    "points": -0.0152,
+    "position": -0.4394,
+    "best_score_gain": 0.253,
+    "worst_score_gain": -0.281,
+    "stops_prior_world": 2.06,
+    "stops_truth_world": 3.42
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 2 earlier season(s) at buddh and 14 earlier round(s) of 2013; truth the race's own tyre-life fit (as it was); stint life truth/prior S 28.6/22.9, M 28.0/22.4, H 28.5/22.8; wear 0.20/0.73",
+   "historical": {
+    "score": 0.0549,
+    "score_season": 0.0549,
+    "points": 1.3485,
+    "position": -0.9697,
+    "best_score_gain": 0.617,
+    "worst_score_gain": -0.283,
+    "stops_prior_world": 2.06,
+    "stops_truth_world": 1.69
+   }
+  },
+  "2013_italian_gp": {
+   "drawn": {
+    "score": 0.0028,
+    "score_season": 0.0028,
+    "points": 0.0606,
+    "position": -0.4242,
+    "best_score_gain": 0.122,
+    "worst_score_gain": -0.162,
+    "stops_prior_world": 1.6,
+    "stops_truth_world": 1.6
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 13 earlier season(s) at monza and 10 earlier round(s) of 2013; truth the race's own tyre-life fit (as it was); stint life truth/prior S 25.0/21.9, M 24.5/21.5, H 24.9/21.8; wear 0.62/0.61",
+   "historical": {
+    "score": 0.0296,
+    "score_season": 0.0296,
+    "points": 0.7273,
+    "position": -0.4848,
+    "best_score_gain": 0.404,
+    "worst_score_gain": -0.121,
+    "stops_prior_world": 1.6,
+    "stops_truth_world": 1.43
+   }
+  },
+  "2014_austrian_gp": {
+   "drawn": {
+    "score": 0.0171,
+    "score_season": 0.0171,
+    "points": 0.4242,
+    "position": -0.1061,
+    "best_score_gain": 0.604,
+    "worst_score_gain": -0.496,
+    "stops_prior_world": 2.49,
+    "stops_truth_world": 2.51
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 4 earlier season(s) at red_bull_ring and 7 earlier round(s) of 2014; truth the race's own tyre-life fit (as it was); stint life truth/prior S 29.9/23.1, M 29.2/22.6, H 29.8/23.0; wear 0.23/0.72",
+   "historical": {
+    "score": 0.0608,
+    "score_season": 0.0608,
+    "points": 1.5,
+    "position": -0.8636,
+    "best_score_gain": 0.604,
+    "worst_score_gain": -0.496,
+    "stops_prior_world": 2.49,
+    "stops_truth_world": 2.02
+   }
+  },
+  "2014_belgian_gp": {
+   "drawn": {
+    "score": 0.0037,
+    "score_season": 0.0037,
+    "points": 0.0909,
+    "position": -0.0909,
+    "best_score_gain": 0.523,
+    "worst_score_gain": -0.402,
+    "stops_prior_world": 1.44,
+    "stops_truth_world": 1.5
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 10 earlier season(s) at spa and 10 earlier round(s) of 2014; truth the race's own tyre-life fit (as it was); stint life truth/prior S 14.3/20.3, M 14.0/19.9, H 14.2/20.3; wear 1.12/0.74",
+   "historical": {
+    "score": 0.0479,
+    "score_season": 0.0479,
+    "points": 1.1818,
+    "position": -0.6515,
+    "best_score_gain": 0.523,
+    "worst_score_gain": -0.284,
+    "stops_prior_world": 1.44,
+    "stops_truth_world": 2.12
+   }
+  },
+  "2014_chinese_gp": {
+   "drawn": {
+    "score": 0.0215,
+    "score_season": 0.0215,
+    "points": 0.5303,
+    "position": -0.3182,
+    "best_score_gain": 0.242,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 1.96
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 7 earlier season(s) at shanghai and 3 earlier round(s) of 2014; truth the race's own tyre-life fit (as it was); stint life truth/prior S 20.4/19.6, M 20.0/19.2, H 20.3/19.5; wear 1.57/0.86",
+   "historical": {
+    "score": -0.0092,
+    "score_season": -0.0092,
+    "points": -0.2273,
+    "position": 0.1667,
+    "best_score_gain": 0.121,
+    "worst_score_gain": -0.284,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.08
+   }
+  },
+  "2014_russian_gp": {
+   "drawn": {
+    "score": 0.0169,
+    "score_season": 0.0169,
+    "points": 0.4127,
+    "position": -0.4127,
+    "best_score_gain": 0.615,
+    "worst_score_gain": -0.324,
+    "stops_prior_world": 1.84,
+    "stops_truth_world": 1.51
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 0 earlier season(s) at sochi and 14 earlier round(s) of 2014; truth the race's own tyre-life fit (as it was); stint life truth/prior S 26.6/22.1, M 26.0/21.6, H 26.4/22.0; wear 0.32/0.72",
+   "historical": {
+    "score": 0.0627,
+    "score_season": 0.0627,
+    "points": 1.5397,
+    "position": -1.127,
+    "best_score_gain": 0.615,
+    "worst_score_gain": -0.445,
+    "stops_prior_world": 1.84,
+    "stops_truth_world": 1.22
+   }
+  },
+  "2015_austrian_gp": {
+   "drawn": {
+    "score": -0.0014,
+    "score_season": -0.0014,
+    "points": -0.0333,
+    "position": 0.0333,
+    "best_score_gain": 0.162,
+    "worst_score_gain": -0.121,
+    "stops_prior_world": 2.94,
+    "stops_truth_world": 2.96
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 5 earlier season(s) at red_bull_ring and 7 earlier round(s) of 2015; truth the race's own tyre-life fit (as it was); stint life truth/prior S 36.8/25.1, M 36.0/24.6, H 36.6/25.0; wear 0.62/0.60",
+   "historical": {
+    "score": 0.0602,
+    "score_season": 0.0602,
+    "points": 1.4833,
+    "position": -0.8167,
+    "best_score_gain": 0.327,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 2.94,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2015_bahrain_gp": {
+   "drawn": {
+    "score": -0.0169,
+    "score_season": -0.0169,
+    "points": -0.4167,
+    "position": 0.2167,
+    "best_score_gain": 0.0,
+    "worst_score_gain": -0.323,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.33
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 10 earlier season(s) at bahrain and 3 earlier round(s) of 2015; truth the race's own tyre-life fit (as it was); stint life truth/prior S 19.1/19.6, M 18.8/19.2, H 19.1/19.5; wear 1.70/1.09",
+   "historical": {
+    "score": -0.0014,
+    "score_season": -0.0014,
+    "points": -0.0333,
+    "position": 0.0167,
+    "best_score_gain": 0.001,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.1
+   }
+  },
+  "2015_italian_gp": {
+   "drawn": {
+    "score": 0.0257,
+    "score_season": 0.0257,
+    "points": 0.6333,
+    "position": -0.3167,
+    "best_score_gain": 0.604,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 1.67
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 15 earlier season(s) at monza and 10 earlier round(s) of 2015; truth the race's own tyre-life fit (as it was); stint life truth/prior S 26.6/24.6, M 26.0/24.1, H 26.4/24.5; wear 0.64/0.56",
+   "historical": {
+    "score": 0.0119,
+    "score_season": 0.0119,
+    "points": 0.3,
+    "position": 0.0833,
+    "best_score_gain": 0.281,
+    "worst_score_gain": -0.047,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2016_brazilian_gp": {
+   "drawn": {
+    "score": 0.0078,
+    "score_season": 0.0078,
+    "points": 0.197,
+    "position": 0.0909,
+    "best_score_gain": 0.281,
+    "worst_score_gain": -0.162,
+    "stops_prior_world": 2.47,
+    "stops_truth_world": 2.27
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 13 earlier season(s) at interlagos and 17 earlier round(s) of 2016; truth the race's own tyre-life fit (as it was); stint life truth/prior S 12.3/22.7, M 12.0/22.2, H 12.2/22.6; wear 0.64/0.78",
+   "historical": {
+    "score": 0.0094,
+    "score_season": 0.0094,
+    "points": 0.2273,
+    "position": -0.2727,
+    "best_score_gain": 0.281,
+    "worst_score_gain": -0.244,
+    "stops_prior_world": 2.47,
+    "stops_truth_world": 3.03
+   }
+  },
+  "2016_european_gp": {
+   "drawn": {
+    "score": 0.0057,
+    "score_season": 0.0057,
+    "points": 0.1364,
+    "position": -0.2273,
+    "best_score_gain": 0.415,
+    "worst_score_gain": -1.016,
+    "stops_prior_world": 1.89,
+    "stops_truth_world": 1.81
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 0 earlier season(s) at baku and 6 earlier round(s) of 2016; truth the race's own tyre-life fit (as it was); stint life truth/prior S 19.9/22.2, M 19.5/21.7, H 19.8/22.1; wear 0.35/0.80",
+   "historical": {
+    "score": -0.0092,
+    "score_season": -0.0092,
+    "points": -0.2273,
+    "position": 0.0758,
+    "best_score_gain": 0.253,
+    "worst_score_gain": -0.162,
+    "stops_prior_world": 1.89,
+    "stops_truth_world": 1.89
+   }
+  },
+  "2016_german_gp": {
+   "drawn": {
+    "score": 0.0013,
+    "score_season": 0.0013,
+    "points": 0.0303,
+    "position": -0.1364,
+    "best_score_gain": 0.364,
+    "worst_score_gain": -0.281,
+    "stops_prior_world": 2.91,
+    "stops_truth_world": 2.76
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 10 earlier season(s) at hockenheimring and 9 earlier round(s) of 2016; truth the race's own tyre-life fit (as it was); stint life truth/prior S 20.4/21.9, M 20.0/21.4, H 20.3/21.8; wear 0.85/0.82",
+   "historical": {
+    "score": -0.0092,
+    "score_season": -0.0092,
+    "points": -0.2273,
+    "position": 0.1212,
+    "best_score_gain": 0.0,
+    "worst_score_gain": -0.281,
+    "stops_prior_world": 2.91,
+    "stops_truth_world": 2.93
+   }
+  },
+  "2016_malaysian_gp": {
+   "drawn": {
+    "score": -0.0051,
+    "score_season": -0.0051,
+    "points": -0.1212,
+    "position": 0.2424,
+    "best_score_gain": 0.203,
+    "worst_score_gain": -0.164,
+    "stops_prior_world": 2.27,
+    "stops_truth_world": 2.49
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 13 earlier season(s) at sepang and 13 earlier round(s) of 2016; truth the race's own tyre-life fit (as it was); stint life truth/prior S 24.0/19.1, M 23.5/18.7, H 23.9/19.0; wear 0.72/0.81",
+   "historical": {
+    "score": 0.0393,
+    "score_season": 0.0393,
+    "points": 0.9697,
+    "position": -0.5152,
+    "best_score_gain": 0.604,
+    "worst_score_gain": -0.246,
+    "stops_prior_world": 2.27,
+    "stops_truth_world": 2.02
+   }
+  },
+  "2016_russian_gp": {
+   "drawn": {
+    "score": 0.0215,
+    "score_season": 0.0215,
+    "points": 0.5152,
+    "position": -0.9394,
+    "best_score_gain": 0.242,
+    "worst_score_gain": -0.163,
+    "stops_prior_world": 1.92,
+    "stops_truth_world": 1.55
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 2 earlier season(s) at sochi and 3 earlier round(s) of 2016; truth the race's own tyre-life fit (as it was); stint life truth/prior S 22.5/23.5, M 22.0/23.0, H 22.4/23.4; wear 0.50/0.72",
+   "historical": {
+    "score": -0.0046,
+    "score_season": -0.0046,
+    "points": -0.1061,
+    "position": 0.3485,
+    "best_score_gain": 0.121,
+    "worst_score_gain": -0.121,
+    "stops_prior_world": 1.92,
+    "stops_truth_world": 1.93
+   }
+  },
+  "2017_abu_dhabi_gp": {
+   "drawn": {
+    "score": 0.0082,
+    "score_season": 0.0082,
+    "points": 0.2,
+    "position": -0.1667,
+    "best_score_gain": 0.281,
+    "worst_score_gain": -0.332,
+    "stops_prior_world": 1.94,
+    "stops_truth_world": 1.92
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 8 earlier season(s) at yas_marina and 18 earlier round(s) of 2017; truth the race's own tyre-life fit (as it was); stint life truth/prior S 28.1/27.4, M 27.5/26.8, H 28.0/27.3; wear 0.80/0.74",
+   "historical": {
+    "score": -0.0054,
+    "score_season": -0.0054,
+    "points": -0.1333,
+    "position": 0.0667,
+    "best_score_gain": 0.001,
+    "worst_score_gain": -0.122,
+    "stops_prior_world": 1.94,
+    "stops_truth_world": 1.87
+   }
+  },
+  "2017_azerbaijan_gp": {
+   "drawn": {
+    "score": 0.0189,
+    "score_season": 0.0189,
+    "points": 0.4667,
+    "position": -0.2,
+    "best_score_gain": 0.485,
+    "worst_score_gain": -0.121,
+    "stops_prior_world": 1.08,
+    "stops_truth_world": 1.22
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 1 earlier season(s) at baku and 7 earlier round(s) of 2017; truth the race's own tyre-life fit (as it was); stint life truth/prior S 13.3/24.6, M 13.0/24.1, H 13.2/24.5; wear 0.20/0.79",
+   "historical": {
+    "score": 0.0421,
+    "score_season": 0.0421,
+    "points": 1.0333,
+    "position": -0.7,
+    "best_score_gain": 0.523,
+    "worst_score_gain": -0.243,
+    "stops_prior_world": 1.08,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2017_belgian_gp": {
+   "drawn": {
+    "score": 0.002,
+    "score_season": 0.002,
+    "points": 0.05,
+    "position": 0.0333,
+    "best_score_gain": 0.122,
+    "worst_score_gain": -0.323,
+    "stops_prior_world": 1.7,
+    "stops_truth_world": 1.69
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 13 earlier season(s) at spa and 11 earlier round(s) of 2017; truth the race's own tyre-life fit (as it was); stint life truth/prior S 15.3/21.4, M 15.0/20.9, H 15.3/21.3; wear 2.37/1.02",
+   "historical": {
+    "score": 0.0208,
+    "score_season": 0.0208,
+    "points": 0.5167,
+    "position": -0.1667,
+    "best_score_gain": 0.402,
+    "worst_score_gain": -0.163,
+    "stops_prior_world": 1.7,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2017_japanese_gp": {
+   "drawn": {
+    "score": 0.0307,
+    "score_season": 0.0307,
+    "points": 0.75,
+    "position": -0.7,
+    "best_score_gain": 0.281,
+    "worst_score_gain": -0.121,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 1.62
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 15 earlier season(s) at suzuka and 14 earlier round(s) of 2017; truth the race's own tyre-life fit (as it was); stint life truth/prior S 27.8/23.1, M 27.2/22.6, H 27.7/23.0; wear 0.93/0.76",
+   "historical": {
+    "score": 0.0124,
+    "score_season": 0.0124,
+    "points": 0.3,
+    "position": -0.35,
+    "best_score_gain": 0.242,
+    "worst_score_gain": -0.169,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 1.81
+   }
+  },
+  "2017_russian_gp": {
+   "drawn": {
+    "score": -0.0013,
+    "score_season": -0.0013,
+    "points": -0.0333,
+    "position": -0.0667,
+    "best_score_gain": 0.243,
+    "worst_score_gain": -0.281,
+    "stops_prior_world": 1.55,
+    "stops_truth_world": 1.33
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 3 earlier season(s) at sochi and 3 earlier round(s) of 2017; truth the race's own tyre-life fit (as it was); stint life truth/prior S 29.6/24.8, M 29.0/24.3, H 29.5/24.7; wear 0.75/0.74",
+   "historical": {
+    "score": 0.027,
+    "score_season": 0.027,
+    "points": 0.6667,
+    "position": -0.3333,
+    "best_score_gain": 0.323,
+    "worst_score_gain": -0.494,
+    "stops_prior_world": 1.55,
+    "stops_truth_world": 1.13
+   }
+  },
+  "2018_azerbaijan_gp": {
+   "drawn": {
+    "score": 0.0034,
+    "score_season": 0.0034,
+    "points": 0.0833,
+    "position": -0.0833,
+    "best_score_gain": 0.081,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 2 earlier season(s) at baku and 2 earlier round(s) of 2018; truth the race's own tyre-life fit (as it was); stint life truth/prior S 26.5/25.1, M 37.1/24.6, H 32.5/25.0; wear 0.46/0.41",
+   "historical": {
+    "score": -0.0028,
+    "score_season": -0.0028,
+    "points": -0.0667,
+    "position": 0.1,
+    "best_score_gain": 0.162,
+    "worst_score_gain": -0.495,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2018_brazilian_gp": {
+   "drawn": {
+    "score": 0.0459,
+    "score_season": 0.0459,
+    "points": 1.1333,
+    "position": -0.5,
+    "best_score_gain": 0.485,
+    "worst_score_gain": -0.493,
+    "stops_prior_world": 1.92,
+    "stops_truth_world": 1.03
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 15 earlier season(s) at interlagos and 13 earlier round(s) of 2018; truth the race's own tyre-life fit (as it was); stint life truth/prior S 38.8/27.7, M 35.0/28.3, H 42.8/30.6; wear 0.55/0.51",
+   "historical": {
+    "score": 0.0251,
+    "score_season": 0.0251,
+    "points": 0.6167,
+    "position": -0.4167,
+    "best_score_gain": 0.324,
+    "worst_score_gain": -0.249,
+    "stops_prior_world": 1.92,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2018_french_gp": {
+   "drawn": {
+    "score": 0.0388,
+    "score_season": 0.0388,
+    "points": 0.95,
+    "position": -0.75,
+    "best_score_gain": 0.523,
+    "worst_score_gain": -0.001,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 0 earlier season(s) at ricard and 3 earlier round(s) of 2018; truth the race's own tyre-life fit (as it was); stint life truth/prior S 36.0/28.2, M 34.6/28.5, H 37.4/28.6; wear 0.20/0.57",
+   "historical": {
+    "score": 0.0048,
+    "score_season": 0.0048,
+    "points": 0.1167,
+    "position": -0.15,
+    "best_score_gain": 0.163,
+    "worst_score_gain": -0.003,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2018_hungarian_gp": {
+   "drawn": {
+    "score": 0.0074,
+    "score_season": 0.0074,
+    "points": 0.1833,
+    "position": -0.0333,
+    "best_score_gain": 0.281,
+    "worst_score_gain": -0.083,
+    "stops_prior_world": 1.06,
+    "stops_truth_world": 1.02
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 15 earlier season(s) at hungaroring and 6 earlier round(s) of 2018; truth the race's own tyre-life fit (as it was); stint life truth/prior S 30.5/30.7, M 36.2/30.4, H 33.5/31.3; wear 0.20/0.45",
+   "historical": {
+    "score": 0.0108,
+    "score_season": 0.0108,
+    "points": 0.2667,
+    "position": -0.1,
+    "best_score_gain": 0.164,
+    "worst_score_gain": -0.615,
+    "stops_prior_world": 1.06,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2018_russian_gp": {
+   "drawn": {
+    "score": -0.0278,
+    "score_season": -0.0278,
+    "points": -0.6833,
+    "position": 0.4333,
+    "best_score_gain": 0.001,
+    "worst_score_gain": -0.604,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 4 earlier season(s) at sochi and 9 earlier round(s) of 2018; truth the race's own tyre-life fit (as it was); stint life truth/prior S 14.2/30.8, M 15.5/31.6, H 26.9/32.2; wear 0.65/0.41",
+   "historical": {
+    "score": 0.4081,
+    "score_season": 0.4081,
+    "points": 10.0667,
+    "position": -5.15,
+    "best_score_gain": 1.02,
+    "worst_score_gain": 0.0,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2019_azerbaijan_gp": {
+   "drawn": {
+    "score": 0.0068,
+    "score_season": 0.0068,
+    "points": 0.1667,
+    "position": -0.1,
+    "best_score_gain": 0.162,
+    "worst_score_gain": -0.122,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 3 earlier season(s) at baku and 3 earlier round(s) of 2019; truth the race's own tyre-life fit (as it was); stint life truth/prior S 15.2/22.3, M 27.3/26.1, H 25.1/26.8; wear 1.26/0.52",
+   "historical": {
+    "score": 0.0291,
+    "score_season": 0.0291,
+    "points": 0.7167,
+    "position": -0.4333,
+    "best_score_gain": 0.362,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2019_brazilian_gp": {
+   "drawn": {
+    "score": 0.0851,
+    "score_season": 0.0851,
+    "points": 2.0833,
+    "position": -1.65,
+    "best_score_gain": 0.496,
+    "worst_score_gain": -0.242,
+    "stops_prior_world": 1.69,
+    "stops_truth_world": 1.85
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 16 earlier season(s) at interlagos and 16 earlier round(s) of 2019; truth the race's own tyre-life fit (as it was); stint life truth/prior S 27.7/24.9, M 27.8/29.4, H 33.5/32.2; wear 0.92/0.49",
+   "historical": {
+    "score": 0.0136,
+    "score_season": 0.0136,
+    "points": 0.3333,
+    "position": -0.2167,
+    "best_score_gain": 0.281,
+    "worst_score_gain": -0.164,
+    "stops_prior_world": 1.69,
+    "stops_truth_world": 1.75
+   }
+  },
+  "2019_french_gp": {
+   "drawn": {
+    "score": 0.0251,
+    "score_season": 0.0251,
+    "points": 0.6167,
+    "position": -0.4333,
+    "best_score_gain": 0.442,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 1 earlier season(s) at ricard and 6 earlier round(s) of 2019; truth the race's own tyre-life fit (as it was); stint life truth/prior S 21.6/24.7, M 25.8/28.9, H 31.3/31.0; wear 0.20/0.50",
+   "historical": {
+    "score": -0.0068,
+    "score_season": -0.0068,
+    "points": -0.1667,
+    "position": 0.1667,
+    "best_score_gain": 0.326,
+    "worst_score_gain": -0.281,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2019_hungarian_gp": {
+   "drawn": {
+    "score": 0.0339,
+    "score_season": 0.0339,
+    "points": 0.8333,
+    "position": -0.5667,
+    "best_score_gain": 0.563,
+    "worst_score_gain": -0.121,
+    "stops_prior_world": 1.56,
+    "stops_truth_world": 2.04
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 16 earlier season(s) at hungaroring and 9 earlier round(s) of 2019; truth the race's own tyre-life fit (as it was); stint life truth/prior S 31.2/24.9, M 34.2/30.2, H 41.8/31.9; wear 0.84/0.41",
+   "historical": {
+    "score": 0.04,
+    "score_season": 0.04,
+    "points": 0.9833,
+    "position": -0.6667,
+    "best_score_gain": 0.523,
+    "worst_score_gain": -0.281,
+    "stops_prior_world": 1.56,
+    "stops_truth_world": 1.22
+   }
+  },
+  "2019_russian_gp": {
+   "drawn": {
+    "score": 0.0511,
+    "score_season": 0.0511,
+    "points": 1.25,
+    "position": -1.0,
+    "best_score_gain": 0.416,
+    "worst_score_gain": -0.281,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 5 earlier season(s) at sochi and 13 earlier round(s) of 2019; truth the race's own tyre-life fit (as it was); stint life truth/prior S 25.1/23.2, M 29.1/27.8, H 32.6/31.9; wear 0.20/0.49",
+   "historical": {
+    "score": 0.0041,
+    "score_season": 0.0041,
+    "points": 0.1,
+    "position": -0.1,
+    "best_score_gain": 0.281,
+    "worst_score_gain": -0.243,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2020_british_gp": {
+   "drawn": {
+    "score": 0.1996,
+    "score_season": 0.1996,
+    "points": 4.8833,
+    "position": -4.0333,
+    "best_score_gain": 0.496,
+    "worst_score_gain": -0.005,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.33
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 15 earlier season(s) at silverstone and 1 earlier round(s) of 2020; truth the race's own tyre-life fit (as it was); stint life truth/prior S 15.0/23.4, M 13.7/27.5, H 27.5/29.4; wear 0.20/0.50",
+   "historical": {
+    "score": 0.2174,
+    "score_season": 0.2174,
+    "points": 5.3167,
+    "position": -4.4667,
+    "best_score_gain": 0.489,
+    "worst_score_gain": 0.0,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2020_italian_gp": {
+   "drawn": {
+    "score": -0.023,
+    "score_season": -0.023,
+    "points": -0.5667,
+    "position": 0.3333,
+    "best_score_gain": 0.321,
+    "worst_score_gain": -0.525,
+    "stops_prior_world": 0.81,
+    "stops_truth_world": 0.98
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 19 earlier season(s) at monza and 5 earlier round(s) of 2020; truth the race's own tyre-life fit (as it was); stint life truth/prior S 18.6/24.4, M 17.5/26.8, H 16.7/32.2; wear 0.91/0.41",
+   "historical": {
+    "score": 0.1697,
+    "score_season": 0.1697,
+    "points": 4.1833,
+    "position": -2.2667,
+    "best_score_gain": 0.847,
+    "worst_score_gain": -0.407,
+    "stops_prior_world": 0.81,
+    "stops_truth_world": 1.74
+   }
+  },
+  "2020_portuguese_gp": {
+   "drawn": {
+    "score": 0.0479,
+    "score_season": 0.0479,
+    "points": 1.1833,
+    "position": -0.5667,
+    "best_score_gain": 0.566,
+    "worst_score_gain": -0.168,
+    "stops_prior_world": 1.04,
+    "stops_truth_world": 1.1
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 0 earlier season(s) at portimao and 9 earlier round(s) of 2020; truth the race's own tyre-life fit (as it was); stint life truth/prior S 28.0/22.8, M 40.1/25.0, H 32.5/28.6; wear 0.57/0.57",
+   "historical": {
+    "score": 0.0515,
+    "score_season": 0.0515,
+    "points": 1.2667,
+    "position": -0.75,
+    "best_score_gain": 0.485,
+    "worst_score_gain": -0.169,
+    "stops_prior_world": 1.04,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2020_sakhir_gp": {
+   "drawn": {
+    "score": 0.1022,
+    "score_season": 0.1022,
+    "points": 2.5167,
+    "position": -1.4167,
+    "best_score_gain": 1.012,
+    "worst_score_gain": -0.733,
+    "stops_prior_world": 2.51,
+    "stops_truth_world": 3.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 15 earlier season(s) at bahrain and 12 earlier round(s) of 2020; truth the race's own tyre-life fit (as it was); stint life truth/prior S 32.7/20.4, M 42.2/23.3, H 43.0/26.0; wear 0.84/0.90",
+   "historical": {
+    "score": 0.0752,
+    "score_season": 0.0752,
+    "points": 1.8667,
+    "position": -0.4833,
+    "best_score_gain": 0.604,
+    "worst_score_gain": -0.737,
+    "stops_prior_world": 2.51,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2021_qatar_gp": {
+   "drawn": {
+    "score": 0.1154,
+    "score_season": 0.1154,
+    "points": 2.8333,
+    "position": -1.9333,
+    "best_score_gain": 0.496,
+    "worst_score_gain": -0.049,
+    "stops_prior_world": 1.67,
+    "stops_truth_world": 1.31
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 0 earlier season(s) at losail and 14 earlier round(s) of 2021; truth the race's own tyre-life fit (as it was); stint life truth/prior S 24.4/22.4, M 26.8/28.1, H 25.3/30.1; wear 0.20/0.59",
+   "historical": {
+    "score": -0.0295,
+    "score_season": -0.0295,
+    "points": -0.7167,
+    "position": 0.7667,
+    "best_score_gain": 0.241,
+    "worst_score_gain": -0.523,
+    "stops_prior_world": 1.67,
+    "stops_truth_world": 1.96
+   }
+  },
+  "2021_spanish_gp": {
+   "drawn": {
+    "score": -0.0141,
+    "score_season": -0.0141,
+    "points": -0.35,
+    "position": 0.1333,
+    "best_score_gain": 0.254,
+    "worst_score_gain": -0.281,
+    "stops_prior_world": 1.98,
+    "stops_truth_world": 2.12
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 20 earlier season(s) at catalunya and 2 earlier round(s) of 2021; truth the race's own tyre-life fit (as it was); stint life truth/prior S 26.8/22.2, M 30.8/25.5, H 33.9/28.1; wear 0.56/0.63",
+   "historical": {
+    "score": 0.0436,
+    "score_season": 0.0436,
+    "points": 1.0667,
+    "position": -0.85,
+    "best_score_gain": 0.402,
+    "worst_score_gain": -0.122,
+    "stops_prior_world": 1.98,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2021_styrian_gp": {
+   "drawn": {
+    "score": 0.0345,
+    "score_season": 0.0345,
+    "points": 0.85,
+    "position": -0.4667,
+    "best_score_gain": 0.488,
+    "worst_score_gain": -0.162,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 11 earlier season(s) at red_bull_ring and 6 earlier round(s) of 2021; truth the race's own tyre-life fit (as it was); stint life truth/prior S 28.7/26.4, M 35.2/31.8, H 36.0/35.9; wear 0.48/0.49",
+   "historical": {
+    "score": 0.0116,
+    "score_season": 0.0116,
+    "points": 0.2833,
+    "position": -0.2333,
+    "best_score_gain": 0.407,
+    "worst_score_gain": -0.243,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2022_azerbaijan_gp": {
+   "drawn": {
+    "score": 0.0212,
+    "score_season": 0.0212,
+    "points": 0.5167,
+    "position": -0.5,
+    "best_score_gain": 0.523,
+    "worst_score_gain": -0.281,
+    "stops_prior_world": 1.08,
+    "stops_truth_world": 1.38
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 5 earlier season(s) at baku and 4 earlier round(s) of 2022; truth the race's own tyre-life fit (as it was); stint life truth/prior S 16.6/19.4, M 17.3/25.2, H 25.9/28.9; wear 0.36/0.63",
+   "historical": {
+    "score": -0.0126,
+    "score_season": -0.0126,
+    "points": -0.3167,
+    "position": -0.0833,
+    "best_score_gain": 0.121,
+    "worst_score_gain": -0.321,
+    "stops_prior_world": 1.08,
+    "stops_truth_world": 1.07
+   }
+  },
+  "2022_italian_gp": {
+   "drawn": {
+    "score": -0.0156,
+    "score_season": -0.0156,
+    "points": -0.3667,
+    "position": 0.8667,
+    "best_score_gain": 0.281,
+    "worst_score_gain": -0.281,
+    "stops_prior_world": 1.65,
+    "stops_truth_world": 1.91
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 21 earlier season(s) at monza and 10 earlier round(s) of 2022; truth the race's own tyre-life fit (as it was); stint life truth/prior S 22.0/20.7, M 30.1/24.0, H 30.0/28.1; wear 0.81/0.67",
+   "historical": {
+    "score": 0.0199,
+    "score_season": 0.0199,
+    "points": 0.4833,
+    "position": -0.5167,
+    "best_score_gain": 0.281,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 1.65,
+    "stops_truth_world": 1.04
+   }
+  },
+  "2022_mexico_city_gp": {
+   "drawn": {
+    "score": 0.0752,
+    "score_season": 0.0752,
+    "points": 1.85,
+    "position": -1.1,
+    "best_score_gain": 1.016,
+    "worst_score_gain": -0.04,
+    "stops_prior_world": 2.61,
+    "stops_truth_world": 2.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 6 earlier season(s) at rodriguez and 12 earlier round(s) of 2022; truth the race's own tyre-life fit (as it was); stint life truth/prior S 31.1/20.7, M 39.1/25.0, H 48.9/31.1; wear 0.78/0.81",
+   "historical": {
+    "score": 0.0516,
+    "score_season": 0.0516,
+    "points": 1.2667,
+    "position": -0.9333,
+    "best_score_gain": 0.523,
+    "worst_score_gain": -0.281,
+    "stops_prior_world": 2.61,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2023_azerbaijan_gp": {
+   "drawn": {
+    "score": -0.0034,
+    "score_season": -0.0034,
+    "points": -0.0833,
+    "position": 0.0667,
+    "best_score_gain": 0.163,
+    "worst_score_gain": -0.283,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 1.92
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 6 earlier season(s) at baku and 3 earlier round(s) of 2023; truth the race's own tyre-life fit (as it was); stint life truth/prior S 23.0/17.8, M 15.1/22.2, H 37.8/25.6; wear 1.03/0.68",
+   "historical": {
+    "score": -0.0318,
+    "score_season": -0.0318,
+    "points": -0.7833,
+    "position": 0.4167,
+    "best_score_gain": 0.122,
+    "worst_score_gain": -1.058,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2023_canadian_gp": {
+   "drawn": {
+    "score": -0.0007,
+    "score_season": -0.0007,
+    "points": -0.0167,
+    "position": 0.0167,
+    "best_score_gain": 0.523,
+    "worst_score_gain": -0.281,
+    "stops_prior_world": 2.58,
+    "stops_truth_world": 2.86
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 17 earlier season(s) at villeneuve and 6 earlier round(s) of 2023; truth the race's own tyre-life fit (as it was); stint life truth/prior S 20.6/22.4, M 16.7/24.4, H 32.1/31.5; wear 0.83/0.75",
+   "historical": {
+    "score": 0.013,
+    "score_season": 0.013,
+    "points": 0.3167,
+    "position": -0.35,
+    "best_score_gain": 0.563,
+    "worst_score_gain": -0.563,
+    "stops_prior_world": 2.58,
+    "stops_truth_world": 2.83
+   }
+  },
+  "2023_japanese_gp": {
+   "drawn": {
+    "score": 0.0157,
+    "score_season": 0.0157,
+    "points": 0.3833,
+    "position": -0.3167,
+    "best_score_gain": 0.323,
+    "worst_score_gain": -0.162,
+    "stops_prior_world": 2.08,
+    "stops_truth_world": 2.11
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 17 earlier season(s) at suzuka and 10 earlier round(s) of 2023; truth the race's own tyre-life fit (as it was); stint life truth/prior S 14.0/19.9, M 18.0/21.7, H 18.7/26.8; wear 1.67/0.86",
+   "historical": {
+    "score": -0.0107,
+    "score_season": -0.0107,
+    "points": -0.2667,
+    "position": 0.0,
+    "best_score_gain": 0.122,
+    "worst_score_gain": -0.324,
+    "stops_prior_world": 2.08,
+    "stops_truth_world": 2.54
+   }
+  },
+  "2023_sao_paulo_gp": {
+   "drawn": {
+    "score": -0.0002,
+    "score_season": -0.0002,
+    "points": 0.0,
+    "position": 0.2,
+    "best_score_gain": 0.567,
+    "worst_score_gain": -1.015,
+    "stops_prior_world": 3.07,
+    "stops_truth_world": 2.91
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 19 earlier season(s) at interlagos and 14 earlier round(s) of 2023; truth the race's own tyre-life fit (as it was); stint life truth/prior S 26.8/21.1, M 29.4/23.0, H 30.9/27.6; wear 0.77/0.89",
+   "historical": {
+    "score": 0.0555,
+    "score_season": 0.0555,
+    "points": 1.3667,
+    "position": -0.75,
+    "best_score_gain": 0.445,
+    "worst_score_gain": -0.121,
+    "stops_prior_world": 3.07,
+    "stops_truth_world": 2.77
+   }
+  },
+  "2024_abu_dhabi_gp": {
+   "drawn": {
+    "score": -0.007,
+    "score_season": -0.007,
+    "points": -0.1667,
+    "position": 0.3333,
+    "best_score_gain": 0.323,
+    "worst_score_gain": -0.324,
+    "stops_prior_world": 1.05,
+    "stops_truth_world": 1.33
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 13 earlier season(s) at yas_marina and 20 earlier round(s) of 2024; truth the race's own tyre-life fit (as it was); stint life truth/prior S 12.2/14.1, M 23.2/21.9, H 27.5/28.8; wear 0.22/0.95",
+   "historical": {
+    "score": -0.0061,
+    "score_season": -0.0061,
+    "points": -0.15,
+    "position": 0.0667,
+    "best_score_gain": 0.085,
+    "worst_score_gain": -0.202,
+    "stops_prior_world": 1.05,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2024_italian_gp": {
+   "drawn": {
+    "score": 0.021,
+    "score_season": 0.021,
+    "points": 0.5167,
+    "position": -0.3333,
+    "best_score_gain": 0.281,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 22 earlier season(s) at monza and 13 earlier round(s) of 2024; truth the race's own tyre-life fit (as it was); stint life truth/prior S 9.4/15.7, M 16.3/23.3, H 22.9/28.1; wear 0.98/0.86",
+   "historical": {
+    "score": 0.0481,
+    "score_season": 0.0481,
+    "points": 1.1833,
+    "position": -0.7,
+    "best_score_gain": 0.402,
+    "worst_score_gain": -0.081,
+    "stops_prior_world": 1.0,
+    "stops_truth_world": 1.4
+   }
+  },
+  "2024_japanese_gp": {
+   "drawn": {
+    "score": 0.0292,
+    "score_season": 0.0292,
+    "points": 0.7167,
+    "position": -0.5167,
+    "best_score_gain": 0.404,
+    "worst_score_gain": -0.121,
+    "stops_prior_world": 1.46,
+    "stops_truth_world": 1.63
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 18 earlier season(s) at suzuka and 3 earlier round(s) of 2024; truth the race's own tyre-life fit (as it was); stint life truth/prior S 10.8/16.7, M 19.5/21.5, H 21.6/26.0; wear 1.69/0.85",
+   "historical": {
+    "score": 0.0189,
+    "score_season": 0.0189,
+    "points": 0.4667,
+    "position": -0.2167,
+    "best_score_gain": 0.283,
+    "worst_score_gain": -0.121,
+    "stops_prior_world": 1.46,
+    "stops_truth_world": 2.0
+   }
+  },
+  "2024_mexico_city_gp": {
+   "drawn": {
+    "score": 0.067,
+    "score_season": 0.067,
+    "points": 1.65,
+    "position": -0.9833,
+    "best_score_gain": 0.685,
+    "worst_score_gain": -0.162,
+    "stops_prior_world": 1.74,
+    "stops_truth_world": 2.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 8 earlier season(s) at rodriguez and 17 earlier round(s) of 2024; truth the race's own tyre-life fit (as it was); stint life truth/prior S 18.6/16.2, M 31.3/25.5, H 45.7/32.7; wear 0.86/0.96",
+   "historical": {
+    "score": 0.0095,
+    "score_season": 0.0095,
+    "points": 0.2333,
+    "position": -0.15,
+    "best_score_gain": 0.404,
+    "worst_score_gain": -0.121,
+    "stops_prior_world": 1.74,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2024_monaco_gp": {
+   "drawn": {
+    "score": 0.0852,
+    "score_season": 0.0852,
+    "points": 2.1,
+    "position": -1.1,
+    "best_score_gain": 0.847,
+    "worst_score_gain": -0.122,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 2.0
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 17 earlier season(s) at monaco and 7 earlier round(s) of 2024; truth the race's own tyre-life fit (as it was); stint life truth/prior S 27.3/18.8, M 50.0/26.1, H 63.3/31.7; wear 0.87/0.88",
+   "historical": {
+    "score": 0.012,
+    "score_season": 0.012,
+    "points": 0.2833,
+    "position": -0.6167,
+    "best_score_gain": 0.604,
+    "worst_score_gain": -0.806,
+    "stops_prior_world": 2.0,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2025_abu_dhabi_gp": {
+   "drawn": {
+    "score": 0.0955,
+    "score_season": 0.0955,
+    "points": 2.35,
+    "position": -1.45,
+    "best_score_gain": 0.523,
+    "worst_score_gain": -1.02,
+    "stops_prior_world": 1.58,
+    "stops_truth_world": 1.63
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 14 earlier season(s) at yas_marina and 19 earlier round(s) of 2025; truth the race's own tyre-life fit (as it was); stint life truth/prior S 10.7/16.6, M 18.0/24.0, H 29.1/29.5; wear 1.73/0.78",
+   "historical": {
+    "score": -0.01,
+    "score_season": -0.01,
+    "points": -0.25,
+    "position": -0.0167,
+    "best_score_gain": 0.402,
+    "worst_score_gain": -1.02,
+    "stops_prior_world": 1.58,
+    "stops_truth_world": 1.98
+   }
+  },
+  "2025_bahrain_gp": {
+   "drawn": {
+    "score": 0.0833,
+    "score_season": 0.0833,
+    "points": 2.0333,
+    "position": -1.85,
+    "best_score_gain": 0.604,
+    "worst_score_gain": -0.405,
+    "stops_prior_world": 1.85,
+    "stops_truth_world": 1.72
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 19 earlier season(s) at bahrain and 2 earlier round(s) of 2025; truth the race's own tyre-life fit (as it was); stint life truth/prior S 14.8/14.0, M 19.2/21.3, H 19.2/25.4; wear 1.94/1.06",
+   "historical": {
+    "score": 0.1017,
+    "score_season": 0.1017,
+    "points": 2.4833,
+    "position": -2.2333,
+    "best_score_gain": 0.738,
+    "worst_score_gain": -0.166,
+    "stops_prior_world": 1.85,
+    "stops_truth_world": 2.21
+   }
+  },
+  "2025_italian_gp": {
+   "drawn": {
+    "score": 0.0965,
+    "score_season": 0.0965,
+    "points": 2.3667,
+    "position": -1.7333,
+    "best_score_gain": 0.729,
+    "worst_score_gain": -0.242,
+    "stops_prior_world": 1.02,
+    "stops_truth_world": 1.37
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 23 earlier season(s) at monza and 12 earlier round(s) of 2025; truth the race's own tyre-life fit (as it was); stint life truth/prior S 28.6/15.2, M 38.4/22.4, H 47.4/27.1; wear 0.46/0.80",
+   "historical": {
+    "score": 0.1035,
+    "score_season": 0.1035,
+    "points": 2.55,
+    "position": -1.45,
+    "best_score_gain": 0.523,
+    "worst_score_gain": -0.162,
+    "stops_prior_world": 1.02,
+    "stops_truth_world": 1.0
+   }
+  },
+  "2025_mexico_city_gp": {
+   "drawn": {
+    "score": 0.073,
+    "score_season": 0.073,
+    "points": 1.8,
+    "position": -0.9333,
+    "best_score_gain": 1.016,
+    "worst_score_gain": -0.121,
+    "stops_prior_world": 2.02,
+    "stops_truth_world": 1.75
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 9 earlier season(s) at rodriguez and 16 earlier round(s) of 2025; truth the race's own tyre-life fit (as it was); stint life truth/prior S 27.3/18.7, M 35.0/27.7, H 40.1/34.1; wear 0.91/0.85",
+   "historical": {
+    "score": 0.0112,
+    "score_season": 0.0112,
+    "points": 0.2833,
+    "position": 0.1667,
+    "best_score_gain": 0.523,
+    "worst_score_gain": -0.739,
+    "stops_prior_world": 2.02,
+    "stops_truth_world": 1.79
+   }
+  },
+  "2025_monaco_gp": {
+   "drawn": {
+    "score": 0.0393,
+    "score_season": 0.0393,
+    "points": 0.9667,
+    "position": -0.6333,
+    "best_score_gain": 0.523,
+    "worst_score_gain": -0.162,
+    "stops_prior_world": 2.33,
+    "stops_truth_world": 2.64
+   },
+   "note": "historical: estimated_from_data: race-day prior calibration/race_day_prior_v1.json from 18 earlier season(s) at monaco and 6 earlier round(s) of 2025; truth the race's own tyre-life fit (as it was); stint life truth/prior S 12.9/18.5, M 21.0/27.8, H 42.2/33.2; wear 1.00/0.85",
+   "historical": {
+    "score": 0.0238,
+    "score_season": 0.0238,
+    "points": 0.5833,
+    "position": -0.4,
+    "best_score_gain": 0.402,
+    "worst_score_gain": -0.203,
+    "stops_prior_world": 2.33,
+    "stops_truth_world": 2.13
+   }
+  }
+ }
+}

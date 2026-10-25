@@ -62,6 +62,8 @@ from f1ar.policy.baseline_strategy import (
     dry_compounds_required,
     free_change_compound,
     plan_for_car,
+    team_setup,
+    team_view,
     weather_stop,
 )
 from f1ar.simulation.incidents import (
@@ -88,8 +90,10 @@ from f1ar.simulation.weather import (
 )
 from f1ar.simulation.weather import penalty_s as weather_penalty_s
 
-ENGINE_VERSION = "lightweight_engine_v0.18.0"
-"""v0.15.0: racecraft intent ATTACK / NORMAL / DEFEND per lap (risk for track position, D-048).
+ENGINE_VERSION = "lightweight_engine_v0.19.0"
+"""v0.19.0: hidden race-day truth (H3, D-058): with ``setup.knowledge`` the baseline plans with
+the race-day prior's tyres while the race runs on the truth; without it, identical to v0.18.
+v0.15.0: racecraft intent ATTACK / NORMAL / DEFEND per lap (risk for track position, D-048).
 v0.14.0: fresh wet-weather tyres under SC/VSC and the wet incident factor, fitted on the 2024
 wet races (D-046).
 v0.13.0: overtaking refit with W2 noise + driver attack/defend skills, launch skill, lap-1
@@ -223,7 +227,7 @@ def _start_fuel(setup: RaceSetup, driver_id: str, compound: Compound) -> float |
     from f1ar.policy.refuel_strategy import best_plan_refuel
 
     plan = best_plan_refuel(
-        setup,
+        team_setup(setup, driver_id),
         entry.profile.archetype,
         laps_completed=0,
         compound=compound,
@@ -1562,8 +1566,9 @@ def _refuel_stop(
             }
         )
     left = max(0.0, car.fuel_laps or 0.0)
+    seen_setup, seen = team_view(setup, car)  # H3: the team plans with what it knows
     plan = best_plan_refuel(
-        setup,
+        seen_setup,
         setup.driver(car.driver_id).profile.archetype,
         laps_completed=car.laps_completed,
         compound=car.compound,
@@ -1572,8 +1577,8 @@ def _refuel_stop(
         free_first=True,
         at_stop=True,
         tyre_age_laps=car.tyre_age_laps,
-        tyre_wear_s=car.tyre_wear_s,
-        life_used=car.tyre_life_used,
+        tyre_wear_s=seen.tyre_wear_s,
+        life_used=seen.tyre_life_used,
     )
     remaining = setup.track.total_laps - car.laps_completed
     stint = remaining if plan is None else plan.first_stint_laps

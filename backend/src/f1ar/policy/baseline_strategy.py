@@ -192,6 +192,35 @@ def stint_costs(
     return out
 
 
+def team_setup(setup: RaceSetup, driver_id: str) -> RaceSetup:
+    """The setup as ``driver_id``'s team knows it (H3, D-058): the race-day prior's tyres
+    unless there's no hidden truth or the car is an oracle."""
+    k = setup.knowledge
+    if k is None or driver_id in k.oracle_drivers:
+        return setup
+    return setup.model_copy(update={"lap_model": k.lap_model})
+
+
+def team_view(setup: RaceSetup, car: CarState) -> tuple[RaceSetup, CarState]:
+    """Setup and car as the team sees them: its dry set's life used and wear read through the
+    prior (the laps driven are known; how much of the *true* life they took is not)."""
+    seen = team_setup(setup, car.driver_id)
+    if seen is setup or car.compound not in DRY_COMPOUNDS:
+        return seen, car
+    assert setup.knowledge is not None
+    true_life = setup.lap_model.compounds[car.compound].life_laps
+    seen_life = seen.lap_model.compounds[car.compound].life_laps
+    life_used = car.tyre_life_used
+    if true_life is not None and seen_life is not None:
+        life_used *= true_life / seen_life
+    return seen, car.model_copy(
+        update={
+            "tyre_life_used": life_used,
+            "tyre_wear_s": car.tyre_wear_s * setup.knowledge.wear_scale,
+        }
+    )
+
+
 def has_tyre_life(setup: RaceSetup) -> bool:
     return any(setup.lap_model.compounds[c].life_laps is not None for c in DRY_COMPOUNDS)
 
@@ -200,6 +229,7 @@ def baseline_pace_mode(setup: RaceSetup, car: CarState) -> PaceMode:
     """The baseline's pace for the lap now beginning (W1): manage when the set wouldn't reach its
     planned stop (or the flag) at BALANCED pace; push when it would still get there after a
     pushed lap; else BALANCED. Without a tyre life the car keeps its mode."""
+    setup, car = team_view(setup, car)
     params = setup.lap_model
     driver = setup.driver(car.driver_id).profile.archetype
     u = life_use_per_lap(params, driver, compound=car.compound, pace_mode=PaceMode.BALANCED)
@@ -370,6 +400,7 @@ def free_change_compound(setup: RaceSetup, car: CarState, wetness: float) -> Com
     wanted = best_tyre(setup.weather, wetness)
     if not is_slick(wanted):
         return wanted
+    setup = team_setup(setup, car.driver_id)
     driver = setup.driver(car.driver_id).profile.archetype
     options = []
     for c in DRY_COMPOUNDS:
@@ -390,7 +421,9 @@ def free_change_compound(setup: RaceSetup, car: CarState, wetness: float) -> Com
 
 def plan_for_car(setup: RaceSetup, car: CarState) -> tuple[PlannedStop, ...]:
     """Plan for ``car`` as it stands at the start of its current lap (refuelling era: the stint
-    on the current fuel is fixed, H1b; ``car.fuel_laps`` None = the start fuel is chosen)."""
+    on the current fuel is fixed, H1b; ``car.fuel_laps`` None = the start fuel is chosen).
+    It plans with what the team knows (H3: the prior, ``team_view``)."""
+    setup, car = team_view(setup, car)
     if setup.rules.refuelling:
         from f1ar.policy.refuel_strategy import best_plan_refuel
 

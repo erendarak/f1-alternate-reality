@@ -1369,3 +1369,35 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   EXP-021 coverage and inference on the full data (stops: precision 0.88, recall 0.83 on 309
   races); EXP-022 on all 26 seasons (10,994/11,012 official results reproduced). H0 done.
 
+
+## D-058 — H3: hidden race-day truth; teams plan on a prior from history (engine v0.19.0, world schema 20)
+
+- **Truth vs knowledge.** A race's tyre life per compound and wear multiplier (its own W1 fit) are
+  its **hidden truth**: the simulation runs on them, nobody reads them. Teams know the **race-day
+  prior**: `calibration/race_day_prior.py`, `scripts/fit_race_day_prior.py`,
+  `configs/calibration/race_day_prior_v1.json` (+ registry manifest).
+- **Prior (no future data):** `log life_raw` per compound and `log wear` = season level (random
+  walk, shrunk toward the previous season with weight 6 races) + track effect (recency 0.85 per
+  year, shrunk to 0 with weight 4), backfitted on the races strictly before the target (earlier
+  seasons, earlier rounds of its season). Weights chosen on 2000-2012 targets from a 64-point grid.
+- **Surprise size measured** (432 races): shared life factor log sd **0.24** (~24 %), per-compound
+  part **0.17** (2018+), wear **0.72** (correlation with life -0.22); a track's first year 0.31;
+  per era 0.22 / 0.23 / 0.26. The wear residual includes the per-race fit's own noise.
+- **Engine v0.19.0:** `RaceSetup.knowledge: TyreKnowledge | None` (the prior's lap model, wear
+  scale, `oracle_drivers`). The baseline planner (stops, refuelling, start fuel, red-flag tyres,
+  manage/push pace) plans with `team_view`: the prior's tyres, its own set's life used and wear
+  read through the prior (laps known, true life not). The engine runs on the truth. Without
+  `knowledge`, or with every car an oracle, races are identical to v0.18 (tested).
+- **Truth modes** (`simulation/race_day.py`): `historical` (the race as it was) and `drawn` (a new
+  truth around the prior with the era's measured surprise, keyed by truth seed and event).
+- **Worlds keep `knowledge` off by default** until H4: planning on the prior alone moves stops
+  further from reality (EXP-027: MAE 0.51 vs 0.37), real teams learn during the race.
+- **Gate (EXP-027): +0.019 [0.010, 0.030] score per car-race (historical truth), +0.021 [0.015,
+  0.028] (drawn): at the ~0.02 bar overall; 2018-2025 +0.043 / +0.041 (clearly above), 2010-2017
+  +0.011 / +0.013, 2000-2009 +0.004 / +0.010 (below).** The value is in compound choice when the
+  compounds' relative lives surprise (2018 Russia +0.41 per car); before 2018 compounds are one
+  measured life x 2018's ratios, so only the stop count can be wrong, and the planner (blind to
+  traffic) sometimes loses by acting on the truth (2011 Turkey -0.06).
+- **Not hidden yet:** car pace, track evolution; season-level calibration (kappa, wear shape,
+  compound ratios) is treated as known. `rl_obs_v1-v3` still read the true tyre life (H4's
+  `rl_obs_v4` removes it).

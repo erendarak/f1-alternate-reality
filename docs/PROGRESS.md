@@ -1437,3 +1437,20 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Plan status: H0 done, H1 + H1b done, H2a/b/c done. Next: H3 (hidden race-day truth) and its
   value-of-information gate (EXP: oracle rules vs rule teams with only the prior).
 
+### 2026-10-25 — H3: hidden race-day truth, gate EXP-027 (engine v0.19.0, D-058)
+
+- Race-day prior from history before each race (track + season random walk, weights chosen on
+  2000-2012): `calibration/race_day_prior.py`, `scripts/fit_race_day_prior.py`,
+  `configs/calibration/race_day_prior_v1.json` + manifest. Surprise measured on 432 races: life
+  ~24 % (log sd 0.24), per compound 0.17 (2018+), wear 0.72; a track's first year 0.31.
+- Engine v0.19.0 / world schema 20: `RaceSetup.knowledge` (prior lap model, oracle cars); the
+  baseline planner plans and reads its tyres through the prior (`team_view`), the race runs on
+  the truth; `simulation/race_day.py` (historical or drawn truth). Without knowledge or with all
+  oracles: identical to v0.18. Worlds keep it off until H4.
+- EXP-027 (103 held-out races, 6,483 paired car-races per mode): oracle gain **+0.019 [0.010,
+  0.030]** (historical), **+0.021 [0.015, 0.028]** (drawn); 2018-2025 **+0.043** (~1 point, 0.7
+  places), before 2018 +0.004 to +0.013. Gain comes from compound choice when relative lives
+  surprise; pre-2018 has no compounds, and the traffic-blind planner sometimes loses with the
+  truth. Gate: borderline overall, clear for 2018-2025.
+- Tests: 493 offline (+6 `tests/unit/test_race_day.py`); ruff, mypy clean; registry ok.
+- Next (owner's call): H4 (in-race estimator, `rl_obs_v4`), recommended on 2018-2025 first.

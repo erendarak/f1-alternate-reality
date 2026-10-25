@@ -2,6 +2,23 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## H3 (hidden race-day truth, engine v0.19.0, D-058)
+
+- **Only the tyres are hidden**: life per compound and wear. Car pace, track evolution and the
+  season-level calibration (kappa, wear-curve shape, compound ratios, fitted on the whole season)
+  are treated as known.
+- **The truth is a fit**: the race's own tyre-life fit carries estimation noise (the wear
+  multiplier especially), so part of the measured surprise (wear log sd 0.72) is fit noise.
+- **No per-compound surprise before 2018** (one measured life x 2018's ratios): the information
+  is worth little there (EXP-027 +0.004 / +0.011), partly by construction.
+- **Teams on the prior never learn during the race** (H4): a prior-only world is further from
+  real stops (MAE 0.51 vs 0.37), so worlds keep `knowledge` off by default.
+- **`rl_obs_v1-v3` still read the true tyre life** and the planner's truth-based advice when the
+  setup has no knowledge: the AI must move to `rl_obs_v4` (H4) before training under uncertainty.
+- **The oracle is the same rule planner**: it ignores traffic in its costs, so acting on the
+  truth sometimes loses (extra stops into a field that stops less).
+- **Not in the app**: no UI shows the prior vs the truth yet.
+
 ## H1b (refuelling era 2000-2009, engine v0.18.0, D-057)
 
 - **Burn per lap and refuel rate are editorial** (2.75 kg/lap, 12.1 l/s; one value for every

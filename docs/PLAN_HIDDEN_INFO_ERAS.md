@@ -7,8 +7,10 @@ races, because with the same 24 tracks and one year's statistics it would be lea
 Learning should be slow in general and differ from race to race, within a year and over the
 whole period."*
 
-Status: **agreed 2026-10-16** (owner: H0 for all of 2000-2025, then 2010-2025 first). H0 in
-progress (D-052).
+Status: **agreed 2026-10-16** (owner: H0 for all of 2000-2025, then 2010-2025 first). H0-H2
+done (D-052..D-057); **H3 done (D-058): gate EXP-027 (numbered after the plan; the table's
+EXP-024..027 became EXP-027 onward) +0.019-0.021 score per car-race overall, +0.04 in 2018-2025,
+below 0.02 before 2018.** Next: the owner's call (recommended: H4, 2018-2025 first).
 
 ---
 
