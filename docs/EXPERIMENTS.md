@@ -1728,6 +1728,53 @@ Caveats:              hindsight over 6 branches is biased up (it picks the lucki
                       the same in every branch.
 ```
 
+## EXP-032 — A2 pre-gate: is good stop timing predictable from what a car sees? (2026-10-25)
+
+```text
+Experiment ID:        EXP-032 (A2 pre-gate, D-063)
+Research question:    Of the ~0.035 score per car-race that the best first-stop lap is worth in
+                      hindsight (EXP-031), how much can a model that sees only what the pit wall
+                      sees capture on races it has never seen?
+Setup:                exp032_timing_pregate.py --seeds 3: A1b world (historical truth, per-team
+                      practice + private data, in-race learning, hidden trend, rival rules),
+                      2018-2025: every rule car forked 3 laps before its planned first stop, the
+                      stop forced at -2..+3 laps on identical luck; 25 features its team could
+                      know (training/pit_timing.fork_features). Train: 100 dry_train races, 2,580
+                      forks; held out: 34 dry_test races, 868 forks. Models predict each offset's
+                      gain and pick the best (or the plan). 74 min.
+                      Follow-up on the saved rows, training races only: learning curve (25/50/100 %
+                      of training races) and a move-only-if-confident threshold by 5-fold CV.
+Output:               docs/experiments/exp032.json (incl. followup_train_only)
+```
+
+| Held out (34 races) | gain vs the plan | share of hindsight | cars moved |
+|---|---|---|---|
+| hindsight (ceiling) | +0.036 [0.027, 0.045] | 1 | |
+| fixed offset (fitted: none) | 0 | 0 | 0 % |
+| ridge | +0.0045 [-0.0008, +0.0105] | 0.12 | 70 % |
+| boosted trees | +0.0009 [-0.005, +0.007] (in sample +0.020) | 0.02 | 87 % |
+| ridge, threshold chosen by CV on training races | -0.0004 [-0.003, +0.002] | 0 | 18 % |
+
+| Training races only | |
+|---|---|
+| ridge, 5-fold CV over races, gain by threshold 0 / 0.002 / 0.005 / 0.01 / 0.02 | -0.002 / -0.002 / -0.001 / -0.000 / -0.000 |
+| ridge held-out gain with 25 / 50 / 100 % of training races | +0.003 / +0.003 / +0.0045 |
+| strongest features (standardised) | race progress, own tyre age, position, a car at the rejoin point, laps left, cars within the pit loss behind |
+
+```text
+Findings:             Almost none of the hindsight value is predictable: the held-out +0.0045 of
+                      ridge is not supported inside the training races (cross-validated gain
+                      below 0 at every threshold), and choosing when to move without looking at the
+                      test races gives -0.0004. Trees memorise (in sample +0.020, held out
+                      +0.001). The hindsight value is mostly how traffic and luck happened to play
+                      out after the decision, which nothing at the fork reveals.
+Gate verdict:         FAIL (below ~0.005 with a CI above 0). An AI trained to beat these rule teams
+                      at pit timing has, on this evidence, nothing reliable to find.
+Caveat:               one decision (the first stop's lap, forked 3 laps before); 25 hand-made
+                      features (an RL agent with lap-time history might see more, the learning
+                      curve rises slightly); 3 seeds.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

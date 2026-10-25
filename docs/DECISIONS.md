@@ -1476,3 +1476,21 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   learnable share is unmeasured. Next: an A2 pre-gate on that, before any training.
 - Engine v0.21.0 (world schema 21 unchanged in shape; new optional fields): off by default; with
   `per_team` and `rival_rules` unset, races are identical to v0.20.
+
+## D-063 — A2 pre-gate fails: no learnable edge over realistic rule teams; reframe the AI goal
+
+- **EXP-032:** first-stop timing is worth +0.036 per car-race in hindsight, but a model seeing
+  what the pit wall sees recovers nothing reliable on held-out races (ridge +0.0045 [-0.001,
+  +0.011], unsupported by cross-validation inside the training races; with a CV-chosen threshold
+  -0.0004). With EXP-031 (perfect tyre information worth ~0 over the realistic field), the rule
+  teams of the A1b world are at the practical limit of what our world rewards.
+- **Consequence:** "an AI that beats the rule teams" (A2 as planned) has no measured room left;
+  training for it would repeat M5's negative results.
+- **Proposal (owner's call):** make the AI's job the *whole* strategist, not an edge over a strong
+  one: an AI that starts from nothing must learn what the rule teams encode (estimate the tyres
+  from lap times, plan stops, manage, react to rivals). Training budget then has a large, honest
+  effect (untrained -> well trained), and the A3 curve and A4 league show it; the rule teams
+  stay as the reference "expert". This matches real F1 better too: the difference between teams
+  is usually how good their strategy tools are, not a hidden edge over a perfect one.
+- Tools kept: `training/pit_timing.py` (counterfactual timing data with features), the EXP-032
+  script (rows can be refit with `--from-rows`).

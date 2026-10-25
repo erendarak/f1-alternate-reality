@@ -2,6 +2,13 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## A2 pre-gate (EXP-032, D-063)
+
+- **Only one decision tested** (first stop's lap, forked 3 laps before); hand-made features;
+  other decisions (compound, second stops, racecraft) not re-tested in the A1b world.
+- **The counterfactuals use a USER hand-over** for up to 6 laps (no tyre management), the same in
+  every branch.
+
 ## A1b (per-team knowledge, rival rules, engine v0.21.0, D-062)
 
 - **Practice and private-data noise sizes are editorial** (practice log life sd 0.20, wear 0.6;

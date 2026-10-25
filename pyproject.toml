@@ -83,5 +83,5 @@ files = ["backend/src/f1ar", "scripts", "tests"]
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
-module = ["fastf1", "fastf1.*", "racesim", "racesim.*", "scipy", "scipy.*"]
+module = ["fastf1", "fastf1.*", "racesim", "racesim.*", "scipy", "scipy.*", "sklearn", "sklearn.*"]
 ignore_missing_imports = true  # untyped third-party (racesim: external research probe only)

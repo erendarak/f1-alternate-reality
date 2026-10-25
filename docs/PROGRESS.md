@@ -1519,3 +1519,16 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
   (rival_rules v1).
 - Next (owner's call): an A2 pre-gate (does what a car sees predict the best stop timing, held
   out?) before training; or reframe A3 around trained vs untrained AIs.
+
+### 2026-10-25 — A2 pre-gate: good stop timing is not predictable (D-063, EXP-032)
+
+- `training/pit_timing.py` (forks before each rule car's first stop, forced offsets on identical
+  luck, `fork_features` without the truth); `scripts/experiments/exp032_timing_pregate.py`;
+  sklearn in the untyped mypy overrides.
+- EXP-032 (100 training races, 2,580 forks; 34 held out, 868): hindsight +0.036; ridge +0.0045
+  [-0.001, +0.011] but negative in cross-validation on training races; CV-chosen threshold
+  -0.0004; trees overfit (+0.020 in sample, +0.001 held out). Gate FAILS.
+- With EXP-031, the realistic rule teams are at our world's practical limit: an AI that beats them
+  has no measured room. Proposal (D-063): train the AI as the whole strategist from scratch
+  (training budget -> results), rule teams as the expert reference.
+- Tests: 502 offline (+1 `tests/unit/test_pit_timing.py`); ruff, mypy clean.

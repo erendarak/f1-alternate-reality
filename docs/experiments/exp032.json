@@ -1,0 +1,136 @@
+{
+ "seeds": 3,
+ "train_forks": 2580,
+ "test_forks": 868,
+ "train_races": 100,
+ "test_races": 34,
+ "features": [
+  "ahead_compound",
+  "ahead_stopped",
+  "ahead_tyre_age",
+  "behind_compound",
+  "behind_stopped",
+  "behind_tyre_age",
+  "believed_laps_of_life_left",
+  "believed_life_used",
+  "believed_wear_s",
+  "car_at_rejoin",
+  "cars_within_pit_loss_behind",
+  "gap_ahead_s",
+  "gap_behind_s",
+  "laps_left",
+  "life_estimate_sd",
+  "neutralisations",
+  "own_compound",
+  "own_tyre_age",
+  "pace_rank",
+  "pit_loss_s",
+  "planned_compound",
+  "position",
+  "race_progress",
+  "share_stopped",
+  "stuck_laps"
+ ],
+ "hindsight": {
+  "mean": 0.0358,
+  "lo": 0.0269,
+  "hi": 0.0452
+ },
+ "fixed_offset": 0,
+ "models": {
+  "plan (d=0)": {
+   "gain": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "moved_share": 0.0,
+   "share_of_hindsight": 0.0
+  },
+  "fixed offset": {
+   "gain": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "moved_share": 0.0,
+   "share_of_hindsight": 0.0
+  },
+  "ridge": {
+   "gain": 0.0045,
+   "ci95": [
+    -0.0008,
+    0.0105
+   ],
+   "moved_share": 0.702,
+   "share_of_hindsight": 0.125
+  },
+  "boosted trees": {
+   "gain": 0.0009,
+   "ci95": [
+    -0.0047,
+    0.0068
+   ],
+   "moved_share": 0.872,
+   "share_of_hindsight": 0.024
+  }
+ },
+ "boosted_trees_in_sample_gain": 0.0199,
+ "followup_train_only": {
+  "learning_curve": {
+   "0.25": 0.0029,
+   "0.5": 0.0033,
+   "1.0": 0.0045
+  },
+  "threshold_cv": {
+   "0.0": -0.002,
+   "0.002": -0.0018,
+   "0.005": -0.0012,
+   "0.01": -0.0001,
+   "0.02": -0.0001
+  },
+  "chosen_threshold": 0.01,
+  "test_with_threshold": {
+   "gain": -0.0004,
+   "ci95": [
+    -0.0028,
+    0.0024
+   ],
+   "moved_share": 0.184
+  },
+  "top_features": [
+   [
+    "race_progress",
+    0.0054
+   ],
+   [
+    "own_tyre_age",
+    0.0046
+   ],
+   [
+    "position",
+    0.0043
+   ],
+   [
+    "car_at_rejoin",
+    0.0033
+   ],
+   [
+    "laps_left",
+    0.0031
+   ],
+   [
+    "cars_within_pit_loss_behind",
+    0.0031
+   ],
+   [
+    "behind_compound",
+    0.0028
+   ],
+   [
+    "behind_stopped",
+    0.0027
+   ]
+  ]
+ }
+}

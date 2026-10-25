@@ -8,7 +8,8 @@ shows in the championship**.
 Status: **agreed 2026-10-25** (D-060). **A1 done (D-061): headroom gate EXP-030 +0.007 to
 +0.010 score per car-race overall, +0.010 to +0.013 in 2018-2025: at the 0.01 bar.** **A1b done (D-062, EXP-031): a realistic field (per-team practice + private data,
 real undercut rate) closes the information prize (n.s.); pit timing is worth ~0.03 in
-hindsight, learnable share unknown.** Replaces the remaining slices of
+hindsight, learnable share unknown.** **A2 pre-gate FAILED (D-063, EXP-032): the timing value is not predictable;
+proposal: train the AI as the whole strategist from scratch, the rule teams as the expert.** Replaces the remaining slices of
 `PLAN_HIDDEN_INFO_ERAS.md`: H4 becomes A1, H5 becomes A2-A3, H6 becomes A5.
 
 ---
