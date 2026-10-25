@@ -2,6 +2,15 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## H3b (track evolution, D-059)
+
+- **Track evolution is not in the engine** beyond the average trend in its fuel term (2010+);
+  each real race has its own trend (sd ~0.01 s/lap since 2010), planned for H4 as a hidden term.
+- **The 2010+ fuel slope is 2024's for every season** (-0.67 s a race in 2010-2017; absolute
+  times only).
+- **Evolution vs fuel rests on editorial numbers**: 0.03 s/kg and the race fuel per season
+  (160 kg 2010-2013 is a rule of thumb).
+
 ## H3 (hidden race-day truth, engine v0.19.0, D-058)
 
 - **Only the tyres are hidden**: life per compound and wear. Car pace, track evolution and the

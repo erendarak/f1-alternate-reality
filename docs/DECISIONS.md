@@ -1401,3 +1401,22 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
 - **Not hidden yet:** car pace, track evolution; season-level calibration (kappa, wear shape,
   compound ratios) is treated as known. `rl_obs_v1-v3` still read the true tyre life (H4's
   `rl_obs_v4` removes it).
+
+## D-059 — H3b: track evolution measured; hidden in H4, not added to the engine now
+
+- **Method** (`calibration/track_evolution.py`, EXP-028): per dry race, a same-lap regression
+  (lap term + driver + compound wear + fresh peak [+ fuel on board before 2010]); the slope of the
+  lap terms is the common trend. Before 2010 the fuel on board differs between cars on the same lap,
+  so the trend is evolution (the engine's season-fitted fuel effect taken off; the free estimate is
+  weakly identified with inferred stints). After 2009 the trend is fuel + evolution, split with the
+  fuel physics (0.03 s/kg x race fuel / laps; race fuel per season editorial: 160 kg 2010-2013,
+  100/105/110 kg FIA limits).
+- **Findings:** evolution averages about 0 beyond fuel in every era (the 2010+ average is not
+  separable from the fuel assumption), varies race to race (true sd 0.010-0.020 s/lap), and is not
+  predictable from a track's earlier years. Its spread is ~0.45x the tyre-wear slope (2010+).
+- **Decision:** no engine change in H3b (a trend common to every car changes no order or strategy
+  in our additive lap model). In H4, with the in-race estimator: a hidden per-race common trend
+  (drawn with EXP-028's sd), so a team reading its own laps can mistake track evolution for less
+  wear (same-lap comparisons with rivals cancel it); and a per-season fuel slope for 2010+ (the
+  engine uses 2024's 0.0485 s/lap everywhere: -0.67 s a race too slow in 2010-2017, absolute time
+  only).

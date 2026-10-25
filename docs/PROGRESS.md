@@ -1454,3 +1454,24 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
   truth. Gate: borderline overall, clear for 2018-2025.
 - Tests: 493 offline (+6 `tests/unit/test_race_day.py`); ruff, mypy clean; registry ok.
 - Next (owner's call): H4 (in-race estimator, `rl_obs_v4`), recommended on 2018-2025 first.
+
+### 2026-10-25 — H3b: track evolution measured (D-059, EXP-028; no engine change)
+
+- Owner's call: measure track evolution before H4. `calibration/track_evolution.py` (same-lap
+  regression per race; the slope of the common lap terms; before 2010 fuel on board separated,
+  after 2009 fuel physics 0.03 s/kg x race fuel / laps taken off, `RACE_FUEL_KG` editorial;
+  driver bootstrap SE), `scripts/experiments/exp028_track_evolution.py` (433 dry races, 1 min).
+- EXP-028: beyond fuel, evolution averages ~0 (2000-2009 -0.000, 2010-2017 +0.004, 2018-2025
+  +0.000 s/lap with 0.03 s/kg; the 2010+ mean moves +-0.01 per +-0.005 s/kg, so the average
+  can't be told from fuel). It **varies race to race** (true sd 0.010-0.020 s/lap, ~0.5-1 s over
+  a race), about 0.45x the wear signal an estimator reads (2010+), and a track's history does
+  **not** predict it (RMSE 0.0104 vs 0.0114 / 0.0135 vs 0.0141 / worse pre-2010).
+- The engine's common trend (2024's fuel slope 0.0485 for every season since 2010) misses -0.013
+  s/lap in 2010-2017 (-0.67 s a race; 2012-2013 -0.027 with heavier fuel) and -0.006 in 2018-2025;
+  common to every car, so race order and strategy are unaffected.
+- Recommendation: no engine change now; in H4 a hidden per-race common trend (sd from EXP-028)
+  so an own-laps estimator faces the real confusion, and a per-season fuel slope (2010+) with
+  the same engine bump.
+- Tests: 495 offline (+2 `tests/unit/test_track_evolution.py`: synthetic races recover a known
+  trend, fuel effect and wear); ruff, mypy clean.
+- Next (owner's call): H4.

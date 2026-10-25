@@ -1557,6 +1557,48 @@ Caveats:              truth = per-race fits (their own noise, especially wear); 
                       evolution are not hidden.
 ```
 
+## EXP-028 — Track evolution in real races 2000-2025 (2026-10-25)
+
+```text
+Experiment ID:        EXP-028 (H3b, D-059)
+Research question:    How much do real lap times change through a race beyond fuel and tyres,
+                      does it vary between races, can history predict it, and what does our
+                      engine miss?
+Setup:                exp028_track_evolution.py --bootstrap 30: 433 dry races; same-lap
+                      regression per race, slope of the common lap terms; SE from 30 driver
+                      bootstraps; races with SE > 0.03 (SC-heavy, few green laps: 1 pre-2010,
+                      9 in 2018-2025) kept per race, left out of the era statistics.
+Output:               docs/experiments/exp028.json
+```
+
+| s per lap | 2000-2009 (157) | 2010-2017 (141) | 2018-2025 (125) |
+|---|---|---|---|
+| common trend: mean / true sd | -0.003 / 0.021 | -0.062 / 0.022 | -0.055 / 0.016 |
+| evolution beyond fuel: mean / true sd | -0.000 / 0.020 | +0.004 / 0.013 | +0.000 / 0.010 |
+| evolution mean if fuel = 0.025 / 0.035 s/kg | (fuel on board) | -0.007 / +0.015 | -0.009 / +0.010 |
+| missing from the engine: mean (per race) | -0.000 (0.0 s) | **-0.014 (-0.67 s)** | -0.006 (-0.27 s) |
+| tyre-wear slope at mean age (mean) | 0.012 | 0.030 | 0.023 |
+| evolution true sd / wear | 1.7 | 0.44 | 0.45 |
+| predict a race: RMSE track's earlier mean vs all earlier races | 0.023 vs 0.021 | 0.0135 vs 0.0141 | 0.0104 vs 0.0114 |
+
+```text
+Findings:             Beyond fuel, evolution averages ~0, but each race has its own trend
+                      (sd 0.010-0.013 s/lap since 2010, ~0.5-0.8 s over a race) that a track's
+                      history barely predicts: race-day noise, not a track property. It is about
+                      half the wear signal, so a team reading only its own lap times would
+                      misjudge its tyres; comparing with rivals on the same lap cancels it.
+Engine:               the common trend uses 2024's fuel slope everywhere since 2010: too slow a
+                      race by 0.67 s in 2010-2017 (1.3-1.6 s in 2012-2013); before 2010 nothing is
+                      missing on average. Common to every car: no order or strategy effect.
+Negative:             the 2010+ average cannot be separated from the fuel assumption (+-0.01
+                      s/lap per +-0.005 s/kg); before 2010 the free fuel effect is weakly
+                      identified (inferred stints), so the pre-2010 spread (0.020) is an upper
+                      bound; the per-race SE is a driver bootstrap (lap-level shocks such as wind
+                      count as evolution).
+Decision:             D-059: no engine change now; hidden per-race trend + per-season fuel slope
+                      in H4.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text
