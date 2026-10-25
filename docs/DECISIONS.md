@@ -1420,3 +1420,37 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   wear (same-lap comparisons with rivals cancel it); and a per-season fuel slope for 2010+ (the
   engine uses 2024's 0.0485 s/lap everywhere: -0.67 s a race too slow in 2010-2017, absolute time
   only).
+
+## D-060 — AI first: the plan becomes A1-A5 (2026-10-25)
+
+- **Owner's direction:** the AI is the point of the project; it should show why being well
+  trained matters (trained AIs for 10 teams / 20 drivers through a season). `docs/PLAN_AI_FIRST.md`.
+- **Why now:** EXP-027 shows information is worth +0.043 score per car-race in 2018-2025 (~45
+  constructor points per team per season): the first time decisions in our world are worth
+  learning (M5's per-decision value was ~0.001 because the rules read the truth).
+- **Plan:** A1 environment under uncertainty (was H4; headroom gate EXP-030), A2 a learner that
+  beats estimator rule teams held out (was H5), A3 training budget vs season points, A4 a 10-team
+  AI league season, A5 adaptation / self-play / retraining between seasons (was H6). H0-H3b stay
+  as done; H4-H6 are not built separately.
+- **Rule for every slice:** it ends with an AI number (training run, curve, held-out comparison or
+  gate); world work only when an AI experiment needs it.
+
+## D-061 — A1: teams learn during the race; the information left for an AI is ~0.01 (engine v0.20.0, world schema 21)
+
+- **Hidden track trend** per race (`LapModelParams.track_trend_s_per_lap`, sd per era from
+  EXP-028: 0.020 / 0.013 / 0.010 s/lap), drawn with the truth seed (`with_hidden_truth(track_trend=)`).
+- **Timing screen** (`TimingObservation`, `WorldState.timing`): every clean lap (green through the
+  whole lap, dry by the slick penalty < 0.05 s, no traffic loss, no pit, no incident, not lap 1)
+  as its residual vs the race-day prior. Pure: saves and forks keep it.
+- **The field's estimate** (`policy/race_estimator.py`, editorial design on measured prior
+  spreads): Bayesian wear + trend with a free constant per car (hidden race form), robust refit;
+  grid posterior on log life per compound with a shared factor; recomputed once per race lap,
+  **published only on material change** (> 3 % in a factor, or 0.005 s/lap trend) so teams act
+  on news and re-plans stay affordable. Shared by every team (public timing), not private.
+- **Rule teams re-plan on it** (`team_view` uses `belief_lap_model`, wear scale x the estimate's
+  wear factor). `TyreKnowledge.learning` switches it (False = H3's prior-only teams).
+- **Gate EXP-030:** oracle vs learning field +0.007 [0.003, 0.011] (historical), +0.010 [0.007,
+  0.014] (drawn); 2018-2025 +0.010 / +0.013. In-race learning recovers ~2/3 of EXP-027's value.
+  At the bar, not above it: the *information* prize left for an AI is ~0.25 points per car-race.
+- **Engine v0.20.0, world schema 21:** without learning and with trend 0, races are identical to
+  v0.19 (tested); worlds keep both off by default.

@@ -11,8 +11,9 @@ Status: **agreed 2026-10-16** (owner: H0 for all of 2000-2025, then 2010-2025 fi
 done (D-052..D-057); **H3 done (D-058): gate EXP-027 (numbered after the plan; the table's
 EXP-024..027 became EXP-027 onward) +0.019-0.021 score per car-race overall, +0.04 in 2018-2025,
 below 0.02 before 2018.** H3b (D-059, EXP-028): track evolution averages ~0 beyond fuel but
-varies race to race (sd ~0.01 s/lap, not predictable from history): hidden in H4. Next: the
-owner's call (recommended: H4, 2018-2025 first).
+varies race to race (sd ~0.01 s/lap, not predictable from history): hidden in H4.
+**2026-10-25 (D-060): the remaining slices moved to `docs/PLAN_AI_FIRST.md`** (H4 -> A1,
+H5 -> A2/A3, H6 -> A5).
 
 ---
 

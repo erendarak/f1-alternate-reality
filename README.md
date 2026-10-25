@@ -6,18 +6,19 @@ character decide what happens next, compete, make mistakes and, over seasons, wr
 alternative history. You can pause, save, reload and branch the timeline at any moment, and take
 any decision yourself.
 
-> **Status:** M0–M4 done:
-> - a deterministic race engine (pit stops, traffic, incidents, safety car, weather);
-> - calibrated on the 2024 season: tyre/fuel model, wet tyres, overtaking per track, the start,
->   race-control rates;
-> - all 24 races of 2024 playable in a 2D browser app with save/load/fork.
+> **Status (2026-10-25): an AI-training project from here on** ([docs/PLAN_AI_FIRST.md](docs/PLAN_AI_FIRST.md)).
+> The world is built:
+> - a deterministic race engine (pit stops, traffic, incidents, safety car, weather, refuelling);
+> - every race 2000-2025 on its own season's fits and sporting rules; 2018-2025 playable in a 2D
+>   browser app with save/load/fork;
+> - a **hidden race-day truth** per race (tyre life and wear): teams only know a prior from history.
 >
-> **No AI has been trained yet**: today's cars follow a rule-based strategy, and the fitted models
-> are statistical calibrations (see [docs/MODEL_REGISTRY.md](docs/MODEL_REGISTRY.md)).
-> **Next, M5:** the first trained AI, one shared reinforcement-learning policy that runs all 20
-> cars, conditioned on each driver's character and the team principal's objective
-> ([docs/M5_DESIGN.md](docs/M5_DESIGN.md)). Progress: [docs/PROGRESS.md](docs/PROGRESS.md).
-> The full product and technical plan is [F1_ALTERNATE_REALITY_MASTER_PLAN.md](F1_ALTERNATE_REALITY_MASTER_PLAN.md).
+> Knowing that truth is worth about **+1 point per car per race** in 2018-2025 (EXP-027): the prize
+> a trained AI competes for. **No AI beats the rule teams yet**: earlier attempts (M5) failed
+> because the rules knew the truth. Next: A1 (the environment under uncertainty), then a learner,
+> a training-budget curve and a 10-team AI league season. Progress: [docs/PROGRESS.md](docs/PROGRESS.md);
+> fitted models: [docs/MODEL_REGISTRY.md](docs/MODEL_REGISTRY.md); full product plan:
+> [F1_ALTERNATE_REALITY_MASTER_PLAN.md](F1_ALTERNATE_REALITY_MASTER_PLAN.md).
 
 Alternate outcomes are **simulation estimates** built on modelling assumptions. They are not historical facts.
 Driver persona values are **editorial assumptions**, not real psychometrics.

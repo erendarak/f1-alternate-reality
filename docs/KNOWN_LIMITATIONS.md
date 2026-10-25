@@ -2,6 +2,19 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## A1 (environment under uncertainty, engine v0.20.0, D-061)
+
+- **One shared estimate for every team** (public timing only): no private own-car data (tyre
+  temperatures, exact fuel), no practice long runs, so every team knows the same.
+- **The estimator is editorial** (model, grid, 3 % publication rule); its prior spreads are
+  measured. It learns little before a quarter of the race; wear stays weakly identified in
+  low-wear races; the life posterior can be over-confident (41-point grid).
+- **The track trend is drawn**, also in "historical" mode (the measured per-race trend is noisy).
+- **Rule teams still ignore rivals** (no covering an undercut); the undercut-frequency check
+  against 2024 (4.6 a race) was not rerun.
+- **Learning slows races** in the refuelling era (re-planning the refuelling DP): ~4-5 s a race.
+- **`rl_obs_v1-v3` still read the truth**: `rl_obs_v4` comes with A2.
+
 ## H3b (track evolution, D-059)
 
 - **Track evolution is not in the engine** beyond the average trend in its fuel term (2010+);

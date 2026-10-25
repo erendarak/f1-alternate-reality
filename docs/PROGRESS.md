@@ -1475,3 +1475,31 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Tests: 495 offline (+2 `tests/unit/test_track_evolution.py`: synthetic races recover a known
   trend, fuel effect and wear); ruff, mypy clean.
 - Next (owner's call): H4.
+
+### 2026-10-25 — AI first: plan A1-A5 (D-060)
+
+- Owner: the AI is the point of the project. `docs/PLAN_AI_FIRST.md`: A1 environment under
+  uncertainty (was H4, headroom gate EXP-030), A2 a learner that beats estimator rule teams held
+  out, A3 training budget vs season points, A4 a 10-team AI league season, A5 adaptation and
+  retraining between seasons. README status rewritten around it.
+- Hidden-info plan: H0-H3b done; H4-H6 folded into A1-A5.
+
+### 2026-10-25 — A1: the environment under uncertainty (engine v0.20.0, world schema 21, D-061)
+
+- Hidden per-race track trend (EXP-028 spreads); the timing screen (clean laps as residuals vs the
+  prior, in the world state); the field's in-race estimate (`policy/race_estimator.py`: Bayesian
+  wear + trend with per-car form, grid posterior on life per compound with a shared factor,
+  published on material change); rule teams re-plan on it; `with_hidden_truth(learning=,
+  track_trend=)`; harness flags `--learning --track-trend`.
+- Bugs found on the way: the track is never exactly dry (wetness 5e-5); laps that started under
+  SC and ended green (+47 s) passed as clean and wrecked the fit (now: phase unchanged, robust
+  refit); re-planning every lap made refuelling-era races 2.5x slower (now only on news).
+- EXP-029: life error 0.19 / 0.14 / 0.12 / 0.10 at 25 / 50 / 75 / 100 % (prior 0.20); wear
+  0.52 -> 0.30 (prior 0.54); trend 0.011 -> 0.002.
+- **EXP-030 gate: oracle vs learning field +0.0068 [0.0033, 0.0105] historical, +0.0102 [0.0072,
+  0.0136] drawn; 2018-2025 +0.010 / +0.013** (EXP-027 with a prior-only field: +0.019 / +0.021).
+  In-race learning recovers ~2/3; the information left is ~0.25 points per car-race: at the
+  0.01 bar, not clearly above.
+- Tests: 499 offline (+4 `tests/unit/test_race_estimator.py`); ruff, mypy clean.
+- Next (owner's call): A2 on 2018-2025, or first widen the prize (decisions where the rules are
+  weak: rivals, undercuts; practice / private data).

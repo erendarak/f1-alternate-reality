@@ -166,5 +166,6 @@ def sample_lap_time_s(
     )
     z = normal(seed, "lap_noise", driver_id, lap_number)
     sd = noise_sd_s(params, driver) if noise_sd is None else noise_sd  # W2: fitted per driver
-    noisy = mean + extra_s + sd * noise_scale * z
+    trend = params.track_trend_s_per_lap * lap_number  # A1: this race's hidden track trend
+    noisy = mean + trend + extra_s + sd * noise_scale * z
     return max(noisy, params.min_lap_fraction * params.base_lap_s)

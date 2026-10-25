@@ -30,6 +30,7 @@ import argparse
 import functools
 import hashlib
 import json
+import math
 import random
 import statistics
 import time
@@ -61,14 +62,47 @@ def _base(event: str) -> Any:
     )
 
 
-def _run(setup: Any, seed: int) -> Any:
+def _run(setup: Any, seed: int, snapshots: list[dict[str, Any]] | None = None) -> Any:
+    """Run a race; ``snapshots`` (A1, learning fields) collects the field's estimate when the
+    leader reaches 25 / 50 / 75 % of the race and at the end."""
     from f1ar.domain.race_state import WorldStatus
     from f1ar.simulation import lightweight_engine as engine
 
     s = engine.start(engine.create_world(setup, seed=seed, world_id="exp027"))
+    marks = [round(setup.track.total_laps * f) for f in (0.25, 0.5, 0.75)]
     while s.world_status is WorldStatus.RUNNING:
         s = engine.step(s).state
+        k = s.setup.knowledge
+        lead = max(c.laps_completed for c in s.cars)
+        if snapshots is not None and marks and k and k.estimate and lead >= marks[0]:
+            snapshots.append(_snapshot(setup, k.estimate, marks.pop(0)))
+    if snapshots is not None and s.setup.knowledge is not None and s.setup.knowledge.estimate:
+        snapshots.append(_snapshot(setup, s.setup.knowledge.estimate, setup.track.total_laps))
     return s
+
+
+def _snapshot(setup: Any, est: Any, lap: int) -> dict[str, Any]:
+    """The estimate vs the truth (log errors), next to the prior's error (A1, EXP-029)."""
+    from f1ar.domain.race_state import DRY_COMPOUNDS
+
+    k = setup.knowledge
+    out: dict[str, Any] = {"lap_share": round(lap / setup.track.total_laps, 2)}
+    for c in DRY_COMPOUNDS:
+        true = setup.lap_model.compounds[c].life_laps / k.lap_model.compounds[c].life_laps
+        out[f"life_{c.value}"] = {
+            "estimate_err": abs(math.log(est.life_factor[c] / true)),
+            "prior_err": abs(math.log(true)),
+        }
+    true_wear = 1.0 / k.wear_scale
+    out["wear"] = {
+        "estimate_err": abs(math.log(est.wear_factor / true_wear)),
+        "prior_err": abs(math.log(true_wear)),
+    }
+    out["trend"] = {
+        "estimate_err": abs(est.trend_s_per_lap - setup.lap_model.track_trend_s_per_lap),
+        "prior_err": abs(setup.lap_model.track_trend_s_per_lap),
+    }
+    return out
 
 
 def _scores(state: Any) -> dict[str, dict[str, float]]:
@@ -107,13 +141,21 @@ def _stops_per_finisher(state: Any) -> float:
     return statistics.fmean(stops) if stops else float("nan")
 
 
-def job(args: tuple[str, str, int]) -> dict[str, Any]:
+def job(args: tuple[str, str, int, bool, bool]) -> dict[str, Any]:
     from f1ar.simulation.race_day import TruthMode, with_hidden_truth, with_oracle
 
-    event, mode, seed = args
-    hidden = with_hidden_truth(_base(event), CONFIGS, mode=TruthMode(mode), truth_seed=seed)
+    event, mode, seed, learning, trend = args
+    hidden = with_hidden_truth(
+        _base(event),
+        CONFIGS,
+        mode=TruthMode(mode),
+        truth_seed=seed,
+        learning=learning,
+        track_trend=trend,
+    )
     drivers = tuple(d.driver_id for d in hidden.drivers)
-    prior_state = _run(hidden, seed)
+    snapshots: list[dict[str, Any]] = []
+    prior_state = _run(hidden, seed, snapshots if learning else None)
     truth_state = _run(with_oracle(hidden, drivers), seed)
     prior = _scores(prior_state)
     cars = []
@@ -135,6 +177,7 @@ def job(args: tuple[str, str, int]) -> dict[str, Any]:
         "note": hidden.inputs["race_day_truth"],
         "stops_prior_world": _stops_per_finisher(prior_state),
         "stops_truth_world": _stops_per_finisher(truth_state),
+        "estimator": snapshots,
         "cars": cars,
     }
 
@@ -247,6 +290,22 @@ def per_race_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
     return out
 
 
+def estimator_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """Mean absolute log error of the field's estimate vs the prior's, by share of the race."""
+    out: dict[str, Any] = {}
+    snaps = [s for r in rows for s in r["estimator"]]
+    for share in sorted({s["lap_share"] for s in snaps}):
+        at = [s for s in snaps if s["lap_share"] == share]
+        out[str(share)] = {
+            q: {
+                k: round(statistics.fmean(s[q][k] for s in at), 4)
+                for k in ("estimate_err", "prior_err")
+            }
+            for q in ("life_SOFT", "life_MEDIUM", "life_HARD", "wear", "trend")
+        }
+    return out
+
+
 def real_stops(event: str) -> float:
     m = real_metrics(ROOT / "data" / "processed" / event)
     stops = [m.stops.get(d, 0) for d in m.finishers]
@@ -260,6 +319,10 @@ def main() -> None:
     parser.add_argument("--modes", nargs="+", default=list(MODES), choices=MODES)
     parser.add_argument("--limit", type=int, help="first N races only (smoke test)")
     parser.add_argument("--json", type=Path)
+    parser.add_argument(
+        "--learning", action="store_true", help="A1: the field learns in-race (EXP-029/030)"
+    )
+    parser.add_argument("--track-trend", action="store_true", help="A1: hidden track trend")
     args = parser.parse_args()
     from f1ar.simulation.race_day import load_prior
 
@@ -270,12 +333,13 @@ def main() -> None:
     if args.limit:
         events = events[: args.limit]
     jobs = [
-        (e, m, event_seed(e, k))
+        (e, m, event_seed(e, k), args.learning, args.track_trend)
         for m in args.modes
         for e in events
         for k in range(1, args.seeds + 1)
     ]
-    print(f"EXP-027: {len(events)} held-out races x {args.seeds} seeds x {args.modes}")
+    label = "EXP-029/030 (learning field)" if args.learning else "EXP-027"
+    print(f"{label}: {len(events)} held-out races x {args.seeds} seeds x {args.modes}")
     print(f"{len(jobs)} jobs")
     t0 = time.perf_counter()
     rows = []
@@ -287,10 +351,18 @@ def main() -> None:
                 el = time.perf_counter() - t0
                 eta = el / i * (len(jobs) - i) / 60
                 print(f"  {i}/{len(jobs)} jobs, {el / 60:.1f} min, ETA {eta:.1f} min")
-    out: dict[str, Any] = {"seeds": args.seeds, "events": events, "modes": {}}
+    out: dict[str, Any] = {
+        "seeds": args.seeds,
+        "learning": args.learning,
+        "track_trend": args.track_trend,
+        "events": events,
+        "modes": {},
+    }
     for m in args.modes:
         mine = [r for r in rows if r["mode"] == m]
         out["modes"][m] = summarise(mine, prior_cfg)
+        if args.learning:
+            out["modes"][m]["estimator"] = estimator_summary(mine)
     if "historical" in args.modes:
         real = {e: real_stops(e) for e in events}
         out["real_stops_per_finisher"] = round(statistics.fmean(real.values()), 3)
@@ -316,7 +388,10 @@ def main() -> None:
     for k in ("real_stops_per_finisher", "stops_mae_prior_world", "stops_mae_truth_world"):
         if k in out:
             print(k, out[k])
-    print(f"EXP-027 done in {(time.perf_counter() - t0) / 60:.1f} min")
+    for m in args.modes:
+        if "estimator" in out["modes"][m]:
+            print(m, "estimator", json.dumps(out["modes"][m]["estimator"], indent=1))
+    print(f"{label} done in {(time.perf_counter() - t0) / 60:.1f} min")
     if args.json:
         args.json.write_text(json.dumps(out, indent=1) + "\n", encoding="utf-8", newline="\n")
 

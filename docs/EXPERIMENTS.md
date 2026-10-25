@@ -1599,6 +1599,76 @@ Decision:             D-059: no engine change now; hidden per-race trend + per-s
                       in H4.
 ```
 
+## EXP-029 — The field's in-race estimate vs the truth (2026-10-25)
+
+```text
+Experiment ID:        EXP-029 (A1, D-061)
+Research question:    How fast does the shared timing-screen estimate learn this race's tyres?
+Setup:                same run as EXP-030 (103 held-out races 2000-2025, 3 seeds, historical and
+                      drawn truths, hidden track trend); the estimate snapshotted when the leader
+                      reaches 25 / 50 / 75 % of the race and at the end; mean absolute log error
+                      vs the truth, next to the prior's error.
+Output:               docs/experiments/exp030.json ("estimator" per mode)
+```
+
+| historical (drawn similar) | 25 % | 50 % | 75 % | end |
+|---|---|---|---|---|
+| life, log error (prior 0.20-0.21) | 0.19 | 0.14 | 0.12 | 0.10 |
+| wear, log error (prior 0.54-0.56) | 0.52 | 0.42 | 0.31 | 0.30 |
+| trend, s/lap (prior 0.012) | 0.011 | 0.007 | 0.003 | 0.002 |
+
+```text
+Findings:             Nothing is learned in the first quarter (the first stints are still young:
+                      no cliff seen, wear and trend not yet separable); by half distance the life
+                      error is down a third, by the end by half. The first stop is usually
+                      decided before half distance: that is when teams are still guessing.
+Caveat:               "end" error is with the whole race seen; wear stays weakly identified in
+                      low-wear races.
+```
+
+## EXP-030 — Headroom gate: oracle vs a field that learns in the race (2026-10-25)
+
+```text
+Experiment ID:        EXP-030 (A1 gate, D-061)
+Research question:    With rule teams that learn during the race, how much is knowing the truth
+                      still worth? (the room left for an AI)
+Setup:                exp027_value_of_information.py --seeds 3 --learning --track-trend: as
+                      EXP-027, but the field learns from the timing screen and races have a hidden
+                      track trend; each car alone as an oracle on identical luck; 6,483 paired
+                      car-races per truth mode; 79 min.
+Output:               docs/experiments/exp030.json
+```
+
+| Oracle gain (score) | historical truth | drawn truth | EXP-027 (field on the prior) |
+|---|---|---|---|
+| all 103 races | **+0.0068 [0.0033, 0.0105]** | **+0.0102 [0.0072, 0.0136]** | +0.019 / +0.021 |
+| 2000-2009 | +0.002 | +0.008 | +0.004 / +0.010 |
+| 2010-2017 | +0.008 | +0.010 | +0.011 / +0.013 |
+| 2018-2025 | **+0.010 [0.002, 0.019]** | **+0.013 [0.007, 0.019]** | +0.043 / +0.041 |
+| points / position per car-race | +0.17 / -0.17 | +0.25 / -0.28 | +0.47 / -0.33 |
+| oracle better / worse (of 6,483) | 1,207 / 857 | 1,302 / 776 | 1,382 / 597 |
+
+| Stops per finisher vs real (historical) | MAE |
+|---|---|
+| field on the prior (EXP-027) | 0.51 |
+| field learning in the race | 0.48 |
+| field knowing the truth | 0.38 |
+
+```text
+Findings:             Learning in the race recovers about two thirds of the information's value
+                      (historical; half on drawn truths) and three quarters in 2018-2025. What is
+                      left for perfect knowledge: +0.007 to +0.010 score per car-race overall,
+                      +0.010 to +0.013 in 2018-2025: about +0.25 points per car-race, ~5 points per
+                      car (~11 per team) over a 22-race season. It sits mostly in the races with
+                      the biggest surprises (historical tertiles -0.001 / +0.004 / +0.017).
+Gate verdict:         AT the ~0.01 bar, not clearly above it. The value of better tyre knowledge
+                      left for an AI is small but real (CIs exclude 0), and largest in 2018-2025.
+Negative:             the oracle loses in 13 % of cases (it is the same traffic-blind planner);
+                      stops barely move toward reality (0.51 -> 0.48).
+Not measured here:    value an AI could find where the rule planner is weak (traffic, rivals'
+                      plans, undercut timing): this gate bounds only *information*, not decisions.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

@@ -50,6 +50,7 @@ from f1ar.domain.race_state import (
     SetRacecraftIntent,
     SetStrategyController,
     StrategyController,
+    TimingObservation,
     WeatherMode,
     WeatherState,
     WorldState,
@@ -66,6 +67,7 @@ from f1ar.policy.baseline_strategy import (
     team_view,
     weather_stop,
 )
+from f1ar.policy.race_estimator import belief_model, estimate, material, observe
 from f1ar.simulation.incidents import (
     IncidentKind,
     Neutralisation,
@@ -90,8 +92,11 @@ from f1ar.simulation.weather import (
 )
 from f1ar.simulation.weather import penalty_s as weather_penalty_s
 
-ENGINE_VERSION = "lightweight_engine_v0.19.0"
-"""v0.19.0: hidden race-day truth (H3, D-058): with ``setup.knowledge`` the baseline plans with
+ENGINE_VERSION = "lightweight_engine_v0.20.0"
+"""v0.20.0: A1 (D-061): a hidden per-race track trend; with ``knowledge.learning`` the field's
+in-race tyre estimate (timing screen) and rule teams re-planning on it; otherwise identical
+to v0.19 when the trend is 0.
+v0.19.0: hidden race-day truth (H3, D-058): with ``setup.knowledge`` the baseline plans with
 the race-day prior's tyres while the race runs on the truth; without it, identical to v0.18.
 v0.15.0: racecraft intent ATTACK / NORMAL / DEFEND per lap (risk for track position, D-048).
 v0.14.0: fresh wet-weather tyres under SC/VSC and the wet incident factor, fitted on the 2024
@@ -607,6 +612,8 @@ def step(state: WorldState, *, allow_paused: bool = False) -> StepResult:
         )
         emit("CHEQUERED_FLAG", winner.driver_id, {"flag_time_s": moved.new_flag_s})
 
+    timing, setup = _update_timing(state, cars)
+
     status: WorldStatus = state.world_status
     if all(c.status is not CarStatus.RUNNING for c in cars):
         status = WorldStatus.COMPLETED
@@ -624,9 +631,38 @@ def step(state: WorldState, *, allow_paused: bool = False) -> StepResult:
             "world_status": status,
             "event_seq": state.event_seq + len(events),
             "weather": weather,
+            "timing": timing,
+            "setup": setup,
         }
     )
     return StepResult(new_state, tuple(events))
+
+
+def _update_timing(
+    state: WorldState, cars: list[CarState] | tuple[CarState, ...]
+) -> tuple[tuple[TimingObservation, ...], RaceSetup]:
+    """A1 (D-061): this tick's clean laps join the timing screen; when the race lap advances
+    (the leader starts a new lap), the field's estimate is recomputed (pure: the setup carries
+    it, so a save or fork keeps it)."""
+    setup = state.setup
+    k = setup.knowledge
+    if k is None or not k.learning:
+        return state.timing, setup
+    new = [
+        c.observation
+        for c, old in zip(cars, state.cars, strict=True)
+        if c.laps_completed > old.laps_completed and c.observation is not None
+    ]
+    timing = (*state.timing, *new) if new else state.timing
+    lead_before = max(c.laps_completed for c in state.cars)
+    if max(c.laps_completed for c in cars) > lead_before and timing:
+        est = estimate(setup, timing)
+        if material(k.estimate, est):  # the teams only act on news
+            knowledge = k.model_copy(
+                update={"estimate": est, "belief_lap_model": belief_model(k, est)}
+            )
+            setup = setup.model_copy(update={"knowledge": knowledge})
+    return timing, setup
 
 
 def _advance_weather(state: WorldState, tick_end: float, emit: _Emit) -> WeatherState:
@@ -1353,6 +1389,15 @@ def _complete_lap(
         car.driver_id,
         {"lap": laps, "lap_time_s": lap_time, "crossing_time_s": crossing_time},
     )
+    # A1: the lap as the timing screen shows it (the car is still at the lap's start here)
+    observation = observe(
+        setup,
+        car,
+        lap_time,
+        neutralised=neutralised,
+        wetness=state.weather.wetness,
+        phase_since_s=state.race_control.since_s,
+    )
     if car.fuel_laps is not None:  # H1b: one lap of fuel burnt; an empty tank must stop
         fuel_left = car.fuel_laps - 1.0
         if stop is None and fuel_left < 1.0 and laps < setup.track.total_laps:
@@ -1375,6 +1420,7 @@ def _complete_lap(
         "incident_kind": None,
         "incident_at_fraction": None,
         "pending_overtakes": (),
+        "observation": observation,
     }
 
     rc_params = setup.race_control
@@ -1417,6 +1463,24 @@ def _complete_lap(
     if stop is not None:
         car, hold = _pit(state, car, stop, emit, neutralised=neutralised)
 
+    k = setup.knowledge
+    if (
+        car.controller is StrategyController.BASELINE
+        and k is not None
+        and k.learning
+        and k.estimate is not None
+        and car.plan_estimate != k.estimate.observations
+    ):  # A1: the estimate moved since this car's plan: re-plan on it
+        plan = plan_for_car(setup, car)
+        if plan != car.planned_stops:
+            emit(
+                "STRATEGY_PLANNED",
+                car.driver_id,
+                {"plan": plan_text(plan), "policy_id": POLICY_ID, "actor_id": POLICY_ID},
+            )
+        car = car.model_copy(
+            update={"planned_stops": plan, "plan_estimate": k.estimate.observations}
+        )
     if car.controller is StrategyController.BASELINE and not car.pace_by_user:
         mode = baseline_pace_mode(setup, car)  # W1: manage or push to make the plan work
         if mode is not car.pace_mode:

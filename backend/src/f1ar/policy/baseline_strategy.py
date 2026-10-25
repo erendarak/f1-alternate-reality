@@ -198,7 +198,8 @@ def team_setup(setup: RaceSetup, driver_id: str) -> RaceSetup:
     k = setup.knowledge
     if k is None or driver_id in k.oracle_drivers:
         return setup
-    return setup.model_copy(update={"lap_model": k.lap_model})
+    believed = k.belief_lap_model if k.learning and k.belief_lap_model is not None else None
+    return setup.model_copy(update={"lap_model": believed or k.lap_model})
 
 
 def team_view(setup: RaceSetup, car: CarState) -> tuple[RaceSetup, CarState]:
@@ -207,17 +208,18 @@ def team_view(setup: RaceSetup, car: CarState) -> tuple[RaceSetup, CarState]:
     seen = team_setup(setup, car.driver_id)
     if seen is setup or car.compound not in DRY_COMPOUNDS:
         return seen, car
-    assert setup.knowledge is not None
+    k = setup.knowledge
+    assert k is not None
     true_life = setup.lap_model.compounds[car.compound].life_laps
     seen_life = seen.lap_model.compounds[car.compound].life_laps
     life_used = car.tyre_life_used
     if true_life is not None and seen_life is not None:
         life_used *= true_life / seen_life
+    wear_scale = k.wear_scale  # believed / true wear: the prior's, times the in-race factor (A1)
+    if k.learning and k.estimate is not None:
+        wear_scale *= k.estimate.wear_factor
     return seen, car.model_copy(
-        update={
-            "tyre_life_used": life_used,
-            "tyre_wear_s": car.tyre_wear_s * setup.knowledge.wear_scale,
-        }
+        update={"tyre_life_used": life_used, "tyre_wear_s": car.tyre_wear_s * wear_scale}
     )
 
 

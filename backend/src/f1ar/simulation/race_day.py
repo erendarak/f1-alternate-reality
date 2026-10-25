@@ -32,6 +32,10 @@ from f1ar.domain.race_state import (
 )
 from f1ar.simulation.rng_streams import normal
 
+TREND_SD = {"2000-2009": 0.020, "2010-2017": 0.013, "2018-2025": 0.010}
+"""Race-to-race spread of the track trend beyond the fitted average, s per lap (EXP-028, D-059;
+estimated_from_data; 2000-2009 is an upper bound)."""
+
 
 class TruthMode(StrEnum):
     HISTORICAL = "historical"
@@ -86,8 +90,12 @@ def with_hidden_truth(
     mode: TruthMode = TruthMode.HISTORICAL,
     truth_seed: int = 0,
     oracle: tuple[str, ...] = (),
+    learning: bool = False,
+    track_trend: bool = False,
 ) -> RaceSetup:
     """The race with a hidden truth and the teams on the prior (``oracle`` cars know the truth).
+    ``learning`` (A1): the teams also learn in the race from the timing screen. ``track_trend``
+    (A1): a hidden per-race lap-time trend drawn with the era's spread (EXP-028).
     Raises ``KeyError`` for a race without a prior (no tyre-life fit, e.g. wet, or no history)."""
     prior_cfg = load_prior(configs)
     if prior_cfg is None:
@@ -133,7 +141,17 @@ def with_hidden_truth(
         lap_model=knowledge_model.model_copy(update={"note": "race-day prior: " + note}),
         wear_scale=prior_wear / true_wear,
         oracle_drivers=tuple(oracle),
+        learning=learning,
+        life_shared_sd=float(era_surprise["life_shared_sd"]),
+        life_compound_sd=float(era_surprise["life_compound_sd"]),
+        wear_sd=float(era_surprise["wear_sd"]),
+        trend_sd=TREND_SD[entry["era"]],
     )
+    if track_trend:
+        trend = TREND_SD[entry["era"]] * normal(truth_seed, "track_trend", setup.event_id)
+        truth_model = truth_model.model_copy(update={"track_trend_s_per_lap": trend})
+        note += f"; hidden track trend {trend:+.4f} s/lap (EXP-028 era sd)"
+        knowledge = knowledge.model_copy(update={"note": note})
     return setup.model_copy(
         update={
             "lap_model": truth_model,

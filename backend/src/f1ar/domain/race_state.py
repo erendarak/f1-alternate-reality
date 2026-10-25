@@ -17,7 +17,7 @@ from f1ar.domain.season_rules import SEASON_2024, SeasonRules
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 20
+WORLD_SCHEMA_VERSION = 21
 
 
 class _Frozen(BaseModel):
@@ -152,6 +152,9 @@ class LapModelParams(_Frozen):
     """W2: SD of a driver's race form (a pace offset drawn once per driver and race)."""
     neutralised_life_factor: float = Field(default=1.0, gt=0)
     """W1: tyre life used on a lap that ends under SC/VSC, relative to a racing lap."""
+    track_trend_s_per_lap: float = 0.0
+    """A1 (D-061): this race's own lap-time trend beyond the fitted average (track evolution,
+    changing conditions; EXP-028), added per lap number. Hidden: teams' models have 0."""
 
     @model_validator(mode="after")
     def _complete(self) -> Self:
@@ -423,6 +426,35 @@ def start_slot(grid_position: int) -> int:
     return grid_position if grid_position > 0 else PIT_LANE_SLOT
 
 
+class TimingObservation(_Frozen):
+    """A1 (D-061): one clean lap as the timing screen shows it, read through the race-day
+    prior: what every team can see (green, dry, no traffic, no pit, no incident, not lap 1)."""
+
+    driver_id: str
+    lap: int = Field(ge=1)
+    compound: Compound
+    wear_s: float = Field(ge=0)
+    """The set's wear at the lap's start as the prior predicts it (laps and modes are known)."""
+    life_used: float = Field(ge=0)
+    """The set's life used at the lap's start as the prior predicts it."""
+    residual_s: float
+    """Lap time minus the prior's expected lap (race form, wear surprise, cliff, trend, noise)."""
+    noise_sd_s: float = Field(gt=0)
+
+
+class TyreEstimate(_Frozen):
+    """A1 (D-061): the field's shared in-race estimate (Bayesian, from ``TimingObservation``)."""
+
+    observations: int = Field(ge=0)
+    wear_factor: float = Field(gt=0)
+    """True wear / the prior's wear (posterior mean)."""
+    wear_factor_sd: float = Field(ge=0)
+    trend_s_per_lap: float
+    life_factor: dict[Compound, float]
+    """True life / the prior's life per dry compound (posterior mean)."""
+    life_factor_sd: dict[Compound, float]
+
+
 class TyreKnowledge(_Frozen):
     """What the rule teams know about this race's tyres (H3, D-058): the race-day prior, not the
     truth in ``RaceSetup.lap_model`` that the simulation runs on. The baseline planner of a car
@@ -436,6 +468,17 @@ class TyreKnowledge(_Frozen):
     """Believed / true wear on a dry set (the prior's wear multiplier over the truth's)."""
     oracle_drivers: tuple[str, ...] = ()
     """Cars that plan with the truth (EXP-027's reference: never a world's default)."""
+    learning: bool = False
+    """A1: the teams learn during the race (``estimate``); False = H3's prior only."""
+    life_shared_sd: float = Field(default=0.24, ge=0)
+    """Prior spread of log life, shared by the compounds (the era's measured surprise)."""
+    life_compound_sd: float = Field(default=0.17, ge=0)
+    wear_sd: float = Field(default=0.72, ge=0)
+    trend_sd: float = Field(default=0.01, ge=0)
+    estimate: TyreEstimate | None = None
+    """The latest in-race estimate (updated by the engine once per race lap when learning)."""
+    belief_lap_model: LapModelParams | None = None
+    """``lap_model`` with ``estimate``'s life and wear factors: what the teams plan with."""
 
 
 class RaceSetup(_Frozen):
@@ -561,6 +604,11 @@ class CarState(_Frozen):
     retired_reason: str | None
     """``"CRASH"`` or ``"FAILURE"`` once RETIRED."""
     retired_at_s: float | None
+    observation: TimingObservation | None = None
+    """A1: the lap just completed as the timing screen shows it (clean laps only); the step
+    moves it into ``WorldState.timing``."""
+    plan_estimate: int = -1
+    """A1: observations behind the estimate the current plan used (-1: planned on the prior)."""
 
 
 class RaceControl(_Frozen):
@@ -690,7 +738,7 @@ DriverAction = (
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[20]
+    schema_version: Literal[21]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None
@@ -714,6 +762,8 @@ class WorldState(_Frozen):
     event_seq: int = Field(ge=0)
     """Number of events emitted so far; the next event gets this sequence number."""
     weather: WeatherState = Field(default_factory=WeatherState)
+    timing: tuple[TimingObservation, ...] = ()
+    """A1 (D-061): every clean lap seen so far, when the teams learn during the race."""
 
     @model_validator(mode="after")
     def _cars_match_setup(self) -> Self:
