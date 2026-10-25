@@ -1427,3 +1427,13 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Next: close H0 when the history fetch ends (~0.7 h), then H3 (hidden race-day truth) and its
   value-of-information gate.
 
+### 2026-10-25 — H0 closed: history 2000-2025 complete (D-052)
+
+- Jolpica history fetch finished: 503 races 2000-2025 cached and converted, no errors.
+- EXP-021 on the full data: inferred stops vs Jolpica's (309 races 2011-2025) precision 0.88,
+  recall 0.83; neutralised laps vs OpenF1 90 % found.
+- EXP-022 on 2000-2025: the rule catalogue reproduces 10532/10550 official results (only the
+  two half-points races differ); era table (retirements 8.4 -> 2.0 per race, stops 1.4-2.8).
+- Plan status: H0 done, H1 + H1b done, H2a/b/c done. Next: H3 (hidden race-day truth) and its
+  value-of-information gate (EXP: oracle rules vs rule teams with only the prior).
+

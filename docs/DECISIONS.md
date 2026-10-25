@@ -1189,7 +1189,7 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   hidden race-day truth that the AI must infer from the laps, over 2000-2025
   (`docs/PLAN_HIDDEN_INFO_ERAS.md`, H0-H6).
 
-## D-052 — H0: history data 2000-2025 (2026-10-16, in progress)
+## D-052 — H0: history data 2000-2025 (2026-10-16; complete 2026-10-25)
 
 - **Jolpica-F1** for every race 2000-2025 (`data/jolpica_history.py`, `scripts/fetch_history.py`):
   results, qualifying, lap times and positions (1996+), pit stops (2011+); cached page by page in
@@ -1364,4 +1364,8 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   randomised); launch skill, launch spread and race-level shift are still fitted per season.
 - Start fuel from the real first stint only when that stop is at >= 20 % of the race (earlier:
   a drive-through, damage or an inference error; the strategy then chooses).
+
+- **D-052 close-out (2026-10-25):** the Jolpica history is complete (503 races, 2000-2025);
+  EXP-021 coverage and inference on the full data (stops: precision 0.88, recall 0.83 on 309
+  races); EXP-022 on all 26 seasons (10,994/11,012 official results reproduced). H0 done.
 

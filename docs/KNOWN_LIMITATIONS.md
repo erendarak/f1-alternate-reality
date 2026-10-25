@@ -74,8 +74,7 @@ Honest list of what does **not** work or is only approximate. Update whenever on
 
 ## H0 (history data 2000-2025, D-052; in progress)
 
-- **The Jolpica fetch takes ~18 h** (server limit 500 requests/hour); it is resumable and runs
-  across sessions. Until it completes, 2000-2017 is partial.
+- **Jolpica history complete** (503 races 2000-2025); no pit stops before 2011 (inferred).
 - **F1's archive needs the owner's signed-in F1 account** (token expires; re-sign-in with
   `python -m fastf1 auth f1tv --authenticate`). FastF1 has 172 of 173 races 2018-2025.
 - **2018 Italian GP is not in FastF1 form**: FastF1 3.8.3 itself crashes on that race's tyre

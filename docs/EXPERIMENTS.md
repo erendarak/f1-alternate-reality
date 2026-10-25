@@ -1313,7 +1313,12 @@ Code:                 scripts/experiments/exp021_history_data.py -> docs/experim
 Findings:             about 9 of 10 inferred stops are real and 3 of 4 real stops are found;
                       the misses are mostly stops under a safety car. Good enough to estimate
                       stop counts and stint lengths for 2000-2010, labelled estimated_from_data.
-Status:               coverage part to be rerun when the Jolpica fetch completes.
+Coverage (complete, 2026-10-25): all 503 races 2000-2025: every car's lap times and positions
+                      (1,000-1,270 lap rows per race), Jolpica pit stops 2011+ (25-59 per race).
+                      Inferred stops vs Jolpica's on 309 races 2011-2025: precision 0.88, recall
+                      0.83 (0.91-0.96 in 2011-2014, 0.65 in 2017); neutralised laps vs OpenF1:
+                      90 % found.
+Status:               complete.
 ```
 
 ## EXP-022 — The strategy game per season 2010-2025 from real data (2026-10-17, partial)
@@ -1343,7 +1348,13 @@ Findings:             the catalogue reproduces every official result so far (3,0
                       point). Stops fall from 2.7 (2011, Pirelli's high-degradation tyres) to 1.8
                       (2025) and stints grow from 15 to 21 laps: each era plays a different game.
                       Stop counts include drive-through / stop-go penalties (Jolpica lists them).
-Status:               2010 (inferred stops) and 2018-2024 when the Jolpica fetch completes.
+Complete (2026-10-25), 2000-2025 (docs/experiments/exp022.json): the catalogue reproduces
+                      10532/10550 official results; the only mismatches are the two half-points
+                      races (2009 Malaysia, 2021 Belgium: shortened-race rule, stored). Retirements
+                      per race 8.4 (2000) -> 2.0 (2024); stops per finisher 1.8-2.8 in the
+                      refuelling era (2.84 in 2004), 2.2-2.7 with Pirelli 2011-2014, 1.4-2.2 since
+                      2018; median stint 15 (2011) -> 23 laps (2018). Stops before 2011 inferred;
+                      neutralised laps before 2018 inferred (SC and VSC together).
 ```
 
 ## EXP-023 — 2018-2025 races on their own season's fits vs reality (2026-10-20)
