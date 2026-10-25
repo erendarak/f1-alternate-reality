@@ -11,8 +11,12 @@ are green for both. **Gain** = gap before (A behind B, s) minus gap after both s
 """
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 import pandas as pd
+
+if TYPE_CHECKING:
+    from f1ar.domain.race_state import RaceSetup
 
 MAX_GAP_S = 3.0
 MAX_OFFSET = 3
@@ -105,3 +109,39 @@ def summary(attempts: list[Attempt]) -> dict[str, float | int]:
         out[f"gain_median_offset{k}_s"] = round(float(g.median()), 3) if len(g) else float("nan")
         out[f"n_offset{k}"] = len(g)
     return out
+
+
+def simulated_laps(setup: "RaceSetup", seed: int) -> pd.DataFrame:
+    """One simulated race as undercut-detector rows (A1b; the same rows EXP-020 builds)."""
+    from f1ar.domain.race_state import RacePhase, WorldStatus
+    from f1ar.simulation import lightweight_engine as engine
+
+    code = {d.driver_id: d.code for d in setup.drivers}
+    state = engine.start(engine.create_world(setup, seed=seed, world_id="undercut"))
+    rows: dict[tuple[str, int], dict[str, object]] = {}
+    neutral_laps: set[int] = set()
+    while state.world_status is WorldStatus.RUNNING:
+        before = state
+        result = engine.step(state)
+        state = result.state
+        if state.race_control.phase is not RacePhase.GREEN:
+            neutral_laps.add(max(c.laps_completed for c in state.cars) + 1)
+        for e in result.events:
+            if e.driver_id is None:
+                continue
+            c = code[e.driver_id]
+            if e.type == "LAP_COMPLETED":
+                lap = int(e.payload["lap"])
+                rows[(c, lap)] = {
+                    "driver": c,
+                    "lap": lap,
+                    "end_s": float(e.payload["crossing_time_s"]),
+                    "pit_in": False,
+                    "green": before.race_control.phase is RacePhase.GREEN
+                    and state.race_control.phase is RacePhase.GREEN,
+                }
+            elif e.type == "PIT_STOP" and (c, int(e.payload["lap"])) in rows:
+                rows[(c, int(e.payload["lap"]))]["pit_in"] = True
+    df = pd.DataFrame(list(rows.values()))
+    df["green"] = df["green"] & ~df["lap"].isin(neutral_laps)
+    return df.assign(event=setup.event_id)

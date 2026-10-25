@@ -63,11 +63,13 @@ from f1ar.policy.baseline_strategy import (
     dry_compounds_required,
     free_change_compound,
     plan_for_car,
+    team_knowledge,
     team_setup,
     team_view,
     weather_stop,
 )
 from f1ar.policy.race_estimator import belief_model, estimate, material, observe
+from f1ar.policy.rival_rules import rival_stop
 from f1ar.simulation.incidents import (
     IncidentKind,
     Neutralisation,
@@ -92,8 +94,10 @@ from f1ar.simulation.weather import (
 )
 from f1ar.simulation.weather import penalty_s as weather_penalty_s
 
-ENGINE_VERSION = "lightweight_engine_v0.20.0"
-"""v0.20.0: A1 (D-061): a hidden per-race track trend; with ``knowledge.learning`` the field's
+ENGINE_VERSION = "lightweight_engine_v0.21.0"
+"""v0.21.0: A1b (D-062): per-team knowledge (practice long runs, private own-car data) and
+rival-aware rule decisions (undercut, cover); off by default.
+v0.20.0: A1 (D-061): a hidden per-race track trend; with ``knowledge.learning`` the field's
 in-race tyre estimate (timing screen) and rule teams re-planning on it; otherwise identical
 to v0.19 when the trend is 0.
 v0.19.0: hidden race-day truth (H3, D-058): with ``setup.knowledge`` the baseline plans with
@@ -656,6 +660,18 @@ def _update_timing(
     timing = (*state.timing, *new) if new else state.timing
     lead_before = max(c.laps_completed for c in state.cars)
     if max(c.laps_completed for c in cars) > lead_before and timing:
+        if k.per_team:  # A1b: every team its own estimate (practice + private data)
+            estimates, models = dict(k.team_estimates), dict(k.team_belief_models)
+            for team in dict.fromkeys(d.team_id for d in setup.drivers):
+                est = estimate(setup, timing, team)
+                if material(estimates.get(team), est):
+                    estimates[team], models[team] = est, belief_model(k, est)
+            if estimates != k.team_estimates:
+                knowledge = k.model_copy(
+                    update={"team_estimates": estimates, "team_belief_models": models}
+                )
+                setup = setup.model_copy(update={"knowledge": knowledge})
+            return timing, setup
         est = estimate(setup, timing)
         if material(k.estimate, est):  # the teams only act on news
             knowledge = k.model_copy(
@@ -1370,6 +1386,16 @@ def _complete_lap(
             stop = wet_stop
         elif stop is not None and not _fits_conditions(setup, car, stop, state.weather.wetness):
             stop = None
+    stuck = 0
+    if setup.rival_rules is not None and not neutralised:  # A1b: react to rivals
+        rival, stuck, why = rival_stop(state, car, crossing_time)
+        if stop is None and rival is not None:
+            stop = rival
+            emit(
+                "STRATEGY_PLANNED",
+                car.driver_id,
+                {"plan": f"{why}: box now", "policy_id": POLICY_ID, "actor_id": POLICY_ID},
+            )
     laps = car.laps_completed + 1
     lap_time = crossing_time - car.lap_started_at_s
     # The lap just driven wears the tyres at the rate of the mode it was driven in.
@@ -1421,6 +1447,7 @@ def _complete_lap(
         "incident_at_fraction": None,
         "pending_overtakes": (),
         "observation": observation,
+        "stuck_laps": stuck,
     }
 
     rc_params = setup.race_control
@@ -1464,13 +1491,14 @@ def _complete_lap(
         car, hold = _pit(state, car, stop, emit, neutralised=neutralised)
 
     k = setup.knowledge
+    est, _ = team_knowledge(setup, car.driver_id)
     if (
         car.controller is StrategyController.BASELINE
         and k is not None
         and k.learning
-        and k.estimate is not None
-        and car.plan_estimate != k.estimate.observations
-    ):  # A1: the estimate moved since this car's plan: re-plan on it
+        and est is not None
+        and car.plan_estimate != est.observations
+    ):  # A1: the team's estimate moved since this car's plan: re-plan on it
         plan = plan_for_car(setup, car)
         if plan != car.planned_stops:
             emit(
@@ -1478,9 +1506,7 @@ def _complete_lap(
                 car.driver_id,
                 {"plan": plan_text(plan), "policy_id": POLICY_ID, "actor_id": POLICY_ID},
             )
-        car = car.model_copy(
-            update={"planned_stops": plan, "plan_estimate": k.estimate.observations}
-        )
+        car = car.model_copy(update={"planned_stops": plan, "plan_estimate": est.observations})
     if car.controller is StrategyController.BASELINE and not car.pace_by_user:
         mode = baseline_pace_mode(setup, car)  # W1: manage or push to make the plan work
         if mode is not car.pace_mode:

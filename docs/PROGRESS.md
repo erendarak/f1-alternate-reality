@@ -1503,3 +1503,19 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Tests: 499 offline (+4 `tests/unit/test_race_estimator.py`); ruff, mypy clean.
 - Next (owner's call): A2 on 2018-2025, or first widen the prize (decisions where the rules are
   weak: rivals, undercuts; practice / private data).
+
+### 2026-10-25 — A1b: a realistic, competitive field (engine v0.21.0, D-062, EXP-031)
+
+- Per-team practice readings and private own-car data (each team its own estimate); rule teams
+  that undercut and cover (`policy/rival_rules.py`, windows fitted to 2024); harness flags
+  `--per-team --rivals --from-season`; `scripts/experiments/exp031_decision_headroom.py`.
+- EXP-031: imperfect per-team knowledge alone gives the real 4.6 undercut attempts a race (was
+  1.5); stops vs real MAE 0.39 (best so far). Perfect tyre knowledge over this field: +0.002 /
+  +0.003, not significant. First-stop timing: +0.033 per car-race in hindsight, no fixed rule
+  captures it; rivals don't add to it.
+- Verdict: the world is more real, the information prize closed; what's left for an AI is
+  situational timing, learnable share unknown.
+- Tests: 501 offline (+2 `tests/unit/test_rival_rules.py`); ruff, mypy clean; registry ok
+  (rival_rules v1).
+- Next (owner's call): an A2 pre-gate (does what a car sees predict the best stop timing, held
+  out?) before training; or reframe A3 around trained vs untrained AIs.

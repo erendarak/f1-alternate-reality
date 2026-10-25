@@ -1669,6 +1669,65 @@ Not measured here:    value an AI could find where the rule planner is weak (tra
                       plans, undercut timing): this gate bounds only *information*, not decisions.
 ```
 
+## EXP-031 — A realistic, competitive field: behaviour, information and decision headroom (2026-10-25)
+
+```text
+Experiment ID:        EXP-031 (A1b gate, D-062)
+Research question:    With per-team practice + private data and rule teams that react to rivals,
+                      (1) does the field behave like real 2024, (2) how much is perfect tyre
+                      knowledge still worth, (3) how much is better pit timing worth?
+Setup:                (1) scripts/fit_rival_rules.py: EXP-020 undercut detector, 16 dry_train +
+                      5 dry_test 2024 races, 3 seeds, 37 window settings (9 min);
+                      (2) exp027_value_of_information.py --learning --track-trend --per-team
+                      --rivals --from-season 2018: 34 held-out races, 3 seeds, historical +
+                      drawn truths, 2,244 paired car-races per mode;
+                      (3) exp031_decision_headroom.py --seeds 2: each rule car's first stop
+                      forced at -2..+3 laps from its plan (forked 3 laps before), identical luck,
+                      A1 world vs A1b world; 643 / 562 cars (21 min).
+Output:               configs/calibration/rival_rules_2024_v1.json, docs/experiments/
+                      exp031_information.json, exp031_decisions.json
+```
+
+| (1) Undercut attempts per race (2024 dry_train) | |
+|---|---|
+| real | 5.3 (all 21 races 4.6; dry_test 2.2) |
+| EXP-020: field knowing the truth (v0.15) | 1.5 |
+| **A1b field, no rival rules** | **4.6** |
+| A1b field + rival rules (chosen: attack window 6, cover 1) | 5.3 (dry_test: 3.5 vs real 2.2) |
+
+| (2) Oracle gain over the A1b field, 2018-2025 | historical | drawn |
+|---|---|---|
+| score | +0.0015 [-0.004, +0.008] | +0.0029 [-0.003, +0.010] |
+| points / position per car-race | +0.04 / -0.06 | +0.07 / -0.11 |
+| oracle better / worse | 457 / 432 | 458 / 394 |
+| stops per finisher, field / truth world / real | 1.56 / 1.57 / 1.54 | |
+| stops MAE vs real: field / truth world | **0.39** / 0.42 | |
+
+| (3) First-stop timing, per car-race | A1 world | A1b world |
+|---|---|---|
+| hindsight best offset vs the plan | +0.036 | +0.033 |
+| mean gain by offset -2 / -1 / +1 / +2 / +3 | +0.002 / -0.003 / -0.004 / -0.010 / -0.012 | +0.002 / +0.001 / -0.005 / -0.007 / -0.018 |
+| one fixed offset, fitted on half the races, on the other half | -0.003 | -0.004 |
+| cars whose score depended on the timing | 423 of 643 | 352 of 562 |
+
+```text
+Findings:             (1) Different, imperfect knowledge alone makes rule teams try undercuts as
+                      often as real 2024 teams (4.6 a race, was 1.5): D-051's diagnosis confirmed.
+                      The rival rules add little; their windows are weakly identified (flat fit).
+                      (2) With practice and private data, perfect tyre knowledge is worth nothing
+                      measurable over the field (CIs include 0): the field's stops are now closer
+                      to the real races (0.39) than a field that knows the truth (0.42).
+                      (3) Pit timing still matters in hindsight (~0.03-0.04 score, ~0.8 points per
+                      car-race), as much with rivals reacting as without, but no fixed timing rule
+                      captures any of it out of sample.
+Gate verdict:         the prize did NOT widen. What is left for an AI is situational timing:
+                      large in hindsight, unknown how much is predictable from what a car sees.
+Negative:             the slice's premise (rivalry widens the prize) is refuted in our world.
+Caveats:              hindsight over 6 branches is biased up (it picks the luckiest); 2 seeds;
+                      forced stops hand the car to a USER for up to 6 laps (no tyre management),
+                      the same in every branch.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

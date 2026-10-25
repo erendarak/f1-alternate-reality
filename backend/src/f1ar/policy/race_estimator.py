@@ -139,8 +139,10 @@ def _wear_and_trend(
     lap: np.ndarray,
     r: np.ndarray,
     w: np.ndarray,
+    beta_prior: tuple[float, float],
 ) -> tuple[float, float, float, np.ndarray]:
-    """Bayesian ``r = beta x + tau lap + a_car``: (beta, sd of beta, tau, a per car)."""
+    """Bayesian ``r = beta x + tau lap + a_car`` with ``beta ~ N(mean, var)`` (``beta_prior``)
+    and ``tau ~ N(0, trend_sd^2)``: (beta, sd of beta, tau, a per car)."""
     n_cars = int(car.max()) + 1 if len(car) else 0
     sw = np.bincount(car, w, n_cars)
     safe = np.where(sw > 0, sw, 1.0)
@@ -149,23 +151,28 @@ def _wear_and_trend(
     rc = r - (np.bincount(car, w * r, n_cars) / safe)[car]
     a = np.array(
         [
-            [np.sum(w * xc * xc) + 1.0 / k.wear_sd**2, np.sum(w * xc * lc)],
+            [np.sum(w * xc * xc) + 1.0 / beta_prior[1], np.sum(w * xc * lc)],
             [np.sum(w * xc * lc), np.sum(w * lc * lc) + 1.0 / max(k.trend_sd, 1e-4) ** 2],
         ]
     )
-    b = np.array([np.sum(w * xc * rc), np.sum(w * lc * rc)])
+    b = np.array([np.sum(w * xc * rc) + beta_prior[0] / beta_prior[1], np.sum(w * lc * rc)])
     cov = np.linalg.inv(a)
     beta, tau = cov @ b
     form = np.bincount(car, w * (r - beta * x - tau * lap), n_cars) / safe
     return float(beta), float(math.sqrt(cov[0, 0])), float(tau), form
 
 
-def estimate(setup: RaceSetup, timing: tuple[TimingObservation, ...]) -> TyreEstimate:
-    """The posterior from every clean lap so far (pure; the prior when there are none)."""
+def estimate(
+    setup: RaceSetup, timing: tuple[TimingObservation, ...], team_id: str | None = None
+) -> TyreEstimate:
+    """The posterior from every clean lap so far (pure; the prior when there are none).
+    ``team_id`` (A1b): that team's own estimate: its practice measurement as one more piece of
+    evidence, its own cars' laps with ``private_noise_factor`` x their noise."""
     k = setup.knowledge
     assert k is not None
     prior = k.lap_model
-    if not timing:
+    practice = k.practice.get(team_id) if team_id is not None else None
+    if not timing and practice is None:
         return TyreEstimate(
             observations=0,
             wear_factor=1.0,
@@ -175,13 +182,22 @@ def estimate(setup: RaceSetup, timing: tuple[TimingObservation, ...]) -> TyreEst
             life_factor_sd=dict.fromkeys(DRY_COMPOUNDS, k.life_shared_sd),
         )
     ids = {d.driver_id: i for i, d in enumerate(setup.drivers)}
-    car = np.array([ids[o.driver_id] for o in timing])
+    car = np.array([ids[o.driver_id] for o in timing], dtype=int)
     x = np.array([o.wear_s for o in timing])
     lu = np.array([o.life_used for o in timing])
     lap = np.array([float(o.lap) for o in timing])
     r = np.array([o.residual_s for o in timing])
     w = 1.0 / np.array([o.noise_sd_s for o in timing]) ** 2
-    comp = np.array([DRY_COMPOUNDS.index(o.compound) for o in timing])
+    if team_id is not None:  # private data: the team reads its own cars more precisely
+        own = {d.driver_id for d in setup.drivers if d.team_id == team_id}
+        mine = np.array([o.driver_id in own for o in timing], dtype=bool)
+        w = np.where(mine, w / k.private_noise_factor**2, w)
+    beta_prior = (0.0, k.wear_sd**2)
+    if practice is not None:  # combine the prior with the practice measurement of k - 1
+        vp = max(practice.wear_factor_sd, 1e-3) ** 2
+        v = 1.0 / (1.0 / beta_prior[1] + 1.0 / vp)
+        beta_prior = (v * (practice.wear_factor - 1.0) / vp, v)
+    comp = np.array([DRY_COMPOUNDS.index(o.compound) for o in timing], dtype=int)
     lives = np.array([prior.compounds[c].life_laps or 0.0 for c in DRY_COMPOUNDS], dtype=float)
     has_life = lives > 0
     sd_c = max(k.life_compound_sd, MIN_COMPOUND_SD)
@@ -191,19 +207,19 @@ def estimate(setup: RaceSetup, timing: tuple[TimingObservation, ...]) -> TyreEst
     u_hat = np.zeros(len(DRY_COMPOUNDS))
     life_mean = np.ones(len(DRY_COMPOUNDS))
     life_sd = np.full(len(DRY_COMPOUNDS), sd_s)
-    beta, beta_sd, tau = 0.0, k.wear_sd, 0.0
+    beta, beta_sd, tau = beta_prior[0], math.sqrt(beta_prior[1]), 0.0
     for _ in range(2):
         clean = (lu < NO_CLIFF_BELOW) & (lu * np.exp(-u_hat[comp]) < NO_CLIFF_BELOW)
         if clean.sum() >= 3:
             beta, beta_sd, tau, form = _wear_and_trend(
-                k, car[clean], x[clean], lap[clean], r[clean], w[clean]
+                k, car[clean], x[clean], lap[clean], r[clean], w[clean], beta_prior
             )
             # robust: refit without laps beyond Z_CAP sd (an unseen hold-up)
             fit = beta * x + tau * lap + _pad(form, len(setup.drivers))[car]
             clean &= np.abs(r - fit) * np.sqrt(w) < Z_CAP
             if clean.sum() >= 3:
                 beta, beta_sd, tau, form = _wear_and_trend(
-                    k, car[clean], x[clean], lap[clean], r[clean], w[clean]
+                    k, car[clean], x[clean], lap[clean], r[clean], w[clean], beta_prior
                 )
         else:
             form = np.zeros(len(setup.drivers))
@@ -211,7 +227,10 @@ def estimate(setup: RaceSetup, timing: tuple[TimingObservation, ...]) -> TyreEst
         res = r - beta * x - tau * lap - form[car]
         prior_cliff = _cliff(prior.cliff_s_per_lap, lu, lives[comp])
         loglik = np.zeros((len(DRY_COMPOUNDS), GRID_POINTS))
-        for ci in range(len(DRY_COMPOUNDS)):
+        for ci, c in enumerate(DRY_COMPOUNDS):
+            if practice is not None and has_life[ci]:  # the long runs' reading of this life
+                sd_p = max(practice.life_factor_sd[c], 1e-3)
+                loglik[ci] += -0.5 * ((u - math.log(practice.life_factor[c])) / sd_p) ** 2
             m = comp == ci
             if not has_life[ci] or not m.any():
                 continue
@@ -221,7 +240,7 @@ def estimate(setup: RaceSetup, timing: tuple[TimingObservation, ...]) -> TyreEst
                 lives[ci] * np.exp(u)[None, :],
             )
             z = (res[m][:, None] - (hyp - prior_cliff[m][:, None])) * np.sqrt(w[m])[:, None]
-            loglik[ci] = -0.5 * np.sum(np.minimum(z * z, Z_CAP**2), axis=0)
+            loglik[ci] += -0.5 * np.sum(np.minimum(z * z, Z_CAP**2), axis=0)
         # shared factor s on the same grid; compound c: u_c = s + d, d ~ N(0, sd_c)
         trans = -0.5 * ((u[None, :] - u[:, None]) / sd_c) ** 2  # [s, u]
         joint = trans[None, :, :] + loglik[:, None, :]  # [c, s, u]

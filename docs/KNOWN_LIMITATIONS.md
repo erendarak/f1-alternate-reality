@@ -2,6 +2,16 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## A1b (per-team knowledge, rival rules, engine v0.21.0, D-062)
+
+- **Practice and private-data noise sizes are editorial** (practice log life sd 0.20, wear 0.6;
+  own laps at half the noise); nothing in our data measures them.
+- **Rival-rule windows are weakly identified** (the fit is flat; 2024 only, applied to every
+  season); covering and undercutting use the planned compound, no tyre-offset strategy.
+- **The decision-headroom hindsight is biased up** (best of 6 branches) and uses a USER hand-over
+  for the forced laps (no tyre management for up to 6 laps, the same in every branch).
+- **Per-team estimates cost time**: 10 estimates per race lap (~1.5-2 s a race).
+
 ## A1 (environment under uncertainty, engine v0.20.0, D-061)
 
 - **One shared estimate for every team** (public timing only): no private own-car data (tyre

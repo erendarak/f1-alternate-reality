@@ -1,0 +1,331 @@
+{
+ "label": "rule teams' rival reactions: undercut and cover (A1b, D-062)",
+ "source_type": "estimated_from_data",
+ "fitted": {
+  "attack_window_laps": 6,
+  "cover_window_laps": 1
+ },
+ "editorial": {
+  "attack_gap_s": 1.0,
+  "attack_laps": 2,
+  "cover_gap_s": 3.0
+ },
+ "method": "windows chosen on 2024 dry_train races so that simulated undercut attempts per race (EXP-020 detector) match the real ones; A1b world (historical truth, per-team practice + private data, in-race learning, hidden trend), seeds per race",
+ "real": {
+  "train_attempts_per_race": 5.31,
+  "test_attempts_per_race": 2.2,
+  "all": {
+   "attempts": 96,
+   "gain_median_s": 1.535,
+   "gain_mean_s": 5.038,
+   "passed_share": 0.458,
+   "gain_median_offset1_s": 0.942,
+   "n_offset1": 67,
+   "gain_median_offset2_s": 2.023,
+   "n_offset2": 14,
+   "gain_median_offset3_s": 3.994,
+   "n_offset3": 15
+  }
+ },
+ "train": {
+  "grid": [
+   {
+    "attack_window_laps": null,
+    "cover_window_laps": null,
+    "attempts_per_race": 4.56,
+    "gain_median_s": 1.4,
+    "passed_share": 0.516
+   },
+   {
+    "attack_window_laps": 0,
+    "cover_window_laps": 0,
+    "attempts_per_race": 4.56,
+    "gain_median_s": 1.4,
+    "passed_share": 0.516
+   },
+   {
+    "attack_window_laps": 0,
+    "cover_window_laps": 1,
+    "attempts_per_race": 4.58,
+    "gain_median_s": 1.21,
+    "passed_share": 0.45
+   },
+   {
+    "attack_window_laps": 0,
+    "cover_window_laps": 2,
+    "attempts_per_race": 4.75,
+    "gain_median_s": 0.83,
+    "passed_share": 0.373
+   },
+   {
+    "attack_window_laps": 0,
+    "cover_window_laps": 3,
+    "attempts_per_race": 5.27,
+    "gain_median_s": 0.95,
+    "passed_share": 0.364
+   },
+   {
+    "attack_window_laps": 0,
+    "cover_window_laps": 4,
+    "attempts_per_race": 5.58,
+    "gain_median_s": 0.64,
+    "passed_share": 0.347
+   },
+   {
+    "attack_window_laps": 0,
+    "cover_window_laps": 6,
+    "attempts_per_race": 6.04,
+    "gain_median_s": 0.58,
+    "passed_share": 0.341
+   },
+   {
+    "attack_window_laps": 1,
+    "cover_window_laps": 0,
+    "attempts_per_race": 5.56,
+    "gain_median_s": 1.43,
+    "passed_share": 0.513
+   },
+   {
+    "attack_window_laps": 1,
+    "cover_window_laps": 1,
+    "attempts_per_race": 5.42,
+    "gain_median_s": 1.04,
+    "passed_share": 0.431
+   },
+   {
+    "attack_window_laps": 1,
+    "cover_window_laps": 2,
+    "attempts_per_race": 5.4,
+    "gain_median_s": 1.06,
+    "passed_share": 0.405
+   },
+   {
+    "attack_window_laps": 1,
+    "cover_window_laps": 3,
+    "attempts_per_race": 5.67,
+    "gain_median_s": 1.02,
+    "passed_share": 0.397
+   },
+   {
+    "attack_window_laps": 1,
+    "cover_window_laps": 4,
+    "attempts_per_race": 6.15,
+    "gain_median_s": 0.91,
+    "passed_share": 0.376
+   },
+   {
+    "attack_window_laps": 1,
+    "cover_window_laps": 6,
+    "attempts_per_race": 6.9,
+    "gain_median_s": 0.8,
+    "passed_share": 0.366
+   },
+   {
+    "attack_window_laps": 2,
+    "cover_window_laps": 0,
+    "attempts_per_race": 6.1,
+    "gain_median_s": 1.43,
+    "passed_share": 0.519
+   },
+   {
+    "attack_window_laps": 2,
+    "cover_window_laps": 1,
+    "attempts_per_race": 5.73,
+    "gain_median_s": 0.95,
+    "passed_share": 0.451
+   },
+   {
+    "attack_window_laps": 2,
+    "cover_window_laps": 2,
+    "attempts_per_race": 5.85,
+    "gain_median_s": 0.74,
+    "passed_share": 0.416
+   },
+   {
+    "attack_window_laps": 2,
+    "cover_window_laps": 3,
+    "attempts_per_race": 6.19,
+    "gain_median_s": 0.89,
+    "passed_share": 0.418
+   },
+   {
+    "attack_window_laps": 2,
+    "cover_window_laps": 4,
+    "attempts_per_race": 6.81,
+    "gain_median_s": 0.95,
+    "passed_share": 0.413
+   },
+   {
+    "attack_window_laps": 2,
+    "cover_window_laps": 6,
+    "attempts_per_race": 7.6,
+    "gain_median_s": 0.95,
+    "passed_share": 0.427
+   },
+   {
+    "attack_window_laps": 3,
+    "cover_window_laps": 0,
+    "attempts_per_race": 6.12,
+    "gain_median_s": 1.65,
+    "passed_share": 0.534
+   },
+   {
+    "attack_window_laps": 3,
+    "cover_window_laps": 1,
+    "attempts_per_race": 6.21,
+    "gain_median_s": 1.36,
+    "passed_share": 0.493
+   },
+   {
+    "attack_window_laps": 3,
+    "cover_window_laps": 2,
+    "attempts_per_race": 6.46,
+    "gain_median_s": 1.09,
+    "passed_share": 0.468
+   },
+   {
+    "attack_window_laps": 3,
+    "cover_window_laps": 3,
+    "attempts_per_race": 6.9,
+    "gain_median_s": 0.96,
+    "passed_share": 0.441
+   },
+   {
+    "attack_window_laps": 3,
+    "cover_window_laps": 4,
+    "attempts_per_race": 7.79,
+    "gain_median_s": 0.87,
+    "passed_share": 0.401
+   },
+   {
+    "attack_window_laps": 3,
+    "cover_window_laps": 6,
+    "attempts_per_race": 8.15,
+    "gain_median_s": 0.94,
+    "passed_share": 0.407
+   },
+   {
+    "attack_window_laps": 4,
+    "cover_window_laps": 0,
+    "attempts_per_race": 5.27,
+    "gain_median_s": 1.56,
+    "passed_share": 0.545
+   },
+   {
+    "attack_window_laps": 4,
+    "cover_window_laps": 1,
+    "attempts_per_race": 5.25,
+    "gain_median_s": 1.25,
+    "passed_share": 0.52
+   },
+   {
+    "attack_window_laps": 4,
+    "cover_window_laps": 2,
+    "attempts_per_race": 5.79,
+    "gain_median_s": 1.06,
+    "passed_share": 0.471
+   },
+   {
+    "attack_window_laps": 4,
+    "cover_window_laps": 3,
+    "attempts_per_race": 6.73,
+    "gain_median_s": 1.01,
+    "passed_share": 0.467
+   },
+   {
+    "attack_window_laps": 4,
+    "cover_window_laps": 4,
+    "attempts_per_race": 7.56,
+    "gain_median_s": 0.73,
+    "passed_share": 0.413
+   },
+   {
+    "attack_window_laps": 4,
+    "cover_window_laps": 6,
+    "attempts_per_race": 8.48,
+    "gain_median_s": 0.6,
+    "passed_share": 0.381
+   },
+   {
+    "attack_window_laps": 6,
+    "cover_window_laps": 0,
+    "attempts_per_race": 5.23,
+    "gain_median_s": 1.3,
+    "passed_share": 0.49
+   },
+   {
+    "attack_window_laps": 6,
+    "cover_window_laps": 1,
+    "attempts_per_race": 5.33,
+    "gain_median_s": 1.36,
+    "passed_share": 0.508
+   },
+   {
+    "attack_window_laps": 6,
+    "cover_window_laps": 2,
+    "attempts_per_race": 5.52,
+    "gain_median_s": 1.24,
+    "passed_share": 0.487
+   },
+   {
+    "attack_window_laps": 6,
+    "cover_window_laps": 3,
+    "attempts_per_race": 6.27,
+    "gain_median_s": 1.18,
+    "passed_share": 0.475
+   },
+   {
+    "attack_window_laps": 6,
+    "cover_window_laps": 4,
+    "attempts_per_race": 7.29,
+    "gain_median_s": 0.71,
+    "passed_share": 0.409
+   },
+   {
+    "attack_window_laps": 6,
+    "cover_window_laps": 6,
+    "attempts_per_race": 9.62,
+    "gain_median_s": 0.81,
+    "passed_share": 0.413
+   }
+  ],
+  "chosen": {
+   "attack_window_laps": 6,
+   "cover_window_laps": 1,
+   "attempts_per_race": 5.33,
+   "gain_median_s": 1.36,
+   "passed_share": 0.508
+  }
+ },
+ "test": {
+  "rules": {
+   "attempts_per_race": 3.47,
+   "gain_median_s": 1.62,
+   "passed_share": 0.577
+  },
+  "no_rules": {
+   "attempts_per_race": 3.13,
+   "gain_median_s": 1.94,
+   "passed_share": 0.596
+  }
+ },
+ "fitted_on": [
+  "2024_bahrain_gp",
+  "2024_saudi_arabian_gp",
+  "2024_australian_gp",
+  "2024_chinese_gp",
+  "2024_miami_gp",
+  "2024_emilia_romagna_gp",
+  "2024_spanish_gp",
+  "2024_austrian_gp",
+  "2024_hungarian_gp",
+  "2024_belgian_gp",
+  "2024_dutch_gp",
+  "2024_azerbaijan_gp",
+  "2024_singapore_gp",
+  "2024_united_states_gp",
+  "2024_las_vegas_gp",
+  "2024_qatar_gp"
+ ],
+ "seeds": 3
+}

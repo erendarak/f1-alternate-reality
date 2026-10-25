@@ -1,0 +1,31 @@
+model_name: rival_rules
+model_version: v1
+kind: undercut / cover windows of the rule teams, fitted to real attempt rates
+source_type: estimated_from_data
+artifact: configs/calibration/rival_rules_2024_v1.json
+artifact_sha256: sha256:1bef32b3cde7ce3f49dfee0b7c2294449388d6ae50a3c62e37cc7a10900cff4b
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2024_v1.yaml
+training_dataset_content_sha256: sha256:e43cd3185e213cee8d80f4b82e69ec171f6f4fada093e7702ca914edcbf58181
+training_races:
+- 2024_bahrain_gp
+- 2024_saudi_arabian_gp
+- 2024_australian_gp
+- 2024_chinese_gp
+- 2024_miami_gp
+- 2024_emilia_romagna_gp
+- 2024_spanish_gp
+- 2024_austrian_gp
+- 2024_hungarian_gp
+- 2024_belgian_gp
+- 2024_dutch_gp
+- 2024_azerbaijan_gp
+- 2024_singapore_gp
+- 2024_united_states_gp
+- 2024_las_vegas_gp
+- 2024_qatar_gp
+metrics:
+  real_attempts_per_race: 5.31
+  sim_attempts_per_race: 5.33
+  held_out_check: EXP-031
+status: fitted on 2024 (A1b, D-062); applied to every season (labelled)

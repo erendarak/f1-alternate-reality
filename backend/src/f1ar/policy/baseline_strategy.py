@@ -39,9 +39,11 @@ from f1ar.domain.race_state import (
     DRY_COMPOUNDS,
     CarState,
     Compound,
+    LapModelParams,
     PaceMode,
     PlannedStop,
     RaceSetup,
+    TyreEstimate,
 )
 from f1ar.simulation.lap_model import life_use_per_lap, wear_per_lap_s
 
@@ -198,8 +200,24 @@ def team_setup(setup: RaceSetup, driver_id: str) -> RaceSetup:
     k = setup.knowledge
     if k is None or driver_id in k.oracle_drivers:
         return setup
-    believed = k.belief_lap_model if k.learning and k.belief_lap_model is not None else None
+    _, believed = team_knowledge(setup, driver_id)
     return setup.model_copy(update={"lap_model": believed or k.lap_model})
+
+
+def team_knowledge(
+    setup: RaceSetup, driver_id: str
+) -> tuple[TyreEstimate | None, LapModelParams | None]:
+    """The estimate and believed lap model ``driver_id``'s team plans with: its own (A1b: practice
+    + private data), the field's shared one (A1), or none (the prior, H3)."""
+    k = setup.knowledge
+    if k is None:
+        return None, None
+    if k.per_team:
+        team = setup.driver(driver_id).team_id
+        return k.team_estimates.get(team), k.team_belief_models.get(team)
+    if k.learning:
+        return k.estimate, k.belief_lap_model
+    return None, None
 
 
 def team_view(setup: RaceSetup, car: CarState) -> tuple[RaceSetup, CarState]:
@@ -215,9 +233,10 @@ def team_view(setup: RaceSetup, car: CarState) -> tuple[RaceSetup, CarState]:
     life_used = car.tyre_life_used
     if true_life is not None and seen_life is not None:
         life_used *= true_life / seen_life
-    wear_scale = k.wear_scale  # believed / true wear: the prior's, times the in-race factor (A1)
-    if k.learning and k.estimate is not None:
-        wear_scale *= k.estimate.wear_factor
+    wear_scale = k.wear_scale  # believed / true wear: the prior's, times the team's estimate
+    est, _ = team_knowledge(setup, car.driver_id)
+    if est is not None:
+        wear_scale *= est.wear_factor
     return seen, car.model_copy(
         update={"tyre_life_used": life_used, "tyre_wear_s": car.tyre_wear_s * wear_scale}
     )

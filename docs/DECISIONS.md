@@ -1454,3 +1454,25 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   At the bar, not above it: the *information* prize left for an AI is ~0.25 points per car-race.
 - **Engine v0.20.0, world schema 21:** without learning and with trend 0, races are identical to
   v0.19 (tested); worlds keep both off by default.
+
+## D-062 — A1b: a realistic, competitive field; the prize did not widen (engine v0.21.0)
+
+- **Per-team knowledge** (`TyreKnowledge.per_team`, `with_hidden_truth(per_team=)`): each team's
+  practice reading of this race's tyres (log life sd 0.20, log wear sd 0.6: EDITORIAL, keyed per
+  team) combined with the prior, and its own estimate during the race with its own cars' laps at
+  half the noise (private data, editorial). 10 estimates per race instead of one.
+- **Rival rules** (`policy/rival_rules.py`, `RaceSetup.rival_rules`, `with_rival_rules`): undercut
+  (within 1.0 s of the car ahead for 2 laps, stop at most 6 laps away) and cover (the car behind
+  within 3.0 s just pitted, stop at most 1 lap away); gaps editorial, windows fitted to the 2024
+  undercut rate (`scripts/fit_rival_rules.py`, `configs/calibration/rival_rules_2024_v1.json`,
+  weakly identified). Applied to every season, labelled.
+- **EXP-031:** without any rival rule, imperfect per-team knowledge already gives real 2024's 4.6
+  undercut attempts a race (was 1.5); stops per finisher vs real best so far (MAE 0.39, a
+  truth-knowing field 0.42). Perfect tyre knowledge over this field: +0.002 / +0.003 (n.s.).
+  Pit timing in hindsight: +0.033 per car-race (A1 world +0.036): rivalry does not add to it;
+  no fixed rule captures it.
+- **Verdict:** the slice made the world more real and *closed* the information prize; the only
+  value left for an AI is situational decisions (timing that depends on the race), whose
+  learnable share is unmeasured. Next: an A2 pre-gate on that, before any training.
+- Engine v0.21.0 (world schema 21 unchanged in shape; new optional fields): off by default; with
+  `per_team` and `rival_rules` unset, races are identical to v0.20.

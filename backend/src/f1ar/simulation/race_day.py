@@ -92,10 +92,12 @@ def with_hidden_truth(
     oracle: tuple[str, ...] = (),
     learning: bool = False,
     track_trend: bool = False,
+    per_team: bool = False,
 ) -> RaceSetup:
     """The race with a hidden truth and the teams on the prior (``oracle`` cars know the truth).
     ``learning`` (A1): the teams also learn in the race from the timing screen. ``track_trend``
-    (A1): a hidden per-race lap-time trend drawn with the era's spread (EXP-028).
+    (A1): a hidden per-race lap-time trend drawn with the era's spread (EXP-028). ``per_team``
+    (A1b): each team gets its own practice measurement and reads its own cars more precisely.
     Raises ``KeyError`` for a race without a prior (no tyre-life fit, e.g. wet, or no history)."""
     prior_cfg = load_prior(configs)
     if prior_cfg is None:
@@ -152,13 +154,62 @@ def with_hidden_truth(
         truth_model = truth_model.model_copy(update={"track_trend_s_per_lap": trend})
         note += f"; hidden track trend {trend:+.4f} s/lap (EXP-028 era sd)"
         knowledge = knowledge.model_copy(update={"note": note})
-    return setup.model_copy(
+    out = setup.model_copy(
         update={
             "lap_model": truth_model,
             "knowledge": knowledge,
             "inputs": {**setup.inputs, "race_day_truth": f"{mode.value}: {note}"},
         }
     )
+    return with_practice(out, truth_seed) if per_team else out
+
+
+PRACTICE_LIFE_SD = 0.20
+"""A1b: spread of a team's practice reading of log tyre life per compound (EDITORIAL: a few
+long runs on light-ish fuel; about the prior's own spread, so practice halves the variance)."""
+PRACTICE_WEAR_SD = 0.6
+"""A1b: spread of a team's practice reading of log wear (EDITORIAL: wear is hard to read from a
+single long run, R-bloggers FP2 analysis in docs/PLAN_HIDDEN_INFO_ERAS.md)."""
+
+
+def with_practice(setup: RaceSetup, truth_seed: int) -> RaceSetup:
+    """A1b (D-062): each team's practice measurement (keyed by truth seed, event and team) and
+    its starting estimate (prior + practice)."""
+    from f1ar.domain.race_state import TyreEstimate
+    from f1ar.policy.race_estimator import belief_model, estimate
+
+    k = setup.knowledge
+    assert k is not None
+    true_wear = 1.0 / k.wear_scale
+    practice = {}
+    for team in dict.fromkeys(d.team_id for d in setup.drivers):
+        life = {}
+        for c in DRY_COMPOUNDS:
+            t, p = setup.lap_model.compounds[c].life_laps, k.lap_model.compounds[c].life_laps
+            ratio = (t / p) if t is not None and p is not None else 1.0
+            z = normal(truth_seed, "practice", setup.event_id, team, c.value)
+            life[c] = ratio * math.exp(PRACTICE_LIFE_SD * z)
+        zw = normal(truth_seed, "practice", setup.event_id, team, "wear")
+        wear = true_wear * math.exp(PRACTICE_WEAR_SD * zw)
+        practice[team] = TyreEstimate(
+            observations=0,
+            wear_factor=round(wear, 4),
+            wear_factor_sd=round(PRACTICE_WEAR_SD * wear, 4),
+            trend_s_per_lap=0.0,
+            life_factor={c: round(v, 4) for c, v in life.items()},
+            life_factor_sd=dict.fromkeys(DRY_COMPOUNDS, PRACTICE_LIFE_SD),
+        )
+    k = k.model_copy(update={"per_team": True, "practice": practice})
+    setup = setup.model_copy(update={"knowledge": k})
+    estimates = {team: estimate(setup, (), team) for team in practice}
+    k = k.model_copy(
+        update={
+            "team_estimates": estimates,
+            "team_belief_models": {t: belief_model(k, e) for t, e in estimates.items()},
+            "note": k.note + "; per-team practice (editorial spreads) and private data",
+        }
+    )
+    return setup.model_copy(update={"knowledge": k})
 
 
 def with_oracle(setup: RaceSetup, oracle: tuple[str, ...]) -> RaceSetup:
@@ -167,4 +218,29 @@ def with_oracle(setup: RaceSetup, oracle: tuple[str, ...]) -> RaceSetup:
         raise ValueError("no hidden truth in this setup")
     return setup.model_copy(
         update={"knowledge": setup.knowledge.model_copy(update={"oracle_drivers": oracle})}
+    )
+
+
+RIVAL_RULES_FILE = Path("calibration") / "rival_rules_2024_v1.json"
+
+
+def with_rival_rules(setup: RaceSetup, configs: Path) -> RaceSetup:
+    """A1b (D-062): rule teams that undercut and cover, windows fitted on 2024
+    (``scripts/fit_rival_rules.py``); the same windows in every season (labelled)."""
+    from f1ar.domain.race_state import RivalRules
+
+    path = configs / RIVAL_RULES_FILE
+    if not path.exists():
+        raise KeyError(f"{RIVAL_RULES_FILE.as_posix()} missing: run scripts/fit_rival_rules.py")
+    cfg = json.loads(path.read_text(encoding="utf-8"))
+    note = (
+        f"estimated_from_data: windows {cfg['fitted']} fitted to the 2024 undercut attempts "
+        f"(EXP-020 detector); gaps editorial {cfg['editorial']}"
+        + ("" if setup.rules.season == 2024 else f" [2024 windows applied to {setup.rules.season}]")
+    )
+    rules = RivalRules(
+        source_type=SourceType.ESTIMATED_FROM_DATA, note=note, **cfg["fitted"], **cfg["editorial"]
+    )
+    return setup.model_copy(
+        update={"rival_rules": rules, "inputs": {**setup.inputs, "rival_rules": note}}
     )

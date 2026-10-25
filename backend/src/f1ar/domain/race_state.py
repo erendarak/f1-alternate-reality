@@ -229,6 +229,24 @@ class TrafficParams(_Frozen):
     (before v0.9.0)."""
 
 
+class RivalRules(_Frozen):
+    """A1b (D-062): the rule teams' reactions to rivals (shape editorial; windows fitted to the
+    undercut attempts of real 2024 races, EXP-031)."""
+
+    source_type: Literal[SourceType.EDITORIAL_ASSUMPTION, SourceType.ESTIMATED_FROM_DATA]
+    note: str
+    attack_gap_s: float = Field(default=1.0, gt=0)
+    """Undercut: following the car ahead at the line by less than this ..."""
+    attack_laps: int = Field(default=2, ge=1)
+    """... on this many laps in a row ..."""
+    attack_window_laps: int = Field(default=3, ge=0)
+    """... with the planned stop at most this many laps away: stop now."""
+    cover_gap_s: float = Field(default=3.0, gt=0)
+    """Cover: the car right behind was within this at the line and has just pitted ..."""
+    cover_window_laps: int = Field(default=3, ge=0)
+    """... and the planned stop is at most this many laps away: stop now."""
+
+
 class RaceControlParams(_Frozen):
     """Incidents and neutralisations (plan §7.5, §10). Ideas credited to TUM FTM race-simulation
     (per-driver accident probability, higher risk on lap 1, FCY phases); probabilities and
@@ -477,6 +495,16 @@ class TyreKnowledge(_Frozen):
     trend_sd: float = Field(default=0.01, ge=0)
     estimate: TyreEstimate | None = None
     """The latest in-race estimate (updated by the engine once per race lap when learning)."""
+    per_team: bool = False
+    """A1b (D-062): each team has its own knowledge: its practice long runs (``practice``) and
+    its own cars' laps read more precisely (private data); else one shared estimate."""
+    practice: dict[str, TyreEstimate] = Field(default_factory=dict)
+    """A1b: each team's practice measurement of this race's tyres (factors vs the prior, with
+    their measurement spread), by team id."""
+    private_noise_factor: float = Field(default=0.5, gt=0, le=1)
+    """A1b: a team's own laps count with this x the lap noise (editorial)."""
+    team_estimates: dict[str, TyreEstimate] = Field(default_factory=dict)
+    team_belief_models: dict[str, LapModelParams] = Field(default_factory=dict)
     belief_lap_model: LapModelParams | None = None
     """``lap_model`` with ``estimate``'s life and wear factors: what the teams plan with."""
 
@@ -493,6 +521,8 @@ class RaceSetup(_Frozen):
     """The season's sporting rules (H1, D-053); 2024's unless the race is from another season."""
     knowledge: TyreKnowledge | None = None
     """H3: what the teams' planners know about the tyres; None = they plan with the truth."""
+    rival_rules: RivalRules | None = None
+    """A1b: rule teams react to rivals (undercut, cover); None = they plan alone (as before)."""
     tick_seconds: float = Field(gt=0)
     profile_set_manifest_hash: str
     """Hash of the full ProfileSet the embedded profiles were taken from."""
@@ -607,6 +637,8 @@ class CarState(_Frozen):
     observation: TimingObservation | None = None
     """A1: the lap just completed as the timing screen shows it (clean laps only); the step
     moves it into ``WorldState.timing``."""
+    stuck_laps: int = Field(default=0, ge=0)
+    """A1b: laps in a row this car crossed the line within ``attack_gap_s`` of the car ahead."""
     plan_estimate: int = -1
     """A1: observations behind the estimate the current plan used (-1: planned on the prior)."""
 

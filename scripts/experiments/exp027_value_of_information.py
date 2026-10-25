@@ -141,10 +141,15 @@ def _stops_per_finisher(state: Any) -> float:
     return statistics.fmean(stops) if stops else float("nan")
 
 
-def job(args: tuple[str, str, int, bool, bool]) -> dict[str, Any]:
-    from f1ar.simulation.race_day import TruthMode, with_hidden_truth, with_oracle
+def job(args: tuple[str, str, int, bool, bool, bool, bool]) -> dict[str, Any]:
+    from f1ar.simulation.race_day import (
+        TruthMode,
+        with_hidden_truth,
+        with_oracle,
+        with_rival_rules,
+    )
 
-    event, mode, seed, learning, trend = args
+    event, mode, seed, learning, trend, per_team, rivals = args
     hidden = with_hidden_truth(
         _base(event),
         CONFIGS,
@@ -152,7 +157,10 @@ def job(args: tuple[str, str, int, bool, bool]) -> dict[str, Any]:
         truth_seed=seed,
         learning=learning,
         track_trend=trend,
+        per_team=per_team,
     )
+    if rivals:
+        hidden = with_rival_rules(hidden, CONFIGS)
     drivers = tuple(d.driver_id for d in hidden.drivers)
     snapshots: list[dict[str, Any]] = []
     prior_state = _run(hidden, seed, snapshots if learning else None)
@@ -323,6 +331,9 @@ def main() -> None:
         "--learning", action="store_true", help="A1: the field learns in-race (EXP-029/030)"
     )
     parser.add_argument("--track-trend", action="store_true", help="A1: hidden track trend")
+    parser.add_argument("--per-team", action="store_true", help="A1b: practice + private data")
+    parser.add_argument("--rivals", action="store_true", help="A1b: rule teams undercut / cover")
+    parser.add_argument("--from-season", type=int, default=2000)
     args = parser.parse_args()
     from f1ar.simulation.race_day import load_prior
 
@@ -330,10 +341,11 @@ def main() -> None:
     assert prior_cfg is not None
     events = sorted(e for e, v in prior_cfg["events"].items() if v["split"] == "dry_test")
     events = [e for e in events if (ROOT / "data" / "processed" / e).exists()]
+    events = [e for e in events if prior_cfg["events"][e]["season"] >= args.from_season]
     if args.limit:
         events = events[: args.limit]
     jobs = [
-        (e, m, event_seed(e, k), args.learning, args.track_trend)
+        (e, m, event_seed(e, k), args.learning, args.track_trend, args.per_team, args.rivals)
         for m in args.modes
         for e in events
         for k in range(1, args.seeds + 1)
@@ -355,6 +367,8 @@ def main() -> None:
         "seeds": args.seeds,
         "learning": args.learning,
         "track_trend": args.track_trend,
+        "per_team": args.per_team,
+        "rivals": args.rivals,
         "events": events,
         "modes": {},
     }

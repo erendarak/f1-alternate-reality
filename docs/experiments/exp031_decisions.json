@@ -1,0 +1,79 @@
+{
+ "seeds": 2,
+ "events": [
+  "2018_azerbaijan_gp",
+  "2018_brazilian_gp",
+  "2018_french_gp",
+  "2018_hungarian_gp",
+  "2018_russian_gp",
+  "2019_azerbaijan_gp",
+  "2019_brazilian_gp",
+  "2019_french_gp",
+  "2019_hungarian_gp",
+  "2019_russian_gp",
+  "2020_british_gp",
+  "2020_italian_gp",
+  "2020_portuguese_gp",
+  "2020_sakhir_gp",
+  "2021_qatar_gp",
+  "2021_spanish_gp",
+  "2021_styrian_gp",
+  "2022_azerbaijan_gp",
+  "2022_italian_gp",
+  "2022_mexico_city_gp",
+  "2023_azerbaijan_gp",
+  "2023_canadian_gp",
+  "2023_japanese_gp",
+  "2023_sao_paulo_gp",
+  "2024_abu_dhabi_gp",
+  "2024_italian_gp",
+  "2024_japanese_gp",
+  "2024_mexico_city_gp",
+  "2024_monaco_gp",
+  "2025_abu_dhabi_gp",
+  "2025_bahrain_gp",
+  "2025_italian_gp",
+  "2025_mexico_city_gp",
+  "2025_monaco_gp"
+ ],
+ "worlds": {
+  "a1": {
+   "races": 34,
+   "cars": 643,
+   "cars_where_timing_changed_the_score": 423,
+   "hindsight_gain": 0.0357,
+   "mean_gain_by_offset": {
+    "-2": 0.0017,
+    "-1": -0.003,
+    "0": 0.0,
+    "1": -0.0035,
+    "2": -0.0095,
+    "3": -0.0124
+   },
+   "simple_rule": {
+    "offset": -2,
+    "fit_half_gain": 0.0065,
+    "held_out_half_gain": -0.0027
+   }
+  },
+  "a1b": {
+   "races": 34,
+   "cars": 562,
+   "cars_where_timing_changed_the_score": 352,
+   "hindsight_gain": 0.0325,
+   "mean_gain_by_offset": {
+    "-2": 0.0024,
+    "-1": 0.0008,
+    "0": 0.0,
+    "1": -0.0048,
+    "2": -0.0066,
+    "3": -0.0182
+   },
+   "simple_rule": {
+    "offset": -2,
+    "fit_half_gain": 0.0084,
+    "held_out_half_gain": -0.0038
+   }
+  }
+ }
+}
