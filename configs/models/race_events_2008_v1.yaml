@@ -1,0 +1,38 @@
+model_name: race_events
+model_version: v1
+kind: rates and shrunk team multipliers from 2008 timing; 2 values fitted by simulation
+source_type: estimated_from_data
+artifact: configs/calibration/race_events_2008_v1.json
+artifact_sha256: sha256:aeda939243ca42f4b2b7b4d37dc674583a68967566321fb7cd1b42e7d8758bb3
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2008_v1.yaml
+training_dataset_content_sha256: sha256:31fd4a3a32ff7d8882bdbc20587970c105e11cf1594d25ad2986da433873a3ee
+training_races:
+- 2008_australian_gp
+- 2008_bahrain_gp
+- 2008_belgian_gp
+- 2008_brazilian_gp
+- 2008_british_gp
+- 2008_canadian_gp
+- 2008_chinese_gp
+- 2008_european_gp
+- 2008_french_gp
+- 2008_german_gp
+- 2008_hungarian_gp
+- 2008_italian_gp
+- 2008_japanese_gp
+- 2008_malaysian_gp
+- 2008_monaco_gp
+- 2008_singapore_gp
+- 2008_spanish_gp
+- 2008_turkish_gp
+metrics:
+  dry_train_check:
+    retirements_per_race: 4.473
+    red_flags_per_race: 0.0
+    safety_cars_per_race: 0.818
+    vscs_per_race: 0.0
+    penalties_per_race: 0.0
+    penalties_per_race_after_scale: 0.0
+  held_out_check: EXP-011
+status: fitted for 2008 (H2a, D-054); held-out check EXP-023

@@ -389,7 +389,24 @@ def free_change_compound(setup: RaceSetup, car: CarState, wetness: float) -> Com
 
 
 def plan_for_car(setup: RaceSetup, car: CarState) -> tuple[PlannedStop, ...]:
-    """Plan for ``car`` as it stands at the start of its current lap."""
+    """Plan for ``car`` as it stands at the start of its current lap (refuelling era: the stint
+    on the current fuel is fixed, H1b; ``car.fuel_laps`` None = the start fuel is chosen)."""
+    if setup.rules.refuelling:
+        from f1ar.policy.refuel_strategy import best_plan_refuel
+
+        refuel = best_plan_refuel(
+            setup,
+            setup.driver(car.driver_id).profile.archetype,
+            laps_completed=car.laps_completed,
+            compound=car.compound,
+            compounds_used=car.compounds_used,
+            fuel_laps=car.fuel_laps,
+            free_first=car.fuel_laps is None,
+            tyre_age_laps=car.tyre_age_laps,
+            tyre_wear_s=car.tyre_wear_s,
+            life_used=car.tyre_life_used,
+        )
+        return () if refuel is None else refuel.stops
     return plan_stops(
         setup,
         setup.driver(car.driver_id).profile.archetype,

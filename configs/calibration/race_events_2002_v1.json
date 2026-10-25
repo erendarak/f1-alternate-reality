@@ -1,0 +1,170 @@
+{
+ "label": "2002 race events (W4, D-042)",
+ "events": [
+  "2002_australian_gp",
+  "2002_malaysian_gp",
+  "2002_brazilian_gp",
+  "2002_spanish_gp",
+  "2002_austrian_gp",
+  "2002_monaco_gp",
+  "2002_european_gp",
+  "2002_french_gp",
+  "2002_hungarian_gp",
+  "2002_belgian_gp",
+  "2002_italian_gp",
+  "2002_japanese_gp",
+  "2002_san_marino_gp",
+  "2002_canadian_gp",
+  "2002_german_gp",
+  "2002_united_states_gp",
+  "2002_british_gp"
+ ],
+ "dry_events": [
+  "2002_australian_gp",
+  "2002_malaysian_gp",
+  "2002_brazilian_gp",
+  "2002_spanish_gp",
+  "2002_austrian_gp",
+  "2002_monaco_gp",
+  "2002_european_gp",
+  "2002_french_gp",
+  "2002_hungarian_gp",
+  "2002_belgian_gp",
+  "2002_italian_gp",
+  "2002_japanese_gp",
+  "2002_san_marino_gp",
+  "2002_canadian_gp",
+  "2002_german_gp",
+  "2002_united_states_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": NaN,
+  "slow_stop_scale_s": NaN,
+  "stops": 0,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {},
+ "reliability": {
+  "field_retirements_per_start": 0.4345,
+  "teams": {
+   "arrows_2002": {
+    "failure_multiplier": 1.122,
+    "retirements": 12,
+    "starts": 22
+   },
+   "bar_2002": {
+    "failure_multiplier": 1.168,
+    "retirements": 19,
+    "starts": 34
+   },
+   "ferrari_2002": {
+    "failure_multiplier": 0.612,
+    "retirements": 5,
+    "starts": 34
+   },
+   "jaguar_2002": {
+    "failure_multiplier": 1.168,
+    "retirements": 19,
+    "starts": 34
+   },
+   "jordan_2002": {
+    "failure_multiplier": 1.049,
+    "retirements": 16,
+    "starts": 34
+   },
+   "mclaren_2002": {
+    "failure_multiplier": 1.009,
+    "retirements": 15,
+    "starts": 34
+   },
+   "minardi_2002": {
+    "failure_multiplier": 1.106,
+    "retirements": 16,
+    "starts": 31
+   },
+   "renault_2002": {
+    "failure_multiplier": 1.128,
+    "retirements": 18,
+    "starts": 34
+   },
+   "sauber_2002": {
+    "failure_multiplier": 0.85,
+    "retirements": 11,
+    "starts": 34
+   },
+   "toyota_2002": {
+    "failure_multiplier": 1.049,
+    "retirements": 16,
+    "starts": 34
+   },
+   "williams_2002": {
+    "failure_multiplier": 0.771,
+    "retirements": 9,
+    "starts": 34
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.0,
+  "sc_share": 0.4,
+  "count": 0,
+  "race_laps": 1030,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 0,
+  "races": 17,
+  "per_race": 0.0
+ },
+ "penalties": {
+  "counts": {},
+  "collision_per_pass": 0.0,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.0,
+  "other_per_car_lap": 0.0,
+  "passes": 1104,
+  "raw": {
+   "collision_per_pass": 0.0,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.0,
+   "other_per_car_lap": 0.0
+  },
+  "scale": 1.0,
+  "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
+ },
+ "fitted": {
+  "risk_scale": 0.6192,
+  "red_flag_per_crash": 0.0,
+  "fit": {
+   "races": [
+    "2002_australian_gp",
+    "2002_malaysian_gp",
+    "2002_brazilian_gp",
+    "2002_spanish_gp",
+    "2002_austrian_gp",
+    "2002_monaco_gp",
+    "2002_european_gp",
+    "2002_french_gp",
+    "2002_hungarian_gp",
+    "2002_belgian_gp",
+    "2002_italian_gp",
+    "2002_japanese_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 8.317,
+   "sim_failures_per_race": 2.85,
+   "real_retirements_per_race": 8.0,
+   "target_red_flags_per_race": 0.0
+  },
+  "check": {
+   "retirements_per_race": 9.183,
+   "red_flags_per_race": 0.0,
+   "safety_cars_per_race": 0.233,
+   "vscs_per_race": 0.0,
+   "penalties_per_race": 0.0,
+   "penalties_per_race_after_scale": 0.0
+  }
+ }
+}

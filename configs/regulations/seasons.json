@@ -1,5 +1,5 @@
 {
-  "description": "Sporting rules per season that change race strategy (H1, D-053). source_type historical_verified: each rule is from the sources below. 2000-2009 (refuelling era) is added in H1b.",
+  "description": "Sporting rules per season that change race strategy (H1, D-053). source_type historical_verified: each rule is from the sources below. 2000-2009 (refuelling era) added in H1b (D-057).",
   "rule_sources": {
     "points": "25-18-15-12-10-8-6-4-2-1 since 2010 (FIA sporting regulations; Motorsport Week on the 2025 return to the 2010-2018 structure)",
     "fastest_lap_point": "2019-2024, only if the driver finishes in the top 10; scrapped for 2025 by the WMSC in October 2024 (formula1.com/en/latest/article/fastest-lap-point-to-be-scrapped-in-2025-after-latest-fia-world-motor-sport.4pUjDzWnGRN7KVWENLc1BY)",
@@ -10,10 +10,28 @@
     "top10_start_tyres": "2010-2013 Q3 tyres, 2014-2021 Q2 tyres, free from 2022 (auto123.com/en/news/f1-top-ten-must-use-qualifying-tyres-in-2010/6429; racefans.net/2022/02/18/f1s-q3-tyre-rule-which-drivers-claimed-helped-top-teams-is-dropped-for-2022)",
     "tyre_supplier": "Bridgestone until 2010, Pirelli from 2011 (the-race.com, Bridgestone F1 history)",
     "drs": "introduced 2011 (FIA technical regulations 2011)",
-    "vsc": "approved for 2015 after tests at the final 2014 events; first used at the 2015 Monaco GP (fia.com/news/world-motor-sport-council-2014-doha)"
+    "vsc": "approved for 2015 after tests at the final 2014 events; first used at the 2015 Monaco GP (fia.com/news/world-motor-sport-council-2014-doha)",
+    "points_2000_2009": "10-6-4-3-2-1 for 1991-2002, 10-8-6-5-4-3-2-1 for 2003-2009 (en.wikipedia.org/wiki/List_of_Formula_One_points_systems)",
+    "refuelling_2000_2009": "allowed until 2009, flow capped at 12.1 l/s (formula1-dictionary.net/f1-refuelling)",
+    "tyre_changes_allowed": "2005: one set for qualifying and the race, changes only for rain or damage; scrapped for 2006 (autosport.com/f1/news/47927/wmsc-approves-rule-changes; en.wikipedia.org/wiki/Formula_One_tyres)",
+    "min_distinct_dry_compounds_2007": "both dry compounds must be used from 2007 (en.wikipedia.org/wiki/Formula_One_tyres); no such rule before",
+    "tyre_supplier_2000_2009": "Bridgestone only 2000 and 2007-2010; Bridgestone and Michelin 2001-2006 (the-race.com, Bridgestone F1 history)",
+    "race_fuel_from_qualifying": "2003-2005: no fuel added between qualifying and the race (grandprix.com/features/joe-saward/news-feature-the-new-rules.html); 2006-2009: the Q3 top ten start on their Q3 fuel, eliminated cars may refuel (f1technical.net/news/2076)",
+    "pit_lane_closed_under_sc": "2007 (from Bahrain) to 2008: pit lane closed until the field queued behind the SC; dropped for 2009 (autosport.com/f1/news/73020/fia-confirms-new-safety-car-rules)"
   },
   "defaults": {
-    "points": [25, 18, 15, 12, 10, 8, 6, 4, 2, 1],
+    "points": [
+      25,
+      18,
+      15,
+      12,
+      10,
+      8,
+      6,
+      4,
+      2,
+      1
+    ],
     "fastest_lap_point": false,
     "double_points_final_round": false,
     "shortened_race_points": "half_below_75pct",
@@ -26,6 +44,16 @@
     "vsc": true
   },
   "seasons": {
+    "2000": {"points": [10, 6, 4, 3, 2, 1], "refuelling": true, "min_distinct_dry_compounds": 0, "top10_start_tyres": "free", "tyre_supplier": "Bridgestone", "drs": false, "vsc": false},
+    "2001": {"points": [10, 6, 4, 3, 2, 1], "refuelling": true, "min_distinct_dry_compounds": 0, "top10_start_tyres": "free", "tyre_supplier": "Bridgestone, Michelin", "drs": false, "vsc": false},
+    "2002": {"points": [10, 6, 4, 3, 2, 1], "refuelling": true, "min_distinct_dry_compounds": 0, "top10_start_tyres": "free", "tyre_supplier": "Bridgestone, Michelin", "drs": false, "vsc": false},
+    "2003": {"points": [10, 8, 6, 5, 4, 3, 2, 1], "refuelling": true, "min_distinct_dry_compounds": 0, "top10_start_tyres": "free", "tyre_supplier": "Bridgestone, Michelin", "drs": false, "vsc": false, "race_fuel_from_qualifying": "all"},
+    "2004": {"points": [10, 8, 6, 5, 4, 3, 2, 1], "refuelling": true, "min_distinct_dry_compounds": 0, "top10_start_tyres": "free", "tyre_supplier": "Bridgestone, Michelin", "drs": false, "vsc": false, "race_fuel_from_qualifying": "all"},
+    "2005": {"points": [10, 8, 6, 5, 4, 3, 2, 1], "refuelling": true, "min_distinct_dry_compounds": 0, "top10_start_tyres": "free", "tyre_supplier": "Bridgestone, Michelin", "drs": false, "vsc": false, "race_fuel_from_qualifying": "all", "tyre_changes_allowed": false},
+    "2006": {"points": [10, 8, 6, 5, 4, 3, 2, 1], "refuelling": true, "min_distinct_dry_compounds": 0, "top10_start_tyres": "free", "tyre_supplier": "Bridgestone, Michelin", "drs": false, "vsc": false, "race_fuel_from_qualifying": "top10"},
+    "2007": {"points": [10, 8, 6, 5, 4, 3, 2, 1], "refuelling": true, "min_distinct_dry_compounds": 2, "top10_start_tyres": "free", "tyre_supplier": "Bridgestone", "drs": false, "vsc": false, "race_fuel_from_qualifying": "top10", "pit_lane_closed_under_sc": true},
+    "2008": {"points": [10, 8, 6, 5, 4, 3, 2, 1], "refuelling": true, "min_distinct_dry_compounds": 2, "top10_start_tyres": "free", "tyre_supplier": "Bridgestone", "drs": false, "vsc": false, "race_fuel_from_qualifying": "top10", "pit_lane_closed_under_sc": true},
+    "2009": {"points": [10, 8, 6, 5, 4, 3, 2, 1], "refuelling": true, "min_distinct_dry_compounds": 2, "top10_start_tyres": "free", "tyre_supplier": "Bridgestone", "drs": false, "vsc": false, "race_fuel_from_qualifying": "top10"},
     "2010": {"tyre_supplier": "Bridgestone", "drs": false, "vsc": false, "top10_start_tyres": "q3_tyres"},
     "2011": {"vsc": false, "top10_start_tyres": "q3_tyres"},
     "2012": {"vsc": false, "top10_start_tyres": "q3_tyres"},

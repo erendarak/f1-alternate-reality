@@ -88,7 +88,7 @@ from f1ar.simulation.weather import (
 )
 from f1ar.simulation.weather import penalty_s as weather_penalty_s
 
-ENGINE_VERSION = "lightweight_engine_v0.17.0"
+ENGINE_VERSION = "lightweight_engine_v0.18.0"
 """v0.15.0: racecraft intent ATTACK / NORMAL / DEFEND per lap (risk for track position, D-048).
 v0.14.0: fresh wet-weather tyres under SC/VSC and the wet incident factor, fitted on the 2024
 wet races (D-046).
@@ -142,7 +142,9 @@ def _sample_next_lap(
     wetness: float = 0.0,
     tyre_life_used: float = 0.0,
     fresh_lap: bool = False,
+    fuel_laps: float | None = None,
 ) -> float:
+    """``fuel_laps``: laps of fuel on board (refuelling era, H1b); None = the race's fuel."""
     entry = setup.driver(driver_id)
     weather = setup.weather
     extra = weather_penalty_s(weather, compound, wetness) * driver_factor(
@@ -161,7 +163,9 @@ def _sample_next_lap(
         compound=compound,
         tyre_wear_s=tyre_wear_s,
         pace_mode=pace_mode,
-        laps_remaining=setup.track.total_laps - laps_completed,
+        laps_remaining=setup.track.total_laps - laps_completed
+        if fuel_laps is None
+        else max(0, round(fuel_laps)),
         car_offset_s=entry.car_pace_offset_s
         + entry.driver_pace_offset_s  # W2: the driver vs his teammate
         + setup.lap_model.form_sd_s * normal(seed, "race_form", driver_id),  # and today's form
@@ -208,6 +212,28 @@ def pending_stop(car: CarState) -> Compound | None:
     return None
 
 
+def _start_fuel(setup: RaceSetup, driver_id: str, compound: Compound) -> float | None:
+    """Refuelling era (H1b): laps of fuel on the grid: fixed in qualifying (race-fuel rule) or
+    the baseline plan's first stint; None without refuelling."""
+    if not setup.rules.refuelling:
+        return None
+    entry = setup.driver(driver_id)
+    if entry.start_fuel_laps is not None:
+        return float(min(entry.start_fuel_laps, setup.track.total_laps))
+    from f1ar.policy.refuel_strategy import best_plan_refuel
+
+    plan = best_plan_refuel(
+        setup,
+        entry.profile.archetype,
+        laps_completed=0,
+        compound=compound,
+        compounds_used=(compound,),
+        fuel_laps=None,
+        free_first=True,
+    )
+    return float(setup.track.total_laps if plan is None else plan.first_stint_laps)
+
+
 def create_world(
     setup: RaceSetup, *, seed: int, world_id: str, timeline_id: str | None = None
 ) -> WorldState:
@@ -227,6 +253,7 @@ def create_world(
     cars = []
     for entry in setup.drivers:
         pace_mode = PaceMode.BALANCED
+        start_fuel = _start_fuel(setup, entry.driver_id, entry.start_compound)
         target = _sample_next_lap(
             setup,
             seed,
@@ -236,6 +263,7 @@ def create_world(
             laps_completed=0,
             tyre_wear_s=0.0,
             wetness=weather.wetness,
+            fuel_laps=start_fuel,
         )
         car = CarState(
             driver_id=entry.driver_id,
@@ -263,6 +291,7 @@ def create_world(
             incident_at_fraction=None,
             lap_started_at_s=0.0,
             last_lap_time_s=None,
+            fuel_laps=start_fuel,
             finish_time_s=None,
             retired_reason=None,
             retired_at_s=None,
@@ -1320,7 +1349,12 @@ def _complete_lap(
         car.driver_id,
         {"lap": laps, "lap_time_s": lap_time, "crossing_time_s": crossing_time},
     )
+    if car.fuel_laps is not None:  # H1b: one lap of fuel burnt; an empty tank must stop
+        fuel_left = car.fuel_laps - 1.0
+        if stop is None and fuel_left < 1.0 and laps < setup.track.total_laps:
+            stop = car.compound
     common = {
+        "fuel_laps": None if car.fuel_laps is None else car.fuel_laps - 1.0,
         "laps_completed": laps,
         "tyre_age_laps": car.tyre_age_laps + 1,
         "tyre_wear_s": wear,
@@ -1399,6 +1433,7 @@ def _complete_lap(
             wetness=state.weather.wetness,
             tyre_life_used=car.tyre_life_used,
             fresh_lap=car.tyre_age_laps == 1 and car.pit_stops > 0,
+            fuel_laps=car.fuel_laps,
         )
     )
     car = car.model_copy(
@@ -1452,6 +1487,8 @@ def _pit(
 ) -> tuple[CarState, float]:
     """Execute a stop at the end of lap ``car.laps_completed``; returns the car and its hold."""
     setup = state.setup
+    if setup.rules.refuelling and car.fuel_laps is not None:
+        return _refuel_stop(state, car, compound, emit, neutralised=neutralised)
     standstill = standstill_s(setup, state.rng.seed, car.driver_id, car.laps_completed)
     hold = setup.pit.lane_loss_s + standstill
     emit(
@@ -1493,6 +1530,91 @@ def _pit(
                 {"plan": plan_text(plan), "policy_id": POLICY_ID, "actor_id": POLICY_ID},
             )
         car = car.model_copy(update={"planned_stops": plan})
+    return car, hold
+
+
+def _refuel_stop(
+    state: WorldState, car: CarState, compound: Compound, emit: _Emit, *, neutralised: bool
+) -> tuple[CarState, float]:
+    """A stop in the refuelling era (H1b): tyres (unless 2005's rule keeps the set: a dry stop
+    is then fuel only) and the fuel for the next stint, chosen now by the plan (a USER/AGENT
+    car takes the baseline's fuel too). Stationary time = the longer of the tyre change and the
+    refuelling (``refuel_s_per_lap`` per lap of fuel put in)."""
+    from f1ar.policy.refuel_strategy import best_plan_refuel
+
+    setup = state.setup
+    keep_set = (
+        not setup.rules.tyre_changes_allowed and compound is car.compound and is_slick(compound)
+    )
+    if not keep_set:
+        used = (
+            car.compounds_used
+            if compound in car.compounds_used
+            else (*car.compounds_used, compound)
+        )
+        car = car.model_copy(
+            update={
+                "compound": compound,
+                "tyre_age_laps": 0,
+                "tyre_wear_s": 0.0,
+                "tyre_life_used": 0.0,
+                "compounds_used": used,
+            }
+        )
+    left = max(0.0, car.fuel_laps or 0.0)
+    plan = best_plan_refuel(
+        setup,
+        setup.driver(car.driver_id).profile.archetype,
+        laps_completed=car.laps_completed,
+        compound=car.compound,
+        compounds_used=car.compounds_used,
+        fuel_laps=None,
+        free_first=True,
+        at_stop=True,
+        tyre_age_laps=car.tyre_age_laps,
+        tyre_wear_s=car.tyre_wear_s,
+        life_used=car.tyre_life_used,
+    )
+    remaining = setup.track.total_laps - car.laps_completed
+    stint = remaining if plan is None else plan.first_stint_laps
+    added = max(0.0, stint - left)
+    refuel = added * setup.pit.refuel_s_per_lap
+    tyres = (
+        0.0 if keep_set else standstill_s(setup, state.rng.seed, car.driver_id, car.laps_completed)
+    )
+    standstill = max(tyres, refuel)
+    hold = setup.pit.lane_loss_s + standstill
+    emit(
+        "PIT_STOP",
+        car.driver_id,
+        {
+            "lap": car.laps_completed,
+            "from_compound": car.compound.value if keep_set else compound.value,
+            "to_compound": compound.value,
+            "tyre_age_laps": car.tyre_age_laps,
+            "standstill_s": standstill,
+            "pit_loss_s": hold,
+            "stop_number": car.pit_stops + 1,
+            "under": state.race_control.phase.value if neutralised else "GREEN",
+            "fuel_laps_added": round(added, 1),
+            "refuel_s": round(refuel, 2),
+        },
+    )
+    stops = () if plan is None else plan.stops
+    if car.controller is StrategyController.BASELINE and stops != car.planned_stops:
+        emit(
+            "STRATEGY_PLANNED",
+            car.driver_id,
+            {"plan": plan_text(stops), "policy_id": POLICY_ID, "actor_id": POLICY_ID},
+        )
+    car = car.model_copy(
+        update={
+            "fuel_laps": left + added,
+            "pit_stops": car.pit_stops + 1,
+            "pit_request": None,
+            "planned_stops": stops if car.controller is StrategyController.BASELINE else (),
+        }
+    )
     return car, hold
 
 

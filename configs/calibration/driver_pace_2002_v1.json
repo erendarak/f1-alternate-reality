@@ -1,0 +1,240 @@
+{
+ "label": "2002 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2002_australian_gp",
+  "2002_malaysian_gp",
+  "2002_brazilian_gp",
+  "2002_spanish_gp",
+  "2002_austrian_gp",
+  "2002_monaco_gp",
+  "2002_european_gp",
+  "2002_french_gp",
+  "2002_hungarian_gp",
+  "2002_belgian_gp",
+  "2002_italian_gp",
+  "2002_japanese_gp"
+ ],
+ "field_noise_s": 0.6601,
+ "form_sd_s": 0.6116,
+ "form_note": "within-pair gap SD 0.892 s, sampling SD 0.217 s over 86 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "BAR": {
+   "team_id": "ferrari_2002",
+   "pace_vs_teammate_s": 0.0772,
+   "raw_mean_gap_s": 0.1062,
+   "races": 8,
+   "lap_noise_s": 0.6907,
+   "raw_noise_s": 0.7044,
+   "clean_laps": 335
+  },
+  "BER": {
+   "team_id": "arrows_2002",
+   "pace_vs_teammate_s": 0.2871,
+   "raw_mean_gap_s": 0.5024,
+   "races": 4,
+   "lap_noise_s": 0.7011,
+   "raw_noise_s": 0.7587,
+   "clean_laps": 107
+  },
+  "BUT": {
+   "team_id": "renault_2002",
+   "pace_vs_teammate_s": 0.0912,
+   "raw_mean_gap_s": 0.1254,
+   "races": 8,
+   "lap_noise_s": 0.6519,
+   "raw_noise_s": 0.6465,
+   "clean_laps": 232
+  },
+  "COU": {
+   "team_id": "mclaren_2002",
+   "pace_vs_teammate_s": 0.0248,
+   "raw_mean_gap_s": 0.0341,
+   "races": 8,
+   "lap_noise_s": 0.6675,
+   "raw_noise_s": 0.6725,
+   "clean_laps": 220
+  },
+  "DAV": {
+   "team_id": "minardi_2002",
+   "pace_vs_teammate_s": 0.0549,
+   "raw_mean_gap_s": 0.2195,
+   "races": 1,
+   "lap_noise_s": 0.628,
+   "raw_noise_s": 0.4944,
+   "clean_laps": 36
+  },
+  "DLR": {
+   "team_id": "jaguar_2002",
+   "pace_vs_teammate_s": -0.0295,
+   "raw_mean_gap_s": -0.0394,
+   "races": 9,
+   "lap_noise_s": 0.6578,
+   "raw_noise_s": 0.6563,
+   "clean_laps": 221
+  },
+  "FIS": {
+   "team_id": "jordan_2002",
+   "pace_vs_teammate_s": -0.2137,
+   "raw_mean_gap_s": -0.2938,
+   "races": 8,
+   "lap_noise_s": 0.6601,
+   "raw_noise_s": 0.6601,
+   "clean_laps": 254
+  },
+  "FRE": {
+   "team_id": "arrows_2002",
+   "pace_vs_teammate_s": -0.2871,
+   "raw_mean_gap_s": -0.5024,
+   "races": 4,
+   "lap_noise_s": 0.6766,
+   "raw_noise_s": 0.6908,
+   "clean_laps": 175
+  },
+  "HEI": {
+   "team_id": "sauber_2002",
+   "pace_vs_teammate_s": -0.2197,
+   "raw_mean_gap_s": -0.3139,
+   "races": 7,
+   "lap_noise_s": 0.6167,
+   "raw_noise_s": 0.5977,
+   "clean_laps": 342
+  },
+  "IRV": {
+   "team_id": "jaguar_2002",
+   "pace_vs_teammate_s": 0.0295,
+   "raw_mean_gap_s": 0.0394,
+   "races": 9,
+   "lap_noise_s": 0.67,
+   "raw_noise_s": 0.6742,
+   "clean_laps": 358
+  },
+  "MAS": {
+   "team_id": "sauber_2002",
+   "pace_vs_teammate_s": 0.2197,
+   "raw_mean_gap_s": 0.3139,
+   "races": 7,
+   "lap_noise_s": 0.6852,
+   "raw_noise_s": 0.7019,
+   "clean_laps": 226
+  },
+  "MCN": {
+   "team_id": "toyota_2002",
+   "pace_vs_teammate_s": 0.1186,
+   "raw_mean_gap_s": 0.1631,
+   "races": 8,
+   "lap_noise_s": 0.6059,
+   "raw_noise_s": 0.5705,
+   "clean_laps": 229
+  },
+  "MON": {
+   "team_id": "williams_2002",
+   "pace_vs_teammate_s": -0.0017,
+   "raw_mean_gap_s": -0.0023,
+   "races": 10,
+   "lap_noise_s": 0.6288,
+   "raw_noise_s": 0.6179,
+   "clean_laps": 432
+  },
+  "MSC": {
+   "team_id": "ferrari_2002",
+   "pace_vs_teammate_s": -0.0772,
+   "raw_mean_gap_s": -0.1062,
+   "races": 8,
+   "lap_noise_s": 0.7307,
+   "raw_noise_s": 0.7596,
+   "clean_laps": 366
+  },
+  "PAN": {
+   "team_id": "bar_2002",
+   "pace_vs_teammate_s": -0.014,
+   "raw_mean_gap_s": -0.02,
+   "races": 7,
+   "lap_noise_s": 0.6892,
+   "raw_noise_s": 0.7233,
+   "clean_laps": 128
+  },
+  "RAI": {
+   "team_id": "mclaren_2002",
+   "pace_vs_teammate_s": -0.0248,
+   "raw_mean_gap_s": -0.0341,
+   "races": 8,
+   "lap_noise_s": 0.6566,
+   "raw_noise_s": 0.6538,
+   "clean_laps": 190
+  },
+  "SAL": {
+   "team_id": "toyota_2002",
+   "pace_vs_teammate_s": -0.1186,
+   "raw_mean_gap_s": -0.1631,
+   "races": 8,
+   "lap_noise_s": 0.6761,
+   "raw_noise_s": 0.6822,
+   "clean_laps": 391
+  },
+  "SAT": {
+   "team_id": "jordan_2002",
+   "pace_vs_teammate_s": 0.2137,
+   "raw_mean_gap_s": 0.2938,
+   "races": 8,
+   "lap_noise_s": 0.6581,
+   "raw_noise_s": 0.6571,
+   "clean_laps": 275
+  },
+  "SCH": {
+   "team_id": "williams_2002",
+   "pace_vs_teammate_s": 0.0017,
+   "raw_mean_gap_s": 0.0023,
+   "races": 10,
+   "lap_noise_s": 0.6549,
+   "raw_noise_s": 0.6528,
+   "clean_laps": 382
+  },
+  "TRU": {
+   "team_id": "renault_2002",
+   "pace_vs_teammate_s": -0.0912,
+   "raw_mean_gap_s": -0.1254,
+   "races": 8,
+   "lap_noise_s": 0.6338,
+   "raw_noise_s": 0.6196,
+   "clean_laps": 278
+  },
+  "VIL": {
+   "team_id": "bar_2002",
+   "pace_vs_teammate_s": 0.014,
+   "raw_mean_gap_s": 0.02,
+   "races": 7,
+   "lap_noise_s": 0.6499,
+   "raw_noise_s": 0.6443,
+   "clean_laps": 275
+  },
+  "WEB": {
+   "team_id": "minardi_2002",
+   "pace_vs_teammate_s": -0.4918,
+   "raw_mean_gap_s": -0.6557,
+   "races": 9,
+   "lap_noise_s": 0.7123,
+   "raw_noise_s": 0.736,
+   "clean_laps": 329
+  },
+  "YOO": {
+   "team_id": "minardi_2002",
+   "pace_vs_teammate_s": 0.5165,
+   "raw_mean_gap_s": 0.7102,
+   "races": 8,
+   "lap_noise_s": 0.7176,
+   "raw_noise_s": 0.7543,
+   "clean_laps": 235
+  }
+ },
+ "overtake_threshold_shift_s": 0.0,
+ "overtake_shift_fit": {
+  "skipped": "superseded by the W3 racecraft refit (H2a)"
+ }
+}

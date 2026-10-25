@@ -1,0 +1,1419 @@
+{
+ "seeds": 6,
+ "seasons": {
+  "2000": {
+   "dry_test": [
+    "2000_british_gp",
+    "2000_hungarian_gp",
+    "2000_japanese_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.206,
+     "passes_bias": -12.333,
+     "retirements_bias": 2.5,
+     "safety_cars_bias": 0.333,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.364,
+     "passes_mae": 14.667,
+     "retirements_mae": 2.5,
+     "safety_cars_mae": 0.333,
+     "vscs_mae": 0.0,
+     "order_rho": 0.256
+    },
+    "borrowed": {
+     "stops_bias": 1.106,
+     "passes_bias": -15.167,
+     "retirements_bias": -3.167,
+     "safety_cars_bias": 0.444,
+     "vscs_bias": 0.0,
+     "stops_mae": 1.151,
+     "passes_mae": 16.389,
+     "retirements_mae": 3.167,
+     "safety_cars_mae": 0.444,
+     "vscs_mae": 0.0,
+     "order_rho": 0.581
+    }
+   },
+   "races": {
+    "2000_british_gp": {
+     "real": {
+      "stops": 1.7058823529411764,
+      "passes": 83,
+      "retirements": 5,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.34,
+      "passes": 56.83,
+      "retirements": 6.83,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.109
+     },
+     "borrowed": {
+      "stops": 3.0,
+      "passes": 55.33,
+      "retirements": 2.5,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.534
+     }
+    },
+    "2000_hungarian_gp": {
+     "real": {
+      "stops": 2.0625,
+      "passes": 45,
+      "retirements": 6,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.3,
+      "passes": 48.5,
+      "retirements": 10.67,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.293
+     },
+     "borrowed": {
+      "stops": 4.15,
+      "passes": 46.83,
+      "retirements": 4.0,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.631
+     }
+    },
+    "2000_japanese_gp": {
+     "real": {
+      "stops": 2.066666666666667,
+      "passes": 71,
+      "retirements": 7,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.58,
+      "passes": 56.67,
+      "retirements": 8.0,
+      "safety_cars": 0.0,
+      "vscs": 0.0,
+      "order_rho": 0.366
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 51.33,
+      "retirements": 2.0,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.577
+     }
+    }
+   }
+  },
+  "2001": {
+   "dry_test": [
+    "2001_san_marino_gp",
+    "2001_canadian_gp",
+    "2001_german_gp",
+    "2001_united_states_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.247,
+     "passes_bias": 16.25,
+     "retirements_bias": -2.167,
+     "safety_cars_bias": -0.167,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.247,
+     "passes_mae": 16.25,
+     "retirements_mae": 2.417,
+     "safety_cars_mae": 0.333,
+     "vscs_mae": 0.0,
+     "order_rho": 0.066
+    },
+    "borrowed": {
+     "stops_bias": 1.293,
+     "passes_bias": -9.125,
+     "retirements_bias": -7.417,
+     "safety_cars_bias": 0.125,
+     "vscs_bias": 0.0,
+     "stops_mae": 1.293,
+     "passes_mae": 9.375,
+     "retirements_mae": 7.417,
+     "safety_cars_mae": 0.458,
+     "vscs_mae": 0.0,
+     "order_rho": 0.276
+    }
+   },
+   "races": {
+    "2001_san_marino_gp": {
+     "real": {
+      "stops": 2.0833333333333335,
+      "passes": 38,
+      "retirements": 10,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 55.83,
+      "retirements": 8.33,
+      "safety_cars": 0.17,
+      "vscs": 0.0,
+      "order_rho": 0.049
+     },
+     "borrowed": {
+      "stops": 3.0,
+      "passes": 29.0,
+      "retirements": 3.5,
+      "safety_cars": 0.17,
+      "vscs": 0.0,
+      "order_rho": 0.367
+     }
+    },
+    "2001_canadian_gp": {
+     "real": {
+      "stops": 1.3333333333333333,
+      "passes": 44,
+      "retirements": 12,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 72.0,
+      "retirements": 8.5,
+      "safety_cars": 0.0,
+      "vscs": 0.0,
+      "order_rho": 0.241
+     },
+     "borrowed": {
+      "stops": 3.0,
+      "passes": 44.5,
+      "retirements": 2.67,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.305
+     }
+    },
+    "2001_german_gp": {
+     "real": {
+      "stops": 1.5,
+      "passes": 53,
+      "retirements": 10,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 70.83,
+      "retirements": 6.0,
+      "safety_cars": 0.0,
+      "vscs": 0.0,
+      "order_rho": -0.051
+     },
+     "borrowed": {
+      "stops": 2.16,
+      "passes": 49.5,
+      "retirements": 1.5,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.128
+     }
+    },
+    "2001_united_states_gp": {
+     "real": {
+      "stops": 1.0714285714285714,
+      "passes": 62,
+      "retirements": 8,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 63.33,
+      "retirements": 8.5,
+      "safety_cars": 0.17,
+      "vscs": 0.0,
+      "order_rho": 0.024
+     },
+     "borrowed": {
+      "stops": 3.0,
+      "passes": 37.5,
+      "retirements": 2.67,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.304
+     }
+    }
+   }
+  },
+  "2002": {
+   "dry_test": [
+    "2002_san_marino_gp",
+    "2002_canadian_gp",
+    "2002_german_gp",
+    "2002_united_states_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.634,
+     "passes_bias": 19.167,
+     "retirements_bias": 1.208,
+     "safety_cars_bias": 0.167,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.634,
+     "passes_mae": 20.583,
+     "retirements_mae": 2.042,
+     "safety_cars_mae": 0.5,
+     "vscs_mae": 0.0,
+     "order_rho": 0.251
+    },
+    "borrowed": {
+     "stops_bias": 1.2,
+     "passes_bias": 0.333,
+     "retirements_bias": -5.375,
+     "safety_cars_bias": 0.417,
+     "vscs_bias": 0.0,
+     "stops_mae": 1.2,
+     "passes_mae": 12.333,
+     "retirements_mae": 5.375,
+     "safety_cars_mae": 0.583,
+     "vscs_mae": 0.0,
+     "order_rho": 0.515
+    }
+   },
+   "races": {
+    "2002_san_marino_gp": {
+     "real": {
+      "stops": 2.1818181818181817,
+      "passes": 24,
+      "retirements": 9,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 65.33,
+      "retirements": 8.67,
+      "safety_cars": 0.17,
+      "vscs": 0.0,
+      "order_rho": 0.389
+     },
+     "borrowed": {
+      "stops": 3.19,
+      "passes": 46.5,
+      "retirements": 3.5,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.583
+     }
+    },
+    "2002_canadian_gp": {
+     "real": {
+      "stops": 1.8461538461538463,
+      "passes": 45,
+      "retirements": 9,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 60.67,
+      "retirements": 9.67,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.139
+     },
+     "borrowed": {
+      "stops": 3.17,
+      "passes": 39.67,
+      "retirements": 2.83,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.434
+     }
+    },
+    "2002_german_gp": {
+     "real": {
+      "stops": 2.111111111111111,
+      "passes": 70,
+      "retirements": 11,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 67.17,
+      "retirements": 9.67,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.353
+     },
+     "borrowed": {
+      "stops": 3.0,
+      "passes": 51.33,
+      "retirements": 2.17,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.605
+     }
+    },
+    "2002_united_states_gp": {
+     "real": {
+      "stops": 1.5625,
+      "passes": 39,
+      "retirements": 4,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.17,
+      "passes": 61.5,
+      "retirements": 9.83,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.125
+     },
+     "borrowed": {
+      "stops": 3.14,
+      "passes": 41.83,
+      "retirements": 3.0,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.439
+     }
+    }
+   }
+  },
+  "2003": {
+   "dry_test": [
+    "2003_san_marino_gp",
+    "2003_canadian_gp",
+    "2003_german_gp",
+    "2003_japanese_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": 0.386,
+     "passes_bias": 13.5,
+     "retirements_bias": 0.042,
+     "safety_cars_bias": 1.042,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.431,
+     "passes_mae": 14.667,
+     "retirements_mae": 1.292,
+     "safety_cars_mae": 1.042,
+     "vscs_mae": 0.0,
+     "order_rho": 0.267
+    },
+    "borrowed": {
+     "stops_bias": 0.488,
+     "passes_bias": -12.708,
+     "retirements_bias": -3.375,
+     "safety_cars_bias": 0.5,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.649,
+     "passes_mae": 12.708,
+     "retirements_mae": 3.375,
+     "safety_cars_mae": 0.5,
+     "vscs_mae": 0.0,
+     "order_rho": 0.449
+    }
+   },
+   "races": {
+    "2003_san_marino_gp": {
+     "real": {
+      "stops": 2.533333333333333,
+      "passes": 45,
+      "retirements": 5,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.44,
+      "passes": 59.67,
+      "retirements": 6.67,
+      "safety_cars": 1.33,
+      "vscs": 0.0,
+      "order_rho": 0.41
+     },
+     "borrowed": {
+      "stops": 2.93,
+      "passes": 32.33,
+      "retirements": 2.5,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.542
+     }
+    },
+    "2003_canadian_gp": {
+     "real": {
+      "stops": 1.9090909090909092,
+      "passes": 43,
+      "retirements": 9,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.42,
+      "passes": 77.33,
+      "retirements": 6.5,
+      "safety_cars": 1.67,
+      "vscs": 0.0,
+      "order_rho": 0.231
+     },
+     "borrowed": {
+      "stops": 2.9,
+      "passes": 40.17,
+      "retirements": 3.0,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.448
+     }
+    },
+    "2003_german_gp": {
+     "real": {
+      "stops": 2.4545454545454546,
+      "passes": 45,
+      "retirements": 6,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 3.2,
+      "passes": 52.33,
+      "retirements": 6.33,
+      "safety_cars": 1.17,
+      "vscs": 0.0,
+      "order_rho": 0.305
+     },
+     "borrowed": {
+      "stops": 3.34,
+      "passes": 33.5,
+      "retirements": 2.67,
+      "safety_cars": 1.0,
+      "vscs": 0.0,
+      "order_rho": 0.455
+     }
+    },
+    "2003_japanese_gp": {
+     "real": {
+      "stops": 2.6875,
+      "passes": 91,
+      "retirements": 4,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 3.07,
+      "passes": 88.67,
+      "retirements": 4.67,
+      "safety_cars": 1.0,
+      "vscs": 0.0,
+      "order_rho": 0.12
+     },
+     "borrowed": {
+      "stops": 2.37,
+      "passes": 67.17,
+      "retirements": 2.33,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.352
+     }
+    }
+   }
+  },
+  "2004": {
+   "dry_test": [
+    "2004_san_marino_gp",
+    "2004_canadian_gp",
+    "2004_german_gp",
+    "2004_chinese_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.404,
+     "passes_bias": 5.375,
+     "retirements_bias": 0.125,
+     "safety_cars_bias": 0.458,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.404,
+     "passes_mae": 17.875,
+     "retirements_mae": 0.958,
+     "safety_cars_mae": 0.458,
+     "vscs_mae": 0.0,
+     "order_rho": 0.352
+    },
+    "borrowed": {
+     "stops_bias": 0.033,
+     "passes_bias": -12.958,
+     "retirements_bias": -2.25,
+     "safety_cars_bias": 0.333,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.165,
+     "passes_mae": 17.958,
+     "retirements_mae": 2.25,
+     "safety_cars_mae": 0.333,
+     "vscs_mae": 0.0,
+     "order_rho": 0.499
+    }
+   },
+   "races": {
+    "2004_san_marino_gp": {
+     "real": {
+      "stops": 2.933333333333333,
+      "passes": 35,
+      "retirements": 5,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.3,
+      "passes": 63.83,
+      "retirements": 3.33,
+      "safety_cars": 0.0,
+      "vscs": 0.0,
+      "order_rho": 0.421
+     },
+     "borrowed": {
+      "stops": 2.97,
+      "passes": 43.5,
+      "retirements": 2.0,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.599
+     }
+    },
+    "2004_canadian_gp": {
+     "real": {
+      "stops": 2.642857142857143,
+      "passes": 51,
+      "retirements": 5,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.56,
+      "passes": 57.33,
+      "retirements": 5.33,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.327
+     },
+     "borrowed": {
+      "stops": 3.0,
+      "passes": 36.33,
+      "retirements": 2.17,
+      "safety_cars": 0.17,
+      "vscs": 0.0,
+      "order_rho": 0.497
+     }
+    },
+    "2004_german_gp": {
+     "real": {
+      "stops": 3.0,
+      "passes": 88,
+      "retirements": 3,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.46,
+      "passes": 63.0,
+      "retirements": 4.17,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.284
+     },
+     "borrowed": {
+      "stops": 3.0,
+      "passes": 40.83,
+      "retirements": 2.17,
+      "safety_cars": 0.0,
+      "vscs": 0.0,
+      "order_rho": 0.298
+     }
+    },
+    "2004_chinese_gp": {
+     "real": {
+      "stops": 2.625,
+      "passes": 67,
+      "retirements": 4,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.27,
+      "passes": 78.33,
+      "retirements": 4.67,
+      "safety_cars": 1.0,
+      "vscs": 0.0,
+      "order_rho": 0.377
+     },
+     "borrowed": {
+      "stops": 2.36,
+      "passes": 68.5,
+      "retirements": 1.67,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.601
+     }
+    }
+   }
+  },
+  "2005": {
+   "dry_test": [
+    "2005_san_marino_gp",
+    "2005_canadian_gp",
+    "2005_german_gp",
+    "2005_belgian_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.404,
+     "passes_bias": -18.125,
+     "retirements_bias": -0.958,
+     "safety_cars_bias": -0.167,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.404,
+     "passes_mae": 26.042,
+     "retirements_mae": 2.625,
+     "safety_cars_mae": 0.25,
+     "vscs_mae": 0.0,
+     "order_rho": 0.226
+    },
+    "borrowed": {
+     "stops_bias": -0.505,
+     "passes_bias": 1.167,
+     "retirements_bias": -3.5,
+     "safety_cars_bias": -0.208,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.505,
+     "passes_mae": 17.667,
+     "retirements_mae": 4.0,
+     "safety_cars_mae": 0.458,
+     "vscs_mae": 0.0,
+     "order_rho": 0.275
+    }
+   },
+   "races": {
+    "2005_san_marino_gp": {
+     "real": {
+      "stops": 2.1333333333333333,
+      "passes": 44,
+      "retirements": 5,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 49.17,
+      "retirements": 3.17,
+      "safety_cars": 0.17,
+      "vscs": 0.0,
+      "order_rho": 0.284
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 55.67,
+      "retirements": 1.33,
+      "safety_cars": 0.17,
+      "vscs": 0.0,
+      "order_rho": 0.422
+     }
+    },
+    "2005_canadian_gp": {
+     "real": {
+      "stops": 2.6666666666666665,
+      "passes": 38,
+      "retirements": 8,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.26,
+      "passes": 48.67,
+      "retirements": 5.67,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.092
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 64.0,
+      "retirements": 2.0,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.218
+     }
+    },
+    "2005_german_gp": {
+     "real": {
+      "stops": 2.736842105263158,
+      "passes": 81,
+      "retirements": 1,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 38.17,
+      "retirements": 4.33,
+      "safety_cars": 0.0,
+      "vscs": 0.0,
+      "order_rho": 0.401
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 61.83,
+      "retirements": 2.0,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.316
+     }
+    },
+    "2005_belgian_gp": {
+     "real": {
+      "stops": 1.5384615384615385,
+      "passes": 105,
+      "retirements": 7,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.2,
+      "passes": 59.5,
+      "retirements": 4.0,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.126
+     },
+     "borrowed": {
+      "stops": 1.06,
+      "passes": 91.17,
+      "retirements": 1.67,
+      "safety_cars": 0.17,
+      "vscs": 0.0,
+      "order_rho": 0.143
+     }
+    }
+   }
+  },
+  "2006": {
+   "dry_test": [
+    "2006_san_marino_gp",
+    "2006_british_gp",
+    "2006_german_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.215,
+     "passes_bias": 22.222,
+     "retirements_bias": 0.611,
+     "safety_cars_bias": -0.333,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.215,
+     "passes_mae": 22.222,
+     "retirements_mae": 2.167,
+     "safety_cars_mae": 0.556,
+     "vscs_mae": 0.0,
+     "order_rho": 0.45
+    },
+    "borrowed": {
+     "stops_bias": 0.864,
+     "passes_bias": 15.667,
+     "retirements_bias": -2.222,
+     "safety_cars_bias": -0.167,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.864,
+     "passes_mae": 20.778,
+     "retirements_mae": 2.778,
+     "safety_cars_mae": 0.389,
+     "vscs_mae": 0.0,
+     "order_rho": 0.68
+    }
+   },
+   "races": {
+    "2006_san_marino_gp": {
+     "real": {
+      "stops": 2.125,
+      "passes": 20,
+      "retirements": 5,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.77,
+      "passes": 47.33,
+      "retirements": 4.83,
+      "safety_cars": 0.17,
+      "vscs": 0.0,
+      "order_rho": 0.445
+     },
+     "borrowed": {
+      "stops": 2.79,
+      "passes": 52.33,
+      "retirements": 1.5,
+      "safety_cars": 0.17,
+      "vscs": 0.0,
+      "order_rho": 0.722
+     }
+    },
+    "2006_british_gp": {
+     "real": {
+      "stops": 1.9444444444444444,
+      "passes": 40,
+      "retirements": 2,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.68,
+      "passes": 70.5,
+      "retirements": 6.17,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.499
+     },
+     "borrowed": {
+      "stops": 3.02,
+      "passes": 62.33,
+      "retirements": 2.83,
+      "safety_cars": 1.0,
+      "vscs": 0.0,
+      "order_rho": 0.796
+     }
+    },
+    "2006_german_gp": {
+     "real": {
+      "stops": 2.142857142857143,
+      "passes": 68,
+      "retirements": 7,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.12,
+      "passes": 76.83,
+      "retirements": 4.83,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.405
+     },
+     "borrowed": {
+      "stops": 3.0,
+      "passes": 60.33,
+      "retirements": 3.0,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.522
+     }
+    }
+   }
+  },
+  "2007": {
+   "dry_test": [
+    "2007_spanish_gp",
+    "2007_french_gp",
+    "2007_turkish_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": 0.22,
+     "passes_bias": 0.278,
+     "retirements_bias": 0.722,
+     "safety_cars_bias": 0.5,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.336,
+     "passes_mae": 11.944,
+     "retirements_mae": 2.167,
+     "safety_cars_mae": 0.5,
+     "vscs_mae": 0.0,
+     "order_rho": 0.463
+    },
+    "borrowed": {
+     "stops_bias": 0.556,
+     "passes_bias": -11.944,
+     "retirements_bias": -2.0,
+     "safety_cars_bias": 0.722,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.556,
+     "passes_mae": 11.944,
+     "retirements_mae": 2.222,
+     "safety_cars_mae": 0.722,
+     "vscs_mae": 0.0,
+     "order_rho": 0.582
+    }
+   },
+   "races": {
+    "2007_spanish_gp": {
+     "real": {
+      "stops": 2.2142857142857144,
+      "passes": 77,
+      "retirements": 8,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.04,
+      "passes": 59.5,
+      "retirements": 5.83,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.371
+     },
+     "borrowed": {
+      "stops": 2.84,
+      "passes": 52.67,
+      "retirements": 3.17,
+      "safety_cars": 1.33,
+      "vscs": 0.0,
+      "order_rho": 0.368
+     }
+    },
+    "2007_french_gp": {
+     "real": {
+      "stops": 2.176470588235294,
+      "passes": 46,
+      "retirements": 4,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.91,
+      "passes": 60.5,
+      "retirements": 5.5,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.441
+     },
+     "borrowed": {
+      "stops": 3.0,
+      "passes": 42.0,
+      "retirements": 2.5,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.62
+     }
+    },
+    "2007_turkish_gp": {
+     "real": {
+      "stops": 1.9,
+      "passes": 58,
+      "retirements": 2,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 61.83,
+      "retirements": 4.83,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.577
+     },
+     "borrowed": {
+      "stops": 2.12,
+      "passes": 50.5,
+      "retirements": 2.33,
+      "safety_cars": 0.17,
+      "vscs": 0.0,
+      "order_rho": 0.758
+     }
+    }
+   }
+  },
+  "2008": {
+   "dry_test": [
+    "2008_spanish_gp",
+    "2008_french_gp",
+    "2008_european_gp",
+    "2008_japanese_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": 0.208,
+     "passes_bias": 10.125,
+     "retirements_bias": 1.125,
+     "safety_cars_bias": 0.542,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.274,
+     "passes_mae": 34.542,
+     "retirements_mae": 2.292,
+     "safety_cars_mae": 0.875,
+     "vscs_mae": 0.0,
+     "order_rho": 0.247
+    },
+    "borrowed": {
+     "stops_bias": 0.871,
+     "passes_bias": -8.75,
+     "retirements_bias": -0.708,
+     "safety_cars_bias": 0.25,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.871,
+     "passes_mae": 22.667,
+     "retirements_mae": 1.542,
+     "safety_cars_mae": 0.75,
+     "vscs_mae": 0.0,
+     "order_rho": 0.436
+    }
+   },
+   "races": {
+    "2008_spanish_gp": {
+     "real": {
+      "stops": 2.1538461538461537,
+      "passes": 53,
+      "retirements": 7,
+      "safety_cars": 2,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.02,
+      "passes": 71.17,
+      "retirements": 4.67,
+      "safety_cars": 1.33,
+      "vscs": 0.0,
+      "order_rho": 0.155
+     },
+     "borrowed": {
+      "stops": 3.01,
+      "passes": 42.33,
+      "retirements": 3.67,
+      "safety_cars": 1.0,
+      "vscs": 0.0,
+      "order_rho": 0.307
+     }
+    },
+    "2008_french_gp": {
+     "real": {
+      "stops": 2.0,
+      "passes": 28,
+      "retirements": 1,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.34,
+      "passes": 62.33,
+      "retirements": 4.17,
+      "safety_cars": 1.0,
+      "vscs": 0.0,
+      "order_rho": 0.308
+     },
+     "borrowed": {
+      "stops": 3.08,
+      "passes": 42.67,
+      "retirements": 2.0,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.684
+     }
+    },
+    "2008_european_gp": {
+     "real": {
+      "stops": 1.6470588235294117,
+      "passes": 25,
+      "retirements": 2,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 61.83,
+      "retirements": 4.33,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.317
+     },
+     "borrowed": {
+      "stops": 2.04,
+      "passes": 38.17,
+      "retirements": 2.67,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.493
+     }
+    },
+    "2008_japanese_gp": {
+     "real": {
+      "stops": 1.7333333333333334,
+      "passes": 103,
+      "retirements": 4,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 54.17,
+      "retirements": 5.33,
+      "safety_cars": 1.0,
+      "vscs": 0.0,
+      "order_rho": 0.21
+     },
+     "borrowed": {
+      "stops": 2.89,
+      "passes": 50.83,
+      "retirements": 2.83,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.26
+     }
+    }
+   }
+  },
+  "2009": {
+   "dry_test": [
+    "2009_bahrain_gp",
+    "2009_british_gp",
+    "2009_belgian_gp",
+    "2009_brazilian_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": 0.145,
+     "passes_bias": -6.458,
+     "retirements_bias": 1.667,
+     "safety_cars_bias": -0.083,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.243,
+     "passes_mae": 16.375,
+     "retirements_mae": 1.667,
+     "safety_cars_mae": 0.5,
+     "vscs_mae": 0.0,
+     "order_rho": 0.408
+    },
+    "borrowed": {
+     "stops_bias": 0.66,
+     "passes_bias": 1.208,
+     "retirements_bias": 0.542,
+     "safety_cars_bias": 0.042,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.66,
+     "passes_mae": 12.875,
+     "retirements_mae": 0.958,
+     "safety_cars_mae": 0.542,
+     "vscs_mae": 0.0,
+     "order_rho": 0.535
+    }
+   },
+   "races": {
+    "2009_bahrain_gp": {
+     "real": {
+      "stops": 2.1052631578947367,
+      "passes": 65,
+      "retirements": 1,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.03,
+      "passes": 49.0,
+      "retirements": 3.17,
+      "safety_cars": 0.17,
+      "vscs": 0.0,
+      "order_rho": 0.458
+     },
+     "borrowed": {
+      "stops": 2.16,
+      "passes": 55.33,
+      "retirements": 2.17,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.666
+     }
+    },
+    "2009_british_gp": {
+     "real": {
+      "stops": 1.9444444444444444,
+      "passes": 56,
+      "retirements": 2,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.35,
+      "passes": 62.17,
+      "retirements": 4.33,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.448
+     },
+     "borrowed": {
+      "stops": 2.69,
+      "passes": 43.0,
+      "retirements": 3.5,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.755
+     }
+    },
+    "2009_belgian_gp": {
+     "real": {
+      "stops": 1.6428571428571428,
+      "passes": 49,
+      "retirements": 2,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.52,
+      "passes": 62.67,
+      "retirements": 3.17,
+      "safety_cars": 0.17,
+      "vscs": 0.0,
+      "order_rho": 0.342
+     },
+     "borrowed": {
+      "stops": 1.96,
+      "passes": 77.17,
+      "retirements": 2.33,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.41
+     }
+    },
+    "2009_brazilian_gp": {
+     "real": {
+      "stops": 1.8571428571428572,
+      "passes": 93,
+      "retirements": 3,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.23,
+      "passes": 63.33,
+      "retirements": 4.0,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.382
+     },
+     "borrowed": {
+      "stops": 3.38,
+      "passes": 92.33,
+      "retirements": 2.17,
+      "safety_cars": 0.67,
+      "vscs": 0.0,
+      "order_rho": 0.31
+     }
+    }
+   }
+  },
+  "2010": {
+   "dry_test": [
+    "2010_canadian_gp",
+    "2010_hungarian_gp",
+    "2010_japanese_gp"
+   ],
+   "summary": {
+    "season": {
+     "stops_bias": -0.147,
+     "passes_bias": -9.5,
+     "retirements_bias": 1.167,
+     "safety_cars_bias": 0.056,
+     "vscs_bias": 0.0,
+     "stops_mae": 0.252,
+     "passes_mae": 50.722,
+     "retirements_mae": 1.167,
+     "safety_cars_mae": 0.167,
+     "vscs_mae": 0.0,
+     "order_rho": 0.43
+    },
+    "borrowed": {
+     "stops_bias": 0.902,
+     "passes_bias": -31.278,
+     "retirements_bias": -2.056,
+     "safety_cars_bias": -0.111,
+     "vscs_bias": 0.0,
+     "stops_mae": 1.12,
+     "passes_mae": 43.278,
+     "retirements_mae": 2.056,
+     "safety_cars_mae": 0.444,
+     "vscs_mae": 0.0,
+     "order_rho": 0.63
+    }
+   },
+   "races": {
+    "2010_canadian_gp": {
+     "real": {
+      "stops": 2.473684210526316,
+      "passes": 141,
+      "retirements": 5,
+      "safety_cars": 0,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 2.0,
+      "passes": 50.67,
+      "retirements": 6.17,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.46
+     },
+     "borrowed": {
+      "stops": 2.15,
+      "passes": 29.17,
+      "retirements": 2.5,
+      "safety_cars": 0.5,
+      "vscs": 0.0,
+      "order_rho": 0.733
+     }
+    },
+    "2010_hungarian_gp": {
+     "real": {
+      "stops": 0.8421052631578947,
+      "passes": 49,
+      "retirements": 5,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 75.83,
+      "retirements": 5.83,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.405
+     },
+     "borrowed": {
+      "stops": 3.0,
+      "passes": 56.5,
+      "retirements": 2.33,
+      "safety_cars": 0.83,
+      "vscs": 0.0,
+      "order_rho": 0.592
+     }
+    },
+    "2010_japanese_gp": {
+     "real": {
+      "stops": 1.125,
+      "passes": 38,
+      "retirements": 3,
+      "safety_cars": 1,
+      "vscs": 0
+     },
+     "season": {
+      "stops": 1.0,
+      "passes": 73.0,
+      "retirements": 4.5,
+      "safety_cars": 1.0,
+      "vscs": 0.0,
+      "order_rho": 0.424
+     },
+     "borrowed": {
+      "stops": 2.0,
+      "passes": 48.5,
+      "retirements": 2.0,
+      "safety_cars": 0.33,
+      "vscs": 0.0,
+      "order_rho": 0.565
+     }
+    }
+   }
+  }
+ }
+}

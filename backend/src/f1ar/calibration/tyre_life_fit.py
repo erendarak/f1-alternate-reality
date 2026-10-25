@@ -32,6 +32,8 @@ import pandas as pd
 import scipy.sparse as sp
 from scipy.sparse.linalg import lsqr
 
+from f1ar.domain.refuelling import FUEL_S_PER_LAP, LAST_REFUELLING_SEASON
+
 DRY = ("SOFT", "MEDIUM", "HARD")
 MIN_STINT = 5
 LIFE_QUANTILE = 0.75
@@ -67,6 +69,13 @@ def green_laps(laps: pd.DataFrame) -> pd.DataFrame:
     g["age"] = g["tyre_age_start"] + g["stint_lap"] - 1
     # H2a (D-054): FastF1 feed gaps leave a stint's tyre age unknown (2022 Austria: 105 laps)
     g = g[g["age"].notna()]
+    # H1b: before 2010 the fuel on board falls within each stint as the tyres age: take its
+    # (editorial) effect off, or the wear slope would absorb the fuel burn-off
+    if "season" in g:
+        refuel = g["season"].astype(int) <= LAST_REFUELLING_SEASON
+        if refuel.any():
+            fuel = refuel * FUEL_S_PER_LAP * g["laps_remaining"].astype(float)
+            g["lap_time_s"] = g["lap_time_s"] - fuel
     med = g.groupby("event_id")["lap_time_s"].transform("median")
     g = g[g["lap_time_s"] < med * 1.07]
     g["fresh"] = ((g["stint_lap"] == 2) & (g["stint"] > 1)).astype(float)

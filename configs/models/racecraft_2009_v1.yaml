@@ -1,0 +1,35 @@
+model_name: racecraft
+model_version: v1
+kind: ML on lap-level encounters (W2 noise convolved) with ridge driver terms; lap-1 gains; launch spread
+  by simulation
+source_type: estimated_from_data (lap-1 grid profile editorial)
+artifact: configs/calibration/racecraft_2009_v1.json
+artifact_sha256: sha256:19854a7fc8af03441b6b5c8f0e2853de8c0af53caeeae25930877c1dedc82ff4
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2009_v1.yaml
+training_dataset_content_sha256: sha256:0d977182ec7d900ee1f58224271bae0bf27ecfab95fd4bff2e6b6ee83fa36c11
+training_races:
+- 2009_abu_dhabi_gp
+- 2009_australian_gp
+- 2009_bahrain_gp
+- 2009_belgian_gp
+- 2009_brazilian_gp
+- 2009_british_gp
+- 2009_chinese_gp
+- 2009_european_gp
+- 2009_german_gp
+- 2009_hungarian_gp
+- 2009_italian_gp
+- 2009_japanese_gp
+- 2009_malaysian_gp
+- 2009_monaco_gp
+- 2009_singapore_gp
+- 2009_spanish_gp
+- 2009_turkish_gp
+metrics:
+  check:
+    dry_train_passes_sim: 56.69
+    dry_train_passes_real: 53.15
+    dry_train_lap1_passes_real: 21.0
+  held_out_check: EXP-013
+status: fitted for 2009 (H2a, D-054); held-out check EXP-023

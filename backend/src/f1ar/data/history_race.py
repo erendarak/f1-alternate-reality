@@ -97,14 +97,39 @@ def unique_grid(results: list[dict[str, Any]], quali: dict[str, int]) -> list[st
     return notes
 
 
+def fill_codes(results: list[dict[str, Any]]) -> list[str]:
+    """Jolpica has no three-letter code for some 2000-2004 drivers: one is made from the family
+    name (ASCII, upper case), unique within the race. Changes ``results``; returns notes."""
+    import unicodedata
+
+    used = {r["Driver"]["code"] for r in results if r["Driver"].get("code")}
+    notes = []
+    for r in results:
+        d = r["Driver"]
+        if d.get("code"):
+            continue
+        plain = unicodedata.normalize("NFKD", f"{d['familyName']}{d['givenName']}")
+        letters = "".join(
+            c for c in plain.encode("ascii", "ignore").decode().upper() if c.isalpha()
+        )
+        candidates = [letters[:3]] + [letters[:2] + c for c in letters[2:]]
+        code = next((c for c in candidates if len(c) == 3 and c not in used), "XXX")
+        d["code"] = code
+        used.add(code)
+        notes.append(f"{d['driverId']} -> {code}")
+    return [f"driver codes generated (none in Jolpica): {', '.join(notes)}"] if notes else []
+
+
 def history_roster(season: int, round_: int, raw: Path) -> tuple[RaceRoster, list[str]]:
     from f1ar.data.pipeline import event_id_for
 
     payload = results_payload(season, round_, raw)
     race = payload["MRData"]["RaceTable"]["Races"][0]
     q = race_tables(season, round_, raw)["qualifying"]
-    quali = {str(d): int(p) for d, p in zip(q["driver"], q["position"], strict=True)}
-    notes = unique_grid(race["Results"], quali)
+    quali = (
+        {} if q.empty else {str(d): int(p) for d, p in zip(q["driver"], q["position"], strict=True)}
+    )
+    notes = fill_codes(race["Results"]) + unique_grid(race["Results"], quali)
     return jolpica_adapter.roster_from_results(
         payload,
         event_id=event_id_for(season, race["raceName"]),

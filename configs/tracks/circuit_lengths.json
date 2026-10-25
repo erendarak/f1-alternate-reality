@@ -1,10 +1,18 @@
 {
-  "description": "Published circuit lengths for 2010-2017 races whose layout has no FastF1 outline (H2b, D-055): circuits not raced since 2017, and layouts used once. Checked before borrowing a same-circuit outline from another season. source_type historical_verified.",
+  "description": "Published circuit lengths for 2000-2017 races whose layout has no FastF1 outline (H2b, D-055): circuits not raced since 2017, and layouts used once. Checked before borrowing a same-circuit outline from another season. source_type historical_verified.",
   "circuits": [
-    {"circuit_id": "sepang", "seasons": [2010, 2017], "length_m": 5543, "source": "en.wikipedia.org/wiki/Sepang_International_Circuit"},
+    {"circuit_id": "sepang", "seasons": [2000, 2017], "length_m": 5543, "source": "en.wikipedia.org/wiki/Sepang_International_Circuit"},
     {"circuit_id": "yeongam", "seasons": [2010, 2013], "length_m": 5615, "source": "fia.com/news/f1-korean-gp-race-preview (55 laps, 308.630 km)"},
     {"circuit_id": "buddh", "seasons": [2011, 2013], "length_m": 5125, "source": "fia.com/news/indian-gp-race-preview (60 laps, 307.249 km)"},
-    {"circuit_id": "valencia", "seasons": [2010, 2012], "length_m": 5419, "source": "en.wikipedia.org/wiki/2012_European_Grand_Prix (57 laps, 308.883 km)"},
-    {"circuit_id": "bahrain", "seasons": [2010, 2010], "length_m": 6299, "source": "en.wikipedia.org/wiki/2010_Bahrain_Grand_Prix (Endurance layout, 49 laps; only in 2010)"}
+    {"circuit_id": "valencia", "seasons": [2008, 2012], "length_m": 5419, "source": "en.wikipedia.org/wiki/2012_European_Grand_Prix (57 laps, 308.883 km)"},
+    {"circuit_id": "bahrain", "seasons": [2010, 2010], "length_m": 6299, "source": "en.wikipedia.org/wiki/2010_Bahrain_Grand_Prix (Endurance layout, 49 laps; only in 2010)"},
+    {"circuit_id": "silverstone", "seasons": [2000, 2009], "length_m": 5141, "source": "ffcorse.com/about/circuit-guides/silverstone-gp (Grand Prix circuit before the 2010 Arena layout; 60 laps = 308.5 km)"},
+    {"circuit_id": "nurburgring", "seasons": [2000, 2001], "length_m": 4556, "source": "iracing.com/tracks/nurburgring (4.556 km until the 2002 revamp; 67 laps = 305.3 km)"},
+    {"circuit_id": "hockenheimring", "seasons": [2000, 2001], "length_m": 6825, "source": "crash.net/f1/news/39540 (2001 German GP preview; old forest layout, 45 laps = 307.1 km)"},
+    {"circuit_id": "hungaroring", "seasons": [2000, 2002], "length_m": 3975, "source": "en.wikipedia.org/wiki/Hungaroring (before the 2003 extension); not re-checked against a second source; consistent with the race distance (77 laps = 306.1 km)"},
+    {"circuit_id": "indianapolis", "seasons": [2000, 2007], "length_m": 4192, "source": "f1-data.com 2007 race list (road course, 73 laps = 306.0 km)"},
+    {"circuit_id": "fuji", "seasons": [2007, 2008], "length_m": 4563, "source": "f1-data.com 2007 race list (67 laps = 305.7 km)"},
+    {"circuit_id": "magny_cours", "seasons": [2003, 2008], "length_m": 4411, "source": "f1-data.com 2007 race list (70 laps = 308.6 km)"},
+    {"circuit_id": "magny_cours", "seasons": [2000, 2002], "length_m": 4251, "source": "pre-2003 layout; not re-checked against a source; consistent with the race distance (72 laps = 306.1 km)"}
   ]
 }

@@ -1,0 +1,34 @@
+model_name: racecraft
+model_version: v1
+kind: ML on lap-level encounters (W2 noise convolved) with ridge driver terms; lap-1 gains; launch spread
+  by simulation
+source_type: estimated_from_data (lap-1 grid profile editorial)
+artifact: configs/calibration/racecraft_2002_v1.json
+artifact_sha256: sha256:ba78f32d90e6b022fb140b7677f91b0154084478746de4517e90da45b09db4bc
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2002_v1.yaml
+training_dataset_content_sha256: sha256:fe9990657b885609a4a270208d3c5994a758eef30ada8f4608cb071a3441108b
+training_races:
+- 2002_australian_gp
+- 2002_austrian_gp
+- 2002_belgian_gp
+- 2002_brazilian_gp
+- 2002_canadian_gp
+- 2002_european_gp
+- 2002_french_gp
+- 2002_german_gp
+- 2002_hungarian_gp
+- 2002_italian_gp
+- 2002_japanese_gp
+- 2002_malaysian_gp
+- 2002_monaco_gp
+- 2002_san_marino_gp
+- 2002_spanish_gp
+- 2002_united_states_gp
+metrics:
+  check:
+    dry_train_passes_sim: 66.12
+    dry_train_passes_real: 67.42
+    dry_train_lap1_passes_real: 28.5
+  held_out_check: EXP-013
+status: fitted for 2002 (H2a, D-054); held-out check EXP-023

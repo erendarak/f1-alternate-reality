@@ -1,0 +1,36 @@
+model_name: race_events
+model_version: v1
+kind: rates and shrunk team multipliers from 2003 timing; 2 values fitted by simulation
+source_type: estimated_from_data
+artifact: configs/calibration/race_events_2003_v1.json
+artifact_sha256: sha256:bc51726943df4a7e9af693a4b4ce9235f9e845b19df335238b611a5b5af984a3
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2003_v1.yaml
+training_dataset_content_sha256: sha256:fbf89d8d8a53555086140d8928146d499adf6e6071e2cc678f61277c4f07866f
+training_races:
+- 2003_australian_gp
+- 2003_austrian_gp
+- 2003_brazilian_gp
+- 2003_british_gp
+- 2003_canadian_gp
+- 2003_european_gp
+- 2003_french_gp
+- 2003_german_gp
+- 2003_hungarian_gp
+- 2003_italian_gp
+- 2003_japanese_gp
+- 2003_malaysian_gp
+- 2003_monaco_gp
+- 2003_san_marino_gp
+- 2003_spanish_gp
+- 2003_united_states_gp
+metrics:
+  dry_train_check:
+    retirements_per_race: 6.382
+    red_flags_per_race: 0.0
+    safety_cars_per_race: 0.982
+    vscs_per_race: 0.0
+    penalties_per_race: 0.0
+    penalties_per_race_after_scale: 0.0
+  held_out_check: EXP-011
+status: fitted for 2003 (H2a, D-054); held-out check EXP-023

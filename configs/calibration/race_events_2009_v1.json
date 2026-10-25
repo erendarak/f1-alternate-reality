@@ -1,0 +1,167 @@
+{
+ "label": "2009 race events (W4, D-042)",
+ "events": [
+  "2009_australian_gp",
+  "2009_malaysian_gp",
+  "2009_chinese_gp",
+  "2009_spanish_gp",
+  "2009_monaco_gp",
+  "2009_turkish_gp",
+  "2009_german_gp",
+  "2009_hungarian_gp",
+  "2009_european_gp",
+  "2009_italian_gp",
+  "2009_singapore_gp",
+  "2009_japanese_gp",
+  "2009_abu_dhabi_gp",
+  "2009_bahrain_gp",
+  "2009_british_gp",
+  "2009_belgian_gp",
+  "2009_brazilian_gp"
+ ],
+ "dry_events": [
+  "2009_australian_gp",
+  "2009_malaysian_gp",
+  "2009_chinese_gp",
+  "2009_spanish_gp",
+  "2009_monaco_gp",
+  "2009_turkish_gp",
+  "2009_german_gp",
+  "2009_hungarian_gp",
+  "2009_european_gp",
+  "2009_italian_gp",
+  "2009_singapore_gp",
+  "2009_japanese_gp",
+  "2009_abu_dhabi_gp",
+  "2009_bahrain_gp",
+  "2009_british_gp",
+  "2009_belgian_gp",
+  "2009_brazilian_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": NaN,
+  "slow_stop_scale_s": NaN,
+  "stops": 0,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {},
+ "reliability": {
+  "field_retirements_per_start": 0.2029,
+  "teams": {
+   "bmw_sauber_2009": {
+    "failure_multiplier": 0.924,
+    "retirements": 6,
+    "starts": 34
+   },
+   "brawn_2009": {
+    "failure_multiplier": 0.584,
+    "retirements": 2,
+    "starts": 34
+   },
+   "ferrari_2009": {
+    "failure_multiplier": 0.924,
+    "retirements": 6,
+    "starts": 34
+   },
+   "force_india_2009": {
+    "failure_multiplier": 1.093,
+    "retirements": 8,
+    "starts": 34
+   },
+   "mclaren_2009": {
+    "failure_multiplier": 1.093,
+    "retirements": 8,
+    "starts": 34
+   },
+   "red_bull_2009": {
+    "failure_multiplier": 1.008,
+    "retirements": 7,
+    "starts": 34
+   },
+   "renault_2009": {
+    "failure_multiplier": 1.008,
+    "retirements": 7,
+    "starts": 34
+   },
+   "toro_rosso_2009": {
+    "failure_multiplier": 1.603,
+    "retirements": 14,
+    "starts": 34
+   },
+   "toyota_2009": {
+    "failure_multiplier": 0.839,
+    "retirements": 5,
+    "starts": 34
+   },
+   "williams_2009": {
+    "failure_multiplier": 0.924,
+    "retirements": 6,
+    "starts": 34
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.0,
+  "sc_share": 0.4,
+  "count": 0,
+  "race_laps": 988,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 0,
+  "races": 17,
+  "per_race": 0.0
+ },
+ "penalties": {
+  "counts": {},
+  "collision_per_pass": 0.0,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.0,
+  "other_per_car_lap": 0.0,
+  "passes": 954,
+  "raw": {
+   "collision_per_pass": 0.0,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.0,
+   "other_per_car_lap": 0.0
+  },
+  "scale": 1.0,
+  "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
+ },
+ "fitted": {
+  "risk_scale": 0.6608,
+  "red_flag_per_crash": 0.0,
+  "fit": {
+   "races": [
+    "2009_australian_gp",
+    "2009_malaysian_gp",
+    "2009_chinese_gp",
+    "2009_spanish_gp",
+    "2009_monaco_gp",
+    "2009_turkish_gp",
+    "2009_german_gp",
+    "2009_hungarian_gp",
+    "2009_european_gp",
+    "2009_italian_gp",
+    "2009_singapore_gp",
+    "2009_japanese_gp",
+    "2009_abu_dhabi_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 3.492,
+   "sim_failures_per_race": 1.231,
+   "real_retirements_per_race": 3.538,
+   "target_red_flags_per_race": 0.0
+  },
+  "check": {
+   "retirements_per_race": 3.677,
+   "red_flags_per_race": 0.0,
+   "safety_cars_per_race": 0.585,
+   "vscs_per_race": 0.0,
+   "penalties_per_race": 0.0,
+   "penalties_per_race_after_scale": 0.0
+  }
+ }
+}

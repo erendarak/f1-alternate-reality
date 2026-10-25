@@ -1330,3 +1330,38 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   0.74): rare events, 9-15 training races a season. Kept (the era differences are real).
 - Weather and wet-race rates stay 2024's (3 wet races a season are too few to fit).
 
+## D-057 — H1b: the refuelling era 2000-2009 (engine v0.18.0, world schema 19)
+
+- **Rules 2000-2009** (sourced, `configs/regulations/seasons.json`): points 10-6-4-3-2-1 until
+  2002, 10-8-6-5-4-3-2-1 2003-2009; refuelling; **2005: one tyre set for the race** (fuel-only
+  stops); two compounds only from 2007; Bridgestone/Michelin tyre war 2001-2006; **race fuel
+  fixed in qualifying** (everyone 2003-2005, the Q3 top ten 2006-2009); pit lane closed under SC
+  2007-2008 (stored, not modelled yet). New `SeasonRules` fields: `race_fuel_from_qualifying`,
+  `pit_lane_closed_under_sc`.
+- **Data:** 174 races converted (`convert_history.py`; generated driver codes for 2000-2004,
+  empty Jolpica qualifying handled); track lengths checked against the regulation distance (laps
+  x length ~ 305 km): borrowed outlines rejected for layouts that changed (Silverstone, old
+  Hockenheim, Nurburgring, Hungaroring) and a sourced table added (2 values labelled "not
+  re-checked"); 16 wet races found; persona seeds 2000-2009 (1990s Jolpica driver lists decide
+  who is a rookie in 2000).
+- **Engine v0.18.0** (changes nothing when `rules.refuelling` is false: 2024, 2019, 2013 races
+  identical to v0.17, 21/21): cars carry `fuel_laps`; the lap model's fuel term uses the fuel on
+  board instead of the race laps left; one lap of fuel per lap; a stop puts in the next stint's
+  fuel (stationary time = max(tyre change, refuelling)); an empty tank forces a stop; 2005's dry
+  stops keep the set. `DriverEntry.start_fuel_laps` (race-fuel rule), `PitParams.refuel_s_per_lap`.
+- **Refuelling planner** (`policy/refuel_strategy.py`): DP over laps x compounds, up to 4 stops,
+  stint cost = tyres + fuel weight (convex) + stop; mid-race the current fuel fixes the stint.
+- **Fuel effect fitted per season** (with kappa/delta, on stops per finisher: 2004 0.075 s per
+  lap of fuel, close to the editorial 0.0825 = 0.03 s/kg x 2.75 kg/lap); refuel rate editorial
+  (12.1 l/s FIA cap); pit-lane loss = measured whole-stop loss minus a typical refuelling.
+- **Fits in the refuelling era:** the lap dataset's fuel proxy is the fuel on board (laps left in
+  the stint); the wear fit takes the fuel effect off first (else the burn-off would cancel the
+  wear slope); the base lap uses fuel on board; overtaking encounters use the fitted fuel effect
+  (with 2024's they gave a 4.4 s pass scale); racecraft bounds widened.
+- **Overtaking curve before 2011 borrowed from 2011** (the first season with Jolpica pit stops):
+  with inferred stops, fuel on board and tyre age in the encounters are noisy and the fitted curve
+  goes flat (pass scales 2.5-8.3 s, launch spread and shift at their bounds, finishing order
+  randomised); launch skill, launch spread and race-level shift are still fitted per season.
+- Start fuel from the real first stint only when that stop is at >= 20 % of the race (earlier:
+  a drive-through, damage or an inference error; the strategy then chooses).
+

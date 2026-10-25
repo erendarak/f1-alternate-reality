@@ -1,0 +1,26 @@
+model_name: driver_pace
+model_version: v1
+kind: same-lap regression per race; driver vs teammate and residual SD, shrunk
+source_type: estimated_from_data
+artifact: configs/calibration/driver_pace_2003_v1.json
+artifact_sha256: sha256:4e4363b6a4e8579c783385a79a962e683cbd09f5ec172481094f1f5247126a9b
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2003_v1.yaml
+training_dataset_content_sha256: sha256:fbf89d8d8a53555086140d8928146d499adf6e6071e2cc678f61277c4f07866f
+training_races:
+- 2003_australian_gp
+- 2003_austrian_gp
+- 2003_brazilian_gp
+- 2003_british_gp
+- 2003_european_gp
+- 2003_french_gp
+- 2003_hungarian_gp
+- 2003_italian_gp
+- 2003_malaysian_gp
+- 2003_monaco_gp
+- 2003_spanish_gp
+metrics:
+  field_noise_s: 0.649
+  overtake_threshold_shift_s: 0.0
+  held_out_check: EXP-012
+status: fitted for 2003 (H2a, D-054); held-out check EXP-023

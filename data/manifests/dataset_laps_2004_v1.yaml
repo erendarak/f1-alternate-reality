@@ -1,0 +1,250 @@
+dataset_id: laps_2004_v1
+dataset_version: 1
+feature_schema_version: 1
+season: 2004
+license_review_status: research_only (F1 timing data via FastF1; not redistributed)
+built_by: scripts/build_lap_dataset.py
+file:
+  relative_path: data/processed/datasets/laps_2004_v1.parquet
+  sha256: sha256:077a0c842d820b916fc2d8acaebc224edcc77c4cc93a821cfe3116b8d7822222
+  content_sha256: sha256:ccce5b3214245aaa88d66050bfb5b9f485090e05e2722a83dba04659b6fb1400
+  rows: 18608
+  representative_rows: 15954
+target: lap_time_s
+features:
+- name: circuit_id
+  available: pre_race
+  source_type: historical_verified
+  description: Jolpica circuit id
+- name: driver_id
+  available: pre_race
+  source_type: historical_verified
+  description: season-specific driver id (roster)
+- name: team_id
+  available: pre_race
+  source_type: historical_verified
+  description: team id (roster)
+- name: grid_position
+  available: pre_race
+  source_type: historical_verified
+  description: official starting slot (0 = pit lane)
+- name: scheduled_laps
+  available: pre_race
+  source_type: historical_verified
+  description: race distance in laps (winner's laps)
+- name: lap_number
+  available: lap_start
+  source_type: historical_verified
+  description: 1-based lap number
+- name: laps_remaining
+  available: lap_start
+  source_type: estimated_from_data
+  description: 'scheduled_laps - lap_number + 1 (fuel proxy); refuelling era: laps left in the stint'
+- name: compound
+  available: lap_start
+  source_type: historical_verified
+  description: tyre compound on this lap
+- name: tyre_age_start
+  available: lap_start
+  source_type: estimated_from_data
+  description: laps already on the set when the lap starts
+- name: fresh_tyre
+  available: lap_start
+  source_type: historical_verified
+  description: the set was new when fitted (FastF1 FreshTyre)
+- name: stint
+  available: lap_start
+  source_type: historical_verified
+  description: stint number
+- name: stint_lap
+  available: lap_start
+  source_type: estimated_from_data
+  description: 1-based lap index within the stint
+- name: pit_out_lap
+  available: lap_start
+  source_type: historical_verified
+  description: the lap starts in the pit lane
+- name: pit_in_lap
+  available: decision
+  source_type: historical_verified
+  description: the car boxes at the end of this lap
+- name: position_start
+  available: lap_start
+  source_type: historical_verified
+  description: position when the lap starts (grid on lap 1)
+- name: gap_ahead_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds behind the car that crossed the line just before, same lap (NaN on lap 1)
+- name: gap_behind_prev_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds ahead of the next car at the PREVIOUS line crossing (the gap to the car behind
+    at this crossing isn't known yet when the lap starts; found by the leakage audit)
+- name: track_status_start
+  available: lap_start
+  source_type: historical_verified
+  description: track status code when the lap starts
+- name: air_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: track_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: humidity_pct
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: rainfall_start
+  available: lap_start
+  source_type: historical_verified
+  description: rain flag of the latest weather sample
+- name: wind_speed_ms
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+lap_facts_never_features:
+- lap_status
+- position_end
+- is_accurate
+- deleted
+- fastf1_generated
+- representative
+leakage_audit: tests/unit/test_lap_dataset.py::test_no_feature_uses_anything_after_the_lap_starts
+excluded_quality_fail: {}
+splits:
+  rule: wet = any intermediate/wet tyre lap or rain at >= 5% of lap starts; among dry races, rounds divisible
+    by 4 are held out (dry_test), the rest are dry_train; leave-one-race-out folds run over dry_train.
+    Rule fixed before any model was fitted.
+  wet: []
+  dry_test:
+  - 2004_san_marino_gp
+  - 2004_canadian_gp
+  - 2004_german_gp
+  - 2004_chinese_gp
+  dry_train:
+  - 2004_australian_gp
+  - 2004_malaysian_gp
+  - 2004_bahrain_gp
+  - 2004_spanish_gp
+  - 2004_monaco_gp
+  - 2004_european_gp
+  - 2004_united_states_gp
+  - 2004_french_gp
+  - 2004_british_gp
+  - 2004_hungarian_gp
+  - 2004_belgian_gp
+  - 2004_italian_gp
+  - 2004_japanese_gp
+  - 2004_brazilian_gp
+events:
+  2004_australian_gp:
+    round: 1
+    group: dry_train
+    rows: 980
+    representative_rows: 864
+    source_manifest_sha256: sha256:d3014cfc62d9307d323704430508ae3ba25c87827ad2ea729baaa0e1045f808a
+  2004_bahrain_gp:
+    round: 3
+    group: dry_train
+    rows: 1055
+    representative_rows: 919
+    source_manifest_sha256: sha256:8aa8b499aee2229d34f11d30e1001c94d250746fcd9d9aadc9ee1fd3ad270f83
+  2004_belgian_gp:
+    round: 14
+    group: dry_train
+    rows: 613
+    representative_rows: 421
+    source_manifest_sha256: sha256:1f7037d6bbd572593c438768bc457193b59169984160eaf49630059192a8debc
+  2004_brazilian_gp:
+    round: 18
+    group: dry_train
+    rows: 1232
+    representative_rows: 1012
+    source_manifest_sha256: sha256:3490c1e43d03420e4daf6fd7f14414dd7b77d9c7d64c196266e5d963ae3348b7
+  2004_british_gp:
+    round: 11
+    group: dry_train
+    rows: 1084
+    representative_rows: 899
+    source_manifest_sha256: sha256:f2fd807f277818e2cbd35a7e8edf2b8eba98d55d280b480130aeb31fb8408fcb
+  2004_canadian_gp:
+    round: 8
+    group: dry_test
+    rows: 1154
+    representative_rows: 1047
+    source_manifest_sha256: sha256:e4e750bbc664337faf9483c2e1717efcf45e80ac859ec8c3c689303dcae59402
+  2004_chinese_gp:
+    round: 16
+    group: dry_test
+    rows: 1008
+    representative_rows: 892
+    source_manifest_sha256: sha256:fbc71e6efeea07d16e0582c0940fbdf87cc558ae6273adcc24ba6e49adfb77b5
+  2004_european_gp:
+    round: 7
+    group: dry_train
+    rows: 968
+    representative_rows: 858
+    source_manifest_sha256: sha256:594282eb10f02057979570eb89282efdbd11dac7c4754cc18e6e95bad3260b59
+  2004_french_gp:
+    round: 10
+    group: dry_train
+    rows: 1290
+    representative_rows: 1156
+    source_manifest_sha256: sha256:28b656bf193b24c3a941a3f5d0a7370b796665d5ef116e576e03d93889a48dd8
+  2004_german_gp:
+    round: 12
+    group: dry_test
+    rows: 1202
+    representative_rows: 1070
+    source_manifest_sha256: sha256:bc4f42cfbc43cd6fce075414086e09d88348d62fe4debf99c9097a89a24dc748
+  2004_hungarian_gp:
+    round: 13
+    group: dry_train
+    rows: 1185
+    representative_rows: 1055
+    source_manifest_sha256: sha256:4c18d37641662e4aacf8c577f8f1060ec85c1baf697b970b3378e013524663cb
+  2004_italian_gp:
+    round: 15
+    group: dry_train
+    rows: 904
+    representative_rows: 777
+    source_manifest_sha256: sha256:a1617ce80e5cd459cf0d38f8fedc9bfba1265e0540e7b4b3b17fa3a99029e1d6
+  2004_japanese_gp:
+    round: 17
+    group: dry_train
+    rows: 974
+    representative_rows: 848
+    source_manifest_sha256: sha256:164ea52988cf3d20115fdf59bd1a2e3b5976c79171f6b4eb956980004a77cf30
+  2004_malaysian_gp:
+    round: 2
+    group: dry_train
+    rows: 1002
+    representative_rows: 862
+    source_manifest_sha256: sha256:4180867132d45195ab54c33756c4e2e7827ecf78599be56a625b7080ba975a75
+  2004_monaco_gp:
+    round: 6
+    group: dry_train
+    rows: 905
+    representative_rows: 715
+    source_manifest_sha256: sha256:86a357674c3524d4f3503e46abf5c7bcfb80339f5d3a043d64fee54240fb8184
+  2004_san_marino_gp:
+    round: 4
+    group: dry_test
+    rows: 1082
+    representative_rows: 958
+    source_manifest_sha256: sha256:9c5542f15f64a9183cddaaa9b3bf24f32dff3a5e6b56701882a0a8fcaf7877a9
+  2004_spanish_gp:
+    round: 5
+    group: dry_train
+    rows: 1106
+    representative_rows: 982
+    source_manifest_sha256: sha256:39ee95994fdd836a9511a119f06006ccde0599e719fe19aff922730a758f1907
+  2004_united_states_gp:
+    round: 9
+    group: dry_train
+    rows: 864
+    representative_rows: 619
+    source_manifest_sha256: sha256:c405156ac5c0380526490e87e40e9087901af89bd8922818d4ee641bd2e2b2bb

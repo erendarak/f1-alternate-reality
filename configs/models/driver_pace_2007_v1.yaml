@@ -1,0 +1,27 @@
+model_name: driver_pace
+model_version: v1
+kind: same-lap regression per race; driver vs teammate and residual SD, shrunk
+source_type: estimated_from_data
+artifact: configs/calibration/driver_pace_2007_v1.json
+artifact_sha256: sha256:305f575eaf87b855877b6747e27615ef2278f341cc2ffdbb997b70ad892927ad
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2007_v1.yaml
+training_dataset_content_sha256: sha256:538147de761693964810b1a6873a33a76b9cac5afad86d0e4e3f122c85421f69
+training_races:
+- 2007_australian_gp
+- 2007_bahrain_gp
+- 2007_belgian_gp
+- 2007_brazilian_gp
+- 2007_british_gp
+- 2007_canadian_gp
+- 2007_hungarian_gp
+- 2007_italian_gp
+- 2007_japanese_gp
+- 2007_malaysian_gp
+- 2007_monaco_gp
+- 2007_united_states_gp
+metrics:
+  field_noise_s: 0.5716
+  overtake_threshold_shift_s: 0.0
+  held_out_check: EXP-012
+status: fitted for 2007 (H2a, D-054); held-out check EXP-023

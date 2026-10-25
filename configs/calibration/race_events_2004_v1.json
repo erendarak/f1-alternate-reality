@@ -1,0 +1,170 @@
+{
+ "label": "2004 race events (W4, D-042)",
+ "events": [
+  "2004_australian_gp",
+  "2004_malaysian_gp",
+  "2004_bahrain_gp",
+  "2004_spanish_gp",
+  "2004_monaco_gp",
+  "2004_european_gp",
+  "2004_united_states_gp",
+  "2004_french_gp",
+  "2004_british_gp",
+  "2004_hungarian_gp",
+  "2004_belgian_gp",
+  "2004_italian_gp",
+  "2004_japanese_gp",
+  "2004_brazilian_gp",
+  "2004_san_marino_gp",
+  "2004_canadian_gp",
+  "2004_german_gp",
+  "2004_chinese_gp"
+ ],
+ "dry_events": [
+  "2004_australian_gp",
+  "2004_malaysian_gp",
+  "2004_bahrain_gp",
+  "2004_spanish_gp",
+  "2004_monaco_gp",
+  "2004_european_gp",
+  "2004_united_states_gp",
+  "2004_french_gp",
+  "2004_british_gp",
+  "2004_hungarian_gp",
+  "2004_belgian_gp",
+  "2004_italian_gp",
+  "2004_japanese_gp",
+  "2004_brazilian_gp",
+  "2004_san_marino_gp",
+  "2004_canadian_gp",
+  "2004_german_gp",
+  "2004_chinese_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": NaN,
+  "slow_stop_scale_s": NaN,
+  "stops": 0,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {},
+ "reliability": {
+  "field_retirements_per_start": 0.2694,
+  "teams": {
+   "bar_2004": {
+    "failure_multiplier": 0.957,
+    "retirements": 9,
+    "starts": 36
+   },
+   "ferrari_2004": {
+    "failure_multiplier": 0.524,
+    "retirements": 2,
+    "starts": 36
+   },
+   "jaguar_2004": {
+    "failure_multiplier": 1.142,
+    "retirements": 12,
+    "starts": 36
+   },
+   "jordan_2004": {
+    "failure_multiplier": 1.328,
+    "retirements": 15,
+    "starts": 36
+   },
+   "mclaren_2004": {
+    "failure_multiplier": 1.142,
+    "retirements": 12,
+    "starts": 36
+   },
+   "minardi_2004": {
+    "failure_multiplier": 1.39,
+    "retirements": 16,
+    "starts": 36
+   },
+   "renault_2004": {
+    "failure_multiplier": 0.895,
+    "retirements": 8,
+    "starts": 36
+   },
+   "sauber_2004": {
+    "failure_multiplier": 0.709,
+    "retirements": 5,
+    "starts": 36
+   },
+   "toyota_2004": {
+    "failure_multiplier": 1.019,
+    "retirements": 10,
+    "starts": 36
+   },
+   "williams_2004": {
+    "failure_multiplier": 0.895,
+    "retirements": 8,
+    "starts": 36
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.0,
+  "sc_share": 0.4,
+  "count": 0,
+  "race_laps": 1122,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 0,
+  "races": 18,
+  "per_race": 0.0
+ },
+ "penalties": {
+  "counts": {},
+  "collision_per_pass": 0.0,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.0,
+  "other_per_car_lap": 0.0,
+  "passes": 1105,
+  "raw": {
+   "collision_per_pass": 0.0,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.0,
+   "other_per_car_lap": 0.0
+  },
+  "scale": 1.0,
+  "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
+ },
+ "fitted": {
+  "risk_scale": 0.5571,
+  "red_flag_per_crash": 0.0,
+  "fit": {
+   "races": [
+    "2004_australian_gp",
+    "2004_malaysian_gp",
+    "2004_bahrain_gp",
+    "2004_spanish_gp",
+    "2004_monaco_gp",
+    "2004_european_gp",
+    "2004_united_states_gp",
+    "2004_french_gp",
+    "2004_british_gp",
+    "2004_hungarian_gp",
+    "2004_belgian_gp",
+    "2004_italian_gp",
+    "2004_japanese_gp",
+    "2004_brazilian_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 5.129,
+   "sim_failures_per_race": 1.929,
+   "real_retirements_per_race": 4.786,
+   "target_red_flags_per_race": 0.0
+  },
+  "check": {
+   "retirements_per_race": 5.086,
+   "red_flags_per_race": 0.0,
+   "safety_cars_per_race": 0.757,
+   "vscs_per_race": 0.0,
+   "penalties_per_race": 0.0,
+   "penalties_per_race_after_scale": 0.0
+  }
+ }
+}

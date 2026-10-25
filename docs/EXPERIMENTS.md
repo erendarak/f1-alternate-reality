@@ -1456,6 +1456,44 @@ Verdict:              mixed; per-season race control kept for the retirement gai
                       seasons pooled (exp025.json): stops MAE 0.26-0.52 per era with own fits.
 ```
 
+## EXP-026 — The refuelling era 2000-2009 on its own season's fits vs reality (2026-10-25)
+
+```text
+Experiment ID:        EXP-026
+Research question:    With fuel load as a strategy variable (engine v0.18.0) and per-season fits,
+                      are held-out 2000-2009 races like the real ones?
+Setup:                exp023_seasons.py on 2000-2010: 40 dry_test races, 6 per-race seeds;
+                      "season" vs "borrowed" (no season files: 2024 tyres, editorial fuel
+                      0.0825, 2024 race control). Real stops are inferred (no pit data < 2011).
+Output:               docs/experiments/exp026.json; isolation runs (--borrow-kinds) on 2002/2006/2008
+```
+
+| 2000-2009 (37 races) | stops MAE / bias | passes MAE / bias | retirements MAE / bias | order rho |
+|---|---|---|---|---|
+| season fits | **0.36 / -0.12** | 19.8 / +5.1 | **1.99 / +0.42** | 0.29 |
+| borrowed | 0.79 / +0.64 | **15.4** / -5.3 | 3.36 / -2.99 | **0.47** |
+
+| Isolated on 2002/2006/2008 (one kind back to 2024's) | order rho |
+|---|---|
+| all season fits | 0.31 |
+| race control 2024's | **0.51** |
+| race events 2024's | 0.21 |
+| driver pace / tyre life / racecraft / personas 2024's | 0.31-0.34 |
+
+```text
+Findings:             stops halved and unbiased; the fitted fuel effect sets the era's stops
+                      (0.03-0.09 s per lap of fuel; 2005 0.09 with whole-race tyres); retirements
+                      match the era's attrition (2024's rates miss 3 a race). The finishing order
+                      matches the specific race far less: the season's high retirement rate (2-3x
+                      2024's) retires random cars, the real race retired specific ones. Kept: a
+                      world with the era's attrition, not one that copies a race's order.
+Negative:             the fuel effect sits at the grid's lower edge (0.03) in 5 seasons; passes
+                      overshoot (+5 a race) after borrowing 2011's curve; the first racecraft run
+                      (own curve) flattened passing (scales 2.5-8.3 s): fixed by the borrow.
+Caveat:               inferred stops (recall 0.73) for real stops, stints, start fuel and fuel on
+                      board; 3-4 test races per season.
+```
+
 ## BENCH-001 — Batch headless throughput (2026-10-12)
 
 ```text

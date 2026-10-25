@@ -1,0 +1,106 @@
+# Driver persona seed for the 2000 season (H2a, D-054), written by
+# scripts/build_season_seeds.py. Identity comes from each race's roster (Jolpica).
+# THE NUMBERS ARE EDITORIAL ASSUMPTIONS: illustrative simulation personas, not verified
+# psychometrics. Drivers who raced in 2024 keep their 2024 seed persona (not refitted for
+# 2000); others are template-only (rookie = no start in an earlier season we have).
+schema_version: 1
+season: 2000
+event_id: 2000_season
+explanation: Illustrative simulation persona; not verified driver psychometrics.
+profile_revision: v1
+policy:
+  type: profile_conditioned_baseline
+  version: untrained
+drivers:
+  alexander_wurz_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  david_coulthard_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  eddie_irvine_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  gaston_mazzacane_2000:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  giancarlo_fisichella_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  heinz_harald_frentzen_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jacques_villeneuve_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jarno_trulli_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jean_alesi_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jenson_button_2000:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  johnny_herbert_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jos_verstappen_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  luciano_burti_2000:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  marc_gene_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  michael_schumacher_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  mika_hakkinen_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  mika_salo_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  nick_heidfeld_2000:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  pedro_de_la_rosa_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  pedro_diniz_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  ralf_schumacher_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  ricardo_zonta_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  rubens_barrichello_2000:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only

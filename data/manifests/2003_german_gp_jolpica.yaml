@@ -1,0 +1,110 @@
+dataset_id: 2003_german_gp_jolpica_v1
+event: 2003_german_gp
+source: jolpica-f1 (history cache, H2b)
+source_api_version: ergast-compatible v1
+retrieved_utc: '2026-10-24T21:31:20Z'
+session_key: 2003/round 12/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2003_german_gp/laps.parquet
+  sha256: sha256:f899080e0c2bac0fcaf34519289e2364ef7e58b99ff969eb32872b283de5631f
+  rows: 879
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - lap_start_time_s
+  - lap_end_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - position
+  - track_status
+  - is_accurate
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - speed_trap_kph
+  - fresh_tyre
+  - deleted
+  - fastf1_generated
+  - compound_name
+  source_type: historical_verified
+  description: lap times and positions (Jolpica); stints, tyre age, pit flags and
+    track status derived, see missingness notes
+- relative_path: data/processed/2003_german_gp/results.parquet
+  sha256: sha256:5c0f57a3377a05fd9032c4bd0d9a7d27e49365b2b35fc2532aa27fbc68aedd96
+  rows: 20
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification (Jolpica)
+- relative_path: data/processed/2003_german_gp/track_status.parquet
+  sha256: sha256:aee4937279dc5feab7019f9a1c4f848679edfc4cec38995c305da19eb12d05c0
+  rows: 3
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: estimated_from_data
+  description: neutralised laps inferred
+- relative_path: data/processed/2003_german_gp/weather.parquet
+  sha256: sha256:e11511d644b4286e4c27572877eb356de302cd4f737a1b22543c910cc1232b41
+  rows: 67
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: estimated_from_data
+  description: rain per lap inferred from lap times
+- relative_path: data/processed/2003_german_gp/race_control.parquet
+  sha256: sha256:aeed3440cc15104b2331e32ef6ab8df8d822bcef6986ed5bfa8c6e235a532997
+  rows: 0
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: editorial_assumption
+  description: 'no race control messages: empty'
+unit_conventions:
+  time: seconds from the start (lap times summed per car)
+missingness_notes:
+- 'pit_stops: estimated_from_data: inferred from lap times (no Jolpica pit stops before
+  2011)'
+- 'stints_tyre_age: estimated_from_data: laps since the start / last stop; new sets'
+- 'track_status: estimated_from_data: neutralised laps inferred from the field''s
+  lap times'
+- 'compound: unknown (Jolpica has no tyre data): compound = MEDIUM placeholder, compound_name
+  = UNKNOWN'
+- 'weather: estimated_from_data: rain only, inferred from lap times (0 wet laps: field
+  median (1.08, 1.22) x the race''s 5th-percentile green lap); temperatures unknown'
+- 'grid: driver codes generated (none in Jolpica): panis -> PAN, matta -> DAM, kiesa
+  -> KIE, verstappen -> VER, wilson -> WIL, frentzen -> FRE, firman -> FIR; VIL grid
+  13 -> 14 (shares its slot in Jolpica); FRE grid 14 -> 15 (behind a shared slot in
+  Jolpica); HEI grid 15 -> 16 (behind a shared slot in Jolpica); WIL grid 16 -> 17
+  (behind a shared slot in Jolpica); BUT grid 17 -> 18 (behind a shared slot in Jolpica);
+  FIR grid 18 -> 19 (behind a shared slot in Jolpica); VER grid 19 -> 20 (behind a
+  shared slot in Jolpica); KIE grid 20 -> 21 (behind a shared slot in Jolpica)'

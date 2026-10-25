@@ -1,0 +1,34 @@
+model_name: tyre_life
+model_version: v1
+kind: stint-length life + same-lap wear regression; globals fitted on behaviour
+source_type: estimated_from_data
+artifact: configs/calibration/tyre_life_2008_v1.json
+artifact_sha256: sha256:d62d54f79a009b28fad64dc40052422d35b340c1eda0b226f5a79c741ede79f4
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2008_v1.yaml
+training_dataset_content_sha256: sha256:31fd4a3a32ff7d8882bdbc20587970c105e11cf1594d25ad2986da433873a3ee
+training_races:
+- 2008_australian_gp
+- 2008_bahrain_gp
+- 2008_belgian_gp
+- 2008_canadian_gp
+- 2008_chinese_gp
+- 2008_german_gp
+- 2008_hungarian_gp
+- 2008_italian_gp
+- 2008_malaysian_gp
+- 2008_singapore_gp
+- 2008_turkish_gp
+metrics:
+  dry_train_fit:
+    kappa: 1.0
+    delta_s: 0.1
+    loss: 0.1314
+    stops_sim: 2.055
+    stops_real: 2.027
+    share_sim:
+      SOFT: 0.6
+      MEDIUM: 0.4
+      HARD: 0.0
+  held_out_check: EXP-010 (docs/experiments/exp010.json)
+status: fitted for 2008 (H2a, D-054); held-out check EXP-023

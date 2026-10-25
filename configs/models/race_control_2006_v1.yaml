@@ -1,0 +1,29 @@
+model_name: race_control
+model_version: v1
+kind: 'method of moments: retirement hazard, SC/VSC per retirement, SC length'
+source_type: estimated_from_data
+artifact: configs/calibration/race_control_2006_v1.json
+artifact_sha256: sha256:3845b2b9858582deabeaef206926f3631cbb09bee93d9ee987d516b3ef7493d1
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2006_v1.yaml
+training_dataset_content_sha256: sha256:21fa0d50fa6846d0faabe14f4cfed0dc906ad1bc6319874d6641815f378574ac
+training_races:
+- 2006_australian_gp
+- 2006_bahrain_gp
+- 2006_brazilian_gp
+- 2006_canadian_gp
+- 2006_european_gp
+- 2006_french_gp
+- 2006_italian_gp
+- 2006_japanese_gp
+- 2006_malaysian_gp
+- 2006_monaco_gp
+- 2006_spanish_gp
+- 2006_turkish_gp
+- 2006_united_states_gp
+metrics:
+  retirements: 91
+  safety_cars: 10
+  vscs: 0
+  held_out_check: EXP-025
+status: fitted for 2006 (H2c, D-056)

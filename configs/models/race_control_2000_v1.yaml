@@ -1,0 +1,25 @@
+model_name: race_control
+model_version: v1
+kind: 'method of moments: retirement hazard, SC/VSC per retirement, SC length'
+source_type: estimated_from_data
+artifact: configs/calibration/race_control_2000_v1.json
+artifact_sha256: sha256:8d6d6a5990d4a6a15e7044e381400557c5c171528bcd0fd265b09453cf3a5636
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2000_v1.yaml
+training_dataset_content_sha256: sha256:758ca28c14c4249d57b9047c3f256c19958cb1a24b178747fe10e1d3f0873582
+training_races:
+- 2000_australian_gp
+- 2000_austrian_gp
+- 2000_brazilian_gp
+- 2000_french_gp
+- 2000_italian_gp
+- 2000_malaysian_gp
+- 2000_monaco_gp
+- 2000_san_marino_gp
+- 2000_spanish_gp
+metrics:
+  retirements: 87
+  safety_cars: 4
+  vscs: 0
+  held_out_check: EXP-025
+status: fitted for 2000 (H2c, D-056)

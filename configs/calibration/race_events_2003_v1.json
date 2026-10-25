@@ -1,0 +1,162 @@
+{
+ "label": "2003 race events (W4, D-042)",
+ "events": [
+  "2003_australian_gp",
+  "2003_malaysian_gp",
+  "2003_brazilian_gp",
+  "2003_spanish_gp",
+  "2003_austrian_gp",
+  "2003_monaco_gp",
+  "2003_european_gp",
+  "2003_french_gp",
+  "2003_british_gp",
+  "2003_hungarian_gp",
+  "2003_italian_gp",
+  "2003_san_marino_gp",
+  "2003_canadian_gp",
+  "2003_german_gp",
+  "2003_japanese_gp",
+  "2003_united_states_gp"
+ ],
+ "dry_events": [
+  "2003_australian_gp",
+  "2003_malaysian_gp",
+  "2003_brazilian_gp",
+  "2003_spanish_gp",
+  "2003_austrian_gp",
+  "2003_monaco_gp",
+  "2003_european_gp",
+  "2003_french_gp",
+  "2003_british_gp",
+  "2003_hungarian_gp",
+  "2003_italian_gp",
+  "2003_san_marino_gp",
+  "2003_canadian_gp",
+  "2003_german_gp",
+  "2003_japanese_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": NaN,
+  "slow_stop_scale_s": NaN,
+  "stops": 0,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {},
+ "reliability": {
+  "field_retirements_per_start": 0.3469,
+  "teams": {
+   "bar_2003": {
+    "failure_multiplier": 1.149,
+    "retirements": 14,
+    "starts": 32
+   },
+   "ferrari_2003": {
+    "failure_multiplier": 0.737,
+    "retirements": 6,
+    "starts": 32
+   },
+   "jaguar_2003": {
+    "failure_multiplier": 1.252,
+    "retirements": 16,
+    "starts": 32
+   },
+   "jordan_2003": {
+    "failure_multiplier": 1.304,
+    "retirements": 17,
+    "starts": 32
+   },
+   "mclaren_2003": {
+    "failure_multiplier": 0.84,
+    "retirements": 8,
+    "starts": 32
+   },
+   "minardi_2003": {
+    "failure_multiplier": 1.046,
+    "retirements": 12,
+    "starts": 32
+   },
+   "renault_2003": {
+    "failure_multiplier": 0.943,
+    "retirements": 10,
+    "starts": 32
+   },
+   "sauber_2003": {
+    "failure_multiplier": 0.995,
+    "retirements": 11,
+    "starts": 32
+   },
+   "toyota_2003": {
+    "failure_multiplier": 1.046,
+    "retirements": 12,
+    "starts": 32
+   },
+   "williams_2003": {
+    "failure_multiplier": 0.686,
+    "retirements": 5,
+    "starts": 32
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.0,
+  "sc_share": 0.4,
+  "count": 0,
+  "race_laps": 945,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 0,
+  "races": 16,
+  "per_race": 0.0
+ },
+ "penalties": {
+  "counts": {},
+  "collision_per_pass": 0.0,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.0,
+  "other_per_car_lap": 0.0,
+  "passes": 1153,
+  "raw": {
+   "collision_per_pass": 0.0,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.0,
+   "other_per_car_lap": 0.0
+  },
+  "scale": 1.0,
+  "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
+ },
+ "fitted": {
+  "risk_scale": 0.6656,
+  "red_flag_per_crash": 0.0,
+  "fit": {
+   "races": [
+    "2003_australian_gp",
+    "2003_malaysian_gp",
+    "2003_brazilian_gp",
+    "2003_spanish_gp",
+    "2003_austrian_gp",
+    "2003_monaco_gp",
+    "2003_european_gp",
+    "2003_french_gp",
+    "2003_british_gp",
+    "2003_hungarian_gp",
+    "2003_italian_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 5.491,
+   "sim_failures_per_race": 2.255,
+   "real_retirements_per_race": 5.909,
+   "target_red_flags_per_race": 0.0
+  },
+  "check": {
+   "retirements_per_race": 6.382,
+   "red_flags_per_race": 0.0,
+   "safety_cars_per_race": 0.982,
+   "vscs_per_race": 0.0,
+   "penalties_per_race": 0.0,
+   "penalties_per_race_after_scale": 0.0
+  }
+ }
+}

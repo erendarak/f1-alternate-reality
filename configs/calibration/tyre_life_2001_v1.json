@@ -1,0 +1,416 @@
+{
+ "label": "2001 tyre life + same-lap wear (W1, D-041)",
+ "compound_reference": "compounds unknown: soft/hard wear and life ratios to the medium from calibration/tyre_life_2018_v1.json (borrowed); stops-only fit",
+ "dataset_sha256": "sha256:7d4c8229983fb18ca4200ab52fcf34d5836b3b4eda7849818872018c0e1810a1",
+ "fitted_on": [
+  "2001_australian_gp",
+  "2001_austrian_gp",
+  "2001_belgian_gp",
+  "2001_british_gp",
+  "2001_european_gp",
+  "2001_french_gp",
+  "2001_hungarian_gp",
+  "2001_italian_gp",
+  "2001_japanese_gp",
+  "2001_monaco_gp",
+  "2001_spanish_gp"
+ ],
+ "globals": {
+  "kappa": 1.5,
+  "kappa_note": "life_laps = kappa x life_raw; fitted on dry_train behaviour",
+  "delta_s": 0.35,
+  "delta_note": "potential pace step: SOFT -delta, MEDIUM 0, HARD +delta; fitted",
+  "fuel_s_per_lap": 0.03,
+  "fuel_note": "lap time per lap of fuel on board; fitted on dry_train stops with kappa/delta"
+ },
+ "season_wear": {
+  "lin": {
+   "MEDIUM": 0.04227791795204792,
+   "SOFT": 0.061373260593173065,
+   "HARD": 0.043789391763207744
+  },
+  "quad": {
+   "MEDIUM": -0.00027456625502570364,
+   "SOFT": -0.00032645701064545625,
+   "HARD": -0.00025511124175871724
+  },
+  "fresh_bonus_s": -0.16177533164378807,
+  "same_lap_offsets": {
+   "SOFT": 0.0,
+   "MEDIUM": 0.0,
+   "HARD": 0.0
+  },
+  "laps": 8454
+ },
+ "life_ratios_vs_medium": {
+  "MEDIUM": 1.0,
+  "SOFT": 1.0212765957446808,
+  "HARD": 1.0172413793103448
+ },
+ "editorial": {
+  "pace_modes": {
+   "CONSERVE": {
+    "offset_s": 0.35,
+    "wear_multiplier": 0.75
+   },
+   "BALANCED": {
+    "offset_s": 0.0,
+    "wear_multiplier": 1.0
+   },
+   "PUSH": {
+    "offset_s": -0.3,
+    "wear_multiplier": 1.4
+   }
+  },
+  "cliff_s_per_lap": 0.5,
+  "neutralised_life_factor": 0.35,
+  "note": "editorial_assumption: research ranges (docs/RESEARCH_REAL_F1.md)"
+ },
+ "events": {
+  "2001_australian_gp": {
+   "total_laps": 58,
+   "life_raw": {
+    "SOFT": 36.77,
+    "MEDIUM": 36.0,
+    "HARD": 36.62
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 20 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 20,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.609,
+   "wear_multiplier_raw": 0.32,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2001_spanish_gp": {
+   "total_laps": 65,
+   "life_raw": {
+    "SOFT": 24.51,
+    "MEDIUM": 24.0,
+    "HARD": 24.41
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 36 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 36,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -0.573,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2001_austrian_gp": {
+   "total_laps": 71,
+   "life_raw": {
+    "SOFT": 48.77,
+    "MEDIUM": 47.75,
+    "HARD": 48.57
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 14 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 14,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.689,
+   "wear_multiplier_raw": 0.524,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2001_monaco_gp": {
+   "total_laps": 78,
+   "life_raw": {
+    "SOFT": 56.43,
+    "MEDIUM": 55.25,
+    "HARD": 56.2
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 16 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 16,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.488,
+   "wear_multiplier_raw": 0.265,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2001_european_gp": {
+   "total_laps": 67,
+   "life_raw": {
+    "SOFT": 34.72,
+    "MEDIUM": 34.0,
+    "HARD": 34.59
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 29 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 29,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.742,
+   "wear_multiplier_raw": 0.634,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2001_french_gp": {
+   "total_laps": 72,
+   "life_raw": {
+    "SOFT": 25.79,
+    "MEDIUM": 25.25,
+    "HARD": 25.69
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 40 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 40,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.213,
+   "wear_multiplier_raw": 1.295,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2001_british_gp": {
+   "total_laps": 60,
+   "life_raw": {
+    "SOFT": 26.04,
+    "MEDIUM": 25.5,
+    "HARD": 25.94
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 27 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 27,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.843,
+   "wear_multiplier_raw": 0.751,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2001_hungarian_gp": {
+   "total_laps": 77,
+   "life_raw": {
+    "SOFT": 30.13,
+    "MEDIUM": 29.5,
+    "HARD": 30.01
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 39 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 39,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.823,
+   "wear_multiplier_raw": 0.749,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2001_belgian_gp": {
+   "total_laps": 36,
+   "life_raw": {
+    "SOFT": 13.28,
+    "MEDIUM": 13.0,
+    "HARD": 13.22
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 29 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 29,
+    "HARD": 0
+   },
+   "wear_multiplier": 2.131,
+   "wear_multiplier_raw": 3.514,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2001_italian_gp": {
+   "total_laps": 53,
+   "life_raw": {
+    "SOFT": 31.66,
+    "MEDIUM": 31.0,
+    "HARD": 31.53
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 21 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 21,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.922,
+   "wear_multiplier_raw": 0.871,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2001_japanese_gp": {
+   "total_laps": 53,
+   "life_raw": {
+    "SOFT": 20.43,
+    "MEDIUM": 20.0,
+    "HARD": 20.34
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 40 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 40,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.477,
+   "wear_multiplier_raw": 0.185,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2001_san_marino_gp": {
+   "total_laps": 62,
+   "life_raw": {
+    "SOFT": 26.55,
+    "MEDIUM": 26.0,
+    "HARD": 26.45
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 33 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 33,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.814,
+   "wear_multiplier_raw": 0.71,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2001_canadian_gp": {
+   "total_laps": 69,
+   "life_raw": {
+    "SOFT": 38.81,
+    "MEDIUM": 38.0,
+    "HARD": 38.66
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 17 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 17,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.877,
+   "wear_multiplier_raw": 0.793,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2001_german_gp": {
+   "total_laps": 45,
+   "life_raw": {
+    "SOFT": 22.98,
+    "MEDIUM": 22.5,
+    "HARD": 22.89
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 22 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 22,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.646,
+   "wear_multiplier_raw": 0.34,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2001_united_states_gp": {
+   "total_laps": 73,
+   "life_raw": {
+    "SOFT": 43.66,
+    "MEDIUM": 42.75,
+    "HARD": 43.49
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 22 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 22,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.603,
+   "wear_multiplier_raw": 0.441,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  }
+ }
+}

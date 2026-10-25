@@ -1,0 +1,32 @@
+{
+  "crash_per_lap": 0.003017,
+  "failure_per_lap": 0.002012,
+  "first_lap_crash_multiplier": 22.51,
+  "fitted_on": [
+    "2006_bahrain_gp",
+    "2006_malaysian_gp",
+    "2006_australian_gp",
+    "2006_european_gp",
+    "2006_spanish_gp",
+    "2006_monaco_gp",
+    "2006_canadian_gp",
+    "2006_united_states_gp",
+    "2006_french_gp",
+    "2006_turkish_gp",
+    "2006_italian_gp",
+    "2006_japanese_gp",
+    "2006_brazilian_gp"
+  ],
+  "lap1_retirement_per_starter": 0.06993,
+  "note": "H2c: 13 dry_train 2006 races; neutralisations inferred from lap times (no VSC yet)",
+  "races": 13,
+  "retirement_per_car_lap": 0.005029,
+  "retirements": 91,
+  "safety_cars": 10,
+  "sc_laps_median": 4.38,
+  "sc_laps_p25": 3.21,
+  "sc_laps_p75": 7.9,
+  "sc_per_retirement": 0.1099,
+  "vsc_per_retirement_without_sc": 0.0,
+  "vscs": 0
+}

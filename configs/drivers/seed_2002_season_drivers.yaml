@@ -1,0 +1,106 @@
+# Driver persona seed for the 2002 season (H2a, D-054), written by
+# scripts/build_season_seeds.py. Identity comes from each race's roster (Jolpica).
+# THE NUMBERS ARE EDITORIAL ASSUMPTIONS: illustrative simulation personas, not verified
+# psychometrics. Drivers who raced in 2024 keep their 2024 seed persona (not refitted for
+# 2002); others are template-only (rookie = no start in an earlier season we have).
+schema_version: 1
+season: 2002
+event_id: 2002_season
+explanation: Illustrative simulation persona; not verified driver psychometrics.
+profile_revision: v1
+policy:
+  type: profile_conditioned_baseline
+  version: untrained
+drivers:
+  alex_yoong_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  allan_mcnish_2002:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  anthony_davidson_2002:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  david_coulthard_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  eddie_irvine_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  enrique_bernoldi_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  felipe_massa_2002:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  giancarlo_fisichella_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  heinz_harald_frentzen_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jacques_villeneuve_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jarno_trulli_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jenson_button_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  juan_pablo_montoya_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  kimi_raikkonen_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  mark_webber_2002:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  michael_schumacher_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  mika_salo_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  nick_heidfeld_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  olivier_panis_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  pedro_de_la_rosa_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  ralf_schumacher_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  rubens_barrichello_2002:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  takuma_sato_2002:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)

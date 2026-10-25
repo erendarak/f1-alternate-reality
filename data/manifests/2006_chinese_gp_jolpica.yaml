@@ -1,0 +1,104 @@
+dataset_id: 2006_chinese_gp_jolpica_v1
+event: 2006_chinese_gp
+source: jolpica-f1 (history cache, H2b)
+source_api_version: ergast-compatible v1
+retrieved_utc: '2026-10-24T21:31:23Z'
+session_key: 2006/round 16/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2006_chinese_gp/laps.parquet
+  sha256: sha256:ee58b072c3ce657ef2a624557ceef5b3fe79f3df844876bbf35e54ead9145628
+  rows: 1125
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - lap_start_time_s
+  - lap_end_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - position
+  - track_status
+  - is_accurate
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - speed_trap_kph
+  - fresh_tyre
+  - deleted
+  - fastf1_generated
+  - compound_name
+  source_type: historical_verified
+  description: lap times and positions (Jolpica); stints, tyre age, pit flags and
+    track status derived, see missingness notes
+- relative_path: data/processed/2006_chinese_gp/results.parquet
+  sha256: sha256:f7889d3a17b408d174bf3e8b13f2d3bc2b11affeb5dc54bf5f2676ed670ff32f
+  rows: 22
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification (Jolpica)
+- relative_path: data/processed/2006_chinese_gp/track_status.parquet
+  sha256: sha256:fc400f5c687447ff62b36a3f5412971895f0db9256aeb4fc101de32288731a96
+  rows: 1
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: estimated_from_data
+  description: neutralised laps inferred
+- relative_path: data/processed/2006_chinese_gp/weather.parquet
+  sha256: sha256:98c83cb8bee56967a59961e338ddf20a147bc9ea8ca99fc0de9909392b2e9ad9
+  rows: 56
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: estimated_from_data
+  description: rain per lap inferred from lap times
+- relative_path: data/processed/2006_chinese_gp/race_control.parquet
+  sha256: sha256:aeed3440cc15104b2331e32ef6ab8df8d822bcef6986ed5bfa8c6e235a532997
+  rows: 0
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: editorial_assumption
+  description: 'no race control messages: empty'
+unit_conventions:
+  time: seconds from the start (lap times summed per car)
+missingness_notes:
+- 'pit_stops: estimated_from_data: inferred from lap times (no Jolpica pit stops before
+  2011)'
+- 'stints_tyre_age: estimated_from_data: laps since the start / last stop; new sets'
+- 'track_status: estimated_from_data: neutralised laps inferred from the field''s
+  lap times'
+- 'compound: unknown (Jolpica has no tyre data): compound = MEDIUM placeholder, compound_name
+  = UNKNOWN'
+- 'weather: estimated_from_data: rain only, inferred from lap times (15 wet laps:
+  field median (1.08, 1.22) x the race''s 5th-percentile green lap); temperatures
+  unknown'

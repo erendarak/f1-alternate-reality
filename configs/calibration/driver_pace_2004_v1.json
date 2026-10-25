@@ -1,0 +1,269 @@
+{
+ "label": "2004 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2004_australian_gp",
+  "2004_malaysian_gp",
+  "2004_bahrain_gp",
+  "2004_spanish_gp",
+  "2004_monaco_gp",
+  "2004_european_gp",
+  "2004_united_states_gp",
+  "2004_french_gp",
+  "2004_british_gp",
+  "2004_hungarian_gp",
+  "2004_belgian_gp",
+  "2004_italian_gp",
+  "2004_japanese_gp",
+  "2004_brazilian_gp"
+ ],
+ "field_noise_s": 0.6678,
+ "form_sd_s": 0.3849,
+ "form_note": "within-pair gap SD 0.583 s, sampling SD 0.210 s over 106 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "ALO": {
+   "team_id": "renault_2004",
+   "pace_vs_teammate_s": -0.1923,
+   "raw_mean_gap_s": -0.2447,
+   "races": 11,
+   "lap_noise_s": 0.5988,
+   "raw_noise_s": 0.5739,
+   "clean_laps": 414
+  },
+  "BAR": {
+   "team_id": "ferrari_2004",
+   "pace_vs_teammate_s": 0.1202,
+   "raw_mean_gap_s": 0.146,
+   "races": 14,
+   "lap_noise_s": 0.6952,
+   "raw_noise_s": 0.7042,
+   "clean_laps": 457
+  },
+  "BAU": {
+   "team_id": "minardi_2004",
+   "pace_vs_teammate_s": 0.0286,
+   "raw_mean_gap_s": 0.0372,
+   "races": 10,
+   "lap_noise_s": 0.7571,
+   "raw_noise_s": 0.7972,
+   "clean_laps": 335
+  },
+  "BRU": {
+   "team_id": "minardi_2004",
+   "pace_vs_teammate_s": -0.0286,
+   "raw_mean_gap_s": -0.0372,
+   "races": 10,
+   "lap_noise_s": 0.7789,
+   "raw_noise_s": 0.8225,
+   "clean_laps": 382
+  },
+  "BUT": {
+   "team_id": "bar_2004",
+   "pace_vs_teammate_s": -0.111,
+   "raw_mean_gap_s": -0.1443,
+   "races": 10,
+   "lap_noise_s": 0.6352,
+   "raw_noise_s": 0.6218,
+   "clean_laps": 367
+  },
+  "COU": {
+   "team_id": "mclaren_2004",
+   "pace_vs_teammate_s": 0.2118,
+   "raw_mean_gap_s": 0.2913,
+   "races": 8,
+   "lap_noise_s": 0.5857,
+   "raw_noise_s": 0.5533,
+   "clean_laps": 380
+  },
+  "DAM": {
+   "team_id": "toyota_2004",
+   "pace_vs_teammate_s": -0.2311,
+   "raw_mean_gap_s": -0.3466,
+   "races": 6,
+   "lap_noise_s": 0.6856,
+   "raw_noise_s": 0.696,
+   "clean_laps": 257
+  },
+  "FIS": {
+   "team_id": "sauber_2004",
+   "pace_vs_teammate_s": -0.1743,
+   "raw_mean_gap_s": -0.2219,
+   "races": 11,
+   "lap_noise_s": 0.6703,
+   "raw_noise_s": 0.6714,
+   "clean_laps": 361
+  },
+  "GEN": {
+   "team_id": "williams_2004",
+   "pace_vs_teammate_s": 0.081,
+   "raw_mean_gap_s": 0.2024,
+   "races": 2,
+   "lap_noise_s": 0.6081,
+   "raw_noise_s": 0.4537,
+   "clean_laps": 58
+  },
+  "GLO": {
+   "team_id": "jordan_2004",
+   "pace_vs_teammate_s": 0.1808,
+   "raw_mean_gap_s": 0.7233,
+   "races": 1,
+   "lap_noise_s": 0.6655,
+   "raw_noise_s": 0.6612,
+   "clean_laps": 78
+  },
+  "HEI": {
+   "team_id": "jordan_2004",
+   "pace_vs_teammate_s": -0.3396,
+   "raw_mean_gap_s": -0.4415,
+   "races": 10,
+   "lap_noise_s": 0.7164,
+   "raw_noise_s": 0.7344,
+   "clean_laps": 404
+  },
+  "KLI": {
+   "team_id": "jaguar_2004",
+   "pace_vs_teammate_s": 0.3672,
+   "raw_mean_gap_s": 0.4774,
+   "races": 10,
+   "lap_noise_s": 0.7407,
+   "raw_noise_s": 0.7705,
+   "clean_laps": 367
+  },
+  "MAS": {
+   "team_id": "sauber_2004",
+   "pace_vs_teammate_s": 0.1743,
+   "raw_mean_gap_s": 0.2219,
+   "races": 11,
+   "lap_noise_s": 0.6255,
+   "raw_noise_s": 0.6085,
+   "clean_laps": 373
+  },
+  "MON": {
+   "team_id": "williams_2004",
+   "pace_vs_teammate_s": -0.0968,
+   "raw_mean_gap_s": -0.121,
+   "races": 12,
+   "lap_noise_s": 0.5969,
+   "raw_noise_s": 0.5738,
+   "clean_laps": 460
+  },
+  "MSC": {
+   "team_id": "ferrari_2004",
+   "pace_vs_teammate_s": -0.1202,
+   "raw_mean_gap_s": -0.146,
+   "races": 14,
+   "lap_noise_s": 0.6898,
+   "raw_noise_s": 0.6958,
+   "clean_laps": 553
+  },
+  "PAI": {
+   "team_id": "toyota_2004",
+   "pace_vs_teammate_s": 0.0699,
+   "raw_mean_gap_s": 0.2796,
+   "races": 1,
+   "lap_noise_s": 0.6793,
+   "raw_noise_s": 0.7581,
+   "clean_laps": 22
+  },
+  "PAN": {
+   "team_id": "toyota_2004",
+   "pace_vs_teammate_s": 0.1855,
+   "raw_mean_gap_s": 0.2361,
+   "races": 11,
+   "lap_noise_s": 0.6787,
+   "raw_noise_s": 0.683,
+   "clean_laps": 390
+  },
+  "PAT": {
+   "team_id": "jordan_2004",
+   "pace_vs_teammate_s": 0.3366,
+   "raw_mean_gap_s": 0.5049,
+   "races": 6,
+   "lap_noise_s": 0.73,
+   "raw_noise_s": 0.7742,
+   "clean_laps": 211
+  },
+  "PIZ": {
+   "team_id": "williams_2004",
+   "pace_vs_teammate_s": -0.0229,
+   "raw_mean_gap_s": -0.0457,
+   "races": 3,
+   "lap_noise_s": 0.6424,
+   "raw_noise_s": 0.5895,
+   "clean_laps": 72
+  },
+  "RAI": {
+   "team_id": "mclaren_2004",
+   "pace_vs_teammate_s": -0.2118,
+   "raw_mean_gap_s": -0.2913,
+   "races": 8,
+   "lap_noise_s": 0.6344,
+   "raw_noise_s": 0.6117,
+   "clean_laps": 221
+  },
+  "SAT": {
+   "team_id": "bar_2004",
+   "pace_vs_teammate_s": 0.111,
+   "raw_mean_gap_s": 0.1443,
+   "races": 10,
+   "lap_noise_s": 0.6327,
+   "raw_noise_s": 0.62,
+   "clean_laps": 414
+  },
+  "SCH": {
+   "team_id": "williams_2004",
+   "pace_vs_teammate_s": 0.1185,
+   "raw_mean_gap_s": 0.1692,
+   "races": 7,
+   "lap_noise_s": 0.687,
+   "raw_noise_s": 0.7031,
+   "clean_laps": 178
+  },
+  "TRU": {
+   "team_id": "renault_2004",
+   "pace_vs_teammate_s": 0.0519,
+   "raw_mean_gap_s": 0.066,
+   "races": 11,
+   "lap_noise_s": 0.5989,
+   "raw_noise_s": 0.579,
+   "clean_laps": 517
+  },
+  "VIL": {
+   "team_id": "renault_2004",
+   "pace_vs_teammate_s": 0.1813,
+   "raw_mean_gap_s": 0.4532,
+   "races": 2,
+   "lap_noise_s": 0.6665,
+   "raw_noise_s": 0.6641,
+   "clean_laps": 76
+  },
+  "WEB": {
+   "team_id": "jaguar_2004",
+   "pace_vs_teammate_s": -0.3672,
+   "raw_mean_gap_s": -0.4774,
+   "races": 10,
+   "lap_noise_s": 0.6197,
+   "raw_noise_s": 0.5917,
+   "clean_laps": 258
+  },
+  "ZON": {
+   "team_id": "toyota_2004",
+   "pace_vs_teammate_s": 0.154,
+   "raw_mean_gap_s": 0.3081,
+   "races": 3,
+   "lap_noise_s": 0.7036,
+   "raw_noise_s": 0.7619,
+   "clean_laps": 92
+  }
+ },
+ "overtake_threshold_shift_s": 0.0,
+ "overtake_shift_fit": {
+  "skipped": "superseded by the W3 racecraft refit (H2a)"
+ }
+}

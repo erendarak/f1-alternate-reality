@@ -1,0 +1,258 @@
+{
+ "label": "2007 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2007_australian_gp",
+  "2007_malaysian_gp",
+  "2007_bahrain_gp",
+  "2007_monaco_gp",
+  "2007_canadian_gp",
+  "2007_united_states_gp",
+  "2007_british_gp",
+  "2007_hungarian_gp",
+  "2007_italian_gp",
+  "2007_belgian_gp",
+  "2007_japanese_gp",
+  "2007_brazilian_gp"
+ ],
+ "field_noise_s": 0.5716,
+ "form_sd_s": 0.3688,
+ "form_note": "within-pair gap SD 0.564 s, sampling SD 0.214 s over 109 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "ALB": {
+   "team_id": "spyker_2007",
+   "pace_vs_teammate_s": 0.066,
+   "raw_mean_gap_s": 0.1057,
+   "races": 5,
+   "lap_noise_s": 0.7117,
+   "raw_noise_s": 0.8117,
+   "clean_laps": 210
+  },
+  "ALO": {
+   "team_id": "mclaren_2007",
+   "pace_vs_teammate_s": 0.017,
+   "raw_mean_gap_s": 0.0213,
+   "races": 12,
+   "lap_noise_s": 0.5362,
+   "raw_noise_s": 0.5214,
+   "clean_laps": 358
+  },
+  "BAR": {
+   "team_id": "honda_2007",
+   "pace_vs_teammate_s": -0.0903,
+   "raw_mean_gap_s": -0.1242,
+   "races": 8,
+   "lap_noise_s": 0.5705,
+   "raw_noise_s": 0.5699,
+   "clean_laps": 294
+  },
+  "BUT": {
+   "team_id": "honda_2007",
+   "pace_vs_teammate_s": 0.0903,
+   "raw_mean_gap_s": 0.1242,
+   "races": 8,
+   "lap_noise_s": 0.6074,
+   "raw_noise_s": 0.6365,
+   "clean_laps": 185
+  },
+  "COU": {
+   "team_id": "red_bull_2007",
+   "pace_vs_teammate_s": 0.0456,
+   "raw_mean_gap_s": 0.0652,
+   "races": 7,
+   "lap_noise_s": 0.5817,
+   "raw_noise_s": 0.5882,
+   "clean_laps": 232
+  },
+  "DAV": {
+   "team_id": "super_aguri_2007",
+   "pace_vs_teammate_s": 0.0477,
+   "raw_mean_gap_s": 0.0607,
+   "races": 11,
+   "lap_noise_s": 0.6814,
+   "raw_noise_s": 0.7463,
+   "clean_laps": 254
+  },
+  "FIS": {
+   "team_id": "renault_2007",
+   "pace_vs_teammate_s": -0.0186,
+   "raw_mean_gap_s": -0.0242,
+   "races": 10,
+   "lap_noise_s": 0.5509,
+   "raw_noise_s": 0.5411,
+   "clean_laps": 314
+  },
+  "HAM": {
+   "team_id": "mclaren_2007",
+   "pace_vs_teammate_s": -0.017,
+   "raw_mean_gap_s": -0.0213,
+   "races": 12,
+   "lap_noise_s": 0.5273,
+   "raw_noise_s": 0.5143,
+   "clean_laps": 513
+  },
+  "HEI": {
+   "team_id": "bmw_sauber_2007",
+   "pace_vs_teammate_s": -0.13,
+   "raw_mean_gap_s": -0.1625,
+   "races": 12,
+   "lap_noise_s": 0.5329,
+   "raw_noise_s": 0.5201,
+   "clean_laps": 451
+  },
+  "KOV": {
+   "team_id": "renault_2007",
+   "pace_vs_teammate_s": 0.0186,
+   "raw_mean_gap_s": 0.0242,
+   "races": 10,
+   "lap_noise_s": 0.5808,
+   "raw_noise_s": 0.5848,
+   "clean_laps": 347
+  },
+  "KUB": {
+   "team_id": "bmw_sauber_2007",
+   "pace_vs_teammate_s": 0.1345,
+   "raw_mean_gap_s": 0.1712,
+   "races": 11,
+   "lap_noise_s": 0.5564,
+   "raw_noise_s": 0.5491,
+   "clean_laps": 311
+  },
+  "LIU": {
+   "team_id": "toro_rosso_2007",
+   "pace_vs_teammate_s": 0.0738,
+   "raw_mean_gap_s": 0.1015,
+   "races": 8,
+   "lap_noise_s": 0.6331,
+   "raw_noise_s": 0.6692,
+   "clean_laps": 255
+  },
+  "MAS": {
+   "team_id": "ferrari_2007",
+   "pace_vs_teammate_s": 0.0601,
+   "raw_mean_gap_s": 0.0765,
+   "races": 11,
+   "lap_noise_s": 0.5552,
+   "raw_noise_s": 0.5477,
+   "clean_laps": 326
+  },
+  "NAK": {
+   "team_id": "williams_2007",
+   "pace_vs_teammate_s": 0.0485,
+   "raw_mean_gap_s": 0.194,
+   "races": 1,
+   "lap_noise_s": 0.5635,
+   "raw_noise_s": 0.5307,
+   "clean_laps": 37
+  },
+  "RAI": {
+   "team_id": "ferrari_2007",
+   "pace_vs_teammate_s": -0.0601,
+   "raw_mean_gap_s": -0.0765,
+   "races": 11,
+   "lap_noise_s": 0.6088,
+   "raw_noise_s": 0.6276,
+   "clean_laps": 297
+  },
+  "ROS": {
+   "team_id": "williams_2007",
+   "pace_vs_teammate_s": -0.2234,
+   "raw_mean_gap_s": -0.2843,
+   "races": 11,
+   "lap_noise_s": 0.5599,
+   "raw_noise_s": 0.5542,
+   "clean_laps": 305
+  },
+  "SAT": {
+   "team_id": "super_aguri_2007",
+   "pace_vs_teammate_s": -0.0477,
+   "raw_mean_gap_s": -0.0607,
+   "races": 11,
+   "lap_noise_s": 0.6012,
+   "raw_noise_s": 0.6171,
+   "clean_laps": 279
+  },
+  "SCH": {
+   "team_id": "toyota_2007",
+   "pace_vs_teammate_s": -0.0317,
+   "raw_mean_gap_s": -0.0403,
+   "races": 11,
+   "lap_noise_s": 0.5716,
+   "raw_noise_s": 0.5716,
+   "clean_laps": 218
+  },
+  "SPE": {
+   "team_id": "toro_rosso_2007",
+   "pace_vs_teammate_s": 0.028,
+   "raw_mean_gap_s": 0.049,
+   "races": 4,
+   "lap_noise_s": 0.5782,
+   "raw_noise_s": 0.586,
+   "clean_laps": 126
+  },
+  "SUT": {
+   "team_id": "spyker_2007",
+   "pace_vs_teammate_s": -0.1446,
+   "raw_mean_gap_s": -0.1989,
+   "races": 8,
+   "lap_noise_s": 0.7051,
+   "raw_noise_s": 0.7823,
+   "clean_laps": 259
+  },
+  "TRU": {
+   "team_id": "toyota_2007",
+   "pace_vs_teammate_s": 0.0317,
+   "raw_mean_gap_s": 0.0403,
+   "races": 11,
+   "lap_noise_s": 0.5808,
+   "raw_noise_s": 0.5845,
+   "clean_laps": 372
+  },
+  "VET": {
+   "team_id": "bmw_sauber_2007",
+   "pace_vs_teammate_s": -0.1177,
+   "raw_mean_gap_s": -0.1883,
+   "races": 5,
+   "lap_noise_s": 0.5354,
+   "raw_noise_s": 0.4836,
+   "clean_laps": 105
+  },
+  "WEB": {
+   "team_id": "red_bull_2007",
+   "pace_vs_teammate_s": -0.0456,
+   "raw_mean_gap_s": -0.0652,
+   "races": 7,
+   "lap_noise_s": 0.5457,
+   "raw_noise_s": 0.5292,
+   "clean_laps": 236
+  },
+  "WUR": {
+   "team_id": "williams_2007",
+   "pace_vs_teammate_s": 0.2256,
+   "raw_mean_gap_s": 0.2933,
+   "races": 10,
+   "lap_noise_s": 0.5654,
+   "raw_noise_s": 0.5616,
+   "clean_laps": 245
+  },
+  "YAM": {
+   "team_id": "spyker_2007",
+   "pace_vs_teammate_s": 0.1771,
+   "raw_mean_gap_s": 0.3542,
+   "races": 3,
+   "lap_noise_s": 0.636,
+   "raw_noise_s": 0.7702,
+   "clean_laps": 72
+  }
+ },
+ "overtake_threshold_shift_s": 0.0,
+ "overtake_shift_fit": {
+  "skipped": "superseded by the W3 racecraft refit (H2a)"
+ }
+}

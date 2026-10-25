@@ -1,0 +1,118 @@
+# Driver persona seed for the 2003 season (H2a, D-054), written by
+# scripts/build_season_seeds.py. Identity comes from each race's roster (Jolpica).
+# THE NUMBERS ARE EDITORIAL ASSUMPTIONS: illustrative simulation personas, not verified
+# psychometrics. Drivers who raced in 2024 keep their 2024 seed persona (not refitted for
+# 2003); others are template-only (rookie = no start in an earlier season we have).
+schema_version: 1
+season: 2003
+event_id: 2003_season
+explanation: Illustrative simulation persona; not verified driver psychometrics.
+profile_revision: v1
+policy:
+  type: profile_conditioned_baseline
+  version: untrained
+drivers:
+  antonio_pizzonia_2003:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  cristiano_da_matta_2003:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  david_coulthard_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  fernando_alonso_2003:
+    template: generic_veteran
+    confidence: 0.15
+    origin: copied from the 2024 seed (master plan §3.3 (Stage 1 fields))
+    persona_label: tactical veteran
+    overrides:
+      race_pace_skill: 0.89
+      consistency: 0.92
+      risk_appetite: 0.7
+      tire_management: 0.91
+      wet_skill: 0.89
+      adaptability: 0.94
+  giancarlo_fisichella_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  heinz_harald_frentzen_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jacques_villeneuve_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jarno_trulli_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jenson_button_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jos_verstappen_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  juan_pablo_montoya_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  justin_wilson_2003:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  kimi_raikkonen_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  marc_gene_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  mark_webber_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  michael_schumacher_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  nick_heidfeld_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  nicolas_kiesa_2003:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  olivier_panis_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  ralf_schumacher_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  ralph_firman_2003:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  rubens_barrichello_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  takuma_sato_2003:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  zsolt_baumgartner_2003:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)

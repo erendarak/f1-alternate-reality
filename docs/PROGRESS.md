@@ -1410,3 +1410,20 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
 - Next: close H0 when the fetch ends (EXP-021 coverage, EXP-022 rerun, 2010 seeds + refit), then
   H1b (refuelling era).
 
+### 2026-10-25 — H1b: the refuelling era 2000-2009 (engine v0.18.0, D-057, EXP-026)
+
+- Rules 2000-2009 sourced (points, refuelling, 2005 one tyre set, 2007 two compounds, tyre war,
+  race fuel fixed in qualifying, pit lane closed under SC 2007-2008 stored).
+- 174 races converted; track lengths checked against the regulation distance (5 changed
+  layouts get sourced lengths); 16 wet races; seeds 2000-2009 (1990s driver lists for rookies).
+- Engine v0.18.0 / world schema 19: fuel on board, burn, refuel stops, empty-tank stops, 2005
+  fuel-only stops, start fuel from qualifying; refuelling planner (DP, up to 4 stops); 2010+
+  races identical to v0.17 (21/21).
+- Fits: fuel proxy = fuel on board; wear fit and base lap fuel-corrected; fuel effect fitted per
+  season with kappa/delta; pit lane loss minus a typical refuelling; overtaking curve from 2011.
+- EXP-026 (37 held-out races): stops MAE 0.36 vs 0.79, retirements 1.99 vs 3.36; finishing order
+  0.29 vs 0.47 (isolated: the era's high attrition from its own race control).
+- Tests: 487 offline (+6 `tests/unit/test_refuelling.py`); ruff, mypy clean; registry ok.
+- Next: close H0 when the history fetch ends (~0.7 h), then H3 (hidden race-day truth) and its
+  value-of-information gate.
+

@@ -21,9 +21,9 @@ drivers:
     confidence: 0.1
     origin: template only (no start before this season in our data)
   christian_klien_2010:
-    template: generic_rookie
+    template: generic_veteran
     confidence: 0.1
-    origin: template only (no start before this season in our data)
+    origin: template only
   felipe_massa_2010:
     template: generic_veteran
     confidence: 0.1
@@ -85,9 +85,9 @@ drivers:
     confidence: 0.1
     origin: template only
   michael_schumacher_2010:
-    template: generic_rookie
+    template: generic_veteran
     confidence: 0.1
-    origin: template only (no start before this season in our data)
+    origin: template only
   nick_heidfeld_2010:
     template: generic_veteran
     confidence: 0.1
@@ -101,9 +101,9 @@ drivers:
     confidence: 0.1
     origin: template only
   pedro_de_la_rosa_2010:
-    template: generic_rookie
+    template: generic_veteran
     confidence: 0.1
-    origin: template only (no start before this season in our data)
+    origin: template only
   robert_kubica_2010:
     template: generic_veteran
     confidence: 0.1

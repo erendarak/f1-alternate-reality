@@ -1,0 +1,345 @@
+{
+ "label": "2000 tyre life + same-lap wear (W1, D-041)",
+ "compound_reference": "compounds unknown: soft/hard wear and life ratios to the medium from calibration/tyre_life_2018_v1.json (borrowed); stops-only fit",
+ "dataset_sha256": "sha256:4ac42424b2e8524cadfcb9a294315f2de2e298f68e7485c558520c59abe67b8c",
+ "fitted_on": [
+  "2000_australian_gp",
+  "2000_austrian_gp",
+  "2000_brazilian_gp",
+  "2000_french_gp",
+  "2000_italian_gp",
+  "2000_malaysian_gp",
+  "2000_monaco_gp",
+  "2000_san_marino_gp",
+  "2000_spanish_gp"
+ ],
+ "globals": {
+  "kappa": 1.5,
+  "kappa_note": "life_laps = kappa x life_raw; fitted on dry_train behaviour",
+  "delta_s": 0.35,
+  "delta_note": "potential pace step: SOFT -delta, MEDIUM 0, HARD +delta; fitted",
+  "fuel_s_per_lap": 0.03,
+  "fuel_note": "lap time per lap of fuel on board; fitted on dry_train stops with kappa/delta"
+ },
+ "season_wear": {
+  "lin": {
+   "MEDIUM": 0.016649651603552466,
+   "SOFT": 0.024169671926828413,
+   "HARD": 0.01724489170956355
+  },
+  "quad": {
+   "MEDIUM": -1.796121526835055e-05,
+   "SOFT": -2.135573668190334e-05,
+   "HARD": -1.668853271927238e-05
+  },
+  "fresh_bonus_s": -0.22770136312563352,
+  "same_lap_offsets": {
+   "SOFT": 0.0,
+   "MEDIUM": 0.0,
+   "HARD": 0.0
+  },
+  "laps": 6390
+ },
+ "life_ratios_vs_medium": {
+  "MEDIUM": 1.0,
+  "SOFT": 1.0212765957446808,
+  "HARD": 1.0172413793103448
+ },
+ "editorial": {
+  "pace_modes": {
+   "CONSERVE": {
+    "offset_s": 0.35,
+    "wear_multiplier": 0.75
+   },
+   "BALANCED": {
+    "offset_s": 0.0,
+    "wear_multiplier": 1.0
+   },
+   "PUSH": {
+    "offset_s": -0.3,
+    "wear_multiplier": 1.4
+   }
+  },
+  "cliff_s_per_lap": 0.5,
+  "neutralised_life_factor": 0.35,
+  "note": "editorial_assumption: research ranges (docs/RESEARCH_REAL_F1.md)"
+ },
+ "events": {
+  "2000_australian_gp": {
+   "total_laps": 58,
+   "life_raw": {
+    "SOFT": 36.51,
+    "MEDIUM": 35.75,
+    "HARD": 36.37
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 18 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 18,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.469,
+   "wear_multiplier_raw": 0.019,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2000_brazilian_gp": {
+   "total_laps": 71,
+   "life_raw": {
+    "SOFT": 45.19,
+    "MEDIUM": 44.25,
+    "HARD": 45.01
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 16 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 16,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -0.928,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2000_san_marino_gp": {
+   "total_laps": 62,
+   "life_raw": {
+    "SOFT": 28.6,
+    "MEDIUM": 28.0,
+    "HARD": 28.48
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 32 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 32,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -1.192,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2000_spanish_gp": {
+   "total_laps": 65,
+   "life_raw": {
+    "SOFT": 23.49,
+    "MEDIUM": 23.0,
+    "HARD": 23.4
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 40 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 40,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.082,
+   "wear_multiplier_raw": 1.123,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2000_monaco_gp": {
+   "total_laps": 78,
+   "life_raw": {
+    "SOFT": 54.13,
+    "MEDIUM": 53.0,
+    "HARD": 53.91
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 14 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 14,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -1.318,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2000_french_gp": {
+   "total_laps": 72,
+   "life_raw": {
+    "SOFT": 24.51,
+    "MEDIUM": 24.0,
+    "HARD": 24.41
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 42 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 42,
+    "HARD": 0
+   },
+   "wear_multiplier": 3.757,
+   "wear_multiplier_raw": 5.066,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2000_austrian_gp": {
+   "total_laps": 71,
+   "life_raw": {
+    "SOFT": 44.94,
+    "MEDIUM": 44.0,
+    "HARD": 44.76
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 21 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 21,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.414,
+   "wear_multiplier_raw": 1.624,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2000_italian_gp": {
+   "total_laps": 53,
+   "life_raw": {
+    "SOFT": 43.91,
+    "MEDIUM": 43.0,
+    "HARD": 43.74
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 13 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 13,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -1.968,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2000_malaysian_gp": {
+   "total_laps": 56,
+   "life_raw": {
+    "SOFT": 27.57,
+    "MEDIUM": 27.0,
+    "HARD": 27.47
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 31 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 31,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -1.424,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2000_british_gp": {
+   "total_laps": 60,
+   "life_raw": {
+    "SOFT": 27.57,
+    "MEDIUM": 27.0,
+    "HARD": 27.47
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 33 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 33,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.059,
+   "wear_multiplier_raw": 1.092,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2000_hungarian_gp": {
+   "total_laps": 77,
+   "life_raw": {
+    "SOFT": 29.62,
+    "MEDIUM": 29.0,
+    "HARD": 29.5
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 42 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 42,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.777,
+   "wear_multiplier_raw": 2.034,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2000_japanese_gp": {
+   "total_laps": 53,
+   "life_raw": {
+    "SOFT": 20.43,
+    "MEDIUM": 20.0,
+    "HARD": 20.34
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 38 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 38,
+    "HARD": 0
+   },
+   "wear_multiplier": 3.519,
+   "wear_multiplier_raw": 4.93,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  }
+ }
+}

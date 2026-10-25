@@ -45,6 +45,11 @@ class SeasonRules(BaseModel):
     tyre_supplier: str = "Pirelli"
     drs: bool = True
     vsc: bool = True
+    race_fuel_from_qualifying: Literal["none", "all", "top10"] = "none"
+    """H1b: who starts the race on the fuel fixed in qualifying (no fuel added before the race):
+    everyone 2003-2005, the Q3 top ten 2006-2009."""
+    pit_lane_closed_under_sc: bool = False
+    """2007-2008: no stop until the field has queued behind the safety car (H1b)."""
     sources: tuple[str, ...] = ()
 
     def points_for(

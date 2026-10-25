@@ -31,12 +31,18 @@ import yaml
 from f1ar.calibration.lap_model_fit import LIFE_FILE
 from f1ar.calibration.season_files import dataset_files, season_path
 from f1ar.calibration.tyre_life_fit import fit_events, to_json
+from f1ar.domain.refuelling import LAST_REFUELLING_SEASON
 
 print = functools.partial(print, flush=True)  # noqa: A001 (progress through pipes)
 ROOT = Path(__file__).resolve().parents[1]
 KAPPAS = (0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.45)
 """0.6 and 0.7 added in H2b: four 2010-2017 seasons hit 0.8, the old edge."""
 DELTAS = (0.0, 0.1, 0.2, 0.35, 0.5, 0.65)
+# H1b, refuelling era: stint lengths are set by fuel, so the stint-length life is short: kappa
+# goes higher; the fuel effect is fitted with it (it sets the number of stops)
+KAPPAS_REFUEL = (1.0, 1.5, 2.0, 3.0)
+DELTAS_REFUEL = (0.1, 0.35)
+FUELS = (0.03, 0.045, 0.06, 0.075, 0.09)
 SEEDS = (1, 2, 3)
 FIRST_COMPOUND_SEASON = 2018
 SHARE_WEIGHT = 4.0
@@ -66,14 +72,14 @@ def real_targets(laps: pd.DataFrame) -> dict[str, dict[str, Any]]:
     return out
 
 
-def simulate(job: tuple[str, float, float, tuple[int, ...]]) -> dict[str, Any]:
+def simulate(job: tuple[str, float, float, float | None, tuple[int, ...]]) -> dict[str, Any]:
     """The rule field on ``event`` with ``kappa``/``delta``: stops per finisher and compound
     shares of laps, averaged over ``seeds``."""
     from f1ar.domain.race_state import CarStatus, WorldStatus
     from f1ar.simulation import lightweight_engine as engine
     from f1ar.simulation.scenarios import event_data_dir, load_event, setup_from_codes
 
-    event, kappa, delta, seeds = job
+    event, kappa, delta, fuel, seeds = job
     roster, profiles = load_event(ROOT / "configs", event)
     setup = setup_from_codes(
         roster,
@@ -81,7 +87,8 @@ def simulate(job: tuple[str, float, float, tuple[int, ...]]) -> dict[str, Any]:
         None,
         data_dir=event_data_dir(ROOT, event),
         configs_dir=ROOT / "configs",
-        tyre_life_overrides={"kappa": kappa, "delta": delta},
+        tyre_life_overrides={"kappa": kappa, "delta": delta}
+        | ({} if fuel is None else {"fuel_s": fuel}),
     )
     total = setup.track.total_laps
     stops, laps_on = [], {"SOFT": 0, "MEDIUM": 0, "HARD": 0}
@@ -114,6 +121,7 @@ def simulate(job: tuple[str, float, float, tuple[int, ...]]) -> dict[str, Any]:
         "event": event,
         "kappa": kappa,
         "delta": delta,
+        "fuel": fuel,
         "stops": statistics.fmean(stops) if stops else float("nan"),
         "shares": {c: v / n for c, v in laps_on.items()},
         "modes": {k: round(v / m, 3) for k, v in modes.items()},
@@ -203,7 +211,7 @@ def main() -> None:
     sha = "sha256:" + hashlib.sha256(dataset.read_bytes()).hexdigest()
     out_path = ROOT / "configs" / season_path(LIFE_FILE, args.season)
 
-    def write(kappa: float, delta: float) -> None:
+    def write(kappa: float, delta: float, fuel: float | None = None) -> None:
         cfg = to_json(
             season,
             ratios,
@@ -218,6 +226,11 @@ def main() -> None:
             else f"compounds unknown: soft/hard wear and life ratios to the medium from "
             f"{season_path(LIFE_FILE, ref_season).as_posix()} (borrowed); stops-only fit",
         )
+        if fuel is not None:  # H1b: the refuelling era's fuel effect, fitted with the tyres
+            cfg["globals"]["fuel_s_per_lap"] = fuel
+            cfg["globals"]["fuel_note"] = (
+                "lap time per lap of fuel on board; fitted on dry_train stops with kappa/delta"
+            )
         out_path.write_text(json.dumps(cfg, indent=1) + "\n", encoding="utf-8", newline="\n")
 
     write(args.kappa, args.delta)
@@ -227,7 +240,13 @@ def main() -> None:
     if args.no_grid:
         return
     targets = real_targets(laps)
-    jobs = [(ev, k, d, SEEDS) for k, d in product(KAPPAS, DELTAS) for ev in train]
+    refuel = args.season <= LAST_REFUELLING_SEASON
+    combos: list[tuple[float, float, float | None]] = (
+        [(k, d, f) for k, d, f in product(KAPPAS_REFUEL, DELTAS_REFUEL, FUELS)]
+        if refuel
+        else [(k, d, None) for k, d in product(KAPPAS, DELTAS)]
+    )
+    jobs = [(ev, k, d, f, SEEDS) for k, d, f in combos for ev in train]
     rows = []
     with ProcessPoolExecutor(max_workers=args.workers) as pool:
         for i, row in enumerate(pool.map(simulate, jobs, chunksize=1), start=1):
@@ -239,10 +258,10 @@ def main() -> None:
                     f"{i}/{len(jobs)} race sets, {el / 60:.1f} min, ETA {eta / 60:.1f} min",
                     flush=True,
                 )
-    grid: dict[tuple[float, float], dict[str, Any]] = {}
-    for k, d in product(KAPPAS, DELTAS):
-        mine = [r for r in rows if r["kappa"] == k and r["delta"] == d]
-        grid[(k, d)] = {
+    grid: dict[tuple[float, float, float | None], dict[str, Any]] = {}
+    for k, d, f in combos:
+        mine = [r for r in rows if r["kappa"] == k and r["delta"] == d and r["fuel"] == f]
+        grid[(k, d, f)] = {
             "loss": statistics.fmean(loss(r, targets[r["event"]], share_weight) for r in mine),
             "stops_sim": statistics.fmean(r["stops"] for r in mine),
             "stops_real": statistics.fmean(targets[r["event"]]["stops"] for r in mine),
@@ -255,9 +274,9 @@ def main() -> None:
                 for m in ("PUSH", "BALANCED", "CONSERVE")
             },
         }
-        print(f"kappa {k:.2f} delta {d:.2f}: {grid[(k, d)]}", flush=True)
+        print(f"kappa {k:.2f} delta {d:.2f} fuel {f}: {grid[(k, d, f)]}", flush=True)
     best = min(grid, key=lambda kd: float(grid[kd]["loss"]))
-    print(f"best: kappa {best[0]}, delta {best[1]}: {grid[best]}", flush=True)
+    print(f"best: kappa {best[0]}, delta {best[1]}, fuel {best[2]}: {grid[best]}", flush=True)
     write(*best)
     write_manifest(
         out_path,
@@ -265,7 +284,7 @@ def main() -> None:
         splits_file=splits_file,
         splits_sha=content_sha(splits_file),
         train=train,
-        best=best,
+        best=(best[0], best[1]),
         fit=grid[best],
     )
     if args.report:
@@ -274,10 +293,12 @@ def main() -> None:
                 c: round(statistics.fmean(targets[e]["shares"][c] for e in train), 3)
                 for c in ("SOFT", "MEDIUM", "HARD")
             },
-            "grid": [{"kappa": k, "delta": d, **v} for (k, d), v in grid.items()],
-            "best": {"kappa": best[0], "delta": best[1]},
+            "grid": [{"kappa": k, "delta": d, "fuel": f, **v} for (k, d, f), v in grid.items()],
+            "best": {"kappa": best[0], "delta": best[1], "fuel": best[2]},
             "per_race_best": [
-                {**r, "real": targets[r["event"]]} for r in rows if (r["kappa"], r["delta"]) == best
+                {**r, "real": targets[r["event"]]}
+                for r in rows
+                if (r["kappa"], r["delta"], r["fuel"]) == best
             ],
             "seconds": round(time.perf_counter() - t0, 1),
         }

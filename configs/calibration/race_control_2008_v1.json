@@ -1,0 +1,30 @@
+{
+  "crash_per_lap": 0.002278,
+  "failure_per_lap": 0.001519,
+  "first_lap_crash_multiplier": 18.76,
+  "fitted_on": [
+    "2008_australian_gp",
+    "2008_malaysian_gp",
+    "2008_bahrain_gp",
+    "2008_turkish_gp",
+    "2008_canadian_gp",
+    "2008_german_gp",
+    "2008_hungarian_gp",
+    "2008_belgian_gp",
+    "2008_italian_gp",
+    "2008_singapore_gp",
+    "2008_chinese_gp"
+  ],
+  "lap1_retirement_per_starter": 0.04425,
+  "note": "H2c: 11 dry_train 2008 races; neutralisations inferred from lap times (no VSC yet)",
+  "races": 11,
+  "retirement_per_car_lap": 0.003797,
+  "retirements": 53,
+  "safety_cars": 10,
+  "sc_laps_median": 6.0,
+  "sc_laps_p25": 2.12,
+  "sc_laps_p75": 7.12,
+  "sc_per_retirement": 0.1887,
+  "vsc_per_retirement_without_sc": 0.0,
+  "vscs": 0
+}

@@ -1,0 +1,277 @@
+{
+ "label": "2006 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2006_bahrain_gp",
+  "2006_malaysian_gp",
+  "2006_australian_gp",
+  "2006_european_gp",
+  "2006_spanish_gp",
+  "2006_monaco_gp",
+  "2006_canadian_gp",
+  "2006_united_states_gp",
+  "2006_french_gp",
+  "2006_turkish_gp",
+  "2006_italian_gp",
+  "2006_japanese_gp",
+  "2006_brazilian_gp"
+ ],
+ "field_noise_s": 0.6272,
+ "form_sd_s": 0.4363,
+ "form_note": "within-pair gap SD 0.646 s, sampling SD 0.190 s over 104 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "ALB": {
+   "team_id": "mf1_2006",
+   "pace_vs_teammate_s": -0.0364,
+   "raw_mean_gap_s": -0.0501,
+   "races": 8,
+   "lap_noise_s": 0.7143,
+   "raw_noise_s": 0.7678,
+   "clean_laps": 244
+  },
+  "ALO": {
+   "team_id": "renault_2006",
+   "pace_vs_teammate_s": -0.1737,
+   "raw_mean_gap_s": -0.2138,
+   "races": 13,
+   "lap_noise_s": 0.5584,
+   "raw_noise_s": 0.5408,
+   "clean_laps": 586
+  },
+  "BAR": {
+   "team_id": "honda_2006",
+   "pace_vs_teammate_s": 0.2821,
+   "raw_mean_gap_s": 0.359,
+   "races": 11,
+   "lap_noise_s": 0.6613,
+   "raw_noise_s": 0.6746,
+   "clean_laps": 384
+  },
+  "BUT": {
+   "team_id": "honda_2006",
+   "pace_vs_teammate_s": -0.2821,
+   "raw_mean_gap_s": -0.359,
+   "races": 11,
+   "lap_noise_s": 0.5952,
+   "raw_noise_s": 0.5817,
+   "clean_laps": 354
+  },
+  "COU": {
+   "team_id": "red_bull_2006",
+   "pace_vs_teammate_s": -0.0101,
+   "raw_mean_gap_s": -0.0139,
+   "races": 8,
+   "lap_noise_s": 0.5805,
+   "raw_noise_s": 0.553,
+   "clean_laps": 255
+  },
+  "DLR": {
+   "team_id": "mclaren_2006",
+   "pace_vs_teammate_s": 0.0375,
+   "raw_mean_gap_s": 0.0751,
+   "races": 3,
+   "lap_noise_s": 0.5347,
+   "raw_noise_s": 0.4362,
+   "clean_laps": 141
+  },
+  "DOO": {
+   "team_id": "red_bull_2006",
+   "pace_vs_teammate_s": -0.0335,
+   "raw_mean_gap_s": -0.1341,
+   "races": 1,
+   "lap_noise_s": 0.5975,
+   "raw_noise_s": 0.4832,
+   "clean_laps": 39
+  },
+  "FIS": {
+   "team_id": "renault_2006",
+   "pace_vs_teammate_s": 0.1737,
+   "raw_mean_gap_s": 0.2138,
+   "races": 13,
+   "lap_noise_s": 0.5441,
+   "raw_noise_s": 0.5116,
+   "clean_laps": 384
+  },
+  "FMO": {
+   "team_id": "super_aguri_2006",
+   "pace_vs_teammate_s": 0.0971,
+   "raw_mean_gap_s": 0.2429,
+   "races": 2,
+   "lap_noise_s": 0.7486,
+   "raw_noise_s": 0.9002,
+   "clean_laps": 120
+  },
+  "HEI": {
+   "team_id": "bmw_sauber_2006",
+   "pace_vs_teammate_s": 0.0526,
+   "raw_mean_gap_s": 0.0657,
+   "races": 12,
+   "lap_noise_s": 0.6347,
+   "raw_noise_s": 0.6375,
+   "clean_laps": 396
+  },
+  "IDE": {
+   "team_id": "super_aguri_2006",
+   "pace_vs_teammate_s": 0.3764,
+   "raw_mean_gap_s": 0.941,
+   "races": 2,
+   "lap_noise_s": 0.602,
+   "raw_noise_s": 0.4873,
+   "clean_laps": 33
+  },
+  "KLI": {
+   "team_id": "red_bull_2006",
+   "pace_vs_teammate_s": 0.0245,
+   "raw_mean_gap_s": 0.035,
+   "races": 7,
+   "lap_noise_s": 0.6274,
+   "raw_noise_s": 0.6275,
+   "clean_laps": 238
+  },
+  "KUB": {
+   "team_id": "bmw_sauber_2006",
+   "pace_vs_teammate_s": -0.1672,
+   "raw_mean_gap_s": -0.2926,
+   "races": 4,
+   "lap_noise_s": 0.5493,
+   "raw_noise_s": 0.4681,
+   "clean_laps": 144
+  },
+  "LIU": {
+   "team_id": "toro_rosso_2006",
+   "pace_vs_teammate_s": 0.0391,
+   "raw_mean_gap_s": 0.0508,
+   "races": 10,
+   "lap_noise_s": 0.657,
+   "raw_noise_s": 0.6737,
+   "clean_laps": 266
+  },
+  "MAS": {
+   "team_id": "ferrari_2006",
+   "pace_vs_teammate_s": 0.1179,
+   "raw_mean_gap_s": 0.15,
+   "races": 11,
+   "lap_noise_s": 0.5611,
+   "raw_noise_s": 0.5382,
+   "clean_laps": 433
+  },
+  "MON": {
+   "team_id": "mclaren_2006",
+   "pace_vs_teammate_s": 0.2869,
+   "raw_mean_gap_s": 0.5021,
+   "races": 4,
+   "lap_noise_s": 0.6423,
+   "raw_noise_s": 0.6564,
+   "clean_laps": 161
+  },
+  "MSC": {
+   "team_id": "ferrari_2006",
+   "pace_vs_teammate_s": -0.1179,
+   "raw_mean_gap_s": -0.15,
+   "races": 11,
+   "lap_noise_s": 0.5975,
+   "raw_noise_s": 0.5865,
+   "clean_laps": 404
+  },
+  "RAI": {
+   "team_id": "mclaren_2006",
+   "pace_vs_teammate_s": -0.2234,
+   "raw_mean_gap_s": -0.3191,
+   "races": 7,
+   "lap_noise_s": 0.6089,
+   "raw_noise_s": 0.6004,
+   "clean_laps": 319
+  },
+  "ROS": {
+   "team_id": "williams_2006",
+   "pace_vs_teammate_s": -0.0453,
+   "raw_mean_gap_s": -0.0724,
+   "races": 5,
+   "lap_noise_s": 0.6322,
+   "raw_noise_s": 0.6362,
+   "clean_laps": 186
+  },
+  "SAT": {
+   "team_id": "super_aguri_2006",
+   "pace_vs_teammate_s": -0.3655,
+   "raw_mean_gap_s": -0.5026,
+   "races": 8,
+   "lap_noise_s": 0.7668,
+   "raw_noise_s": 0.8198,
+   "clean_laps": 395
+  },
+  "SCH": {
+   "team_id": "toyota_2006",
+   "pace_vs_teammate_s": -0.0038,
+   "raw_mean_gap_s": -0.0048,
+   "races": 11,
+   "lap_noise_s": 0.6272,
+   "raw_noise_s": 0.6272,
+   "clean_laps": 187
+  },
+  "SPE": {
+   "team_id": "toro_rosso_2006",
+   "pace_vs_teammate_s": -0.0391,
+   "raw_mean_gap_s": -0.0508,
+   "races": 10,
+   "lap_noise_s": 0.5897,
+   "raw_noise_s": 0.5742,
+   "clean_laps": 362
+  },
+  "TMO": {
+   "team_id": "mf1_2006",
+   "pace_vs_teammate_s": 0.0364,
+   "raw_mean_gap_s": 0.0501,
+   "races": 8,
+   "lap_noise_s": 0.7296,
+   "raw_noise_s": 0.7726,
+   "clean_laps": 357
+  },
+  "TRU": {
+   "team_id": "toyota_2006",
+   "pace_vs_teammate_s": 0.0038,
+   "raw_mean_gap_s": 0.0048,
+   "races": 11,
+   "lap_noise_s": 0.5952,
+   "raw_noise_s": 0.583,
+   "clean_laps": 393
+  },
+  "VIL": {
+   "team_id": "bmw_sauber_2006",
+   "pace_vs_teammate_s": 0.0347,
+   "raw_mean_gap_s": 0.0478,
+   "races": 8,
+   "lap_noise_s": 0.6367,
+   "raw_noise_s": 0.6424,
+   "clean_laps": 252
+  },
+  "WEB": {
+   "team_id": "williams_2006",
+   "pace_vs_teammate_s": 0.0453,
+   "raw_mean_gap_s": 0.0724,
+   "races": 5,
+   "lap_noise_s": 0.6504,
+   "raw_noise_s": 0.6663,
+   "clean_laps": 219
+  },
+  "YAM": {
+   "team_id": "super_aguri_2006",
+   "pace_vs_teammate_s": 0.2361,
+   "raw_mean_gap_s": 0.4132,
+   "races": 4,
+   "lap_noise_s": 0.6544,
+   "raw_noise_s": 0.7201,
+   "clean_laps": 62
+  }
+ },
+ "overtake_threshold_shift_s": 0.0,
+ "overtake_shift_fit": {
+  "skipped": "superseded by the W3 racecraft refit (H2a)"
+ }
+}

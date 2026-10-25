@@ -1,0 +1,34 @@
+model_name: tyre_life
+model_version: v1
+kind: stint-length life + same-lap wear regression; globals fitted on behaviour
+source_type: estimated_from_data
+artifact: configs/calibration/tyre_life_2001_v1.json
+artifact_sha256: sha256:93aea4926377d7f65b186a40ac01627e936c992c1c7e0d51a1892ce58b5a87c2
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2001_v1.yaml
+training_dataset_content_sha256: sha256:ccf5c1cc0901c937a19f14435b7c523a8d144380ff194a7f57ef2a23a461bc27
+training_races:
+- 2001_australian_gp
+- 2001_austrian_gp
+- 2001_belgian_gp
+- 2001_british_gp
+- 2001_european_gp
+- 2001_french_gp
+- 2001_hungarian_gp
+- 2001_italian_gp
+- 2001_japanese_gp
+- 2001_monaco_gp
+- 2001_spanish_gp
+metrics:
+  dry_train_fit:
+    kappa: 1.5
+    delta_s: 0.35
+    loss: 0.1947
+    stops_sim: 1.562
+    stops_real: 1.713
+    share_sim:
+      SOFT: 0.479
+      MEDIUM: 0.521
+      HARD: 0.0
+  held_out_check: EXP-010 (docs/experiments/exp010.json)
+status: fitted for 2001 (H2a, D-054); held-out check EXP-023

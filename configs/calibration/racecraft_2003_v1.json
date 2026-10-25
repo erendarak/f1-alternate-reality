@@ -1,0 +1,321 @@
+{
+ "label": "2003 racecraft (W3, D-044)",
+ "events": [
+  "2003_australian_gp",
+  "2003_malaysian_gp",
+  "2003_brazilian_gp",
+  "2003_spanish_gp",
+  "2003_austrian_gp",
+  "2003_monaco_gp",
+  "2003_european_gp",
+  "2003_french_gp",
+  "2003_british_gp",
+  "2003_hungarian_gp",
+  "2003_italian_gp",
+  "2003_san_marino_gp",
+  "2003_canadian_gp",
+  "2003_german_gp",
+  "2003_japanese_gp"
+ ],
+ "overtaking": {
+  "min_gap_s": 0.526,
+  "threshold_s": 0.87,
+  "scale_s": 0.8112,
+  "eps": 0.00238,
+  "track_threshold_s": {},
+  "track_encounters": {},
+  "track_passes": {},
+  "drivers": {},
+  "encounters": 4518,
+  "passes": 293,
+  "borrowed_from": "racecraft_2011_v1 (stops inferred before 2011); own fit was {'threshold_s': 0.4748, 'scale_s': 4.3263, 'encounters': 4518, 'passes': 293}",
+  "race_level_shift_s": -0.4883
+ },
+ "launch": {
+  "seconds_per_position": 0.746,
+  "pace_vs_grid_beta": 0.1027,
+  "mean_abs_gain": 2.108,
+  "drivers": {
+   "ALO": {
+    "positions_per_start": 0.545,
+    "launch_offset_s": -0.4063,
+    "raw_mean_positions": 0.762,
+    "starts": 15
+   },
+   "BAR": {
+    "positions_per_start": 0.388,
+    "launch_offset_s": -0.2894,
+    "raw_mean_positions": 0.554,
+    "starts": 14
+   },
+   "BAU": {
+    "positions_per_start": 0.202,
+    "launch_offset_s": -0.1509,
+    "raw_mean_positions": 0.809,
+    "starts": 2
+   },
+   "BUT": {
+    "positions_per_start": 0.282,
+    "launch_offset_s": -0.2107,
+    "raw_mean_positions": 0.403,
+    "starts": 14
+   },
+   "COU": {
+    "positions_per_start": 0.546,
+    "launch_offset_s": -0.4072,
+    "raw_mean_positions": 0.764,
+    "starts": 15
+   },
+   "DAM": {
+    "positions_per_start": -0.262,
+    "launch_offset_s": 0.1957,
+    "raw_mean_positions": -0.367,
+    "starts": 15
+   },
+   "FIR": {
+    "positions_per_start": -0.363,
+    "launch_offset_s": 0.271,
+    "raw_mean_positions": -0.545,
+    "starts": 12
+   },
+   "FIS": {
+    "positions_per_start": 0.09,
+    "launch_offset_s": -0.0673,
+    "raw_mean_positions": 0.129,
+    "starts": 14
+   },
+   "FRE": {
+    "positions_per_start": -1.111,
+    "launch_offset_s": 0.829,
+    "raw_mean_positions": -1.624,
+    "starts": 13
+   },
+   "GEN": {
+    "positions_per_start": -0.187,
+    "launch_offset_s": 0.1392,
+    "raw_mean_positions": -1.306,
+    "starts": 1
+   },
+   "HEI": {
+    "positions_per_start": 0.834,
+    "launch_offset_s": -0.6222,
+    "raw_mean_positions": 1.168,
+    "starts": 15
+   },
+   "KIE": {
+    "positions_per_start": -0.468,
+    "launch_offset_s": 0.3488,
+    "raw_mean_positions": -1.169,
+    "starts": 4
+   },
+   "MON": {
+    "positions_per_start": 0.072,
+    "launch_offset_s": -0.0536,
+    "raw_mean_positions": 0.101,
+    "starts": 15
+   },
+   "MSC": {
+    "positions_per_start": -0.077,
+    "launch_offset_s": 0.0571,
+    "raw_mean_positions": -0.107,
+    "starts": 15
+   },
+   "PAN": {
+    "positions_per_start": -0.734,
+    "launch_offset_s": 0.5479,
+    "raw_mean_positions": -1.028,
+    "starts": 15
+   },
+   "PIZ": {
+    "positions_per_start": -0.801,
+    "launch_offset_s": 0.5977,
+    "raw_mean_positions": -1.282,
+    "starts": 10
+   },
+   "RAI": {
+    "positions_per_start": 0.496,
+    "launch_offset_s": -0.3699,
+    "raw_mean_positions": 0.725,
+    "starts": 13
+   },
+   "SAT": {
+    "positions_per_start": 0.378,
+    "launch_offset_s": -0.282,
+    "raw_mean_positions": 2.646,
+    "starts": 1
+   },
+   "SCH": {
+    "positions_per_start": -0.116,
+    "launch_offset_s": 0.0866,
+    "raw_mean_positions": -0.166,
+    "starts": 14
+   },
+   "TRU": {
+    "positions_per_start": 0.256,
+    "launch_offset_s": -0.1908,
+    "raw_mean_positions": 0.374,
+    "starts": 13
+   },
+   "VER": {
+    "positions_per_start": -0.238,
+    "launch_offset_s": 0.1778,
+    "raw_mean_positions": -0.34,
+    "starts": 14
+   },
+   "VIL": {
+    "positions_per_start": -0.02,
+    "launch_offset_s": 0.0148,
+    "raw_mean_positions": -0.029,
+    "starts": 13
+   },
+   "WEB": {
+    "positions_per_start": -0.06,
+    "launch_offset_s": 0.0451,
+    "raw_mean_positions": -0.085,
+    "starts": 15
+   },
+   "WIL": {
+    "positions_per_start": 0.169,
+    "launch_offset_s": -0.1258,
+    "raw_mean_positions": 0.236,
+    "starts": 15
+   }
+  },
+  "start_spread_s": 2.248
+ },
+ "lap1_grid_profile": [
+  0.2239,
+  0.2239,
+  1.194,
+  1.194,
+  1.3433,
+  1.3433,
+  1.306,
+  1.306,
+  1.306,
+  1.306,
+  1.306,
+  1.306,
+  1.306,
+  1.306,
+  1.3433,
+  1.3433,
+  0.5224,
+  0.5224,
+  0.1493,
+  0.1493
+ ],
+ "lap1_grid_profile_note": "editorial shape: Dartmouth Sports Analytics 2022-23 lap-1 incident involvements by grid row (rows 4-7 interpolated), mean 1",
+ "fit_history": [
+  {
+   "param": "spread",
+   "value": 1.75,
+   "passes": 11.15
+  },
+  {
+   "param": "spread",
+   "value": 2.375,
+   "passes": 18.56
+  },
+  {
+   "param": "spread",
+   "value": 2.6875,
+   "passes": 23.03
+  },
+  {
+   "param": "spread",
+   "value": 2.5312,
+   "passes": 20.68
+  },
+  {
+   "param": "spread",
+   "value": 2.6094,
+   "passes": 21.92
+  },
+  {
+   "param": "spread",
+   "value": 2.6484,
+   "passes": 22.43
+  },
+  {
+   "param": "spread",
+   "value": 2.668,
+   "passes": 22.74
+  },
+  {
+   "param": "shift",
+   "value": 0.0,
+   "passes": 57.5
+  },
+  {
+   "param": "shift",
+   "value": -0.25,
+   "passes": 67.75
+  },
+  {
+   "param": "shift",
+   "value": -0.375,
+   "passes": 73.48
+  },
+  {
+   "param": "shift",
+   "value": -0.4375,
+   "passes": 75.7
+  },
+  {
+   "param": "shift",
+   "value": -0.4688,
+   "passes": 77.36
+  },
+  {
+   "param": "shift",
+   "value": -0.4844,
+   "passes": 78.59
+  },
+  {
+   "param": "shift",
+   "value": -0.4922,
+   "passes": 78.77
+  },
+  {
+   "param": "spread",
+   "value": 1.75,
+   "passes": 15.39
+  },
+  {
+   "param": "spread",
+   "value": 2.375,
+   "passes": 23.9
+  },
+  {
+   "param": "spread",
+   "value": 2.0625,
+   "passes": 19.33
+  },
+  {
+   "param": "spread",
+   "value": 2.2188,
+   "passes": 22.22
+  },
+  {
+   "param": "spread",
+   "value": 2.2969,
+   "passes": 22.91
+  },
+  {
+   "param": "spread",
+   "value": 2.2578,
+   "passes": 22.74
+  },
+  {
+   "param": "spread",
+   "value": 2.2383,
+   "passes": 22.39
+  }
+ ],
+ "check": {
+  "dry_train_passes_sim": 70.68,
+  "dry_train_passes_real": 78.73,
+  "dry_train_lap1_passes_real": 22.55
+ }
+}

@@ -28,6 +28,7 @@ import pandas as pd
 
 from f1ar.data.quality import representative_laps
 from f1ar.domain.provenance import SourceType
+from f1ar.domain.refuelling import LAST_REFUELLING_SEASON
 
 FEATURE_SCHEMA_VERSION = 1
 DATASET_VERSION = 1
@@ -53,7 +54,12 @@ FEATURES: tuple[Feature, ...] = (
     Feature("grid_position", "pre_race", V, "official starting slot (0 = pit lane)"),
     Feature("scheduled_laps", "pre_race", V, "race distance in laps (winner's laps)"),
     Feature("lap_number", "lap_start", V, "1-based lap number"),
-    Feature("laps_remaining", "lap_start", E, "scheduled_laps - lap_number + 1 (fuel proxy)"),
+    Feature(
+        "laps_remaining",
+        "lap_start",
+        E,
+        "scheduled_laps - lap_number + 1 (fuel proxy); refuelling era: laps left in the stint",
+    ),
     Feature("compound", "lap_start", V, "tyre compound on this lap"),
     Feature("tyre_age_start", "lap_start", E, "laps already on the set when the lap starts"),
     Feature("fresh_tyre", "lap_start", V, "the set was new when fitted (FastF1 FreshTyre)"),
@@ -149,6 +155,11 @@ def race_laps(
         }
     )
     out["laps_remaining"] = scheduled - out["lap_number"] + 1
+    if season <= LAST_REFUELLING_SEASON:  # H1b: the fuel on board follows the stints
+        stint_end = df.groupby(["driver_number", "stint"], dropna=False)["lap_number"].transform(
+            "max"
+        )
+        out["laps_remaining"] = (stint_end.astype(int) - out["lap_number"] + 1).clip(lower=1)
     out["compound"] = df["compound"].astype("string")
     out["tyre_age_start"] = (df["tyre_life_laps"] - 1).astype("Float64")
     out["fresh_tyre"] = df["fresh_tyre"].astype("boolean")

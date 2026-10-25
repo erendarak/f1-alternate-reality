@@ -1,0 +1,213 @@
+{
+ "label": "2007 persona estimates (W5, D-045)",
+ "fitted_on": [
+  "2007_australian_gp",
+  "2007_malaysian_gp",
+  "2007_bahrain_gp",
+  "2007_monaco_gp",
+  "2007_canadian_gp",
+  "2007_united_states_gp",
+  "2007_british_gp",
+  "2007_hungarian_gp",
+  "2007_italian_gp",
+  "2007_belgian_gp",
+  "2007_japanese_gp",
+  "2007_brazilian_gp"
+ ],
+ "wear": {
+  "reference_slope_s_per_lap2": 0.02749020131686205,
+  "split_half_drivers": -0.253,
+  "split_half_teams": 0.672,
+  "reliability_drivers": 0.0,
+  "reliability_teams": 0.804,
+  "drivers": {
+   "ALB": {
+    "team_id": "spyker_2007",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": -0.00468,
+    "team_vs_field_s_per_lap2": -0.01238,
+    "races": 3
+   },
+   "ALO": {
+    "team_id": "mclaren_2007",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": -0.00231,
+    "team_vs_field_s_per_lap2": 0.01914,
+    "races": 12
+   },
+   "BAR": {
+    "team_id": "honda_2007",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": -0.00219,
+    "team_vs_field_s_per_lap2": -0.01306,
+    "races": 8
+   },
+   "BUT": {
+    "team_id": "honda_2007",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": 0.00219,
+    "team_vs_field_s_per_lap2": -0.01306,
+    "races": 8
+   },
+   "COU": {
+    "team_id": "red_bull_2007",
+    "wear_multiplier": 1.0201,
+    "vs_teammate_s_per_lap2": -0.01515,
+    "team_vs_field_s_per_lap2": 0.00069,
+    "races": 5
+   },
+   "DAV": {
+    "team_id": "super_aguri_2007",
+    "wear_multiplier": 0.829,
+    "vs_teammate_s_per_lap2": -0.00429,
+    "team_vs_field_s_per_lap2": -0.00585,
+    "races": 11
+   },
+   "FIS": {
+    "team_id": "renault_2007",
+    "wear_multiplier": 0.8164,
+    "vs_teammate_s_per_lap2": -0.00117,
+    "team_vs_field_s_per_lap2": -0.00628,
+    "races": 10
+   },
+   "HAM": {
+    "team_id": "mclaren_2007",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": 0.00231,
+    "team_vs_field_s_per_lap2": 0.01914,
+    "races": 12
+   },
+   "HEI": {
+    "team_id": "bmw_sauber_2007",
+    "wear_multiplier": 1.2185,
+    "vs_teammate_s_per_lap2": 0.00185,
+    "team_vs_field_s_per_lap2": 0.00747,
+    "races": 12
+   },
+   "KOV": {
+    "team_id": "renault_2007",
+    "wear_multiplier": 0.8164,
+    "vs_teammate_s_per_lap2": 0.00117,
+    "team_vs_field_s_per_lap2": -0.00628,
+    "races": 10
+   },
+   "KUB": {
+    "team_id": "bmw_sauber_2007",
+    "wear_multiplier": 1.2185,
+    "vs_teammate_s_per_lap2": -0.00263,
+    "team_vs_field_s_per_lap2": 0.00747,
+    "races": 11
+   },
+   "LIU": {
+    "team_id": "toro_rosso_2007",
+    "wear_multiplier": 1.0326,
+    "vs_teammate_s_per_lap2": -0.00948,
+    "team_vs_field_s_per_lap2": 0.00111,
+    "races": 8
+   },
+   "MAS": {
+    "team_id": "ferrari_2007",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": 0.00111,
+    "team_vs_field_s_per_lap2": 0.01383,
+    "races": 11
+   },
+   "NAK": {
+    "team_id": "williams_2007",
+    "wear_multiplier": 0.8197,
+    "vs_teammate_s_per_lap2": -0.01233,
+    "team_vs_field_s_per_lap2": -0.00617,
+    "races": 1
+   },
+   "RAI": {
+    "team_id": "ferrari_2007",
+    "wear_multiplier": 1.25,
+    "vs_teammate_s_per_lap2": -0.00111,
+    "team_vs_field_s_per_lap2": 0.01383,
+    "races": 11
+   },
+   "ROS": {
+    "team_id": "williams_2007",
+    "wear_multiplier": 0.8197,
+    "vs_teammate_s_per_lap2": 0.00737,
+    "team_vs_field_s_per_lap2": -0.00617,
+    "races": 11
+   },
+   "SAT": {
+    "team_id": "super_aguri_2007",
+    "wear_multiplier": 0.829,
+    "vs_teammate_s_per_lap2": 0.00429,
+    "team_vs_field_s_per_lap2": -0.00585,
+    "races": 11
+   },
+   "SCH": {
+    "team_id": "toyota_2007",
+    "wear_multiplier": 1.0436,
+    "vs_teammate_s_per_lap2": 0.00217,
+    "team_vs_field_s_per_lap2": 0.00149,
+    "races": 11
+   },
+   "SPE": {
+    "team_id": "toro_rosso_2007",
+    "wear_multiplier": 1.0326,
+    "vs_teammate_s_per_lap2": -0.00339,
+    "team_vs_field_s_per_lap2": 0.00111,
+    "races": 4
+   },
+   "SUT": {
+    "team_id": "spyker_2007",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": 0.00519,
+    "team_vs_field_s_per_lap2": -0.01238,
+    "races": 6
+   },
+   "TRU": {
+    "team_id": "toyota_2007",
+    "wear_multiplier": 1.0436,
+    "vs_teammate_s_per_lap2": -0.00217,
+    "team_vs_field_s_per_lap2": 0.00149,
+    "races": 11
+   },
+   "VET": {
+    "team_id": "toro_rosso_2007",
+    "wear_multiplier": 1.0326,
+    "vs_teammate_s_per_lap2": 0.01922,
+    "team_vs_field_s_per_lap2": 0.00111,
+    "races": 5
+   },
+   "WEB": {
+    "team_id": "red_bull_2007",
+    "wear_multiplier": 1.0201,
+    "vs_teammate_s_per_lap2": 0.01515,
+    "team_vs_field_s_per_lap2": 0.00069,
+    "races": 5
+   },
+   "WUR": {
+    "team_id": "williams_2007",
+    "wear_multiplier": 0.8197,
+    "vs_teammate_s_per_lap2": -0.00687,
+    "team_vs_field_s_per_lap2": -0.00617,
+    "races": 10
+   },
+   "YAM": {
+    "team_id": "spyker_2007",
+    "wear_multiplier": 0.75,
+    "vs_teammate_s_per_lap2": -0.0057,
+    "team_vs_field_s_per_lap2": -0.01238,
+    "races": 3
+   }
+  }
+ },
+ "derived_at_setup": {
+  "consistency": "rank of W2 lap noise (driver_pace_2007_v1), persona spread",
+  "overtake_skill": "rank of W3 attack term (racecraft_2007_v1), persona spread",
+  "defense_skill": "rank of W3 defend term (racecraft_2007_v1), persona spread"
+ },
+ "not_measurable": {
+  "mistake proneness (consistency x composure in incidents)": "blue flags dominate big losses (2024: 24 events left; odd vs even races r = -0.33)",
+  "composure": "no measurement (penalties too few per driver)",
+  "wet_skill": "3 wet races",
+  "risk_appetite": "a preference, not a measurement",
+  "qualifying_skill": "the grid is real"
+ }
+}

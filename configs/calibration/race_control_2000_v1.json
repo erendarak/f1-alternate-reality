@@ -1,0 +1,28 @@
+{
+  "crash_per_lap": 0.004487,
+  "failure_per_lap": 0.002991,
+  "first_lap_crash_multiplier": 21.85,
+  "fitted_on": [
+    "2000_australian_gp",
+    "2000_brazilian_gp",
+    "2000_san_marino_gp",
+    "2000_spanish_gp",
+    "2000_monaco_gp",
+    "2000_french_gp",
+    "2000_austrian_gp",
+    "2000_italian_gp",
+    "2000_malaysian_gp"
+  ],
+  "lap1_retirement_per_starter": 0.10101,
+  "note": "H2c: 9 dry_train 2000 races; neutralisations inferred from lap times (no VSC yet)",
+  "races": 9,
+  "retirement_per_car_lap": 0.007478,
+  "retirements": 87,
+  "safety_cars": 4,
+  "sc_laps_median": 3.13,
+  "sc_laps_p25": 1.6,
+  "sc_laps_p75": 13.84,
+  "sc_per_retirement": 0.046,
+  "vsc_per_retirement_without_sc": 0.0,
+  "vscs": 0
+}

@@ -62,6 +62,21 @@ class BaseLapEstimate:
     note: str
 
 
+def stint_fuel(laps: pd.DataFrame) -> dict[tuple[int, int], int]:
+    """(car number, lap) -> laps of fuel on board at the lap's start: to the end of its stint
+    (refuelling era, H1b)."""
+    out: dict[tuple[int, int], int] = {}
+    for r in (
+        laps.groupby(["driver_number", "stint"], dropna=False)["lap_number"]
+        .agg(["min", "max"])
+        .reset_index()
+        .to_dict("records")
+    ):
+        for lap in range(int(r["min"]), int(r["max"]) + 1):
+            out[(int(r["driver_number"]), lap)] = int(r["max"]) - lap + 1
+    return out
+
+
 def estimate_base_lap(
     laps: pd.DataFrame,
     roster: RaceRoster,
@@ -70,6 +85,7 @@ def estimate_base_lap(
     car_estimate: "CarPaceEstimate",
     total_laps: int,
     driver_offsets: Mapping[str, float] | None = None,
+    refuelling: bool = False,
 ) -> BaseLapEstimate:
     """``base_lap_s`` such that the lap model's mean prediction for the fastest team's real
     representative laps matches them (median residual).
@@ -85,6 +101,7 @@ def estimate_base_lap(
 
     fastest = min(car_estimate.car_pace_s, key=lambda team: car_estimate.car_pace_s[team])
     by_number = {e.car_number: e for e in roster.entries}
+    fuel_left = stint_fuel(laps) if refuelling else None
     residuals: list[float] = []
     for row in representative_laps(laps).to_dict("records"):
         entry = by_number.get(int(row["driver_number"]))
@@ -107,7 +124,15 @@ def estimate_base_lap(
             tyre_age_laps=max(0, tyre_life - 1),
             pace_mode=PaceMode.BALANCED,
         )
-        fuel = lap_model.fuel_s_per_lap_remaining * (total_laps - int(row["lap_number"]) + 1)
+        on_board = (
+            fuel_left.get(
+                (int(row["driver_number"]), int(row["lap_number"])),
+                total_laps - int(row["lap_number"]) + 1,
+            )
+            if fuel_left is not None  # H1b: refuelling era, fuel follows the stints
+            else total_laps - int(row["lap_number"]) + 1
+        )
+        fuel = lap_model.fuel_s_per_lap_remaining * on_board
         residuals.append(
             float(row["lap_time_s"]) - skill - lap_model.compounds[c].offset_s - wear - fuel
         )

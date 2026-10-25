@@ -1,0 +1,107 @@
+dataset_id: 2001_malaysian_gp_jolpica_v1
+event: 2001_malaysian_gp
+source: jolpica-f1 (history cache, H2b)
+source_api_version: ergast-compatible v1
+retrieved_utc: '2026-10-24T21:31:17Z'
+session_key: 2001/round 2/R
+license_review_status: research_only
+files:
+- relative_path: data/processed/2001_malaysian_gp/laps.parquet
+  sha256: sha256:d8d421b05a77ee3990e8ff9938506163a96e10d0b2e1497675bf6df8e54eaf8c
+  rows: 803
+  columns:
+  - driver_number
+  - driver_code
+  - team
+  - lap_number
+  - lap_time_s
+  - lap_start_time_s
+  - lap_end_time_s
+  - pit_in_time_s
+  - pit_out_time_s
+  - stint
+  - compound
+  - tyre_life_laps
+  - position
+  - track_status
+  - is_accurate
+  - sector1_s
+  - sector2_s
+  - sector3_s
+  - speed_trap_kph
+  - fresh_tyre
+  - deleted
+  - fastf1_generated
+  - compound_name
+  source_type: historical_verified
+  description: lap times and positions (Jolpica); stints, tyre age, pit flags and
+    track status derived, see missingness notes
+- relative_path: data/processed/2001_malaysian_gp/results.parquet
+  sha256: sha256:a17b3b4383523653985409c11b96ac84d1497d4a36f8f93b3a7ff8371c2396cd
+  rows: 22
+  columns:
+  - driver_number
+  - driver_code
+  - full_name
+  - team_name
+  - grid_position
+  - position
+  - classified_position
+  - status
+  - laps
+  - points
+  - team_color
+  source_type: historical_verified
+  description: official classification (Jolpica)
+- relative_path: data/processed/2001_malaysian_gp/track_status.parquet
+  sha256: sha256:1b14b4c6920e82701255dbecefaaa5f899fd32d92f08fb906f2ff3f68e0fef57
+  rows: 3
+  columns:
+  - session_time_s
+  - status
+  - status_name
+  - message
+  source_type: estimated_from_data
+  description: neutralised laps inferred
+- relative_path: data/processed/2001_malaysian_gp/weather.parquet
+  sha256: sha256:214a29a60831b70c7508a162d59a3c3db742cec01a0c3075149e2b996dd2e8ab
+  rows: 55
+  columns:
+  - session_time_s
+  - air_temp_c
+  - track_temp_c
+  - humidity_pct
+  - pressure_mbar
+  - rainfall
+  - wind_speed_ms
+  - wind_direction_deg
+  source_type: estimated_from_data
+  description: rain per lap inferred from lap times
+- relative_path: data/processed/2001_malaysian_gp/race_control.parquet
+  sha256: sha256:aeed3440cc15104b2331e32ef6ab8df8d822bcef6986ed5bfa8c6e235a532997
+  rows: 0
+  columns:
+  - utc_time
+  - category
+  - flag
+  - scope
+  - lap
+  - message
+  source_type: editorial_assumption
+  description: 'no race control messages: empty'
+unit_conventions:
+  time: seconds from the start (lap times summed per car)
+missingness_notes:
+- 'pit_stops: estimated_from_data: inferred from lap times (no Jolpica pit stops before
+  2011)'
+- 'stints_tyre_age: estimated_from_data: laps since the start / last stop; new sets'
+- 'track_status: estimated_from_data: neutralised laps inferred from the field''s
+  lap times'
+- 'compound: unknown (Jolpica has no tyre data): compound = MEDIUM placeholder, compound_name
+  = UNKNOWN'
+- 'weather: estimated_from_data: rain only, inferred from lap times (18 wet laps:
+  field median (1.08, 1.22) x the race''s 5th-percentile green lap); temperatures
+  unknown'
+- 'grid: driver codes generated (none in Jolpica): frentzen -> FRE, hakkinen -> HAK,
+  verstappen -> VER, alesi -> ALE, burti -> BUR, mazzacane -> MAZ, marques -> MAR,
+  bernoldi -> BER, irvine -> IRV, panis -> PAN'

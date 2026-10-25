@@ -1,0 +1,27 @@
+model_name: race_control
+model_version: v1
+kind: 'method of moments: retirement hazard, SC/VSC per retirement, SC length'
+source_type: estimated_from_data
+artifact: configs/calibration/race_control_2008_v1.json
+artifact_sha256: sha256:5e27b29eb4df3ff58926fc81fb2ff6db45b8ed92e388a6ac3585ff397ac05c4e
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2008_v1.yaml
+training_dataset_content_sha256: sha256:31fd4a3a32ff7d8882bdbc20587970c105e11cf1594d25ad2986da433873a3ee
+training_races:
+- 2008_australian_gp
+- 2008_bahrain_gp
+- 2008_belgian_gp
+- 2008_canadian_gp
+- 2008_chinese_gp
+- 2008_german_gp
+- 2008_hungarian_gp
+- 2008_italian_gp
+- 2008_malaysian_gp
+- 2008_singapore_gp
+- 2008_turkish_gp
+metrics:
+  retirements: 53
+  safety_cars: 10
+  vscs: 0
+  held_out_check: EXP-025
+status: fitted for 2008 (H2c, D-056)

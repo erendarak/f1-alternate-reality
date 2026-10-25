@@ -1,0 +1,30 @@
+{
+  "crash_per_lap": 0.003611,
+  "failure_per_lap": 0.002407,
+  "first_lap_crash_multiplier": 11.92,
+  "fitted_on": [
+    "2003_australian_gp",
+    "2003_malaysian_gp",
+    "2003_brazilian_gp",
+    "2003_spanish_gp",
+    "2003_austrian_gp",
+    "2003_monaco_gp",
+    "2003_european_gp",
+    "2003_french_gp",
+    "2003_british_gp",
+    "2003_hungarian_gp",
+    "2003_italian_gp"
+  ],
+  "lap1_retirement_per_starter": 0.04545,
+  "note": "H2c: 11 dry_train 2003 races; neutralisations inferred from lap times (no VSC yet)",
+  "races": 11,
+  "retirement_per_car_lap": 0.006018,
+  "retirements": 75,
+  "safety_cars": 13,
+  "sc_laps_median": 4.54,
+  "sc_laps_p25": 3.69,
+  "sc_laps_p75": 6.01,
+  "sc_per_retirement": 0.1733,
+  "vsc_per_retirement_without_sc": 0.0,
+  "vscs": 0
+}

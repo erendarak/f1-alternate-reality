@@ -1,0 +1,177 @@
+{
+ "label": "2006 race events (W4, D-042)",
+ "events": [
+  "2006_bahrain_gp",
+  "2006_malaysian_gp",
+  "2006_australian_gp",
+  "2006_european_gp",
+  "2006_spanish_gp",
+  "2006_monaco_gp",
+  "2006_canadian_gp",
+  "2006_united_states_gp",
+  "2006_french_gp",
+  "2006_turkish_gp",
+  "2006_italian_gp",
+  "2006_japanese_gp",
+  "2006_brazilian_gp",
+  "2006_san_marino_gp",
+  "2006_british_gp",
+  "2006_german_gp",
+  "2006_hungarian_gp",
+  "2006_chinese_gp"
+ ],
+ "dry_events": [
+  "2006_bahrain_gp",
+  "2006_malaysian_gp",
+  "2006_australian_gp",
+  "2006_european_gp",
+  "2006_spanish_gp",
+  "2006_monaco_gp",
+  "2006_canadian_gp",
+  "2006_united_states_gp",
+  "2006_french_gp",
+  "2006_turkish_gp",
+  "2006_italian_gp",
+  "2006_japanese_gp",
+  "2006_brazilian_gp",
+  "2006_san_marino_gp",
+  "2006_british_gp",
+  "2006_german_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": NaN,
+  "slow_stop_scale_s": NaN,
+  "stops": 0,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {},
+ "reliability": {
+  "field_retirements_per_start": 0.3131,
+  "teams": {
+   "bmw_sauber_2006": {
+    "failure_multiplier": 0.826,
+    "retirements": 8,
+    "starts": 36
+   },
+   "ferrari_2006": {
+    "failure_multiplier": 0.666,
+    "retirements": 5,
+    "starts": 36
+   },
+   "honda_2006": {
+    "failure_multiplier": 0.773,
+    "retirements": 7,
+    "starts": 36
+   },
+   "mclaren_2006": {
+    "failure_multiplier": 1.092,
+    "retirements": 13,
+    "starts": 36
+   },
+   "mf1_2006": {
+    "failure_multiplier": 1.076,
+    "retirements": 10,
+    "starts": 28
+   },
+   "red_bull_2006": {
+    "failure_multiplier": 1.092,
+    "retirements": 13,
+    "starts": 36
+   },
+   "renault_2006": {
+    "failure_multiplier": 0.613,
+    "retirements": 4,
+    "starts": 36
+   },
+   "spyker_mf1_2006": {
+    "failure_multiplier": 1.049,
+    "retirements": 3,
+    "starts": 8
+   },
+   "super_aguri_2006": {
+    "failure_multiplier": 1.358,
+    "retirements": 18,
+    "starts": 36
+   },
+   "toro_rosso_2006": {
+    "failure_multiplier": 0.932,
+    "retirements": 10,
+    "starts": 36
+   },
+   "toyota_2006": {
+    "failure_multiplier": 1.092,
+    "retirements": 13,
+    "starts": 36
+   },
+   "williams_2006": {
+    "failure_multiplier": 1.465,
+    "retirements": 20,
+    "starts": 36
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.0,
+  "sc_share": 0.4,
+  "count": 0,
+  "race_laps": 1011,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 0,
+  "races": 18,
+  "per_race": 0.0
+ },
+ "penalties": {
+  "counts": {},
+  "collision_per_pass": 0.0,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.0,
+  "other_per_car_lap": 0.0,
+  "passes": 1141,
+  "raw": {
+   "collision_per_pass": 0.0,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.0,
+   "other_per_car_lap": 0.0
+  },
+  "scale": 1.0,
+  "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
+ },
+ "fitted": {
+  "risk_scale": 0.5597,
+  "red_flag_per_crash": 0.0,
+  "fit": {
+   "races": [
+    "2006_bahrain_gp",
+    "2006_malaysian_gp",
+    "2006_australian_gp",
+    "2006_european_gp",
+    "2006_spanish_gp",
+    "2006_monaco_gp",
+    "2006_canadian_gp",
+    "2006_united_states_gp",
+    "2006_french_gp",
+    "2006_turkish_gp",
+    "2006_italian_gp",
+    "2006_japanese_gp",
+    "2006_brazilian_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 6.185,
+   "sim_failures_per_race": 2.231,
+   "real_retirements_per_race": 5.692,
+   "target_red_flags_per_race": 0.0
+  },
+  "check": {
+   "retirements_per_race": 5.954,
+   "red_flags_per_race": 0.0,
+   "safety_cars_per_race": 0.538,
+   "vscs_per_race": 0.0,
+   "penalties_per_race": 0.0,
+   "penalties_per_race_after_scale": 0.0
+  }
+ }
+}

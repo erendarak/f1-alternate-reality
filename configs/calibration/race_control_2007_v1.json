@@ -1,0 +1,31 @@
+{
+  "crash_per_lap": 0.002686,
+  "failure_per_lap": 0.00179,
+  "first_lap_crash_multiplier": 13.44,
+  "fitted_on": [
+    "2007_australian_gp",
+    "2007_malaysian_gp",
+    "2007_bahrain_gp",
+    "2007_monaco_gp",
+    "2007_canadian_gp",
+    "2007_united_states_gp",
+    "2007_british_gp",
+    "2007_hungarian_gp",
+    "2007_italian_gp",
+    "2007_belgian_gp",
+    "2007_japanese_gp",
+    "2007_brazilian_gp"
+  ],
+  "lap1_retirement_per_starter": 0.03788,
+  "note": "H2c: 12 dry_train 2007 races; neutralisations inferred from lap times (no VSC yet)",
+  "races": 12,
+  "retirement_per_car_lap": 0.004476,
+  "retirements": 72,
+  "safety_cars": 8,
+  "sc_laps_median": 6.41,
+  "sc_laps_p25": 5.84,
+  "sc_laps_p75": 9.19,
+  "sc_per_retirement": 0.1111,
+  "vsc_per_retirement_without_sc": 0.0,
+  "vscs": 0
+}

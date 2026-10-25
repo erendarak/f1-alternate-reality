@@ -1,0 +1,27 @@
+model_name: race_control
+model_version: v1
+kind: 'method of moments: retirement hazard, SC/VSC per retirement, SC length'
+source_type: estimated_from_data
+artifact: configs/calibration/race_control_2003_v1.json
+artifact_sha256: sha256:94422d6b4a0ff4617492094df34833a96c41f7ecf368214e7804e5274cec78d6
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2003_v1.yaml
+training_dataset_content_sha256: sha256:fbf89d8d8a53555086140d8928146d499adf6e6071e2cc678f61277c4f07866f
+training_races:
+- 2003_australian_gp
+- 2003_austrian_gp
+- 2003_brazilian_gp
+- 2003_british_gp
+- 2003_european_gp
+- 2003_french_gp
+- 2003_hungarian_gp
+- 2003_italian_gp
+- 2003_malaysian_gp
+- 2003_monaco_gp
+- 2003_spanish_gp
+metrics:
+  retirements: 75
+  safety_cars: 13
+  vscs: 0
+  held_out_check: EXP-025
+status: fitted for 2003 (H2c, D-056)

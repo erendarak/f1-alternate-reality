@@ -3,8 +3,9 @@
 Every value is an EDITORIAL ASSUMPTION, like the 2024 seed. A driver who also raced in 2024
 keeps the persona of the 2024 seed (a persona belongs to the person; it is not refitted for the
 season here); any other driver gets a template: ``generic_rookie`` without a start in any earlier
-season we have (rosters 2018+, Jolpica history 2000+), else ``generic_veteran``. The W5 refit then
-replaces the fields a season's data can measure, once that season is fitted.
+season we have (rosters, Jolpica history 2000+, Jolpica driver lists 1990-1999), else
+``generic_veteran``. The W5 refit then replaces the fields a season's data can measure, once
+that season is fitted.
 
 Usage:
     uv run python scripts/build_season_seeds.py --seasons 2018 2019 2020 2021 2022 2023 2025
@@ -22,6 +23,9 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 CONFIGS = ROOT / "configs"
 HISTORY = ROOT / "data" / "processed" / "history"
+RAW = ROOT / "data" / "raw" / "jolpica"
+FIRST_DRIVER_LIST = 1990
+"""Drivers who raced in 1990-1999 aren't rookies in 2000 (season driver lists, not results)."""
 REFERENCE = CONFIGS / "drivers" / "seed_2024_season_drivers.yaml"
 
 
@@ -36,6 +40,19 @@ def starts_by_season() -> dict[int, set[str]]:
         results = folder / "results.parquet"
         if results.exists():
             out[int(folder.name.split("_")[0])] |= set(pd.read_parquet(results)["driver"])
+    # before our race data (2000): Jolpica's season driver lists, cached (10 requests once)
+    from f1ar.data.jolpica_adapter import BASE_URL
+    from f1ar.data.jolpica_history import Throttle, cached, get_json
+
+    throttle = Throttle(9.0)
+    for year in range(FIRST_DRIVER_LIST, 2000):
+        url = f"{BASE_URL}/{year}/drivers.json?limit=100"
+
+        def fetch(u: str = url) -> Any:
+            return get_json(u, throttle)
+
+        page = cached(RAW / str(year) / "drivers.json", fetch)
+        out[year] |= {d["driverId"] for d in page["MRData"]["DriverTable"]["Drivers"]}
     return out
 
 

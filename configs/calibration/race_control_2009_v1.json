@@ -1,0 +1,32 @@
+{
+  "crash_per_lap": 0.002034,
+  "failure_per_lap": 0.001356,
+  "first_lap_crash_multiplier": 18.24,
+  "fitted_on": [
+    "2009_australian_gp",
+    "2009_malaysian_gp",
+    "2009_chinese_gp",
+    "2009_spanish_gp",
+    "2009_monaco_gp",
+    "2009_turkish_gp",
+    "2009_german_gp",
+    "2009_hungarian_gp",
+    "2009_european_gp",
+    "2009_italian_gp",
+    "2009_singapore_gp",
+    "2009_japanese_gp",
+    "2009_abu_dhabi_gp"
+  ],
+  "lap1_retirement_per_starter": 0.03846,
+  "note": "H2c: 13 dry_train 2009 races; neutralisations inferred from lap times (no VSC yet)",
+  "races": 13,
+  "retirement_per_car_lap": 0.00339,
+  "retirements": 54,
+  "safety_cars": 9,
+  "sc_laps_median": 7.62,
+  "sc_laps_p25": 6.28,
+  "sc_laps_p75": 9.37,
+  "sc_per_retirement": 0.1667,
+  "vsc_per_retirement_without_sc": 0.0,
+  "vscs": 0
+}

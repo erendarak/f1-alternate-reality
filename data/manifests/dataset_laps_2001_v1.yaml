@@ -1,0 +1,243 @@
+dataset_id: laps_2001_v1
+dataset_version: 1
+feature_schema_version: 1
+season: 2001
+license_review_status: research_only (F1 timing data via FastF1; not redistributed)
+built_by: scripts/build_lap_dataset.py
+file:
+  relative_path: data/processed/datasets/laps_2001_v1.parquet
+  sha256: sha256:7d4c8229983fb18ca4200ab52fcf34d5836b3b4eda7849818872018c0e1810a1
+  content_sha256: sha256:ccf5c1cc0901c937a19f14435b7c523a8d144380ff194a7f57ef2a23a461bc27
+  rows: 17357
+  representative_rows: 15614
+target: lap_time_s
+features:
+- name: circuit_id
+  available: pre_race
+  source_type: historical_verified
+  description: Jolpica circuit id
+- name: driver_id
+  available: pre_race
+  source_type: historical_verified
+  description: season-specific driver id (roster)
+- name: team_id
+  available: pre_race
+  source_type: historical_verified
+  description: team id (roster)
+- name: grid_position
+  available: pre_race
+  source_type: historical_verified
+  description: official starting slot (0 = pit lane)
+- name: scheduled_laps
+  available: pre_race
+  source_type: historical_verified
+  description: race distance in laps (winner's laps)
+- name: lap_number
+  available: lap_start
+  source_type: historical_verified
+  description: 1-based lap number
+- name: laps_remaining
+  available: lap_start
+  source_type: estimated_from_data
+  description: 'scheduled_laps - lap_number + 1 (fuel proxy); refuelling era: laps left in the stint'
+- name: compound
+  available: lap_start
+  source_type: historical_verified
+  description: tyre compound on this lap
+- name: tyre_age_start
+  available: lap_start
+  source_type: estimated_from_data
+  description: laps already on the set when the lap starts
+- name: fresh_tyre
+  available: lap_start
+  source_type: historical_verified
+  description: the set was new when fitted (FastF1 FreshTyre)
+- name: stint
+  available: lap_start
+  source_type: historical_verified
+  description: stint number
+- name: stint_lap
+  available: lap_start
+  source_type: estimated_from_data
+  description: 1-based lap index within the stint
+- name: pit_out_lap
+  available: lap_start
+  source_type: historical_verified
+  description: the lap starts in the pit lane
+- name: pit_in_lap
+  available: decision
+  source_type: historical_verified
+  description: the car boxes at the end of this lap
+- name: position_start
+  available: lap_start
+  source_type: historical_verified
+  description: position when the lap starts (grid on lap 1)
+- name: gap_ahead_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds behind the car that crossed the line just before, same lap (NaN on lap 1)
+- name: gap_behind_prev_s
+  available: lap_start
+  source_type: estimated_from_data
+  description: seconds ahead of the next car at the PREVIOUS line crossing (the gap to the car behind
+    at this crossing isn't known yet when the lap starts; found by the leakage audit)
+- name: track_status_start
+  available: lap_start
+  source_type: historical_verified
+  description: track status code when the lap starts
+- name: air_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: track_temp_c
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: humidity_pct
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+- name: rainfall_start
+  available: lap_start
+  source_type: historical_verified
+  description: rain flag of the latest weather sample
+- name: wind_speed_ms
+  available: lap_start
+  source_type: historical_verified
+  description: latest weather sample at lap start
+lap_facts_never_features:
+- lap_status
+- position_end
+- is_accurate
+- deleted
+- fastf1_generated
+- representative
+leakage_audit: tests/unit/test_lap_dataset.py::test_no_feature_uses_anything_after_the_lap_starts
+excluded_quality_fail: {}
+splits:
+  rule: wet = any intermediate/wet tyre lap or rain at >= 5% of lap starts; among dry races, rounds divisible
+    by 4 are held out (dry_test), the rest are dry_train; leave-one-race-out folds run over dry_train.
+    Rule fixed before any model was fitted.
+  wet:
+  - 2001_malaysian_gp
+  - 2001_brazilian_gp
+  dry_test:
+  - 2001_san_marino_gp
+  - 2001_canadian_gp
+  - 2001_german_gp
+  - 2001_united_states_gp
+  dry_train:
+  - 2001_australian_gp
+  - 2001_spanish_gp
+  - 2001_austrian_gp
+  - 2001_monaco_gp
+  - 2001_european_gp
+  - 2001_french_gp
+  - 2001_british_gp
+  - 2001_hungarian_gp
+  - 2001_belgian_gp
+  - 2001_italian_gp
+  - 2001_japanese_gp
+events:
+  2001_australian_gp:
+    round: 1
+    group: dry_train
+    rows: 913
+    representative_rows: 678
+    source_manifest_sha256: sha256:d991574a952c49ea4bb88e11eb300576e2f489f09757223557ebe570373f627a
+  2001_austrian_gp:
+    round: 6
+    group: dry_train
+    rows: 1029
+    representative_rows: 938
+    source_manifest_sha256: sha256:1ad8bf46d988cb6396f9a98fccf19529132e73f7207c84898e6e12ebd35090fd
+  2001_belgian_gp:
+    round: 14
+    group: dry_train
+    rows: 510
+    representative_rows: 435
+    source_manifest_sha256: sha256:83d50c9801df36c0f573722fd10a090de440cb283b8dd0b40f57b51d7443a297
+  2001_brazilian_gp:
+    round: 3
+    group: wet
+    rows: 1119
+    representative_rows: 963
+    source_manifest_sha256: sha256:fabe02ed1eeef525039cab6999fe314f78cac795ea82786c94f65c3c86620981
+  2001_british_gp:
+    round: 11
+    group: dry_train
+    rows: 984
+    representative_rows: 911
+    source_manifest_sha256: sha256:194e3d0045a8a7cd580cd15776e33a320d3ca004dac256f71974e9b2780b117e
+  2001_canadian_gp:
+    round: 8
+    group: dry_test
+    rows: 957
+    representative_rows: 854
+    source_manifest_sha256: sha256:155c8b0651272ab6c31f1af2e28e4bb19bd6b4ba5d79e6ad2946f44167ebd5ba
+  2001_european_gp:
+    round: 9
+    group: dry_train
+    rows: 1255
+    representative_rows: 1175
+    source_manifest_sha256: sha256:9a920c2d7e3227e851d236b62d5656ae06a128d7871d610b35a1b88aacb4eaf6
+  2001_french_gp:
+    round: 10
+    group: dry_train
+    rows: 1326
+    representative_rows: 1225
+    source_manifest_sha256: sha256:1a2564f1ab3d88c60cbbcf14c9de313eaa35aea27b314966b16e4b8fc639d0ac
+  2001_german_gp:
+    round: 12
+    group: dry_test
+    rows: 656
+    representative_rows: 592
+    source_manifest_sha256: sha256:9f80bc35d1c8bf77068fecd19ac5fbd85c053bc33711abe8fd60d6f21e473b44
+  2001_hungarian_gp:
+    round: 13
+    group: dry_train
+    rows: 1306
+    representative_rows: 1203
+    source_manifest_sha256: sha256:270df31d5903e7d4d0b78c7565a34cea779c1e5e9350042249bb1070baf66efa
+  2001_italian_gp:
+    round: 15
+    group: dry_train
+    rows: 868
+    representative_rows: 803
+    source_manifest_sha256: sha256:a6ef2b710be477a373b300c798d6ae0500bc75a766be2dcd73055afa0822a9ec
+  2001_japanese_gp:
+    round: 17
+    group: dry_train
+    rows: 1002
+    representative_rows: 892
+    source_manifest_sha256: sha256:c23da860d1a39bbd0a5c34ef6aca8c2bdd841789a7b9d07e4387ea6f482cbbb3
+  2001_malaysian_gp:
+    round: 2
+    group: wet
+    rows: 803
+    representative_rows: 625
+    source_manifest_sha256: sha256:ad7b3bfb4c96c884f82e68f36d6cc1b53d7a61f55cf59d463cdade5c34a4f605
+  2001_monaco_gp:
+    round: 7
+    group: dry_train
+    rows: 1130
+    representative_rows: 1075
+    source_manifest_sha256: sha256:5d9b780a4b06c90628442b4e597153e780089c0ed3f4d035183b68e2c699aa24
+  2001_san_marino_gp:
+    round: 4
+    group: dry_test
+    rows: 1015
+    representative_rows: 927
+    source_manifest_sha256: sha256:0571ea25d59478ac9e21fd0b1df7e6dd6991197605f72ac683be6ca2fb95eb75
+  2001_spanish_gp:
+    round: 5
+    group: dry_train
+    rows: 1160
+    representative_rows: 1060
+    source_manifest_sha256: sha256:1674c9d70a29163d7fadb678fbc7daa4002a3673e6671436fc8254f331a09025
+  2001_united_states_gp:
+    round: 16
+    group: dry_test
+    rows: 1324
+    representative_rows: 1258
+    source_manifest_sha256: sha256:ddbfa0b7d7f26363fa47524426700b473e6d058572055d706150f9d7b1dd7711

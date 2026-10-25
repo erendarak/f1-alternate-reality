@@ -1,0 +1,248 @@
+{
+ "label": "2001 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2001_australian_gp",
+  "2001_spanish_gp",
+  "2001_austrian_gp",
+  "2001_monaco_gp",
+  "2001_european_gp",
+  "2001_french_gp",
+  "2001_british_gp",
+  "2001_hungarian_gp",
+  "2001_belgian_gp",
+  "2001_italian_gp",
+  "2001_japanese_gp"
+ ],
+ "field_noise_s": 0.6812,
+ "form_sd_s": 0.5916,
+ "form_note": "within-pair gap SD 0.869 s, sampling SD 0.235 s over 78 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "ALE": {
+   "team_id": "prost_2001",
+   "pace_vs_teammate_s": -0.2068,
+   "raw_mean_gap_s": -0.2955,
+   "races": 7,
+   "lap_noise_s": 0.6421,
+   "raw_noise_s": 0.6257,
+   "clean_laps": 357
+  },
+  "ALO": {
+   "team_id": "minardi_2001",
+   "pace_vs_teammate_s": -0.6911,
+   "raw_mean_gap_s": -0.9872,
+   "races": 7,
+   "lap_noise_s": 0.7745,
+   "raw_noise_s": 0.8258,
+   "clean_laps": 273
+  },
+  "BAR": {
+   "team_id": "ferrari_2001",
+   "pace_vs_teammate_s": 0.0483,
+   "raw_mean_gap_s": 0.0628,
+   "races": 10,
+   "lap_noise_s": 0.6255,
+   "raw_noise_s": 0.6042,
+   "clean_laps": 394
+  },
+  "BER": {
+   "team_id": "arrows_2001",
+   "pace_vs_teammate_s": 0.1409,
+   "raw_mean_gap_s": 0.2113,
+   "races": 6,
+   "lap_noise_s": 0.7104,
+   "raw_noise_s": 0.7377,
+   "clean_laps": 160
+  },
+  "BUR": {
+   "team_id": "prost_2001",
+   "pace_vs_teammate_s": 0.2137,
+   "raw_mean_gap_s": 0.3206,
+   "races": 6,
+   "lap_noise_s": 0.7162,
+   "raw_noise_s": 0.7408,
+   "clean_laps": 213
+  },
+  "BUT": {
+   "team_id": "benetton_2001",
+   "pace_vs_teammate_s": 0.2227,
+   "raw_mean_gap_s": 0.2969,
+   "races": 9,
+   "lap_noise_s": 0.7765,
+   "raw_noise_s": 0.8291,
+   "clean_laps": 272
+  },
+  "COU": {
+   "team_id": "mclaren_2001",
+   "pace_vs_teammate_s": -0.2727,
+   "raw_mean_gap_s": -0.3895,
+   "races": 7,
+   "lap_noise_s": 0.6194,
+   "raw_noise_s": 0.5825,
+   "clean_laps": 251
+  },
+  "DLR": {
+   "team_id": "jaguar_2001",
+   "pace_vs_teammate_s": 0.4017,
+   "raw_mean_gap_s": 0.6428,
+   "races": 5,
+   "lap_noise_s": 0.743,
+   "raw_noise_s": 0.7753,
+   "clean_laps": 287
+  },
+  "ENG": {
+   "team_id": "prost_2001",
+   "pace_vs_teammate_s": 0.3043,
+   "raw_mean_gap_s": 1.2173,
+   "races": 1,
+   "lap_noise_s": 0.6933,
+   "raw_noise_s": 0.7354,
+   "clean_laps": 43
+  },
+  "FIS": {
+   "team_id": "benetton_2001",
+   "pace_vs_teammate_s": -0.2227,
+   "raw_mean_gap_s": -0.2969,
+   "races": 9,
+   "lap_noise_s": 0.7204,
+   "raw_noise_s": 0.7399,
+   "clean_laps": 302
+  },
+  "FRE": {
+   "team_id": "jordan_2001",
+   "pace_vs_teammate_s": -0.2689,
+   "raw_mean_gap_s": -0.4303,
+   "races": 5,
+   "lap_noise_s": 0.7058,
+   "raw_noise_s": 0.7236,
+   "clean_laps": 207
+  },
+  "HAK": {
+   "team_id": "mclaren_2001",
+   "pace_vs_teammate_s": 0.2727,
+   "raw_mean_gap_s": 0.3895,
+   "races": 7,
+   "lap_noise_s": 0.7044,
+   "raw_noise_s": 0.72,
+   "clean_laps": 223
+  },
+  "HEI": {
+   "team_id": "sauber_2001",
+   "pace_vs_teammate_s": 0.1781,
+   "raw_mean_gap_s": 0.2449,
+   "races": 8,
+   "lap_noise_s": 0.6259,
+   "raw_noise_s": 0.5985,
+   "clean_laps": 303
+  },
+  "IRV": {
+   "team_id": "jaguar_2001",
+   "pace_vs_teammate_s": -0.3328,
+   "raw_mean_gap_s": -0.4991,
+   "races": 6,
+   "lap_noise_s": 0.6567,
+   "raw_noise_s": 0.6425,
+   "clean_laps": 260
+  },
+  "MAR": {
+   "team_id": "minardi_2001",
+   "pace_vs_teammate_s": 0.4568,
+   "raw_mean_gap_s": 0.731,
+   "races": 5,
+   "lap_noise_s": 0.7062,
+   "raw_noise_s": 0.7248,
+   "clean_laps": 201
+  },
+  "MON": {
+   "team_id": "williams_2001",
+   "pace_vs_teammate_s": 0.0113,
+   "raw_mean_gap_s": 0.0161,
+   "races": 7,
+   "lap_noise_s": 0.6178,
+   "raw_noise_s": 0.5854,
+   "clean_laps": 293
+  },
+  "MSC": {
+   "team_id": "ferrari_2001",
+   "pace_vs_teammate_s": -0.0483,
+   "raw_mean_gap_s": -0.0628,
+   "races": 10,
+   "lap_noise_s": 0.7102,
+   "raw_noise_s": 0.7189,
+   "clean_laps": 497
+  },
+  "PAN": {
+   "team_id": "bar_2001",
+   "pace_vs_teammate_s": 0.0396,
+   "raw_mean_gap_s": 0.0594,
+   "races": 6,
+   "lap_noise_s": 0.659,
+   "raw_noise_s": 0.645,
+   "clean_laps": 237
+  },
+  "RAI": {
+   "team_id": "sauber_2001",
+   "pace_vs_teammate_s": -0.1781,
+   "raw_mean_gap_s": -0.2449,
+   "races": 8,
+   "lap_noise_s": 0.6799,
+   "raw_noise_s": 0.6792,
+   "clean_laps": 310
+  },
+  "SCH": {
+   "team_id": "williams_2001",
+   "pace_vs_teammate_s": -0.0113,
+   "raw_mean_gap_s": -0.0161,
+   "races": 7,
+   "lap_noise_s": 0.628,
+   "raw_noise_s": 0.6019,
+   "clean_laps": 306
+  },
+  "TRU": {
+   "team_id": "jordan_2001",
+   "pace_vs_teammate_s": 0.0955,
+   "raw_mean_gap_s": 0.1433,
+   "races": 6,
+   "lap_noise_s": 0.6061,
+   "raw_noise_s": 0.5624,
+   "clean_laps": 258
+  },
+  "VER": {
+   "team_id": "arrows_2001",
+   "pace_vs_teammate_s": -0.1409,
+   "raw_mean_gap_s": -0.2113,
+   "races": 6,
+   "lap_noise_s": 0.6552,
+   "raw_noise_s": 0.645,
+   "clean_laps": 383
+  },
+  "VIL": {
+   "team_id": "bar_2001",
+   "pace_vs_teammate_s": -0.0396,
+   "raw_mean_gap_s": -0.0594,
+   "races": 6,
+   "lap_noise_s": 0.6024,
+   "raw_noise_s": 0.5583,
+   "clean_laps": 268
+  },
+  "YOO": {
+   "team_id": "minardi_2001",
+   "pace_vs_teammate_s": 0.6512,
+   "raw_mean_gap_s": 1.628,
+   "races": 2,
+   "lap_noise_s": 0.6818,
+   "raw_noise_s": 0.6832,
+   "clean_laps": 69
+  }
+ },
+ "overtake_threshold_shift_s": 0.0,
+ "overtake_shift_fit": {
+  "skipped": "superseded by the W3 racecraft refit (H2a)"
+ }
+}

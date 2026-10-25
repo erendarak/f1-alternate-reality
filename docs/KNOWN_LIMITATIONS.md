@@ -2,6 +2,22 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## H1b (refuelling era 2000-2009, engine v0.18.0, D-057)
+
+- **Burn per lap and refuel rate are editorial** (2.75 kg/lap, 12.1 l/s; one value for every
+  track); the fuel effect per lap of fuel is fitted per season on stops, not measured.
+- **Real stops and stints are inferred** (no Jolpica pit stops before 2011): fuel on board,
+  tyre age and start fuel inherit the inference's errors; the overtaking curve is borrowed from
+  2011 (2000-2010), only launch and race-level shift fitted per season.
+- **The fuel effect hits the grid's lower edge (0.03 s per lap of fuel) in 5 of 10 seasons**.
+- **Finishing order vs the real race is low (rho 0.29)**: the era's attrition retires random
+  cars (EXP-026); the real order depended on which cars broke.
+- **Start fuel** is the inferred first stop where the race-fuel rule applies; implausible ones
+  (before 20 % of the race) leave the choice to the strategy.
+- **Not modelled:** the 2007-2008 closed pit lane under SC, fuel saving, SC laps burning less,
+  the 2001-2006 tyre war (one tyre model for both suppliers), the Q3 fuel-burn credit.
+- **2005 stops keep the set**, but a wet-weather change is allowed (as the rule did).
+
 ## H2c (race control per season, D-056)
 
 - **Per-season SC/VSC rates are noisy** (9-15 training races; EXP-025: no better than 2024's for

@@ -1,0 +1,214 @@
+{
+ "label": "2009 persona estimates (W5, D-045)",
+ "fitted_on": [
+  "2009_australian_gp",
+  "2009_malaysian_gp",
+  "2009_chinese_gp",
+  "2009_spanish_gp",
+  "2009_monaco_gp",
+  "2009_turkish_gp",
+  "2009_german_gp",
+  "2009_hungarian_gp",
+  "2009_european_gp",
+  "2009_italian_gp",
+  "2009_singapore_gp",
+  "2009_japanese_gp",
+  "2009_abu_dhabi_gp"
+ ],
+ "wear": {
+  "reference_slope_s_per_lap2": 0.011300202443211099,
+  "split_half_drivers": -0.216,
+  "split_half_teams": 0.098,
+  "reliability_drivers": 0.0,
+  "reliability_teams": 0.179,
+  "drivers": {
+   "ALG": {
+    "team_id": "toro_rosso_2009",
+    "wear_multiplier": 1.075,
+    "vs_teammate_s_per_lap2": -0.00306,
+    "team_vs_field_s_per_lap2": 0.00473,
+    "races": 3
+   },
+   "ALO": {
+    "team_id": "renault_2009",
+    "wear_multiplier": 0.899,
+    "vs_teammate_s_per_lap2": 0.00248,
+    "team_vs_field_s_per_lap2": -0.00637,
+    "races": 10
+   },
+   "BAD": {
+    "team_id": "ferrari_2009",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": -0.01287,
+    "team_vs_field_s_per_lap2": -0.0,
+    "races": 1
+   },
+   "BAR": {
+    "team_id": "brawn_2009",
+    "wear_multiplier": 1.1204,
+    "vs_teammate_s_per_lap2": -0.00073,
+    "team_vs_field_s_per_lap2": 0.0076,
+    "races": 12
+   },
+   "BOU": {
+    "team_id": "toro_rosso_2009",
+    "wear_multiplier": 1.075,
+    "vs_teammate_s_per_lap2": -0.00873,
+    "team_vs_field_s_per_lap2": 0.00473,
+    "races": 3
+   },
+   "BUE": {
+    "team_id": "toro_rosso_2009",
+    "wear_multiplier": 1.075,
+    "vs_teammate_s_per_lap2": 0.0059,
+    "team_vs_field_s_per_lap2": 0.00473,
+    "races": 6
+   },
+   "BUT": {
+    "team_id": "brawn_2009",
+    "wear_multiplier": 1.1204,
+    "vs_teammate_s_per_lap2": 0.00073,
+    "team_vs_field_s_per_lap2": 0.0076,
+    "races": 12
+   },
+   "FIS": {
+    "team_id": "ferrari_2009",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": -0.00729,
+    "team_vs_field_s_per_lap2": -0.0,
+    "races": 9
+   },
+   "GLO": {
+    "team_id": "toyota_2009",
+    "wear_multiplier": 0.9675,
+    "vs_teammate_s_per_lap2": -0.00104,
+    "team_vs_field_s_per_lap2": -0.00205,
+    "races": 7
+   },
+   "GRO": {
+    "team_id": "renault_2009",
+    "wear_multiplier": 0.899,
+    "vs_teammate_s_per_lap2": -0.0014,
+    "team_vs_field_s_per_lap2": -0.00637,
+    "races": 4
+   },
+   "HAM": {
+    "team_id": "mclaren_2009",
+    "wear_multiplier": 0.9218,
+    "vs_teammate_s_per_lap2": 0.00594,
+    "team_vs_field_s_per_lap2": -0.00494,
+    "races": 10
+   },
+   "HEI": {
+    "team_id": "bmw_sauber_2009",
+    "wear_multiplier": 1.0108,
+    "vs_teammate_s_per_lap2": -0.00048,
+    "team_vs_field_s_per_lap2": 0.00068,
+    "races": 11
+   },
+   "KOB": {
+    "team_id": "toyota_2009",
+    "wear_multiplier": 0.9675,
+    "vs_teammate_s_per_lap2": -0.00355,
+    "team_vs_field_s_per_lap2": -0.00205,
+    "races": 1
+   },
+   "KOV": {
+    "team_id": "mclaren_2009",
+    "wear_multiplier": 0.9218,
+    "vs_teammate_s_per_lap2": -0.00594,
+    "team_vs_field_s_per_lap2": -0.00494,
+    "races": 10
+   },
+   "KUB": {
+    "team_id": "bmw_sauber_2009",
+    "wear_multiplier": 1.0108,
+    "vs_teammate_s_per_lap2": 0.00048,
+    "team_vs_field_s_per_lap2": 0.00068,
+    "races": 11
+   },
+   "LIU": {
+    "team_id": "force_india_2009",
+    "wear_multiplier": 0.9273,
+    "vs_teammate_s_per_lap2": 0.00055,
+    "team_vs_field_s_per_lap2": -0.00459,
+    "races": 3
+   },
+   "MAS": {
+    "team_id": "ferrari_2009",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": 0.00289,
+    "team_vs_field_s_per_lap2": -0.0,
+    "races": 4
+   },
+   "NAK": {
+    "team_id": "williams_2009",
+    "wear_multiplier": 0.9426,
+    "vs_teammate_s_per_lap2": -0.00738,
+    "team_vs_field_s_per_lap2": -0.00362,
+    "races": 9
+   },
+   "PIQ": {
+    "team_id": "renault_2009",
+    "wear_multiplier": 0.899,
+    "vs_teammate_s_per_lap2": -0.0032,
+    "team_vs_field_s_per_lap2": -0.00637,
+    "races": 6
+   },
+   "RAI": {
+    "team_id": "ferrari_2009",
+    "wear_multiplier": 1.0,
+    "vs_teammate_s_per_lap2": 0.00285,
+    "team_vs_field_s_per_lap2": -0.0,
+    "races": 9
+   },
+   "ROS": {
+    "team_id": "williams_2009",
+    "wear_multiplier": 0.9426,
+    "vs_teammate_s_per_lap2": 0.00738,
+    "team_vs_field_s_per_lap2": -0.00362,
+    "races": 9
+   },
+   "SUT": {
+    "team_id": "force_india_2009",
+    "wear_multiplier": 0.9273,
+    "vs_teammate_s_per_lap2": 0.00495,
+    "team_vs_field_s_per_lap2": -0.00459,
+    "races": 8
+   },
+   "TRU": {
+    "team_id": "toyota_2009",
+    "wear_multiplier": 0.9675,
+    "vs_teammate_s_per_lap2": 0.00136,
+    "team_vs_field_s_per_lap2": -0.00205,
+    "races": 8
+   },
+   "VET": {
+    "team_id": "red_bull_2009",
+    "wear_multiplier": 1.1415,
+    "vs_teammate_s_per_lap2": -0.00716,
+    "team_vs_field_s_per_lap2": 0.00893,
+    "races": 10
+   },
+   "WEB": {
+    "team_id": "red_bull_2009",
+    "wear_multiplier": 1.1415,
+    "vs_teammate_s_per_lap2": 0.00716,
+    "team_vs_field_s_per_lap2": 0.00893,
+    "races": 10
+   }
+  }
+ },
+ "derived_at_setup": {
+  "consistency": "rank of W2 lap noise (driver_pace_2009_v1), persona spread",
+  "overtake_skill": "rank of W3 attack term (racecraft_2009_v1), persona spread",
+  "defense_skill": "rank of W3 defend term (racecraft_2009_v1), persona spread"
+ },
+ "not_measurable": {
+  "mistake proneness (consistency x composure in incidents)": "blue flags dominate big losses (2024: 24 events left; odd vs even races r = -0.33)",
+  "composure": "no measurement (penalties too few per driver)",
+  "wet_skill": "3 wet races",
+  "risk_appetite": "a preference, not a measurement",
+  "qualifying_skill": "the grid is real"
+ }
+}

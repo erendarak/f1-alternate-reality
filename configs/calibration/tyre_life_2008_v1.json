@@ -1,0 +1,416 @@
+{
+ "label": "2008 tyre life + same-lap wear (W1, D-041)",
+ "compound_reference": "compounds unknown: soft/hard wear and life ratios to the medium from calibration/tyre_life_2018_v1.json (borrowed); stops-only fit",
+ "dataset_sha256": "sha256:1b92bee15841524777116065b6454357a80d8118f2ef817be63a04b8666bc95f",
+ "fitted_on": [
+  "2008_australian_gp",
+  "2008_bahrain_gp",
+  "2008_belgian_gp",
+  "2008_canadian_gp",
+  "2008_chinese_gp",
+  "2008_german_gp",
+  "2008_hungarian_gp",
+  "2008_italian_gp",
+  "2008_malaysian_gp",
+  "2008_singapore_gp",
+  "2008_turkish_gp"
+ ],
+ "globals": {
+  "kappa": 1.0,
+  "kappa_note": "life_laps = kappa x life_raw; fitted on dry_train behaviour",
+  "delta_s": 0.1,
+  "delta_note": "potential pace step: SOFT -delta, MEDIUM 0, HARD +delta; fitted",
+  "fuel_s_per_lap": 0.045,
+  "fuel_note": "lap time per lap of fuel on board; fitted on dry_train stops with kappa/delta"
+ },
+ "season_wear": {
+  "lin": {
+   "MEDIUM": 0.010574078547057508,
+   "SOFT": 0.015349991429031708,
+   "HARD": 0.010952111420368626
+  },
+  "quad": {
+   "MEDIUM": 0.00016565142980929295,
+   "SOFT": 0.00019695818256917574,
+   "HARD": 0.00015391382292700013
+  },
+  "fresh_bonus_s": -0.1443814925854407,
+  "same_lap_offsets": {
+   "SOFT": 0.0,
+   "MEDIUM": 0.0,
+   "HARD": 0.0
+  },
+  "laps": 7992
+ },
+ "life_ratios_vs_medium": {
+  "MEDIUM": 1.0,
+  "SOFT": 1.0212765957446808,
+  "HARD": 1.0172413793103448
+ },
+ "editorial": {
+  "pace_modes": {
+   "CONSERVE": {
+    "offset_s": 0.35,
+    "wear_multiplier": 0.75
+   },
+   "BALANCED": {
+    "offset_s": 0.0,
+    "wear_multiplier": 1.0
+   },
+   "PUSH": {
+    "offset_s": -0.3,
+    "wear_multiplier": 1.4
+   }
+  },
+  "cliff_s_per_lap": 0.5,
+  "neutralised_life_factor": 0.35,
+  "note": "editorial_assumption: research ranges (docs/RESEARCH_REAL_F1.md)"
+ },
+ "events": {
+  "2008_australian_gp": {
+   "total_laps": 58,
+   "life_raw": {
+    "SOFT": 22.72,
+    "MEDIUM": 22.25,
+    "HARD": 22.63
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 12 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 12,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -4.18,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2008_malaysian_gp": {
+   "total_laps": 56,
+   "life_raw": {
+    "SOFT": 23.49,
+    "MEDIUM": 23.0,
+    "HARD": 23.4
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 37 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 37,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -0.601,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2008_bahrain_gp": {
+   "total_laps": 57,
+   "life_raw": {
+    "SOFT": 24.0,
+    "MEDIUM": 23.5,
+    "HARD": 23.91
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 39 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 39,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.653,
+   "wear_multiplier_raw": 1.95,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2008_turkish_gp": {
+   "total_laps": 58,
+   "life_raw": {
+    "SOFT": 24.77,
+    "MEDIUM": 24.25,
+    "HARD": 24.67
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 32 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 32,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -2.694,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2008_canadian_gp": {
+   "total_laps": 70,
+   "life_raw": {
+    "SOFT": 36.77,
+    "MEDIUM": 36.0,
+    "HARD": 36.62
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 19 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 19,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.122,
+   "wear_multiplier_raw": 1.197,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2008_german_gp": {
+   "total_laps": 67,
+   "life_raw": {
+    "SOFT": 28.6,
+    "MEDIUM": 28.0,
+    "HARD": 28.48
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 24 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 24,
+    "HARD": 0
+   },
+   "wear_multiplier": 2.106,
+   "wear_multiplier_raw": 2.647,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2008_hungarian_gp": {
+   "total_laps": 70,
+   "life_raw": {
+    "SOFT": 30.64,
+    "MEDIUM": 30.0,
+    "HARD": 30.52
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 38 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 38,
+    "HARD": 0
+   },
+   "wear_multiplier": 2.079,
+   "wear_multiplier_raw": 2.5,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2008_belgian_gp": {
+   "total_laps": 44,
+   "life_raw": {
+    "SOFT": 20.43,
+    "MEDIUM": 20.0,
+    "HARD": 20.34
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 31 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 31,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.399,
+   "wear_multiplier_raw": 1.683,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2008_italian_gp": {
+   "total_laps": 53,
+   "life_raw": {
+    "SOFT": 27.57,
+    "MEDIUM": 27.0,
+    "HARD": 27.47
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 34 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 34,
+    "HARD": 0
+   },
+   "wear_multiplier": 1.564,
+   "wear_multiplier_raw": 1.88,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2008_singapore_gp": {
+   "total_laps": 61,
+   "life_raw": {
+    "SOFT": 31.4,
+    "MEDIUM": 30.75,
+    "HARD": 31.28
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 22 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 22,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -4.965,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2008_chinese_gp": {
+   "total_laps": 56,
+   "life_raw": {
+    "SOFT": 23.74,
+    "MEDIUM": 23.25,
+    "HARD": 23.65
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 32 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 32,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.592,
+   "wear_multiplier_raw": 0.392,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2008_spanish_gp": {
+   "total_laps": 66,
+   "life_raw": {
+    "SOFT": 26.55,
+    "MEDIUM": 26.0,
+    "HARD": 26.45
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 23 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 23,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.317,
+   "wear_multiplier_raw": -0.1,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2008_french_gp": {
+   "total_laps": 70,
+   "life_raw": {
+    "SOFT": 29.62,
+    "MEDIUM": 29.0,
+    "HARD": 29.5
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 39 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 39,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -2.021,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2008_european_gp": {
+   "total_laps": 57,
+   "life_raw": {
+    "SOFT": 22.72,
+    "MEDIUM": 22.25,
+    "HARD": 22.63
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 32 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 32,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.978,
+   "wear_multiplier_raw": 0.968,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  },
+  "2008_japanese_gp": {
+   "total_laps": 67,
+   "life_raw": {
+    "SOFT": 35.74,
+    "MEDIUM": 35.0,
+    "HARD": 35.6
+   },
+   "life_source": {
+    "SOFT": "filled from the race's other compounds x season ratio",
+    "MEDIUM": "q75 of 24 stints, shrunk with weight 5.0 toward the race's other compounds x season ratio",
+    "HARD": "filled from the race's other compounds x season ratio"
+   },
+   "stints": {
+    "SOFT": 0,
+    "MEDIUM": 24,
+    "HARD": 0
+   },
+   "wear_multiplier": 0.2,
+   "wear_multiplier_raw": -1.943,
+   "same_lap_offsets": {
+    "MEDIUM": 0.0
+   }
+  }
+ }
+}

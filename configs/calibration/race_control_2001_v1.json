@@ -1,0 +1,30 @@
+{
+  "crash_per_lap": 0.004105,
+  "failure_per_lap": 0.002737,
+  "first_lap_crash_multiplier": 14.5,
+  "fitted_on": [
+    "2001_australian_gp",
+    "2001_spanish_gp",
+    "2001_austrian_gp",
+    "2001_monaco_gp",
+    "2001_european_gp",
+    "2001_french_gp",
+    "2001_british_gp",
+    "2001_hungarian_gp",
+    "2001_belgian_gp",
+    "2001_italian_gp",
+    "2001_japanese_gp"
+  ],
+  "lap1_retirement_per_starter": 0.06224,
+  "note": "H2c: 11 dry_train 2001 races; neutralisations inferred from lap times (no VSC yet)",
+  "races": 11,
+  "retirement_per_car_lap": 0.006841,
+  "retirements": 92,
+  "safety_cars": 2,
+  "sc_laps_median": 9.94,
+  "sc_laps_p25": -0.17,
+  "sc_laps_p75": 20.04,
+  "sc_per_retirement": 0.0217,
+  "vsc_per_retirement_without_sc": 0.0,
+  "vscs": 0
+}

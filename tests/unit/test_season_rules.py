@@ -19,13 +19,29 @@ def _field(roster: RaceRoster, profiles: ProfileSet, season: int, **rc: float) -
     return setup.model_copy(update={"race_control": setup.race_control.model_copy(update=rc)})
 
 
-def test_catalogue_covers_2010_2025_with_the_documented_rules() -> None:
-    rules = load_catalogue(CONFIGS)
-    assert sorted(rules) == list(range(2010, 2026))
+def test_catalogue_covers_2000_2025_with_the_documented_rules() -> None:
+    every = load_catalogue(CONFIGS)
+    assert sorted(every) == list(range(2000, 2026))
+    rules = {s: r for s, r in every.items() if s >= 2010}
     assert all(r.points == (25, 18, 15, 12, 10, 8, 6, 4, 2, 1) for r in rules.values())
     assert all(not r.refuelling and r.min_distinct_dry_compounds == 2 for r in rules.values())
     assert [s for s, r in rules.items() if not r.vsc] == [2010, 2011, 2012, 2013, 2014]
     assert [s for s, r in rules.items() if not r.drs] == [2010]
+    # H1b: the refuelling era
+    old = {s: r for s, r in every.items() if s < 2010}
+    assert all(r.refuelling and not r.vsc and not r.drs for r in old.values())
+    assert [s for s, r in old.items() if r.points == (10, 6, 4, 3, 2, 1)] == [2000, 2001, 2002]
+    assert all(len(r.points) == 8 for s, r in old.items() if s >= 2003)
+    assert [s for s, r in old.items() if not r.tyre_changes_allowed] == [2005]
+    assert [s for s, r in old.items() if r.min_distinct_dry_compounds == 2] == [2007, 2008, 2009]
+    assert [s for s, r in old.items() if r.pit_lane_closed_under_sc] == [2007, 2008]
+    assert [r.race_fuel_from_qualifying for s, r in sorted(old.items())] == ["none"] * 3 + [
+        "all"
+    ] * 3 + ["top10"] * 4
+    assert [s for s, r in old.items() if "Michelin" in r.tyre_supplier] == list(range(2001, 2007))
+    assert (
+        not rules[2010].pit_lane_closed_under_sc and rules[2010].race_fuel_from_qualifying == "none"
+    )
     assert [s for s, r in rules.items() if r.fastest_lap_point] == [
         2019,
         2020,

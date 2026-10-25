@@ -39,6 +39,12 @@ from f1ar.domain.race_state import (
     default_weather_params,
     start_slot,
 )
+from f1ar.domain.refuelling import (
+    FUEL_KG_PER_LAP,
+    FUEL_S_PER_KG,
+    FUEL_S_PER_LAP,
+    REFUEL_S_PER_LAP,
+)
 from f1ar.domain.season_rules import SEASON_2024, SeasonRules, rules_for
 from f1ar.policy.baseline_strategy import POLICY_ID as STRATEGY_POLICY_ID
 
@@ -273,10 +279,27 @@ def setup_from_codes(
         )
     # W1: car pace and the base lap are read off real (managed) race laps with the offsets seen
     # on race laps; the simulation then runs the tyres' potential pace
+    refuelling = rules_for(configs, season).refuelling
+    fuel_s = FUEL_S_PER_LAP
+    if refuelling:  # H1b: the fuel term counts laps of fuel on board
+        fitted_fuel = life[0]["globals"].get("fuel_s_per_lap") if life is not None else None
+        fuel_s = float(tyre_life_overrides.get("fuel_s", fitted_fuel or FUEL_S_PER_LAP))
+        lap_params = lap_params.model_copy(update={"fuel_s_per_lap_remaining": fuel_s})
+        if estimation_params is not None:
+            estimation_params = estimation_params.model_copy(
+                update={"fuel_s_per_lap_remaining": fuel_s}
+            )
     seen = estimation_params or lap_params
     estimate = estimate_car_offsets(laps, roster, profiles, seen, driver_offsets)
     base = estimate_base_lap(
-        laps, roster, profiles, seen, estimate, track.total_laps, driver_offsets
+        laps,
+        roster,
+        profiles,
+        seen,
+        estimate,
+        track.total_laps,
+        driver_offsets,
+        refuelling=refuelling,
     )
     lap_model = lap_params.model_copy(update={"base_lap_s": base.base_lap_s})
     try:
@@ -397,7 +420,70 @@ def setup_from_codes(
     )
     setup = with_racecraft(setup, configs, racecraft_overrides or {})
     setup = with_race_events(setup, configs, race_events_overrides or {})
+    if refuelling:
+        fuel_source = (
+            "override (fitting)"
+            if "fuel_s" in tyre_life_overrides
+            else "fitted on the season's stops (tyre life config)"
+            if life is not None and life[0]["globals"].get("fuel_s_per_lap")
+            else "editorial default"
+        )
+        setup = with_refuelling(setup, raw_laps, fuel_s, fuel_source)
     return _label_other_seasons(setup, configs)
+
+
+MIN_FUEL_STINT_SHARE = 0.2
+"""A first stop before this share of the race isn't taken as the start fuel (a drive-through,
+damage, or an inference error): that car's start fuel is then chosen by the strategy."""
+
+
+def with_refuelling(
+    setup: RaceSetup, raw_laps: pd.DataFrame, fuel_s: float, fuel_source: str
+) -> RaceSetup:
+    """H1b (D-057): a refuelling-era race: the refuel rate, and the start fuel the race-fuel
+    rule fixed in qualifying (everyone 2003-2005, the top ten 2006-2009): the car's real first
+    stint (to its first stop, inferred from lap times), else the strategy chooses it."""
+    rule = setup.rules.race_fuel_from_qualifying
+    first_stop = (
+        raw_laps[raw_laps["pit_in_time_s"].notna()].groupby("driver_code")["lap_number"].min()
+    )
+    total = setup.track.total_laps
+    drivers, unknown = [], 0
+    for d in setup.drivers:
+        fixed = rule == "all" or (rule == "top10" and 1 <= d.grid_position <= 10)
+        stop = first_stop.get(d.code)
+        plausible = stop is not None and MIN_FUEL_STINT_SHARE * total <= int(stop) < total
+        if fixed and not plausible:
+            unknown += 1
+        start = int(stop) if fixed and plausible and stop is not None else None
+        drivers.append(d.model_copy(update={"start_fuel_laps": start}))
+    # the measured whole-stop loss already holds the real refuelling time: take a typical one
+    # (median stint x refuel rate) off, the engine adds each stop's own
+    stints = raw_laps.groupby(["driver_code", "stint"], dropna=False)["lap_number"].count()
+    typical = float(stints.median()) * REFUEL_S_PER_LAP if len(stints) else 0.0
+    lane = max(5.0, setup.pit.lane_loss_s + setup.pit.standstill_median_s - typical)
+    pit = setup.pit.model_copy(update={"refuel_s_per_lap": REFUEL_S_PER_LAP, "lane_loss_s": lane})
+    note = (
+        f"refuelling {REFUEL_S_PER_LAP:.3f} s per lap of fuel (editorial: {FUEL_KG_PER_LAP} "
+        f"kg/lap, 12.1 l/s; domain/refuelling.py); fuel effect {fuel_s:.4f} s per lap of fuel "
+        f"({fuel_source}; editorial default {FUEL_S_PER_LAP:.4f} = {FUEL_S_PER_KG} s/kg); "
+        f"pit lane loss {lane:.1f} s = measured whole-stop loss minus a typical refuelling "
+        f"({typical:.1f} s); start fuel "
+        + {
+            "none": "chosen by the strategy",
+            "all": "fixed in qualifying for every car: its real first stint (inferred stop)",
+            "top10": "fixed in qualifying for the top ten: their real first stint (inferred "
+            "stop); the others choose",
+        }[rule]
+        + (f" ({unknown} cars: first stop too early or none, strategy chooses)" if unknown else "")
+    )
+    return setup.model_copy(
+        update={
+            "drivers": tuple(drivers),
+            "pit": pit,
+            "inputs": {**setup.inputs, "refuelling": note},
+        }
+    )
 
 
 def with_racecraft(

@@ -1,0 +1,27 @@
+model_name: personas
+model_version: v1
+kind: tyre wear slopes vs teammate/team (shrunk by split-half reliability)
+source_type: estimated_from_data
+artifact: configs/calibration/personas_2007_v1.json
+artifact_sha256: sha256:54caaa38b560c479c74d75f511d7208db4c4159969aee3e02a45248f0e0aec81
+feature_schema_version: 1
+training_dataset_manifest: data/manifests/dataset_laps_2007_v1.yaml
+training_dataset_content_sha256: sha256:538147de761693964810b1a6873a33a76b9cac5afad86d0e4e3f122c85421f69
+training_races:
+- 2007_australian_gp
+- 2007_bahrain_gp
+- 2007_belgian_gp
+- 2007_brazilian_gp
+- 2007_british_gp
+- 2007_canadian_gp
+- 2007_hungarian_gp
+- 2007_italian_gp
+- 2007_japanese_gp
+- 2007_malaysian_gp
+- 2007_monaco_gp
+- 2007_united_states_gp
+metrics:
+  split_half_drivers: -0.253
+  split_half_teams: 0.672
+  held_out_check: EXP-014
+status: fitted for 2007 (H2a, D-054); held-out check EXP-023

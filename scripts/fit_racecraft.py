@@ -22,6 +22,7 @@ import json
 import statistics
 import time
 from concurrent.futures import ProcessPoolExecutor
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -29,7 +30,7 @@ import pandas as pd
 import yaml
 
 from f1ar.calibration.driver_pace_fit import load_pace
-from f1ar.calibration.lap_model_fit import load_shape
+from f1ar.calibration.lap_model_fit import load_life, load_shape
 from f1ar.calibration.racecraft_fit import (
     RACECRAFT_FILE,
     fit_overtaking_skills,
@@ -39,9 +40,12 @@ from f1ar.calibration.racecraft_fit import (
 from f1ar.calibration.reference_metrics import real_metrics
 from f1ar.calibration.season_files import dataset_files, season_path
 from f1ar.calibration.traffic_fit import encounters
+from f1ar.domain.refuelling import FUEL_S_PER_LAP, LAST_REFUELLING_SEASON
 from f1ar.simulation.scenarios import default_traffic_params
 
 print = functools.partial(print, flush=True)  # noqa: A001 (progress through pipes)
+FIRST_PIT_DATA_SEASON = 2011
+"""Jolpica has pit stops from 2011; before, they are inferred from lap times (EXP-021)."""
 ROOT = Path(__file__).resolve().parents[1]
 CONFIGS = ROOT / "configs"
 
@@ -92,6 +96,11 @@ def main() -> None:
     }
     tp = default_traffic_params()
     shape, _ = load_shape(CONFIGS, args.season)
+    refuel = args.season <= LAST_REFUELLING_SEASON
+    if refuel:  # H1b: cars on different fuel loads meet: use the season's fitted fuel effect
+        life = load_life(CONFIGS, args.season)
+        fuel = life[0]["globals"].get("fuel_s_per_lap") if life is not None else None
+        shape = replace(shape, fuel_s_per_lap=float(fuel or FUEL_S_PER_LAP))
     enc = encounters(
         dry,
         shape,
@@ -101,6 +110,29 @@ def main() -> None:
     )
     print(f"{len(enc)} encounters; fitting overtaking with driver terms ...")
     overtaking = fit_overtaking_skills(enc)
+    inferred = args.season < FIRST_PIT_DATA_SEASON
+    if inferred:
+        # H1b (D-057): before 2011 the stops (so fuel on board and tyre age) are inferred; a
+        # missed stop makes the encounters' expected margins wrong and the fitted curve flat
+        # (pass scales of 2.5-8 s, 2024: 0.37). Borrow 2011's curve, the first season with
+        # Jolpica pit stops; no track or driver terms; launch spread and shift still fitted.
+        ref = json.loads(
+            (CONFIGS / season_path(RACECRAFT_FILE, FIRST_PIT_DATA_SEASON)).read_text(
+                encoding="utf-8"
+            )
+        )["overtaking"]
+        own = {k: overtaking[k] for k in ("threshold_s", "scale_s", "encounters", "passes")}
+        overtaking = {
+            **{k: ref[k] for k in ("min_gap_s", "threshold_s", "scale_s", "eps")},
+            "track_threshold_s": {},
+            "track_encounters": {},
+            "track_passes": {},
+            "drivers": {},
+            "encounters": overtaking["encounters"],
+            "passes": overtaking["passes"],
+            "borrowed_from": f"racecraft_{FIRST_PIT_DATA_SEASON}_v1 (stops inferred before "
+            f"{FIRST_PIT_DATA_SEASON}); own fit was {own}",
+        }
     print(
         f"threshold {overtaking['threshold_s']} s, scale {overtaking['scale_s']} s, "
         f"min gap {overtaking['min_gap_s']} s ({(time.perf_counter() - t0) / 60:.1f} min)"
@@ -159,9 +191,10 @@ def main() -> None:
             cfg["overtaking"]["race_level_shift_s"] = round((lo + hi) / 2, 4)
 
     with ProcessPoolExecutor(max_workers=args.workers) as pool:
-        bisect(pool, "spread", 0.5, 3.0)
-        bisect(pool, "shift", -0.5, 0.5)
-        bisect(pool, "spread", 0.5, 3.0)  # the shift moves lap-1 passes a little too
+        spread_hi, shift_lo = 3.0, -0.5
+        bisect(pool, "spread", 0.5, spread_hi)
+        bisect(pool, "shift", shift_lo, 0.5)
+        bisect(pool, "spread", 0.5, spread_hi)  # the shift moves lap-1 passes a little too
         write()
         total = run(pool, race_jobs, False)
     real_total = total_target

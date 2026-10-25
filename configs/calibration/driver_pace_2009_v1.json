@@ -1,0 +1,259 @@
+{
+ "label": "2009 driver race pace vs teammate + lap noise (W2, D-043)",
+ "events": [
+  "2009_australian_gp",
+  "2009_malaysian_gp",
+  "2009_chinese_gp",
+  "2009_spanish_gp",
+  "2009_monaco_gp",
+  "2009_turkish_gp",
+  "2009_german_gp",
+  "2009_hungarian_gp",
+  "2009_european_gp",
+  "2009_italian_gp",
+  "2009_singapore_gp",
+  "2009_japanese_gp",
+  "2009_abu_dhabi_gp"
+ ],
+ "field_noise_s": 0.6058,
+ "form_sd_s": 0.6003,
+ "form_note": "within-pair gap SD 0.876 s, sampling SD 0.217 s over 103 team-races",
+ "settings": {
+  "min_laps": 10,
+  "pace_prior_races": 3.0,
+  "clean_gap_s": 2.5,
+  "noise_prior_laps": 150.0,
+  "max_residual_s": 2.0
+ },
+ "drivers": {
+  "ALG": {
+   "team_id": "toro_rosso_2009",
+   "pace_vs_teammate_s": 0.3646,
+   "raw_mean_gap_s": 0.638,
+   "races": 4,
+   "lap_noise_s": 0.6403,
+   "raw_noise_s": 0.6856,
+   "clean_laps": 114
+  },
+  "ALO": {
+   "team_id": "renault_2009",
+   "pace_vs_teammate_s": -0.3133,
+   "raw_mean_gap_s": -0.3987,
+   "races": 11,
+   "lap_noise_s": 0.5756,
+   "raw_noise_s": 0.5603,
+   "clean_laps": 296
+  },
+  "BAD": {
+   "team_id": "ferrari_2009",
+   "pace_vs_teammate_s": 0.2831,
+   "raw_mean_gap_s": 1.1324,
+   "races": 1,
+   "lap_noise_s": 0.6387,
+   "raw_noise_s": 0.7591,
+   "clean_laps": 41
+  },
+  "BAR": {
+   "team_id": "brawn_2009",
+   "pace_vs_teammate_s": 0.0953,
+   "raw_mean_gap_s": 0.1173,
+   "races": 13,
+   "lap_noise_s": 0.5498,
+   "raw_noise_s": 0.5295,
+   "clean_laps": 414
+  },
+  "BOU": {
+   "team_id": "toro_rosso_2009",
+   "pace_vs_teammate_s": 0.0522,
+   "raw_mean_gap_s": 0.0913,
+   "races": 4,
+   "lap_noise_s": 0.619,
+   "raw_noise_s": 0.6317,
+   "clean_laps": 156
+  },
+  "BUE": {
+   "team_id": "toro_rosso_2009",
+   "pace_vs_teammate_s": -0.2652,
+   "raw_mean_gap_s": -0.3647,
+   "races": 8,
+   "lap_noise_s": 0.6447,
+   "raw_noise_s": 0.6698,
+   "clean_laps": 232
+  },
+  "BUT": {
+   "team_id": "brawn_2009",
+   "pace_vs_teammate_s": -0.0953,
+   "raw_mean_gap_s": -0.1173,
+   "races": 13,
+   "lap_noise_s": 0.6115,
+   "raw_noise_s": 0.6137,
+   "clean_laps": 398
+  },
+  "FIS": {
+   "team_id": "force_india_2009",
+   "pace_vs_teammate_s": 0.2813,
+   "raw_mean_gap_s": 0.3751,
+   "races": 9,
+   "lap_noise_s": 0.6292,
+   "raw_noise_s": 0.6415,
+   "clean_laps": 287
+  },
+  "GLO": {
+   "team_id": "toyota_2009",
+   "pace_vs_teammate_s": -0.192,
+   "raw_mean_gap_s": -0.2743,
+   "races": 7,
+   "lap_noise_s": 0.6058,
+   "raw_noise_s": 0.6058,
+   "clean_laps": 196
+  },
+  "GRO": {
+   "team_id": "renault_2009",
+   "pace_vs_teammate_s": 0.2939,
+   "raw_mean_gap_s": 0.5144,
+   "races": 4,
+   "lap_noise_s": 0.5758,
+   "raw_noise_s": 0.5454,
+   "clean_laps": 148
+  },
+  "HAM": {
+   "team_id": "mclaren_2009",
+   "pace_vs_teammate_s": -0.1603,
+   "raw_mean_gap_s": -0.2083,
+   "races": 10,
+   "lap_noise_s": 0.6086,
+   "raw_noise_s": 0.6096,
+   "clean_laps": 421
+  },
+  "HEI": {
+   "team_id": "bmw_sauber_2009",
+   "pace_vs_teammate_s": -0.0323,
+   "raw_mean_gap_s": -0.0404,
+   "races": 12,
+   "lap_noise_s": 0.5892,
+   "raw_noise_s": 0.5817,
+   "clean_laps": 332
+  },
+  "KOB": {
+   "team_id": "toyota_2009",
+   "pace_vs_teammate_s": -0.0232,
+   "raw_mean_gap_s": -0.093,
+   "races": 1,
+   "lap_noise_s": 0.5919,
+   "raw_noise_s": 0.5456,
+   "clean_laps": 45
+  },
+  "KOV": {
+   "team_id": "mclaren_2009",
+   "pace_vs_teammate_s": 0.1603,
+   "raw_mean_gap_s": 0.2083,
+   "races": 10,
+   "lap_noise_s": 0.5321,
+   "raw_noise_s": 0.4959,
+   "clean_laps": 306
+  },
+  "KUB": {
+   "team_id": "bmw_sauber_2009",
+   "pace_vs_teammate_s": 0.0323,
+   "raw_mean_gap_s": 0.0404,
+   "races": 12,
+   "lap_noise_s": 0.622,
+   "raw_noise_s": 0.6336,
+   "clean_laps": 209
+  },
+  "LIU": {
+   "team_id": "force_india_2009",
+   "pace_vs_teammate_s": 0.1017,
+   "raw_mean_gap_s": 0.2033,
+   "races": 3,
+   "lap_noise_s": 0.6169,
+   "raw_noise_s": 0.6425,
+   "clean_laps": 65
+  },
+  "MAS": {
+   "team_id": "ferrari_2009",
+   "pace_vs_teammate_s": -0.0594,
+   "raw_mean_gap_s": -0.104,
+   "races": 4,
+   "lap_noise_s": 0.5242,
+   "raw_noise_s": 0.4415,
+   "clean_laps": 148
+  },
+  "NAK": {
+   "team_id": "williams_2009",
+   "pace_vs_teammate_s": 0.1858,
+   "raw_mean_gap_s": 0.2286,
+   "races": 13,
+   "lap_noise_s": 0.5918,
+   "raw_noise_s": 0.5828,
+   "clean_laps": 236
+  },
+  "PIQ": {
+   "team_id": "renault_2009",
+   "pace_vs_teammate_s": 0.2328,
+   "raw_mean_gap_s": 0.3326,
+   "races": 7,
+   "lap_noise_s": 0.5889,
+   "raw_noise_s": 0.5722,
+   "clean_laps": 152
+  },
+  "RAI": {
+   "team_id": "ferrari_2009",
+   "pace_vs_teammate_s": -0.2435,
+   "raw_mean_gap_s": -0.3247,
+   "races": 9,
+   "lap_noise_s": 0.5383,
+   "raw_noise_s": 0.5057,
+   "clean_laps": 310
+  },
+  "ROS": {
+   "team_id": "williams_2009",
+   "pace_vs_teammate_s": -0.1858,
+   "raw_mean_gap_s": -0.2286,
+   "races": 13,
+   "lap_noise_s": 0.5526,
+   "raw_noise_s": 0.5308,
+   "clean_laps": 365
+  },
+  "SUT": {
+   "team_id": "force_india_2009",
+   "pace_vs_teammate_s": -0.1618,
+   "raw_mean_gap_s": -0.2225,
+   "races": 8,
+   "lap_noise_s": 0.6476,
+   "raw_noise_s": 0.6814,
+   "clean_laps": 185
+  },
+  "TRU": {
+   "team_id": "toyota_2009",
+   "pace_vs_teammate_s": 0.183,
+   "raw_mean_gap_s": 0.2516,
+   "races": 8,
+   "lap_noise_s": 0.6071,
+   "raw_noise_s": 0.6078,
+   "clean_laps": 294
+  },
+  "VET": {
+   "team_id": "red_bull_2009",
+   "pace_vs_teammate_s": -0.0944,
+   "raw_mean_gap_s": -0.1201,
+   "races": 11,
+   "lap_noise_s": 0.6099,
+   "raw_noise_s": 0.6123,
+   "clean_laps": 268
+  },
+  "WEB": {
+   "team_id": "red_bull_2009",
+   "pace_vs_teammate_s": 0.0944,
+   "raw_mean_gap_s": 0.1201,
+   "races": 11,
+   "lap_noise_s": 0.5625,
+   "raw_noise_s": 0.5465,
+   "clean_laps": 405
+  }
+ },
+ "overtake_threshold_shift_s": 0.0,
+ "overtake_shift_fit": {
+  "skipped": "superseded by the W3 racecraft refit (H2a)"
+ }
+}

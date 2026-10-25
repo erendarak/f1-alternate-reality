@@ -1,0 +1,130 @@
+# Driver persona seed for the 2005 season (H2a, D-054), written by
+# scripts/build_season_seeds.py. Identity comes from each race's roster (Jolpica).
+# THE NUMBERS ARE EDITORIAL ASSUMPTIONS: illustrative simulation personas, not verified
+# psychometrics. Drivers who raced in 2024 keep their 2024 seed persona (not refitted for
+# 2005); others are template-only (rookie = no start in an earlier season we have).
+schema_version: 1
+season: 2005
+event_id: 2005_season
+explanation: Illustrative simulation persona; not verified driver psychometrics.
+profile_revision: v1
+policy:
+  type: profile_conditioned_baseline
+  version: untrained
+drivers:
+  alexander_wurz_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  anthony_davidson_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  antonio_pizzonia_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  christian_klien_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  christijan_albers_2005:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  david_coulthard_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  felipe_massa_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  fernando_alonso_2005:
+    template: generic_veteran
+    confidence: 0.15
+    origin: copied from the 2024 seed (master plan §3.3 (Stage 1 fields))
+    persona_label: tactical veteran
+    overrides:
+      race_pace_skill: 0.89
+      consistency: 0.92
+      risk_appetite: 0.7
+      tire_management: 0.91
+      wet_skill: 0.89
+      adaptability: 0.94
+  giancarlo_fisichella_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jacques_villeneuve_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jarno_trulli_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  jenson_button_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  juan_pablo_montoya_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  kimi_raikkonen_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  mark_webber_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  michael_schumacher_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  narain_karthikeyan_2005:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  nick_heidfeld_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  patrick_friesacher_2005:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  pedro_de_la_rosa_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  ralf_schumacher_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  ricardo_zonta_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  robert_doornbos_2005:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  rubens_barrichello_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  takuma_sato_2005:
+    template: generic_veteran
+    confidence: 0.1
+    origin: template only
+  tiago_monteiro_2005:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)
+  vitantonio_liuzzi_2005:
+    template: generic_rookie
+    confidence: 0.1
+    origin: template only (no start before this season in our data)

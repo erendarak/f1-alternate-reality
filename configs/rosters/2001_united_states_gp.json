@@ -1,0 +1,347 @@
+{
+  "schema_version": 1,
+  "event_id": "2001_united_states_gp",
+  "season": 2001,
+  "round": 16,
+  "circuit_id": "indianapolis",
+  "race_date": "2001-09-30",
+  "source_type": "historical_verified",
+  "source": {
+    "name": "jolpica-f1",
+    "url": "https://api.jolpi.ca/ergast/f1/2001/16/results.json",
+    "retrieved_utc": "2026-10-24T21:31:18Z",
+    "license_review_status": "research_only"
+  },
+  "entries": [
+    {
+      "driver_id": "michael_schumacher_2001",
+      "person_id": "michael_schumacher",
+      "code": "MSC",
+      "car_number": 1,
+      "given_name": "Michael",
+      "family_name": "Schumacher",
+      "team_id": "ferrari_2001",
+      "team_name": "Ferrari",
+      "grid_position": 1,
+      "external_ids": {
+        "jolpica_driver_id": "michael_schumacher",
+        "jolpica_constructor_id": "ferrari"
+      }
+    },
+    {
+      "driver_id": "ralf_schumacher_2001",
+      "person_id": "ralf_schumacher",
+      "code": "SCH",
+      "car_number": 5,
+      "given_name": "Ralf",
+      "family_name": "Schumacher",
+      "team_id": "williams_2001",
+      "team_name": "Williams",
+      "grid_position": 2,
+      "external_ids": {
+        "jolpica_driver_id": "ralf_schumacher",
+        "jolpica_constructor_id": "williams"
+      }
+    },
+    {
+      "driver_id": "juan_pablo_montoya_2001",
+      "person_id": "juan_pablo_montoya",
+      "code": "MON",
+      "car_number": 6,
+      "given_name": "Juan",
+      "family_name": "Pablo Montoya",
+      "team_id": "williams_2001",
+      "team_name": "Williams",
+      "grid_position": 3,
+      "external_ids": {
+        "jolpica_driver_id": "montoya",
+        "jolpica_constructor_id": "williams"
+      }
+    },
+    {
+      "driver_id": "mika_hakkinen_2001",
+      "person_id": "mika_hakkinen",
+      "code": "HAK",
+      "car_number": 3,
+      "given_name": "Mika",
+      "family_name": "Häkkinen",
+      "team_id": "mclaren_2001",
+      "team_name": "McLaren",
+      "grid_position": 4,
+      "external_ids": {
+        "jolpica_driver_id": "hakkinen",
+        "jolpica_constructor_id": "mclaren"
+      }
+    },
+    {
+      "driver_id": "rubens_barrichello_2001",
+      "person_id": "rubens_barrichello",
+      "code": "BAR",
+      "car_number": 2,
+      "given_name": "Rubens",
+      "family_name": "Barrichello",
+      "team_id": "ferrari_2001",
+      "team_name": "Ferrari",
+      "grid_position": 5,
+      "external_ids": {
+        "jolpica_driver_id": "barrichello",
+        "jolpica_constructor_id": "ferrari"
+      }
+    },
+    {
+      "driver_id": "nick_heidfeld_2001",
+      "person_id": "nick_heidfeld",
+      "code": "HEI",
+      "car_number": 16,
+      "given_name": "Nick",
+      "family_name": "Heidfeld",
+      "team_id": "sauber_2001",
+      "team_name": "Sauber",
+      "grid_position": 6,
+      "external_ids": {
+        "jolpica_driver_id": "heidfeld",
+        "jolpica_constructor_id": "sauber"
+      }
+    },
+    {
+      "driver_id": "david_coulthard_2001",
+      "person_id": "david_coulthard",
+      "code": "COU",
+      "car_number": 4,
+      "given_name": "David",
+      "family_name": "Coulthard",
+      "team_id": "mclaren_2001",
+      "team_name": "McLaren",
+      "grid_position": 7,
+      "external_ids": {
+        "jolpica_driver_id": "coulthard",
+        "jolpica_constructor_id": "mclaren"
+      }
+    },
+    {
+      "driver_id": "jarno_trulli_2001",
+      "person_id": "jarno_trulli",
+      "code": "TRU",
+      "car_number": 11,
+      "given_name": "Jarno",
+      "family_name": "Trulli",
+      "team_id": "jordan_2001",
+      "team_name": "Jordan",
+      "grid_position": 8,
+      "external_ids": {
+        "jolpica_driver_id": "trulli",
+        "jolpica_constructor_id": "jordan"
+      }
+    },
+    {
+      "driver_id": "jean_alesi_2001",
+      "person_id": "jean_alesi",
+      "code": "ALE",
+      "car_number": 12,
+      "given_name": "Jean",
+      "family_name": "Alesi",
+      "team_id": "jordan_2001",
+      "team_name": "Jordan",
+      "grid_position": 9,
+      "external_ids": {
+        "jolpica_driver_id": "alesi",
+        "jolpica_constructor_id": "jordan"
+      }
+    },
+    {
+      "driver_id": "jenson_button_2001",
+      "person_id": "jenson_button",
+      "code": "BUT",
+      "car_number": 8,
+      "given_name": "Jenson",
+      "family_name": "Button",
+      "team_id": "benetton_2001",
+      "team_name": "Benetton",
+      "grid_position": 10,
+      "external_ids": {
+        "jolpica_driver_id": "button",
+        "jolpica_constructor_id": "benetton"
+      }
+    },
+    {
+      "driver_id": "kimi_raikkonen_2001",
+      "person_id": "kimi_raikkonen",
+      "code": "RAI",
+      "car_number": 17,
+      "given_name": "Kimi",
+      "family_name": "Räikkönen",
+      "team_id": "sauber_2001",
+      "team_name": "Sauber",
+      "grid_position": 11,
+      "external_ids": {
+        "jolpica_driver_id": "raikkonen",
+        "jolpica_constructor_id": "sauber"
+      }
+    },
+    {
+      "driver_id": "giancarlo_fisichella_2001",
+      "person_id": "giancarlo_fisichella",
+      "code": "FIS",
+      "car_number": 7,
+      "given_name": "Giancarlo",
+      "family_name": "Fisichella",
+      "team_id": "benetton_2001",
+      "team_name": "Benetton",
+      "grid_position": 12,
+      "external_ids": {
+        "jolpica_driver_id": "fisichella",
+        "jolpica_constructor_id": "benetton"
+      }
+    },
+    {
+      "driver_id": "olivier_panis_2001",
+      "person_id": "olivier_panis",
+      "code": "PAN",
+      "car_number": 9,
+      "given_name": "Olivier",
+      "family_name": "Panis",
+      "team_id": "bar_2001",
+      "team_name": "BAR",
+      "grid_position": 13,
+      "external_ids": {
+        "jolpica_driver_id": "panis",
+        "jolpica_constructor_id": "bar"
+      }
+    },
+    {
+      "driver_id": "eddie_irvine_2001",
+      "person_id": "eddie_irvine",
+      "code": "IRV",
+      "car_number": 18,
+      "given_name": "Eddie",
+      "family_name": "Irvine",
+      "team_id": "jaguar_2001",
+      "team_name": "Jaguar",
+      "grid_position": 14,
+      "external_ids": {
+        "jolpica_driver_id": "irvine",
+        "jolpica_constructor_id": "jaguar"
+      }
+    },
+    {
+      "driver_id": "heinz_harald_frentzen_2001",
+      "person_id": "heinz_harald_frentzen",
+      "code": "FRE",
+      "car_number": 22,
+      "given_name": "Heinz-Harald",
+      "family_name": "Frentzen",
+      "team_id": "prost_2001",
+      "team_name": "Prost",
+      "grid_position": 15,
+      "external_ids": {
+        "jolpica_driver_id": "frentzen",
+        "jolpica_constructor_id": "prost"
+      }
+    },
+    {
+      "driver_id": "pedro_de_la_rosa_2001",
+      "person_id": "pedro_de_la_rosa",
+      "code": "DLR",
+      "car_number": 19,
+      "given_name": "Pedro",
+      "family_name": "de la Rosa",
+      "team_id": "jaguar_2001",
+      "team_name": "Jaguar",
+      "grid_position": 16,
+      "external_ids": {
+        "jolpica_driver_id": "rosa",
+        "jolpica_constructor_id": "jaguar"
+      }
+    },
+    {
+      "driver_id": "fernando_alonso_2001",
+      "person_id": "fernando_alonso",
+      "code": "ALO",
+      "car_number": 21,
+      "given_name": "Fernando",
+      "family_name": "Alonso",
+      "team_id": "minardi_2001",
+      "team_name": "Minardi",
+      "grid_position": 17,
+      "external_ids": {
+        "jolpica_driver_id": "alonso",
+        "jolpica_constructor_id": "minardi"
+      }
+    },
+    {
+      "driver_id": "jacques_villeneuve_2001",
+      "person_id": "jacques_villeneuve",
+      "code": "VIL",
+      "car_number": 10,
+      "given_name": "Jacques",
+      "family_name": "Villeneuve",
+      "team_id": "bar_2001",
+      "team_name": "BAR",
+      "grid_position": 18,
+      "external_ids": {
+        "jolpica_driver_id": "villeneuve",
+        "jolpica_constructor_id": "bar"
+      }
+    },
+    {
+      "driver_id": "enrique_bernoldi_2001",
+      "person_id": "enrique_bernoldi",
+      "code": "BER",
+      "car_number": 15,
+      "given_name": "Enrique",
+      "family_name": "Bernoldi",
+      "team_id": "arrows_2001",
+      "team_name": "Arrows",
+      "grid_position": 19,
+      "external_ids": {
+        "jolpica_driver_id": "bernoldi",
+        "jolpica_constructor_id": "arrows"
+      }
+    },
+    {
+      "driver_id": "jos_verstappen_2001",
+      "person_id": "jos_verstappen",
+      "code": "VER",
+      "car_number": 14,
+      "given_name": "Jos",
+      "family_name": "Verstappen",
+      "team_id": "arrows_2001",
+      "team_name": "Arrows",
+      "grid_position": 20,
+      "external_ids": {
+        "jolpica_driver_id": "verstappen",
+        "jolpica_constructor_id": "arrows"
+      }
+    },
+    {
+      "driver_id": "tomas_enge_2001",
+      "person_id": "tomas_enge",
+      "code": "ENG",
+      "car_number": 23,
+      "given_name": "Tomáš",
+      "family_name": "Enge",
+      "team_id": "prost_2001",
+      "team_name": "Prost",
+      "grid_position": 21,
+      "external_ids": {
+        "jolpica_driver_id": "enge",
+        "jolpica_constructor_id": "prost"
+      }
+    },
+    {
+      "driver_id": "alex_yoong_2001",
+      "person_id": "alex_yoong",
+      "code": "YOO",
+      "car_number": 20,
+      "given_name": "Alex",
+      "family_name": "Yoong",
+      "team_id": "minardi_2001",
+      "team_name": "Minardi",
+      "grid_position": 22,
+      "external_ids": {
+        "jolpica_driver_id": "yoong",
+        "jolpica_constructor_id": "minardi"
+      }
+    }
+  ]
+}

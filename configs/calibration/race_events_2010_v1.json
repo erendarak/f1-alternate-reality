@@ -142,7 +142,7 @@
   "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
  },
  "fitted": {
-  "risk_scale": 0.6203,
+  "risk_scale": 0.6374,
   "red_flag_per_crash": 0.0,
   "fit": {
    "races": [
@@ -161,13 +161,13 @@
     "2010_abu_dhabi_gp"
    ],
    "seeds": 5,
-   "sim_crashes_per_race_at_1": 5.308,
-   "sim_failures_per_race": 1.938,
+   "sim_crashes_per_race_at_1": 5.431,
+   "sim_failures_per_race": 1.769,
    "real_retirements_per_race": 5.231,
    "target_red_flags_per_race": 0.0
   },
   "check": {
-   "retirements_per_race": 5.692,
+   "retirements_per_race": 5.8,
    "red_flags_per_race": 0.0,
    "safety_cars_per_race": 0.785,
    "vscs_per_race": 0.0,

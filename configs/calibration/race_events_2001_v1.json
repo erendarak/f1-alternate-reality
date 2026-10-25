@@ -1,0 +1,168 @@
+{
+ "label": "2001 race events (W4, D-042)",
+ "events": [
+  "2001_australian_gp",
+  "2001_spanish_gp",
+  "2001_austrian_gp",
+  "2001_monaco_gp",
+  "2001_european_gp",
+  "2001_french_gp",
+  "2001_british_gp",
+  "2001_hungarian_gp",
+  "2001_belgian_gp",
+  "2001_italian_gp",
+  "2001_japanese_gp",
+  "2001_san_marino_gp",
+  "2001_canadian_gp",
+  "2001_german_gp",
+  "2001_united_states_gp",
+  "2001_malaysian_gp",
+  "2001_brazilian_gp"
+ ],
+ "dry_events": [
+  "2001_australian_gp",
+  "2001_spanish_gp",
+  "2001_austrian_gp",
+  "2001_monaco_gp",
+  "2001_european_gp",
+  "2001_french_gp",
+  "2001_british_gp",
+  "2001_hungarian_gp",
+  "2001_belgian_gp",
+  "2001_italian_gp",
+  "2001_japanese_gp",
+  "2001_san_marino_gp",
+  "2001_canadian_gp",
+  "2001_german_gp",
+  "2001_united_states_gp"
+ ],
+ "pit": {
+  "slow_threshold_s": 3.0,
+  "slow_stop_probability": NaN,
+  "slow_stop_scale_s": NaN,
+  "stops": 0,
+  "note": "pit-lane time vs the race median, green-flag stops"
+ },
+ "crews": {},
+ "reliability": {
+  "field_retirements_per_start": 0.4155,
+  "teams": {
+   "arrows_2001": {
+    "failure_multiplier": 1.078,
+    "retirements": 16,
+    "starts": 34
+   },
+   "bar_2001": {
+    "failure_multiplier": 0.912,
+    "retirements": 12,
+    "starts": 34
+   },
+   "benetton_2001": {
+    "failure_multiplier": 0.995,
+    "retirements": 14,
+    "starts": 34
+   },
+   "ferrari_2001": {
+    "failure_multiplier": 0.663,
+    "retirements": 6,
+    "starts": 34
+   },
+   "jaguar_2001": {
+    "failure_multiplier": 1.161,
+    "retirements": 18,
+    "starts": 34
+   },
+   "jordan_2001": {
+    "failure_multiplier": 1.078,
+    "retirements": 16,
+    "starts": 34
+   },
+   "mclaren_2001": {
+    "failure_multiplier": 0.912,
+    "retirements": 12,
+    "starts": 34
+   },
+   "minardi_2001": {
+    "failure_multiplier": 1.181,
+    "retirements": 18,
+    "starts": 33
+   },
+   "prost_2001": {
+    "failure_multiplier": 0.912,
+    "retirements": 12,
+    "starts": 34
+   },
+   "sauber_2001": {
+    "failure_multiplier": 0.953,
+    "retirements": 13,
+    "starts": 34
+   },
+   "williams_2001": {
+    "failure_multiplier": 1.161,
+    "retirements": 18,
+    "starts": 34
+   }
+  },
+  "note": "all-cause retirements and non-starts as a proxy (no cause in the data)"
+ },
+ "debris": {
+  "per_lap": 0.0,
+  "sc_share": 0.4,
+  "count": 0,
+  "race_laps": 939,
+  "note": "SC/VSC deployments without a retirement within a lap, dry races"
+ },
+ "red_flags": {
+  "count": 0,
+  "races": 17,
+  "per_race": 0.0
+ },
+ "penalties": {
+  "counts": {},
+  "collision_per_pass": 0.0,
+  "false_start_per_starter": 0.0,
+  "pit_speeding_per_stop": 0.0,
+  "other_per_car_lap": 0.0,
+  "passes": 1101,
+  "raw": {
+   "collision_per_pass": 0.0,
+   "false_start_per_starter": 0.0,
+   "pit_speeding_per_stop": 0.0,
+   "other_per_car_lap": 0.0
+  },
+  "scale": 1.0,
+  "scale_note": "x1.000: simulated dry_train 0.00 vs real 0.00 per race"
+ },
+ "fitted": {
+  "risk_scale": 0.5857,
+  "red_flag_per_crash": 0.0,
+  "fit": {
+   "races": [
+    "2001_australian_gp",
+    "2001_spanish_gp",
+    "2001_austrian_gp",
+    "2001_monaco_gp",
+    "2001_european_gp",
+    "2001_french_gp",
+    "2001_british_gp",
+    "2001_hungarian_gp",
+    "2001_belgian_gp",
+    "2001_italian_gp",
+    "2001_japanese_gp"
+   ],
+   "seeds": 5,
+   "sim_crashes_per_race_at_1": 7.636,
+   "sim_failures_per_race": 2.8,
+   "real_retirements_per_race": 7.273,
+   "target_red_flags_per_race": 0.0
+  },
+  "check": {
+   "retirements_per_race": 7.818,
+   "red_flags_per_race": 0.0,
+   "safety_cars_per_race": 0.182,
+   "vscs_per_race": 0.0,
+   "penalties_per_race": 0.0,
+   "penalties_per_race_after_scale": 0.0
+  }
+ }
+}

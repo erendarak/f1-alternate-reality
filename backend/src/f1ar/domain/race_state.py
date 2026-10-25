@@ -17,7 +17,7 @@ from f1ar.domain.season_rules import SEASON_2024, SeasonRules
 from f1ar.persistence.snapshot_codec import state_hash
 from f1ar.simulation.rng_streams import RngSpec
 
-WORLD_SCHEMA_VERSION = 18
+WORLD_SCHEMA_VERSION = 19
 
 
 class _Frozen(BaseModel):
@@ -180,6 +180,8 @@ class PitParams(_Frozen):
     exponential with mean ``slow_stop_scale_s`` on top of the standstill (0 = off)."""
     slow_stop_min_s: float = Field(default=3.0, ge=0)
     slow_stop_scale_s: float = Field(default=7.5, gt=0)
+    refuel_s_per_lap: float = Field(default=0.0, ge=0)
+    """H1b (refuelling era): stationary seconds per lap of fuel put in (0 = no refuelling)."""
 
 
 class TrafficParams(_Frozen):
@@ -402,6 +404,9 @@ class DriverEntry(_Frozen):
     """W3: raises the pass threshold when this driver defends."""
     launch_offset_s: float = Field(default=0.0, ge=-3.0, le=3.0)
     """W3: lap-1 time vs an average start (negative = good launches; 2024 lap-1 gains)."""
+    start_fuel_laps: int | None = Field(default=None, ge=1)
+    """H1b: laps of fuel fixed in qualifying (2003-2009 race-fuel rule; from the real first
+    stint); None = the strategy chooses the start fuel (or no refuelling)."""
     persona_estimates: dict[str, str] = Field(default_factory=dict)
     """W5: persona fields of this race's profile copy that were estimated from data, with a note
     (the rest of the persona stays editorial)."""
@@ -530,6 +535,9 @@ class CarState(_Frozen):
     lap_started_at_s: float = Field(ge=0)
     """Sim time the lap in progress started (line crossing); lap times are measured from it."""
     last_lap_time_s: float | None
+    fuel_laps: float | None = None
+    """H1b (refuelling era): laps of fuel on board at the start of the lap in progress; None
+    without refuelling (the car then carries the race's fuel: laps remaining)."""
     best_lap_time_s: float | None = None
     """Fastest lap so far (H1: the fastest-lap point of 2019-2024)."""
     finish_time_s: float | None
@@ -665,7 +673,7 @@ DriverAction = (
 
 
 class WorldState(_Frozen):
-    schema_version: Literal[18]
+    schema_version: Literal[19]
     world_id: str
     timeline_id: str
     parent_timeline_id: str | None
