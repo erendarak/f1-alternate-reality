@@ -1532,3 +1532,22 @@ data, natural with M6's comparison), `GET /api/drivers/{id}/profile` (served per
   has no measured room. Proposal (D-063): train the AI as the whole strategist from scratch
   (training budget -> results), rule teams as the expert reference.
 - Tests: 502 offline (+1 `tests/unit/test_pit_timing.py`); ruff, mypy clean.
+
+### 2026-10-26 (in progress) — A2: the strategist from scratch (D-064)
+
+- Built (uncommitted): `rl_obs_v4` (`training/features.py`: no truth, no planner advice; tested
+  identical under a different hidden truth while v3 changes); training scenarios in the A1b world
+  (`ScenarioSampler(world="a1b")`: drawn truth per episode, per-team knowledge, rival rules);
+  `RaceSession(racecraft=False, regulation_guard=True)` (18 effective actions; the rulebook's
+  two-compound stop forced on the last chance); budget checkpoints in `training/ppo.py`;
+  `scripts/train_strategist.py`; `scripts/experiments/exp033_budget_curve.py` (held out, paired
+  with the expert, sampled actions); `evaluate(racecraft=, regulation_guard=)`.
+- Pilot 1 (100k, no guard, 27 min, 61 decisions/s): training score vs expert -0.21 -> -0.17,
+  P17.2 -> P16.0, pace less random; 16 % disqualified (two-compound rule). Its held-out check was
+  invalid: deterministic actions with the stay prior never stop (fixed: sampled evaluation).
+- Pilot 2 (100k, guard on, 30 min, 55 decisions/s), EXP-033 held out (34 races x 2 seeds x 6
+  cars, sampled): score vs expert -0.281 (untrained) / -0.289 (25k) / -0.269 (50k) / **-0.237
+  [-0.277, -0.200] (100k)**; P16.3 -> P14.8 (expert P10.2); -111 -> -92 points per season vs the
+  expert. Learning, slowly. Disqualifications 10-16 %: the guard used the car's own lap count, a
+  lapped car never reached it (fixed: the leader's progress, one lap's margin; 0 of 56 after).
+- Next: the main run (1.6M decisions ~8 h, budgets 25k..1.6M), then EXP-033 on it (A3).

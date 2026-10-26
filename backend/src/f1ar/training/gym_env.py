@@ -19,7 +19,7 @@ import numpy as np
 
 from f1ar.domain.race_state import RaceSetup
 from f1ar.training.actions import N_ACTIONS
-from f1ar.training.features import RL_FEATURE_NAMES, RL_OBSERVATION_SCHEMA
+from f1ar.training.features import RL_FEATURE_SETS, RL_OBSERVATION_SCHEMA
 from f1ar.training.regulations import REGULATIONS_2024, RegulationSet
 from f1ar.training.scenarios import Scenario, ScenarioSampler
 from f1ar.training.session import Decision, RaceSession
@@ -46,15 +46,25 @@ class RaceStrategyEnv(gym.Env[np.ndarray, np.int64]):
         opponent_policy: Policy | None = None,
         opponents: int | str = 0,
         policy_id: str = "learning",
+        observation_schema: str = RL_OBSERVATION_SCHEMA,
+        racecraft: bool = True,
+        regulation_guard: bool = False,
     ) -> None:
-        """``opponents``: how many other cars ``opponent_policy`` runs (an int or ``"all"``)."""
+        """``opponents``: how many other cars ``opponent_policy`` runs (an int or ``"all"``);
+        ``observation_schema`` / ``racecraft`` go to the session (A2: ``rl_obs_v4``, False)."""
         self.sampler = sampler
         self.regulations = regulations
         self.opponent_policy = opponent_policy
         self.opponents = opponents
         self.policy_id = policy_id
+        self.observation_schema = observation_schema
+        self.racecraft = racecraft
+        self.regulation_guard = regulation_guard
         self.observation_space = gym.spaces.Box(
-            low=-10.0, high=10.0, shape=(len(RL_FEATURE_NAMES),), dtype=np.float32
+            low=-10.0,
+            high=10.0,
+            shape=(len(RL_FEATURE_SETS[observation_schema]),),
+            dtype=np.float32,
         )
         self.action_space = gym.spaces.Discrete(N_ACTIONS)
         self.session: RaceSession | None = None
@@ -83,6 +93,9 @@ class RaceStrategyEnv(gym.Env[np.ndarray, np.int64]):
                 context=scenario.context,
                 regulations=self.regulations,
                 policy_id=self.policy_id,
+                observation_schema=self.observation_schema,
+                racecraft=self.racecraft,
+                regulation_guard=self.regulation_guard,
             )
             self._decision = self._advance()
             if self._decision is not None:  # the car retired before deciding: draw again
@@ -127,7 +140,7 @@ class RaceStrategyEnv(gym.Env[np.ndarray, np.int64]):
             "event_id": self.scenario.event_id,
             "driver_id": self.me,
             "objective": self.session.scoring[self.me].order.objective.value,
-            "observation_schema": RL_OBSERVATION_SCHEMA,
+            "observation_schema": self.observation_schema,
             "regulations": self.regulations.version,
         }
         if self._decision is not None:

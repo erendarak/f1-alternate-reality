@@ -1,0 +1,126 @@
+{
+ "run": "a2_pilot2",
+ "seeds": 2,
+ "slots": [
+  1,
+  4,
+  8,
+  12,
+  16,
+  20
+ ],
+ "events": [
+  "2018_azerbaijan_gp",
+  "2018_brazilian_gp",
+  "2018_french_gp",
+  "2018_hungarian_gp",
+  "2018_russian_gp",
+  "2019_azerbaijan_gp",
+  "2019_brazilian_gp",
+  "2019_french_gp",
+  "2019_hungarian_gp",
+  "2019_russian_gp",
+  "2020_british_gp",
+  "2020_italian_gp",
+  "2020_portuguese_gp",
+  "2020_sakhir_gp",
+  "2021_qatar_gp",
+  "2021_spanish_gp",
+  "2021_styrian_gp",
+  "2022_azerbaijan_gp",
+  "2022_italian_gp",
+  "2022_mexico_city_gp",
+  "2023_azerbaijan_gp",
+  "2023_canadian_gp",
+  "2023_japanese_gp",
+  "2023_sao_paulo_gp",
+  "2024_abu_dhabi_gp",
+  "2024_italian_gp",
+  "2024_japanese_gp",
+  "2024_mexico_city_gp",
+  "2024_monaco_gp",
+  "2025_abu_dhabi_gp",
+  "2025_bahrain_gp",
+  "2025_italian_gp",
+  "2025_mexico_city_gp",
+  "2025_monaco_gp"
+ ],
+ "budgets": {
+  "0": {
+   "steps": 0,
+   "cases": 402,
+   "score_vs_expert": -0.2811,
+   "ci95": [
+    -0.3242,
+    -0.2396
+   ],
+   "points_per_race": 0.682,
+   "expert_points_per_race": 5.726,
+   "points_per_season_vs_expert": -111.0,
+   "position": 16.27,
+   "expert_position": 10.22,
+   "stops": 2.59,
+   "expert_stops": 1.5,
+   "dsq_share": 0.04,
+   "better_than_expert": 11,
+   "worse_than_expert": 312
+  },
+  "25000": {
+   "steps": 28672,
+   "cases": 402,
+   "score_vs_expert": -0.2888,
+   "ci95": [
+    -0.3316,
+    -0.246
+   ],
+   "points_per_race": 0.547,
+   "expert_points_per_race": 5.726,
+   "points_per_season_vs_expert": -113.9,
+   "position": 16.83,
+   "expert_position": 10.22,
+   "stops": 1.71,
+   "expert_stops": 1.5,
+   "dsq_share": 0.144,
+   "better_than_expert": 9,
+   "worse_than_expert": 318
+  },
+  "50000": {
+   "steps": 50176,
+   "cases": 402,
+   "score_vs_expert": -0.2691,
+   "ci95": [
+    -0.3083,
+    -0.2302
+   ],
+   "points_per_race": 0.886,
+   "expert_points_per_race": 5.726,
+   "points_per_season_vs_expert": -106.5,
+   "position": 16.25,
+   "expert_position": 10.22,
+   "stops": 1.67,
+   "expert_stops": 1.5,
+   "dsq_share": 0.159,
+   "better_than_expert": 13,
+   "worse_than_expert": 309
+  },
+  "100000": {
+   "steps": 100352,
+   "cases": 402,
+   "score_vs_expert": -0.2367,
+   "ci95": [
+    -0.2769,
+    -0.2002
+   ],
+   "points_per_race": 1.547,
+   "expert_points_per_race": 5.726,
+   "points_per_season_vs_expert": -91.9,
+   "position": 14.78,
+   "expert_position": 10.22,
+   "stops": 2.19,
+   "expert_stops": 1.5,
+   "dsq_share": 0.097,
+   "better_than_expert": 19,
+   "worse_than_expert": 298
+  }
+ }
+}

@@ -60,6 +60,26 @@ The claim "better training wins championships" needs four things, each with a nu
 
 Then M6/M7 of the master plan (alternate seasons, the living world) run on these agents.
 
+## 4b. Revised after A1b and the A2 pre-gate (2026-10-26, D-063): the AI learns the whole job
+
+EXP-031 and EXP-032 showed that realistic rule teams (practice, private data, in-race learning,
+the real undercut rate) leave no measurable edge for an AI: perfect tyre knowledge is worth ~0
+over them and pit timing isn't predictable from what a car sees. So the AI's task changes from
+"beat a strong strategist" to **"become a strategist"**: it starts from nothing (no rule planner,
+no cloning of the rules, no planner advice in its inputs) and must learn everything the rule
+teams encode. The rule teams are the **expert reference**; training budget is the variable.
+
+| Slice | What | AI result it must show |
+|---|---|---|
+| **A2 The strategist from scratch** | (a) training scenarios in the A1b world: 2018-2025 dry_train races, hidden truths **drawn** per episode, per-team knowledge, rival rules; several AI cars per race among rule teams; (b) `rl_obs_v4`: what the pit wall sees, no truth and no planner advice: race and car state, the team's own tyre estimate and its uncertainty (the team's software, labelled), the prior's tyre lives, own recent lap residuals, neighbours' gaps / tyres / stops, rejoin traffic, SC/VSC, weather; (c) 18 actions (pit x pace; racecraft NORMAL); (d) MaskablePPO from a random network, terminal POINTS reward paired with the expert's score for the same car (control variate), an editorial "stay out" exploration prior; checkpoints along the way | a **pilot** (~100k decisions) shows the reward rising from the untrained level; then the full run |
+| **A3 Training matters** (the core plot) | checkpoints of the full run (0 / 25k / 50k / 100k / 200k / 400k / 800k / 1.6M decisions, 2-3 training seeds), each evaluated on **held-out** races (dry_test 2018-2025), paired with the expert on identical luck | **score and points per season vs training budget**, with CIs: how far untrained is below the expert, how fast training closes the gap, where it plateaus (reported as it is: below, at or above the expert) |
+| **A4 The AI league season** | 10 teams, each with a strategist of a different budget (plus the expert as one team), a full season with hidden drawn truths, standings and replays in the app | **better-trained teams finish higher** (rank correlation budget vs points, CIs over seasons); decisions shown with what the team believed and what was true |
+| **A5 Agents that adapt** | self-play among AI teams, retraining between seasons | as before |
+
+Honesty rules for this plan: the expert is never weakened to make the AI look good; "reaches the
+expert" is a valid result and "beats the expert" is only claimed when measured; what the AI's
+inputs contain is listed in its schema (the team estimate is a labelled team tool, not the truth).
+
 ## 5. Risks
 
 - **The estimator may close the gap** (EXP-030): if rule teams with an in-race estimate get near

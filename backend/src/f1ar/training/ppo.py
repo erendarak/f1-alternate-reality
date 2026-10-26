@@ -91,6 +91,16 @@ class TrainConfig:
     character_randomisation: bool = False
     """Redraw the learning car's risk appetite per race (``randomise_character``, slice 4)."""
     """Sd of the per-race tyre/pit-loss perturbation (``training.scenarios.randomise_tyres``)."""
+    world: str = "plain"
+    """A2: ``a1b`` = hidden drawn truths, realistic rule teams (``training.scenarios.WORLDS``)."""
+    observation_schema: str = "rl_obs_v3"
+    racecraft: bool = True
+    """False (A2): attack / defend masked, the AI races NORMAL."""
+    regulation_guard: bool = False
+    """A2: force a compliant stop on the last chance (``RaceSession``; the rulebook, editorial)."""
+    checkpoint_steps: tuple[int, ...] = ()
+    """A3: save the policy when training passes each of these step counts (and at step 0), the
+    training-budget curve's points (``checkpoints/budget_<steps>``)."""
     device: str = "cuda"
     eval_every: int = 100_000
     eval_events: tuple[str, ...] = ()
@@ -136,8 +146,22 @@ class TrainingEnv(RaceStrategyEnv):
     advanced to the same sim time. Run in one go at the episode end it stalled every worker in
     lockstep (main run attempt 1: 53 instead of ~100 decisions/s)."""
 
-    def __init__(self, sampler: ScenarioSampler, *, reward_baseline: str = "none") -> None:
-        super().__init__(sampler, policy_id="training")
+    def __init__(
+        self,
+        sampler: ScenarioSampler,
+        *,
+        reward_baseline: str = "none",
+        observation_schema: str = "rl_obs_v3",
+        racecraft: bool = True,
+        regulation_guard: bool = False,
+    ) -> None:
+        super().__init__(
+            sampler,
+            policy_id="training",
+            observation_schema=observation_schema,
+            racecraft=racecraft,
+            regulation_guard=regulation_guard,
+        )
         self.reward_baseline = reward_baseline
         self._pace: list[PaceMode] = []
         self._intent: list[RacecraftIntent] = []
@@ -186,8 +210,16 @@ def make_env(root: Path, cfg: TrainConfig) -> TrainingEnv:
         championship_probability=cfg.championship_probability,
         tyre_randomisation=cfg.tyre_randomisation,
         character_randomisation=cfg.character_randomisation,
+        world=cfg.world,
+        configs=root / "configs",
     )
-    return TrainingEnv(sampler, reward_baseline=cfg.reward_baseline)
+    return TrainingEnv(
+        sampler,
+        reward_baseline=cfg.reward_baseline,
+        observation_schema=cfg.observation_schema,
+        racecraft=cfg.racecraft,
+        regulation_guard=cfg.regulation_guard,
+    )
 
 
 def make_vec_env(root: Path, cfg: TrainConfig, *, subprocess: bool = True) -> VecEnv:
@@ -351,6 +383,7 @@ class ProgressCallback(BaseCallback):
         self.t0 = time.perf_counter()
         self.next_eval = cfg.eval_every
         self.best: float | None = None
+        self.budgets = sorted(s for s in cfg.checkpoint_steps if s > 0)
 
     def _on_step(self) -> bool:
         for done, info in zip(self.locals["dones"], self.locals["infos"], strict=True):
@@ -395,6 +428,8 @@ class ProgressCallback(BaseCallback):
         for key in ("train/entropy_loss", "train/approx_kl", "train/explained_variance"):
             if key in logged:
                 row[key.split("/")[1]] = round(float(logged[key]), 4)
+        while self.budgets and steps >= self.budgets[0]:
+            save_budget(self.model, self.run_dir, self.budgets.pop(0))  # type: ignore[arg-type]
         if steps >= self.next_eval and self.cases:
             self.next_eval += self.cfg.eval_every
             row |= self._check(steps)
@@ -429,6 +464,16 @@ class ProgressCallback(BaseCallback):
             | {f"sampled_{k}": v for k, v in sampled.items()}
             | {"check_s": round(time.perf_counter() - t, 1)}
         )
+
+
+def save_budget(model: MaskablePPO, run_dir: Path, budget: int) -> None:
+    """The policy at ``budget`` training decisions (A3's curve; the label is the planned budget,
+    the actual step count is the first rollout end past it)."""
+    out = run_dir / "checkpoints" / f"budget_{budget}"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    export_actor(model).save(out.with_suffix(".npz"))
+    meta = {"budget": budget, "steps": int(model.num_timesteps)}
+    out.with_suffix(".json").write_text(json.dumps(meta) + "\n", encoding="utf-8", newline="\n")
 
 
 def train(root: Path, cfg: TrainConfig, run_dir: Path) -> tuple[MaskablePPO, ProgressLog]:
@@ -474,6 +519,8 @@ def train(root: Path, cfg: TrainConfig, run_dir: Path) -> tuple[MaskablePPO, Pro
                 json.dumps(stats, indent=1) + "\n", encoding="utf-8", newline="\n"
             )
         log = ProgressLog()
+        if cfg.checkpoint_steps:
+            save_budget(model, run_dir, 0)  # the untrained network: the curve's first point
         callback = ProgressCallback(root, cfg, run_dir, cases, log)
         model.learn(total_timesteps=cfg.total_steps, callback=callback)
         model.save(str(run_dir / "final"))

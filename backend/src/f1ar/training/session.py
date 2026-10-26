@@ -21,8 +21,10 @@ from dataclasses import dataclass
 import numpy as np
 
 from f1ar.domain.race_state import (
+    DRY_COMPOUNDS,
     CarStatus,
     Compound,
+    RacecraftIntent,
     RaceEvent,
     RaceSetup,
     SetStrategyController,
@@ -30,6 +32,7 @@ from f1ar.domain.race_state import (
     WorldState,
     WorldStatus,
 )
+from f1ar.policy.baseline_strategy import dry_compounds_required
 from f1ar.simulation import lightweight_engine as engine
 from f1ar.training.actions import (
     INTENT_OPTIONS,
@@ -77,7 +80,13 @@ class RaceSession:
         policy_id: str = "untrained",
         world_id: str = "training",
         observation_schema: str = RL_OBSERVATION_SCHEMA,
+        racecraft: bool = True,
+        regulation_guard: bool = False,
     ) -> None:
+        """``racecraft=False`` (A2): attack / defend are masked, the AI races NORMAL (18
+        effective actions: pit x pace). ``regulation_guard`` (A2, editorial): on the last lap a
+        stop can still be made, a car that hasn't used the required dry compounds may only stop
+        for one it hasn't used (the rulebook every team knows; not strategy)."""
         missing = [d for d in agents if d not in scoring]
         if missing:
             raise ValueError(f"no scoring for agent(s) {missing}")
@@ -87,6 +96,8 @@ class RaceSession:
         self.context = context
         self.regulations = regulations
         self.observation_schema = observation_schema
+        self.racecraft = racecraft
+        self.regulation_guard = regulation_guard
         self.actor_id = f"AGENT:{policy_id}"
         state = engine.create_world(setup, seed=seed, world_id=world_id)
         for d in self.agents:
@@ -168,11 +179,34 @@ class RaceSession:
             c is None or (c in valid.pit_compounds and self.regulations.allows_pit(c))
             for c in PIT_OPTIONS
         ]
+        if self.regulation_guard:
+            pit_ok = self._guard(driver_id, pit_ok)
         pace_ok = [m in valid.pace_modes and self.regulations.allows_pace(m) for m in PACE_OPTIONS]
-        intent_ok = [i in valid.intents for i in INTENT_OPTIONS]
+        intent_ok = [
+            i in valid.intents and (self.racecraft or i is RacecraftIntent.NORMAL)
+            for i in INTENT_OPTIONS
+        ]
         return np.array(
             [p and q and r for p in pit_ok for q in pace_ok for r in intent_ok], dtype=bool
         )
+
+    def _guard(self, driver_id: str, pit_ok: list[bool]) -> list[bool]:
+        car = self.state.car(driver_id)
+        setup = self.state.setup
+        used = set(car.compounds_used)
+        total = setup.track.total_laps
+        lead = max(c.laps_completed for c in self.state.cars)
+        # the race ends with the leader: a lapped car's last chance comes earlier than its own
+        # lap count says (one lap's margin: the flag can fall while it is on its in-lap)
+        if car.laps_completed < total - 2 and lead < total - 3:
+            return pit_ok
+        if len(used) >= dry_compounds_required(setup, car.compounds_used):
+            return pit_ok
+        forced = [
+            ok and c is not None and c in DRY_COMPOUNDS and c not in used
+            for ok, c in zip(pit_ok, PIT_OPTIONS, strict=True)
+        ]
+        return forced if any(forced) else pit_ok
 
     def act(self, driver_id: str, action: int) -> None:
         """Apply one decision for ``driver_id`` (must be legal under its mask)."""

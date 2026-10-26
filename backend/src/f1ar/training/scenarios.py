@@ -41,6 +41,9 @@ from f1ar.training.objectives import (
 
 SetupFactory = Callable[[str, bool], RaceSetup]
 """``(event_id, random_rain) -> RaceSetup``."""
+WORLDS = ("plain", "a1b")
+"""``plain``: the setup as built (teams know the truth, M5); ``a1b``: hidden drawn truth,
+per-team practice + private data, in-race learning, hidden trend, rival rules (A2, D-064)."""
 STANDINGS_NOISE = 1.0
 """Per-race noise of the synthetic standings, in units of the car/driver strength score."""
 
@@ -164,6 +167,8 @@ class ScenarioSampler:
         objective: Objective | None = None,
         tyre_randomisation: float = 0.0,
         character_randomisation: bool = False,
+        world: str = "plain",
+        configs: Path | None = None,
     ) -> None:
         """``agents``: how many cars the AI runs (an int, or ``"all"``); ``objective`` forces one
         objective for every AI car (curricula), otherwise the team principal decides;
@@ -178,6 +183,12 @@ class ScenarioSampler:
         self.objective = objective
         self.tyre_randomisation = tyre_randomisation
         self.character_randomisation = character_randomisation
+        if world not in WORLDS:
+            raise ValueError(f"world must be one of {WORLDS}")
+        if world != "plain" and configs is None:
+            raise ValueError("a hidden-truth world needs the configs directory")
+        self.world = world
+        self.configs = configs
 
     def scoring(
         self, setup: RaceSetup, agents: Sequence[str], context: ChampionshipContext | None
@@ -189,6 +200,20 @@ class ScenarioSampler:
         event_id = self.events[int(rng.integers(len(self.events)))]
         random_rain = bool(rng.random() < self.rain_probability)
         setup = randomise_tyres(self.factory(event_id, random_rain), rng, self.tyre_randomisation)
+        if self.world == "a1b":  # A2 (D-064): a new hidden truth every episode, realistic teams
+            from f1ar.simulation.race_day import TruthMode, with_hidden_truth, with_rival_rules
+
+            assert self.configs is not None
+            setup = with_hidden_truth(
+                setup,
+                self.configs,
+                mode=TruthMode.DRAWN,
+                truth_seed=int(rng.integers(1, 2**31 - 1)),
+                learning=True,
+                track_trend=True,
+                per_team=True,
+            )
+            setup = with_rival_rules(setup, self.configs)
         drivers = [d.driver_id for d in setup.drivers]
         n = len(drivers) if self.agents == "all" else int(self.agents)
         picked = rng.choice(drivers, size=min(n, len(drivers)), replace=False)

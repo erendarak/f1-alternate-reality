@@ -42,6 +42,8 @@ def evaluate(
     *,
     context: ChampionshipContext | None = None,
     regulations: RegulationSet = REGULATIONS_2024,
+    racecraft: bool = True,
+    regulation_guard: bool = False,
 ) -> CaseResult:
     t0 = time.perf_counter()
     agents = [driver_id] if strategist is not None else []
@@ -54,6 +56,8 @@ def evaluate(
         regulations=regulations,
         policy_id=strategist.name if strategist is not None else "none",
         observation_schema=getattr(strategist, "observation_schema", RL_OBSERVATION_SCHEMA),
+        racecraft=racecraft,
+        regulation_guard=regulation_guard,
     )
     if strategist is not None:
         strategist.start(session, driver_id)

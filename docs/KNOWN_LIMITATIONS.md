@@ -2,6 +2,15 @@
 
 Honest list of what does **not** work or is only approximate. Update whenever one is found or fixed.
 
+## A2 (strategist from scratch, D-064)
+
+- **Learning is slow** (pilot: +0.044 score vs the expert per 100k decisions held out) and the
+  environment runs ~55 decisions/s (per-team estimates and the paired expert race cost time).
+- **One AI car per race** (the others are rule teams); no self-play yet.
+- **Editorial helpers:** the stay-out exploration prior and the regulation guard are given, not
+  learned; the team estimate in the observation is a team tool computed by the world.
+- **Pilot numbers include disqualifications** from the first guard (it missed lapped cars).
+
 ## A2 pre-gate (EXP-032, D-063)
 
 - **Only one decision tested** (first stop's lap, forked 3 laps before); hand-made features;

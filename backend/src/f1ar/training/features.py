@@ -129,10 +129,53 @@ _V3_EXTRA = (
     "rival.gap_s",
 )
 RL_V3_NAMES: tuple[str, ...] = (*RL_V2_NAMES, *_V3_EXTRA)
+_V4_EXTRA = (
+    *(f"prior.{c}.life_laps" for c in _DRY),
+    *(f"prior.{c}.offset_s" for c in _DRY),
+    "prior.medium_wear_s_per_lap",
+    *(f"estimate.{c}.life_factor" for c in _DRY),
+    *(f"estimate.{c}.life_sd" for c in _DRY),
+    "estimate.wear_factor",
+    "estimate.wear_sd",
+    "estimate.trend_s_per_lap",
+    "estimate.observations",
+    "car.believed_life_used",
+    "car.believed_laps_of_life_left",
+    "car.believed_wear_s",
+    *(f"car.residual_{k}" for k in range(1, 4)),
+    "car.residuals_seen",
+    "ahead.tyre_age_laps",
+    "ahead.stops_diff",
+    "ahead.pace_gap_s",
+    "behind.tyre_age_laps",
+    "behind.stops_diff",
+    "behind.pace_gap_s",
+    "rejoin.cars_within_pit_loss",
+    "rejoin.car_at_rejoin_point",
+    "field.share_stopped",
+    "race.neutralisations",
+    "race.points_now",
+    "race.points_one_up",
+    "race.points_one_down",
+    "rival.in_race",
+    "rival.places_ahead",
+    "rival.gap_s",
+)
+RL_V4_NAMES: tuple[str, ...] = (
+    *OBSERVATION_FEATURE_NAMES,
+    *(n for n in _EXTRA if n != "track.medium_wear_s_per_lap"),
+    *_V4_EXTRA,
+)
+"""A2 (D-064): what the pit wall sees, never the truth: the engine observation, the safe v1
+extras (``track.medium_wear_s_per_lap`` read the true model: left out), the race-day prior's
+tyres, the team's own in-race estimate and its uncertainty (the team's software), the car's
+tyres read through it, its last clean-lap residuals, the cars around it, where it would rejoin,
+and what is at stake. No rule-planner advice."""
 RL_FEATURE_SETS: dict[str, tuple[str, ...]] = {
     "rl_obs_v1": RL_V1_NAMES,
     "rl_obs_v2": RL_V2_NAMES,
     "rl_obs_v3": RL_V3_NAMES,
+    "rl_obs_v4": RL_V4_NAMES,
 }
 RL_FEATURE_NAMES: tuple[str, ...] = RL_FEATURE_SETS[RL_OBSERVATION_SCHEMA]
 """The current schema's order."""
@@ -280,6 +323,71 @@ def _v3_values(state: WorldState, driver_id: str, order: TeamOrder) -> dict[str,
     return v
 
 
+def _v4_values(state: WorldState, driver_id: str) -> dict[str, float]:
+    """The pit wall's view (A2, D-064): prior, own estimate, own tyres through it, timing."""
+    from f1ar.policy.baseline_strategy import team_knowledge, team_view
+    from f1ar.training.pit_timing import _time_gaps
+
+    setup = state.setup
+    k = setup.knowledge
+    prior = k.lap_model if k is not None else setup.lap_model  # no hidden truth: no surprise
+    car = state.car(driver_id)
+    me = setup.driver(driver_id)
+    driver = me.profile.archetype
+    v: dict[str, float] = {}
+    for c in DRY_COMPOUNDS:
+        name = c.value.lower()
+        cp = prior.compounds[c]
+        v[f"prior.{name}.life_laps"] = (cp.life_laps or LIFE_SCALE * 2) / LIFE_SCALE
+        v[f"prior.{name}.offset_s"] = cp.offset_s
+    v["prior.medium_wear_s_per_lap"] = prior.compounds[Compound.MEDIUM].deg_s_per_lap * 10.0
+    est, _ = team_knowledge(setup, driver_id)
+    for c in DRY_COMPOUNDS:
+        name = c.value.lower()
+        v[f"estimate.{name}.life_factor"] = est.life_factor[c] if est else 1.0
+        v[f"estimate.{name}.life_sd"] = (
+            est.life_factor_sd[c] if est else (k.life_shared_sd if k else 0.0)
+        )
+    v["estimate.wear_factor"] = est.wear_factor if est else 1.0
+    v["estimate.wear_sd"] = est.wear_factor_sd if est else (k.wear_sd if k else 0.0)
+    v["estimate.trend_s_per_lap"] = (est.trend_s_per_lap * 100.0) if est else 0.0
+    v["estimate.observations"] = min(est.observations, 1000) / 1000.0 if est else 0.0
+    seen_setup, seen = team_view(setup, car)
+    u = life_use_per_lap(
+        seen_setup.lap_model, driver, compound=car.compound, pace_mode=PaceMode.BALANCED
+    )
+    laps_left = (1.0 - seen.tyre_life_used) / u if u > 0 else LIFE_SCALE
+    v["car.believed_life_used"] = min(seen.tyre_life_used, 2.0)
+    v["car.believed_laps_of_life_left"] = (
+        float(np.clip(laps_left, -LIFE_SCALE, 2 * LIFE_SCALE)) / LIFE_SCALE
+    )
+    v["car.believed_wear_s"] = min(seen.tyre_wear_s, 20.0) / 5.0
+    mine = [o.residual_s for o in state.timing if o.driver_id == driver_id][-3:]
+    for i in range(1, 4):
+        r = mine[-i] if len(mine) >= i else 0.0
+        v[f"car.residual_{i}"] = float(np.clip(r, -5.0, 5.0)) / 2.0
+    v["car.residuals_seen"] = float(len(mine)) / 3.0
+    ahead, behind = _neighbours(state, driver_id)
+    for side, other in (("ahead", ahead), ("behind", behind)):
+        if other is None:
+            v[f"{side}.tyre_age_laps"] = v[f"{side}.stops_diff"] = v[f"{side}.pace_gap_s"] = 0.0
+            continue
+        o = state.car(other)
+        v[f"{side}.tyre_age_laps"] = o.tyre_age_laps / LIFE_SCALE
+        v[f"{side}.stops_diff"] = float(np.clip(o.pit_stops - car.pit_stops, -3, 3)) / 3.0
+        sign = 1.0 if side == "ahead" else -1.0
+        v[f"{side}.pace_gap_s"] = (
+            sign * (setup.driver(other).car_pace_offset_s - me.car_pace_offset_s) / 2.0
+        )
+    pit_loss = setup.pit.lane_loss_s + setup.pit.standstill_median_s
+    gaps = [g for g, _ in _time_gaps(state, car) if g > 0]
+    v["rejoin.cars_within_pit_loss"] = sum(g < pit_loss for g in gaps) / 5.0
+    v["rejoin.car_at_rejoin_point"] = float(any(abs(g - pit_loss) < 2.0 for g in gaps))
+    v["field.share_stopped"] = sum(o.pit_stops > 0 for o in state.cars) / len(state.cars)
+    v["race.neutralisations"] = (state.race_control.sc_count + state.race_control.vsc_count) / 3.0
+    return v
+
+
 def rl_observation(
     state: WorldState,
     driver_id: str,
@@ -331,6 +439,10 @@ def rl_observation(
         for name in _EXTRA:
             if name.startswith("championship."):
                 values[name] = 0.0
+    if schema == "rl_obs_v4":  # A2: no truth, no planner advice
+        values.update(_v3_values(state, driver_id, order))
+        values.update(_v4_values(state, driver_id))
+        return np.array([values[n] for n in names], dtype=np.float32)
     if schema != "rl_obs_v1":
         values.update(_v2_values(state, driver_id))
     if schema not in ("rl_obs_v1", "rl_obs_v2"):

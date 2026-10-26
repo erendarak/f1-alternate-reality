@@ -1494,3 +1494,26 @@ The owner chose to adapt the world first (W1 of the research plan), before more 
   is usually how good their strategy tools are, not a hidden edge over a perfect one.
 - Tools kept: `training/pit_timing.py` (counterfactual timing data with features), the EXP-032
   script (rows can be refit with `--from-rows`).
+
+## D-064 — A2: the strategist learns the whole job from scratch (2026-10-26)
+
+- **Task:** a random MaskablePPO network drives one car's strategy among the expert rule teams of
+  the A1b world; no rule planner, no cloning of the rules, no planner advice. The rule teams are
+  the expert reference; training budget is the variable (A3 curve, A4 league).
+- **`rl_obs_v4`** (`training/features.py`): engine observation + safe v1 extras (the old
+  `track.medium_wear_s_per_lap` read the true model and is left out) + the race-day prior's tyres,
+  the team's own estimate and its uncertainty (labelled team software), its tyres read through it,
+  its last clean-lap residuals, neighbours' tyres / stops / pace, rejoin traffic, points at stake.
+  Tested: unchanged when only the hidden truth changes (v3 changes).
+- **Training world** (`ScenarioSampler(world="a1b")`): a truth drawn per episode (no memorising
+  tracks), per-team knowledge, in-race learning, hidden trend, rival rules; 2018-2025 dry_train
+  races only (dry_test held out for A3).
+- **Actions:** pit x pace (18 effective; racecraft masked: no value found in M5 slice 4).
+- **Reward:** POINTS score minus the expert's score for the same car in the same race (control
+  variate). **Editorial helpers, labelled:** a 0.95 "stay out" prior (exploration only) and a
+  regulation guard (on the last chance, a car missing the two-dry-compound rule may only stop for
+  an unused dry compound; the race's end is the leader's).
+- **Evaluation** (`exp033_budget_curve.py`): every budget checkpoint on held-out races, paired with
+  the expert on identical luck, actions sampled as in training (deterministic argmax with the stay
+  prior never stops: the first check was invalid for that reason).
+- **Pilot 2 (100k):** held out -0.281 -> -0.237 vs the expert (P16.3 -> P14.8), learning but slow.
